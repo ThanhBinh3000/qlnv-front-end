@@ -77,7 +77,7 @@ export class VonMuaVonUngComponent implements OnInit {
         //kiem tra ban ghi da ton tai chua
         const request = {
             loaiTimKiem: '0',
-            maLoai: 1,
+            maLoai: 6,
             maDvi: this.userInfo?.MA_DVI,
             namBcao: nam,
             paggingReq: {
@@ -121,7 +121,7 @@ export class VonMuaVonUngComponent implements OnInit {
                 maHang: Utils.MUA_THOC,
                 hangDtqg: 'Thóc',
             })
-            if (!this.userService.isChiCuc) {
+            if (!this.userService.isChiCuc()) {
                 response.ttGui.lstCtietBcaos.push({
                     ...new TienThua(),
                     id: null,
@@ -133,6 +133,14 @@ export class VonMuaVonUngComponent implements OnInit {
                     id: null,
                     maHang: Utils.MUA_MUOI,
                     hangDtqg: 'Muối',
+                })
+            }
+            if (this.userService.isTongCuc()) {
+                response.ttGui.lstCtietBcaos.push({
+                    ...new TienThua(),
+                    id: null,
+                    maHang: Utils.MUA_VTU,
+                    hangDtqg: 'Vật tư',
                 })
             }
             await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(

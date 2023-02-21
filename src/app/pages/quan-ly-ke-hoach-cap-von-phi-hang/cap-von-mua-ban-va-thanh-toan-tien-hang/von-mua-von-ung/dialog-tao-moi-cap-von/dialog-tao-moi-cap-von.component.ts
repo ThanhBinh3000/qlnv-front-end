@@ -38,7 +38,9 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        if (!this.userService.isTongCuc() || this.request.maLoai == 3) {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        }
         this.response.maLoai = this.request.maLoai;
         this.userInfo = this.userService.getUserLogin();
     }
