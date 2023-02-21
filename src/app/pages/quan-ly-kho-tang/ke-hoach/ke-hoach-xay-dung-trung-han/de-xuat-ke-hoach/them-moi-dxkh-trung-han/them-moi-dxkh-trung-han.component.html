@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>THÔNG TIN ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>

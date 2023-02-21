@@ -69,7 +69,6 @@
           <th width="130px">Số hợp đồng</th>
           <th width="130px">Tên hợp đồng</th>
           <th width="130px">Ngày ký</th>
-          <th>Trích yếu</th>
           <th width="200px">Bên bán</th>
           <th width="200px">Bên mua</th>
           <th width="130px">Số QĐ mua sắm</th>
@@ -151,10 +150,10 @@
           <td>{{ data.giaTri }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH))">
+            <a (click)="redirectToChiTiet(true, data.id)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
+            <a
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil"></i>
             </a>
@@ -186,5 +185,5 @@
 </ng-container>
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-mm-thong-tin-hop-dong></app-mm-thong-tin-hop-dong>
+  <app-mm-thong-tin-hop-dong  [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"></app-mm-thong-tin-hop-dong>
 </ng-container>
