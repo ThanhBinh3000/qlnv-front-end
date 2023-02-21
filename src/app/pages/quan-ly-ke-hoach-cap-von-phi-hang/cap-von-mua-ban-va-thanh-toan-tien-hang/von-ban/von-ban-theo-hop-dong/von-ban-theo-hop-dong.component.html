@@ -42,7 +42,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-                        <span>Nộp tiền vốn thừa</span>
+                        <span>Vốn bán nộp lên đơn vị cấp trên</span>
                     </div>
                 </div>
             </div>
@@ -115,20 +115,23 @@
                         </ng-template>
                     </div>
                 </div> -->
-                <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th rowspan="2">Tên khách hàng </th>
-                            <th rowspan="2">Quyết định phê duyệt kết quả nhà thầu / Hợp đồng</th>
+                            <th rowspan="2" *ngIf="baoCao.maLoai == 4" nzWidth="150px" nzLeft>Tên khách hàng </th>
+                            <th rowspan="2" *ngIf="baoCao.maLoai == 4" nzWidth="200px" nzLeft>Quyết định phê duyệt
+                                <br /> kết quả nhà thầu / Hợp
+                                đồng</th>
+                            <th rowspan="2" *ngIf="baoCao.maLoai == 1" nzWidth="350px" nzLeft>Đơn vị</th>
                             <th colspan="3">Số lượng</th>
                             <th rowspan="2">Đơn giá (đồng /kg)</th>
-                            <th rowspan="2">Giá trị hợp đồng <br /> (đã bao gồm VAT) (đồng)</th>
-                            <th rowspan="2">Giá trị thực hiện (lũy kế)</th>
-                            <th rowspan="2">Số đã nộp Tổng cục (lũy kế)</th>
+                            <th rowspan="2">Giá trị hợp đồng (đã <br /> bao gồm VAT) (đồng)</th>
+                            <th rowspan="2">Giá trị thực hiện <br /> (lũy kế)</th>
+                            <th rowspan="2">Số đã nộp Tổng cục <br /> (lũy kế)</th>
                             <th colspan="2">Nộp lần này</th>
-                            <th rowspan="2">Lũy kế sau lần nộp này</th>
+                            <th rowspan="2">Lũy kế sau lần <br /> nộp này</th>
                             <th rowspan="2">Số còn phải nộp</th>
-                            <th [hidden]="statusGui" rowSpan="2"></th>
+                            <th *ngIf="statusGui" rowSpan="2" style="width: 50px;" nzRight></th>
                         </tr>
                         <tr>
                             <th>Kế hoạch</th>
@@ -138,8 +141,8 @@
                             <th>Số nộp lần này</th>
                         </tr>
                         <tr>
-                            <th>A</th>
-                            <th>B</th>
+                            <th nzLeft>A</th>
+                            <th *ngIf="baoCao.maLoai == 4" nzLeft>B</th>
                             <th>1</th>
                             <th>2</th>
                             <th>3</th>
@@ -151,19 +154,22 @@
                             <th>9</th>
                             <th>10=9+7</th>
                             <th>11=6-10</th>
-                            <th [hidden]="statusGui"></th>
+                            <th *ngIf="statusGui" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of lstCtietBcaos; let i = index">
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                <td>
+                                <td *ngIf="baoCao.maLoai == 4" nzLeft>
                                     <ng-container *ngIf="data.isParent">
                                         {{ data.tenKhachHang }}
                                     </ng-container>
                                 </td>
-                                <td>
+                                <td *ngIf="baoCao.maLoai == 4" nzLeft>
                                     {{ data.qdPdKqNhaThau }}
+                                </td>
+                                <td *ngIf="baoCao.maLoai == 1" nzLeft>
+                                    {{ data.tenDvi }}
                                 </td>
                                 <td>
                                     {{ displayValue(data.soLuongKeHoach) }}
@@ -198,18 +204,21 @@
                                 <td>
                                     {{ displayValue(data.soConPhaiNop) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <i *ngIf="data.isParent" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
-                                <td>
+                                <td *ngIf="baoCao.maLoai == 4" nzLeft>
                                     <ng-container *ngIf="data.isParent">
                                         {{ data.tenKhachHang }}
                                     </ng-container>
                                 </td>
-                                <td>
+                                <td *ngIf="baoCao.maLoai == 4" nzLeft>
                                     {{ editCache[data.id].data.qdPdKqNhaThau }}
+                                </td>
+                                <td *ngIf="baoCao.maLoai == 1" nzLeft>
+                                    {{ editCache[data.id].data.tenDvi }}
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.soLuongKeHoach) }}
@@ -251,7 +260,7 @@
                                 <td>
                                     {{ displayValue(editCache[data.id].data.soConPhaiNop) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -262,64 +271,66 @@
                         </tr>
                     </tbody>
                 </nz-table>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col nzSpan="24">
-                        <label class="search__label">Thuyết minh</label>
-                        <textarea rows="2" nz-input [(ngModel)]="baoCao.ttGui.thuyetMinh"
-                            [disabled]="statusGui"></textarea>
+                <ng-container *ngIf="baoCao.maLoai == 4">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col nzSpan="24">
+                            <label class="search__label">Thuyết minh</label>
+                            <textarea rows="2" nz-input [(ngModel)]="baoCao.ttGui.thuyetMinh"
+                                [disabled]="!statusGui"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="3">
-                        Danh sách văn bản đính kèm
-                        <nz-upload [(nzFileList)]="baoCao.ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
-                            [hidden]="statusGui">
-                            <button nz-button>
-                                <i nz-icon nzType="upload"></i>
-                                Select File
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="3">
+                            Danh sách văn bản đính kèm
+                            <nz-upload [(nzFileList)]="baoCao.ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
+                                *ngIf="statusGui">
+                                <button nz-button>
+                                    <i nz-icon nzType="upload"></i>
+                                    Select File
+                                </button>
+                            </nz-upload>
+                            <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
+                                [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
+                                *ngIf="statusGui" style="margin-top: 16px">
+                                Thêm vào danh sách
                             </button>
-                        </nz-upload>
-                        <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
-                            [hidden]="statusGui" style="margin-top: 16px">
-                            Thêm vào danh sách
-                        </button>
+                        </div>
                     </div>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="12">
-                        <nz-table nzBordered class="table__body">
-                            <thead>
-                                <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="10%"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of baoCao.ttGui.lstFiles; let i = index">
-                                    <td>{{ i + 1 }} </td>
-                                    <td>{{ data.fileName }}</td>
-                                    <td>
-                                        <a (click)="downloadFileGui(data.id)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a *ngIf="!statusGui" (click)="deleteFileGui(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                        <div nz-col class="gutter-row" [nzSpan]="12">
+                            <nz-table nzBordered class="table__body">
+                                <thead>
+                                    <tr>
+                                        <th nzWidth="7%">STT</th>
+                                        <th>Tên file</th>
+                                        <th nzWidth="10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let data of baoCao.ttGui.lstFiles; let i = index">
+                                        <td>{{ i + 1 }} </td>
+                                        <td>{{ data.fileName }}</td>
+                                        <td>
+                                            <a (click)="downloadFileGui(data.id)">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                            <a *ngIf="statusGui" (click)="deleteFileGui(data.id)">
+                                                <i class="fa fa-trash-o do"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </nz-table>
+                        </div>
                     </div>
-                </div>
+                </ng-container>
             </nz-card>
             <div style="margin-top: 20px;"></div>
-            <ng-container *ngIf="isParent">
+            <ng-container *ngIf="isParent && baoCao.maLoai == 4">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card"
                     nzTitle="Thông tin nơi nhận">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                        <ng-container *ngIf="statusNhan; else nhap">
+                        <ng-container *ngIf="!statusNhan; else nhap">
                             <div nz-col nzSpan="6">
                                 Ngày nhận lệnh chuyển có: <span>{{ getDate(baoCao.ttNhan.ngayNhanLenhChuyenCo) }}</span>
                             </div>
@@ -347,14 +358,14 @@
                         <div nz-col nzSpan="24" style="margin-top: 10px;">
                             <label class="search__label">Thuyết minh</label>
                             <textarea rows="2" nz-input [(ngModel)]="baoCao.ttNhan.thuyetMinh"
-                                [disabled]="statusNhan"></textarea>
+                                [disabled]="!statusNhan"></textarea>
                         </div>
                     </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col class="gutter-row" [nzSpan]="3">
                             Danh sách văn bản đính kèm
                             <nz-upload [(nzFileList)]="baoCao.ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
-                                [hidden]="statusNhan">
+                                *ngIf="statusNhan">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
                                     Select File
@@ -362,7 +373,7 @@
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
                                 [disabled]="!baoCao.ttNhan.fileList || baoCao.ttNhan.fileList?.length === 0"
-                                [hidden]="statusNhan" style="margin-top: 16px">
+                                *ngIf="statusNhan" style="margin-top: 16px">
                                 Thêm vào danh sách
                             </button>
                         </div>
@@ -385,7 +396,7 @@
                                             <a (click)="downloadFileNhan(data.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a *ngIf="!statusNhan" (click)="deleteFileNhan(data.id)">
+                                            <a *ngIf="statusNhan" (click)="deleteFileNhan(data.id)">
                                                 <i class="fa fa-trash-o do"></i>
                                             </a>
                                         </td>

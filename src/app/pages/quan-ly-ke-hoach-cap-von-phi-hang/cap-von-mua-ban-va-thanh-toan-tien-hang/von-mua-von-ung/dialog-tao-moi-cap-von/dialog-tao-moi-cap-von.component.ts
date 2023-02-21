@@ -50,77 +50,32 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             this.response.loaiDnghi = null;
             return;
         }
-        this.spinner.show();
         await this.checkRequest();
-
-        if (this.response.maLoai == 2) {
-            if (this.isRequestExist == 0) {
-                this.notification.warning(MESSAGE.WARNING, 'Bản ghi chưa tồn tại');
-                this.response.loaiDnghi = null;
-                return;
-            }
-            if (this.isRequestExist == 2) {
-                this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
-                this.response.loaiDnghi = null;
-                return;
-            }
-            this.response.ttNhan.lstCtietBcaos.push({
-                id: uuid.v4() + 'FE',
-                ngayNhanLenhChuyenCo: this.response.ttNhan.ngayNhanLenhChuyenCo,
-                tkNhan: this.response.ttNhan.tkNhan,
-                dot: this.response.dot,
-            })
-            this.response.ttNhan.ngayNhanLenhChuyenCo = null;
-            this.response.ttNhan.tkNhan = null;
-            this.response.dot += 1;
-            this.response.ttNhan.trangThai = Utils.TT_BC_1;
+        //bao cao da ton tai nhung chua duoc phe duyet
+        if (this.isRequestExist == 2) {
+            this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
+            this.response.loaiDnghi = null;
+            return;
         }
-
-        if (this.response.maLoai == 1) {
-            if (this.isRequestExist == 0) {
-                this.response.ttGui = new sendInfo();
-                this.response.ttGui.lstCtietBcaos = [];
-                this.response.ttNhan = new receivedInfo();
-                this.response.ttNhan.lstCtietBcaos = [];
-                this.response.maDvi = this.userInfo?.MA_DVI;
-                this.response.ngayTao = new Date();
-                this.response.dot = 1;
-                this.response.ttGui.trangThai = Utils.TT_BC_1;
-                this.response.ttNhan.trangThai = Utils.TT_BC_1;
-                this.response.ttGui.lstFiles = [];
-                this.response.ttNhan.lstFiles = [];
-                //bao cao chua ton tai
+        //bao cao chua ton tai
+        if (this.isRequestExist == 0) {
+            this.response.ttGui = new sendInfo();
+            this.response.ttGui.lstCtietBcaos = [];
+            this.response.ttNhan = new receivedInfo();
+            this.response.ttNhan.lstCtietBcaos = [];
+            this.response.maDvi = this.userInfo?.MA_DVI;
+            this.response.ngayTao = new Date();
+            this.response.dot = 1;
+            this.response.ttGui.trangThai = Utils.TT_BC_1;
+            this.response.ttNhan.trangThai = Utils.TT_BC_1;
+            this.response.ttGui.lstFiles = [];
+            this.response.ttNhan.lstFiles = [];
+            if (this.response.maLoai == 2) {
                 this.response.ttGui.lstCtietBcaos.push({
                     ...new CapUng(),
                     id: uuid.v4() + 'FE',
                 })
-                await this.getMaDnghi();
             } else {
-                this.notification.warning(MESSAGE.WARNING, 'Bản ghi đã tồn tại');
-                this.response.loaiDnghi = null;
-                return;
-            }
-        }
-
-        if (this.response.maLoai == 3) {
-            if (this.isRequestExist == 2) {
-                this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
-                this.response.loaiDnghi = null;
-                return;
-            }
-            if (this.isRequestExist == 0) {
-                this.response.ttGui = new sendInfo();
-                this.response.ttGui.lstCtietBcaos = [];
-                this.response.ttNhan = new receivedInfo();
-                this.response.ttNhan.lstCtietBcaos = [];
-                this.response.maDvi = this.userInfo?.MA_DVI;
-                this.response.ngayTao = new Date();
-                this.response.dot = 1;
-                this.response.ttGui.trangThai = Utils.TT_BC_1;
-                this.response.ttNhan.trangThai = Utils.TT_BC_1;
-                this.response.ttGui.lstFiles = [];
-                this.response.ttNhan.lstFiles = [];
-                //bao cao chua ton tai
                 await this.getChildUnit();
                 this.donVis.forEach(item => {
                     this.response.ttGui.lstCtietBcaos.push({
@@ -130,23 +85,38 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                         tenDvi: item.tenDvi,
                     })
                 })
-                await this.getMaDnghi();
+            }
+            await this.getMaDnghi();
+        }
+        //bao cao da ton tai va duoc phe duyet
+        if (this.isRequestExist == 1) {
+            //them lan moi cho de nghi
+            await this.capVonMuaBanTtthService.ctietVonMuaBan(this.idRequest).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response = data.data;
+                        this.response.ttGui.listFile = [];
+                        this.response.ttNhan.listFile = [];
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+            if (this.response.maLoai == 2) {
+                this.response.ttNhan.lstCtietBcaos.push({
+                    id: uuid.v4() + 'FE',
+                    ngayNhanLenhChuyenCo: this.response.ttNhan.ngayNhanLenhChuyenCo,
+                    tkNhan: this.response.ttNhan.tkNhan,
+                    dot: this.response.dot,
+                })
+                this.response.ttNhan.ngayNhanLenhChuyenCo = null;
+                this.response.ttNhan.tkNhan = null;
+                this.response.dot += 1;
+                this.response.ttNhan.trangThai = Utils.TT_BC_1;
             } else {
-                //them lan moi cho de nghi
-                await this.capVonMuaBanTtthService.ctietVonMuaBan(this.idRequest).toPromise().then(
-                    async (data) => {
-                        if (data.statusCode == 0) {
-                            this.response = data.data;
-                            this.response.ttGui.listFile = [];
-                            this.response.ttNhan.listFile = [];
-                        } else {
-                            this.notification.error(MESSAGE.ERROR, data?.msg);
-                        }
-                    },
-                    (err) => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
                 this.response.ttGui.lstCtietBcaos.forEach(item => {
                     item.listLuyKe.push({
                         id: uuid.v4() + 'FE',
@@ -164,74 +134,74 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.response.ttNhan.trangThai = Utils.TT_BC_1;
             }
         }
-        this.spinner.hide();
     }
 
-    async getContractData() {
-        const request = {
-            namKHoach: this.response.namDnghi,
-            maDvi: this.userInfo.MA_DVI,
-            loaiVthh: null,
-        }
-        switch (this.response.loaiDnghi) {
-            case Utils.MUA_THOC:
-                request.loaiVthh = "0101"
-                break;
-            case Utils.MUA_GAO:
-                request.loaiVthh = "0102"
-                break;
-            case Utils.MUA_MUOI:
-                request.loaiVthh = "04"
-                break;
-            case Utils.MUA_VTU:
-                request.loaiVthh = "02"
-                break;
-        }
-        await this.capVonMuaBanTtthService.dsachHopDong(request).toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    data.data.forEach(item => {
-                        const temp: ThanhToan = {
-                            ... new ThanhToan(),
-                            id: uuid.v4() + 'FE',
-                            tenKhachHang: item.tenNhaThau,
-                            isParent: false,
-                            qdPdKqNhaThau: item.soHd,
-                            soLuongKeHoach: item.soLuongKehoach,
-                            soLuongHopDong: item.soLuong,
-                            donGia: item.donGia,
-                            giaTriHd: mulNumber(item.soLuong, item.donGia),
-                        }
-                        this.response.ttGui.lstCtietBcaos.push(temp);
-                        const index = this.response.ttGui.lstCtietBcaos.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
-                        if (index == -1) {
-                            this.response.ttGui.lstCtietBcaos.push({
-                                ...temp,
-                                id: uuid.v4() + 'FE',
-                                isParent: true,
-                                qdPdKqNhaThau: item.soQdPdKhlcnt,
-                            })
-                        } else {
-                            if (this.response.ttGui.lstCtietBcaos[index].qdPdKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                                this.response.ttGui.lstCtietBcaos[index].qdPdKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
-                            }
-                            this.response.ttGui.lstCtietBcaos[index].soLuongHopDong = sumNumber([this.response.ttGui.lstCtietBcaos[index].soLuongHopDong, temp.soLuongHopDong]);
-                            this.response.ttGui.lstCtietBcaos[index].soLuongKeHoach = sumNumber([this.response.ttGui.lstCtietBcaos[index].soLuongKeHoach, temp.soLuongKeHoach]);
-                            this.response.ttGui.lstCtietBcaos[index].giaTriHd = sumNumber([this.response.ttGui.lstCtietBcaos[index].giaTriHd, temp.giaTriHd]);
-                            this.response.ttGui.lstCtietBcaos[index].donGia = divNumber(this.response.ttGui.lstCtietBcaos[index].giaTriHd, this.response.ttGui.lstCtietBcaos[index].soLuongHopDong);
-                        }
-                    })
-                } else {
-                    this.notification.warning(MESSAGE.WARNING, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.warning(MESSAGE.WARNING, MESSAGE.SYSTEM_ERROR);
-            },
-        );
-    }
+    // async getContractData() {
+    //     const request = {
+    //         namKHoach: this.response.namDnghi,
+    //         maDvi: this.userInfo.MA_DVI,
+    //         loaiVthh: null,
+    //     }
+    //     switch (this.response.loaiDnghi) {
+    //         case Utils.MUA_THOC:
+    //             request.loaiVthh = "0101"
+    //             break;
+    //         case Utils.MUA_GAO:
+    //             request.loaiVthh = "0102"
+    //             break;
+    //         case Utils.MUA_MUOI:
+    //             request.loaiVthh = "04"
+    //             break;
+    //         case Utils.MUA_VTU:
+    //             request.loaiVthh = "02"
+    //             break;
+    //     }
+    //     await this.capVonMuaBanTtthService.dsachHopDong(request).toPromise().then(
+    //         (data) => {
+    //             if (data.statusCode == 0) {
+    //                 data.data.forEach(item => {
+    //                     const temp: ThanhToan = {
+    //                         ... new ThanhToan(),
+    //                         id: uuid.v4() + 'FE',
+    //                         tenKhachHang: item.tenNhaThau,
+    //                         isParent: false,
+    //                         qdPdKqNhaThau: item.soHd,
+    //                         soLuongKeHoach: item.soLuongKehoach,
+    //                         soLuongHopDong: item.soLuong,
+    //                         donGia: item.donGia,
+    //                         giaTriHd: mulNumber(item.soLuong, item.donGia),
+    //                     }
+    //                     this.response.ttGui.lstCtietBcaos.push(temp);
+    //                     const index = this.response.ttGui.lstCtietBcaos.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
+    //                     if (index == -1) {
+    //                         this.response.ttGui.lstCtietBcaos.push({
+    //                             ...temp,
+    //                             id: uuid.v4() + 'FE',
+    //                             isParent: true,
+    //                             qdPdKqNhaThau: item.soQdPdKhlcnt,
+    //                         })
+    //                     } else {
+    //                         if (this.response.ttGui.lstCtietBcaos[index].qdPdKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
+    //                             this.response.ttGui.lstCtietBcaos[index].qdPdKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+    //                         }
+    //                         this.response.ttGui.lstCtietBcaos[index].soLuongHopDong = sumNumber([this.response.ttGui.lstCtietBcaos[index].soLuongHopDong, temp.soLuongHopDong]);
+    //                         this.response.ttGui.lstCtietBcaos[index].soLuongKeHoach = sumNumber([this.response.ttGui.lstCtietBcaos[index].soLuongKeHoach, temp.soLuongKeHoach]);
+    //                         this.response.ttGui.lstCtietBcaos[index].giaTriHd = sumNumber([this.response.ttGui.lstCtietBcaos[index].giaTriHd, temp.giaTriHd]);
+    //                         this.response.ttGui.lstCtietBcaos[index].donGia = divNumber(this.response.ttGui.lstCtietBcaos[index].giaTriHd, this.response.ttGui.lstCtietBcaos[index].soLuongHopDong);
+    //                     }
+    //                 })
+    //             } else {
+    //                 this.notification.warning(MESSAGE.WARNING, data?.msg);
+    //             }
+    //         },
+    //         (err) => {
+    //             this.notification.warning(MESSAGE.WARNING, MESSAGE.SYSTEM_ERROR);
+    //         },
+    //     );
+    // }
 
     async getMaDnghi() {
+        this.spinner.show();
         await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
@@ -244,9 +214,11 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+        this.spinner.hide();
     }
 
     async getChildUnit() {
+        this.spinner.show();
         const request = {
             maDviCha: this.response.maDvi,
             trangThai: '01',
@@ -267,9 +239,11 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         )
+        this.spinner.hide();
     }
 
     async checkRequest() {
+        this.spinner.show();
         this.isRequestExist = 0;
         this.request.namDnghi = this.response.namDnghi;
         this.request.loaiDnghi = this.response.loaiDnghi;
@@ -298,6 +272,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.response.loaiDnghi = null;
             }
         );
+        this.spinner.hide();
     }
 
     handleOk() {

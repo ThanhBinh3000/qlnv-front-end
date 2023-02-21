@@ -14,7 +14,7 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
     }
 
     urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
-    urlTest = 'http://localhost:9150';
+    urlTest = 'http://localhost:9170';
 
     //search list bao cao
     timBaoCao(request: any): Observable<any> {

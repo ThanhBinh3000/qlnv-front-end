@@ -16,7 +16,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 // import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
@@ -111,6 +111,7 @@ export class AddQuyetToanTongHopComponent implements OnInit {
   LST_CHUNG_KHO: any[] = [];
   lstBcaoDviTrucThuocs: any[] = [];
   childUnit: any[] = [];
+  amount = AMOUNT;
   initItem: ItemData = {
     id: null,
     stt: "0",

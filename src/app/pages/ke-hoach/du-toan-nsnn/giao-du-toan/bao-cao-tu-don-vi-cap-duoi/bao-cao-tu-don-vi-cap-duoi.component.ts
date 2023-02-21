@@ -12,7 +12,7 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { GDT, Utils } from 'src/app/Utility/utils';
+import { GDT, TRANG_THAI_KIEM_TRA_BAO_CAO, Utils } from 'src/app/Utility/utils';
 
 export const TRANG_THAI_TIM_KIEM_GIAO = [
   {
@@ -137,6 +137,16 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
       this.isCanbotc = true;
     }
 
+    if (this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(GDT.VIEW_REPORT_TH)) {
+      this.trangThai = '7';
+      this.status = false;
+      this.searchFilter.loaiTimKiem = '1';
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
+    }
+
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -151,15 +161,6 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
       }
     );
 
-    if (this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(GDT.VIEW_REPORT_TH)) {
-      this.trangThai = '7';
-      this.status = false;
-      this.searchFilter.loaiTimKiem = '1';
-      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
-      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
-      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
-      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
-    }
     this.onSubmit();
     this.spinner.hide();
   }
@@ -269,7 +270,8 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
   }
 
   getStatusName(trangThai: string) {
-    return this.trangThais.find(e => e.id == trangThai).tenDm;
+    const trangThais = TRANG_THAI_KIEM_TRA_BAO_CAO;
+    return trangThais.find(e => e.id == trangThai).ten;
   }
 
   getUnitName(maDvi: string) {

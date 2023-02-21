@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { CapUng, LuyKeCapUng, Report, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -37,6 +37,7 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     status = false;
     saveStatus = false;
@@ -175,10 +176,11 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
     getStatusButton() {
         const trangThai = this.baoCao.ttNhan.trangThai;
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        if (Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV)) {
-            this.status = false;
+        this.status = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV);
+        if (this.status) {
+            this.scrollX = (300 + 11 * BOX_NUMBER_WIDTH).toString() + 'px';
         } else {
-            this.status = true;
+            this.scrollX = (250 + 11 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
         this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV) && checkChirld;
         this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV) && checkChirld && !(!this.baoCao.id);

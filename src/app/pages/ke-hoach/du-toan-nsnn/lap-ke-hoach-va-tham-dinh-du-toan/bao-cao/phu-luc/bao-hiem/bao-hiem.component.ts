@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
+import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bao-hiem.constant';
 
@@ -22,7 +22,11 @@ export class ItemData {
   slDuoiM3: number;
   slTong: number;
   gtTuM3: number;
+  gtTuTleBh: number
+  gtTuGtBh: number
   gtDuoiM3: number;
+  gtDuoiTleBh: number
+  gtDuoiGtBh: number
   gtTong: number;
 }
 
@@ -44,6 +48,7 @@ export class BaoHiemComponent implements OnInit {
   duAns: any[] = DANH_MUC;
   soLaMa: any[] = LA_MA;
   lstCtietBcao: ItemData[] = [];
+  lstTle: any[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   //trang thai cac nut
   status = false;
@@ -60,6 +65,7 @@ export class BaoHiemComponent implements OnInit {
   hsBhTu: number;
   userInfo: any;
   disableHs: boolean = true;
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -88,6 +94,7 @@ export class BaoHiemComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin()
     this.hsBhDuoi = this.formDetail?.hsBhDuoi;
     this.hsBhTu = this.formDetail?.hsBhTu;
+    await this.getTle()
 
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
@@ -107,11 +114,16 @@ export class BaoHiemComponent implements OnInit {
           slDuoiM3: 0,
           slTong: 0,
           gtTuM3: 0,
+          gtTuTleBh: 0,
+          gtTuGtBh: 0,
           gtDuoiM3: 0,
+          gtDuoiTleBh: 0,
+          gtDuoiGtBh: 0,
           gtTong: 0,
         })
       })
       if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+        console.log(this.dataInfo.extraData);
         this.dataInfo.extraData.forEach(item => {
           this.lstCtietBcao.push({
             ...new ItemData(),
@@ -125,11 +137,27 @@ export class BaoHiemComponent implements OnInit {
             slDuoiM3: item.slDuoiM3,
             slTong: item.slTong,
             gtTuM3: item.gtTuM3,
+            gtTuTleBh: 0,
+            gtTuGtBh: 0,
             gtDuoiM3: item.gtDuoiM3,
+            gtDuoiTleBh: 0,
+            gtDuoiGtBh: 0,
             gtTong: item.gtTong,
           })
         })
       }
+      this.lstCtietBcao.forEach(itm => {
+        this.lstTle.forEach(item => {
+          if (item.tenDmuc == itm.tenVtu) {
+            itm.gtDuoiTleBh = item.tyLeKhoDuoi
+            itm.gtTuTleBh = item.tyLeKhoTren
+          }
+        })
+        itm.gtTuGtBh = itm.gtTuM3 * itm.gtTuGtBh
+        itm.gtDuoiGtBh = itm.gtDuoiM3 * itm.gtDuoiTleBh
+        itm.gtTong = itm.gtTuGtBh + itm.gtDuoiGtBh
+      })
+
       this.setLevel();
     } else if (!this.lstCtietBcao[0]?.stt) {
       this.lstCtietBcao.forEach(item => {
@@ -142,6 +170,30 @@ export class BaoHiemComponent implements OnInit {
     this.updateEditCache();
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  async getTle() {
+    const request = {
+      nam: this.namBcao
+    }
+
+    this.spinner.show()
+    await this.lapThamDinhService.getDsTle(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          console.log(data.data?.lstCtiets);
+          this.lstTle = data.data?.lstCtiets
+          console.log("this.lstTle", this.lstTle);
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    this.spinner.hide()
   }
 
   getStatusButton() {

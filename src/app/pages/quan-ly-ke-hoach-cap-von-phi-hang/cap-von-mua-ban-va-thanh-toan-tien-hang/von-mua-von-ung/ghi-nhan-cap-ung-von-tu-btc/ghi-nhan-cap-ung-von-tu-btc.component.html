@@ -99,12 +99,12 @@
                         </ng-template>
                     </div>
                 </div> -->
-                <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
                             <th>Số lệnh chi tiền</th>
                             <th>Ngày(lập lệnh chi tiền)</th>
-                            <th>Nội dung</th>
+                            <th style="width: 250px;">Nội dung</th>
                             <th>Mã nguồn NS</th>
                             <th>Niên độ NS</th>
                             <th>Mã chương</th>
@@ -114,7 +114,7 @@
                             <th>Vốn ứng</th>
                             <th>Vốn cấp</th>
                             <th>Cộng</th>
-                            <th [hidden]="status" rowSpan="2"></th>
+                            <th *ngIf="status" style="width: 50px;" rowSpan="2" nzRight></th>
                         </tr>
                         <tr>
                             <th>A</th>
@@ -170,7 +170,7 @@
                                 <td>
                                     {{ displayValue(data.tong) }}
                                 </td>
-                                <td [hidden]="status">
+                                <td *ngIf="status" nzRight>
                                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
@@ -224,7 +224,7 @@
                                 <td>
                                     {{ displayValue(editCache[data.id].data.tong) }}
                                 </td>
-                                <td [hidden]="status">
+                                <td *ngIf="status" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -235,61 +235,11 @@
                         </tr>
                     </tbody>
                 </nz-table>
-
-                <!-- <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col nzSpan="24">
-                        <label class="search__label">Thuyết minh</label>
-                        <textarea rows="2" nz-input [(ngModel)]="ttGui.thuyetMinh" [disabled]="ttGui.status"></textarea>
-                    </div>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="3">
-                        Danh sách văn bản đính kèm
-                        <nz-upload [(nzFileList)]="ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
-                            [hidden]="ttGui.status">
-                            <button nz-button>
-                                <i nz-icon nzType="upload"></i>
-                                Select File
-                            </button>
-                        </nz-upload>
-                        <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="ttGui.fileList.length === 0" [hidden]="ttGui.status" style="margin-top: 16px">
-                            Thêm vào danh sách
-                        </button>
-                    </div>
-                </div>
-                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <div nz-col class="gutter-row" [nzSpan]="12">
-                        <nz-table nzBordered class="table__body">
-                            <thead>
-                                <tr>
-                                    <th nzWidth="7%">STT</th>
-                                    <th>Tên file</th>
-                                    <th nzWidth="10%"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of ttGui.lstFiles; let i = index">
-                                    <td>{{ i + 1 }} </td>
-                                    <td>{{ data.fileName }}</td>
-                                    <td>
-                                        <a (click)="downloadFileGui(data.id)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a *ngIf="!ttGui.status" (click)="deleteFileGui(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </div>
-                </div> -->
             </nz-card>
             <div style="margin-top: 20px;"></div>
             <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Thông tin nơi nhận">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <ng-container *ngIf="status; else nhap">
+                    <ng-container *ngIf="!status; else nhap">
                         <div nz-col nzSpan="6">
                             Ngày nhận lệnh chuyển có: <span>{{ getDate(baoCao.ttNhan.ngayNhanLenhChuyenCo) }}</span>
                         </div>
@@ -317,22 +267,22 @@
                     <div nz-col nzSpan="24" style="margin-top: 10px;">
                         <label class="search__label">Thuyết minh</label>
                         <textarea rows="2" nz-input [(ngModel)]="baoCao.ttNhan.thuyetMinh"
-                            [disabled]="status"></textarea>
+                            [disabled]="!status"></textarea>
                     </div>
                 </div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
                         Danh sách văn bản đính kèm
                         <nz-upload [(nzFileList)]="baoCao.ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
-                            [hidden]="status">
+                            *ngIf="status">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Select File
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
-                            [disabled]="!baoCao.ttNhan.fileList || baoCao.ttNhan.fileList?.length === 0"
-                            [hidden]="status" style="margin-top: 16px">
+                            [disabled]="!baoCao.ttNhan.fileList || baoCao.ttNhan.fileList?.length === 0" *ngIf="status"
+                            style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>
@@ -355,7 +305,7 @@
                                         <a (click)="downloadFileNhan(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="!status" (click)="deleteFileNhan(data.id)">
+                                        <a *ngIf="status" (click)="deleteFileNhan(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
