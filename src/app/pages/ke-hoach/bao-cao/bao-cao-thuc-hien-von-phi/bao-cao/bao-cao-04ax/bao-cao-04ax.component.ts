@@ -8,10 +8,10 @@ import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/d
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, findIndex, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -80,7 +80,7 @@ export class BaoCao04axComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
         private baoCaoThucHienVonPhiService: BaoCaoThucHienVonPhiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -163,13 +163,6 @@ export class BaoCao04axComponent implements OnInit {
             }
         });
 
-        //sap xep lai so thu tu
-        if (!this.lstCtietBcao[0].stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdungChi;
-            })
-        }
-
         if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
         }
@@ -179,7 +172,13 @@ export class BaoCao04axComponent implements OnInit {
             this.getColTotal2();
         }
         this.setWidth();
-        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
+                this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNdungChi');
+            } else {
+                this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+            }
+        }
 
         this.updateEditCache();
         this.getStatusButton();
@@ -187,23 +186,17 @@ export class BaoCao04axComponent implements OnInit {
     }
 
     async getListNdung() {
-        //lay danh muc noi dung chi
-        await this.quanLyVonPhiService.getListCategory('NOI_DUNG_CHI04A').toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    res.data.forEach(item => {
-                        this.noiDungChis.push({
-                            ...item,
-                            level: item.ma?.split('.').length - 2,
-                        })
+        const data = await this.danhMucService.danhMucChungGetAll('BC_VP_04A');
+        if (data) {
+            data.data.forEach(
+                item => {
+                    this.noiDungChis.push({
+                        ...item,
+                        level: item.ma?.split('.').length - 2,
                     })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        )
+            )
+        }
     }
 
     async getDinhMuc() {
@@ -215,17 +208,17 @@ export class BaoCao04axComponent implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
-                    this.dinhMucs.forEach(item => {
-                        if (!item.cloaiVthh.startsWith('02')) {
-                            item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
-                            item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
-                            item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
-                            item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
-                            item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
-                            item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
-                            item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
-                        }
-                    })
+                    // this.dinhMucs.forEach(item => {
+                    //     if (!item.cloaiVthh.startsWith('02')) {
+                    //         item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
+                    //         item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
+                    //         item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
+                    //         item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
+                    //         item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
+                    //         item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
+                    //         item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
+                    //     }
+                    // })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }

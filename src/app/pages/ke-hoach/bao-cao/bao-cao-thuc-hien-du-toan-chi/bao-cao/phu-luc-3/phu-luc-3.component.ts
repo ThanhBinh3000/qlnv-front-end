@@ -6,11 +6,10 @@ import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-cho
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DIADIEM } from '../bao-cao.constant';
 
@@ -98,7 +97,7 @@ export class PhuLucIIIComponent implements OnInit {
     trangThaiPhuLuc = '1';
     initItem: ItemData = new ItemData();
     total: ItemData = new ItemData();
-    scrollX = '5900px'
+    scrollX = (500 + 41 * BOX_NUMBER_WIDTH + 1000).toString() + 'px';
     amount = AMOUNT;
     quatity = QUATITY;
     //trang thai cac nut
@@ -114,9 +113,8 @@ export class PhuLucIIIComponent implements OnInit {
 
     constructor(
         private spinner: NgxSpinnerService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
-        private danhMucService: DanhMucHDVService,
+        private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -130,23 +128,17 @@ export class PhuLucIIIComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
-        await this.danhMucService.dMMaDuAnPhuLuc3().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    data.data.forEach(item => {
-                        this.maDans.push({
-                            ...item,
-                            level: item.ma.split('.').length - 2,
-                        })
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL3');
+        if (category) {
+            category.data.forEach(
+                item => {
+                    this.maDans.push({
+                        ...item,
+                        level: item.ma?.split('.').length - 2,
                     })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
+            )
+        }
 
         this.id = this.data?.id;
         this.idBcao = this.data?.idBcao;
@@ -160,7 +152,7 @@ export class PhuLucIIIComponent implements OnInit {
         this.status = this.data?.status;
         this.statusEdit = !this.status && this.maLoaiBcao != '527';
         if (this.startEdit) {
-            this.scrollX = '5700px';
+            this.scrollX = (500 + 41 * BOX_NUMBER_WIDTH + 800).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.data?.lstCtietBcaos.forEach(item => {

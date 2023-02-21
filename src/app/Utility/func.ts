@@ -54,27 +54,58 @@ export function sortByIndex(lstCtietBcao: any[]) {
 export function sortWithoutIndex(lstCtietBcao: any[], key: string) {
     lstCtietBcao = setLevel(lstCtietBcao, key);
     let level = 0;
-    let lstCtietBcaoTemp: any[] = lstCtietBcao;
-    lstCtietBcao = [];
-    const data: any = lstCtietBcaoTemp.find(e => e.level == 0);
-    lstCtietBcao = addHead(data, lstCtietBcao);
-    lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
-    let lstTemp: any[] = lstCtietBcaoTemp.filter(e => e.level == level);
-    while (lstTemp.length != 0 || level == 0) {
+    let lstCtietBcaoTemp: any[] = [];
+    let lstTemp = lstCtietBcao.filter(e => e.level == level);
+    while (lstTemp?.length > 0) {
+        lstTemp.sort((a, b) => {
+            if (getTail(a[key]) > getTail(b[key])) {
+                return 1;
+            }
+            return -1;
+        })
         lstTemp.forEach(item => {
-            let index: number = lstCtietBcao.findIndex(e => e[key] === getHead(item[key]));
-            if (index != -1) {
-                lstCtietBcao = addChild(lstCtietBcao[index].id, item, lstCtietBcao);
+            if (lstCtietBcaoTemp?.length == 0) {
+                addHead(item, lstCtietBcaoTemp);
             } else {
-                index = lstCtietBcao.findIndex(e => getHead(e[key]) === getHead(item[key]));
-                lstCtietBcao = addParent(lstCtietBcao[index].id, item, lstCtietBcao);
+                let index: number = lstCtietBcaoTemp.findIndex(e => e[key] === getHead(item[key]));
+                if (index != -1) {
+                    lstCtietBcaoTemp = addChild(lstCtietBcaoTemp[index].id, item, lstCtietBcaoTemp);
+                } else {
+                    index = lstCtietBcaoTemp.findIndex(e => getHead(e[key]) === getHead(item[key]));
+                    lstCtietBcaoTemp = addParent(lstCtietBcaoTemp[index].id, item, lstCtietBcaoTemp);
+                }
             }
         })
         level += 1;
-        lstTemp = lstCtietBcaoTemp.filter(e => e.level == level);
+        lstTemp = lstCtietBcao.filter(e => e.level == level);
     }
-    return lstCtietBcao;
+    return lstCtietBcaoTemp;
 }
+
+// export function sortWithoutIndex(lstCtietBcao: any[], key: string) {
+//     lstCtietBcao = setLevel(lstCtietBcao, key);
+//     let level = 0;
+//     let lstCtietBcaoTemp: any[] = lstCtietBcao;
+//     lstCtietBcao = [];
+//     const data: any = lstCtietBcaoTemp.find(e => e.level == 0);
+//     lstCtietBcao = addHead(data, lstCtietBcao);
+//     lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
+//     let lstTemp: any[] = lstCtietBcaoTemp.filter(e => e.level == level);
+//     while (lstTemp.length != 0 || level == 0) {
+//         lstTemp.forEach(item => {
+//             let index: number = lstCtietBcao.findIndex(e => e[key] === getHead(item[key]));
+//             if (index != -1) {
+//                 lstCtietBcao = addChild(lstCtietBcao[index].id, item, lstCtietBcao);
+//             } else {
+//                 index = lstCtietBcao.findIndex(e => getHead(e[key]) === getHead(item[key]));
+//                 lstCtietBcao = addParent(lstCtietBcao[index].id, item, lstCtietBcao);
+//             }
+//         })
+//         level += 1;
+//         lstTemp = lstCtietBcaoTemp.filter(e => e.level == level);
+//     }
+//     return lstCtietBcao;
+// }
 
 //them phan tu o vi tri dau tien cua mang
 export function addHead(initItem: any, lstCtietBcao: any[]) {

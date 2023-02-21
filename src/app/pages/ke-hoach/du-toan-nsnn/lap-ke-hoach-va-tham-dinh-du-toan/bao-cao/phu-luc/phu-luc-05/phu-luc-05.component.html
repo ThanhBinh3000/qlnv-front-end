@@ -156,8 +156,8 @@
               <td>{{displayValue(data.luyKeVapVon)}}</td>
               <td>{{displayValue(data.keHoachVon)}}</td>
               <td>
-                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd"
-                  (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.keHoachVonTd"
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
               </td>
               <td>{{displayValue(data.keHoachNamDtN1)}}</td>
               <td>{{displayValue(data.keHoachNamDtN2)}}</td>
@@ -192,42 +192,42 @@
                 <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thoiGianThucHien" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaTriCongTrinh">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.giaTriCongTrinh"
+                  [options]="amount" />
               </td>
               <td>
                 <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoTgianBanHanh" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoGtriDtoanKtoanTmdt">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.qdPdBcaoGtriDtoanKtoanTmdt"
+                  [options]="amount" />
               </td>
               <td>
                 <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanTgianBanHanh" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanGtriQtoan">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.qdPdQtoanGtriQtoan"
+                  [options]="amount" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVapVon">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.luyKeVapVon"
+                  [options]="amount" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVon">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.keHoachVon"
+                  [options]="amount" />
               </td>
               <td *ngIf="viewAppraisalValue">
-                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.keHoachVonTd"
+                  [options]="amount" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN1">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.keHoachNamDtN1"
+                  [options]="amount" />
               </td>
               <td>
-                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN2">
-                </fm-input-number>
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.keHoachNamDtN2"
+                  [options]="amount" />
               </td>
               <td>
                 <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
