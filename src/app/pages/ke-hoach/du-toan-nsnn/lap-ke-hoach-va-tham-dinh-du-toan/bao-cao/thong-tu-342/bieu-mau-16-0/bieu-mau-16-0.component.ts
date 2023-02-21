@@ -9,7 +9,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, LTD, MONEY_LIMIT, sumNumber, Utils } from "src/app/Utility/utils";
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, LTD, MONEY_LIMIT, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 // import { DANH_MUC } from './bieu-mau-18.constant';
 
@@ -69,6 +69,7 @@ export class BieuMau160Component implements OnInit {
   listIdDelete = ""
   editAppraisalValue: boolean;
   viewAppraisalValue: boolean;
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

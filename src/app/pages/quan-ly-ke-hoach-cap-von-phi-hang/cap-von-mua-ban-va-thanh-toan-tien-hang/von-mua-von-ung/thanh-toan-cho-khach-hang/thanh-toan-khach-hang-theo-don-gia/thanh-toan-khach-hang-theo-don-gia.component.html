@@ -107,18 +107,18 @@
                         </ng-template>
                     </div>
                 </div> -->
-                <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th rowspan="2">Đơn vị</th>
+                            <th rowspan="2" nzWidth="300px" nzLeft>Đơn vị</th>
                             <th rowspan="2">Số lượng</th>
-                            <th rowspan="2">Đơn giá (theo quyết định)</th>
+                            <th rowspan="2">Đơn giá <br /> (theo quyết định)</th>
                             <th rowspan="2">Giá trị theo kế hoạch</th>
                             <th colspan="3">Số thanh toán lũy kế</th>
-                            <th rowspan="2">Số còn được thanh toán</th>
-                            <th rowspan="2">Số duyệt thanh toán lần này</th>
+                            <th rowspan="2">Số còn được <br /> thanh toán</th>
+                            <th rowspan="2">Số duyệt thanh <br /> toán lần này</th>
                             <th colspan="6">Ủy nhiệm chi (số thanh toán lần này)</th>
-                            <th [hidden]="statusGui" rowSpan="2"></th>
+                            <th *ngIf="statusGui" rowSpan="2" style="width: 50px;" nzRight></th>
                         </tr>
                         <tr>
                             <th>Cấp ứng</th>
@@ -132,14 +132,14 @@
                             <th>Cộng</th>
                         </tr>
                         <tr>
-                            <th>A</th>
+                            <th nzLeft>A</th>
                             <th>1</th>
                             <th>2</th>
                             <th>3=1x2</th>
                             <th>4</th>
                             <th>5</th>
                             <th>6=4+5</th>
-                            <th>7</th>
+                            <th>7=3-6</th>
                             <th>8</th>
                             <th>9</th>
                             <th>10</th>
@@ -147,13 +147,13 @@
                             <th>12</th>
                             <th>13</th>
                             <th>14=12+13</th>
-                            <th [hidden]="statusGui"></th>
+                            <th *ngIf="statusGui" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of lstCtietBcaos; let i = index">
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                <td>
+                                <td nzLeft>
                                     {{ data.tenDvi }}
                                 </td>
                                 <td>
@@ -198,12 +198,12 @@
                                 <td>
                                     {{ displayValue(data.uyNhiemChiTong) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
-                                <td>
+                                <td nzLeft>
                                     {{ editCache[data.id].data.tenDvi }}
                                 </td>
                                 <td>
@@ -262,7 +262,7 @@
                                 <td>
                                     {{ displayValue(editCache[data.id].data.uyNhiemChiTong) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -277,22 +277,22 @@
                     <div nz-col nzSpan="24">
                         <label class="search__label">Thuyết minh</label>
                         <textarea rows="2" nz-input [(ngModel)]="baoCao.ttGui.thuyetMinh"
-                            [disabled]="statusGui"></textarea>
+                            [disabled]="!statusGui"></textarea>
                     </div>
                 </div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
                         Danh sách văn bản đính kèm
                         <nz-upload [(nzFileList)]="baoCao.ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
-                            [hidden]="statusGui">
+                            *ngIf="statusGui">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Select File
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
-                            [hidden]="statusGui" style="margin-top: 16px">
+                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0" *ngIf="statusGui"
+                            style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>
@@ -315,7 +315,7 @@
                                         <a (click)="downloadFileGui(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="!statusGui" (click)="deleteFileGui(data.id)">
+                                        <a *ngIf="statusGui" (click)="deleteFileGui(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>

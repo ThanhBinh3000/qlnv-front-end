@@ -49,8 +49,8 @@
                     <tr>
                         <th>Dự toán</th>
                         <th>Ước thực hiện</th>
-                        <th>Định mức</th>
                         <th>Số lượng bảo quản</th>
+                        <th>Định mức</th>
                         <th>Thành tiền </th>
                         <th *ngIf="checkViewTD">Số lượng bảo quản năm n-1</th>
                         <th *ngIf="checkViewTD">Thành tiền </th>
@@ -105,8 +105,8 @@
                             <td>{{displayValue(data.thucHienNamTruoc)}}</td>
                             <td>{{displayValue(data.dtoanNamHtai)}}</td>
                             <td>{{displayValue(data.uocThNamHtai)}}</td>
-                            <td>{{displayValue(data.dmucNamDtoan)}}</td>
                             <td>{{displayValue(data.sluongNamDtoan)}}</td>
+                            <td>{{displayValue(data.dmucNamDtoan)}}</td>
                             <td>{{displayValue(data.ttienNamDtoan)}}</td>
                             <td *ngIf="checkViewTD">
                                 {{displayValue(data.sluongNamN1Td)}}
@@ -140,8 +140,8 @@
                                 <td>{{displayValue(editCache[data.id].data.thucHienNamTruoc)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.dtoanNamHtai)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.uocThNamHtai)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.sluongNamDtoan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.ttienNamDtoan)}}</td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
@@ -151,24 +151,24 @@
                             </ng-container>
                             <ng-template #editAppraisal>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.thucHienNamTruoc"></fm-input-number>
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.thucHienNamTruoc" [options]="amount" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number>
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.dtoanNamHtai" [options]="amount" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.uocThNamHtai"></fm-input-number>
-                                </td>
-                                <td>
-                                    {{editCache[data.id].data.dmucNamDtoan}}
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.uocThNamHtai" [options]="amount" />
                                 </td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                </td>
+                                <td>
+                                    {{editCache[data.id].data.dmucNamDtoan}}
                                 </td>
                                 <td>
                                     {{displayValue(editCache[data.id].data.ttienNamDtoan)}}

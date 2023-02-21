@@ -5,9 +5,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
-import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { divNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
@@ -40,6 +40,9 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
             this.response.canCuVeGia = Utils.QD_DON_GIA;
         }
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        if (this.userService.isChiCuc()) {
+            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
+        }
         this.userInfo = this.userService.getUserLogin();
     }
 

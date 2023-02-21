@@ -24,7 +24,7 @@
                     [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN ĐẤU GIÁ </span>
+                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KH BÁN TRỰC TIẾP </span>
             </div>
         </div>
     </div>
@@ -33,12 +33,12 @@
             <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung">
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
                     <div nz-row [nzGutter]="24">
-                        <div nz-col nzSpan="2">
+                        <div nz-col [nzSpan]="2">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-select formControlName="nam" nzAllowClear
+                                    <nz-select formControlName="namKh" nzAllowClear
                                         [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                             [nzLabel]="p.text"></nz-option>
@@ -59,7 +59,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ điều chỉnh</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -69,17 +69,17 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker formControlName="ngayHlucDc" nzFormat="dd/MM/yyyy"
+                                    <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
                                         [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="12">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
                                     Trích yếu
@@ -90,9 +90,9 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Quyết định gốc</nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Số quyết định gốc</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdGoc()">
                                         <input [readonly]="true" nz-input formControlName="soQdGoc" readonly="true" />
@@ -100,7 +100,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ gốc</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -110,7 +110,37 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="18">
+                        <div nz-col [nzSpan]="2">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                        <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                        <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <input nz-input formControlName="moTaHangHoa" [readonly]="true" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
                                 <nz-form-control nz-col nzSpan="24" [nzErrorTip]="error">
@@ -144,55 +174,8 @@
                 </form>
             </nz-collapse-panel>
         </nz-collapse>
-
         <nz-collapse>
-            <nz-collapse-panel nzActive="true" nzHeader="Thông tin quyết định điều chỉnh KH BĐG">
-                <form nz-form nzLayout="vertical" [formGroup]="formData">
-                    <div nz-row [nzGutter]="24">
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ giao chỉ tiêu của
-                                    TCDTNN</nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open">
-                                        <input [readonly]="true" nz-input formControlName="soQdCc" readonly="true" />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open">
-                                        <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
-                                            readonly="true" />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open">
-                                        <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
-                                            readonly="true" />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="moTaHangHoa" [readonly]="true" />
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                    </div>
-                </form>
-
+            <nz-collapse-panel nzActive="true" nzHeader="Thông tin đề xuất của các cục DTNN KV">
                 <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
                     <thead>
@@ -200,13 +183,12 @@
                             <th [width]="30">STT</th>
                             <th>Cục DTNN KV</th>
                             <th>Địa chỉ</th>
-                            <th>Số kế hoạch/tờ trình</th>
-                            <th>Ngày lập KH</th>
-                            <th>Ngày duyệt KH</th>
+                            <th>Số kế hoạch/đề xuất</th>
+                            <th>Ngày ký</th>
                             <th>Trích yếu</th>
-                            <th>Số ĐV tài sản</th>
-                            <th>Tổng SL xuất bán (kg)</th>
-                            <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt(đ)</th>
+                            <th>Tên dự án</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng tiền đã bao gồm thuế</th>
                         </tr>
                     </thead>
                     <tbody #bodyChiTiet>
@@ -215,12 +197,11 @@
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.diaChi }}</td>
                             <td>{{ data.soDxuat }}</td>
-                            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.trichYeu }}</td>
-                            <td>{{ data.soDviTsan }}</td>
+                            <td>{{ data.tenDuAn }}</td>
                             <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                            <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' }}</td>
+                            <td>{{ data.tongTienVat | number: '1.0-1' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -236,7 +217,7 @@
             </div>
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
-                    <app-thongtin-qd-dieuchinh-khbtt [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
+                    <app-thongtin-qd-dieuchinh-khbtt [title]="'Quyết định điều chỉnh'" [dataInput]="dataInput"
                         [isView]="false">
                     </app-thongtin-qd-dieuchinh-khbtt>
                 </nz-card>

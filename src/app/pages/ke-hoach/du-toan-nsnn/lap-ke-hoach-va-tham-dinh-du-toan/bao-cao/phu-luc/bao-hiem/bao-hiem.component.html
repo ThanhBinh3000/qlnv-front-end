@@ -18,17 +18,17 @@
                     </ng-template>
                 </div>
             </div>
-            <div nz-col [nzSpan]="12" class="d-flex">
+            <!-- <div nz-col [nzSpan]="12" class="d-flex">
                 <div class="d-flex flex-column justify-content-between">
                     <label>Hệ số bảo hiểm kho từ 5000m³ (%):</label>
-                    <fm-input-number nz-input class="search__input" [(ngModel)]="hsBhTu" [disabled]="disableHs">
-                    </fm-input-number>
+                    <input class="money-input" currencyMask [(ngModel)]="hsBhTu" [disabled]="disableHs"
+                        [options]="amount" />
                 </div>
 
                 <div class="pl-2 d-flex flex-column justify-content-between">
                     <label>Hệ số bảo hiểm kho dưới 5000m³ (%):</label>
-                    <fm-input-number nz-input class="search__input" [(ngModel)]="hsBhDuoi" [disabled]="disableHs">
-                    </fm-input-number>
+                    <input class="money-input" currencyMask [(ngModel)]="hsBhDuoi" [disabled]="disableHs"
+                        [options]="amount" />
                 </div>
 
                 <div class="pl-2 d-flex flex-column justify-content-between">
@@ -49,28 +49,35 @@
                         <span>Lưu hệ số</span>
                     </button>
                 </div>
-            </div>
+            </div> -->
         </div>
         <nz-table nzBordered class=" table__body">
             <thead>
                 <tr>
-                    <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
-                    <th rowspan="2" nzWidth="400px">Danh mục kho hàng và hàng DTQG tham gia bảo hiểm năm
+                    <th rowspan="3" class="text-center" nzWidth="100px">STT</th>
+                    <th rowspan="3" nzWidth="400px">Danh mục kho hàng và hàng DTQG tham gia bảo hiểm năm
                         {{namBcao}}</th>
-                    <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
+                    <th rowspan="3" nzWidth="150px">Đơn vị tính</th>
                     <th colSpan="3" nzWidth="150px">Số lượng</th>
-                    <th colSpan="3" nzWidth="150px">Giá trị(VNĐ)</th>
+                    <th colSpan="7" nzWidth="150px">Giá trị bảo hiểm (VNĐ)</th>
                     <!-- <th rowspan="2" [hidden]="status"></th>
                     <th rowspan="2" [hidden]="status"></th> -->
                 </tr>
                 <tr>
-
-                    <th>Từ 5000m³</th>
-                    <th>Dưới 5000m³</th>
-                    <th>Tổng</th>
-                    <th>Từ 5000m³</th>
-                    <th>Dưới 5000m³</th>
-                    <th>Tổng</th>
+                    <th rowspan="2">Từ 5000m³</th>
+                    <th rowspan="2">Dưới 5000m³</th>
+                    <th rowspan="2">Tổng</th>
+                    <th colSpan="3">Từ 5000m³</th>
+                    <th colSpan="3">Dưới 5000m³</th>
+                    <th rowSpan="2">Tổng</th>
+                </tr>
+                <tr>
+                    <th>Giá trị</th>
+                    <th>Tỉ lệ phí bảo hiểm</th>
+                    <th>Giá trị bảo hiểm</th>
+                    <th>Giá trị</th>
+                    <th>Tỉ lệ phí bảo hiểm</th>
+                    <th>Giá trị bảo hiểm</th>
                 </tr>
                 <tr>
                     <th class="text-center">1</th>
@@ -81,7 +88,11 @@
                     <th>6=4+5</th>
                     <th>7</th>
                     <th>8</th>
-                    <th>9=7+8</th>
+                    <th>9=7x8</th>
+                    <th>10</th>
+                    <th>11</th>
+                    <th>12=10x11</th>
+                    <th>13=9+12</th>
                     <!-- <th nzWidth="2.5%" [hidden]="status"></th>
                     <th nzWidth="2.5%" [hidden]="status"></th> -->
                 </tr>
@@ -93,7 +104,11 @@
                     <th>{{displayNumber(total.slDuoiM3)}}</th>
                     <th>{{displayNumber(total.slTong)}}</th>
                     <th>{{displayValue(total.gtTuM3)}}</th>
+                    <th>{{displayValue(total.gtTuTleBh)}}</th>
+                    <th>{{displayValue(total.gtTuGtBh)}}</th>
                     <th>{{displayValue(total.gtDuoiM3)}}</th>
+                    <th>{{displayValue(total.gtDuoiTleBh)}}</th>
+                    <th>{{displayValue(total.gtDuoiGtBh)}}</th>
                     <th>{{displayValue(total.gtTong)}}</th>
                     <!-- <th nzWidth="2.5%" [hidden]="status"></th>
                     <th nzWidth="2.5%" [hidden]="status"></th> -->
@@ -113,12 +128,16 @@
                         <td>{{displayNumber(data.slDuoiM3)}}</td>
                         <td>{{displayNumber(data.slTong)}}</td>
                         <td>{{displayValue(data.gtTuM3)}}</td>
+                        <td>{{displayValue(data.gtTuTleBh)}}</td>
+                        <td>{{displayValue(data.gtTuGtBh)}}</td>
                         <td>{{displayValue(data.gtDuoiM3)}}</td>
+                        <td>{{displayValue(data.gtDuoiTleBh)}}</td>
+                        <td>{{displayValue(data.gtDuoiGtBh)}}</td>
                         <td>{{displayValue(data.gtTong)}}</td>
                         <!-- <td [hidden]="status">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                        </td>
-                        <td [hidden]="status">
+                        </td> -->
+                        <!-- <td [hidden]="status">
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                             <i *ngIf="checkDelete(data.maVtu)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
@@ -140,25 +159,39 @@
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maDviTinh" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.slTuM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.slTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.slDuoiM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.slDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
                             {{displayNumber(editCache[data.id].data.slTong)}}
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtTuM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class=" search__input"
-                                [(ngModel)]="editCache[data.id].data.gtDuoiM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtTuTleBh"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                        </td>
+                        <td>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtTuGtBh"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                        </td>
+                        <td>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                        </td>
+                        <td>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtDuoiTleBh"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                        </td>
+                        <td>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtDuoiGtBh"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
                             {{displayValue(editCache[data.id].data.gtTong)}}
@@ -169,8 +202,8 @@
                                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
                                 Hủy
                             </a>
-                        </td>
-                        <td>
+                        </td> -->
+                        <!-- <td>
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                             <i *ngIf="checkDelete(data.maVtu)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
