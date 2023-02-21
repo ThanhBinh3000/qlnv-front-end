@@ -1,7 +1,7 @@
 .text-green {
-    color: #8BC34C;
-    font-weight: 500;
-    font-size: 12px;
+  color: #8BC34C;
+  font-weight: 500;
+  font-size: 12px;
 }
 
 .text-blue {
@@ -9,9 +9,11 @@
   font-weight: bold;
   background-color: #ededed;
 }
-.bg-selected td{
+
+.bg-selected td {
   background-color: #ebedff;
 }
+
 .title-card {
   width: 100%;
 
@@ -27,4 +29,32 @@
 :host ::ng-deep .ant-statistic-content {
   color: #001CFF;
   font-size: 18px;
+}
+
+::ng-deep .ant-modal-header, ::ng-deep .ant-modal-footer {
+  background-color: #f3f3f3;
+}
+::ng-deep .ant-modal-body{
+  padding-top: 10px;
+}
+.modal-card ::ng-deep .ant-card {
+  border: none;
+
+  .ant-card-head {
+    border-left: 1px double grey;
+    font-weight: bolder;
+  }
+
+  .ant-card-foot {
+    border-left: 1px double grey;
+    font-weight: bolder;
+  }
+
+  .ant-card-body {
+    padding: 10px 10px 10px 10px;
+  }
+
+  .ant-card-head-title {
+    color: grey;
+  }
 }
