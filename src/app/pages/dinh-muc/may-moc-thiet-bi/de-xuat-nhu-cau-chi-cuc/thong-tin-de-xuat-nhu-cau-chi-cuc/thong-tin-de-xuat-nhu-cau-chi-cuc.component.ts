@@ -52,6 +52,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
+      listQlDinhMucDxTbmmTbcdDtl: [null],
     });
   }
 
@@ -284,6 +285,7 @@ export class MmThongTinNcChiCuc {
   chenhLechThieu: number;
   chenhLechThua: number;
   soLuong: number = 0;
+  soLuongTc: number = 0;
   donGiaTd: number = 0;
   thanhTienNc: number = 0;
   ghiChu: number;

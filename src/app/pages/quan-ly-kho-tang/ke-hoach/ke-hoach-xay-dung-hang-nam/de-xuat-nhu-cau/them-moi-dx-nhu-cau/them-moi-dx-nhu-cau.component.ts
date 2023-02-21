@@ -238,9 +238,26 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
+    if(this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
+      return;
+    }
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new DanhMucKho();
     this.updateEditCache()
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.maDuAn == item.maDuAn) {
+          rs = true;
+          return;
+        }
+      })
+    }
+    return rs;
   }
 
   clearData() {
@@ -255,6 +272,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   luuEdit(index: number): void {
+    if(this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
+      return;
+    }
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
   }
