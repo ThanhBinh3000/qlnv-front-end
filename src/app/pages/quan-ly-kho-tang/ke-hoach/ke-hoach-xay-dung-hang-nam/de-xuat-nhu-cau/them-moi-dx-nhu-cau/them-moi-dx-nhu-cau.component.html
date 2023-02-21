@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO) && userService.isCuc())|| (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc()) "
+              *ngIf=" ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc()) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
@@ -247,7 +247,7 @@
           <td>{{ data.tenDuAn }}</td>
           <td>{{ data.diaDiem }}</td>
           <td>{{ data.loaiDuAn }}</td>
-          <td>{{ data.tgKhoiCongTu + ' - ' + data.tgHoanThanhDen }}</td>
+          <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
           <td>{{ data.khoi }}</td>
           <td>{{ data.soQdPd }}</td>
           <td>{{ data.tmdtDuKien }}</td>

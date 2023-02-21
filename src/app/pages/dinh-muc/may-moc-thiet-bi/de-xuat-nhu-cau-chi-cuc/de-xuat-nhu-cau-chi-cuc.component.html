@@ -38,7 +38,7 @@
     <div class="group-button">
       <h3>DANH SÁCH ĐỀ XUẤT</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>

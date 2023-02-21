@@ -11,16 +11,15 @@ import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 
 @Component({
-  selector: 'app-mm-dx-cuc',
-  templateUrl: './mm-dx-cuc.component.html',
-  styleUrls: ['./mm-dx-cuc.component.scss']
+  selector: 'app-mm-qd-mua-sam',
+  templateUrl: './mm-qd-mua-sam.component.html',
+  styleUrls: ['./mm-qd-mua-sam.component.scss']
 })
-export class MmDxCucComponent extends Base2Component implements OnInit {
+export class MmQdMuaSamComponent extends Base2Component implements OnInit {
 
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  listDxChiCuc : any[] = []
 
   constructor(
     httpClient: HttpClient,
