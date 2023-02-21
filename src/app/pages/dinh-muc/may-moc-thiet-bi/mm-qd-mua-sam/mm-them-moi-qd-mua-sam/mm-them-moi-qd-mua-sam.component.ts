@@ -15,6 +15,7 @@ import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
+import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 
 @Component({
   selector: 'app-mm-them-moi-qd-mua-sam',
@@ -36,22 +37,23 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dxChiCucService: MmDxChiCucService,
+    private qdMuaSamService: QuyetDinhMuaSamService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
+    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()
     this.formData = this.fb.group({
       id : [null],
       maDvi : [null],
-      namKeHoach : [null],
-      soTh : [null, Validators.required],
-      soCv : [null, Validators.required],
+      namKeHoach : [dayjs().get('year'), Validators.required],
+      maTh : [null, Validators.required],
+      soQd : [null, Validators.required],
       trichYeu : [null, Validators.required],
       ngayKy : [null, Validators.required],
       trangThai : ['00'],
       tenTrangThai : ['Dự thảo'],
       fileDinhKems : [null],
       lyDoTuChoi : [null],
-      listQlDinhMucDxTbmmTbcdDtl : [null],
+      listQlDinhMucQdMuaSamDtlReq : [null],
     });
   }
 
@@ -60,9 +62,9 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsDxCc();
-      // if (this.id > 0) {
-      //   await this.detail(this.id);
-      // }
+      if (this.id > 0) {
+        await this.detail(this.id);
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -113,14 +115,14 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
+    this.formData.value.listQlDinhMucQdMuaSamDtlReq = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
+    body.soQd = body.soQd + this.maQd
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
+        this.approve(data.id, STATUS.CHO_DUYET_LDTC, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
       }
@@ -130,13 +132,14 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   async detail(id) {
     this.spinner.show();
     try {
-      let res = await this.dxChiCucService.getDetail(id);
+      let res = await this.qdMuaSamService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.value.soQd = this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+          this.dataTable = data.listQlDinhMucQdMuaSamDtl;
           this.convertListData()
           this.expandAll();
         }
@@ -161,7 +164,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         break;
       }
       case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.DA_DUYET_LDTC
+        trangThai = STATUS.BAN_HANH
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
@@ -203,7 +206,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     let sl = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
       data.dataChild.forEach(item => {
-        sl = sl + item.soLuong
+        sl = sl + item.soLuongTc
       })
     }
     return sl
@@ -227,14 +230,30 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  changSoTh(event) {
+  async changSoTh(event) {
     if (this.listTongHop && this.listTongHop.length > 0) {
       let result = this.listTongHop.filter(item => item.id = event)
-      console.log(result)
       if (result && result.length > 0) {
-        this.dataTable = result[0].listQlDinhMucDxTbmmTbcdDtl
-        this.convertListData()
+        let detailTh = result[0]
+        let res = await this.dxChiCucService.getDetail(detailTh.id);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data) {
+            const data = res.data;
+            this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+            if (this.dataTable && this.dataTable.length > 0) {
+              this.dataTable.forEach(item => {
+                item.id = null;
+                item.ghiChu = null;
+              })
+              this.convertListData()
+              this.expandAll();
+            }
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg)
+        }
       }
     }
   }
 }
+

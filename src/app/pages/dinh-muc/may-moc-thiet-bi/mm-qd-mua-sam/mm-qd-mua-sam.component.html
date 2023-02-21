@@ -11,7 +11,7 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Số quyết định</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soCv"/>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd"/>
           </div>
           <div nz-col nzSpan="14">
             <label class="search__label">Trích yếu</label>
@@ -28,7 +28,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -78,8 +78,8 @@
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCv"
-                     (input)="filterInTable('soCv',filterTable.soCv)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                     (input)="filterInTable('soQd',filterTable.soQd)" />
             </nz-input-group>
           </th>
           <th>
@@ -111,8 +111,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTh"
-                     (input)="filterInTable('soTh',filterTable.soTh)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTh"
+                     (input)="filterInTable('maTh',filterTable.maTh)" />
             </nz-input-group>
           </th>
           <th>
@@ -132,22 +132,22 @@
                    [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soCv }}</td>
+          <td>{{ data.soQd }}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
-          <td>{{ data.soTh }}</td>
+          <td>{{ data.maTh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH))">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc())"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai ==STATUS.DU_THAO && userService.isTongCuc()" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

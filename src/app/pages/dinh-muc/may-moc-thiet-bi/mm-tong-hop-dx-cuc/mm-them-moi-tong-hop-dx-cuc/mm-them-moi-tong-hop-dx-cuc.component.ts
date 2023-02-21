@@ -113,6 +113,14 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
+          let arr = detail.listQlDinhMucDxTbmmTbcd;
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              if (dtl.id == item.dxTbmmTbcdId) {
+                item.maDvi = dtl.maDvi
+              }
+            })
+          }
           item.id = null;
           item.ghiChu = null;
           idVirtual:uuidv4();

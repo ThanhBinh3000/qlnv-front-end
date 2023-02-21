@@ -38,7 +38,7 @@
       </button>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_CBV " nzShowIcon nzType="error" class="mg-t-10"
+  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDTC " nzShowIcon nzType="error" class="mg-t-10"
             nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
@@ -62,7 +62,7 @@
             <nz-form-label nzRequired>Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group [nzAddOnAfter]="maQd">
-                <input nz-input formControlName="soCv" [readonly]="isView"/>
+                <input nz-input formControlName="soQd" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -72,7 +72,7 @@
             <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="soTh" (ngModelChange)="changSoTh($event)">
+                <nz-select nzAllowClear formControlName="maTh" (ngModelChange)="changSoTh($event)" [nzDisabled]="isView">
                   <nz-option *ngFor="let item of listTongHop" [nzValue]="item.id" [nzLabel]="item.id"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -165,13 +165,13 @@
           <td>{{0}}</td>
           <td>{{0}}</td>
           <td>
-            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
+            <nz-input-number [(ngModel)]="item.soLuongTc" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
           <td>{{item.donGiaTd  | number: '1.0-1' }}</td>
-          <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1' }}</td>
-          <td>{{item.ghiChu}}</td>
+          <td>{{item.donGiaTd * item.soLuongTc   | number: '1.0-1' }}</td>
+          <td><input nz-input [(ngModel)]="item.ghiChu" [readonly]="isView"></td>
         </tr>
       </ng-container>
     </ng-container>
