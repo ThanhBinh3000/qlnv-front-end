@@ -5,18 +5,18 @@ import { StorageService } from './../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from './../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import dayjs from 'dayjs';
 import { UserLogin } from './../../../../../models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
+import { PhieuKiemNghiemChatLuongService } from './../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 @Component({
-  selector: 'app-bien-ban-lay-mau-ban-giao-mau',
-  templateUrl: './bien-ban-lay-mau-ban-giao-mau.component.html',
-  styleUrls: ['./bien-ban-lay-mau-ban-giao-mau.component.scss']
+  selector: 'app-phieu-kiem-nghiem-chat-luong',
+  templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
+  styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
-export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
+export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
 
   @Input()
   loaiVthh: string;
@@ -29,31 +29,36 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
+    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBanGiaoMauService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
     this.formData = this.fb.group({
-      soBienBan: null,
-      soQdGiaoNvXh: null,
-      dviKiemNghiem: null,
       tenDvi: null,
       maDvi: null,
-      ngayLayMau: null,
-      ngayLayMauTu: null,
-      ngayLayMauDen: null,
+      nam: [dayjs().get("year")],
+      soQdGiaoNvXh: null,
+      soPhieu: null,
+      soBienBan: null,
+      ngayKnMau: null,
+      ngayKnTu: null,
+      ngayKnDen: null,
+      soBbXuatDocKho: null,
       type: null
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
       nam: '',
       ngayQdGiaoNvXh: '',
+      soPhieu: '',
+      ngayKnMau: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganKho: '',
+      tenLoKho: '',
       soBienBan: '',
       ngayLayMau: '',
-      tenDiemKho: '',
-      tenLoKho: '',
       soBbTinhKho: '',
       ngayXuatDocKho: '',
-      soBbHaoDoi: '',
       tenTrangThai: '',
     };
   }
