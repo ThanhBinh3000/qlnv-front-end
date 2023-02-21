@@ -255,13 +255,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     if (maLoaiDan == "1") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
     } else if (maLoaiDan == "2") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDieuChinh',
       }
       this.dataChange.emit(obj);
     } else {

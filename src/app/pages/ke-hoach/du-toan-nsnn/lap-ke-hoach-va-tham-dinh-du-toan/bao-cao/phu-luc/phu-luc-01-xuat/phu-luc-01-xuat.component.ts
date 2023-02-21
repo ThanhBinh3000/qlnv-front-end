@@ -121,14 +121,14 @@ export class PhuLuc01XuatComponent implements OnInit {
         item.dmucNamDtoan = dinhMuc?.tongDmuc;
         item.dviTinh = dinhMuc?.donViTinh;
         item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
-        item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
+        item.ttienTd = mulNumber(item.dmucNamDtoan, item.sluongTd);
       } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
         // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
         item.dmucNamDtoan = dinhMuc?.tongDmuc;
         item.dviTinh = dinhMuc?.donViTinh;
         item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
-        item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
+        item.ttienTd = mulNumber(item.dmucNamDtoan, item.sluongTd);
       }
     })
 
