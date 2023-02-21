@@ -24,9 +24,9 @@ export class QuanLyVonPhiService extends BaseService {
     )
   }
 
-  dmKho(maDvi: string): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/dm-kho/MLK/' + maDvi
+  dmKho(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/dm-kho', request
     )
   }
 

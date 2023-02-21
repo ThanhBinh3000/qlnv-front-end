@@ -239,7 +239,13 @@ export class BaoHiemHangComponent implements OnInit {
   }
 
   async getDmKho() {
-    await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+    const obj = {
+      maDvi: this.maDviTao,
+      type: [
+        "MLK"
+      ]
+    }
+    await this.quanLyVonPhiService.dmKho(obj).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.listDanhMucKho = res.data;
       } else {

@@ -155,7 +155,7 @@ export class PhuLuc02Component implements OnInit {
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
 				// item.dviTinh = dinhMuc?.donViTinh;
 				item.ttienTaiKho = mulNumber(item.dmucTaiKho, item.sluongTaiKho);
-				item.binhQuanNgoaiKho = divNumber(item.ttienNgoaiKho, item.sluongTaiKho);
+				item.ttienNgoaiKho = mulNumber(item.binhQuanNgoaiKho, item.sluongTaiKho);
 				item.tongCong = sumNumber([item.ttienTaiKho, item.ttienNgoaiKho])
 				// }
 			})
@@ -467,7 +467,7 @@ export class PhuLuc02Component implements OnInit {
 					// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
 					this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho]) * sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
 					this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
-					this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
+					// this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
 					this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
 				}
@@ -500,7 +500,7 @@ export class PhuLuc02Component implements OnInit {
 						// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
 						this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
 						this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
-						this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+						// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
 						// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
 						this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
 					}
