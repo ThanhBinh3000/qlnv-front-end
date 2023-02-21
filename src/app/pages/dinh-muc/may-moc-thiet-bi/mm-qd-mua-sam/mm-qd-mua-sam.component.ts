@@ -39,7 +39,8 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
       trichYeu: [''],
       ngayKy: [''],
       ngayKyTu: [''],
-      ngayKyDen: ['']
+      ngayKyDen: [''],
+      loai: ['0']
     });
     this.filterTable = {};
   }

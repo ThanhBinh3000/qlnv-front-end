@@ -111,8 +111,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.qdMsTc"
-                     (input)="filterInTable('qdMsTc',filterTable.qdMsTc)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdMuaSam"
+                     (input)="filterInTable('soQdMuaSam',filterTable.soQdMuaSam)" />
             </nz-input-group>
           </th>
           <th>
@@ -137,7 +137,7 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
-          <td>{{ data.soQdGiaoCt }}</td>
+          <td>{{ data.soQdMuaSam }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV">

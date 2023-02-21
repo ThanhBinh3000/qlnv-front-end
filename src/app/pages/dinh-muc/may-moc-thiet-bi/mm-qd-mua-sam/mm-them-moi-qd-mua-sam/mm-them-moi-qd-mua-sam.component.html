@@ -71,10 +71,8 @@
           <nz-form-item>
             <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <nz-select nzAllowClear formControlName="maTh" (ngModelChange)="changSoTh($event)" [nzDisabled]="isView">
-                  <nz-option *ngFor="let item of listTongHop" [nzValue]="item.id" [nzLabel]="item.id"></nz-option>
-                </nz-select>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                <input nz-input formControlName="maTh" [readonly]="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -157,7 +155,7 @@
           <td></td>
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
-          <td>{{item.donViTinh}}</td>
+          <td></td>
           <td>{{0}}</td>
           <td>{{0}}</td>
           <td>{{0}}</td>

@@ -4,9 +4,9 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {FormGroup, Validators} from "@angular/forms";
+import { Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
+import {chain} from 'lodash';
 import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
@@ -16,6 +16,7 @@ import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
+import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 
 @Component({
   selector: 'app-mm-them-moi-qd-mua-sam',
@@ -25,11 +26,12 @@ import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam
 export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input()   listTongHop : any[] = [];
-  maQd  : string
+  @Input() listTongHop: any[] = [];
+  maQd: string
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -42,18 +44,19 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      id : [null],
-      maDvi : [null],
-      namKeHoach : [dayjs().get('year'), Validators.required],
-      maTh : [null, Validators.required],
-      soQd : [null, Validators.required],
-      trichYeu : [null, Validators.required],
-      ngayKy : [null, Validators.required],
-      trangThai : ['00'],
-      tenTrangThai : ['Dự thảo'],
-      fileDinhKems : [null],
-      lyDoTuChoi : [null],
-      listQlDinhMucQdMuaSamDtlReq : [null],
+      id: [null],
+      maDvi: [null],
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      maTh: [null, Validators.required],
+      soQd: [null, Validators.required],
+      trichYeu: [null, Validators.required],
+      ngayKy: [null, Validators.required],
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKems: [null],
+      lyDoTuChoi: [null],
+      listQlDinhMucQdMuaSamDtlReq: [null],
+      loai : ['0']
     });
   }
 
@@ -89,7 +92,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         let data = res.data;
         this.listTongHop = data.content;
         if (this.listTongHop) {
-          this.listTongHop.filter(item => item.trangThai == this.STATUS.DA_DUYET_LDV)
+          this.listTongHop.filter(item => item.trangThai == this.STATUS.DA_DUYET_LDV )
         }
       } else {
         this.listTongHop = [];
@@ -137,7 +140,9 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.value.soQd = this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+          this.formData.patchValue({
+            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+          })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
           this.convertListData()
@@ -172,7 +177,11 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(),})
+      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
+          tenTaiSan: key,
+          dataChild: value,
+          idVirtual: uuidv4(),
+        })
       ).value()
     }
     if (this.dataTable && this.dataTable.length > 0) {
@@ -202,7 +211,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     console.log(this.dataTable)
   }
 
-  sumSoLuong(data : any) {
+  sumSoLuong(data: any) {
     let sl = 0;
     if (data && data.dataChild && data.dataChild.length > 0) {
       data.dataChild.forEach(item => {
@@ -244,6 +253,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
               this.dataTable.forEach(item => {
                 item.id = null;
                 item.ghiChu = null;
+                item.soLuong = item.soLuongTc
               })
               this.convertListData()
               this.expandAll();
@@ -253,6 +263,30 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
       }
+    }
+  }
+
+  chonMaTongHop() {
+    if (!this.isView) {
+      let modalQD = this.modal.create({
+        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
+        nzContent: DialogMmMuaSamComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzComponentParams: {
+          listTh: this.listTongHop
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.formData.patchValue({
+            maTh : data
+          })
+          await this.changSoTh(data);
+        }
+      })
     }
   }
 }
