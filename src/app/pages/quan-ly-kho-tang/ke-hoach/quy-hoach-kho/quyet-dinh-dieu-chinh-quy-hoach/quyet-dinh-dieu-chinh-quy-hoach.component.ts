@@ -288,15 +288,15 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
   }
 
   clearFilter() {
-    this.filterTable = {
+    this.searchFilter = {
       soQuyetDinh: '',
       ngayKy: '',
       namBatDau: '',
       namKetThuc: '',
-      namKhoach: '',
-      trichYeu: '',
-      soQdGoc: '',
-      tenTrangThai: '',
+      phuongAnQuyHoach: '',
+      maCuc: '',
+      maChiCuc: '',
+      maDiemKho: '',
     };
     this.search();
   }
@@ -336,20 +336,20 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maChiCuc": this.searchFilter.maChiCuc,
-          "maCuc": this.searchFilter.maCuc,
-          "maDiemKho": this.searchFilter.maDiemKho,
-          "namBatDau": this.searchFilter.namBatDau,
-          "ngayKyDen": this.searchFilter.ngayKy[1],
-          "ngayKyTu": this.searchFilter.ngayKy[0],
-          "namKetThuc": this.searchFilter.namKetThuc,
-          "paggingReq": {
-            "limit": 20,
-            "page": 1
-          },
-          "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
-          "soQuyetDinh": this.searchFilter.soQuyetDinh,
-          "type": this.type
+          ngayKyTu: this.searchFilter.ngayKy[0],
+          ngayKyDen: this.searchFilter.ngayKy[1],
+          soQuyetDinh: this.searchFilter.soQuyetDinh,
+          namBatDau: this.searchFilter.namBatDau,
+          namKetThuc: this.searchFilter.namKetThuc,
+          maCuc: this.searchFilter.maCuc,
+          maChiCuc: this.searchFilter.maChiCuc,
+          maDiemKho: this.searchFilter.maDiemKho,
+          type: this.type,
+          maDvi:this.userInfo.MA_DVI,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          }
         }
         this.quyHoachKhoService
           .export(body)
