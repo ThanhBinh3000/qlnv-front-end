@@ -19,6 +19,8 @@ import {STATUS} from "../../../../../../constants/status";
 
 import {DonviService} from "../../../../../../services/donvi.service";
 import {iterator} from "rxjs/internal-compatibility";
+import {OldResponseData} from "../../../../../../interfaces/response";
+import {MangLuoiKhoService} from "../../../../../../services/quan-ly-kho-tang/mangLuoiKho.service";
 
 
 @Component({
@@ -66,6 +68,7 @@ export class ThemMoiQdComponent implements OnInit {
     private quyHoachKhoService: QuyHoachKhoService,
     private fb: FormBuilder,
     private modal: NzModalService,
+    private mangLuoiKhoService: MangLuoiKhoService,
     private helperService: HelperService
   ) {
     this.formData = this.fb.group({
@@ -84,7 +87,7 @@ export class ThemMoiQdComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.maQd = '/QĐ-TC',
+    this.maQd = '/QĐ-BTC',
       await Promise.all([
         await this.loadListPa(),
         await this.loadDsNam(),
@@ -439,18 +442,41 @@ export class ThemMoiQdComponent implements OnInit {
     }
   }
 
-  onChangDiemKho(event, type?) {
+  async onChangDiemKho(event, type?) {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
-    if (diemKho) {
-      if (type) {
-        type.tenDiemKho = diemKho[0].tenDvi
-        type.diaDiem = diemKho[0].diaChi
-      } else {
-        this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
-        this.rowItemTL.diaDiem = diemKho[0].diaChi
+    let res = await this.getDetailMlkByKey(event, '4')
+    if (res) {
+      if (diemKho) {
+        if (type) {
+          type.tenDiemKho = diemKho[0].tenDvi
+          type.diaDiem = diemKho[0].diaChi
+          type.dienTich = res.dienTichDat ? res.dienTichDat : 0
+        } else {
+          this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
+          this.rowItemTL.diaDiem = diemKho[0].diaChi
+          this.rowItemTL.dienTich =res.dienTichDat ? res.dienTichDat : 0
+        }
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không thấy thông tin điểm kho!')
+      return;
     }
   }
+
+  async getDetailMlkByKey(maDvi, capDvi) {
+      let body = {
+        maDvi: maDvi,
+        capDvi: capDvi
+      }
+    let resp;
+      await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+           resp = res.data.object;
+        }
+      })
+    return resp;
+    }
+
 
   checkValidators(rowItem : QuyHoachKho) {
     let arr = [];
@@ -469,12 +495,12 @@ export class ThemMoiQdComponent implements OnInit {
     return check;
   }
 
-  exportCt() {
+  exportCt(type : string) {
     this.spinner.show();
     try {
       if (this.dataTable && this.dataTable.length > 0) {
         let body = {
-          listCt: this.dataTable
+          listCt: type == 'TL' ? this.dataTableTL : this.dataTableDTM
         }
         this.quyHoachKhoService
           .exportCt(body)

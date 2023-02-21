@@ -81,6 +81,7 @@
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                     </th>
                     <th width="60px" class="text-center">STT</th>
+                    <th *ngIf="searchFilter.loaiTimKiem == '1'">Đơn vị</th>
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
                     <th>Loại</th>
@@ -102,6 +103,13 @@
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
+                    <th *ngIf="searchFilter.loaiTimKiem == '1'">
+                        <div *ngFor="let e of donVis">
+                            <div *ngIf="e.maDvi == data.maDvi">
+                                {{e.tenDvi}}
+                            </div>
+                        </div>
+                    </th>
                     <td>
                         {{ data.maCapUng}}
                     </td>

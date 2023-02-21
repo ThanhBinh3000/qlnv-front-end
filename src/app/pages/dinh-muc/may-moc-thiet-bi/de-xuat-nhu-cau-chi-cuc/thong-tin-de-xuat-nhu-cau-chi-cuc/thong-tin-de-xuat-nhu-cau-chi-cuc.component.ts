@@ -39,6 +39,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
+      capDvi: [null],
       soCv: [null, Validators.required],
       ngayKy: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
@@ -231,6 +232,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     }
     this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
+    this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
