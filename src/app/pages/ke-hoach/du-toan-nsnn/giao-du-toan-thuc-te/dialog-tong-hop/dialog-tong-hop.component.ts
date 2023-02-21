@@ -73,7 +73,8 @@ export class DialogTongHopComponent implements OnInit {
     const request = {
       maPa: this.response.maPa,
       maDvi: this.obj.maDvi,
-      namPa: this.response.namHienTai
+      namPa: this.response.namHienTai,
+      maLoaiDan: "3",
     }
     this.spinner.show();
     await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
