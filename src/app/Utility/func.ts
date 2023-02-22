@@ -267,6 +267,10 @@ export function divNumber(num1, num2): number {
     }
 }
 
+export function percent(num1, num2): number {
+    return divNumber(mulNumber(num1, 100), num2);
+}
+
 //hien thi cac so theo dinh dang
 export function displayNumber(num: number): string {
     let displayValue: string;

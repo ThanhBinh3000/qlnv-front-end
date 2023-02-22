@@ -113,14 +113,14 @@
                             <th rowspan="3" nzWidth="50px" nzLeft>STT</th>
                             <th rowspan="3" nzLeft>Hàng DTQG</th>
                             <th colspan="3" rowspan="2">Nhận</th>
-                            <th *ngIf="capDvi == 2" colspan="9">Chi</th>
-                            <th *ngIf="capDvi != 2" colspan="6">Chi</th>
+                            <th *ngIf="capDvi != 3" colspan="9">Chi</th>
+                            <th *ngIf="capDvi == 3" colspan="6">Chi</th>
                             <th colspan="5">Nộp lên đơn vị cấp trên</th>
                             <th *ngIf="statusGui" rowSpan="3" style="width: 50px;" nzRight></th>
                         </tr>
                         <tr>
                             <th *ngIf="capDvi != 3" colspan="3">Giao cho đơn vị cấp dưới</th>
-                            <th *ngIf="capDvi != 1" colspan="3">Tổng thanh toán cho khách hàng</th>
+                            <th colspan="3">Tổng thanh toán cho khách hàng</th>
                             <th colspan="3">Số dư</th>
                             <th rowspan="2">Số đã nộp tổng cục <br /> (lũy kế) của lần nộp này</th>
                             <th colspan="2">Nộp lần này</th>
@@ -131,9 +131,9 @@
                             <th>Tổng vốn ứng</th>
                             <th>Tổng vốn cấp</th>
                             <th>Tổng vốn</th>
-                            <th *ngIf="capDvi == 2">Tổng vốn ứng</th>
-                            <th *ngIf="capDvi == 2">Tổng vốn cấp</th>
-                            <th *ngIf="capDvi == 2">Tổng vốn</th>
+                            <th *ngIf="capDvi != 3">Tổng vốn ứng</th>
+                            <th *ngIf="capDvi != 3">Tổng vốn cấp</th>
+                            <th *ngIf="capDvi != 3">Tổng vốn</th>
                             <th>Tổng vốn ứng</th>
                             <th>Tổng vốn cấp</th>
                             <th>Tổng vốn</th>
@@ -152,9 +152,9 @@
                             <th *ngIf="capDvi != 3">4</th>
                             <th *ngIf="capDvi != 3">5</th>
                             <th *ngIf="capDvi != 3">6=4+5</th>
-                            <th *ngIf="capDvi != 1">7</th>
-                            <th *ngIf="capDvi != 1">8</th>
-                            <th *ngIf="capDvi != 1">9=7+8</th>
+                            <th>7</th>
+                            <th>8</th>
+                            <th>9=7+8</th>
                             <th>10=1-4-7</th>
                             <th>11=2-5-8</th>
                             <th>12=10+11</th>
@@ -193,13 +193,13 @@
                                 <td *ngIf="capDvi != 3">
                                     {{ displayValue(data.tongCapGiao) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(data.tongVonUngTt) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(data.tongVonCapTt) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(data.tongVonTt) }}
                                 </td>
                                 <td>
@@ -255,13 +255,13 @@
                                 <td *ngIf="capDvi != 3">
                                     {{ displayValue(editCache[data.id].data.tongCapGiao) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(editCache[data.id].data.tongVonUngTt) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(editCache[data.id].data.tongVonCapTt) }}
                                 </td>
-                                <td *ngIf="capDvi != 1">
+                                <td>
                                     {{ displayValue(editCache[data.id].data.tongVonTt) }}
                                 </td>
                                 <td>

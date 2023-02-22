@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, percent, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -157,18 +157,18 @@ export class PhuLucIComponent implements OnInit {
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                giaiNganThangBcaoTcongTle: divNumber(item.giaiNganThangBcaoTcong, item.kphiSdungTcong),
-                giaiNganThangBcaoDtoanTle: divNumber(item.giaiNganThangBcaoDtoan, item.kphiSdungDtoan),
-                giaiNganThangBcaoNguonKhacTle: divNumber(item.giaiNganThangBcaoNguonKhac, item.kphiSdungNguonKhac),
-                giaiNganThangBcaoNguonQuyTle: divNumber(item.giaiNganThangBcaoNguonQuy, item.kphiSdungNguonQuy),
-                giaiNganThangBcaoNsttTle: divNumber(item.giaiNganThangBcaoNstt, item.kphiSdungNstt),
-                giaiNganThangBcaoCkTle: divNumber(item.giaiNganThangBcaoCk, item.kphiSdungCk),
-                luyKeGiaiNganTcongTle: divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
-                luyKeGiaiNganDtoanTle: divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
-                luyKeGiaiNganNguonKhacTle: divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
-                luyKeGiaiNganNguonQuyTle: divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy),
-                luyKeGiaiNganNsttTle: divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt),
-                luyKeGiaiNganCkTle: divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk),
+                giaiNganThangBcaoTcongTle: percent(item.giaiNganThangBcaoTcong, item.kphiSdungTcong),
+                giaiNganThangBcaoDtoanTle: percent(item.giaiNganThangBcaoDtoan, item.kphiSdungDtoan),
+                giaiNganThangBcaoNguonKhacTle: percent(item.giaiNganThangBcaoNguonKhac, item.kphiSdungNguonKhac),
+                giaiNganThangBcaoNguonQuyTle: percent(item.giaiNganThangBcaoNguonQuy, item.kphiSdungNguonQuy),
+                giaiNganThangBcaoNsttTle: percent(item.giaiNganThangBcaoNstt, item.kphiSdungNstt),
+                giaiNganThangBcaoCkTle: percent(item.giaiNganThangBcaoCk, item.kphiSdungCk),
+                luyKeGiaiNganTcongTle: percent(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
+                luyKeGiaiNganDtoanTle: percent(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
+                luyKeGiaiNganNguonKhacTle: percent(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
+                luyKeGiaiNganNguonQuyTle: percent(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy),
+                luyKeGiaiNganNsttTle: percent(item.luyKeGiaiNganNstt, item.kphiSdungNstt),
+                luyKeGiaiNganCkTle: percent(item.luyKeGiaiNganCk, item.kphiSdungCk),
                 checked: false,
             })
         })
@@ -177,12 +177,12 @@ export class PhuLucIComponent implements OnInit {
             this.luyKeDetail.forEach(item => {
                 this.lstCtietBcao.push({
                     ...item,
-                    luyKeGiaiNganTcongTle: divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
-                    luyKeGiaiNganDtoanTle: divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
-                    luyKeGiaiNganNguonKhacTle: divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
-                    luyKeGiaiNganNguonQuyTle: divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy),
-                    luyKeGiaiNganNsttTle: divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt),
-                    luyKeGiaiNganCkTle: divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk),
+                    luyKeGiaiNganTcongTle: percent(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
+                    luyKeGiaiNganDtoanTle: percent(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
+                    luyKeGiaiNganNguonKhacTle: percent(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
+                    luyKeGiaiNganNguonQuyTle: percent(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy),
+                    luyKeGiaiNganNsttTle: percent(item.luyKeGiaiNganNstt, item.kphiSdungNstt),
+                    luyKeGiaiNganCkTle: percent(item.luyKeGiaiNganCk, item.kphiSdungCk),
                     checked: false,
                     id: uuid.v4() + 'FE',
                 })
@@ -598,18 +598,18 @@ export class PhuLucIComponent implements OnInit {
                     this.lstCtietBcao[index].luyKeGiaiNganNstt = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganNstt, item.luyKeGiaiNganNstt]);
                     this.lstCtietBcao[index].luyKeGiaiNganCk = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganCk, item.luyKeGiaiNganCk]);
 
-                    this.lstCtietBcao[index].giaiNganThangBcaoTcongTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoTcong, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNsttTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNstt, this.lstCtietBcao[index].kphiSdungNstt);
-                    this.lstCtietBcao[index].giaiNganThangBcaoCkTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoCk, this.lstCtietBcao[index].kphiSdungCk);
-                    this.lstCtietBcao[index].luyKeGiaiNganTcongTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].luyKeGiaiNganDtoanTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
-                    this.lstCtietBcao[index].luyKeGiaiNganNguonKhacTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
-                    this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
-                    this.lstCtietBcao[index].luyKeGiaiNganNsttTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNstt, this.lstCtietBcao[index].kphiSdungNstt);
-                    this.lstCtietBcao[index].luyKeGiaiNganCkTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganCk, this.lstCtietBcao[index].kphiSdungCk);
+                    this.lstCtietBcao[index].giaiNganThangBcaoTcongTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoTcong, this.lstCtietBcao[index].kphiSdungTcong);
+                    this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNsttTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoNstt, this.lstCtietBcao[index].kphiSdungNstt);
+                    this.lstCtietBcao[index].giaiNganThangBcaoCkTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoCk, this.lstCtietBcao[index].kphiSdungCk);
+                    this.lstCtietBcao[index].luyKeGiaiNganTcongTle = percent(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].kphiSdungTcong);
+                    this.lstCtietBcao[index].luyKeGiaiNganDtoanTle = percent(this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
+                    this.lstCtietBcao[index].luyKeGiaiNganNguonKhacTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
+                    this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
+                    this.lstCtietBcao[index].luyKeGiaiNganNsttTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNstt, this.lstCtietBcao[index].kphiSdungNstt);
+                    this.lstCtietBcao[index].luyKeGiaiNganCkTle = percent(this.lstCtietBcao[index].luyKeGiaiNganCk, this.lstCtietBcao[index].kphiSdungCk);
                 }
             })
             stt = getHead(stt);
@@ -653,18 +653,18 @@ export class PhuLucIComponent implements OnInit {
                 this.total.luyKeGiaiNganCk = sumNumber([this.total.luyKeGiaiNganCk, item.luyKeGiaiNganCk]);
             }
         })
-        this.total.giaiNganThangBcaoTcongTle = divNumber(this.total.giaiNganThangBcaoTcong, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoDtoanTle = divNumber(this.total.giaiNganThangBcaoDtoan, this.total.kphiSdungDtoan);
-        this.total.giaiNganThangBcaoNguonKhacTle = divNumber(this.total.giaiNganThangBcaoNguonKhac, this.total.kphiSdungNguonKhac);
-        this.total.giaiNganThangBcaoNguonQuyTle = divNumber(this.total.giaiNganThangBcaoNguonQuy, this.total.kphiSdungNguonQuy);
-        this.total.giaiNganThangBcaoNsttTle = divNumber(this.total.giaiNganThangBcaoNstt, this.total.kphiSdungNstt);
-        this.total.giaiNganThangBcaoCkTle = divNumber(this.total.giaiNganThangBcaoCk, this.total.kphiSdungCk);
-        this.total.luyKeGiaiNganTcongTle = divNumber(this.total.luyKeGiaiNganTcong, this.total.kphiSdungTcong);
-        this.total.luyKeGiaiNganDtoanTle = divNumber(this.total.luyKeGiaiNganDtoan, this.total.kphiSdungDtoan);
-        this.total.luyKeGiaiNganNguonKhacTle = divNumber(this.total.luyKeGiaiNganNguonKhac, this.total.kphiSdungNguonKhac);
-        this.total.luyKeGiaiNganNguonQuyTle = divNumber(this.total.luyKeGiaiNganNguonQuy, this.total.kphiSdungNguonQuy);
-        this.total.luyKeGiaiNganNsttTle = divNumber(this.total.luyKeGiaiNganNstt, this.total.kphiSdungNstt);
-        this.total.luyKeGiaiNganCkTle = divNumber(this.total.luyKeGiaiNganCk, this.total.kphiSdungCk);
+        this.total.giaiNganThangBcaoTcongTle = percent(this.total.giaiNganThangBcaoTcong, this.total.kphiSdungTcong);
+        this.total.giaiNganThangBcaoDtoanTle = percent(this.total.giaiNganThangBcaoDtoan, this.total.kphiSdungDtoan);
+        this.total.giaiNganThangBcaoNguonKhacTle = percent(this.total.giaiNganThangBcaoNguonKhac, this.total.kphiSdungNguonKhac);
+        this.total.giaiNganThangBcaoNguonQuyTle = percent(this.total.giaiNganThangBcaoNguonQuy, this.total.kphiSdungNguonQuy);
+        this.total.giaiNganThangBcaoNsttTle = percent(this.total.giaiNganThangBcaoNstt, this.total.kphiSdungNstt);
+        this.total.giaiNganThangBcaoCkTle = percent(this.total.giaiNganThangBcaoCk, this.total.kphiSdungCk);
+        this.total.luyKeGiaiNganTcongTle = percent(this.total.luyKeGiaiNganTcong, this.total.kphiSdungTcong);
+        this.total.luyKeGiaiNganDtoanTle = percent(this.total.luyKeGiaiNganDtoan, this.total.kphiSdungDtoan);
+        this.total.luyKeGiaiNganNguonKhacTle = percent(this.total.luyKeGiaiNganNguonKhac, this.total.kphiSdungNguonKhac);
+        this.total.luyKeGiaiNganNguonQuyTle = percent(this.total.luyKeGiaiNganNguonQuy, this.total.kphiSdungNguonQuy);
+        this.total.luyKeGiaiNganNsttTle = percent(this.total.luyKeGiaiNganNstt, this.total.kphiSdungNstt);
+        this.total.luyKeGiaiNganCkTle = percent(this.total.luyKeGiaiNganCk, this.total.kphiSdungCk);
     }
 
     changeModel(id: string) {
@@ -699,18 +699,18 @@ export class PhuLucIComponent implements OnInit {
         this.editCache[id].data.luyKeGiaiNganCk = sumNumber([data.luyKeGiaiNganCk, this.editCache[id].data.giaiNganThangBcaoCk, -data.giaiNganThangBcaoCk]);
 
         //tinh ty le
-        this.editCache[id].data.giaiNganThangBcaoTcongTle = divNumber(this.editCache[id].data.giaiNganThangBcaoTcong, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoDtoanTle = divNumber(this.editCache[id].data.giaiNganThangBcaoDtoan, this.editCache[id].data.kphiSdungDtoan);
-        this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
-        this.editCache[id].data.giaiNganThangBcaoNguonQuyTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
-        this.editCache[id].data.giaiNganThangBcaoNsttTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNstt, this.editCache[id].data.kphiSdungNstt);
-        this.editCache[id].data.giaiNganThangBcaoCkTle = divNumber(this.editCache[id].data.giaiNganThangBcaoCk, this.editCache[id].data.kphiSdungCk);
-        this.editCache[id].data.luyKeGiaiNganTcongTle = divNumber(this.editCache[id].data.luyKeGiaiNganTcong, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.luyKeGiaiNganDtoanTle = divNumber(this.editCache[id].data.luyKeGiaiNganDtoan, this.editCache[id].data.kphiSdungDtoan);
-        this.editCache[id].data.luyKeGiaiNganNguonKhacTle = divNumber(this.editCache[id].data.luyKeGiaiNganNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
-        this.editCache[id].data.luyKeGiaiNganNguonQuyTle = divNumber(this.editCache[id].data.luyKeGiaiNganNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
-        this.editCache[id].data.luyKeGiaiNganNsttTle = divNumber(this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.kphiSdungNstt);
-        this.editCache[id].data.luyKeGiaiNganCkTle = divNumber(this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.kphiSdungCk)
+        this.editCache[id].data.giaiNganThangBcaoTcongTle = percent(this.editCache[id].data.giaiNganThangBcaoTcong, this.editCache[id].data.kphiSdungTcong);
+        this.editCache[id].data.giaiNganThangBcaoDtoanTle = percent(this.editCache[id].data.giaiNganThangBcaoDtoan, this.editCache[id].data.kphiSdungDtoan);
+        this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = percent(this.editCache[id].data.giaiNganThangBcaoNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
+        this.editCache[id].data.giaiNganThangBcaoNguonQuyTle = percent(this.editCache[id].data.giaiNganThangBcaoNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
+        this.editCache[id].data.giaiNganThangBcaoNsttTle = percent(this.editCache[id].data.giaiNganThangBcaoNstt, this.editCache[id].data.kphiSdungNstt);
+        this.editCache[id].data.giaiNganThangBcaoCkTle = percent(this.editCache[id].data.giaiNganThangBcaoCk, this.editCache[id].data.kphiSdungCk);
+        this.editCache[id].data.luyKeGiaiNganTcongTle = percent(this.editCache[id].data.luyKeGiaiNganTcong, this.editCache[id].data.kphiSdungTcong);
+        this.editCache[id].data.luyKeGiaiNganDtoanTle = percent(this.editCache[id].data.luyKeGiaiNganDtoan, this.editCache[id].data.kphiSdungDtoan);
+        this.editCache[id].data.luyKeGiaiNganNguonKhacTle = percent(this.editCache[id].data.luyKeGiaiNganNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
+        this.editCache[id].data.luyKeGiaiNganNguonQuyTle = percent(this.editCache[id].data.luyKeGiaiNganNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
+        this.editCache[id].data.luyKeGiaiNganNsttTle = percent(this.editCache[id].data.luyKeGiaiNganNstt, this.editCache[id].data.kphiSdungNstt);
+        this.editCache[id].data.luyKeGiaiNganCkTle = percent(this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.kphiSdungCk)
     }
 
     //chuyen du lieu tu phu luc 2 va 3 sang phu luc 1
@@ -759,14 +759,14 @@ export class PhuLucIComponent implements OnInit {
         this.lstCtietBcao[index].luyKeGiaiNganTcong = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].luyKeGiaiNganNguonQuy,
         this.lstCtietBcao[index].luyKeGiaiNganNstt, this.lstCtietBcao[index].luyKeGiaiNganCk]);
         //tinh lai ty le
-        this.lstCtietBcao[index].giaiNganThangBcaoTcongTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoTcong, this.lstCtietBcao[index].kphiSdungTcong);
-        this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
-        this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
-        this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
-        this.lstCtietBcao[index].luyKeGiaiNganTcongTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].kphiSdungTcong);
-        this.lstCtietBcao[index].luyKeGiaiNganDtoanTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
-        this.lstCtietBcao[index].luyKeGiaiNganNguonKhacTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
-        this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
+        this.lstCtietBcao[index].giaiNganThangBcaoTcongTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoTcong, this.lstCtietBcao[index].kphiSdungTcong);
+        this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
+        this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
+        this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = percent(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
+        this.lstCtietBcao[index].luyKeGiaiNganTcongTle = percent(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].kphiSdungTcong);
+        this.lstCtietBcao[index].luyKeGiaiNganDtoanTle = percent(this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
+        this.lstCtietBcao[index].luyKeGiaiNganNguonKhacTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
+        this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = percent(this.lstCtietBcao[index].luyKeGiaiNganNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
         this.sum(this.lstCtietBcao[index].stt)
     }
 
