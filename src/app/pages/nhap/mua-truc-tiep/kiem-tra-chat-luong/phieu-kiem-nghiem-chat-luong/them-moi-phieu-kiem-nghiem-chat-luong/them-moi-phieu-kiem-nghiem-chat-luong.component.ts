@@ -402,7 +402,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listBbBanGiaoMau = res.data.content
-        console.log(this.listBbBanGiaoMau, 5555);
       }
     }
   }
@@ -433,7 +432,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let res = await this.bienBanLayMauServive.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      console.log(data, 9999);
       this.formData.patchValue({
         soBbLayMau: data.soBienBan,
         soBbNhapDayKho: data.soBbNhapDayKho,
