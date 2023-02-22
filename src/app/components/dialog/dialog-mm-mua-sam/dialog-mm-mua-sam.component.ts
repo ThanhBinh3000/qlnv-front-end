@@ -1,8 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NzModalRef} from "ng-zorro-antd/modal";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {MmDxChiCucService} from "../../../services/mm-dx-chi-cuc.service";
 
 @Component({
   selector: 'app-dialog-mm-mua-sam',
