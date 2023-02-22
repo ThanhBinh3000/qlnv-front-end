@@ -90,7 +90,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   listNoiDung = []
   listThanhTien: any;
   listSoLuong: any;
-
+  errorInputComponent: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -200,7 +200,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI,
+      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
@@ -280,52 +280,60 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
-    this.isVisible = true;
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
+    this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
-    if (data) {
-      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+    if (this.userService.isCuc()) {
+      this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
       this.changeCuc(this.phuongAnRow.maDviCuc);
-      this.phuongAnRow.noiDung = data.childData[0].noiDung;
-      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-
-      console.log(this.formData.value.deXuatPhuongAn, 98888)
-      console.log(data);
-      console.log(this.phuongAnRow, "phuongAnRow")
     }
+    /* if (data) {
+       this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+       this.changeCuc(this.phuongAnRow.maDviCuc);
+       this.phuongAnRow.noiDung = data.childData[0].noiDung;
+       this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+     }*/
   }
 
   handleOk(): void {
+    if (!this.phuongAnRow.maDviChiCuc) {
+      this.errorInputComponent.push('inputChiCuc');
+      return;
+    }
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuid.v4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
     this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten
     let index = this.formData.value.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
     let table = this.formData.value.deXuatPhuongAn;
-    table.forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
+    table.filter(s => s.noiDung === this.phuongAnRow.noiDung && s.maDviCuc === this.phuongAnRow.maDviCuc)
+      .forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
 
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
     } else {
       table = [...table, this.phuongAnRow]
     }
-    console.log(this.phuongAnRow)
     this.formData.patchValue({
       deXuatPhuongAn: table
     })
     this.buildTableView();
     this.isVisible = false;
-
     //clean
+    this.errorInputComponent = [];
     this.phuongAnRow = {}
     this.listChiCuc = []
   }
 
   handleCancel(): void {
     this.isVisible = false;
+    //clean
+    this.errorInputComponent = [];
     this.phuongAnRow = {}
+    this.listChiCuc = []
   }
 
   buildTableView() {
+    console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), 'raw')
     let dataView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
@@ -333,10 +341,12 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           .groupBy("tenCuc")
           .map((v, k) => {
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              console.log(rowCuc, 'rowCuc');
               return {
                 idVirtual: uuid.v4(),
                 tenCuc: k,
-                soLuongXuatCuc: v[0].soLuongXuatCuc,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
                 soLuongXuatCucThucTe: soLuongXuatCucThucTe,
                 tenCloaiVthh: v[0].tenCloaiVthh,
                 childData: v
@@ -368,44 +378,49 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async changeCuc(event: any) {
-    let existRow = this.formData.value.deXuatPhuongAn
-      .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
-    if (existRow) {
-      this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
-    } else {
-      this.phuongAnRow.soLuongXuatCuc = 0
+    if (event) {
+      let existRow = this.formData.value.deXuatPhuongAn
+        .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
+      if (existRow) {
+        this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
+      } else {
+        this.phuongAnRow.soLuongXuatCuc = 0
+      }
+
+      let data = this.dsDonVi.find(s => s.maDvi == event);
+      this.phuongAnRow.tenCuc = data.tenDvi;
+      let body = {
+        trangThai: "01",
+        maDviCha: event,
+        type: "DV"
+      };
+      let res = await this.donViService.getDonViTheoMaCha(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
 
-    let data = this.dsDonVi.find(s => s.maDvi == event);
-    this.phuongAnRow.tenCuc = data.tenDvi;
-    let body = {
-      trangThai: "01",
-      maDviCha: event,
-      type: "DV"
-    };
-    let res = await this.donViService.getDonViTheoMaCha(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listChiCuc = res.data;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
   }
 
   async changeChiCuc(event: any) {
-    let data = this.listChiCuc.find(s => s.maDvi == event);
-    this.phuongAnRow.tenChiCuc = data.tenDvi;
-    let body = {
-      'maDvi': event,
-      'loaiVthh': this.formData.value.loaiVthh
-    }
-    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        if (data.length > 0) {
-          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
-        }
+    if (event) {
+      let data = this.listChiCuc.find(s => s.maDvi == event);
+      this.phuongAnRow.tenChiCuc = data.tenDvi;
+      let body = {
+        'maDvi': event,
+        'loaiVthh': this.formData.value.loaiVthh
       }
-    });
+      this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data;
+          if (data.length > 0) {
+            this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+          }
+        }
+      });
+    }
   }
 
 
@@ -444,8 +459,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
     } else {
+      console.log('hhaaa')
       await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_LDC, 'Bạn có muốn gửi duyệt ?');
+      await this.approve(this.idInput, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
     }
   }
 
@@ -475,8 +491,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else if (data.idVirtual) {
       currentRow = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual)
     }
-    console.log(currentRow, 123)
     this.phuongAnRow = currentRow;
+    console.log(this.phuongAnRow, 'current')
     this.changeCuc(this.phuongAnRow.maDviCuc);
     this.showModal();
   }
@@ -506,5 +522,13 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   handleCancelSuaNoiDung(): void {
     this.isVisibleSuaNoiDung = false;
     this.phuongAnRow = {}
+  }
+
+  checkVld(inputName: string) {
+    if (this.errorInputComponent.find(s => s === inputName)) {
+      return 'error'
+    } else {
+      return '';
+    }
   }
 }

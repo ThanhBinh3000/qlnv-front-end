@@ -65,7 +65,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     await this.convertDataTable();
   }
   convertDataTable() {
-    console.log(this.dataTable, 555);
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
         item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]

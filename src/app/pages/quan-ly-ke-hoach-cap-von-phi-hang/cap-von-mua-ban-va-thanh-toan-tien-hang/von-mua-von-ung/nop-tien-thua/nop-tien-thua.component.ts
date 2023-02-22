@@ -211,9 +211,9 @@ export class NopTienThuaComponent implements OnInit {
             this.statusNhan = false;
         }
         if (this.statusGui) {
-            this.scrollX = (100 + (this.userService.isCuc() ? 18 : 15) * BOX_NUMBER_WIDTH).toString() + 'px';
+            this.scrollX = (100 + (this.userService.isChiCuc() ? 15 : 18) * BOX_NUMBER_WIDTH).toString() + 'px';
         } else {
-            this.scrollX = (50 + (this.userService.isCuc() ? 18 : 15) * BOX_NUMBER_WIDTH).toString() + 'px';
+            this.scrollX = (50 + (this.userService.isChiCuc() ? 15 : 18) * BOX_NUMBER_WIDTH).toString() + 'px';
         }
     }
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @import './default.scss';
 
 @import './common/button.scss';
@@ -644,7 +645,7 @@ button.btn.btn-create {
 // }
 
 .ant-collapse>.ant-collapse-item.ant-collapse-item-active>.ant-collapse-header:before {
-  top: (($input-h / 2) - 2) $i;
+  top: (math.div($input-h, 2) - 2) $i;
 }
 
 .ant-tabs>.ant-tabs-nav,
@@ -661,7 +662,7 @@ button.btn.btn-create {
 }
 
 .ant-tabs-card.ant-tabs-top>.ant-tabs-nav .ant-tabs-tab {
-  height: ($input-h + $tab-h/3);
+  height: ($input-h + math.div($tab-h, 3));
   // margin-top: 4px;
 }
 
@@ -3447,7 +3448,7 @@ nz-upload {
     margin: 0 -12px;
 
     .card-content {
-      margin: $mb/2 12px;
+      margin: math.div($mb, 2);
       width: calc(33.333333% - 24px);
 
       .trai {

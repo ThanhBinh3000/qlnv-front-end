@@ -214,13 +214,13 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           this.isDataAvailable = true;
         })
         break;
-      case 'refuse':
-        await this.tuChoi('8').then(() => {
+      case 'accept':
+        await this.onSubmit('9', null).then(() => {
           this.isDataAvailable = true;
         })
         break;
-      case 'receive':
-        await this.onSubmit('9', null).then(() => {
+      case 'nonaccept':
+        await this.tuChoi('8').then(() => {
           this.isDataAvailable = true;
         })
         break;
@@ -955,6 +955,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
   // submit các nút chức năng check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
+    debugger
     if (this.id) {
       const requestGroupButtons = {
         id: this.id,
