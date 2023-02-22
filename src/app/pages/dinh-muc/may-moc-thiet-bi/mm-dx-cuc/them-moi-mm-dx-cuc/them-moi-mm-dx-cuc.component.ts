@@ -278,12 +278,10 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     this.dataTable.forEach(s => {
       this.expandSet.add(s.idVirtual);
     })
-    console.log(this.expandSet,128912893)
   }
 
 
   onExpandChange(id: number, checked: boolean): void {
-    console.log(this.expandSet,1111)
     if (checked) {
       this.expandSet.add(id);
     } else {

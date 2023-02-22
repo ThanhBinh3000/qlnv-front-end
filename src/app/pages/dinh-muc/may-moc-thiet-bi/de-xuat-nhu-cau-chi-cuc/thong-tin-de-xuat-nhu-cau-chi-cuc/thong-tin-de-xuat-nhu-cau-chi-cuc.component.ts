@@ -276,6 +276,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 export class MmThongTinNcChiCuc {
   id: number;
   maDvi : string;
+  tenDvi : string;
   tenTaiSan: string;
   maTaiSan: string;
   donViTinh: string;

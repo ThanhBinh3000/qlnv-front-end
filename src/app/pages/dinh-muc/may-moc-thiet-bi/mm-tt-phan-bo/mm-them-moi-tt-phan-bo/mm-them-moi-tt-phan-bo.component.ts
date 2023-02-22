@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component";
 
   @Component({
     selector: 'app-mm-them-moi-tt-phan-bo',
@@ -47,8 +48,7 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null, Validators.required],
-      soQd: [null, Validators.required],
+      soVb: [null, Validators.required],
       soQdMs: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -108,7 +108,7 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
     }
   }
 
-  async save(isOther: boolean) {
+  async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -122,14 +122,10 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
     this.formData.value.listQlDinhMucQdMuaSamDtlReq = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
-    body.soQd = body.soQd + this.maQd
+    body.soVb = body.soVb + this.maQd
     let data = await this.createUpdate(body);
     if (data) {
-      if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDTC, "Bạn có chắc chắn muốn gửi duyệt?");
-      } else {
         this.goBack()
-      }
     }
   }
 
@@ -142,7 +138,7 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+            soVb : this.formData.value.soVb ? this.formData.value.soVb.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
@@ -161,42 +157,6 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
     }
   }
 
-  async pheDuyet() {
-    let trangThai;
-    switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.BAN_HANH
-      }
-    }
-    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
-  }
-
-  convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
-          tenTaiSan: key,
-          dataChild: value,
-          idVirtual: uuidv4(),
-        })
-      ).value()
-    }
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach(item => {
-        if (item && item.dataChild && item.dataChild.length > 0) {
-          item.dataChild.forEach(data => {
-            item.donViTinh = data.donViTinh
-            item.donGiaTd = data.donGiaTd
-          })
-        }
-      })
-    }
-    this.expandAll();
-  }
 
   conVertTreToList() {
     let arr = [];
@@ -249,14 +209,14 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
             const data = res.data;
-            this.dataTable = data.listQlDinhMucQdMuaSamDtl;
+            if (data && data.listQlDinhMucQdMuaSamDtl && data.listQlDinhMucQdMuaSamDtl.length > 0 ) {
+              this.dataTable = data.listQlDinhMucQdMuaSamDtl.filter(item => item.maDvi = this.userInfo.MA_DVI)
+            }
             if (this.dataTable && this.dataTable.length > 0) {
               this.dataTable.forEach(item => {
                 item.id = null;
                 item.ghiChu = null;
-                item.soLuong = item.soLuongTc
               })
-              this.convertListData()
               this.expandAll();
             }
           }
@@ -291,5 +251,85 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
       })
     }
   }
+
+    convertListData() {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({
+            tenTaiSan: key,
+            dataChild: value,
+            idVirtual: uuidv4(),
+          })
+        ).value()
+      }
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          if (item && item.dataChild && item.dataChild.length > 0) {
+            item.dataChild.forEach(data => {
+              item.donViTinh = data.donViTinh
+              item.soLuongTc = data.soLuongTc
+            })
+          }
+        })
+      }
+      this.expandAll();
+    }
+
+    openModalCt(data : any, type :string, idx : number, list?:any) {
+      if (!this.isView) {
+        let modalQD = this.modal.create({
+          nzTitle: type == 'them' ? 'Thêm mới chi tiết thông tin phân bổ' : 'Chỉnh sửa chi tiết thông tin phân bổ',
+          nzContent: MmThongTinPhanBoCtComponent,
+          nzMaskClosable: false,
+          nzClosable: false,
+          nzWidth: '1000px',
+          nzStyle: { top: '200px' },
+          nzFooter: null,
+          nzComponentParams: {
+            dataInput : data,
+            type : type
+          },
+        });
+        modalQD.afterClose.subscribe(async (detail) => {
+          if(detail) {
+            if (!data.dataChild) {
+              data.dataChild = []
+            }
+            if (!data.idVirtual) {
+              data.idVirtual = uuidv4();
+            }
+            if(type == 'them') {
+              data.dataChild.push(detail)
+            } else {
+              if (list && list.length >0) {
+                Object.assign(list[idx], detail);
+              }
+            }
+            this.expandAll()
+          }
+        })
+      }
+    }
+    deleteItem(index: any, y : any) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 400,
+        nzOnOk: async () => {
+          try {
+            if (this.dataTable && this.dataTable.length >0 && this.dataTable[index]) {
+              if ( this.dataTable[index] &&  this.dataTable[index].dataChild &&  this.dataTable[index].dataChild[y]) {
+                this.dataTable[index].dataChild.splice(y, 1);
+              }
+            }
+          } catch (e) {
+            console.log('error', e);
+          }
+        },
+      });
+    }
 }
 
