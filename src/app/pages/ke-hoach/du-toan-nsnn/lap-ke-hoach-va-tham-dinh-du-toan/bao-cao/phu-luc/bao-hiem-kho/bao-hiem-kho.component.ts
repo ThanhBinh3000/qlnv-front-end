@@ -183,9 +183,14 @@ export class BaoHiemKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
 
+    const obj = {
+      maDvi: this.maDviTao,
+      type: [
+        "MLK"
+      ]
+    }
 
-
-    await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+    await this.quanLyVonPhiService.dmKho(obj).toPromise().then(res => {
       if (res.statusCode == 0) {
 
         if (this.userInfo.capDvi == "3") {

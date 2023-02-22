@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DCDT, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './add-bao-cao.constant';
 import { PhuLuc1Component } from './phu-luc-1/phu-luc-1.component';
@@ -58,6 +58,7 @@ export class BaoCao {
   ngayDuyetLD: any;
   ngayCapTrenTraKq: any;
   maDvi: string;
+  maDviCha: string;
   maDviTien: string;
   thuyetMinh: string;
   lyDoTuChoi: string;
@@ -241,15 +242,64 @@ export class AddBaoCaoComponent implements OnInit {
           ...new ItemData(),
           id: uuid.v4() + 'FE',
           maLoai: e.id,
-          tenPl: e.temPl,
+          tenPl: e.tenPl,
           tenDm: e.tenDm + 'năm' + this.baoCao.namBcao,
           trangThai: "3",
           lstCtietDchinh: [],
-        })
-      })
+        });
+      });
+    } else {
+      this.baoCao?.lstDviTrucThuoc.forEach(e => {
+        if (e.ngayDuyetTBP.includes('/')) {
+          e.ngayDuyetTBP = e.ngayDuyetTBP;
+          e.ngayDuyetLD = e.ngayDuyetLD;
+        } else {
+          e.ngayDuyetTBP = this.datePipe.transform(e.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
+          e.ngayDuyetLD = this.datePipe.transform(e.ngayDuyetLD, Utils.FORMAT_DATE_STR);
+        }
+      });
+    }
+    this.getStatusButton();
+    this.spinner.hide();
+  };
+
+  getStatusButton() {
+    const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
+    const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
+    //kiem tra quyen cua cac user
+    const checkSave = isSynthetic ? this.userService.isAccessPermisson(DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
+    const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.APPROVE_REPORT);
+    const checkPass = isSynthetic ? this.userService.isAccessPermisson(DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DUYET_REPORT);
+    const checkApprove = isSynthetic ? this.userService.isAccessPermisson(DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT);
+    const checkAccept = this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT);
+    const checkCopy = isSynthetic ? this.userService.isAccessPermisson(DCDT.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.COPY_REPORT);
+    const checkPrint = isSynthetic ? this.userService.isAccessPermisson(DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PRINT_REPORT);
+    if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) && checkSave) {
+      this.status = false;
+    } else {
+      this.status = true;
     }
 
-    this.spinner.hide();
+    this.viewRecommendedValue = Utils.statusAppraisal.includes(this.baoCao.trangThaiBaoCao);
+    this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) && checkSave && isChild;
+    this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThaiBaoCao) && checkSunmit && isChild && !(!this.baoCao.id);
+    this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThaiBaoCao) && checkPass && isChild;
+    this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThaiBaoCao) && checkApprove && isChild;
+    this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao) && checkAccept && isParent;
+    this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThaiBaoCao) && checkCopy && isChild;
+    this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThaiBaoCao) && checkPrint && isChild;
+
+    if (this.acceptStatus || this.approveStatus || this.passStatus) {
+      this.okStatus = true;
+    } else {
+      this.okStatus = false;
+    }
+    if (this.saveStatus) {
+      this.finishStatus = false;
+    } else {
+      this.finishStatus = true;
+    }
   };
 
   async getDetailReport() {
