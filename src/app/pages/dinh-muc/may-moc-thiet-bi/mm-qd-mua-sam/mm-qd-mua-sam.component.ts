@@ -69,7 +69,7 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
       })
     }
     this.formData.patchValue({
-      maDvi : this.userService.isTongCuc()  ? this.userInfo.MA_DVI : null,
+      maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
     })
     await this.search();
   }

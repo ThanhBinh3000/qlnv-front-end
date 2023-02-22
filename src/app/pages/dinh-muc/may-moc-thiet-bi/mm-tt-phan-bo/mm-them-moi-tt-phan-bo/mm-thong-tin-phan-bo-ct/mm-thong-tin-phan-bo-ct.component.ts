@@ -20,6 +20,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 export class MmThongTinPhanBoCtComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
+  @Input() sum: number
   item: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   listChiCuc: any[] = []
   userInfo: UserLogin
@@ -36,7 +37,7 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.addDetail()
+    this.addDetail();
     // await this.loadDsChiCuc();
 
   }
@@ -78,6 +79,11 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.item.soLuong > this.sum){
+      this.notification.error(MESSAGE.ERROR, 'Số lượng vượt quá số lượng được phân bổ!');
+      this.spinner.hide();
+      return;
+    }
     this._modalRef.close(this.item);
     this.item = new MmThongTinNcChiCuc();
   }
@@ -97,4 +103,10 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
     return msgRequired;
   }
 
+  changeDvi(event) {
+      let loaiHangHoa = this.listChiCuc.filter(item => item.maDvi === event)
+      if (loaiHangHoa && loaiHangHoa.length > 0) {
+        this.item.tenDvi = loaiHangHoa[0].tenDvi
+      }
+  }
 }

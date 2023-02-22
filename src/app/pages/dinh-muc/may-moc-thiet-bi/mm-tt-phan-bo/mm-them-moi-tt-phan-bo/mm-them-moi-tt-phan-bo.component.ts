@@ -226,6 +226,19 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
     }
   }
 
+  sumSlPb(item  :any) {
+    let slPb = item.soLuongTc ? item.soLuongTc : 0;
+    let slChild = 0
+    let result = 0;
+    if (item.dataChild && item.dataChild.length > 0 ) {
+      item.dataChild.forEach(item => {
+        slChild = slChild + item.soLuong ? item.soLuong : 0
+      })
+    }
+    result = slPb - slChild
+    return result;
+  }
+
   chonMaTongHop() {
     if (!this.isView) {
       let modalQD = this.modal.create({
@@ -285,7 +298,8 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
           nzFooter: null,
           nzComponentParams: {
             dataInput : data,
-            type : type
+            type : type,
+            sum : this.sumSlPb(list)
           },
         });
         modalQD.afterClose.subscribe(async (detail) => {
@@ -300,7 +314,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
               data.dataChild.push(detail)
             } else {
               if (list && list.length >0) {
-                Object.assign(list[idx], detail);
+                Object.assign(list.dataChild[idx], detail);
               }
             }
             this.expandAll()

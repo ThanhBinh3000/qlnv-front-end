@@ -4,10 +4,9 @@
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label nzRequired nzNoColon="true">VP Cục, Chi cục</nz-form-label>
-<!--            <nz-select nzAllowClear [(ngModel)]="item.maDvi">-->
-<!--              <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>-->
-<!--            </nz-select>-->
-            <input nz-input  [(ngModel)]="item.maDvi">
+            <nz-select nzAllowClear [(ngModel)]="item.maDvi" (ngModelChange)="changeDvi($event)">
+              <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+            </nz-select>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
