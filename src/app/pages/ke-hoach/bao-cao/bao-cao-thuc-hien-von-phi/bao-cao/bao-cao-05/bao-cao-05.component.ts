@@ -516,6 +516,9 @@ export class BaoCao05Component implements OnInit {
     }
 
     tinhDinhMuc(data: ItemData) {
+        if (!data) {
+            return;
+        }
         const soLuong = [];
         data.listCtiet.forEach(item => {
             if (item.loaiMatHang == 0) {
@@ -531,7 +534,7 @@ export class BaoCao05Component implements OnInit {
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
 
         if (nvChuyenMon) {
-            this.lstCtietBcao[nvChuyenMon].listCtiet.forEach(item => {
+            this.lstCtietBcao[nvChuyenMon]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
@@ -545,7 +548,7 @@ export class BaoCao05Component implements OnInit {
         }
 
         if (ttCaNhan) {
-            this.lstCtietBcao[ttCaNhan].listCtiet.forEach(item => {
+            this.lstCtietBcao[ttCaNhan]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
@@ -573,7 +576,7 @@ export class BaoCao05Component implements OnInit {
         // }
 
         if (tongCucDh) {
-            this.lstCtietBcao[tongCucDh].listCtiet.forEach(item => {
+            this.lstCtietBcao[tongCucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  AUTHEN_API: 'http://192.168.1.80:8888',
-  SERVICE_API: 'http://192.168.1.80:8888',
+  AUTHEN_API: 'http://10.100.30.20:9111',
+  SERVICE_API: 'http://10.100.30.20:9111',
 };
 
 /*
