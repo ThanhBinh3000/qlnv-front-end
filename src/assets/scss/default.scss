@@ -1,5 +1,5 @@
+@use "sass:math";
 @import './shared/colors.scss';
-
 /*::ng-deep <<<< để apdungj css toàn cục*/
 $font-size10: 10px; //1rem;
 $font-size11: 11px; //1.1rem;
@@ -120,11 +120,11 @@ $textarea-h: (
   $input-h * 2
 ); //(($input-h * 2) + $inputLabel-h);
 $btn-padding: (
-  ($input-h / 2) - 5
+  math.div($input-h,2) - 5
 );
 $input-mb: $label-padding;
 $inputLabel-text: 500;
-$mb: $input-h/2;
+$mb: math.div($input-h,2);
 
 $tab-h: 9px;
 
