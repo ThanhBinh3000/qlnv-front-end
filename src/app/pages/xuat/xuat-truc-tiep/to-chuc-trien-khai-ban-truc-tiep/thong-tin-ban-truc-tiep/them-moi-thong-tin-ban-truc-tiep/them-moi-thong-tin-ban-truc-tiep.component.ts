@@ -159,6 +159,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
             this.loadDetail(this.idInput);
+            this.quayLai()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -184,6 +185,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       await this.loadDetail(this.idInput)
+      this.quayLai()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

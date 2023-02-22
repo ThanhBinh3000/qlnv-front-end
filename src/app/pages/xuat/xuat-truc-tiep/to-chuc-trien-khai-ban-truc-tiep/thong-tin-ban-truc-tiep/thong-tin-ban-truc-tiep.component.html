@@ -144,15 +144,16 @@
                         <td>{{data.hdr.tenCloaiVthh}}</td>
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id)">
+                            <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a (click)="goDetail(data.id)">
+                            <a *ngIf="data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a (click)="delete(data)">
+                            <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
                                 <i class="fa fa-trash-o do"></i>
-                            </a>
+                              </a> -->
                         </td>
                     </tr>
                 </tbody>
