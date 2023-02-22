@@ -153,8 +153,8 @@ export class BaoHiemComponent implements OnInit {
             itm.gtTuTleBh = item.tyLeKhoTren
           }
         })
-        itm.gtTuGtBh = itm.gtTuM3 * itm.gtTuGtBh
-        itm.gtDuoiGtBh = itm.gtDuoiM3 * itm.gtDuoiTleBh
+        itm.gtTuGtBh = (itm.gtTuM3 * itm.gtTuTleBh) / 100
+        itm.gtDuoiGtBh = (itm.gtDuoiM3 * itm.gtDuoiTleBh) / 100
         itm.gtTong = itm.gtTuGtBh + itm.gtDuoiGtBh
       })
 

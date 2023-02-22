@@ -167,7 +167,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         const obj = {
           ...res,
           id: null,
-          tabSelected: 'baocao',
+          tabSelected: 'addbaocao',
           isSynthetic: false,
         }
         this.dataChange.emit(obj);
