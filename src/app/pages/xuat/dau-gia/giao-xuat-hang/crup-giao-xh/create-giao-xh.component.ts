@@ -237,7 +237,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     if (id > 0) {
       let data = await this.detail(id);
       this.formData.patchValue({
-        soQd: data.soQd.split('/')[0]
+        soQd: data.soQd?.split('/')[0]
       })
       this.dataTable = data.children;
     };

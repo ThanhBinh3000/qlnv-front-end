@@ -68,18 +68,20 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                 maHang: Utils.MUA_THOC,
                 hangDtqg: 'Thóc',
             })
-            this.response.ttGui.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: Utils.MUA_GAO,
-                hangDtqg: 'Gạo',
-            })
-            this.response.ttGui.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: Utils.MUA_MUOI,
-                hangDtqg: 'Muối',
-            })
+            if (!this.userService.isChiCuc) {
+                this.response.ttGui.lstCtietBcaos.push({
+                    ...new TienThua(),
+                    id: uuid.v4() + 'FE',
+                    maHang: Utils.MUA_GAO,
+                    hangDtqg: 'Gạo',
+                })
+                this.response.ttGui.lstCtietBcaos.push({
+                    ...new TienThua(),
+                    id: uuid.v4() + 'FE',
+                    maHang: Utils.MUA_MUOI,
+                    hangDtqg: 'Muối',
+                })
+            }
             await this.getMaDnghi();
         } else {
             //them lan moi cho de nghi

@@ -8,6 +8,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
 
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
@@ -23,7 +24,8 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private bienBanLayMauXhService: BienBanLayMauXhService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
@@ -33,6 +35,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       trichYeu: null,
       ngayTao: null,
       maChiCuc: null,
+      trangThai: this.STATUS.BAN_HANH
     })
 
     this.filterTable = {
@@ -64,6 +67,37 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.bienBanLayMauXhService.delete(body).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
 }

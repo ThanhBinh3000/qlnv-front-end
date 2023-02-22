@@ -266,8 +266,11 @@ export class AddBaoCaoComponent implements OnInit {
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
+      console.log("this.data", this.data);
+
       this.baoCao.nam = this.data.namDtoan;
       this.baoCao.maPa = this.data?.maPa;
+      this.baoCao.maPaCha = this.data?.maPaCha;
       this.baoCao.maDvi = this.data?.maDvi ? this.data?.maDvi : this.userInfo?.MA_DVI;
       this.baoCao.maLoaiDan = this.data?.maLoaiDan
       this.baoCao.maPhanGiao = "3"
@@ -275,6 +278,7 @@ export class AddBaoCaoComponent implements OnInit {
       this.baoCao.soQd = this.data?.soQd
       if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
         this.baoCao.lstCtiets = this.data?.lstCtiets ? this.data?.lstCtiets : [];
+        this.baoCao.maPaCha = this.data?.maPaCha;
       }
       let lstCtietsPhuLucPhanBo
       if (this.data.preTab == "chiTietDuToanCapTren") {
@@ -470,7 +474,7 @@ export class AddBaoCaoComponent implements OnInit {
       // editAppraisalValue: this.acceptStatus,
       isSynthetic: isSynthetic
     };
-    
+
 
 
     dataInfo.data.maDviTien = '1';
@@ -755,7 +759,7 @@ export class AddBaoCaoComponent implements OnInit {
         item.id = null;
       }
     })
-    
+
 
     //call service them moi
     if (!this.baoCao.id) {
@@ -825,8 +829,6 @@ export class AddBaoCaoComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
-          
-
           this.baoCao.lstCtiets.forEach(item => {
             const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
             item.tenPl = appendix.tenPl;
@@ -932,10 +934,20 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
-    const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
+    console.log("this.userInfo", this.userInfo)
+    let isParent
+    if (this.userInfo.CAP_DVI == "1") {
+      this.childUnit.forEach(s => {
+        if (s.maDvi == this.baoCao.maDvi) {
+          isParent = true
+        }
+      })
+    } else if (this.userInfo.CAP_DVI == "2") {
+      const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
+      isParent = this.userInfo.MA_DVI == maDviCha;
+    }
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
-    const isParent = this.userInfo.MA_DVI == maDviCha;
     //kiem tra quyen cua cac user
     const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
     const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
@@ -978,6 +990,8 @@ export class AddBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
+          console.log(this.childUnit);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

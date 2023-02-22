@@ -8,6 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVMB, LOAI_DE_NGHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
@@ -50,6 +51,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
+    donVis: any[] = [];
     //cac quyn cua nguoi thao tac
     createPermission: string;
     editPermission: string;
@@ -68,7 +70,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private notification: NzNotificationService,
-        private danhMuc: DanhMucHDVService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
@@ -89,8 +91,8 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case 'gnv':
                 this.title = 'DANH SÁCH GHI NHẬN CẤP ỨNG VỐN TỪ ĐƠN VỊ CẤP TRÊN';
                 this.searchFilter.loaiTimKiem = '0';
+                this.searchFilter.maLoai = 2;
                 if (this.userService.isTongCuc()) {
-                    this.searchFilter.maLoai = 1;
                     this.createPermission = CVMB.ADD_REPORT_TC_GNV;
                     this.deletePermission = CVMB.DELETE_REPORT_GNV;
                 } else {
@@ -135,8 +137,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.deletePermission = 'NO';
                 this.passPermission = CVMB.DUYET_REPORT_GNV_TH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV_TH;
-                this.trangThais.find(e => e.id == Utils.TT_BC_1).tenDm = 'Mới';
+                // this.trangThais.find(e => e.id == Utils.TT_BC_1).tenDm = 'Mới';
                 this.isSend = false;
+                await this.getChildUnit();
                 break;
             case 'thanhtoan':
                 this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
@@ -239,6 +242,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
+        if (trangThai == Utils.TT_BC_1 && this.searchFilter.loaiTimKiem == '1') {
+            return 'Mới';
+        }
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
@@ -270,9 +276,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                     tabSelected: null,
                 }
                 switch (this.searchFilter.maLoai) {
-                    case 1:
-                        obj.tabSelected = 'gnv-btc';
-                        break;
+                    // case 1:
+                    //     obj.tabSelected = 'gnv-btc';
+                    //     break;
                     case 2:
                         obj.tabSelected = 'gnv-cv';
                         break;
@@ -308,9 +314,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             tabSelected: '',
         }
         switch (this.searchFilter.maLoai) {
-            case 1:
-                obj.tabSelected = 'gnv-btc';
-                break;
+            // case 1:
+            //     obj.tabSelected = 'gnv-btc';
+            //     break;
             case 2:
                 obj.tabSelected = 'gnv-cv';
                 break;
@@ -395,6 +401,31 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.spinner.hide();
             },
         });
+    }
+
+    async getChildUnit() {
+        this.spinner.show();
+        const request = {
+            maDviCha: this.searchFilter.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    if (this.userService.isTongCuc()) {
+                        this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CDT') || e.tenVietTat.startsWith('VP')));
+                    } else {
+                        this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CCDT') || e.tenVietTat.startsWith('VP')))
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+        this.spinner.hide();
     }
 
 }

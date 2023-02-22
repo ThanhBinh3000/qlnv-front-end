@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 import dayjs from "dayjs";
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-de-xuat-nhu-cau-chi-cuc',
@@ -26,7 +27,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    dxChiCucService: MmDxChiCucService
+    private dxChiCucService: MmDxChiCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -64,7 +65,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     }
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
   }
@@ -80,9 +81,34 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     this.formData.reset();
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
+  }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'de-xuat-chi-cuc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   async showList() {

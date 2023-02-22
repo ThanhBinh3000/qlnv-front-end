@@ -18,7 +18,7 @@ export enum PATH {
   HOP_DONG = "hop-dong", // Hợp đồng,
   QD_DC = 'qd-dieu-chinh', // Quyết định điều chỉnh
   QD_GNV_XH = 'qd-gnv-xh', // Quyết định giao nhiệm vụ xuất hàng
-
+  BB_LAY_MAU = 'bban-lay-mau',
 
 
   // Menu 0

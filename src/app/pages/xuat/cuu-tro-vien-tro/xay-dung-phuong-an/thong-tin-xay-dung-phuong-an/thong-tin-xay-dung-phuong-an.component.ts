@@ -25,6 +25,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import * as uuid from "uuid";
 import {FileDinhKem} from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {QuanLyHangTrongKhoService} from "../../../../../services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-thong-tin-xay-dung-phuong-an',
@@ -85,6 +86,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   phuongAnView = [];
   phuongAnRow: any = {};
   isVisible = false;
+  isVisibleSuaNoiDung = false;
   listNoiDung = []
   listThanhTien: any;
   listSoLuong: any;
@@ -102,6 +104,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private cdr: ChangeDetectorRef,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
@@ -276,16 +279,26 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     item.selected = true;
   }
 
-  showModal(): void {
+  showModal(data?: any): void {
     this.isVisible = true;
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
+    if (data) {
+      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+      this.changeCuc(this.phuongAnRow.maDviCuc);
+      this.phuongAnRow.noiDung = data.childData[0].noiDung;
+      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+
+      console.log(this.formData.value.deXuatPhuongAn, 98888)
+      console.log(data);
+      console.log(this.phuongAnRow, "phuongAnRow")
+    }
   }
 
   handleOk(): void {
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuid.v4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
-    this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma = this.phuongAnRow.cloaiVthh)?.ten
+    this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten
     let index = this.formData.value.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
     let table = this.formData.value.deXuatPhuongAn;
     table.forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
@@ -295,6 +308,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else {
       table = [...table, this.phuongAnRow]
     }
+    console.log(this.phuongAnRow)
     this.formData.patchValue({
       deXuatPhuongAn: table
     })
@@ -317,18 +331,30 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
-          .map((v, k) => ({
-              idVirtual: uuid.v4(),
-              tenCuc: k,
-              soLuongXuatCuc: v[0].soLuongXuatCuc,
-              tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
-            })
+          .map((v, k) => {
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              return {
+                idVirtual: uuid.v4(),
+                tenCuc: k,
+                soLuongXuatCuc: v[0].soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
+            }
           ).value();
-        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0)
-        return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        return {
+          idVirtual: uuid.v4(),
+          noiDung: key,
+          soLuongXuat: soLuongXuat,
+          soLuongXuatThucTe: soLuongXuatThucTe,
+          childData: rs
+        };
       }).value();
     this.phuongAnView = dataView
+    console.log(this.phuongAnView, "phuongAnView")
     this.expandAll()
 
     //
@@ -368,6 +394,36 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   async changeChiCuc(event: any) {
     let data = this.listChiCuc.find(s => s.maDvi == event);
     this.phuongAnRow.tenChiCuc = data.tenDvi;
+    let body = {
+      'maDvi': event,
+      'loaiVthh': this.formData.value.loaiVthh
+    }
+    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.length > 0) {
+          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+        }
+      }
+    });
+  }
+
+
+  async changeCloaiVthh(event: any) {
+    let body = {
+      maDvi: this.phuongAnRow.maDviChiCuc,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: event
+    }
+    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.length > 0) {
+          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+        }
+
+      }
+    });
   }
 
   async save() {
@@ -423,5 +479,32 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.phuongAnRow = currentRow;
     this.changeCuc(this.phuongAnRow.maDviCuc);
     this.showModal();
+  }
+
+  suaNoiDung(data: any) {
+    this.phuongAnRow.noiDung = data.noiDung;
+    this.phuongAnRow.noiDungEdit = data.noiDung;
+    this.showModalSuaNoiDung();
+  }
+
+  showModalSuaNoiDung(): void {
+    this.isVisibleSuaNoiDung = true;
+  }
+
+  handleOkSuaNoiDung(): void {
+    let currentNoiDung = this.formData.value.deXuatPhuongAn.filter(s => s.noiDung == this.phuongAnRow.noiDung);
+    currentNoiDung.forEach(s => {
+      s.noiDung = this.phuongAnRow.noiDungEdit;
+    });
+    this.buildTableView();
+    this.isVisibleSuaNoiDung = false;
+
+    //clean
+    this.phuongAnRow = {}
+  }
+
+  handleCancelSuaNoiDung(): void {
+    this.isVisibleSuaNoiDung = false;
+    this.phuongAnRow = {}
   }
 }

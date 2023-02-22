@@ -3,7 +3,7 @@ import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from 'src/app/Utility/utils';
 import { DANH_MUC } from '../bieu-mau-14-0/bieu-mau-14-0.constant';
 import * as uuid from "uuid";
 import { MESSAGE } from 'src/app/constants/message';
@@ -53,7 +53,7 @@ export class BieuMau140Component implements OnInit {
   viewAppraisalValue: boolean;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

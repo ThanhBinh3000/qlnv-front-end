@@ -44,8 +44,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
     namKeHoach: '',
     maTongHop: '',
     tenDuAn: '',
-    tgKhoiCongTu: '',
-    tgHoanThanhDen: '',
+    tgKhoiCong: '',
+    tgHoanThanh: '',
     ngayTongHop: '',
     trangThai: '',
   };
@@ -116,8 +116,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
       "maDvi": this.userInfo.MA_DVI,
       "maTongHop": this.searchFilter.maTongHop,
       "namKeHoach": this.searchFilter.namKeHoach,
-      "namBatDau": this.searchFilter.tgKhoiCongTu,
-      "namKetThuc": this.searchFilter.tgHoanThanhDen,
+      "namBatDau": this.searchFilter.tgKhoiCong,
+      "namKetThuc": this.searchFilter.tgHoanThanh,
       "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
       "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
       "paggingReq": {
@@ -254,8 +254,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
           "maDvi": this.userInfo.MA_DVI,
           "maTongHop": this.searchFilter.maTongHop,
           "namKeHoach": this.searchFilter.namKeHoach,
-          "namBatDau": this.searchFilter.tgKhoiCongTu,
-          "namKetThuc": this.searchFilter.tgHoanThanhDen,
+          "namBatDau": this.searchFilter.tgKhoiCong,
+          "namKetThuc": this.searchFilter.tgHoanThanh,
           "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
           "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
           "paggingReq": {
@@ -305,8 +305,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
       namKeHoach: '',
       maTongHop: '',
       tenDuAn: '',
-      tgKhoiCongTu: '',
-      tgHoanThanhDen: '',
+      tgKhoiCong: '',
+      tgHoanThanh: '',
       ngayTongHop: '',
       trangThai: '',
     };
