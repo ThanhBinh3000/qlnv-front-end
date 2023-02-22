@@ -517,6 +517,7 @@
           <nz-form-control>
             <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc"
                        (ngModelChange)="changeCuc($event)"
+                       [nzDisabled]="userService.isCuc()"
                        nzPlaceHolder="Chọn đơn vị" nzShowSearch>
               <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
             </nz-select>
@@ -534,7 +535,7 @@
       <nz-card nzTitle="Thông tin phân bổ xuất cứu trợ, viện trợ thực tế của Cục">
         <nz-form-item>
           <nz-form-label [nzXs]="7">Chi Cục DTNN</nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="'Vui lòng chọn Chi cục'" [nzValidateStatus]="checkVld('inputChiCuc')">
             <div nz-row [nzGutter]="48">
               <div nz-col [nzSpan]="16">
                 <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviChiCuc"
