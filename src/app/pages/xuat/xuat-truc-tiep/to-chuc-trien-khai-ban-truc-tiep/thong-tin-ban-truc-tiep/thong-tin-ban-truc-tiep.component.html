@@ -133,26 +133,27 @@
                     <tr *ngFor="let data of basicTable.data; let i = index">
                         <td width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                                [nzDisabled]="data.trangThai != '00'"></label>
+                                [nzDisabled]="data.trangThaiChaoGia != '00'"></label>
                         </td>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                        <td>{{data.hdr.soQdPd }}</td>
+                        <td>{{data.soQdPd }}</td>
                         <td>{{data.pthucBanTrucTiep }}</td>
                         <td>{{data.ngayNhanCgia | date: 'dd/MM/YYYY'}}</td>
                         <td>{{data.soQdKq }}</td>
-                        <td>{{data.hdr.tenLoaiVthh}}</td>
-                        <td>{{data.hdr.tenCloaiVthh}}</td>
-                        <td>{{data.tenTrangThai}}</td>
+                        <td>{{data.tenLoaiVthh}}</td>
+                        <td>{{data.tenCloaiVthh}}</td>
+                        <td>{{data.tenTrangThaiChaoGia}}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id)">
+                            <a *ngIf="data.trangThaiChaoGia == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a (click)="goDetail(data.id)">
-                                <i class="fa fa-pencil"></i>
+                            <a *ngIf="data.trangThaiChaoGia == STATUS.CHUA_CAP_NHAT || data.trangThaiChaoGia == STATUS.DANG_CAP_NHAT"
+                                (click)="goDetail(data.id)">
+                                <i class="icon htvbdh_soanthao"></i>
                             </a>
-                            <a (click)="delete(data)">
+                            <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
                                 <i class="fa fa-trash-o do"></i>
-                            </a>
+                              </a> -->
                         </td>
                     </tr>
                 </tbody>

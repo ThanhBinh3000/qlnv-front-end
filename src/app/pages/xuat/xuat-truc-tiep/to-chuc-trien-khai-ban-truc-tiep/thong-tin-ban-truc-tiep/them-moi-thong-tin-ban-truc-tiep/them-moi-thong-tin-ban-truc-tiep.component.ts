@@ -45,7 +45,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         id: [],
-        idDtl: [],
+        idHdr: [],
         namKh: [dayjs().get("year"), [Validators.required]],
         soQdPd: [''],
         maDvi: [''],
@@ -59,8 +59,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
-        trangThai: [''],
-        tenTrangThai: [''],
+        trangThaiChaoGia: [''],
+        tenTrangThaiChaoGia: [''],
         soQdPdKq: [''],
         ghiChu: ['']
       }
@@ -74,6 +74,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.spinner.show();
       await Promise.all([
         this.loadDetail(this.idInput),
+        this.initForm()
       ])
       this.spinner.hide();
     } catch (e) {
@@ -85,41 +86,35 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.updateEditCache()
   }
 
+  initForm() {
+    this.formData.patchValue({
+      tenDvi: this.userInfo.TEN_DVI,
+      maDvi: this.userInfo.MA_DVI,
+    })
+  }
 
   async loadDetail(id: number) {
     if (id > 0) {
-      await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
+      await this.quyetDinhPdKhBanTrucTiepService.getDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
           this.dataTable = dataDtl.xhTcTtinBttList
           this.formData.patchValue({
-            idDtl: id,
+            idHdr: id,
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayKthuc: dataDtl.ngayKthuc,
             ghiChu: dataDtl.ghiChu,
             soQdPd: dataDtl.soQdPd,
-
+            namKh: dataDtl.namKh,
+            trangThaiChaoGia: dataDtl.trangThaiChaoGia,
+            tenTrangThaiChaoGia: dataDtl.tenTrangThaiChaoGia,
+            tenCloaiVthh: dataDtl.tenCloaiVthh,
+            cloaiVthh: dataDtl.cloaiVthh,
+            tenLoaiVthh: dataDtl.tenLoaiVthh,
+            loaiVthh: dataDtl.loaiVthh,
+            moTaHangHoa: dataDtl.moTaHangHoa,
           })
-          if (dataDtl) {
-            await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
-              const dataHdr = hdr.data;
-              this.formData.patchValue({
-                soQdPd: dataHdr.soQdPd,
-                namKh: dataHdr.namKh,
-                trangThai: dataDtl.trangThai,
-                tenTrangThai: dataDtl.tenTrangThai,
-                tenDvi: dataDtl.tenDvi,
-                maDvi: dataDtl.maDvi,
-                tenCloaiVthh: dataHdr.tenCloaiVthh,
-                cloaiVthh: dataHdr.cloaiVthh,
-                tenLoaiVthh: dataHdr.tenLoaiVthh,
-                loaiVthh: dataHdr.loaiVthh,
-                moTaHangHoa: dataHdr.moTaHangHoa,
-
-              })
-            })
-          }
 
         })
         .catch((e) => {
@@ -152,13 +147,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         try {
           let body = {
             id: this.idInput,
-            trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
+            trangThaiChaoGia: this.STATUS.HOAN_THANH_CAP_NHAT
           }
           let res = await this.chaoGiaMuaLeUyQuyenService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
             this.loadDetail(this.idInput);
+            this.quayLai()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -184,6 +180,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       await this.loadDetail(this.idInput)
+      this.quayLai()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
