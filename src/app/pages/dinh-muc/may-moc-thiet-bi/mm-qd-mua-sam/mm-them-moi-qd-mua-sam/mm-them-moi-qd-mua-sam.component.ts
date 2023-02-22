@@ -56,7 +56,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
-      loai : ['0']
+      loai : ['00']
     });
   }
 
@@ -276,15 +276,16 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh: this.listTongHop
+          listTh: this.listTongHop,
+          type : this.formData.value.loai
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maTh : data
+            maTh : data.id
           })
-          await this.changSoTh(data);
+          await this.changSoTh(data.id);
         }
       })
     }

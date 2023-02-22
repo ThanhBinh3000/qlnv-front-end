@@ -3,10 +3,12 @@
     <nz-table>
       <tr>
         <td class="label-name">
-          <label>{{data.id}}</label>
+          <label *ngIf="type == '00'">{{data.id}}</label>
+          <label *ngIf="type == '01'">{{data.soQd}}</label>
         </td>
         <td>
-          <label nz-radio [nzValue]="data.id"></label>
+          <label *ngIf="type == '00'" nz-radio [nzValue]="data.id"></label>
+          <label *ngIf="type == '01'" nz-radio [nzValue]="data.soQd"></label>
         </td>
       </tr>
     </nz-table>

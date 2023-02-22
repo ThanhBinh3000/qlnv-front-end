@@ -11,11 +11,11 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Số văn bản</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soCv"/>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soVb"/>
           </div>
           <div nz-col nzSpan="3">
-            <label class="search__label">Số QĐ mua sắm</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soCv"/>
+            <label class="search__label">Số quyết định mua sắm</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQdMs"/>
           </div>
           <div nz-col nzSpan="11">
             <label class="search__label">Trích yếu</label>
@@ -32,7 +32,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -81,8 +81,8 @@
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCv"
-                     (input)="filterInTable('soCv',filterTable.soCv)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                     (input)="filterInTable('soQd',filterTable.soQd)" />
             </nz-input-group>
           </th>
           <th>
@@ -107,9 +107,9 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soTh',filterTable.soTh)" />
+          <nz-input-group >
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTh"
+                     (input)="filterInTable('maTh',filterTable.maTh)" />
             </nz-input-group>
           </th>
           <th>
@@ -129,21 +129,21 @@
                    [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soCv }}</td>
+          <td>{{ data.soQd }}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soTh }}</td>
+          <td>{{ data.maTh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY) && userService.isCuc()) || !userService.isCuc() ">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH) && userService.isCuc()) || userService.isCuc()">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO  && userService.isCuc() " (click)="delete(data)">
+            <a *ngIf="data.trangThai ==STATUS.DU_THAO && userService.isCuc()" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -171,5 +171,5 @@
 </ng-container>
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-mm-them-moi-tt-phan-bo  [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"></app-mm-them-moi-tt-phan-bo>
+  <app-mm-them-moi-tt-phan-bo [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"></app-mm-them-moi-tt-phan-bo>
 </ng-container>

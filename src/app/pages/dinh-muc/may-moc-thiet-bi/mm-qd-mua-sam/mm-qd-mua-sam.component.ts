@@ -33,14 +33,13 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
-      capDvi: [''],
       namKeHoach: [''],
       soQd: [''],
       trichYeu: [''],
       ngayKy: [''],
       ngayKyTu: [''],
       ngayKyDen: [''],
-      loai: ['0']
+      loai: ['00']
     });
     this.filterTable = {};
   }
