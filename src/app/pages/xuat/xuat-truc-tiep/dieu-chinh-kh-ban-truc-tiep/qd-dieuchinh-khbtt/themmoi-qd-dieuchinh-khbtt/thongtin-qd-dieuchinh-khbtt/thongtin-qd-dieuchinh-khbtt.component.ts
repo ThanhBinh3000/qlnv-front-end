@@ -133,7 +133,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
         dataEdit: data,
       },
     });
-    modalGT.afterClose.subscribe((res) => {
+    modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
@@ -160,7 +160,6 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     });
     this.dataInput.soLuong = tongSoLuong * 1000
   }
-
 
   changeFormData() {
     if (this.formData.value.id) {

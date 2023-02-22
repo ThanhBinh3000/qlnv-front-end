@@ -15,6 +15,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 
 @Component({
   selector: 'app-them-qd-pd-ket-qua-btt',
@@ -33,13 +34,14 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       id: [],
-      idDtl: [],
+      idHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
       soQdKq: [, [Validators.required]],
       ngayHluc: [, [Validators.required]],
@@ -75,13 +77,15 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   initForm() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
+      tenDvi: this.userInfo.TEN_DVI,
+      maDvi: this.userInfo.MA_DVI,
     });
   }
 
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
-      await this.onChangeTtin(res.idDtl);
+      await this.onChangeTtin(res.idHdr);
     }
   }
 
@@ -157,15 +161,15 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     let body = {
       "namKh": this.formData.value.namKh,
       "loaiVthh": this.loaiVthh,
-      "maDvi": this.userInfo.MA_DVI,
-      "trangThai": STATUS.HOAN_THANH_CAP_NHAT,
+
+      "trangThaiChaoGia": STATUS.HOAN_THANH_CAP_NHAT,
       "paggingReq": {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       }
     }
     let listTb = [];
-    let res = await this.chaoGiaMuaLeUyQuyenService.search(body);
+    let res = await this.quyetDinhPdKhBanTrucTiepService.search(body);
     if (res.data) {
       listTb = res.data.content;
     }
@@ -189,13 +193,13 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     });
   }
 
-  async onChangeTtin(idDtl) {
-    let res = await this.chaoGiaMuaLeUyQuyenService.getDetail(idDtl);
+  async onChangeTtin(idHdr) {
+    let res = await this.quyetDinhPdKhBanTrucTiepService.getDetail(idHdr);
     if (res.data) {
       const data = res.data;
+      console.log(data, 999)
       this.formData.patchValue({
         soQdPd: data.soQdPd,
-        tenDvi: data.tenDvi,
         diaDiemChaoGia: data.diaDiemChaoGia,
         ngayMkho: data.ngayMkho,
         ngayKthuc: data.ngayKthuc,
@@ -204,7 +208,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
-        idDtl: data.id,
+        idHdr: data.id,
       })
       this.dataTable = data.xhTcTtinBttList
     }
