@@ -214,13 +214,13 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
           this.isDataAvailable = true;
         })
         break;
-      case 'receive':
-        await this.onSubmit('8', null).then(() => {
+      case 'accept':
+        await this.onSubmit('9', null).then(() => {
           this.isDataAvailable = true;
         })
         break;
-      case 'refuse':
-        await this.tuChoi('9').then(() => {
+      case 'nonaccept':
+        await this.tuChoi('8').then(() => {
           this.isDataAvailable = true;
         })
         break;

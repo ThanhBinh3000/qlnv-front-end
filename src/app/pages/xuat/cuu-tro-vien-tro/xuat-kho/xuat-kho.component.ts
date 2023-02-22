@@ -4,11 +4,11 @@ import { Globals } from './../../../../shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
-  selector: 'app-kiem-tra-chat-luong',
-  templateUrl: './kiem-tra-chat-luong.component.html',
-  styleUrls: ['./kiem-tra-chat-luong.component.scss']
+  selector: 'app-xuat-kho',
+  templateUrl: './xuat-kho.component.html',
+  styleUrls: ['./xuat-kho.component.scss']
 })
-export class KiemTraChatLuongComponent implements OnInit {
+export class XuatKhoComponent implements OnInit {
   tabs: any[] = [];
   loaiVthhSelected: string;
   constructor(

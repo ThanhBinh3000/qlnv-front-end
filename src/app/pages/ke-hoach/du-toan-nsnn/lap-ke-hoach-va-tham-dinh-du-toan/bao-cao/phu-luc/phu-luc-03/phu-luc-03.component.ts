@@ -492,7 +492,7 @@ export class PhuLuc03Component implements OnInit {
           this.lstCtietBcao[index].thucHienNamTruoc = sumNumber([this.lstCtietBcao[index].thucHienNamTruoc, item.thucHienNamTruoc]);
           this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
           this.lstCtietBcao[index].uocThNamHtai = sumNumber([this.lstCtietBcao[index].uocThNamHtai, item.uocThNamHtai]);
-          this.lstCtietBcao[index].sluongNamDtoan = sumNumber([this.lstCtietBcao[index].sluongNamDtoan, item.sluongNamDtoan]);
+          // this.lstCtietBcao[index].sluongNamDtoan = sumNumber([this.lstCtietBcao[index].sluongNamDtoan, item.sluongNamDtoan]);
           this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
           this.lstCtietBcao[index].sluongNamN1Td = sumNumber([this.lstCtietBcao[index].sluongNamN1Td, item.sluongNamN1Td]);
           this.lstCtietBcao[index].ttienNamN1Td = sumNumber([this.lstCtietBcao[index].ttienNamN1Td, item.ttienNamN1Td]);
