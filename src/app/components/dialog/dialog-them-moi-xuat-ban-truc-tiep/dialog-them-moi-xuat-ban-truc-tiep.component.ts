@@ -60,6 +60,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       maDvi: [null, [Validators.required]],
       diaChi: [null],
       tenDvi: [null],
+      donGiaVat: [null],
       soLuong: [null],
       soLuongChiTieu: [null],
       soLuongKh: [null],

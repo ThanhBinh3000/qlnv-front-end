@@ -50,6 +50,9 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+      })
       await this.search();
       this.spinner.hide();
     }
