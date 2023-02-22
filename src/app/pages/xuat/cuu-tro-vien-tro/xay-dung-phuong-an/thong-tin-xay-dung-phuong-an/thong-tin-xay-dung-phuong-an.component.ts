@@ -459,8 +459,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
     } else {
+      console.log('hhaaa')
       await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_LDC, 'Bạn có muốn gửi duyệt ?');
+      await this.approve(this.idInput, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
     }
   }
 

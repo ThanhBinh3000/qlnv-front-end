@@ -92,7 +92,6 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   listKieuNhapXuat: any;
   listHangHoaAll: any;
   dsDonVi: any;
-  deXuatPhuongAn: any[];
 
   constructor(
     httpClient: HttpClient,
@@ -465,7 +464,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
             if (this.formData.value.deXuatCuuTro) {
               this.selectRow(this.formData.value.deXuatCuuTro[0])
             }
-            console.log(this.formData.value,8787)
+            console.log(this.formData.value, 8787)
             this.summaryData()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -601,7 +600,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
 
   summaryData() {
     this.tongSoLuongDxuat = this.formData.value.deXuatCuuTro.reduce((prev, cur) => prev + cur.tongSoLuongDx, 0)
-    this.tongThanhTienDxuat = this.formData.value.deXuatCuuTro.reduce((prev, cur) => prev +cur.thanhTienDx, 0)
+    this.tongThanhTienDxuat = this.formData.value.deXuatCuuTro.reduce((prev, cur) => prev + cur.thanhTienDx, 0)
   }
 
   checkAvailableByStatus(nextStatus: String) {
@@ -691,6 +690,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   buildTableView() {
+    console.log(this.formData.value.deXuatPhuongAn, "PA");
     let dataView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
@@ -708,10 +708,11 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs};
       }).value();
     this.phuongAnView = dataView
+    console.log(this.phuongAnView, 199191)
     this.expandAll()
 
     //
-    if (this.formData.value.deXuatPhuongAn.length !== 0) {
+    if (this.formData.value.deXuatPhuongAn && this.formData.value.deXuatPhuongAn.length > 0) {
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
     } else {
@@ -726,8 +727,8 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          this.deXuatPhuongAn = res.data.deXuatPhuongAn;
-          this.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+          res.data.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+          this.formData.value.deXuatPhuongAn = res.data.deXuatPhuongAn;
           this.buildTableView();
         }
       })
