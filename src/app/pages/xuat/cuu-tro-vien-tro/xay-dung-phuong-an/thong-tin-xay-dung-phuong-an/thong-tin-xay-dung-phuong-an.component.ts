@@ -280,28 +280,19 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
-    //clean
-    this.errorInputComponent = [];
-    this.phuongAnRow = {}
-    this.listChiCuc = []
-
-    this.isVisible = true;
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
+    this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
     if (this.userService.isCuc()) {
       this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
       this.changeCuc(this.phuongAnRow.maDviCuc);
     }
-    if (data) {
-      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
-      this.changeCuc(this.phuongAnRow.maDviCuc);
-      this.phuongAnRow.noiDung = data.childData[0].noiDung;
-      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-
-      console.log(this.formData.value.deXuatPhuongAn, 98888)
-      console.log(data);
-      console.log(this.phuongAnRow, "phuongAnRow")
-    }
+    /* if (data) {
+       this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+       this.changeCuc(this.phuongAnRow.maDviCuc);
+       this.phuongAnRow.noiDung = data.childData[0].noiDung;
+       this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+     }*/
   }
 
   handleOk(): void {
@@ -314,7 +305,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten
     let index = this.formData.value.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
     let table = this.formData.value.deXuatPhuongAn;
-    //table.forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
+    table.filter(s => s.noiDung === this.phuongAnRow.noiDung && s.maDviCuc === this.phuongAnRow.maDviCuc)
+      .forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
 
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
@@ -326,11 +318,18 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     })
     this.buildTableView();
     this.isVisible = false;
+    //clean
+    this.errorInputComponent = [];
+    this.phuongAnRow = {}
+    this.listChiCuc = []
   }
 
   handleCancel(): void {
     this.isVisible = false;
+    //clean
+    this.errorInputComponent = [];
     this.phuongAnRow = {}
+    this.listChiCuc = []
   }
 
   buildTableView() {
@@ -491,8 +490,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else if (data.idVirtual) {
       currentRow = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual)
     }
-    console.log(currentRow, 123)
     this.phuongAnRow = currentRow;
+    console.log(this.phuongAnRow, 'current')
     this.changeCuc(this.phuongAnRow.maDviCuc);
     this.showModal();
   }
