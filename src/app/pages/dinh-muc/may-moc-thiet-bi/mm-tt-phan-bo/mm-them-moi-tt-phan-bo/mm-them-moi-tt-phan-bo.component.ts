@@ -93,7 +93,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
         let data = res.data;
         this.listTongHop = data.content;
         if (this.listTongHop) {
-          this.listTongHop.filter(item => item.trangThai == this.STATUS.BAN_HANH )
+          this.listTongHop = this.listTongHop.filter(item => item.trangThai == this.STATUS.BAN_HANH )
         }
       } else {
         this.listTongHop = [];
@@ -169,7 +169,6 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
       }
     })
     this.dataTable = arr
-    console.log(this.dataTable)
   }
 
   sumSoLuong(data: any) {

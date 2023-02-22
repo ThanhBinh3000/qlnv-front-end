@@ -149,7 +149,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
         let data = res.data;
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
-          this.listDxCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV)
+          this.listDxCuc = this.listDxCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV)
         }
       } else {
         this.listDxCuc = [];

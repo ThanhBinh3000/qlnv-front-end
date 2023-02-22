@@ -139,7 +139,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC)
         }
       } else {
         this.listDxChiCuc = [];
