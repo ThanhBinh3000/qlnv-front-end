@@ -13,7 +13,7 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="[20]">
+        <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="3">
             <label> Năm kế hoạch </label>
             <nz-select formControlName="nam">
@@ -222,10 +222,10 @@
             <td>{{ data.tongSoLuong|number: '1.0-1' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tenTrangThaiTh }}</td>
             <td>{{ data.maTongHop }}</td>
-            <td>{{ data.tenTrangThaiTH }}</td>
-            <td>{{ data.soQD }}</td>
-            <td>{{ data.tenTrangThaiQD }}</td>
+            <td>{{ data.soQdPd }}</td>
+            <td>{{ data.tenTrangThaiQd }}</td>
             <td class="text-left">
               <a (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
