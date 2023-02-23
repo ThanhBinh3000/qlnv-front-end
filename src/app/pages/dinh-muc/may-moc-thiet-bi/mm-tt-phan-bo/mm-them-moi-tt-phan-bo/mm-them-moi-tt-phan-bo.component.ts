@@ -142,6 +142,9 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
+          if(this.userService.isChiCuc()) {
+            this.dataTable = this.dataTable.filter(item => item.maDvi = this.userInfo.MA_DVI)
+          }
           this.convertListData()
           this.expandAll();
         }
@@ -242,7 +245,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
   chonMaTongHop() {
     if (!this.isView) {
       let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
+        nzTitle: 'DANH SÁCH QUYẾT ĐỊNH MUA SẮM',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,

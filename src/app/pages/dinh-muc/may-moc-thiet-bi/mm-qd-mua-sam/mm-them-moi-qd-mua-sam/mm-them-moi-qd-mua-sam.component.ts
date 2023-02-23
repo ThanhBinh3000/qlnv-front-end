@@ -147,6 +147,9 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
+          if(this.userService.isCuc()) {
+            this.dataTable = this.dataTable.filter(item => item.maDvi = this.userInfo.MA_DVI)
+          }
           this.convertListData()
           this.expandAll();
         }
