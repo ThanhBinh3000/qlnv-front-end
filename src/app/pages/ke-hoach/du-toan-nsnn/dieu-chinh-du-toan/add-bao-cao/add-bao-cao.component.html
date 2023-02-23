@@ -152,24 +152,14 @@
                       </ng-template>
                     </td>
                     <td>
-                      <ng-container *ngIf="baoCao.id">
-                        <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
-                          <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                        </a>
-                        <a *ngIf="(status || userInfo?.sub != data.giaoCho) && data.giaoCho">
-                          <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                        </a>
-                      </ng-container>
-                    </td>
-                    <td>
-                      <ng-container>
-                        <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
-                          <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
-                        </a>
-                        <a *ngIf="(!status || userInfo?.sub != data.giaoCho) && data.giaoCho">
-                          <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                        </a>
-                      </ng-container>
+                      <!-- <ng-container *ngIf="baoCao.id"> -->
+                      <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
+                        <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                      </a>
+                      <a *ngIf="(status || userInfo?.sub != data.giaoCho) && data.giaoCho">
+                        <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                      </a>
+                      <!-- </ng-container> -->
                       <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiNhap)">
                         <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                       </a>

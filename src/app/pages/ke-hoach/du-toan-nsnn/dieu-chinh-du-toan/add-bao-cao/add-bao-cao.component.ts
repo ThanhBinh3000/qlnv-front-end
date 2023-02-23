@@ -8,6 +8,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -147,6 +148,7 @@ export class AddBaoCaoComponent implements OnInit {
     private modal: NzModalService,
     public globals: Globals,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhDuToanService: DieuChinhService,
   ) { }
 
   async ngOnInit() {
@@ -234,6 +236,20 @@ export class AddBaoCaoComponent implements OnInit {
       this.baoCao.tongHopTuIds = [];
       this.baoCao.lstFiles = [];
       this.baoCao.listIdFiles = [];
+      this.baoCao.dotBcao = this.data?.dotBcao
+
+      await this.dieuChinhDuToanService.sinhMaBaoCaoDieuChinh().toPromise().then(
+        (data) => {
+          if (data.statusCode == 0) {
+            this.baoCao.maBcao = data.data;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+      );
     }
 
     if (this.baoCao.lstDviTrucThuoc.length == 0) {
