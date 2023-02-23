@@ -23,28 +23,34 @@ import { MmQdMuaSamComponent } from './mm-qd-mua-sam/mm-qd-mua-sam.component';
 import { MmThemMoiQdMuaSamComponent } from './mm-qd-mua-sam/mm-them-moi-qd-mua-sam/mm-them-moi-qd-mua-sam.component';
 import {MmThemMoiTtPhanBoComponent} from "./mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-them-moi-tt-phan-bo.component";
 import {MmThongTinHopDongComponent} from "./mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
+import { MmThongTinPhanBoCtComponent } from './mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component';
+import {
+    MmThemMoiPhuLucComponent
+} from "./mm-hop-dong/mm-thong-tin-hop-dong/mm-them-moi-phu-luc/mm-them-moi-phu-luc.component";
 
 @NgModule({
-  declarations: [
-    MayMocThietBiComponent,
-    DeXuatNhuCauChiCucComponent,
-    ThongTinDeXuatNhuCauChiCucComponent,
-    MmBienBanGiaoNhanComponent,
-    MmHienTrangCcdcComponent,
-    MmDinhMucTrangBiComponent,
-    MmThemMoiDmTrangBiComponent,
-    MmHopDongComponent,
-    MmTtPhanBoComponent,
-    MmDxCucComponent,
-    ThemMoiMmDxCucComponent,
-    MmTongHopDxCucComponent,
-    MmThemMoiTongHopDxCucComponent,
-    MmQdMuaSamComponent,
-    MmThemMoiQdMuaSamComponent,
-    MmThemMoiQdMuaSamComponent,
-    MmThemMoiTtPhanBoComponent,
-    MmThongTinHopDongComponent
-  ],
+    declarations: [
+        MayMocThietBiComponent,
+        DeXuatNhuCauChiCucComponent,
+        ThongTinDeXuatNhuCauChiCucComponent,
+        MmBienBanGiaoNhanComponent,
+        MmHienTrangCcdcComponent,
+        MmDinhMucTrangBiComponent,
+        MmThemMoiDmTrangBiComponent,
+        MmHopDongComponent,
+        MmTtPhanBoComponent,
+        MmDxCucComponent,
+        ThemMoiMmDxCucComponent,
+        MmTongHopDxCucComponent,
+        MmThemMoiTongHopDxCucComponent,
+        MmQdMuaSamComponent,
+        MmThemMoiQdMuaSamComponent,
+        MmThemMoiQdMuaSamComponent,
+        MmThemMoiTtPhanBoComponent,
+        MmThongTinHopDongComponent,
+        MmThongTinPhanBoCtComponent,
+        MmThemMoiPhuLucComponent
+    ],
   imports: [
     CommonModule,
     ComponentsModule,
