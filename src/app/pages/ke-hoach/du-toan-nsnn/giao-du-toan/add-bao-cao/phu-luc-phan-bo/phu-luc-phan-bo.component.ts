@@ -5,12 +5,13 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './phu-luc-phan-bo.constant';
 import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 
 export class ItemData {
   id: string;

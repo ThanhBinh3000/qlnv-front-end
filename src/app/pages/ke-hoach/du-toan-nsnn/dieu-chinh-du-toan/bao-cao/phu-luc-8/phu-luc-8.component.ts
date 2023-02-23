@@ -13,7 +13,8 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney, NOT_OK, OK } from 'src/app/Utility/utils';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { DON_VI_TIEN, MONEY_LIMIT, NOT_OK, OK } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 
 export class ItemData {
