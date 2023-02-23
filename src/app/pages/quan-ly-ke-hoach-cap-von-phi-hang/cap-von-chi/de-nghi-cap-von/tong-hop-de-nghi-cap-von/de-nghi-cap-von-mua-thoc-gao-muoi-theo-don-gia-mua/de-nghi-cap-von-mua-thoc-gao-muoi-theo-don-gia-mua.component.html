@@ -83,7 +83,7 @@
 								</ng-container>
 							</td>
 							<td>
-								<nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="statusCv">
+								<nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="statusCv">
 									<button nz-button>
 										<i nz-icon nzType="upload"></i>
 										Chọn tệp
@@ -106,13 +106,13 @@
 		</div>
 
 		<div class="mt-16 flex-card p-lr16">
-			<nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Danh sách hợp đồng">
+			<nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Danh sách đơn vị">
 				<div id="tablePrint">
-					<nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+					<nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
 						<thead>
 							<tr>
-								<th rowspan="2">STT</th>
-								<th rowspan="2">Đơn vị</th>
+								<th rowspan="2" nzWidth="50px" nzLeft>STT</th>
+								<th rowspan="2" nzWidth="250px" nzLeft>Đơn vị</th>
 								<th rowspan="2">Số lượng (Kế hoạch)</th>
 								<th rowspan="2">Đơn giá (theo quyết định)</th>
 								<th rowspan="2">Giá trị theo kế hoạch</th>
@@ -122,8 +122,8 @@
 								<th colspan="3">Vốn duyệt cấp lần này</th>
 								<th rowspan="2">Số lũy kế sau khi cấp lần này</th>
 								<th rowspan="2">Số còn được cấp</th>
-								<th rowspan="2">Ghi chú</th>
-								<th rowspan="2" [hidden]="status"></th>
+								<th rowspan="2" style="width: 200px;">Ghi chú</th>
+								<th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
 							</tr>
 							<tr>
 								<th>Cấp vốn</th>
@@ -134,8 +134,8 @@
 								<th>Cộng</th>
 							</tr>
 							<tr>
-								<th>A</th>
-								<th>B</th>
+								<th nzLeft>A</th>
+								<th nzLeft>B</th>
 								<th>1</th>
 								<th>2</th>
 								<th>3=1x2</th>
@@ -149,13 +149,13 @@
 								<th>11=6+10</th>
 								<th>12=3-11</th>
 								<th>D</th>
-								<th [hidden]="status"></th>
+								<th *ngIf="status" nzRight></th>
 							</tr>
 							<tr>
+								<th nzLeft></th>
+								<th nzLeft>Tổng cộng</th>
 								<th></th>
-								<th>Tổng cộng</th>
-								<th>{{displayValue(total.slKeHoach)}}</th>
-								<th>{{displayValue(total.donGia)}}</th>
+								<th></th>
 								<th>{{displayValue(total.gtTheoKeHoach)}}</th>
 								<th>{{displayValue(total.luyKeCapVon)}}</th>
 								<th>{{displayValue(total.luyKeCapUng)}}</th>
@@ -167,16 +167,16 @@
 								<th>{{displayValue(total.soLkeSauKhiCapLanNay)}}</th>
 								<th>{{displayValue(total.soConDuocCap)}}</th>
 								<th></th>
-								<th [hidden]="status"></th>
+								<th *ngIf="status" nzRight></th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
 								<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-									<td>
+									<td nzLeft>
 										{{ i+1 }}
 									</td>
-									<td>
+									<td nzLeft>
 										{{ data.tenDvi }}
 									</td>
 									<td>
@@ -225,16 +225,16 @@
 									<td>
 										{{ data.ghiChu }}
 									</td>
-									<td [hidden]="status">
+									<td *ngIf="status" nzRight>
 										<i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
 											(click)="startEdit(data.id)"></i>
 									</td>
 								</ng-container>
 								<ng-template #editTemplate>
-									<td>
+									<td nzLeft>
 										{{ i+1 }}
 									</td>
-									<td>
+									<td nzLeft>
 										{{ editCache[data.id].data.tenDvi }}
 									</td>
 									<!-- <ng-container *ngIf="baoCao.soLan != 1; else moi"> -->
@@ -274,12 +274,12 @@
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.vonDuyetCapUng"
+											[(ngModel)]="editCache[data.id].data.vonDuyetCapVon"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.vonDuyetCapVon"
+											[(ngModel)]="editCache[data.id].data.vonDuyetCapUng"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
@@ -295,7 +295,7 @@
 										<input nz-input class="search__input"
 											[(ngModel)]="editCache[data.id].data.ghiChu" />
 									</td>
-									<td [hidden]="status">
+									<td *ngIf="status" nzRight>
 										<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 										<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 											(nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -310,20 +310,20 @@
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col nzSpan="24">
 						<label class="search__label">Thuyết minh</label>
-						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh" [disabled]="status"></textarea>
+						<textarea rows="2" nz-input [(ngModel)]="baoCao.thuyetMinh" [disabled]="!status"></textarea>
 					</div>
 				</div>
 				<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 					<div nz-col class="gutter-row" [nzSpan]="3">
 						Danh sách văn bản đính kèm
-						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+						<nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status">
 							<button nz-button>
 								<i nz-icon nzType="upload"></i>
 								Chọn tệp
 							</button>
 						</nz-upload>
 						<button nz-button [nzType]="'primary'" (click)="handleUpload()"
-							[disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+							[disabled]="fileList.length === 0" *ngIf="status" style="margin-top: 16px">
 							Thêm vào danh sách
 						</button>
 					</div>
@@ -346,7 +346,7 @@
 										<a (click)="downloadFile(data.id)">
 											<i class="fa fa-eye"></i>
 										</a>
-										<a *ngIf="!status" (click)="deleteFile(data.id)">
+										<a *ngIf="status" (click)="deleteFile(data.id)">
 											<i class="fa fa-trash-o do"></i>
 										</a>
 									</td>

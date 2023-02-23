@@ -1,12 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';

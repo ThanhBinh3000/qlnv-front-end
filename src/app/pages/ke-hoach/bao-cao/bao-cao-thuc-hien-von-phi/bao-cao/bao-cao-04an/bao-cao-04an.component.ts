@@ -111,8 +111,10 @@ export class BaoCao04anComponent implements OnInit {
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
         this.listVtus = this.data?.lstVtus;
 
-        await this.getListNdung();
-        await this.getDinhMuc();
+        if (this.status) {
+            await this.getListNdung();
+            await this.getDinhMuc();
+        }
 
         if (this.lstCtietBcao.length == 0) {
             if (this.luyKes.length > 0) {

@@ -7,9 +7,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { sumNumber, Utils } from 'src/app/Utility/utils';
+import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { utils } from 'xlsx';
 import { receivedInfo, Report, sendInfo, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -47,10 +46,13 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
 
         if (this.isRequestExist == 2) {
             this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
-            this.response.loaiDnghi = null;
+            // this.response.loaiDnghi = null;
             return;
         }
         if (this.isRequestExist == 0) {
+            this.notification.warning(MESSAGE.WARNING, 'Chưa tồn tại bản ghi nộp tiền vốn thừa năm ' + this.response.namDnghi);
+            // this.response.loaiDnghi = null;
+            return;
             this.response.ttGui = new sendInfo();
             this.response.ttGui.lstCtietBcaos = [];
             this.response.ttNhan = new receivedInfo();

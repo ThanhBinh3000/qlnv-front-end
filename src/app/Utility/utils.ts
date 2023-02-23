@@ -478,6 +478,7 @@ export const QUATITY = {
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
+//kich co cua o nhap so lieu
 export const BOX_NUMBER_WIDTH = 150;
 
 // loai bao cao quy trinh thuc hien du toan chi
@@ -681,12 +682,12 @@ export function mulMoney(value, maDonViTien): number {
   }
 }
 
-// export function getNumberValue(num): number {
-//   if (!num) {
-//     return 0;
-//   }
-//   return Number(num.toFixed(4));
-// }
+export function getNumberValue(num): number {
+  if (!num) {
+    return 0;
+  }
+  return Number(num.toFixed(4));
+}
 
 export function sumNumber(num: any): number {
   let check = true;
