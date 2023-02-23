@@ -16,11 +16,12 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 // import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { TEN_HANG } from './add-quyet-toan-tong-hop.constant';
 import { DialogAddVatTuComponent } from '../dialog-add-vat-tu/dialog-add-vat-tu.component';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 // import { NOI_DUNG } from './them-bao-cao-quyet-toan.constant';
 export class ItemData {
   id!: any;

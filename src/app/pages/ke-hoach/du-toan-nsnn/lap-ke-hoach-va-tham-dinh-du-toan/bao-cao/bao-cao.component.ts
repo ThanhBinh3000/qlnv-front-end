@@ -1336,17 +1336,20 @@ export class BaoCaoComponent implements OnInit {
                     if (data7?.trangThai != '3') {
                         let tongTu = 0;
                         let tongDuoi = 0;
+                        let tong = 0
                         data7?.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
-                                tongTu = sumNumber([tongTu, item.gtTuM3]);
-                                tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
+                                // tongTu = sumNumber([tongTu, item.gtTuM3]);
+                                // tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
+                                tong = sumNumber([tong, item.gtTong])
                             }
                         })
                         dataInfo.extraData.push({
                             stt: '0.1.5',
                             maNdung: '0.1.5',
-                            namKh: sumNumber([mulNumber(divNumber(data7.hsBhDuoi, 100), tongDuoi), mulNumber(divNumber(data7.hsBhTu, 100), tongTu)]),
+                            // namKh: sumNumber([mulNumber(divNumber(data7.hsBhDuoi, 100), tongDuoi), mulNumber(divNumber(data7.hsBhTu, 100), tongTu)]),
+                            namKh: tong,
                             giaTriThamDinh: null,
                         })
                     }

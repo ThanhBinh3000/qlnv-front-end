@@ -9,11 +9,12 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-03.constant';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { displayNumber, divNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 // import { DANH_MUC } from './phu-luc-03.constant';
 
 export class ItemData {
