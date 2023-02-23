@@ -4,7 +4,7 @@
             Phiếu xuất kho
         </li>
         <li nz-menu-item (click)="selectTab(1)">
-            Bảng kê cấn hàng
+            Bảng kê cân hàng
         </li>
         <li nz-menu-item (click)="selectTab(1)">
             Biên bản tịnh kho
@@ -16,6 +16,9 @@
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
     <app-phieu-xuat-kho [loaiVthh]="loaiVthh"></app-phieu-xuat-kho>
+</ng-container>
+ <ng-container *ngIf="tabSelected == 1">
+    <app-bang-ke-can [loaiVthh]="loaiVthh"></app-bang-ke-can>
 </ng-container>
 <!-- <ng-container *ngIf="tabSelected == 1">
     <app-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh"></app-phieu-kiem-nghiem-chat-luong>
