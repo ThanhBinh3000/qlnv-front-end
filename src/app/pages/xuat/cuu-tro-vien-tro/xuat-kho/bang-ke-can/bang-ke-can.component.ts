@@ -1,33 +1,25 @@
 import {Component, Input, OnInit} from '@angular/core';
-import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "../../../../../services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
-} from "../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from './../../../../services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DonviService} from './../../../../services/donvi.service';
-import {chain, isEmpty} from 'lodash';
-import {STATUS} from "src/app/constants/status";
-import {DatePipe} from "@angular/common";
-import * as uuid from "uuid";
-
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
+import dayjs from "dayjs";
+import {UserLogin} from "../../../../../models/userlogin";
+import {MESSAGE} from "../../../../../constants/message";
+import { isEmpty } from 'lodash';
 @Component({
-  selector: 'app-xay-dung-phuong-an',
-  templateUrl: './xay-dung-phuong-an.component.html',
-  styleUrls: ['./xay-dung-phuong-an.component.scss']
+  selector: 'app-bang-ke-can',
+  templateUrl: './bang-ke-can.component.html',
+  styleUrls: ['./bang-ke-can.component.scss']
 })
-export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
-
-  @Input()
-  loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
+export class BangKeCanComponent extends Base2Component implements OnInit {
+  @Input() loaiVthh: string;
 
   constructor(
     httpClient: HttpClient,
@@ -65,14 +57,12 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     };
   }
 
-
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
-
 
   async ngOnInit() {
     try {
@@ -132,4 +122,5 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+
 }

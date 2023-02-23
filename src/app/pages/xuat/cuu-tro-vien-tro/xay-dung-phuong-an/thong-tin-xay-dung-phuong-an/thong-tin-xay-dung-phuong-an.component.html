@@ -71,11 +71,17 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="userService.isTongCuc()"
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
             type="button" class="btn btn-sub"
             (click)="approve(idInput,STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
+    </button>
+    <button *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc()"
+            type="button" class="btn btn-sub"
+            (click)="approve(idInput,STATUS.DU_THAO,'Bạn có muốn đổi trạng thái để chỉnh sửa đề xuất này ?')">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Chỉnh sửa</span>
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
