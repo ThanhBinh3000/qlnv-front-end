@@ -190,6 +190,20 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       // }
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }
+
+    let body = {
+      maDvi: event,
+      loaiVthh: this.loaiVthh
+    }
+    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.length > 0) {
+          this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
+          this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
+        }
+      }
+    });
   }
 
   changeDiemKho(index?) {
@@ -279,6 +293,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   addDiemKho() {
     if (this.validateDiemKho()) {
+      this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
       this.listOfData = [...this.listOfData, this.thongTinXuatBanTrucTiep];
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
       this.formData.patchValue({

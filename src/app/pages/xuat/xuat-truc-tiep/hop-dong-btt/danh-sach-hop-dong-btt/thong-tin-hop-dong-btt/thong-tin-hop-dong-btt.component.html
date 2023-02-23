@@ -525,9 +525,9 @@
                                 <td class="text-center">{{i + 1}}</td>
                                 <td>{{data.tenDvi}}</td>
                                 <td>{{data.diaChi}}</td>
-                                <td>{{data.soLuong}}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{data.tongSoLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{data.donGiaVat * data.tongSoLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
                                 <td></td>
                             </tr>
                         </ng-container>

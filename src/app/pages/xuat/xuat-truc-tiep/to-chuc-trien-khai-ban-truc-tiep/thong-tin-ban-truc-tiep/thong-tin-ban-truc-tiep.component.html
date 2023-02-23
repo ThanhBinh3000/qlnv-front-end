@@ -147,7 +147,7 @@
                             <a *ngIf="data.trangThaiChaoGia == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThaiChaoGia == STATUS.CHUA_CAP_NHAT || data.trangThaiChaoGia == STATUS.DANG_CAP_NHAT"
+                            <a *ngIf="data.trangThaiChaoGia != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
                                 (click)="goDetail(data.id)">
                                 <i class="icon htvbdh_soanthao"></i>
                             </a>

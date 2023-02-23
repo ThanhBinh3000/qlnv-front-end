@@ -211,7 +211,7 @@
                             <th>Trích yếu</th>
                             <th>Tên dự án</th>
                             <th>Số Lượng</th>
-                            <th>Tổng tiền đã bao gồm thuế</th>
+                            <th>Tổng tiền đã bao gồm thuế (đồng)</th>
                         </tr>
                     </thead>
                     <tbody #bodyChiTiet>
@@ -223,8 +223,8 @@
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.trichYeu }}</td>
                             <td>{{ data.tenDuAn }}</td>
-                            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                            <td>{{ data.tongTienVat | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong * 1000 | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number: '1.0-1' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
