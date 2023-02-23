@@ -38,6 +38,7 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
       tenHd: [''],
       soQd: [''],
       benMua: [''],
+      ngayKy: [''],
     });
     this.filterTable = {};
   }

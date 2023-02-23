@@ -112,7 +112,16 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
+          let arr = detail.listQlDinhMucDxTbmmTbcd;
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              if (dtl.id == item.dxTbmmTbcdId) {
+                item.maDvi = dtl.maDvi
+              }
+            })
+          }
           item.id = null;
+          item.ghiChu = null;
           idVirtual:uuidv4();
         })
         this.convertListData()
@@ -139,7 +148,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC)
         }
       } else {
         this.listDxChiCuc = [];
@@ -278,12 +287,10 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     this.dataTable.forEach(s => {
       this.expandSet.add(s.idVirtual);
     })
-    console.log(this.expandSet,128912893)
   }
 
 
   onExpandChange(id: number, checked: boolean): void {
-    console.log(this.expandSet,1111)
     if (checked) {
       this.expandSet.add(id);
     } else {

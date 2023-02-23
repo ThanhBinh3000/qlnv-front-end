@@ -91,6 +91,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
+      donGiaVat: [],
     });
   }
 
@@ -207,6 +208,13 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
+          console.log(data, 999)
+          this.formData.patchValue({
+            donGiaVat: data.giaQdVat
+          })
+          if (!data.giaQdVat) {
+            this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+          }
         }
         if (res.statusCode == API_STATUS_CODE.SUCCESS) {
           this.formData.patchValue({
@@ -235,6 +243,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
         namKh: this.formData.get('namKh').value,
+        donGiaVat: this.formData.value.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((data) => {

@@ -4,10 +4,27 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
+        <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV ) " type="button" class="btn btn-sub do"
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi"></i>
+            <span>Từ chối</span>
+        </button>
+        <button
+            *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+            type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+        </button>
+        <button *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()" type="button"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_chuyenvanthu"></i>
             <span>Ban hành</span>
+        </button>
+        <button
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
+            type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <span>Lưu và gửi duyệt</span>
         </button>
         <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
             class="btn btn-main" (click)="save()">
@@ -28,6 +45,12 @@
             </div>
         </div>
     </div>
+
+    <nz-alert class="mg-t-10"
+        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    </nz-alert>
+
     <nz-card class="mg-t-16 flex-card p-lr16">
         <nz-collapse>
             <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung">
@@ -188,7 +211,7 @@
                             <th>Trích yếu</th>
                             <th>Tên dự án</th>
                             <th>Số Lượng</th>
-                            <th>Tổng tiền đã bao gồm thuế</th>
+                            <th>Tổng tiền đã bao gồm thuế (đồng)</th>
                         </tr>
                     </thead>
                     <tbody #bodyChiTiet>
@@ -200,8 +223,8 @@
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.trichYeu }}</td>
                             <td>{{ data.tenDuAn }}</td>
-                            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                            <td>{{ data.tongTienVat | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong * 1000 | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number: '1.0-1' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>

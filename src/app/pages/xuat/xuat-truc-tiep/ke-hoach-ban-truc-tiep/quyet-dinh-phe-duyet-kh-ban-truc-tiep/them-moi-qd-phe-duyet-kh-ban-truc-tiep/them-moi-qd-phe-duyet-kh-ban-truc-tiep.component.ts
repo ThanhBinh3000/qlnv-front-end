@@ -213,6 +213,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
       namKh: this.formData.get('namKh').value,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
