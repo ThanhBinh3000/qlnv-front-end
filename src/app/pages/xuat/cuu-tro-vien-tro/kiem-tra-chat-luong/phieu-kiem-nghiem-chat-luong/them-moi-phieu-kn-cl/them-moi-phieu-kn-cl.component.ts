@@ -10,16 +10,12 @@ import dayjs from 'dayjs';
 import { FileDinhKem } from './../../../../../../models/FileDinhKem';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
-import { QuyetDinhGiaoNvCuuTroService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { DialogTableSelectionComponent } from './../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { isEmpty, cloneDeep } from 'lodash';
 import { PhuongPhapLayMau } from './../../../../../../models/PhuongPhapLayMau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ItemDaiDien } from 'src/app/pages/nhap/dau-thau/kiem-tra-chat-luong/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
 import { Validators } from '@angular/forms';
 import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from './../../../../../../models/PhieuKiemNghiemChatLuongThoc';
-import { filter } from 'rxjs/operators';
 import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 
 @Component({
@@ -349,19 +345,9 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
     this.reject(this.idInput, trangThai)
   }
 
-  async loadChiTiet(id: number) {
-    if (id > 0) {
-      let data = await this.detail(id);
-      this.formData.patchValue({
-        soQd: data.soQd.split('/')[0]
-      })
-      this.dataTable = data.children;
-    };
-  }
-
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.BAN_HANH || trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
       return true
     }
     return false;

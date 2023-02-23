@@ -157,7 +157,7 @@
         <div class="title-chi-tieu">
             <span>
             </span>
-            <span> Số lượng, Địa điểm </span>
+            <span> Danh mục đơn vị tài sản bán trực tiếp </span>
         </div>
     </div>
 </div>
@@ -176,7 +176,6 @@
                 <th>ĐVT</th>
                 <th>Đơn giá được duyệt(đ/kg)</th>
                 <th>Thành tiền</th>
-                <th>Số tiền đặt trước (đ)</th>
                 <th *ngIf="!isView"></th>
             </tr>
         </thead>
@@ -203,19 +202,19 @@
                         <td>{{phanLo.maDviTsan}}</td>
                         <td>
                             <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-                                [nzSize]="'small'" [(ngModel)]="phanLo.soLuong" (ngModelChange)="changeFormData()">
+                                [nzSize]="'small'" [(ngModel)]="phanLo.soLuong " (ngModelChange)="changeFormData()">
                             </nz-input-number>
                         </td>
                         <td>{{phanLo.dviTinh }}</td>
                         <td>
                             <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-                                [nzSize]="'small'" [(ngModel)]="phanLo.donGiaVat" (ngModelChange)="changeFormData()">
+                                [nzSize]="'small'" [(ngModel)]="phanLo.donGiaDeXuat "
+                                (ngModelChange)="changeFormData()">
                             </nz-input-number>
                         </td>
-                        <td>{{phanLo.giaKhoiDiem }}</td>
-                        <td>{{phanLo.tienDatTruoc }}</td>
+                        <td>{{phanLo.soLuong * phanLo.donGiaDeXuat}}</td>
                         <td *ngIf="!isView">
-                            <a (click)="themMoiBangPhanLoTaiSan(phanLo,phanLo.idx)">
+                            <a (click)="themMoiBangPhanLoTaiSan(phanLo,phanLo.y)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>

@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
-import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
+import {QuyetDinhMuaSamService} from "../../../../services/quyet-dinh-mua-sam.service";
 
 @Component({
   selector: 'app-mm-tt-phan-bo',
@@ -27,17 +27,20 @@ export class MmTtPhanBoComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dxChiCucService: MmDxChiCucService
+    private qdMuaSamService: QuyetDinhMuaSamService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
+    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
-      capDvi: [''],
       namKeHoach: [''],
-      soCv: [''],
+      soVb: [''],
+      soQdMs: [''],
       trichYeu: [''],
       ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
+      loai: ['01']
     });
     this.filterTable = {};
   }
@@ -61,12 +64,13 @@ export class MmTtPhanBoComponent extends Base2Component implements OnInit {
 
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+      this.formData.patchValue({
+        ngayKyTu :  dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
+        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+      })
     }
     this.formData.patchValue({
-      maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      maDvi : this.userService.isTongCuc()  ? this.userInfo.MA_DVI : null,
     })
     await this.search();
   }
@@ -74,8 +78,7 @@ export class MmTtPhanBoComponent extends Base2Component implements OnInit {
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
     })
     await this.search();
   }
@@ -95,10 +98,10 @@ export class MmTtPhanBoComponent extends Base2Component implements OnInit {
           limit: this.pageSize,
           page: this.page - 1
         }
-        this.dxChiCucService
+        this.qdMuaSamService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'tong-hop-dx-chi-cuc.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-mua-sam.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

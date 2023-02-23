@@ -52,6 +52,13 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       idDxHdr: [],
       maDvi: [''],
       tenDvi: [''],
+      diaChi: [''],
+      soDxuat: [null,],
+      ngayPduyet: [],
+      trichYeu: [null],
+      tenDuAn: [null],
+      tongSoLuong: [null,],
+      donGiaVat: [null,],
       tgianBdauTchuc: [],
       tgianDkienTu: [null,],
       tgianDkienDen: [null,],
@@ -62,15 +69,6 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       tgianGnhanGhiChu: [null,],
       pthucGnhan: [null,],
       thongBaoKh: [null,],
-      khoanTienDatTruoc: [null,],
-      tongSoLuong: [null,],
-      tongTienKdienDonGia: [null,],
-      tongTienDatTruocDonGia: [null,],
-      diaChi: [],
-      namKh: [dayjs().get('year'),],
-      soDxuat: [null,],
-      trichYeu: [null],
-      ldoTuchoi: [],
       children: []
     });
   }
@@ -86,7 +84,6 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
             this.formData.patchValue(res.data);
             this.formData.patchValue({
               tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
-
             });
           }
         } else {
@@ -133,7 +130,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
         dataEdit: data,
       },
     });
-    modalGT.afterClose.subscribe((res) => {
+    modalGT.afterClose.subscribe((data) => {
       if (!data) {
         return;
       }
@@ -160,7 +157,6 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     });
     this.dataInput.soLuong = tongSoLuong * 1000
   }
-
 
   changeFormData() {
     if (this.formData.value.id) {

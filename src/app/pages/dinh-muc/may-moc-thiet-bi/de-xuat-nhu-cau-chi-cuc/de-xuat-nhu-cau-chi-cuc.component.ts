@@ -55,13 +55,17 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
       soCv: [''],
       trichYeu: [''],
       ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
     });
   }
 
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+      this.formData.patchValue({
+        ngayKyTu : dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
+        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+      })
     }
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,

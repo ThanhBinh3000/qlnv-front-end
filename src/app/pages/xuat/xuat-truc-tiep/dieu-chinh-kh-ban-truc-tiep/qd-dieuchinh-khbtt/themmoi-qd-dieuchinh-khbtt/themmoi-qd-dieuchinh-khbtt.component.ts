@@ -67,6 +67,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
       fileName: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: ['']
     })
   }
 
@@ -118,6 +119,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
     await this.quyetDinhPdKhBanTrucTiepService.search({
       trangThai: STATUS.BAN_HANH,
       namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
       lastest: 1,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -187,12 +189,48 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
     console.log("🚀 ~ save ~ data", data)
     if (data) {
       if (isGuiDuyet) {
-        this.approve(data.id, STATUS.BAN_HANH, "Bạn có muốn ban hành điều chỉnh ?");
+        this.guiDuyet();
       } else {
         this.goBack()
       }
     }
   }
+
+  async guiDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_LDV:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        msg = MESSAGE.GUI_DUYET_CONFIRM
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
+        msg = MESSAGE.PHE_DUYET_CONFIRM
+        break;
+      }
+      case STATUS.DA_DUYET_LDV: {
+        trangThai = STATUS.BAN_HANH;
+        msg = MESSAGE.PHE_DUYET_CONFIRM
+        break;
+      }
+    }
+    this.approve(this.idInput, trangThai, msg);
+  }
+
+  tuChoi() {
+    let trangThai = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.TU_CHOI_LDV;
+        break;
+      }
+    };
+    this.reject(this.idInput, trangThai);
+  }
+
 
   async loadChiTiet(id: number) {
     if (id > 0) {
@@ -223,7 +261,6 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
   index = 0;
   async showDetail($event, index) {
     await this.spinner.show();
-    // console.log(this.bodyChiTiet.nativeElement)
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
     this.isTongHop = this.formData.value.phanLoai == 'TH';

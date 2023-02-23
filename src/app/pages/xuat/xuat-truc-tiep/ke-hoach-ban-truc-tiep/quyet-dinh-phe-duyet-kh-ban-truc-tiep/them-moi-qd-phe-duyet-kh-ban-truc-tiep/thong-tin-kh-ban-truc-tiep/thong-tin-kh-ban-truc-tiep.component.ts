@@ -57,6 +57,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
       thoiGianDuKien: [],
+      donGiaVat: []
     });
   }
 
