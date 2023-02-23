@@ -4,7 +4,9 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="this.userService.isChiCuc() && !isDisabled()" class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <button
+            *ngIf="this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
@@ -17,8 +19,9 @@
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button *ngIf="this.userService.isChiCuc() && !isDisabled()" type="button" class="btn btn-main"
-            (click)="save()">
+        <button
+            *ngIf="this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+            type="button" class="btn btn-main" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -28,8 +31,7 @@
     <div class="header header-green-background">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span
-                    [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
                 <span>Biên bản lấy mẫu/bàn giao mẫu</span>
@@ -38,7 +40,7 @@
     </div>
 
     <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-        nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuChoi}}">
+        nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
     </nz-alert>
 
     <nz-card class="mt16 flex-card p-lr16">

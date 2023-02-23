@@ -43,6 +43,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       ngayKnTu: null,
       ngayKnDen: null,
       soBbXuatDocKho: null,
+      loaiVthh: null,
       type: null
     })
     this.filterTable = {

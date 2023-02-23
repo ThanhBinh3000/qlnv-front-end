@@ -312,19 +312,9 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     this.reject(this.idInput, trangThai)
   }
 
-  async loadChiTiet(id: number) {
-    if (id > 0) {
-      let data = await this.detail(id);
-      this.formData.patchValue({
-        soQd: data.soQd.split('/')[0]
-      })
-      this.dataTable = data.children;
-    };
-  }
-
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.BAN_HANH || trangThai == STATUS.CHO_DUYET_LDCC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC) {
       return true
     }
     return false;
