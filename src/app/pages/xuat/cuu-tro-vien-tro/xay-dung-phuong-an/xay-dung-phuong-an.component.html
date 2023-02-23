@@ -13,7 +13,7 @@
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="[20]">
+        <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="3">
             <label> Năm kế hoạch </label>
             <nz-select formControlName="nam">
@@ -85,17 +85,20 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="60px" class="text-center">STT</th>
-            <th width="">Năm kế hoạch</th>
-            <th width="">Loại hình nhập xuất</th>
-            <th width="">Số công văn/đề xuất</th>
-            <th width="">Đơn vị đề xuất</th>
-            <th width="">Ngày đề xuất</th>
-            <th width="">Ngày duyệt đề xuất</th>
-            <th width="">Loại hàng hoá</th>
-            <th width="">Tổng SL xuất CT,VT (kg)</th>
-            <th width="">Trích yếu</th>
-            <th width="">Trạng thái đề xuất</th>
-            <th width="">Trạng thái/Mã tổng hợp</th>
+            <th>Năm kế hoạch</th>
+            <th>Loại hình nhập xuất</th>
+            <th>Số công văn/đề xuất</th>
+            <th>Đơn vị đề xuất</th>
+            <th>Ngày đề xuất</th>
+            <th>Ngày duyệt đề xuất</th>
+            <th>Loại hàng hoá</th>
+            <th>Tổng SL xuất CT,VT (kg)</th>
+            <th>Trích yếu</th>
+            <th>Trạng thái ĐX</th>
+            <th>Trạng thái TH</th>
+            <th>Mã TH</th>
+            <th>Trạng thái QĐ</th>
+            <th>Số QĐ</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -178,6 +181,27 @@
               </nz-input-group>
 
             </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
+                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
+                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
+                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+              </nz-input-group>
+
+            </th>
             <th></th>
           </tr>
         </thead>
@@ -198,7 +222,10 @@
             <td>{{ data.tongSoLuong|number: '1.0-1' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tenTrangThaiTh }}</td>
             <td>{{ data.maTongHop }}</td>
+            <td>{{ data.soQdPd }}</td>
+            <td>{{ data.tenTrangThaiQd }}</td>
             <td class="text-left">
               <a (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
