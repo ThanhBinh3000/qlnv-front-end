@@ -9,7 +9,7 @@ import { QuanLyQuyenComponent } from './quan-ly-quyen/quan-ly-quyen.component';
 import { QuanTriHeThongNewRoutingModule } from './quan-tri-he-thong-routing.module';
 import { QuanTriHeThongNewComponent } from './quan-tri-he-thong.component';
 import { QuanTriThamSoComponent } from './quan-tri-tham-so/quan-tri-tham-so.component';
-import { ThemMoiQtriThamSoComponent } from './quan-tri-tham-so/them-moi-qtri-tham-so/them-moi-qtri-tham-so.component';
+import {ThemMoiQtriThamSoComponent} from "./quan-tri-tham-so/them-moi-qtri-tham-so/them-moi-qtri-tham-so.component";
 
 @NgModule({
   declarations: [
