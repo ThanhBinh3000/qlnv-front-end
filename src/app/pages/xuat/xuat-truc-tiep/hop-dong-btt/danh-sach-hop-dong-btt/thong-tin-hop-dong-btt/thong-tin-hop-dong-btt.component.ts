@@ -22,6 +22,7 @@ import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -246,7 +247,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     let body = {
       loaiVthh: this.loaiVthh,
       namKh: this.formData.value.namHd,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH
     };
     let res = await this.qdPdKetQuaBttService.search(body)
     if (res.data) {
@@ -278,8 +280,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.qdPdKetQuaBttService.getDetail(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          console.log(dataKq, 1)
-          let resTtin = await this.chaoGiaMuaLeUyQuyenService.getDetail(dataKq.idDtl);
+          let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataKq.idHdr);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
             this.dataTable = dataThongTin.children;
