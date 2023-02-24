@@ -4,6 +4,7 @@ import { KiemSoatQuyenTruyCapComponent } from './kiem-soat-quyen-truy-cap/kiem-s
 import { QuanLyCanBoComponent } from './quan-ly-can-bo/quan-ly-can-bo.component';
 import { QuanLyQuyenComponent } from './quan-ly-quyen/quan-ly-quyen.component';
 import { QuanTriHeThongNewComponent } from './quan-tri-he-thong.component';
+import {QuanTriThamSoComponent} from "./quan-tri-tham-so/quan-tri-tham-so.component";
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: 'kiem-soat-truy-cap',
         component: KiemSoatQuyenTruyCapComponent,
+      },
+      {
+        path: 'quan-tri-tham-so',
+        component: QuanTriThamSoComponent,
       },
     ],
   },
