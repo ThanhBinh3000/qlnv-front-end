@@ -13,7 +13,8 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { DON_VI_TIEN, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './chi-tiet-du-toan-tu-cap-tren.constant';
 // import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';

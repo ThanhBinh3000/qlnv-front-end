@@ -16,7 +16,8 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { sumNumber } from 'src/app/Utility/func';
+import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHULUCLIST } from './bao-cao.constant';
 

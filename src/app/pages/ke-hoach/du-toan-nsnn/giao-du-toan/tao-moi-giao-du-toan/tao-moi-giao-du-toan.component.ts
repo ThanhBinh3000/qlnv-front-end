@@ -20,7 +20,8 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
 // khai báo class data request

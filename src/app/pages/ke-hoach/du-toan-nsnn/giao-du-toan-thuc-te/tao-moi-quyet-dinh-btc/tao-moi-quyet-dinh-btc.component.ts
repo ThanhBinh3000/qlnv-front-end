@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
 import { Globals } from 'src/app/shared/globals';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
@@ -19,6 +19,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 
 export class ItemData {
   id!: any;
