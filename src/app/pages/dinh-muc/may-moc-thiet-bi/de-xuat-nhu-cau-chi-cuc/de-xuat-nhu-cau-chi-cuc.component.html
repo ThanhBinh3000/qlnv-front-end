@@ -28,7 +28,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -38,7 +38,7 @@
     <div class="group-button">
       <h3>DANH SÁCH ĐỀ XUẤT</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isChiCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>

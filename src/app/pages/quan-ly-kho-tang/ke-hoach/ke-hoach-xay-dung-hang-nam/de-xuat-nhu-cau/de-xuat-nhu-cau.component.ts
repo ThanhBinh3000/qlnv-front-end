@@ -53,7 +53,6 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
       diaDiem : [null],
       ngayKy : [null],
       trangThai : [null],
-      role : [null],
     });
     this.filterTable = {
       soCongVan: '',
@@ -71,7 +70,6 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       this.formData.patchValue({
-        role : this.userService.isCuc() ? 'CUC': 'TC',
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
       })
       await Promise.all([
@@ -100,12 +98,6 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
         maDvi: this.userInfo.MA_DVI
       })
     }
-  }
-
-  initForm() {
-      this.formData.patchValue({
-        role : this.userService.isCuc() ? 'CUC' : 'TC'
-      })
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {

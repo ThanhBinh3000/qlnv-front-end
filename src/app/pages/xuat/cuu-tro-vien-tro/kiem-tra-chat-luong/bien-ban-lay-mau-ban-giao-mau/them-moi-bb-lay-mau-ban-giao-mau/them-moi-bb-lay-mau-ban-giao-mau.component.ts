@@ -45,7 +45,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   canCu: any = [];
   listFileDinhKem: any = [];
   fileNiemPhong: any = [];
-  dataEdit: { [key: string]: { edit: boolean; data: ItemDaiDien } } = {};
 
   constructor(
     httpClient: HttpClient,
@@ -100,7 +99,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNhaKho: [],
         tenNganKho: [],
         tenLoKho: [],
-        nguoiLienQuan: [],
+        nguoiLienQuan: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         canCu: [new Array<FileDinhKem>()],
         fileDinhKemNiemPhong: [new Array<FileDinhKem>()],
@@ -145,18 +144,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
             this.fileNiemPhong = data.fileDinhKemNiemPhong;
             this.listDaiDienChiCuc = data.nguoiLienQuan.filter(x => x.loaiDaiDien == 'CHI_CUC')
             this.listDaiDienCuc = data.nguoiLienQuan.filter(x => x.loaiDaiDien == 'CUC')
-            this.listDaiDienChiCuc.forEach((item, index) => {
-              this.dataEdit[index] = {
-                edit: false,
-                data: { ...item },
-              };
-            });
-            this.listDaiDienCuc.forEach((item, index) => {
-              this.dataEdit[index] = {
-                edit: false,
-                data: { ...item },
-              };
-            });
           }
         })
         .catch((e) => {
@@ -232,8 +219,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
 
     });
     let dataChiCuc = data.noiDungCuuTro.find(item => item.maDviChiCuc == this.userInfo.MA_DVI);
-    console.log(data, "data");
-    console.log(dataChiCuc, 123);
     if (dataChiCuc) {
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
     }
@@ -243,7 +228,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
 
 
   openDialogDdiemNhapHang() {
-    console.log(this.listDiaDiemNhap, 1234);
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
       nzContent: DialogTableSelectionComponent,
@@ -283,7 +267,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maBb;
     }
-    console.log(body, "cmm");
     body.fileDinhKems = this.listFileDinhKem;
     body.canCu = this.canCu;
     body.fileDinhKemNiemPhong = this.fileNiemPhong;
@@ -329,19 +312,9 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     this.reject(this.idInput, trangThai)
   }
 
-  async loadChiTiet(id: number) {
-    if (id > 0) {
-      let data = await this.detail(id);
-      this.formData.patchValue({
-        soQd: data.soQd.split('/')[0]
-      })
-      this.dataTable = data.children;
-    };
-  }
-
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.BAN_HANH || trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC) {
       return true
     }
     return false;

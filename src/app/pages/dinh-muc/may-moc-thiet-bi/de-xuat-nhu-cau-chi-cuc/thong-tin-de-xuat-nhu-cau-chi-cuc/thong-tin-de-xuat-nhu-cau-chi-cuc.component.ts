@@ -31,8 +31,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dxChiCucService: MmDxChiCucService,
-    private dmTaiSanService: DanhMucTaiSanService,
+    private dxChiCucService: MmDxChiCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -52,6 +51,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
+      listQlDinhMucDxTbmmTbcdDtl: [null],
     });
   }
 
@@ -129,6 +129,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       this.spinner.hide();
       return;
     }
+    this.rowItem.maDvi = this.userInfo.MA_DVI;
     this.rowItem.thanhTienNc = this.rowItem.soLuong * this.rowItem.donGiaTd
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmThongTinNcChiCuc();
@@ -274,6 +275,8 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 
 export class MmThongTinNcChiCuc {
   id: number;
+  maDvi : string;
+  tenDvi : string;
   tenTaiSan: string;
   maTaiSan: string;
   donViTinh: string;
@@ -284,6 +287,7 @@ export class MmThongTinNcChiCuc {
   chenhLechThieu: number;
   chenhLechThua: number;
   soLuong: number = 0;
+  soLuongTc: number = 0;
   donGiaTd: number = 0;
   thanhTienNc: number = 0;
   ghiChu: number;

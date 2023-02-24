@@ -106,7 +106,6 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     }
 
     await this.search();
-    console.log(this.dataTable, 123);
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
   }
@@ -121,8 +120,6 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
         return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children");
-
     this.expandAll()
 
   }

@@ -10,11 +10,14 @@ import { QuyetDinhPheDuyetPhuongAnModule } from "./quyet-dinh-phe-duyet-phuong-a
 import { QuyetDinhGnvXuatHangModule } from "./quyet-dinh-gnv-xuat-hang/quyet-dinh-gnv-xuat-hang.module";
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
+import { XuatKhoComponent } from './xuat-kho/xuat-kho.component';
+import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
 
 @NgModule({
   declarations: [
     CuuTroVienTroComponent,
     KiemTraChatLuongComponent,
+    XuatKhoComponent,
 
 
   ],
@@ -27,7 +30,8 @@ import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luon
     TongHopPhuongAnModule,
     XayDungPhuongAnModule,
     QuyetDinhGnvXuatHangModule,
-    KiemTraChatLuongModule
+    KiemTraChatLuongModule,
+    XuatKhoModule
   ],
 })
 export class CuuTroVienTroModule {

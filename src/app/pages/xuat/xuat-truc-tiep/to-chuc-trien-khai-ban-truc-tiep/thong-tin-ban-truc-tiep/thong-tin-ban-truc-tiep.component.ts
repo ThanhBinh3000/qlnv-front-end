@@ -34,13 +34,14 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
     this.formData = this.fb.group({
       namKh: dayjs().get('year'),
       ngayChaoGia: null,
       toChucCaNhan: null,
-      maDvi: null,
-      tenDvi: null,
+      // maDvi: null,
+      // tenDvi: null,
+      loaiVthh: null,
       lastest: 1
     })
 
@@ -58,7 +59,8 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh, maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();
       await this.initData()

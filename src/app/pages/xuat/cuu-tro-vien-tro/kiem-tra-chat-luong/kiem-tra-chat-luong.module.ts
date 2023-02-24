@@ -6,6 +6,8 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { BienBanLayMauBanGiaoMauComponent } from './bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
 import { ThemMoiBbLayMauBanGiaoMauComponent } from './bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau.component';
 import { ThanhPhanThamGiaComponent } from './bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component';
+import { PhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
+import { ThemMoiPhieuKnClComponent } from './phieu-kiem-nghiem-chat-luong/them-moi-phieu-kn-cl/them-moi-phieu-kn-cl.component';
 
 
 
@@ -14,7 +16,9 @@ import { ThanhPhanThamGiaComponent } from './bien-ban-lay-mau-ban-giao-mau/them-
     MainComponent,
     BienBanLayMauBanGiaoMauComponent,
     ThemMoiBbLayMauBanGiaoMauComponent,
-    ThanhPhanThamGiaComponent
+    ThanhPhanThamGiaComponent,
+    PhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKnClComponent
   ],
   imports: [
     CommonModule,

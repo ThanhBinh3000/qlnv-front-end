@@ -1,18 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
 import {
   DeXuatPhuongAnCuuTroService
 } from "../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from './../../../../services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { DonviService } from './../../../../services/donvi.service';
-import { isEmpty } from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from './../../../../services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {DonviService} from './../../../../services/donvi.service';
+import {chain, isEmpty} from 'lodash';
+import {STATUS} from "src/app/constants/status";
+import {DatePipe} from "@angular/common";
+import * as uuid from "uuid";
 
 @Component({
   selector: 'app-xay-dung-phuong-an',
@@ -71,15 +74,13 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   isView = false;
 
 
-
   async ngOnInit() {
     try {
       this.initData()
       await this.timKiem();
       await this.spinner.hide();
 
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -112,6 +113,7 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
+
   async timKiem() {
     if (this.formData.value.ngayDx) {
       this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
