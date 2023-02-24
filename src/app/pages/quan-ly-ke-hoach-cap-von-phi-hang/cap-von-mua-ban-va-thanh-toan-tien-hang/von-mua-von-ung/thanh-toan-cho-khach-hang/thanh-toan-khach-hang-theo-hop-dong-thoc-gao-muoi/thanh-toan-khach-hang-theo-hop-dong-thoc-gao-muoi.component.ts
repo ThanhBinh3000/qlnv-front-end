@@ -15,7 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVMB, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, QUATITY, Utils } from 'src/app/Utility/utils';
-import { LuyKeThanhToan, receivedInfo, Report, sendInfo, ThanhToan, TRANG_THAI } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { LuyKeThanhToan, Report, ThanhToan, TRANG_THAI } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-thanh-toan-khach-hang-theo-hop-dong-thoc-gao-muoi',

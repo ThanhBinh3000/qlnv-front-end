@@ -7,7 +7,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
+import { displayNumber, divNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bao-hiem.constant';
 
@@ -153,8 +154,8 @@ export class BaoHiemComponent implements OnInit {
             itm.gtTuTleBh = item.tyLeKhoTren
           }
         })
-        itm.gtTuGtBh = itm.gtTuM3 * itm.gtTuGtBh
-        itm.gtDuoiGtBh = itm.gtDuoiM3 * itm.gtDuoiTleBh
+        itm.gtTuGtBh = (itm.gtTuM3 * itm.gtTuTleBh) / 100
+        itm.gtDuoiGtBh = (itm.gtDuoiM3 * itm.gtDuoiTleBh) / 100
         itm.gtTong = itm.gtTuGtBh + itm.gtDuoiGtBh
       })
 

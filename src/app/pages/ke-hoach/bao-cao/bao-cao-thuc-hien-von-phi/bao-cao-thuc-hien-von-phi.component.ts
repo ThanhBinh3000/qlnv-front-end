@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { BCVP } from 'src/app/Utility/utils';
 import { TAB_LIST } from './bao-cao-thuc-hien-von-phi.constant';
 
 @Component({

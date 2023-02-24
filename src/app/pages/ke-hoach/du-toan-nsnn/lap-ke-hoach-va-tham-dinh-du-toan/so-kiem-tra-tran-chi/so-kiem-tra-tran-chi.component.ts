@@ -11,7 +11,8 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { DON_VI_TIEN, KHOAN_MUC, LA_MA, LTD, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 export class ItemData {
     id: string;
