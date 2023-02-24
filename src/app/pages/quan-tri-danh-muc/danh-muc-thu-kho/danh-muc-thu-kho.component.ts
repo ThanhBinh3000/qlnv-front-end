@@ -298,14 +298,15 @@ export class DanhMucThuKhoComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-
   async changePageIndex(event) {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -315,9 +316,11 @@ export class DanhMucThuKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      await this.search();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
