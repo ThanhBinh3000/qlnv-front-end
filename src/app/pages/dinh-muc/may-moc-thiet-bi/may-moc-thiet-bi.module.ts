@@ -27,6 +27,9 @@ import { MmThongTinPhanBoCtComponent } from './mm-tt-phan-bo/mm-them-moi-tt-phan
 import {
     MmThemMoiPhuLucComponent
 } from "./mm-hop-dong/mm-thong-tin-hop-dong/mm-them-moi-phu-luc/mm-them-moi-phu-luc.component";
+import {
+    MmThemMoiBbGiaoNhanComponent
+} from "./mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/mm-them-moi-bb-giao-nhan.component";
 
 @NgModule({
     declarations: [
@@ -49,7 +52,8 @@ import {
         MmThemMoiTtPhanBoComponent,
         MmThongTinHopDongComponent,
         MmThongTinPhanBoCtComponent,
-        MmThemMoiPhuLucComponent
+        MmThemMoiPhuLucComponent,
+        MmThemMoiBbGiaoNhanComponent
     ],
   imports: [
     CommonModule,

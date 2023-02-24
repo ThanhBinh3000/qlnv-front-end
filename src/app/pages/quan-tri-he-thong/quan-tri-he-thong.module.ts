@@ -8,13 +8,17 @@ import { QuanLyCanBoComponent } from './quan-ly-can-bo/quan-ly-can-bo.component'
 import { QuanLyQuyenComponent } from './quan-ly-quyen/quan-ly-quyen.component';
 import { QuanTriHeThongNewRoutingModule } from './quan-tri-he-thong-routing.module';
 import { QuanTriHeThongNewComponent } from './quan-tri-he-thong.component';
+import { QuanTriThamSoComponent } from './quan-tri-tham-so/quan-tri-tham-so.component';
+import {ThemMoiQtriThamSoComponent} from "./quan-tri-tham-so/them-moi-qtri-tham-so/them-moi-qtri-tham-so.component";
 
 @NgModule({
   declarations: [
     QuanLyCanBoComponent,
     QuanTriHeThongNewComponent,
     QuanLyQuyenComponent,
-    KiemSoatQuyenTruyCapComponent
+    KiemSoatQuyenTruyCapComponent,
+    QuanTriThamSoComponent,
+    ThemMoiQtriThamSoComponent
   ],
   imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 

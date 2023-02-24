@@ -116,6 +116,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                         uyNhiemChiTong: item.uyNhiemChiTong,
                         dot: this.response.dot,
                     })
+                    item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhiemChiSoTien]);
                     item.uyNhiemChiNgay = null;
                     item.uyNhiemChiMaNguonNs = null;
                     item.uyNhiemChiNienDoNs = null;

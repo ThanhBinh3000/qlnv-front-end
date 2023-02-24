@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -15,6 +15,7 @@ import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam
 import {
   MmThongTinPhanBoCtComponent
 } from "../../mm-tt-phan-bo/mm-them-moi-tt-phan-bo/mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-mm-thong-tin-hop-dong',
@@ -28,6 +29,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   isViewPl : boolean
   isViewHd : boolean = false;
   listTongHop : any[] = [];
+  listLoaiHd : any[] = [];
+  listHangHoa : any[] = [];
   maQd  : string
   rowItem: MmHopDongCt = new MmHopDongCt();
   dataEdit: { [key: string]: { edit: boolean; data: MmHopDongCt } } = {};
@@ -40,6 +43,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     modal: NzModalService,
     private dxChiCucService: MmDxChiCucService,
     private qdMuaSamService: QuyetDinhMuaSamService,
+    private dmService : DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -62,11 +66,16 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     });
   }
 
+  goBackPl() {
+    this.isViewHd = false;
+  }
+
   async ngOnInit() {
     this.spinner.show();
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsDxCc();
+      await this.loadDsLoaiHd();
       // if (this.id > 0) {
       //   await this.detail(this.id);
       // }
@@ -75,6 +84,13 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsLoaiHd() {
+    let res = await this.dmService.danhMucChungGetAll("HINH_THUC_HOP_DONG");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHd = res.data
     }
   }
 
@@ -271,7 +287,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     });
   }
 
-  chonMaTongHop() {
+  async chonMaTongHop() {
     if (!this.isView) {
       let modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH QUYẾT ĐỊNH MUA SẮM',
@@ -286,33 +302,22 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            soQdMs : data.soQd
-          })
-          await this.changSoTh(data.id);
-        }
+       if (data ) {
+         this.formData.patchValue({
+           soQdMs : data.soQd
+         })
+         let detailMs = await this.qdMuaSamService.getDetail(data.id)
+         if (detailMs.msg == MESSAGE.SUCCESS) {
+           let datams = detailMs.data
+           if (datams && datams.listQlDinhMucQdMuaSamDtl) {
+             this.listHangHoa = datams.listQlDinhMucQdMuaSamDtl
+           }
+         }
+       }
       })
     }
   }
-  async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.qdMuaSamService.getDetail(detailTh.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            const data = res.data;
-            this.dataTable = data.listQlDinhMucQdMuaSamDtl
-            this.updateEditCache()
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
-        }
-      }
-    }
-  }
+
   redirectToPhuLuc(isView: boolean, id: number) {
     this.idPhuLuc = id;
     this.isViewHd = true;

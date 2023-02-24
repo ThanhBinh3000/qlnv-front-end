@@ -163,11 +163,6 @@ export class BaoCao04axComponent implements OnInit {
             }
         });
 
-        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
-            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
-        }
-
-
         if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
             this.getColTotal2();
         }
@@ -179,6 +174,11 @@ export class BaoCao04axComponent implements OnInit {
                 this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
             }
         }
+
+        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
+            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
+        }
+
 
         this.updateEditCache();
         this.getStatusButton();
@@ -524,7 +524,7 @@ export class BaoCao04axComponent implements OnInit {
         const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.3');
-        if (nvChuyenMon) {
+        if (nvChuyenMon && nvChuyenMon != -1) {
             this.lstCtietBcao[nvChuyenMon]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -538,7 +538,7 @@ export class BaoCao04axComponent implements OnInit {
             this.sum(this.lstCtietBcao[nvChuyenMon].stt);
         }
 
-        if (ttCaNhan) {
+        if (ttCaNhan && ttCaNhan != -1) {
             this.lstCtietBcao[ttCaNhan]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -552,7 +552,7 @@ export class BaoCao04axComponent implements OnInit {
             this.sum(this.lstCtietBcao[ttCaNhan].stt);
         }
 
-        if (cucDh) {
+        if (cucDh && cucDh != -1) {
             this.lstCtietBcao[cucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -566,7 +566,7 @@ export class BaoCao04axComponent implements OnInit {
             this.sum(this.lstCtietBcao[cucDh].stt);
         }
 
-        if (tongCucDh) {
+        if (tongCucDh && tongCucDh != -1) {
             this.lstCtietBcao[tongCucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
