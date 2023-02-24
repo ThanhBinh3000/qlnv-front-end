@@ -150,6 +150,7 @@ export class QuanTriThamSoComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
+        await this.search()
       })
   }
 

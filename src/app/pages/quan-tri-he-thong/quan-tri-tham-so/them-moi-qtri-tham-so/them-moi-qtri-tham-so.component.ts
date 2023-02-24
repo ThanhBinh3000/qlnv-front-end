@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
@@ -15,6 +15,7 @@ import {
 import {QuanTriThamSoService} from "../../../../services/quan-tri-tham-so.service";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../constants/message";
+import {STATUS, TrangThaiHoatDong} from "../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-qtri-tham-so',
@@ -22,9 +23,13 @@ import {MESSAGE} from "../../../../constants/message";
   styleUrls: ['./them-moi-qtri-tham-so.component.scss']
 })
 export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit {
-  danhSachLoai : any[] = [];
-  danhSachDmdc  :any[] = [];
-  danhSachDmDcCt  :any[] =[];
+  @Input()
+  dataDetail : any;
+
+  danhSachLoai: any[] = [];
+  danhSachDmdc: any[] = [];
+  danhSachDmDcCt: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -33,8 +38,7 @@ export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit
     modal: NzModalService,
     private _modalRef: NzModalRef,
     private qtriService: QuanTriThamSoService,
-    private dmDungChung : DanhMucService
-
+    private dmDungChung: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qtriService);
     this.formData = this.fb.group({
@@ -63,6 +67,23 @@ export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit
     }
   }
 
+  patchValue() {
+    if (this.dataDetail) {
+      this.formData.patchValue({
+        id: this.dataDetail.id,
+        ma: this.dataDetail.ma,
+        ten: this.dataDetail.ten,
+        giaTri: this.dataDetail.giaTri,
+        loai: this.dataDetail.loai,
+        danhSach: this.dataDetail.danhSach,
+        moTa: this.dataDetail.moTa,
+        tuNgay: this.dataDetail.tuNgay,
+        denNgay: this.dataDetail.denNgay,
+        trangThai: this.dataDetail.trangThai,
+      })
+    }
+  }
+
   async loadDsLoai() {
     let res = await this.dmDungChung.danhMucChungGetAll('KIEU_GIA_TRI');
     if (res.msg == MESSAGE.SUCCESS) {
@@ -70,8 +91,19 @@ export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit
     }
   }
 
-  handleOk() {
-    this._modalRef.close();
+  async handleOk() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.spinner.hide();
+      return;
+    }
+    let body = this.formData.value;
+    body.trangThai = this.formData.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
+    let data = await this.createUpdate(body);
+    if (data) {
+      this._modalRef.close();
+    }
   }
 
   onCancel() {

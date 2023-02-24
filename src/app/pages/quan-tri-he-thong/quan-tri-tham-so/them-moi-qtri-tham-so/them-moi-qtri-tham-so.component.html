@@ -6,11 +6,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Mã tham số</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="ma"
-                         nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                </nz-option>
-              </nz-select>
+              <input class="search__input" placeholder="Nhập text" nz-input formControlName="ma"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -26,7 +22,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Kiểu giá trị</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="ma" nzAllowClear>
+              <nz-select formControlName="loai" nzAllowClear>
                 <nz-option *ngFor="let p of danhSachLoai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -67,7 +63,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Áp dụng từ ngày </nz-form-label>
             <nz-form-control>
-              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" formControlName="tuNgay">
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="dd-MM-yyyy" formControlName="tuNgay">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -76,7 +72,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Áp dụng đến ngày </nz-form-label>
             <nz-form-control>
-              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="yyyy-MM-dd" formControlName="denNgay">
+              <nz-date-picker class="search__input" [nzDisabledDate]="" nzFormat="dd-MM-yyyy" formControlName="denNgay">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>

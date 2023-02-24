@@ -7,8 +7,8 @@ import {BaseService} from "./base.service";
 })
 export class QuanTriThamSoService extends BaseService{
 
-  GATEWAY = '/sys-param';
+  GATEWAY = '/qlnv-system';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'quan-tri-tham-so', '/sys-param');
+    super(httpClient, 'sys-param', '/qlnv-system');
   }
 }
