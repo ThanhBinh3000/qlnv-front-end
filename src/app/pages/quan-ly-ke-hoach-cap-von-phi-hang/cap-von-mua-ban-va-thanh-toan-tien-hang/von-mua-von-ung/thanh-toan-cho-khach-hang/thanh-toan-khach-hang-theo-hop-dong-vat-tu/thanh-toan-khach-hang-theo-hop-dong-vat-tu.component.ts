@@ -494,9 +494,9 @@ export class ThanhToanKhachHangTheoHopDongVatTuComponent implements OnInit {
     changeModel(id: string) {
         const index = this.lstCtietBcaos.findIndex(e => e.id == id);
         this.editCache[id].data.giaTriTh = mulNumber(this.editCache[id].data.donGia, this.editCache[id].data.soLuongThucHien);
-        this.editCache[id].data.soTtLuyKe = sumNumber([this.lstCtietBcaos[index].soTtLuyKe, this.editCache[id].data.uyNhiemChiSoTien, -this.lstCtietBcaos[index].uyNhiemChiSoTien]);
+        // this.editCache[id].data.soTtLuyKe = sumNumber([this.lstCtietBcaos[index].soTtLuyKe, this.editCache[id].data.uyNhiemChiSoTien, -this.lstCtietBcaos[index].uyNhiemChiSoTien]);
         this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.giaTriTh, -this.editCache[id].data.soTtLuyKe]);
-        this.editCache[id].data.soConDuocTtSauLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhiemChiSoTien]);
+        this.editCache[id].data.tongDaTt = sumNumber([this.editCache[id].data.soTtLuyKe, this.editCache[id].data.uyNhiemChiSoTien]);
     }
 
     sortReport() {
