@@ -147,6 +147,7 @@ export class QuanTriThamSoComponent implements OnInit {
         nzWidth: '1200px',
         nzFooter: null,
         nzComponentParams: {
+          dataDetail : data
         },
       });
       modalQD.afterClose.subscribe(async (data) => {

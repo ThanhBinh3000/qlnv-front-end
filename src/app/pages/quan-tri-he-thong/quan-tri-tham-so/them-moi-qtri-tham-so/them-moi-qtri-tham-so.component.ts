@@ -59,6 +59,7 @@ export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit
     this.spinner.show();
     try {
       await this.loadDsLoai();
+      this.patchValue()
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -110,4 +111,19 @@ export class ThemMoiQtriThamSoComponent extends Base2Component implements OnInit
     this._modalRef.close();
   }
 
+  async loadDanhSach(event) {
+    if (event == '03') {
+      let res = await this.dmDungChung.danhMucChungGetAll('DANH_MUC_DC');
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.danhSachDmdc = res.data
+      }
+    }
+  }
+
+  async loadDanhSachCt(event) {
+    let res = await this.dmDungChung.danhMucChungGetAll(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.danhSachDmDcCt = res.data
+    }
+  }
 }
