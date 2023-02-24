@@ -4,34 +4,19 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc()" type="button"
-            class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
-      type="button" class="btn btn-main" (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <!--  Start Thông tin quyết định phê duyệt-->
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span [ngClass]="'da-ban-hanh'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span> QUYẾT ĐỊNH PHÊ DUYỆT PHƯƠNG ÁN XUẤT VIỆN TRỢ, CỨU TRỢ </span>
       </div>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-            nzDescription="{{formData.value.lyDoTuChoi}}">
-  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse nzAccordion>
       <div class="mt16 flex-card p-lr16">
@@ -39,7 +24,7 @@
           <div class="header-text">
             <div class="title-chi-tieu">
               <span></span>
-              <span>Thông tin tổng hợp</span>
+              <span>Thông tin chung</span>
             </div>
           </div>
         </div>
@@ -112,7 +97,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-group>
-                  <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true"/>
+                  <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -123,7 +108,7 @@
               <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
                 <nz-input-group>
-                  <input [readonly]="true" nz-input formControlName="loaiNhapXuat" readonly="true"/>
+                  <input [readonly]="true" nz-input formControlName="loaiNhapXuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -134,7 +119,7 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isDisabled()"/>
+                <input nz-input formControlName="trichYeu" [readonly]="isDisabled()" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -157,12 +142,12 @@
             <nz-form-control [nzErrorTip]="error">
               <div class="list-file">
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input/>
+                  <input type="text" nz-input />
                 </nz-input-group>
                 <ng-template #suffixTemplateInfo>
                   <div class="icon-file-dinh-kem">
                     <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file"/>
+                    <input class="input-file" (change)="getNameFile($event)" type="file" />
                   </div>
                 </ng-template>
               </div>
@@ -183,7 +168,6 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <span>Tông số lượng viện trợ</span>
       <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.quyetDinhPdDtl">
         <thead>
         <tr>
@@ -254,7 +238,8 @@
                             Thành Tiền
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-statistic [nzValue]="listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                            <nz-statistic
+                              [nzValue]="listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -292,7 +277,8 @@
                     <ng-container *ngFor="let item of tblDataCache.data, let i = index;">
                       <tr>
                         <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
+                            [nzExpand]="expandSetStringCache.has(item.idVirtual)" nzShowExpand="true"
+                            style="width: 35px">
                         </td>
                         <td>{{i + 1}}</td>
                         <td>{{ item.noiDung }}</td>
@@ -566,4 +552,5 @@
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
+
 </div>
