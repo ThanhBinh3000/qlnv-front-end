@@ -9,7 +9,8 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc1.constant';
 

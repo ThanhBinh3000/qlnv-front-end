@@ -15,7 +15,8 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { sumNumber, mulNumber, exchangeMoney, displayNumber } from 'src/app/Utility/func';
+import { DON_VI_TIEN, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
@@ -1237,13 +1238,13 @@ export class PhuongAnGiaoSktTranChiComponent implements OnInit {
             item.listCtietDvi.forEach(e => {
                 data.push({
                     ...e,
-                    soTranChi: mulMoney(e.soTranChi, this.maDviTien),
+                    soTranChi: mulNumber(e.soTranChi, Number(this.maDviTien)),
                     id: null,
                 })
             })
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSo: mulMoney(item.tongSo, this.maDviTien),
+                tongSo: mulNumber(item.tongSo, Number(this.maDviTien)),
                 listCtietDvi: data,
                 id: null,
             })

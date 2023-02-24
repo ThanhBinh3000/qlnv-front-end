@@ -5,8 +5,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,8 +13,9 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, mulNumber, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI, } from '../../de-nghi-cap-von.constant';
+import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 // export class BaoCao{
 //   slKeHoach: number;
@@ -58,6 +57,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	dviTiens: any[] = DON_VI_TIEN;
 	amount = AMOUNT;
 	quatity = QUATITY;
+	scrollX: string;
 	//trang thai cac nut
 	status = false;
 	statusCv = false;
@@ -190,20 +190,17 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	//check role cho các nut trinh duyet
 	getStatusButton() {
 		const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-		if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc()) {
-			this.status = false;
-		} else {
-			this.status = true;
-		}
-		if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) {
-			this.statusCv = false;
-		} else {
-			this.statusCv = true;
-		}
+		this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && !this.userService.isTongCuc();
+		this.statusCv = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
 		this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
 		this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
 		this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
 		this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
+		if (this.status) {
+			this.scrollX = (550 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
+		} else {
+			this.scrollX = (500 + 12 * BOX_NUMBER_WIDTH).toString() + 'px';
+		}
 	}
 
 	back() {
@@ -495,9 +492,9 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
 	getTotal() {
 		this.total = new ItemRequest();
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
-			this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
-			this.total.gtTheoKeHoach = mulNumber(this.total.slKeHoach, this.total.donGia);
+			// this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+			// this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+			this.total.gtTheoKeHoach = sumNumber([this.total.gtTheoKeHoach, item.gtTheoKeHoach]);
 			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
 			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
 			this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);

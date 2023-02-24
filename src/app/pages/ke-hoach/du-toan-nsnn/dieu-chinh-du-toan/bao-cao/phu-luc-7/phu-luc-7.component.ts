@@ -14,10 +14,11 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
+import { DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc7.constant';
 import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { displayNumber, divNumber, exchangeMoney } from 'src/app/Utility/func';
 
 export class ItemData {
 

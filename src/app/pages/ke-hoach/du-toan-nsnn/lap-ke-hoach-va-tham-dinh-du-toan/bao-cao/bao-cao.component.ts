@@ -16,7 +16,8 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { divNumber, LTD, mulNumber, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { sumNumber } from 'src/app/Utility/func';
+import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './bao-cao.constant';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
@@ -1336,17 +1337,20 @@ export class BaoCaoComponent implements OnInit {
                     if (data7?.trangThai != '3') {
                         let tongTu = 0;
                         let tongDuoi = 0;
+                        let tong = 0
                         data7?.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
-                                tongTu = sumNumber([tongTu, item.gtTuM3]);
-                                tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
+                                // tongTu = sumNumber([tongTu, item.gtTuM3]);
+                                // tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
+                                tong = sumNumber([tong, item.gtTong])
                             }
                         })
                         dataInfo.extraData.push({
                             stt: '0.1.5',
                             maNdung: '0.1.5',
-                            namKh: sumNumber([mulNumber(divNumber(data7.hsBhDuoi, 100), tongDuoi), mulNumber(divNumber(data7.hsBhTu, 100), tongTu)]),
+                            // namKh: sumNumber([mulNumber(divNumber(data7.hsBhDuoi, 100), tongDuoi), mulNumber(divNumber(data7.hsBhTu, 100), tongTu)]),
+                            namKh: tong,
                             giaTriThamDinh: null,
                         })
                     }

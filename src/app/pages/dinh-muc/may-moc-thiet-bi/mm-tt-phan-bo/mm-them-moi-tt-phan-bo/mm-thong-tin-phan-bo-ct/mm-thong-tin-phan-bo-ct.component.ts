@@ -38,7 +38,7 @@ export class MmThongTinPhanBoCtComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     this.addDetail();
-    // await this.loadDsChiCuc();
+    await this.loadDsChiCuc();
 
   }
 
