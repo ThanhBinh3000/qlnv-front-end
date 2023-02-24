@@ -197,7 +197,7 @@ export class BaoHiemKhoComponent implements OnInit {
         if (this.userInfo.capDvi == "3") {
 
           this.listDanhMucKho = res.data;
-          this.listDanhMucKho = this.listDanhMucKho[0].children;
+          // this.listDanhMucKho = this.listDanhMucKho[0].children;
 
         } else {
           this.listDanhMucKho = res.data;

@@ -7,7 +7,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -319,20 +321,202 @@ export class AddBaoCaoComponent implements OnInit {
   };
 
   async getDetailReport() {
-
+    await this.dieuChinhDuToanService.bCDieuChinhDuToanChiTiet(this.baoCao.id).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.baoCao = data.data;
+          this.baoCao.lstDchinh.forEach(item => {
+            const appendix = this.listAppendix.find(e => e.id == item.maLoai);
+            item.tenPl = appendix.tenPl;
+            item.tenDm = appendix.tenDm;
+          })
+          this.baoCao.ngayNhap = this.datePipe.transform(this.baoCao.ngayNhap, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTrinhDuyet = this.datePipe.transform(this.baoCao.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayDuyetTBP = this.datePipe.transform(this.baoCao.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayDuyetLD = this.datePipe.transform(this.baoCao.ngayDuyetLD, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(this.baoCao.ngayCapTrenTraKq, Utils.FORMAT_DATE_STR);
+          this.baoCao.lstDviTrucThuoc.forEach(item => {
+            item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+            item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          })
+          this.listFile = [];
+          this.getStatusButton();
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
   };
+
+  //upload file
+  async uploadFile(file: File) {
+    // day file len server
+    const upfile: FormData = new FormData();
+    upfile.append('file', file);
+    upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maBcao);
+    const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+      (data) => {
+        const objfile = {
+          fileName: data.filename,
+          fileSize: data.size,
+          fileUrl: data.url,
+        }
+        return objfile;
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+    return temp;
+  }
 
   async save() {
+    if (!this.baoCao.lstDchinh.every(e => e.giaoCho)) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    //kiem tra kich co cua file
+    let checkFile = true;
+    for (const iterator of this.listFile) {
+      if (iterator.size > Utils.FILE_SIZE) {
+        checkFile = false;
+      }
+    }
+    if (!checkFile) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+      return;
+    }
+    const tongHopTuIds = []
+    const baoCaoTemp = JSON.parse(JSON.stringify({
+      ...this.baoCao,
+      tongHopTuIds
+    }));
+    this.baoCao.lstDchinh.forEach(item => {
+      baoCaoTemp.tongHopTuIds.push(item.id);
+    })
+    if (!baoCaoTemp.fileDinhKems) {
+      baoCaoTemp.fileDinhKems = [];
+    }
+    for (const iterator of this.listFile) {
+      baoCaoTemp.fileDinhKems.push(await this.uploadFile(iterator));
+    }
+    if (!baoCaoTemp.congVan) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+      return;
+    }
 
+    // replace nhung ban ghi dc them moi id thanh null
+    baoCaoTemp.lstDchinh.forEach(item => {
+      if (item.id?.length == 38) {
+        item.id = null;
+      }
+    })
+
+    //call service them moi
+    if (!this.baoCao.id) {
+      this.dieuChinhDuToanService.trinhDuyetDieuChinhService(baoCaoTemp).toPromise().then(
+        async data => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.baoCao.id = data.data.id;
+            this.getDetailReport();
+            const dataTemp = {
+              id: data.data.id,
+              tabSelected: this.data.tabSelected,
+              preTab: this.data.preTab,
+            }
+            this.data = dataTemp;
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        },
+        err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+    } else {
+      this.dieuChinhDuToanService.updateDieuChinh(baoCaoTemp).toPromise().then(
+        async data => {
+          if (data.statusCode == 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            await this.getDetailReport();
+          } else {
+            this.notification.error(MESSAGE.ERROR, data?.msg);
+          }
+        }, err => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+    }
   };
 
+  // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
+    if (mcn == Utils.TT_BC_2) {
+      if (!this.baoCao.congVan) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        return;
+      }
+      if (!this.baoCao.lstDchinh.every(e => e.trangThai == '5')) {
+        this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
+        return;
+      }
+    } else {
+      let check = true;
+      if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
+        this.baoCao.lstDchinh.forEach(item => {
+          if (item.trangThai == '2') {
+            check = false;
+          }
+        })
+      }
+      if (!check) {
+        this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
+        return;
+      }
+    }
+    const requestGroupButtons = {
+      id: this.baoCao.id,
+      maChucNang: mcn,
+      lyDoTuChoi: lyDoTuChoi,
+    };
+    await this.dieuChinhDuToanService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
+      if (data.statusCode == 0) {
+        this.baoCao.trangThaiBaoCao = mcn;
+        this.getStatusButton();
+        if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+        }
+        // this.tabs = [];
+      } else {
+        this.notification.error(MESSAGE.ERROR, data?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    });
+  }
 
-  };
-
+  //show popup tu choi
   async tuChoi(mcn: string) {
-
-  };
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.toPromise().then(async (text) => {
+      if (text) {
+        this.onSubmit(mcn, text);
+      }
+    });
+  }
 
   getListUser() {
     this.quanLyVonPhiService.getListUser().toPromise().then(
