@@ -103,13 +103,13 @@
                     <td class="text-center">
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
-                    <th *ngIf="searchFilter.loaiTimKiem == '1'">
+                    <td *ngIf="searchFilter.loaiTimKiem == '1'">
                         <div *ngFor="let e of donVis">
                             <div *ngIf="e.maDvi == data.maDvi">
                                 {{e.tenDvi}}
                             </div>
                         </div>
-                    </th>
+                    </td>
                     <td>
                         {{ data.maCapUng}}
                     </td>

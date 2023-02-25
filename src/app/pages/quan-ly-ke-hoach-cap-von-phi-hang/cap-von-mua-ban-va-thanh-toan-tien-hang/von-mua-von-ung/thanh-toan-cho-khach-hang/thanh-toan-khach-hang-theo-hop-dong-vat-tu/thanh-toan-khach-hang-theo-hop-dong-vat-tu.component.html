@@ -117,22 +117,25 @@
                             <th rowspan="2">Đơn giá</th>
                             <th rowspan="2">Giá trị hợp đồng (đã <br /> bao gồm VAT) (đồng)</th>
                             <th rowspan="2">Giá trị thực hiện</th>
-                            <th rowspan="2">Số thanh toán lũy kế</th>
+                            <th colspan="3">Số thanh toán lũy kế</th>
                             <th rowspan="2">Số còn được <br /> thanh toán</th>
                             <th rowspan="2">Số duyệt thanh <br /> toán lần này</th>
-                            <th colspan="4">Ủy nhiệm chi (số thanh toán lần này)</th>
-                            <th rowspan="2" style="width: 200px;">Tổng đã thanh toán
-                            </th>
+                            <th colspan="6">Ủy nhiệm chi (số thanh toán lần này)</th>
                             <th *ngIf="statusGui" rowSpan="2" style="width: 50px;" nzRight></th>
                         </tr>
                         <tr>
                             <th>Kế hoạch</th>
                             <th>Hợp đồng</th>
                             <th>Thực hiện</th>
+                            <th>Cấp ứng</th>
+                            <th>Cấp vốn</th>
+                            <th>Cộng</th>
                             <th>Ngày</th>
                             <th>Mã nguồn NS</th>
                             <th>Niên độ NS</th>
-                            <th>Số tiền</th>
+                            <th>Cấp ứng</th>
+                            <th>Cấp vốn</th>
+                            <th>Cộng</th>
                         </tr>
                         <tr>
                             <th nzLeft>A</th>
@@ -144,13 +147,16 @@
                             <th>5=2x4</th>
                             <th>6=3x4</th>
                             <th>7</th>
-                            <th>8=6-7</th>
-                            <th>9</th>
-                            <th>10</th>
+                            <th>8</th>
+                            <th>9=7+8</th>
+                            <th>10=6-9</th>
                             <th>11</th>
                             <th>12</th>
                             <th>13</th>
-                            <th>14=7+13</th>
+                            <th>14</th>
+                            <th>15</th>
+                            <th>16</th>
+                            <th>17=15+16</th>
                             <th *ngIf="statusGui" nzRight></th>
                         </tr>
                     </thead>
@@ -184,7 +190,13 @@
                                     {{ displayValue(data.giaTriTh) }}
                                 </td>
                                 <td>
-                                    {{ displayValue(data.soTtLuyKe) }}
+                                    {{ displayValue(data.luyKeCapUng) }}
+                                </td>
+                                <td>
+                                    {{ displayValue(data.luyKeCapVon) }}
+                                </td>
+                                <td>
+                                    {{ displayValue(data.luyKeTong) }}
                                 </td>
                                 <td>
                                     {{ displayValue(data.soConDuocTt) }}
@@ -202,10 +214,13 @@
                                     {{ data.uyNhiemChiNienDoNs }}
                                 </td>
                                 <td>
-                                    {{ displayValue(data.uyNhiemChiSoTien) }}
+                                    {{ displayValue(data.uyNhiemChiCapUng) }}
                                 </td>
                                 <td>
-                                    {{ displayValue(data.tongDaTt) }}
+                                    {{ displayValue(data.uyNhiemChiCapVon) }}
+                                </td>
+                                <td>
+                                    {{ displayValue(data.uyNhiemChiTong) }}
                                 </td>
                                 <td *ngIf="statusGui" nzRight>
                                     <i *ngIf="data.isParent" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -242,7 +257,13 @@
                                     {{ displayValue(editCache[data.id].data.giaTriTh) }}
                                 </td>
                                 <td>
-                                    {{ displayValue(editCache[data.id].data.soTtLuyKe) }}
+                                    {{ displayValue(editCache[data.id].data.luyKeCapUng) }}
+                                </td>
+                                <td>
+                                    {{ displayValue(editCache[data.id].data.luyKeCapVon) }}
+                                </td>
+                                <td>
+                                    {{ displayValue(editCache[data.id].data.luyKeTong) }}
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.soConDuocTt) }}
@@ -266,11 +287,16 @@
                                 </td>
                                 <td>
                                     <input class="money-input" currencyMask [options]="amount"
-                                        [(ngModel)]="editCache[data.id].data.uyNhiemChiSoTien"
+                                        [(ngModel)]="editCache[data.id].data.uyNhiemChiCapUng"
                                         (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
-                                    {{ displayValue(editCache[data.id].data.tongDaTt) }}
+                                    <input class="money-input" currencyMask [options]="amount"
+                                        [(ngModel)]="editCache[data.id].data.uyNhiemChiCapVon"
+                                        (ngModelChange)="changeModel(data.id)" />
+                                </td>
+                                <td>
+                                    {{ displayValue(editCache[data.id].data.uyNhiemChiTong) }}
                                 </td>
                                 <td *ngIf="statusGui" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
