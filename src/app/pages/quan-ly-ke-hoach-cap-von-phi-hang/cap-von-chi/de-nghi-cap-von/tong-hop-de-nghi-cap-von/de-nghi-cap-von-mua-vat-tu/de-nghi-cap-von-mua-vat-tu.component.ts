@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVNC, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
@@ -42,6 +42,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     dviTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     status = false;
     saveStatus = true;
@@ -173,15 +174,16 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)) {
-            this.status = false;
-        } else {
-            this.status = true;
-        }
+        this.status = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT);
         this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) && checkChirld;
         this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) && checkChirld && !(!this.baoCao.id);
         this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) && checkChirld;
         this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) && checkChirld;
+        if (this.status) {
+            this.scrollX = (900 + 13 * BOX_NUMBER_WIDTH).toString() + 'px';
+        } else {
+            this.scrollX = (850 + 13 * BOX_NUMBER_WIDTH).toString() + 'px';
+        }
     }
 
     back() {
@@ -470,9 +472,9 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     }
 
     changeModel(id: string) {
+        this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
         this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.soTtLuyKe]);
         this.editCache[id].data.soConDuocTtSauTtLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhchiNienSoTien]);
-        this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
     }
 
     showDialogCopy() {
