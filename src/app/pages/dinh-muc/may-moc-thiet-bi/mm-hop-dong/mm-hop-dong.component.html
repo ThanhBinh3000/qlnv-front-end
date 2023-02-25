@@ -5,19 +5,19 @@
         <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="4">
             <label class="search__label">Số hợp đồng</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soHd"/>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soHopDong"/>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Tên hợp đồng</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="tenHd" />
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="tenHopDong" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Số quyết định mua sắm</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd" />
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQdMuaSam" />
           </div>
           <div nz-col nzSpan="8">
             <label class="search__label">Bên mua</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="benMua" />
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="strBenMua" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày ký</label>
@@ -30,7 +30,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -74,7 +74,7 @@
           <th width="130px">Số QĐ mua sắm</th>
           <th width="130px">Giá trị hợp đồng</th>
           <th width="130px">Trạng thái</th>
-          <th width="120px">Hành động</th>
+          <th width="120px" class="text-center">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -141,20 +141,20 @@
                    [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soCv }}</td>
-          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.soHopDong }}</td>
+          <td>{{ data.tenHopDong }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.benMua }}</td>
-          <td>{{ data.benBan }}</td>
-          <td>{{ data.soQd }}</td>
+          <td>{{ data.banTenDvi }}</td>
+          <td>{{ data.muaTenDvi }}</td>
+          <td>{{ data.soQdpdKhMuaSam }}</td>
           <td>{{ data.giaTri }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td>
-            <a (click)="redirectToChiTiet(true, data.id)">
+          <td class="text-center">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
               <i class="fa fa-eye"></i>
             </a>
             <a
-               (click)="redirectToChiTiet(false, data.id)">
+               (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">

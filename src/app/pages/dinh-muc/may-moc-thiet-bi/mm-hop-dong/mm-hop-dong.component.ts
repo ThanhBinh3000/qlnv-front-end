@@ -9,6 +9,7 @@ import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
+import {HopDongMmTbcdService} from "../../../../services/hop-dong-mm-tbcd.service";
 
 @Component({
   selector: 'app-mm-hop-dong',
@@ -27,18 +28,20 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dxChiCucService: MmDxChiCucService
+    private hopDongService: HopDongMmTbcdService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
+    super(httpClient, storageService, notification, spinner, modal, hopDongService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      maDvi: [''],
-      capDvi: [''],
-      soHd: [''],
-      tenHd: [''],
-      soQd: [''],
-      benMua: [''],
+      soHopDong: [''],
+      tenHopDong: [''],
+      soQdMuaSam: [''],
+      strBenMua: [''],
+      trangThai: [''],
       ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
+      loai: ['00'],
     });
     this.filterTable = {};
   }
@@ -62,13 +65,11 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
 
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+      this.formData.patchValue({
+        ngayKyTu : dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
+        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+      })
     }
-    this.formData.patchValue({
-      maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
-    })
     await this.search();
   }
 
@@ -96,10 +97,10 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
           limit: this.pageSize,
           page: this.page - 1
         }
-        this.dxChiCucService
+        this.hopDongService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'tong-hop-dx-chi-cuc.xlsx'),
+            saveAs(blob, 'hop-dong-mua-sam.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

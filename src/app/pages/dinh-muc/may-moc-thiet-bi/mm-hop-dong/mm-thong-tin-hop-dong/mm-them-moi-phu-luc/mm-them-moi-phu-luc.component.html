@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
+      <button class="btn btn-sub ml-2" (click)="approve(id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 )">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2"
+      <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
               *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO )">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -34,7 +34,7 @@
             <nz-form-label nzRequired>Phụ lục số</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soPl" [readonly]="isView"/>
+                <input nz-input formControlName="soPhuLuc" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -44,7 +44,7 @@
             <nz-form-label nzRequired>Số hợp đồng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soHd" [readonly]="true"/>
+                <input nz-input formControlName="soHopDong" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -54,7 +54,7 @@
             <nz-form-label nzRequired>Tên hợp đồng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soHd" [readonly]="true"/>
+                <input nz-input formControlName="tenHopDong" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -94,8 +94,8 @@
           <nz-form-item>
             <nz-form-label>Ngày hiệu lực trước khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
-                              formControlName="ngayKy">
+              <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
+                              formControlName="ngayHlTruoc">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -104,8 +104,8 @@
           <nz-form-item>
             <nz-form-label>Ngày hiệu lực sau khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
-                              formControlName="ngayKy">
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                              formControlName="ngayHlSau">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -117,7 +117,7 @@
             <nz-form-label nzRequired>Số ngày thực hiện trước khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soPl" [readonly]="true"/>
+                <input nz-input formControlName="soNgayHlTruoc" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -127,7 +127,7 @@
             <nz-form-label nzRequired>Số ngày thực hiện trước sau điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="soPl" [readonly]="isView"/>
+                <input nz-input formControlName="soNgayHlSau" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -171,7 +171,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Nội dung điều chỉnh khác</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea rows="3" class="search__input" nz-input formControlName="veViec"></textarea>
+              <textarea rows="3" class="search__input" nz-input formControlName="noiDungDcKhac"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -189,7 +189,7 @@
           <nz-form-item>
             <nz-form-label nzRequired>Ghi chú</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea rows="3" class="search__input" nz-input formControlName="veViec"></textarea>
+              <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
