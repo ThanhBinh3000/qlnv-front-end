@@ -1,0 +1,98 @@
+<ng-container *ngIf="isDataAvailable">
+  <div class="" modal__content>
+    <div id="tablePrint">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+
+        <div nz-col [nzSpan]="4" style="display:flex;">
+          <div>Đơn vị</div>
+          <div style="padding-left: 5px;">
+            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+              <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+            </ng-container>
+            <ng-template #editMoney>
+              <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                (ngModelChange)="editMoneyUnit=false">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="18"></div>
+        <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
+          <!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+            <i class="fa fa-trash-o"></i>
+            <span>Xóa</span>
+          </button>
+          <ng-container>
+            <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </ng-container> -->
+        </div>
+      </div>
+
+      <nz-table nzBordered class="table__body">
+        <thead>
+          <tr>
+            <th rowSpan="2">STT</th>
+            <th rowSpan="2">Tên công trình</th>
+            <th rowSpan="2">Kế hoạch vốn năm {{namBcao}} </th>
+            <th rowSpan="2">Dự toán đã giao lũy kế (đến 31/05/{{namBcao}})</th>
+            <th colSpan="3">Giá trị công trình (Ghi giá trị quyết toán; giá trị dự toán hoặc tổng đầu tư nếu chưa phê
+              duyệt quyết toán)</th>
+            <th rowSpan="2">Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)</th>
+            <th colSpan="2">Kế hoạch năm {{namBcao}} sau điều chỉnh </th>
+            <th rowSpan="2">Dự toán đề nghị điều chỉnh lần này</th>
+            <th rowSpan="2">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2">Ghi chú (đã duyệt quyết toán/ chưa duyệt quyết toán) </th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+      </nz-table>
+
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+      <div nz-col nzSpan="24">
+        <label class="search__label">Thuyết minh</label>
+        <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          <span>Hoàn tất nhập liệu</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+          <i nz-icon nzType="close" nzTheme="outline"></i>
+          <span>Not OK</span>
+        </button>
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>

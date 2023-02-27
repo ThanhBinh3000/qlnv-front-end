@@ -5,8 +5,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,7 +13,8 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
+import { displayNumber } from 'src/app/Utility/func';
+import { CVNC, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({

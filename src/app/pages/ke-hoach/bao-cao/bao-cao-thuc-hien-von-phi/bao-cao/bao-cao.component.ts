@@ -16,7 +16,8 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BAO_CAO_DOT, BCVP, divNumber, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divNumber, sumNumber } from 'src/app/Utility/func';
+import { BAO_CAO_DOT, BCVP, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM } from './bao-cao.constant';
 
@@ -371,11 +372,7 @@ export class BaoCaoComponent implements OnInit {
         const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCVP.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.COPY_REPORT);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(BCVP.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PRINT_REPORT);
         const checkExport = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
-        if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
-            this.status = false;
-        } else {
-            this.status = true;
-        }
+        this.status = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
 
         this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld;
         this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld && !(!this.baoCao.id);

@@ -120,9 +120,9 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-
-        let nam = value[0].nam;
-        let ngayQdGiaoNvXh = value[0].ngayQdGiaoNvXh;
+        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        let nam = quyetDinh.nam;
+        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
         return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
       }).value();
     this.children = dataView

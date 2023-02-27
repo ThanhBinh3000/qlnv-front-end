@@ -6,7 +6,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
+import { divNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
@@ -115,6 +116,7 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
                         uyNhiemChiTong: item.uyNhiemChiTong,
                         dot: this.response.dot,
                     })
+                    item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhiemChiSoTien]);
                     item.uyNhiemChiNgay = null;
                     item.uyNhiemChiMaNguonNs = null;
                     item.uyNhiemChiNienDoNs = null;

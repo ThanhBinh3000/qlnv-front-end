@@ -12,7 +12,8 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
 import { MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 

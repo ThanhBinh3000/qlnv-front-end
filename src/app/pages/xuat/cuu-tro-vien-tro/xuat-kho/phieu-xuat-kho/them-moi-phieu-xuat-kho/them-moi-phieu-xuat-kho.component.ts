@@ -4,7 +4,6 @@ import { StorageService } from './../../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from './../../../../../../components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from './../../../../../../models/FileDinhKem';
@@ -12,13 +11,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from './../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Validators } from '@angular/forms';
-import { DanhMucTieuChuanService } from './../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service';
 import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import { QuyetDinhGiaoNvCuuTroService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from './../../../../../../shared/commonFunction';
 import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { sum } from 'ng-zorro-antd/core/util';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -90,7 +86,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maSo: [],
         donViTinh: [],
         theoChungTu: [],
-        thucNhap: [],
+        thucXuat: [],
         donGia: [],
         thanhTien: [],
         ghiChu: [],
@@ -292,9 +288,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + "/" + this.maPhieu;
-    }
     body.fileDinhKems = this.fileDinhKems;
     let data = await this.createUpdate(body);
     if (data) {
@@ -349,12 +342,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       maSo: null,
       theoChungTu: null,
-      thucNhap: null,
+      thucXuat: null,
     })
   }
 
   calculateSum() {
-    let sum = this.formData.value.thucNhap * this.formData.value.donGia;
+    let sum = this.formData.value.thucXuat * this.formData.value.donGia;
     return sum;
 
   }

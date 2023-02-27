@@ -7,9 +7,9 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { CapUng, receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { CapUng, receivedInfo, Report, sendInfo } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'dialog-tao-moi-cap-von',
@@ -107,6 +107,18 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
+            this.response.ttGui.lstCtietBcaos.forEach(item => {
+                item.listLuyKe.push({
+                    id: uuid.v4() + 'FE',
+                    vonUng: item.vonUng,
+                    vonCap: item.vonCap,
+                    tong: item.tong,
+                    dot: this.response.dot,
+                })
+                item.vonUng = 0;
+                item.vonCap = 0;
+                item.tong = 0;
+            })
             if (this.response.maLoai == 2) {
                 this.response.ttNhan.lstCtietBcaos.push({
                     id: uuid.v4() + 'FE',
@@ -116,25 +128,12 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 })
                 this.response.ttNhan.ngayNhanLenhChuyenCo = null;
                 this.response.ttNhan.tkNhan = null;
-                this.response.dot += 1;
-                this.response.ttNhan.trangThai = Utils.TT_BC_1;
+
             } else {
-                this.response.ttGui.lstCtietBcaos.forEach(item => {
-                    item.listLuyKe.push({
-                        id: uuid.v4() + 'FE',
-                        vonUng: item.vonUng,
-                        vonCap: item.vonCap,
-                        tong: item.tong,
-                        dot: this.response.dot,
-                    })
-                    item.vonUng = 0;
-                    item.vonCap = 0;
-                    item.tong = 0;
-                })
-                this.response.dot += 1;
                 this.response.ttGui.trangThai = Utils.TT_BC_1;
-                this.response.ttNhan.trangThai = Utils.TT_BC_1;
             }
+            this.response.dot += 1;
+            this.response.ttNhan.trangThai = Utils.TT_BC_1;
         }
     }
 
@@ -256,8 +255,8 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {
-                        if ((data.data.content[0].ttGui.trangThai == Utils.TT_BC_7 && this.request.loaiTimKiem == '0') ||
-                            (data.data.content[0].ttNhan.trangThai == Utils.TT_BC_7 && this.request.loaiTimKiem == '1')) {
+                        if ((data.data.content[0].ttGui.trangThai == Utils.TT_BC_7 && this.response.maLoai == 3) ||
+                            (data.data.content[0].ttNhan.trangThai == Utils.TT_BC_7 && this.response.maLoai == 2)) {
                             this.isRequestExist = 1;
                             this.idRequest = data.data.content[0].id;
                         } else {

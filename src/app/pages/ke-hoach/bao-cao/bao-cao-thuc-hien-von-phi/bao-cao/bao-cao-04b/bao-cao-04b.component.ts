@@ -101,7 +101,7 @@ export class BaoCao04bComponent implements OnInit {
         this.maDvi = this.data?.maDvi;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
@@ -164,10 +164,6 @@ export class BaoCao04bComponent implements OnInit {
             }
         });
 
-        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
-            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
-        }
-
         if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
             this.getColTotal2();
         }
@@ -179,6 +175,10 @@ export class BaoCao04bComponent implements OnInit {
             } else {
                 this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
             }
+        }
+
+        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
+            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
         }
 
         this.updateEditCache();
@@ -515,6 +515,9 @@ export class BaoCao04bComponent implements OnInit {
     }
 
     tinhDinhMuc(data: ItemData) {
+        if (!data) {
+            return;
+        }
         const soLuong = [];
         data.listCtiet.forEach(item => {
             if (item.loaiMatHang == 0) {
@@ -529,8 +532,8 @@ export class BaoCao04bComponent implements OnInit {
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.3');
 
-        if (nvChuyenMon) {
-            this.lstCtietBcao[nvChuyenMon].listCtiet.forEach(item => {
+        if (nvChuyenMon && nvChuyenMon != -1) {
+            this.lstCtietBcao[nvChuyenMon]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
@@ -543,8 +546,8 @@ export class BaoCao04bComponent implements OnInit {
             this.sum(this.lstCtietBcao[nvChuyenMon].stt);
         }
 
-        if (ttCaNhan) {
-            this.lstCtietBcao[ttCaNhan].listCtiet.forEach(item => {
+        if (ttCaNhan && ttCaNhan != -1) {
+            this.lstCtietBcao[ttCaNhan]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
@@ -557,8 +560,8 @@ export class BaoCao04bComponent implements OnInit {
             this.sum(this.lstCtietBcao[ttCaNhan].stt);
         }
 
-        if (cucDh) {
-            this.lstCtietBcao[cucDh].listCtiet.forEach(item => {
+        if (cucDh && cucDh != -1) {
+            this.lstCtietBcao[cucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);
@@ -571,8 +574,8 @@ export class BaoCao04bComponent implements OnInit {
             this.sum(this.lstCtietBcao[cucDh].stt);
         }
 
-        if (tongCucDh) {
-            this.lstCtietBcao[tongCucDh].listCtiet.forEach(item => {
+        if (tongCucDh && tongCucDh != -1) {
+            this.lstCtietBcao[tongCucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const dm = this.dinhMucs.find(e => e.cloaiVthh == item.maVtu);

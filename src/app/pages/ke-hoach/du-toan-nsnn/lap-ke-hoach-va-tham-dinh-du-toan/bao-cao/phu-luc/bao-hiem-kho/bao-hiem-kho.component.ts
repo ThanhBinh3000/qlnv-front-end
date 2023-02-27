@@ -9,9 +9,10 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA } from 'src/app/Utility/utils';
 import { chain, cloneDeep } from 'lodash';
 import * as uuid from 'uuid';
+import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 
 export class ItemData {
   id: any;
@@ -183,15 +184,20 @@ export class BaoHiemKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
 
+    const obj = {
+      maDvi: this.maDviTao,
+      type: [
+        "MLK"
+      ]
+    }
 
-
-    await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+    await this.quanLyVonPhiService.dmKho(obj).toPromise().then(res => {
       if (res.statusCode == 0) {
 
         if (this.userInfo.capDvi == "3") {
 
           this.listDanhMucKho = res.data;
-          this.listDanhMucKho = this.listDanhMucKho[0].children;
+          // this.listDanhMucKho = this.listDanhMucKho[0].children;
 
         } else {
           this.listDanhMucKho = res.data;

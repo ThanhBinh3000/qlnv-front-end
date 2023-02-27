@@ -151,10 +151,7 @@ export class ThanhToanKhachHangTheoHopDongVatTuComponent implements OnInit {
     }
 
     getStatusName() {
-        if (this.dataInfo?.preTab == 'cv') {
-            return this.trangThais.find(e => e.id == this.baoCao.ttGui.trangThai)?.tenDm;
-        }
-        return this.trangThais.find(e => e.id == this.baoCao.ttNhan.trangThai)?.tenDm;
+        return this.trangThais.find(e => e.id == this.baoCao.ttGui.trangThai)?.tenDm;
     }
 
     getDate(date: Date) {
@@ -194,9 +191,9 @@ export class ThanhToanKhachHangTheoHopDongVatTuComponent implements OnInit {
             this.statusGui = false;
         }
         if (this.statusGui) {
-            this.scrollX = (700 + 13 * BOX_NUMBER_WIDTH).toString() + 'px';
+            this.scrollX = (500 + 17 * BOX_NUMBER_WIDTH).toString() + 'px';
         } else {
-            this.scrollX = (650 + 13 * BOX_NUMBER_WIDTH).toString() + 'px';
+            this.scrollX = (450 + 17 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
     }
 
@@ -494,9 +491,12 @@ export class ThanhToanKhachHangTheoHopDongVatTuComponent implements OnInit {
     changeModel(id: string) {
         const index = this.lstCtietBcaos.findIndex(e => e.id == id);
         this.editCache[id].data.giaTriTh = mulNumber(this.editCache[id].data.donGia, this.editCache[id].data.soLuongThucHien);
-        this.editCache[id].data.soTtLuyKe = sumNumber([this.lstCtietBcaos[index].soTtLuyKe, this.editCache[id].data.uyNhiemChiSoTien, -this.lstCtietBcaos[index].uyNhiemChiSoTien]);
-        this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.giaTriTh, -this.editCache[id].data.soTtLuyKe]);
-        this.editCache[id].data.soConDuocTtSauLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhiemChiSoTien]);
+        this.editCache[id].data.uyNhiemChiTong = sumNumber([this.editCache[id].data.uyNhiemChiCapUng, this.editCache[id].data.uyNhiemChiCapVon]);
+        this.editCache[id].data.luyKeCapUng = sumNumber([this.lstCtietBcaos[index].luyKeCapUng, this.editCache[id].data.uyNhiemChiCapUng, -this.lstCtietBcaos[index].uyNhiemChiCapUng]);
+        this.editCache[id].data.luyKeCapVon = sumNumber([this.lstCtietBcaos[index].luyKeCapVon, this.editCache[id].data.uyNhiemChiCapVon, -this.lstCtietBcaos[index].uyNhiemChiCapVon]);
+        this.editCache[id].data.luyKeTong = sumNumber([this.editCache[id].data.luyKeCapUng, this.editCache[id].data.luyKeCapVon]);
+        // this.editCache[id].data.soTtLuyKe = sumNumber([this.lstCtietBcaos[index].soTtLuyKe, this.editCache[id].data.uyNhiemChiSoTien, -this.lstCtietBcaos[index].uyNhiemChiSoTien]);
+        this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.giaTriTh, -this.editCache[id].data.luyKeTong]);
     }
 
     sortReport() {
@@ -624,7 +624,7 @@ export class ThanhToanKhachHangTheoHopDongVatTuComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttNhan.trangThai)) {
+        if (Utils.statusSave.includes(this.baoCao.ttGui.trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

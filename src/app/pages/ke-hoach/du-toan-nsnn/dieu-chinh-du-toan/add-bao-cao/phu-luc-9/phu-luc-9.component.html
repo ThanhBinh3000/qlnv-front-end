@@ -1,0 +1,144 @@
+<ng-container *ngIf="isDataAvailable">
+  <div class="" modal__content>
+    <div id="tablePrint">
+      <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+
+        <div nz-col [nzSpan]="4" style="display:flex;">
+          <div>Đơn vị</div>
+          <div style="padding-left: 5px;">
+            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+              <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+            </ng-container>
+            <ng-template #editMoney>
+              <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                (ngModelChange)="editMoneyUnit=false">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="18"></div>
+        <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
+          <!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+            <i class="fa fa-trash-o"></i>
+            <span>Xóa</span>
+          </button>
+          <ng-container>
+            <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </ng-container> -->
+        </div>
+      </div>
+
+      <nz-table nzBordered class="table__body">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Tên đơn vị(Biên chế thực tế có mặt)</th>
+            <th>Biên chế {{namBcao}} được giao</th>
+            <th>Biên chế có mặt</th>
+            <th>Biên chế chưa tuyển</th>
+            <th>Hệ số lương và các loại phụ cấp cho biên chê công chức có mặt 01/01/{{namBcao}}</th>
+            <th>Tổng quỹ lương và các loại phụ cấp cho biên chế công chức có mặt năm {{namBcao}} (tính đến
+              31/12/{{namBcao}} (không tính HĐ 68)) </th>
+            <th>Tổng nhu cầu tiền lương năm {{namBcao}} </th>
+            <th>Bao gồm</th>
+            <th>Dự toán, kinh phí được sử dụng trong năm</th>
+            <th>Dự toán đã thực hiện đến thời điểm báo cáo</th>
+            <th>Dự toán ước thực hiện đến cuối năm</th>
+            <th>Tổng nhu cầu dự toán trong năm</th>
+            <th>Dự toán điều chỉnh (+ tăng) (- giảm)</th>
+            <th>Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+          </tr>
+          <tr>
+            <th>Tổng số</th>
+            <th>Bao gồm</th>
+            <th>Tổng số</th>
+            <th>Bao gồm</th>
+            <th>Tiền lương biên chế thực tế có mặt</th>
+            <th>Các khoản đóng góp theo lương của biên chế thực tế</th>
+            <th>Lương CBCC chưa tuyển dụng</th>
+            <th>Lương điều hòa chung</th>
+            <th>Dự toán năm trước chuyển sang được phép sử dụng</th>
+            <th>Dự toán, kinh phí đã giao trong năm</th>
+            <th>Cộng</th>
+          </tr>
+          <tr>
+            <th>Hệ số lương</th>
+            <th>Hệ số các loại phụ cấp</th>
+            <th>Tiền lương</th>
+            <th>Tiền phụ cấp lương</th>
+          </tr>
+          <tr>
+            <th>Tổng</th>
+            <th>PC chức vụ</th>
+            <th>PC trách nhiệm</th>
+            <th>PC thâm niên vượt khung</th>
+            <th>HSBL</th>
+            <th>Phụ cấp công vụ </th>
+            <th>Phụ cấp thâm niên</th>
+            <th>Phụ cấp ưu đãi nghề</th>
+            <th>PC khu vực</th>
+            <th>PC khác</th>
+            <th>Tổng</th>
+            <th>PC chức vụ</th>
+            <th>PC trách nhiệm</th>
+            <th>PC thâm niên vượt khung</th>
+            <th>HSBL</th>
+            <th>Phụ cấp công vụ </th>
+            <th>Phụ cấp thâm niên</th>
+            <th>Phụ cấp ưu đãi nghề</th>
+            <th>PC khu vực</th>
+            <th>PC khác</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+
+      </nz-table>
+
+    </div>
+    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+      <div nz-col nzSpan="24">
+        <label class="search__label">Thuyết minh</label>
+        <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
+          <i nz-icon nzType="printer" nzTheme="outline"></i>
+          <span>In</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          <span>Hoàn tất nhập liệu</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+          <i nz-icon nzType="check" nzTheme="outline"></i>
+          <span>OK</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+          <i nz-icon nzType="close" nzTheme="outline"></i>
+          <span>Not OK</span>
+        </button>
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-container>
