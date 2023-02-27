@@ -393,7 +393,7 @@
             <nz-form-item>
               <nz-form-label>Ghi chú</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <textarea rows="3"  nz-input [readonly]="isView"></textarea>
+                <textarea rows="3" formControlName="ghiChu"  nz-input [readonly]="isView"></textarea>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -421,7 +421,7 @@
           <th width="150px">Ngày ký</th>
           <th width="">Về việc</th>
           <th width="150px">Trạng thái</th>
-          <th width="120px">Hành động</th>
+          <th width="120px" class="text-center">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -431,14 +431,14 @@
           <td>{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
           <td>{{data.veViec  }}</td>
           <td>{{data.tenTrangThai }}</td>
-          <td>
+          <td class="text-center">
             <a (click)="redirectToPhuLuc(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
               <i class="fa fa-eye"></i>
             </a>
             <a (click)="redirectToPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="delete(data) "  *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a (click)="deleteDetail(data) "  *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -453,5 +453,5 @@
   </ng-template>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isViewHd">
-  <app-mm-them-moi-phu-luc [dataHdr]="formData.value" [id]="idPhuLuc" [isView]="isViewPl" (goBackEvent)="goBackPl()" ></app-mm-them-moi-phu-luc>
+  <app-mm-them-moi-phu-luc [dataHdr]="formData.value" [id]="idPhuLuc" [isView]="isViewPl"  (goBackEvent)="goBackPl($event)" ></app-mm-them-moi-phu-luc>
 </ng-container>

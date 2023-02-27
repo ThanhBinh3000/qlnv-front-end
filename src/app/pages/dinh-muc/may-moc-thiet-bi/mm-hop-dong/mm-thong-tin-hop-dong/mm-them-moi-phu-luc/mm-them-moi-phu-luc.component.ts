@@ -24,6 +24,7 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
   @Input() tablePl : any
   @Output()
   goBackEvent = new EventEmitter<any>();
+  checkDtl : boolean
 
   constructor(
     httpClient: HttpClient,
@@ -31,8 +32,7 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private hopDongService: HopDongMmTbcdService,
-    private qdMuaSamService: QuyetDinhMuaSamService,
+    private hopDongService: HopDongMmTbcdService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongService)
     super.ngOnInit()
@@ -44,13 +44,12 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
       soHopDong : [null],
       tenHopDong : [null],
       ngayKy : [null, Validators.required],
+      ngayKyDc : [null],
       veViec : [null],
-      noiDungDcKhac : [null],
+      noiDung : [null],
       ghiChu : [null],
-      ngayHlTruoc : [null],
-      ngayHlSau : [null],
-      soNgayHlTruoc : [null],
-      soNgayHlSau : [null],
+      thoiGianThucHien : [null],
+      thoiGianThucHienDc : [null],
       listFileDinhKems : [null],
       trangThai : ['00'],
       tenTrangThai : ['Dự thảo'],
@@ -76,8 +75,9 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
     }
   }
 
-  goBack() {
-    this.goBackEvent.emit();
+  goBackHdr(is : boolean) {
+    this.checkDtl = is
+    this.goBackEvent.emit(this.checkDtl);
   }
 
   initForm() {
@@ -85,8 +85,8 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         tenHopDong : this.dataHdr.tenHopDong,
         soHopDong : this.dataHdr.soHopDong,
-        ngayHlTruoc : this.dataHdr.ngayKy,
-        soNgayHlTruoc : this.dataHdr.thoiGianThucHien
+        ngayKy : this.dataHdr.ngayKy,
+        thoiGianThucHien: this.dataHdr.thoiGianThucHien
       })
     }
   }
@@ -130,7 +130,7 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
     let body = this.formData.value
     let data = await this.createUpdate(body);
     if (data) {
-      this.goBack()
+      this.goBackHdr(true)
     }
   }
 

@@ -34,6 +34,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   maQd: string
   rowItem: MmHopDongCt = new MmHopDongCt();
   dataEdit: { [key: string]: { edit: boolean; data: MmHopDongCt } } = {};
+  checkLoadDetail : boolean
 
   constructor(
     httpClient: HttpClient,
@@ -59,7 +60,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       ngayKy: [null, Validators.required],
       loaiHopDong: [null, Validators.required],
       thoiGianThucHien: [null, Validators.required],
-      giaTri: [null, Validators.required],
+      giaTri: [null],
       // ben mua
       muaTenDvi: [null],
       muaDiaChi: [null],
@@ -95,9 +96,11 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     });
   }
 
-  goBackPl() {
+  goBackPl(event) {
     this.isViewHd = false;
-    this.detail(this.id)
+    if (event) {
+      this.detail(this.id)
+    }
   }
 
   async ngOnInit() {
@@ -105,10 +108,10 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     try {
       let namHd = this.formData.value.namHopDong;
       this.maQd = `/${namHd}/VP-BĐ-NM`;
-      await this.loadDsDxCc();
-      await this.loadDsLoaiHd();
+       this.loadDsDxCc();
+       this.loadDsLoaiHd();
       if (this.id > 0) {
-        await this.detail(this.id);
+         this.detail(this.id);
       } else {
         this.initForm()
       }
@@ -423,6 +426,38 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       this.rowItem.donGia = result[0].donGia;
     }
   }
+
+  deleteDetail(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.hopDongService.delete(body).then(async () => {
+            await this.detail(this.id);
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
 }
 
 export class MmHopDongCt {
