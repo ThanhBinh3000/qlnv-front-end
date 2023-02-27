@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChiTietBangKeCanComponent } from './chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component';
+import {ComponentsModule} from "../../../../../components/components.module";
+import {DirectivesModule} from "../../../../../directives/directives.module";
+import {NzStatisticModule} from "ng-zorro-antd/statistic";
+import {NzPipesModule} from "ng-zorro-antd/pipes";
 
 
 
@@ -12,7 +16,11 @@ import { ChiTietBangKeCanComponent } from './chi-tiet-bang-ke-can/chi-tiet-bang-
     ChiTietBangKeCanComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    ComponentsModule,
+    DirectivesModule,
+    NzStatisticModule,
+    NzPipesModule
   ]
 })
 export class BangKeCanModule { }
