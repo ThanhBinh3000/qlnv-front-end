@@ -116,7 +116,7 @@ export class BaoCao03Component implements OnInit {
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         if (this.status) {
             this.scrollX = (350 + 9 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
         }

@@ -102,7 +102,7 @@ export class BaoCao05Component implements OnInit {
         this.maDvi = this.data?.maDvi;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;

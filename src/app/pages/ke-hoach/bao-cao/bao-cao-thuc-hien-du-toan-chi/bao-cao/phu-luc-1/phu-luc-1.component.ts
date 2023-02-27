@@ -146,7 +146,7 @@ export class PhuLucIComponent implements OnInit {
         this.namBcao = this.data?.namBcao;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
-        this.statusEdit = !this.status && this.maLoaiBcao != '527';
+        this.statusEdit = this.status && this.maLoaiBcao != '527';
         if (this.statusEdit) {
             this.scrollX = (350 + 42 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
