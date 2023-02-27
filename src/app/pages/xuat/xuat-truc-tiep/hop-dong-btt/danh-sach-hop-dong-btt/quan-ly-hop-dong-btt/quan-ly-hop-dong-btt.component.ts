@@ -6,9 +6,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -26,31 +27,35 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
   idHopDong: number;
   isEditHopDong: boolean
 
+
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private hopDongXuatHangService: HopDongXuatHangService,
-    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
-    private thongTinDauGiaService: ThongTinDauGiaService
+    private hopDongBttService: HopDongBttService,
+    private qdPdKetQuaBttService: QdPdKetQuaBttService,
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
+
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       id: [],
-      nam: [''],
+      namKh: [''],
       soQdKq: [],
       soQdPd: [],
       tenDvi: [],
+      tenLoaiHdong: [],
       soLuongDviTsan: [],
       soLuongDviTsanTrung: [],
       soLuongDviTsanTruot: [],
-      vat: ['5'],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
-      soLuongXuatBan: [],
-      donGiaTrungThau: [],
+      vat: ['5'],
+      soLuong: [],
       tongTien: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
@@ -69,12 +74,12 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
 
   async getDetail(id) {
     if (id) {
-      let res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
+      let res = await this.qdPdKetQuaBttService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        await this.thongTinDauGiaService.getDetail(data.maThongBao?.split('/')[0]).then(dataTtin => {
+        await this.quyetDinhPdKhBanTrucTiepService.getDetail(data.idHdr).then(dataTtin => {
           this.formData.patchValue({
-            nam: data.nam,
+            namKh: data.namKh,
             soQdKq: data.soQdKq,
             soQdPd: dataTtin.data?.soQdPd,
             tenDvi: data.tenDvi,
@@ -83,7 +88,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
             trangThaiHd: data.trangThaiHd,
             tenTrangThaiHd: data.tenTrangThaiHd
           })
-          this.dataTable = data.listHopDong;
+          this.dataTable = data.listHopDongBtt;
         });
       }
     }
@@ -148,7 +153,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
           let body = {
             id: data.id
           };
-          this.hopDongXuatHangService.delete(body).then(async () => {
+          this.hopDongBttService.delete(body).then(async () => {
             this.getDetail(this.id);
             this.spinner.hide();
           });
