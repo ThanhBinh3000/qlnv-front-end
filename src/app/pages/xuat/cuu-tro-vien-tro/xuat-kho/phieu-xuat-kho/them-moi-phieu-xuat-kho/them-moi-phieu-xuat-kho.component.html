@@ -382,7 +382,7 @@
                         </tr>
                         <tr>
                             <th>Theo chứng từ (1)</th>
-                            <th>Thực nhập (2)</th>
+                            <th>Thực Xuất (2)</th>
                         </tr>
                         <tr>
                         </tr>
@@ -405,6 +405,7 @@
                             </td>
                             <td>
                                 {{formData.value.donViTinh}}
+                            </td>
                             <td>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group>
@@ -415,7 +416,7 @@
                             <td>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group>
-                                        <nz-input-number nz-input [nzSize]="'small'" formControlName="thucNhap"
+                                        <nz-input-number nz-input [nzSize]="'small'" formControlName="thucXuat"
                                             [nzDisabled]="isView" [nzFormatter]="globals.formatter"
                                             [nzParser]="globals.parser" (input)="calculateSum()">
                                         </nz-input-number>
@@ -425,8 +426,11 @@
                             <td>
                                 {{formData.value.donGia| number: '1.0-1' :
                                 'vi_VN'}}
-                            <td>{{calculateSum() | number: '1.0-1' :
-                                'vi_VN'}}</td>
+                            </td>
+                            <td>
+                                {{calculateSum() | number: '1.0-1' :
+                                'vi_VN'}}
+                            </td>
                             <td>
                                 <a (click)="clearItemRow(formData.value.id)">
                                     <i class="fa fa-refresh"></i>
