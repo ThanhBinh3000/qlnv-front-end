@@ -5,18 +5,20 @@ import { StorageService } from './../../../../../services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from './../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import dayjs from 'dayjs';
 import { UserLogin } from './../../../../../models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
+import { PhieuXuatKhoService } from './../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { BienBanTinhKhoService } from './../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+
 @Component({
-  selector: 'app-bien-ban-lay-mau-ban-giao-mau',
-  templateUrl: './bien-ban-lay-mau-ban-giao-mau.component.html',
-  styleUrls: ['./bien-ban-lay-mau-ban-giao-mau.component.scss']
+  selector: 'app-bien-ban-tinh-kho',
+  templateUrl: './bien-ban-tinh-kho.component.html',
+  styleUrls: ['./bien-ban-tinh-kho.component.scss']
 })
-export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
+export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
 
   @Input()
   loaiVthh: string;
@@ -29,31 +31,37 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
+    private phieuXuatKhoService: PhieuXuatKhoService,
+    private bienBanTinhKhoService: BienBanTinhKhoService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBanGiaoMauService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanTinhKhoService);
     this.formData = this.fb.group({
-      soBienBan: null,
-      soQdGiaoNvXh: null,
-      dviKiemNghiem: null,
       tenDvi: null,
       maDvi: null,
-      ngayLayMau: null,
-      ngayLayMauTu: null,
-      ngayLayMauDen: null,
+      nam: null,
+      soQdGiaoNvXh: null,
+      soBbTinhKho: null,
+      ngayBatDauXuat: null,
+      ngayBatDauXuatTu: null,
+      ngayBatDauXuatDen: null,
+      ngayKetThucXuat: null,
+      ngayKetThucXuatTu: null,
+      ngayKetThucXuatDen: null,
+      loaiVthh: null,
       type: null
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
       nam: '',
       ngayQdGiaoNvXh: '',
-      soBienBan: '',
-      ngayLayMau: '',
+      soBbTinhKho: '',
+      ngayBatDauXuat: '',
+      ngayKetThucXuat: '',
       tenDiemKho: '',
       tenLoKho: '',
-      soBbTinhKho: '',
-      ngayXuatDocKho: '',
-      soBbHaoDoi: '',
+      soPhieuXuatKho: '',
+      ngayXuatKho: '',
+      soBkCanHang: '',
       tenTrangThai: '',
     };
   }
@@ -72,6 +80,7 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     try {
       this.initData()
       this.timKiem();
+      console.log(this.loaiVthh, 55555);
     }
     catch (e) {
       console.log('error: ', e)
@@ -100,11 +109,15 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
-    if (this.formData.value.ngayLayMau) {
-      this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayBatDauXuat) {
+      this.formData.value.ngayBatDauXuatTu = dayjs(this.formData.value.ngayBatDauXuat[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayBatDauXuatDen = dayjs(this.formData.value.ngayBatDauXuat[1]).format('YYYY-MM-DD')
     }
-
+    if (this.formData.value.ngayKetThucXuat) {
+      this.formData.value.ngayKetThucXuatTu = dayjs(this.formData.value.ngayKetThucXuat[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayKetThucXuatDen = dayjs(this.formData.value.ngayKetThucXuat[1]).format('YYYY-MM-DD')
+    }
+    this.formData.value.loaiVthh = this.loaiVthh;
     await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
@@ -115,11 +128,36 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+        let rs = chain(value)
+          .groupBy("soBbTinhKho")
+          .map((v, k) => {
+            let soBb = v.find(s => s.soBbTinhKho === k)
+            return {
+              idVirtual: uuid.v4(),
+              soBbTinhKho: k,
+              tenDiemKho: soBb.tenDiemKho,
+              tenLoKho: soBb.tenLoKho,
+              ngayBatDauXuat: soBb.ngayBatDauXuat,
+              ngayKetThucXuat: soBb.ngayKetThucXuat,
+              trangThai: soBb.trangThai,
+              tenTrangThai: soBb.tenTrangThai,
+              maDvi: soBb.maDvi,
+              id: soBb.id,
+              childData: v
+            }
+          }
+          ).value();
         let nam = quyetDinh.nam;
         let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+        return {
+          idVirtual: uuid.v4(),
+          soQdGiaoNvXh: key, nam: nam,
+          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          childData: rs
+        };
       }).value();
     this.children = dataView
+    console.log(this.children, 555);
     this.expandAll()
 
   }
