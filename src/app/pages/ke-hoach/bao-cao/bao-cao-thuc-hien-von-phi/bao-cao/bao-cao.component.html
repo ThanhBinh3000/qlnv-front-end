@@ -78,8 +78,8 @@
                             <td>{{baoCao?.nguoiTao}}</td>
                             <td>{{baoCao?.ngayTao}}</td>
                             <td>
-                                <ng-container *ngIf="!status">
-                                    <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                <ng-container *ngIf="status">
+                                    <nz-upload [nzBeforeUpload]="beforeUploadCV" *ngIf="status">
                                         <button nz-button>
                                             <i nz-icon nzType="upload"></i>
                                             Select File
@@ -112,12 +112,12 @@
                             <div nz-col class="gutter-row canphai phai" [nzSpan]="24"
                                 style="display:flex; justify-content: end;">
                                 <button type="button" class="btn btn-main" (click)="addPhuLuc()"
-                                    [hidden]="status || userInfo?.sub != baoCao?.nguoiTao">
+                                    [hidden]="!status || userInfo?.sub != baoCao?.nguoiTao">
                                     <i class="icon htvbdh_dau-cong"></i>
                                     <span>Thêm</span>
                                 </button>
                                 <button type="button" class="btn btn-sub" (click)="deletePhuLucList()"
-                                    [hidden]="status || userInfo?.sub != baoCao?.nguoiTao">
+                                    [hidden]="!status || userInfo?.sub != baoCao?.nguoiTao">
                                     <i class="icon htvbdh_tcdt_delete"></i>
                                     <span>Xóa</span>
                                 </button>
@@ -132,7 +132,7 @@
                                     <th>Trạng thái</th>
                                     <th>Giao cho</th>
                                     <th>Hành động</th>
-                                    <th class="th" [hidden]="status">
+                                    <th class="th" *ngIf="status">
                                         <label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
                                             [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                                         </label>
@@ -150,7 +150,7 @@
                                     </td>
                                     <td>
                                         <ng-container
-                                            *ngIf="userInfo?.sub == baoCao?.nguoiTao && !status && item?.id?.length == 38;else templateNguoiBcao ">
+                                            *ngIf="userInfo?.sub == baoCao?.nguoiTao && status && item?.id?.length == 38;else templateNguoiBcao ">
                                             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn người thực hiện"
                                                 [(ngModel)]="item.nguoiBcao"
                                                 [class]="item.nguoiBcao ?'' : 'input-error-validate' ">
@@ -168,15 +168,15 @@
                                         </ng-template>
                                     </td>
                                     <td>
-                                        <a *ngIf="!status && userInfo?.sub == item.nguoiBcao && baoCao.id"
+                                        <a *ngIf="status && userInfo?.sub == item.nguoiBcao && baoCao.id"
                                             (click)="newTab(item.maLoai)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="status" (click)="newTab(item.maLoai)">
+                                        <a *ngIf="!status" (click)="newTab(item.maLoai)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                     </td>
-                                    <td [hidden]="status">
+                                    <td *ngIf="status">
                                         <label [hidden]="userInfo?.sub != baoCao?.nguoiTao" nz-checkbox
                                             [nzValue]="item.id" [(ngModel)]="item.checked"
                                             (ngModelChange)="updateSingleChecked()"></label>
@@ -242,14 +242,14 @@
                         </ng-container>
                         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                             <div nz-col class="gutter-row" [nzSpan]="3">
-                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                                <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" *ngIf="status">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Select File
                                     </button>
                                 </nz-upload>
                                 <button nz-button [nzType]="'primary'" (click)="handleUpload()"
-                                    [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                                    [disabled]="fileList.length === 0" *ngIf="status" style="margin-top: 16px">
                                     Thêm vào danh sách
                                 </button>
                             </div>
@@ -272,7 +272,7 @@
                                                 <a (click)="downloadFile(data.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="!status" (click)="deleteFile(data.id)">
+                                                <a *ngIf="status" (click)="deleteFile(data.id)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>

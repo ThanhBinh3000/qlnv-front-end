@@ -342,11 +342,7 @@ export class BaoCaoComponent implements OnInit {
         const checkAccept = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
         const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCDTC.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.COPY_REPORT);
         const checkPrint = isSynthetic ? this.userService.isAccessPermisson(BCDTC.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.PRINT_REPORT);
-        if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
-            this.status = false;
-        } else {
-            this.status = true;
-        }
+        this.status = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave;
 
         this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld;
         this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld && !(!this.baoCao.id);
