@@ -102,7 +102,7 @@ export class BaoCao04anComponent implements OnInit {
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.maDvi = this.data?.maDvi;
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
@@ -111,10 +111,10 @@ export class BaoCao04anComponent implements OnInit {
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
         this.listVtus = this.data?.lstVtus;
 
-        if (this.status) {
-            await this.getListNdung();
-            await this.getDinhMuc();
-        }
+        // if (this.status) {
+        await this.getListNdung();
+        await this.getDinhMuc();
+        // }
 
         if (this.lstCtietBcao.length == 0) {
             if (this.luyKes.length > 0) {
@@ -169,10 +169,6 @@ export class BaoCao04anComponent implements OnInit {
 
         this.setWidth();
 
-        // tinh toan dinh muc trong man hinh neu bao cao la bao cao van phong
-        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
-            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
-        }
         //tinh lai tong cong
         if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
             this.getColTotal2();
@@ -184,6 +180,11 @@ export class BaoCao04anComponent implements OnInit {
             } else {
                 this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
             }
+        }
+
+        // tinh toan dinh muc trong man hinh neu bao cao la bao cao van phong
+        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
+            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
         }
 
         // this.sortByIndex();
@@ -546,7 +547,7 @@ export class BaoCao04anComponent implements OnInit {
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.3');
         //tinh dinh muc cho nghiep vu chuyen mon
-        if (nvChuyenMon) {
+        if (nvChuyenMon && nvChuyenMon != -1) {
             this.lstCtietBcao[nvChuyenMon]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -561,7 +562,7 @@ export class BaoCao04anComponent implements OnInit {
         }
 
         //tinh dinh muc cho thanh toan ca nhan        
-        if (ttCaNhan) {
+        if (ttCaNhan && ttCaNhan != -1) {
             this.lstCtietBcao[ttCaNhan]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -575,7 +576,7 @@ export class BaoCao04anComponent implements OnInit {
             this.sum(this.lstCtietBcao[ttCaNhan].stt);
         }
         //tinh dinh muc cho cuc dieu hanh
-        if (cucDh) {
+        if (cucDh && cucDh != -1) {
             this.lstCtietBcao[cucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
@@ -589,7 +590,7 @@ export class BaoCao04anComponent implements OnInit {
             this.sum(this.lstCtietBcao[cucDh].stt);
         }
         //tinh dinh muc cho tong cuc dieu hanh
-        if (tongCucDh) {
+        if (tongCucDh && tongCucDh != -1) {
             this.lstCtietBcao[tongCucDh]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;

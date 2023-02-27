@@ -107,7 +107,7 @@ export class PhuLucIIComponent implements OnInit {
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namBcao = this.data?.namBcao;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         if (this.status) {
             this.scrollX = (350 + 20 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
