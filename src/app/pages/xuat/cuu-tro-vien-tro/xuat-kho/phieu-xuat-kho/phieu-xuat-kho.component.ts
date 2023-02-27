@@ -73,6 +73,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       this.timKiem();
+      console.log(this.loaiVthh, 55555);
     }
     catch (e) {
       console.log('error: ', e)
@@ -105,7 +106,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
       this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
     }
-
+    this.formData.value.loaiVthh = this.loaiVthh;
     await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
@@ -115,18 +116,21 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
+        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
+            let diDiem = v.find(s => s.tenDiemKho === k)
             return {
               idVirtual: uuid.v4(),
               tenDiemKho: k,
+              tenLoKho: diDiem.tenLoKho,
               childData: v
             }
           }
           ).value();
-        let nam = value[0].nam;
-        let ngayQdGiaoNvXh = value[0].ngayQdGiaoNvXh;
+        let nam = quyetDinh.nam;
+        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key, nam: nam,
@@ -135,7 +139,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
-    console.log(this.children, 55);
     this.expandAll()
 
   }

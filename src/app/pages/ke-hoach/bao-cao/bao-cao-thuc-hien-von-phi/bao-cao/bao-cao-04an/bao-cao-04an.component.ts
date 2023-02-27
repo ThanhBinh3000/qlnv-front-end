@@ -102,7 +102,7 @@ export class BaoCao04anComponent implements OnInit {
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.maDvi = this.data?.maDvi;
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = !this.data?.status;
+        this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.lstCtietBcao = this.data?.lstCtietBcaos;
@@ -111,10 +111,10 @@ export class BaoCao04anComponent implements OnInit {
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
         this.listVtus = this.data?.lstVtus;
 
-        if (this.status) {
-            await this.getListNdung();
-            await this.getDinhMuc();
-        }
+        // if (this.status) {
+        await this.getListNdung();
+        await this.getDinhMuc();
+        // }
 
         if (this.lstCtietBcao.length == 0) {
             if (this.luyKes.length > 0) {

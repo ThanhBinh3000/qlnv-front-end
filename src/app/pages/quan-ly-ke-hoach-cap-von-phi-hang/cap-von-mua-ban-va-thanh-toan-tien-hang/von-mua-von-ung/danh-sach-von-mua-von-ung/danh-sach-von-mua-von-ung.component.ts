@@ -191,7 +191,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                             lyDoTuChoi: this.isSend ? item.ttGui.lyDoTuChoi : item.ttNhan.lyDoTuChoi,
                             checked: false,
                             isEdit: this.checkEditStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
-                            isDelete: this.checkDeleteStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
+                            isDelete: this.checkDeleteStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai) && item.dot == 1,
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);

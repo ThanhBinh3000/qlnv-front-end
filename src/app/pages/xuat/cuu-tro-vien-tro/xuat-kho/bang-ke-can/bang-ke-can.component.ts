@@ -12,7 +12,12 @@ import {
 import dayjs from "dayjs";
 import {UserLogin} from "../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../constants/message";
-import { isEmpty } from 'lodash';
+import {chain, isEmpty} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import {
+  BangKeCanCtvtService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+
 @Component({
   selector: 'app-bang-ke-can',
   templateUrl: './bang-ke-can.component.html',
@@ -21,6 +26,15 @@ import { isEmpty } from 'lodash';
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  dsDonvi: any[] = [];
+  userInfo: UserLogin;
+  userdetail: any = {};
+  selectedId: number = 0;
+  isVatTu: boolean = false;
+  isView = false;
+  expandSetString = new Set<string>();
+  dataView: any = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -28,41 +42,29 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService
+    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private bangKeCanCtvtService: BangKeCanCtvtService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
+    super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
     this.formData = this.fb.group({
+      id: [],
       nam: dayjs().get('year'),
-      soDx: null,
-      tenDvi: null,
-      maDvi: null,
-      ngayDx: null,
-      ngayDxTu: null,
-      ngayDxDen: null,
-      ngayKetThuc: null,
-      type: null
+      soQdGiaoNvXh: [],
+      soBangKe: [],
+      thoiGianGiaoNhan: [],
+      ngayQdGiaoNvXh: [],
+      maDiemKho: [],
+      maNhaKho: [],
+      maNganKho: [],
+      maLoKho: [],
+      tenDiemKho: [],
+      tenNhaKho: [],
+      tenNganKho: [],
+      tenLoKho: [],
+      ngayKetThuc: [],
+      type: []
     })
-    this.filterTable = {
-      nam: '',
-      tenLoaiHinhNhapXuat: '',
-      soDx: '',
-      tenDonVi: '',
-      ngayDx: '',
-      ngayPduyet: '',
-      tenLoaiVthh: '',
-      tongSoLuong: '',
-      trichYeu: '',
-      tenTrangThai: '',
-      maTongHop: ''
-    };
   }
-
-  dsDonvi: any[] = [];
-  userInfo: UserLogin;
-  userdetail: any = {};
-  selectedId: number = 0;
-  isVatTu: boolean = false;
-  isView = false;
 
   async ngOnInit() {
     try {
@@ -114,6 +116,9 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
     }
     await this.search();
+    console.log(this.dataTable, "hahaha")
+    await this.formData.patchValue(this.dataTable);
+    this.buildTableView();
   }
 
   redirectDetail(id, b: boolean) {
@@ -123,4 +128,52 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     // this.isViewDetail = isView ?? false;
   }
 
+  expandAll() {
+    this.dataView.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
+  }
+
+  onExpandStringChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+
+  buildTableView() {
+    console.log(JSON.stringify(this.dataTable), 'raw')
+    let dataView = chain(this.dataTable)
+      .groupBy("soQdGiaoNvXh")
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy("maLoKho")
+          .map((v, k) => {
+              let rowLv2 = v.find(s => s.maLoKho === k);
+              return {
+                idVirtual: uuidv4(),
+                maLoKho: k,
+                tenLoKho: rowLv2.tenLoKho,
+                maDiemKho: rowLv2.maDiemKho,
+                tenDiemKho: rowLv2.tenDiemKho,
+                childData: v
+              }
+            }
+          ).value();
+        // let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        // let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
+        return {
+          idVirtual: uuidv4(),
+          soQdGiaoNvXh: key,
+          nam: rowLv1.nam,
+          thoiGianGiaoNhan: rowLv1.thoiGianGiaoNhan,
+          childData: rs
+        };
+      }).value();
+    this.dataView = dataView
+    console.log(JSON.stringify(this.dataView), "phuongAnView")
+    this.expandAll()
+  }
 }
