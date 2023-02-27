@@ -6,13 +6,13 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {STATUS} from "../../../../../constants/status";
 import dayjs from "dayjs";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 import {chain} from 'lodash';
+import * as uuid from "uuid";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {HopDongMmTbcdService} from "../../../../../services/hop-dong-mm-tbcd.service";
 
@@ -31,10 +31,11 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   listLoaiHd: any[] = [];
   listHangHoa: any[] = [];
   listPhuLuc: any[] = [];
+  listDiaDiem: any[] = [];
   maQd: string
   rowItem: MmHopDongCt = new MmHopDongCt();
   dataEdit: { [key: string]: { edit: boolean; data: MmHopDongCt } } = {};
-  checkLoadDetail : boolean
+  expandSetString = new Set<string>();
 
   constructor(
     httpClient: HttpClient,
@@ -108,10 +109,10 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     try {
       let namHd = this.formData.value.namHopDong;
       this.maQd = `/${namHd}/VP-BĐ-NM`;
-       this.loadDsDxCc();
-       this.loadDsLoaiHd();
+      this.loadDsDxCc();
+      this.loadDsLoaiHd();
       if (this.id > 0) {
-         this.detail(this.id);
+        this.detail(this.id);
       } else {
         this.initForm()
       }
@@ -132,8 +133,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
 
   initForm() {
     this.formData.patchValue({
-      muaTenDvi : this.userInfo.TEN_DVI,
-      diaChi : this.userInfo.DON_VI.diaChi
+      muaTenDvi: this.userInfo.TEN_DVI,
+      muaDiaChi: this.userInfo.DON_VI.diaChi
     })
   }
 
@@ -168,24 +169,30 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async save() {
+  async save(isKy? : boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
+    this.convertListDiaDiem()
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
-      this.formData.value.fileDinhKems = this.fileDinhKem;
+      this.formData.value.listFileDinhKems = this.fileDinhKem;
     }
     this.formData.value.listQlDinhMucHdLoaiHh = this.dataTable;
     this.formData.value.giaTri = this.calcTong();
     this.formData.value.maDvi = this.userInfo.MA_DVI
     this.formData.value.capDvi = this.userInfo.CAP_DVI
+    this.formData.value.listQlDinhMucHdDiaDiemNh = this.listDiaDiem
     let body = this.formData.value;
     let data = await this.createUpdate(body);
     if (data) {
-      this.goBack()
+      if (isKy) {
+        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
+      } else {
+        this.goBack()
+      }
     }
   }
 
@@ -196,11 +203,13 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          await this.changeSoQdMs(data.soQdpdKhMuaSam);
+          this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucHdLoaiHh;
           this.listPhuLuc = data.listPhuLuc
+          this.listDiaDiem = data.listQlDinhMucHdDiaDiemNh;
+          this.buildDiaDiemTc()
           this.updateEditCache()
         }
       } else {
@@ -346,23 +355,20 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
+          this.listDiaDiem = [];
+          this.listHangHoa = [];
+          this.dataTable = [];
           this.formData.patchValue({
             soQdpdKhMuaSam: data.soQd
           })
-          let detailMs = await this.qdMuaSamService.getDetail(data.id)
-          if (detailMs.msg == MESSAGE.SUCCESS) {
-            let datams = detailMs.data
-            if (datams && datams.listQlDinhMucQdMuaSamDtl) {
-              this.listHangHoa = datams.listQlDinhMucQdMuaSamDtl
-              this.convertListData()
-            }
-          }
+          await this.changeSoQdMs(data.soQd)
+          await this.loadDsHangHoa(data.soQd)
         }
       })
     }
   }
 
-  async changeSoQdMs(soQd : string) {
+  async changeSoQdMs(soQd: string) {
     let res = this.listTongHop.filter(item => item.soQd = soQd)
     if (res && res.length > 0) {
       let detailMs = await this.qdMuaSamService.getDetail(res[0].id)
@@ -374,6 +380,32 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         }
       }
     }
+  }
+
+  async loadDsHangHoa(soQdMs: string) {
+    let body = {
+      soQdMs: soQdMs,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+      loai: '01'
+    }
+    let res = await this.qdMuaSamService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let list = res.data.content
+      if (list && list.length > 0) {
+        let detail = list[0]
+        let ttpb = await this.qdMuaSamService.getDetail(detail.id)
+        if (ttpb.msg == MESSAGE.SUCCESS) {
+          this.listDiaDiem = ttpb.data.listQlDinhMucQdMuaSamDtl
+          this.listDiaDiem.forEach(item => {
+            item.diaDiemGiaoNhan = item.diaDiem
+          })
+        }
+      }
+    }
+    this.buildDiaDiemTc()
   }
 
   redirectToPhuLuc(isView: boolean, id: number) {
@@ -405,6 +437,49 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         }
       })
     }
+  }
+
+  convertListDiaDiem() {
+    let arr = [];
+    if (this.listDiaDiem) {
+      this.listDiaDiem.forEach(item => {
+        if (item.childData && item.childData.length > 0) {
+          item.childData.forEach(data => {
+            if (data.childData && data.childData.length > 0) {
+              data.childData.forEach(dtl => {
+                arr.push(dtl)
+              })
+            }
+          })
+        }
+      })
+      this.listDiaDiem = arr
+    }
+  }
+
+  buildDiaDiemTc() {
+    if (this.listDiaDiem && this.listDiaDiem.length > 0) {
+      this.listDiaDiem = chain(this.listDiaDiem)
+        .groupBy("tenTaiSan")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenDviCha")
+            .map((v, k) => {
+                return {
+                  idVirtual: uuid.v4(),
+                  tenDviCha: k,
+                  childData: v
+                }
+              }
+            ).value();
+          return {
+            idVirtual: uuid.v4(),
+            tenTaiSan: key,
+            childData: rs
+          };
+        }).value();
+    }
+    this.expandAll()
   }
 
   calcTong() {
@@ -458,6 +533,25 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     });
   }
 
+  onExpandStringChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+
+
+  expandAll() {
+    this.listDiaDiem.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+      if (s.childData && s.childData.length > 0) {
+        s.childData.forEach(item => {
+          this.expandSetString.add(item.idVirtual);
+        })
+      }
+    })
+  }
 }
 
 export class MmHopDongCt {
@@ -472,7 +566,8 @@ export class MmHopDongCt {
 
 export class MmHopDongDiaDiemCt {
   id: number;
-  maHangHoa: string;
+  maTaiSan: string;
+  tenTaiSan: string;
   maDvi: string;
   tenDvi: string;
   soLuong: number = 0;

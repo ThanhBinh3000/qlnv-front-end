@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_KY  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span>HỢP ĐỒNG</span>
+        <span>PHỤ LỤC HỢP ĐỒNG</span>
       </div>
     </div>
     <div class="btn-group">
@@ -14,7 +14,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="approve(id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
+      <button class="btn btn-sub ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 )">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
@@ -63,8 +63,8 @@
           <nz-form-item>
             <nz-form-label nzRequired>Ngày ký</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
-                             >
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" formControlName="ngayKy"
+              >
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -95,7 +95,7 @@
             <nz-form-label>Ngày hiệu lực trước khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="true" class="search__input" nzFormat="dd/MM/YYYY"
-                              formControlName="ngayKy">
+                              formControlName="ngayKyTruoc">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -114,7 +114,7 @@
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
-            <nz-form-label nzRequired>Số ngày thực hiện trước khi điều chỉnh</nz-form-label>
+            <nz-form-label>Số ngày thực hiện trước khi điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input nz-input formControlName="thoiGianThucHien" [readonly]="true"/>
@@ -124,7 +124,7 @@
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
-            <nz-form-label nzRequired>Số ngày thực hiện trước sau điều chỉnh</nz-form-label>
+            <nz-form-label>Số ngày thực hiện trước sau điều chỉnh</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input nz-input formControlName="thoiGianThucHienDc" [readonly]="isView"/>
@@ -142,7 +142,7 @@
       </div>
     </div>
   </div>
-  <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
+  <nz-table class="nowrap mg-t-10" #tblData [nzData]="listDiaDiem" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
@@ -154,8 +154,77 @@
       <th nzWidth="170px">Số lượng</th>
       <th nzWidth="250px">Địa điểm giao nhận</th>
       <th nzWidth="250px">Số lượng đã hoàn thành giao nhận</th>
+      <th nzWidth="120px" class="text-center">Hành động</th>
     </tr>
     </thead>
+    <tbody>
+    <ng-container *ngFor="let item of tblData.data, let i = index;">
+      <tr>
+        <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+            [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+            style="width: 35px"></td>
+        <td></td>
+        <td>{{i + 1}}</td>
+        <td>{{ item.tenTaiSan }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+        <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+          <tr>
+            <td></td>
+            <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
+                [nzExpand]="expandSetString.has(lv1.idVirtual)" nzShowExpand="true"
+                style="width: 35px"></td>
+            <td>{{(i + 1) + '.' + (i1 + 1)}}</td>
+            <td>{{lv1.tenDviCha}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSetString.has(lv1.idVirtual)">
+            <tr *ngFor="let lv2 of lv1.childData,let i2=index">
+              <ng-container>
+                <td></td>
+                <td></td>
+                <td>{{(i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1)}}</td>
+                <td>{{lv2.tenDvi }}</td>
+                <td *ngIf="itemRowEdit != ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">{{lv2.soLuong}}</td>
+                <td  *ngIf="itemRowEdit == ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">
+                  <nz-input-number [nzSize]="'small'" [(ngModel)]="lv2.soLuong"
+                                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                  </nz-input-number>
+                </td>
+                <td>{{lv2.donViTinh}}</td>
+                <td>{{lv2.diaDiemGiaoNhan}}</td>
+                <td>{{lv2.soLuongHoanThanh}}</td>
+                <td class="text-center"  *ngIf="itemRowEdit != ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">
+                  <a (click)="editRow( i, i1, i2, lv2.soLuong )">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="deleteItem(lv2)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+                <td class="text-center"  *ngIf="itemRowEdit == ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">
+                  <a class="save" (click)="saveEdit()">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEdit(lv2)">
+                    <i class="fa fa-ban do"></i> </a>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    </tbody>
   </nz-table>
   <div class="header header-green-background mg-t-10">
     <div class="header-text">

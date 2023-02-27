@@ -15,12 +15,12 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
+        <button class="btn btn-sub ml-2" (click)="save(true)"
                 *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 )">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
-        <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
+        <button type="button" class="btn btn-sub xanh ml-2" (click)="save(false)"
                 *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() ">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -85,7 +85,8 @@
             <nz-form-item>
               <nz-form-label nzRequired>Ngày ký</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
+                <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                                nzPlaceHolder="Ngày ký"
                                 formControlName="ngayKy">
                 </nz-date-picker>
               </nz-form-control>
@@ -96,7 +97,7 @@
               <nz-form-label nzRequired>Loại hợp đồng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <nz-select [nzDisabled]="isView"  nzAllowClear formControlName="loaiHopDong">
+                  <nz-select [nzDisabled]="isView" nzAllowClear formControlName="loaiHopDong">
                     <nz-option *ngFor="let item of listLoaiHd" [nzValue]="item.ma" [nzLabel]="item.giaTri"></nz-option>
                   </nz-select>
                 </nz-input-group>
@@ -107,8 +108,9 @@
             <nz-form-item>
               <nz-form-label nzRequired>Thời gian thực hiện hợp đồng (ngày)</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number [nzDisabled]="isView" formControlName="thoiGianThucHien" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
-                                 >
+                <nz-input-number [nzDisabled]="isView" formControlName="thoiGianThucHien" [nzMin]="1" [nzMax]="9999999"
+                                 [nzStep]="1" [nzSize]="'small'"
+                >
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -117,8 +119,10 @@
             <nz-form-item>
               <nz-form-label nzRequired>Giá trị hợp đồng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-number nzDisabled [ngModel]="calcTong()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                 [ngModelOptions]="{standalone: true}" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                <nz-input-number nzDisabled [ngModel]="calcTong()" [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser"
+                                 [ngModelOptions]="{standalone: true}" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                 [nzSize]="'small'">
                 </nz-input-number>
               </nz-form-control>
             </nz-form-item>
@@ -141,7 +145,8 @@
           <th></th>
           <th>
             <nz-select nzAllowClear [(ngModel)]="rowItem.maHangHoa" (ngModelChange)="changHangHoa($event)">
-              <nz-option *ngFor="let item of listHangHoa" [nzValue]="item.maHangHoa" [nzLabel]="item.tenHangHoa"></nz-option>
+              <nz-option *ngFor="let item of listHangHoa" [nzValue]="item.maHangHoa"
+                         [nzLabel]="item.tenHangHoa"></nz-option>
             </nz-select>
           </th>
           <th>
@@ -151,7 +156,7 @@
             <input type="text" [(ngModel)]="rowItem.soLuong" readonly nz-input/>
           </th>
           <th>
-            <nz-input-number [nzSize]="'small'"  [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzDisabled]="isView"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
           </th>
@@ -202,7 +207,7 @@
               </nz-input-number>
             </td>
             <td>
-              <input type="text" [(ngModel)]="dataEdit[idx].data.donGia * rowItem.soLuong " readonly nz-input/>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.donGia * dataEdit[idx].data.soLuong " readonly nz-input/>
             </td>
             <td class="text-center" *ngIf="!isView">
               <a class="save" (click)="saveDinhMuc(idx)">
@@ -372,7 +377,7 @@
           </div>
         </div>
       </div>
-      <nz-table class="nowrap mg-t-10" [nzData]="dataTable" [nzFrontPagination]="false"
+      <nz-table class="nowrap mg-t-10" #tblData [nzData]="listDiaDiem" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
@@ -386,6 +391,52 @@
           <th nzWidth="250px">Số lượng đã hoàn thành giao nhận</th>
         </tr>
         </thead>
+        <tbody>
+        <ng-container *ngFor="let item of tblData.data, let i = index;">
+          <tr>
+            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+                style="width: 35px"></td>
+            <td></td>
+            <td>{{i + 1}}</td>
+            <td>{{ item.tenTaiSan }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+              <tr>
+                <td></td>
+                <td (nzExpandChange)="onExpandStringChange(lv1.idVirtual, $event)"
+                    [nzExpand]="expandSetString.has(lv1.idVirtual)" nzShowExpand="true"
+                    style="width: 35px"></td>
+                <td></td>
+                <td>{{lv1.tenDviCha}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <ng-container *ngIf="expandSetString.has(lv1.idVirtual)">
+                <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{lv2.tenDvi}}</td>
+                    <td>{{lv2.soLuong}}</td>
+                    <td>{{lv2.donViTinh}}</td>
+                    <td>{{lv2.diaDiemGiaoNhan}}</td>
+                    <td>{{lv2.soLuongHoanThanh}}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        </tbody>
       </nz-table>
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
@@ -393,7 +444,7 @@
             <nz-form-item>
               <nz-form-label>Ghi chú</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <textarea rows="3" formControlName="ghiChu"  nz-input [readonly]="isView"></textarea>
+                <textarea rows="3" formControlName="ghiChu" nz-input [readonly]="isView"></textarea>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -405,14 +456,15 @@
             <span class="text-uppercase font-weight-bold">Phụ lục hợp đồng</span>
           </div>
         </div>
-        <div class="btn-group" >
+        <div class="btn-group">
           <button type="button" class="btn btn-sub xanh" (click)="redirectToPhuLuc(false, null)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm PL hợp đồng</span>
           </button>
         </div>
       </div>
-      <nz-table class="nowrap pd-10" [nzData]="listPhuLuc" [nzFrontPagination]="false" *ngIf="formData.value.trangThai == STATUS.DA_KY"
+      <nz-table class="nowrap pd-10" [nzData]="listPhuLuc" [nzFrontPagination]="false"
+                *ngIf="formData.value.trangThai == STATUS.DA_KY"
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
@@ -438,7 +490,7 @@
             <a (click)="redirectToPhuLuc(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="deleteDetail(data) "  *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a (click)="deleteDetail(data) " *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -453,5 +505,6 @@
   </ng-template>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isViewHd">
-  <app-mm-them-moi-phu-luc [dataHdr]="formData.value" [id]="idPhuLuc" [isView]="isViewPl"  (goBackEvent)="goBackPl($event)" ></app-mm-them-moi-phu-luc>
+  <app-mm-them-moi-phu-luc [dataHdr]="formData.value" [id]="idPhuLuc" [isView]="isViewPl" [listDiaDiem]="listDiaDiem"
+                           (goBackEvent)="goBackPl($event)"></app-mm-them-moi-phu-luc>
 </ng-container>
