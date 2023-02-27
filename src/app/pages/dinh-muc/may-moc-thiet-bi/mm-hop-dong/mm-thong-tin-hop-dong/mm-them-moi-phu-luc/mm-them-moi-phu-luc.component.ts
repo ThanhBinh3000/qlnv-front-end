@@ -50,7 +50,7 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
       ngayKy: [null, Validators.required],
       ngayKyTruoc: [null],
       ngayKyDc: [null],
-      veViec: [null],
+      veViec: [null, Validators.required],
       noiDung: [null],
       ghiChu: [null],
       thoiGianThucHien: [null],
