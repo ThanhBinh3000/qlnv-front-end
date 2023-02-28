@@ -108,8 +108,10 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
           this.chagneHopDong(data.soHopDong)
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
-          this.formData.value.soBienBan = this.formData.value.soBienBan ? this.formData.value.soBienBan.split('/')[0] : null
-          this.dataTable = data.listQlDinhMucHdLoaiHh;
+          this.formData.patchValue({
+            soBienBan : this.formData.value.soBienBan ?  this.formData.value.soBienBan.split('/')[0] : null
+          })
+          this.dataTable = data.listQlDinhMucBbGnLoaiHh;
           this.tableBenNhan = data.listQlDinhMucBbGnDaiDienBenNhan;
           this.tableBenGiao = data.listQlDinhMucBbGnDaiDienBenGiao;
           this.updateEditCache()

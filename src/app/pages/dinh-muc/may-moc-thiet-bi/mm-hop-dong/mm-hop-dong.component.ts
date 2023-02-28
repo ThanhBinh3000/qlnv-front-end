@@ -71,11 +71,13 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         ngayKyTu: dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
         ngayKyDen: dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY'),
-        maDvi: this.userInfo.MA_DVI ,
-        capDvi:this.userInfo.CAP_DVI ,
-        loai: '00'
       })
     }
+    this.formData.patchValue({
+      maDvi: this.userInfo.MA_DVI ,
+      capDvi:this.userInfo.CAP_DVI ,
+      loai: '00'
+    })
     await this.search();
   }
 

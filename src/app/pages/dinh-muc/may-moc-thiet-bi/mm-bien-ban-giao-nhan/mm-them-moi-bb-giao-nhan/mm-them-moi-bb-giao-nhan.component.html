@@ -16,11 +16,11 @@
           <span>Quay lại</span>
         </button>
         <button class="btn btn-sub ml-2" (click)="save(true)"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 )">
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && userService.isChiCuc() )">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()">
+        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -33,7 +33,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">
               Năm kế hoạch
             </nz-form-label>
-            <nz-select formControlName="namKeHoach">
+            <nz-select formControlName="namKeHoach" [nzDisabled]="isView">
               <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text">
               </nz-option>
             </nz-select>
@@ -79,7 +79,7 @@
               Ngày giao nhận
             </nz-form-label>
             <nz-form-control>
-              <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày giao nhận"
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày giao nhận"
                               formControlName="ngayGiaoNhan">
               </nz-date-picker>
             </nz-form-control>
@@ -123,9 +123,9 @@
               <th nzWidth="40px">STT</th>
               <th nzWidth="300px">Đại diện bên nhận</th>
               <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center">Hành động</th>
+              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
-            <tr>
+            <tr *ngIf="!isView">
               <th></th>
               <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.hoVaTen"></th>
               <th><input nz-input [ngModelOptions]="{standalone: true}"  [(ngModel)]="rowItemBn.chucVu"></th>
@@ -145,7 +145,7 @@
                 <td>{{ idx + 1 }}</td>
                 <td>{{ data.hoVaTen}}</td>
                 <td>{{ data.chucVu}}</td>
-                <td class="text-center">
+                <td class="text-center" *ngIf="!isView">
                   <a (click)="editRowBgBn(idx, 'benNhan')">
                     <i class="fa fa-pencil"></i>
                   </a>
@@ -178,9 +178,9 @@
               <th nzWidth="40px">STT</th>
               <th nzWidth="300px">Đại diện bên giao</th>
               <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center">Hành động</th>
+              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
-            <tr>
+            <tr *ngIf="!isView">
               <th></th>
               <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBg.hoVaTen"></th>
               <th><input nz-input [ngModelOptions]="{standalone: true}"  [(ngModel)]="rowItemBg.chucVu"></th>
@@ -200,7 +200,7 @@
               <td>{{ idx + 1 }}</td>
               <td>{{ data.hoVaTen}}</td>
               <td>{{ data.chucVu}}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="editRowBgBn(idx, 'benGiao')">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -235,11 +235,11 @@
             <th nzWidth="140px">Số lượng</th>
             <th nzWidth="140px">Đơn giá</th>
             <th>Thành tiền</th>
-            <th nzWidth="120px" class="text-center">Hành động</th>
+            <th nzWidth="120px" class="text-center" *ngIf="!isView">Hành động</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
+          <tr *ngIf="!isView">
             <td></td>
             <td>
               <nz-select nzAllowClear [(ngModel)]="rowItem.maHangHoa" [ngModelOptions]="{standalone: true}" (ngModelChange)="changHangHoa($event)">
@@ -282,7 +282,7 @@
               <td>{{ data.soLuong  | number: '1.0-1'  }}</td>
               <td>{{ data.donGia }}</td>
               <td>{{ data.donGia *  data.soLuong   | number: '1.0-1'  }}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="editRow(idx)">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -337,7 +337,7 @@
               Quy cách chất lượng
             </nz-form-label>
             <nz-form-control>
-              <textarea rows="3" class="search__input" nz-input formControlName="quyCachChatLuong"></textarea>
+              <textarea [readonly]="isView" rows="3" class="search__input" nz-input formControlName="quyCachChatLuong"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -347,7 +347,7 @@
               Các nội dung khác
             </nz-form-label>
             <nz-form-control>
-              <textarea rows="3" class="search__input" nz-input formControlName="noiDungKhac"></textarea>
+              <textarea [readonly]="isView" rows="3" class="search__input" nz-input formControlName="noiDungKhac"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>

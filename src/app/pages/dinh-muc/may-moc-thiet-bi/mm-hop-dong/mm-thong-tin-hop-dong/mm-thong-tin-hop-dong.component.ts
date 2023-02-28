@@ -207,6 +207,9 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
           const data = res.data;
           this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            soHopDong : this.formData.value.soHopDong ?  this.formData.value.soHopDong.split('/')[0] : null
+          })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucHdLoaiHh;
           this.listPhuLuc = data.listPhuLuc
