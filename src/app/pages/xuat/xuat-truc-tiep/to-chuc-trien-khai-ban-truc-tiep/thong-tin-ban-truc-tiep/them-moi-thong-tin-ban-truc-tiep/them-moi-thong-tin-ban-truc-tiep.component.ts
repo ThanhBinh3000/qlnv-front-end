@@ -13,6 +13,7 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 import { ChiTietThongTinBanTrucTiepChaoGia } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-moi-thong-tin-ban-truc-tiep',
@@ -45,7 +46,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         id: [],
-        idHdr: [],
+        idDtl: [],
         namKh: [dayjs().get("year"), [Validators.required]],
         soQdPd: [''],
         maDvi: [''],
@@ -59,8 +60,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
-        trangThaiChaoGia: [''],
-        tenTrangThaiChaoGia: [''],
+        trangThai: [STATUS.CHUA_CAP_NHAT],
+        tenTrangThai: ['Chưa cập nhật'],
         soQdPdKq: [''],
         ghiChu: ['']
       }
@@ -95,25 +96,24 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
 
   async loadDetail(id: number) {
     if (id > 0) {
-      await this.quyetDinhPdKhBanTrucTiepService.getDetail(id)
+      await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
           this.dataTable = dataDtl.xhTcTtinBttList
           this.formData.patchValue({
-            idHdr: id,
+            idDtl: id,
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayKthuc: dataDtl.ngayKthuc,
             ghiChu: dataDtl.ghiChu,
-            soQdPd: dataDtl.soQdPd,
-            namKh: dataDtl.namKh,
-            trangThaiChaoGia: dataDtl.trangThaiChaoGia,
-            tenTrangThaiChaoGia: dataDtl.tenTrangThaiChaoGia,
-            tenCloaiVthh: dataDtl.tenCloaiVthh,
-            cloaiVthh: dataDtl.cloaiVthh,
-            tenLoaiVthh: dataDtl.tenLoaiVthh,
-            loaiVthh: dataDtl.loaiVthh,
-            moTaHangHoa: dataDtl.moTaHangHoa,
+            soQdPd: dataDtl.xhQdPdKhBttHdr.soQdPd,
+            trangThai: dataDtl.trangThai,
+            tenTrangThai: dataDtl.tenTrangThai,
+            tenCloaiVthh: dataDtl.xhQdPdKhBttHdr.tenCloaiVthh,
+            cloaiVthh: dataDtl.xhQdPdKhBttHdr.cloaiVthh,
+            tenLoaiVthh: dataDtl.xhQdPdKhBttHdr.tenLoaiVthh,
+            loaiVthh: dataDtl.xhQdPdKhBttHdr.loaiVthh,
+            moTaHangHoa: dataDtl.xhQdPdKhBttHdr.moTaHangHoa,
           })
 
         })
@@ -147,7 +147,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         try {
           let body = {
             id: this.idInput,
-            trangThaiChaoGia: this.STATUS.HOAN_THANH_CAP_NHAT
+            trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
           }
           let res = await this.chaoGiaMuaLeUyQuyenService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
