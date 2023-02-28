@@ -5,10 +5,10 @@
     <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
       Quyết định PA cứu trợ, viện trợ được chuyển xuất cấp
     </li>
-<!--    <li nz-menu-item (click)="selectTab(1)"-->
-<!--        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">-->
-<!--      Tổng hợp phương án-->
-<!--    </li>-->
+    <li nz-menu-item (click)="selectTab(1)"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">
+      Quyết định xuất cấp
+    </li>
 <!--    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA')">-->
 <!--      Quyết định phê duyệt phương án-->
 <!--    </li>-->
@@ -28,9 +28,9 @@
     <ng-container *ngIf="tabSelected == 0">
       <app-quyet-dinh-phuong-an></app-quyet-dinh-phuong-an>
     </ng-container>
-<!--    <ng-container *ngIf="tabSelected == 1">-->
-<!--      <app-tong-hop-phuong-an></app-tong-hop-phuong-an>-->
-<!--    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 1">
+      <app-quyet-dinh-xuat-cap></app-quyet-dinh-xuat-cap>
+    </ng-container>
 <!--    <ng-container *ngIf="tabSelected == 2">-->
 <!--      <app-quyet-dinh-phe-duyet-phuong-an></app-quyet-dinh-phe-duyet-phuong-an>-->
 <!--    </ng-container>-->

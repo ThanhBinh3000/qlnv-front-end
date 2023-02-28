@@ -5,6 +5,7 @@ import { XuatCapRoutingModule } from "./xuat-cap-routing.module";
 import { ComponentsModule } from "../../../../components/components.module";
 import { DirectivesModule } from "../../../../directives/directives.module";
 import { QuyetDinhPhuongAnModule } from "./quyet-dinh-phuong-an/quyet-dinh-phuong-an.module";
+import { QuyetDinhXuatCapModule } from "./quyet-dinh-xuat-cap/quyet-dinh-xuat-cap.module";
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { QuyetDinhPhuongAnModule } from "./quyet-dinh-phuong-an/quyet-dinh-phuon
     XuatCapRoutingModule,
     ComponentsModule,
     DirectivesModule,
-    QuyetDinhPhuongAnModule
+    QuyetDinhPhuongAnModule,
+    QuyetDinhXuatCapModule
   ]
 })
 export class XuatCapModule {
