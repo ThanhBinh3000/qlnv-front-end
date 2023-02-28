@@ -11,6 +11,6 @@ export class PhieuXuatKhoService extends BaseService {
     GATEWAY = '/qlnv-hang';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'cuu-tro/kt-cl/phieu-xuat-kho', '');
+        super(httpClient, 'cuu-tro/xuat-kho/phieu-xuat-kho', '');
     }
 }

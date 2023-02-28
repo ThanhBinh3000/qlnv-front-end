@@ -5,8 +5,10 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { MainXuatKhoComponent } from './main-xuat-kho/main-xuat-kho.component';
 import { BangKeCanComponent } from './bang-ke-can/bang-ke-can.component';
-import {BangKeCanModule} from "./bang-ke-can/bang-ke-can.module";
+import { BangKeCanModule } from "./bang-ke-can/bang-ke-can.module";
 import { ThemMoiPhieuXuatKhoComponent } from './phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
+import { BienBanTinhKhoComponent } from './bien-ban-tinh-kho/bien-ban-tinh-kho.component';
+import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 
 
 
@@ -15,7 +17,9 @@ import { ThemMoiPhieuXuatKhoComponent } from './phieu-xuat-kho/them-moi-phieu-xu
     MainXuatKhoComponent,
     PhieuXuatKhoComponent,
     ThemMoiPhieuXuatKhoComponent,
-    BangKeCanComponent
+    BangKeCanComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
   ],
   imports: [
     CommonModule,

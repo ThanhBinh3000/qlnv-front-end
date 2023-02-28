@@ -36,4 +36,13 @@ export const NHAP_ROUTE_LIST = [
     idHover: 'kiem-soat-truy-cap',
     isSelected: false
   },
+  {
+    id: 5,
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Quản trị tham số',
+    url: `/${NHAP_MAIN_ROUTE}/quan-tri-tham-so`,
+    dropdown: 'quan-tri-tham-so',
+    idHover: 'quan-tri-tham-so',
+    isSelected: false
+  }
 ];

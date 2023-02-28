@@ -316,7 +316,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
             if(type == 'them') {
               data.dataChild.push(detail)
             } else {
-              if (list && list.length >0) {
+              if (list) {
                 Object.assign(list.dataChild[idx], detail);
               }
             }
