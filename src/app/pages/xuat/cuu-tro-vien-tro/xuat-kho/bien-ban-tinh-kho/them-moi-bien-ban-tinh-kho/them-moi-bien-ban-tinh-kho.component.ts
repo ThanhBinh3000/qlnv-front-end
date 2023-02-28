@@ -16,6 +16,7 @@ import { QuyetDinhGiaoNvCuuTroService } from './../../../../../../services/qlnv-
 import { convertTienTobangChu } from './../../../../../../shared/commonFunction';
 import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -200,9 +201,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       ngayQdGiaoNvXh: data.ngayKy,
 
     });
-    let dataChiCuc = data.noiDungCuuTro.find(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
     if (dataChiCuc) {
-      this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
+      this.listDiaDiemNhap = dataChiCuc;
     }
     await this.spinner.hide();
   }
@@ -253,7 +254,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
       this.dataTable = this.listPhieuXuatKho;
-      console.log(this.dataTable, 555);
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
       }
@@ -261,36 +261,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-  // openDialogPhieuKnCl() {
-  //   const modalQD = this.modal.create({
-  //     nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
-  //     nzContent: DialogTableSelectionComponent,
-  //     nzMaskClosable: false,
-  //     nzClosable: false,
-  //     nzWidth: '900px',
-  //     nzFooter: null,
-  //     nzComponentParams: {
-  //       dataTable: this.listPhieuXuatKho,
-  //       dataHeader: ['Số phiếu', 'Ngày giám định'],
-  //       dataColumn: ['soPhieu', 'ngayKnMau']
-  //     },
-  //   });
-  //   modalQD.afterClose.subscribe(async (data) => {
-  //     if (data) {
-  //       this.formData.patchValue({
-  //         soPhieuKnCl: data.soPhieu,
-  //         ktvBaoQuan: data.nguoiKn,
-  //         ngayKn: data.ngayKnMau,
-  //         loaiVthh: data.loaiVthh,
-  //         cloaiVthh: data.cloaiVthh,
-  //         tenLoaiVthh: data.tenLoaiVthh,
-  //         tenCloaiVthh: data.tenCloaiVthh,
-  //         moTaHangHoa: data.moTaHangHoa,
 
-  //       });
-  //     }
-  //   });
-  // }
 
   async save(isGuiDuyet?) {
     let body = this.formData.value;
