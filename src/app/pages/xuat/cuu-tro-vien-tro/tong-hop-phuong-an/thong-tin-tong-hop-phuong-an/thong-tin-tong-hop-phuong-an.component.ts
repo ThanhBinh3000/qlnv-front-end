@@ -455,6 +455,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
           loaiNhapXuat: this.formData.value.loaiNhapXuat,
           trangThaiList: [STATUS.DA_TAO_CBV, STATUS.DA_DUYET_LDC],
           nam: this.formData.get('nam').value,
+          loaiVthh: this.formData.get('loaiVthh').value,
 
         }
         await this.tongHopPhuongAnCuuTroService.tonghop(body).then(async res => {
