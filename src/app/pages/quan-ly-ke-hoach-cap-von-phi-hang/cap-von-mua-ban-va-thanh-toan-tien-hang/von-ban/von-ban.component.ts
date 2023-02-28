@@ -174,7 +174,7 @@ export class VonBanComponent implements OnInit {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(response).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                        // this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

@@ -6,10 +6,8 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import dayjs from 'dayjs';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
   templateUrl: './danh-sach-hop-dong-btt.component.html',
@@ -25,11 +23,11 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private hopDongBttService: HopDongBttService,
+    private qdPdKetQuaBttService: QdPdKetQuaBttService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
-      namHd: '',
+      namKh: '',
       soHd: '',
       tenHd: '',
       ngayKy: '',
@@ -38,7 +36,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       loaiVthh: '',
     });
     this.filterTable = {
-      namHd: '',
+      namKh: '',
       soQdPd: '',
       soQdKq: '',
       ngayMkho: '',
