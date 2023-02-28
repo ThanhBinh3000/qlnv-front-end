@@ -77,7 +77,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       let res = await this.qdPdKetQuaBttService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        await this.quyetDinhPdKhBanTrucTiepService.getDetail(data.idHdr).then(dataTtin => {
+        await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(data.idPdKhDtl).then(dataTtin => {
           this.formData.patchValue({
             namKh: data.namKh,
             soQdKq: data.soQdKq,
