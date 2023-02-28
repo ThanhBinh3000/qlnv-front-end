@@ -70,6 +70,7 @@
           <th>Trích yếu</th>
           <th width="130px">Số QĐ giao chỉ tiêu</th>
           <th width="130px">Số tổng hợp</th>
+          <th width="130px">Số đề xuất Cục</th>
           <th width="130px">Trạng thái</th>
           <th width="120px">Hành động</th>
         </tr>
@@ -117,6 +118,12 @@
           </th>
           <th>
             <nz-input-group >
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maDx"
+                     (input)="filterInTable('maDx',filterTable.maDx)" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group >
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                      (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
             </nz-input-group>
@@ -138,6 +145,7 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.maTh }}</td>
+          <td>{{ data.maDx }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH) && userService.isTongCuc()) || userService.isCuc()">

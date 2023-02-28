@@ -30,6 +30,7 @@ import {
 import {
     MmThemMoiBbGiaoNhanComponent
 } from "./mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/mm-them-moi-bb-giao-nhan.component";
+import { DialogMmBbGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +54,8 @@ import {
         MmThongTinHopDongComponent,
         MmThongTinPhanBoCtComponent,
         MmThemMoiPhuLucComponent,
-        MmThemMoiBbGiaoNhanComponent
+        MmThemMoiBbGiaoNhanComponent,
+        DialogMmBbGiaoNhanComponent
     ],
   imports: [
     CommonModule,

@@ -136,7 +136,7 @@
           <td>{{ data.soQdMs }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY) && userService.isCuc()) || userService.isChiCuc()">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY) && userService.isCuc()) || userService.isChiCuc() || userService.isTongCuc()">
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isCuc()"
