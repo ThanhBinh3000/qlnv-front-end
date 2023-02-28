@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 import {HopDongMmTbcdService} from "../../../../services/hop-dong-mm-tbcd.service";
@@ -33,6 +33,8 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, hopDongService)
     super.ngOnInit()
     this.formData = this.fb.group({
+      maDvi: [''],
+      capDvi: [''],
       soHopDong: [''],
       tenHopDong: [''],
       soQdMuaSam: [''],
@@ -45,6 +47,7 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
     });
     this.filterTable = {};
   }
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -66,8 +69,11 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
-        ngayKyTu : dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
-        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY'),
+        ngayKyTu: dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
+        ngayKyDen: dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY'),
+        maDvi: this.userInfo.MA_DVI ,
+        capDvi:this.userInfo.CAP_DVI ,
+        loai: '00'
       })
     }
     await this.search();
@@ -76,8 +82,9 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      maDvi: this.userInfo.MA_DVI ,
+      capDvi:this.userInfo.CAP_DVI ,
+      loai: '00'
     })
     await this.search();
   }

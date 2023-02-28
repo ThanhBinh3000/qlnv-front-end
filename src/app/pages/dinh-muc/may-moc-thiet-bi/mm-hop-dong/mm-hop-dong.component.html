@@ -81,14 +81,14 @@
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHd"
-                     (input)="filterInTable('soHd',filterTable.soHd)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHopDong"
+                     (input)="filterInTable('soHopDong',filterTable.soHopDong)" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHd"
-                     (input)="filterInTable('tenHd',filterTable.tenHd)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHopDong"
+                     (input)="filterInTable('tenHopDong',filterTable.tenHopDong)" />
             </nz-input-group>
           </th>
           <th>
@@ -102,20 +102,20 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.benMua"
-                     (input)="filterInTable('benMua',filterTable.benMua)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.banTenDvi"
+                     (input)="filterInTable('banTenDvi',filterTable.banTenDvi)" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.benBan"
-                     (input)="filterInTable('benBan',filterTable.benBan)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.muaTenDvi"
+                     (input)="filterInTable('muaTenDvi',filterTable.muaTenDvi)" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdpdKhMuaSam"
+                     (input)="filterInTable('soQdpdKhMuaSam',filterTable.soQdpdKhMuaSam)" />
             </nz-input-group>
           </th>
           <th>
@@ -147,17 +147,17 @@
           <td>{{ data.banTenDvi }}</td>
           <td>{{ data.muaTenDvi }}</td>
           <td>{{ data.soQdpdKhMuaSam }}</td>
-          <td>{{ data.giaTri }}</td>
+          <td>{{ data.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class="text-center">
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY">
+          <td class="text-left">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="data.trangThai == STATUS.DA_KY || data.capDvi != userInfo.CAP_DVI">
               <i class="fa fa-eye"></i>
             </a>
             <a
-               (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO">
+               (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO && data.capDvi == userInfo.CAP_DVI">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai ==STATUS.DU_THAO" (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && data.capDvi == userInfo.CAP_DVI" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

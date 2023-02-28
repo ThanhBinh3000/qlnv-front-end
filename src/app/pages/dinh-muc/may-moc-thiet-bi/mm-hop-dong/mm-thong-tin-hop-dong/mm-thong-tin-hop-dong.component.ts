@@ -147,7 +147,9 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         "paggingReq": {
           "limit": 10,
           "page": 0
-        }
+        },
+        "capDvi" : this.userInfo.CAP_DVI,
+        "maDvi" : this.userInfo.MA_DVI,
       }
       let res = await this.qdMuaSamService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -389,23 +391,21 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         limit: this.pageSize,
         page: this.page - 1,
       },
-      loai: '01'
+      loai: '01',
+      trangThai : STATUS.DA_KY
     }
-    let res = await this.qdMuaSamService.search(body);
+    let res = await this.qdMuaSamService.listTtPbo(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let list = res.data.content
-      if (list && list.length > 0) {
-        let detail = list[0]
-        let ttpb = await this.qdMuaSamService.getDetail(detail.id)
-        if (ttpb.msg == MESSAGE.SUCCESS) {
-          this.listDiaDiem = ttpb.data.listQlDinhMucQdMuaSamDtl
-          this.listDiaDiem.forEach(item => {
-            item.diaDiemGiaoNhan = item.diaDiem
-          })
-        }
+      this.listDiaDiem = res.data
+      if (this.userService.isCuc()) {
+        this.listDiaDiem = this.listDiaDiem.filter(item => item.tenDviCha == this.userInfo.TEN_DVI)
       }
+      if (!this.listDiaDiem) {
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
+        return;
+      }
+      this.buildDiaDiemTc()
     }
-    this.buildDiaDiemTc()
   }
 
   redirectToPhuLuc(isView: boolean, id: number) {
