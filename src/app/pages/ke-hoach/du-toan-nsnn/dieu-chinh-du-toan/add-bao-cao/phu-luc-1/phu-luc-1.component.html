@@ -53,7 +53,108 @@
           </tr>
         </thead>
         <tbody>
-
+          <tr *ngFor="let data of lstCtietBcao; let i = index">
+            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
+              <!-- <td [hidden]="status " class="text-center">
+                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td class="text-center">
+                {{getChiMuc(data.stt)}}
+              </td>
+              <td>
+                {{data.noiDung}}
+              </td>
+              <td>{{data.dviTinh}}</td>
+              <td>{{displayValue(data.thienNamTruoc)}}</td>
+              <td>{{displayValue(data.dtoanNamHtai)}}</td>
+              <td>{{displayValue(data.uocNamHtai)}}</td>
+              <td>{{displayValue(data.sluongNamDtoan)}}</td>
+              <td>{{displayValue(data.dmucNamDtoan)}}</td>
+              <td>{{displayValue(data.ttienNamDtoan)}}</td>
+              <td *ngIf="viewRecommendedValue">
+                {{displayValue(data.sluongTd)}}
+              </td>
+              <td *ngIf="viewRecommendedValue">
+                {{displayValue(data.ttienTd)}}
+              </td>
+              <td [hidden]="status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td [hidden]="status && !editRecommendedValue">
+                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+              </td> -->
+            </ng-container>
+            <ng-template #editTemplate>
+              <!-- <td [hidden]="status" class="text-center">
+                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td class="text-center">
+                {{getChiMuc(editCache[data.id].data.stt)}}
+              </td>
+              <td>
+                {{editCache[data.id].data.tenDanhMuc}}
+              </td>
+              <td>
+                {{editCache[data.id].data.dviTinh}}
+              </td>
+              <ng-container *ngIf="editRecommendedValue; else editRecommended">
+                <td>{{displayValue(editCache[data.id].data.thienNamTruoc)}}</td>
+                <td>{{displayValue(editCache[data.id].data.dtoanNamHtai)}}</td>
+                <td>{{displayValue(editCache[data.id].data.uocNamHtai)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongNamDtoan)}}</td>
+                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
+                <td>{{displayValue(editCache[data.id].data.ttienNamDtoan)}}</td>
+                <td>
+                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongTd"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                </td>
+              </ng-container> -->
+              <ng-template #editRecommended>
+                <!-- <td>
+                  
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.thienNamTruoc"
+                    [options]="amount" />
+                </td>
+                <td>
+                 
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanNamHtai"
+                    [options]="amount" />
+                </td>
+                <td>
+                  
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.uocNamHtai"
+                    [options]="amount" />
+                </td>
+                <td>
+                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                </td>
+                <td>
+                  {{displayValue(editCache[data.id].data.dmucNamDtoan)}}
+                </td>
+                <td>
+                  {{displayValue(editCache[data.id].data.ttienNamDtoan)}}
+                </td>
+                <td *ngIf="viewRecommendedValue">
+                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongTd"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                </td> -->
+              </ng-template>
+              <!-- <td *ngIf="viewRecommendedValue">
+                {{displayValue(editCache[data.id].data.ttienTd)}}
+              </td> -->
+              <td [hidden]="status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td [hidden]="status && !viewRecommendedValue">
+                <a class="save" (click)="saveEdit(editCache[data.id].data.id)" style="margin-right:15px">Lưu</a>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                  (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
+              </td>
+            </ng-template>
+          </tr>
         </tbody>
 
       </nz-table>

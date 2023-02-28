@@ -252,31 +252,32 @@ export class AddBaoCaoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
+
+      if (this.baoCao.lstDviTrucThuoc.length == 0) {
+        this.listAppendix.forEach(e => {
+          this.baoCao.lstDchinh.push({
+            ...new ItemData(),
+            id: uuid.v4() + 'FE',
+            maLoai: e.id,
+            tenPl: e.tenPl,
+            tenDm: e.tenDm + 'năm' + this.baoCao.namBcao,
+            trangThai: "3",
+            lstCtietDchinh: [],
+          });
+        });
+      } else {
+        this.baoCao?.lstDviTrucThuoc.forEach(e => {
+          if (e.ngayDuyetTBP.includes('/')) {
+            e.ngayDuyetTBP = e.ngayDuyetTBP;
+            e.ngayDuyetLD = e.ngayDuyetLD;
+          } else {
+            e.ngayDuyetTBP = this.datePipe.transform(e.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
+            e.ngayDuyetLD = this.datePipe.transform(e.ngayDuyetLD, Utils.FORMAT_DATE_STR);
+          }
+        });
+      }
     }
 
-    if (this.baoCao.lstDviTrucThuoc.length == 0) {
-      this.listAppendix.forEach(e => {
-        this.baoCao.lstDchinh.push({
-          ...new ItemData(),
-          id: uuid.v4() + 'FE',
-          maLoai: e.id,
-          tenPl: e.tenPl,
-          tenDm: e.tenDm + 'năm' + this.baoCao.namBcao,
-          trangThai: "3",
-          lstCtietDchinh: [],
-        });
-      });
-    } else {
-      this.baoCao?.lstDviTrucThuoc.forEach(e => {
-        if (e.ngayDuyetTBP.includes('/')) {
-          e.ngayDuyetTBP = e.ngayDuyetTBP;
-          e.ngayDuyetLD = e.ngayDuyetLD;
-        } else {
-          e.ngayDuyetTBP = this.datePipe.transform(e.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
-          e.ngayDuyetLD = this.datePipe.transform(e.ngayDuyetLD, Utils.FORMAT_DATE_STR);
-        }
-      });
-    }
     this.getStatusButton();
     this.spinner.hide();
   };
@@ -330,6 +331,12 @@ export class AddBaoCaoComponent implements OnInit {
             item.tenPl = appendix.tenPl;
             item.tenDm = appendix.tenDm;
           })
+          this.baoCao.trangThaiBaoCao = data.data.trangThai
+          this.baoCao.ngayNhap = data.data.ngayTao;
+          this.baoCao.ngayTrinhDuyet = data.data.ngayTrinh;
+          this.baoCao.ngayDuyetTBP = data.data.ngayDuyet;
+          this.baoCao.ngayDuyetLD = data.data.ngayPheDuyet;
+          this.baoCao.ngayCapTrenTraKq = data.data.ngayTraKq;
           this.baoCao.ngayNhap = this.datePipe.transform(this.baoCao.ngayNhap, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayTrinhDuyet = this.datePipe.transform(this.baoCao.ngayTrinhDuyet, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayDuyetTBP = this.datePipe.transform(this.baoCao.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
@@ -394,7 +401,7 @@ export class AddBaoCaoComponent implements OnInit {
       ...this.baoCao,
       tongHopTuIds
     }));
-    this.baoCao.lstDchinh.forEach(item => {
+    this.baoCao.lstDviTrucThuoc.forEach(item => {
       baoCaoTemp.tongHopTuIds.push(item.id);
     })
     if (!baoCaoTemp.fileDinhKems) {
