@@ -138,7 +138,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
-            console.log(this.formData.value,2992929211111);
           }
         })
         .catch((e) => {

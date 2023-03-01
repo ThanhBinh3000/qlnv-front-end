@@ -70,11 +70,8 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       await this.timKiem();
-      await this.spinner.hide();
-
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -106,26 +103,32 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     return this.userInfo.MA_DVI == maDvi;
   }
 
-  async timKiem() {
-    if (this.formData.value.ngayDx) {
-      this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayKetThuc) {
-      this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
-    console.log(this.dataTable, "hahaha")
-    await this.formData.patchValue(this.dataTable);
+  async search(roles?): Promise<void> {
+    await this.spinner.show()
+    await super.search(roles);
     this.buildTableView();
+    await this.spinner.hide()
   }
 
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = b;
-    // this.isViewDetail = isView ?? false;
+  async timKiem() {
+    await this.spinner.show();
+    try {
+      if (this.formData.value.ngayDx) {
+        this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
+      }
+      if (this.formData.value.ngayKetThuc) {
+        this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
+      }
+      await this.search();
+      /*await this.formData.patchValue(this.dataTable);
+      this.buildTableView();*/
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   expandAll() {
@@ -152,11 +155,17 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
           .map((v, k) => {
               let rowLv2 = v.find(s => s.maLoKho === k);
               return {
+                id: rowLv2.id,
                 idVirtual: uuidv4(),
                 maLoKho: k,
                 tenLoKho: rowLv2.tenLoKho,
                 maDiemKho: rowLv2.maDiemKho,
                 tenDiemKho: rowLv2.tenDiemKho,
+                maNganKho: rowLv2.maNganKho,
+                tenNganKho: rowLv2.tenNganKho,
+                soPhieuXuatKho: rowLv2.soPhieuXuatKho,
+                trangThai: rowLv2.trangThai,
+                tenTrangThai: rowLv2.tenTrangThai,
                 childData: v
               }
             }
@@ -173,7 +182,17 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.dataView = dataView
-    console.log(JSON.stringify(this.dataView), "phuongAnView")
+    console.log(this.dataView, 'dataView')
     this.expandAll()
+  }
+
+  editRow(lv2: any, isView: boolean) {
+    this.selectedId = lv2.id;
+    this.isDetail = true;
+    this.isView = isView;
+  }
+
+  async deleteRow(lv2: any) {
+    await this.delete(lv2);
   }
 }

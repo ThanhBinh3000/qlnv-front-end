@@ -204,11 +204,10 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
-
     });
-    let dataChiCuc = data.noiDungCuuTro.find(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
     if (dataChiCuc) {
-      this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
+      this.listDiaDiemNhap = dataChiCuc;
     }
     await this.spinner.hide();
   }
