@@ -307,7 +307,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
       body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
     }
-    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileDinhKem = this.fileDinhKem;
     body.children = this.dataTable;
     let res = await this.createUpdate(body);
     if (res) {
