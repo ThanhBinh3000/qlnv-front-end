@@ -9,22 +9,16 @@ import {NzModalRef} from "ng-zorro-antd/modal";
 export class DialogMmMuaSamComponent implements OnInit {
   @Input() listTh : any[] = []
   @Input() type : string
-  radioValue  : any
   constructor(
     private _modalRef: NzModalRef,
   ) { }
 
   ngOnInit(): void {
+    console.log(this.listTh)
   }
 
-  handleOk() {
-    let result;
-    if (this.type == '00') {
-      result = this.listTh.find(element => element.id == this.radioValue);
-    } else {
-      result = this.listTh.find(element => element.soQd == this.radioValue);
-    }
-    this._modalRef.close(result);
+  handleOk(data  :any) {
+    this._modalRef.close(data);
   }
 
   onCancel() {

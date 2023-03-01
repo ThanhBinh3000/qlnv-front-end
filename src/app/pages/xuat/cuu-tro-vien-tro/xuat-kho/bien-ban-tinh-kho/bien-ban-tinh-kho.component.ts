@@ -80,7 +80,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       this.timKiem();
-      console.log(this.loaiVthh, 55555);
     }
     catch (e) {
       console.log('error: ', e)
@@ -157,7 +156,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
-    console.log(this.children, 555);
     this.expandAll()
 
   }
