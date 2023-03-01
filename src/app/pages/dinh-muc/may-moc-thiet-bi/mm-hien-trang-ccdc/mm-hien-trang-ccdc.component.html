@@ -70,9 +70,10 @@
           <th nzWidth="100px">Số lượng nhập(2)</th>
           <th nzWidth="100px">Số lượng điều chỉnh tăng(3)</th>
           <th nzWidth="100px">Số lượng điều chỉnh giảm(4)</th>
-          <th nzWidth="100px">Số lượng đã sử dụng(5)</th>
-          <th nzWidth="100px">Số lượng tồn(1+2+3-4-5)</th>
-          <th nzWidth="100px">Hành động</th>
+          <th nzWidth="100px">Số lượng cần sửa chữa(5)</th>
+          <th nzWidth="100px">Số lượng phải thanh lý(6)</th>
+          <th nzWidth="100px">Số lượng tồn(7)=1+2+3-4-6</th>
+          <th nzWidth="100px" nzRight>Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -80,22 +81,23 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
           <td *ngIf="userService.isCuc()">{{ data.tenDvi }}</td>
-          <td>{{ data.maHangHoa }}</td>
-          <td>{{ data.tenHangHoa }}</td>
+          <td>{{ data.maTaiSan }}</td>
+          <td>{{ data.tenTaiSan}}</td>
           <td>{{ data.donViTinh }}</td>
           <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.soDuNamTruoc }}</td>
+          <td>{{ data.slNhap }}</td>
+          <td>{{ data.dieuChinhTang }}</td>
+          <td>{{ data.dieuChinhGiam }}</td>
+          <td>{{ data.slCanSuaChua }}</td>
+          <td>{{ data.slCanThanhLy }}</td>
           <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.namKeHoach }}</td>
-          <td>
+          <td nzRight>
             <a>
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="openDialog()">
+              (click)="openDialog(data)">
               <i class="fa fa-pencil"></i>
             </a>
           </td>

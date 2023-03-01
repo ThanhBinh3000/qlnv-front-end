@@ -7,11 +7,9 @@ import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {Validators} from "@angular/forms";
-import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
 import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {STATUS} from "../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',

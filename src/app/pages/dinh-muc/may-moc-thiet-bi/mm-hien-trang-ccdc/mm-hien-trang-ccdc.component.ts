@@ -9,7 +9,7 @@ import {DonviService} from "../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {MESSAGE} from "../../../../constants/message";
 import {MmHienTrangMmService} from "../../../../services/mm-hien-trang-mm.service";
-import {DialogMmMuaSamComponent} from "../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import {saveAs} from 'file-saver';
 import {MmThongTinHienTrangComponent} from "./mm-thong-tin-hien-trang/mm-thong-tin-hien-trang.component";
 @Component({
   selector: 'app-mm-hien-trang-ccdc',
@@ -87,7 +87,7 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
     this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB")
   }
 
-  openDialog() {
+  openDialog(data : any) {
       let modalQD = this.modal.create({
         nzContent: MmThongTinHienTrangComponent,
         nzMaskClosable: false,
@@ -96,11 +96,39 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
         nzWidth: '1200',
         nzFooter: null,
         nzComponentParams: {
-
+          dataDetail : data
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
 
       })
     }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.hienTrangSv
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'hien-trang-may-moc-chuyen-dung.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
 }
+
+
