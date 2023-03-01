@@ -10,7 +10,7 @@ import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.se
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { addChild, addHead, addParent, displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, getName, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 export class ItemData {
@@ -61,6 +61,10 @@ export class PhuLuc4Component implements OnInit {
   noiDungs: any[] = [];
   total: ItemData = new ItemData();
   soLaMa: any[] = LA_MA;
+  tongDieuChinhTang: number;
+  tongDieuChinhGiam: number;
+  dToanVuTang: number;
+  dToanVuGiam: number;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -80,6 +84,18 @@ export class PhuLuc4Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
+    const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
+    if (category) {
+      category.data.forEach(
+        item => {
+          this.noiDungs.push({
+            ...item,
+            level: item.ma?.split('.').length - 2,
+            giaTri: getName(this.namBcao, item.giaTri),
+          })
+        }
+      )
+    }
     this.userInfo = this.userService.getUserLogin();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;
@@ -93,36 +109,31 @@ export class PhuLuc4Component implements OnInit {
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
+        checked: false
       })
     })
 
-    if (this.lstCtietBcao.length == 0) {
-      // this.linhVucChis.forEach(e => {
-      this.lstCtietBcao.push({
-        ...new ItemData(),
-        id: uuid.v4() + 'FE',
-        stt: "0.1",
-        maNoiDung: this.userInfo.MA_DVI,
-        noiDung: this.userInfo.TEN_DVI,
-      })
-      // })
-      // this.setLevel();
-      // this.lstCtietBcao.forEach(item => {
-      //   item.tenDanhMuc += this.getName(item.level, item.maDanhMuc);
-      // })
-    } else if (!this.lstCtietBcao[0]?.stt) {
-      this.lstCtietBcao.forEach(item => {
-        item.stt = item.maNoiDung;
-      })
+    if (this.lstCtietBcao.length > 0) {
+      if (!this.lstCtietBcao[0]?.stt) {
+        this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNoiDung');
+      } else {
+        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+      }
     }
-
     // this.sortByIndex();
     this.getTotal();
     this.tinhTong();
+    this.lstCtietBcao.forEach(item => {
+      item.noiDung = this.noiDungs.find(e => e.ma == item.maNoiDung)?.giaTri;
+    })
     this.updateEditCache();
     this.getStatusButton();
     this.spinner.hide();
   };
+
+  getLowStatus(str: string) {
+    return this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1;
+  }
 
   updateAllChecked(): void {
     if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true
@@ -151,9 +162,8 @@ export class PhuLuc4Component implements OnInit {
         this.total.dtoanDaGiaoLke = sumNumber([this.total.dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
         this.total.qtoanGtriDtoan = sumNumber([this.total.qtoanGtriDtoan, item.qtoanGtriDtoan]);
         this.total.dtoanDchinhDnghi = sumNumber([this.total.dtoanDchinhDnghi, item.dtoanDchinhDnghi]);
-        this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-        this.total.dtoanDchinhDnghiLanNay = sumNumber([this.total.dtoanDchinhDnghiLanNay, item.dtoanDchinhDnghiLanNay]);
         this.total.khoachSauDchinh = sumNumber([this.total.khoachSauDchinh, item.khoachSauDchinh]);
+        this.total.dtoanDchinhDnghiLanNay = sumNumber([this.total.dtoanDchinhDnghiLanNay, item.dtoanDchinhDnghiLanNay]);
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
       }
     })
@@ -268,15 +278,9 @@ export class PhuLuc4Component implements OnInit {
     this._modalRef.close();
   };
 
-  deleteLine(stt: string) {
-    const head = this.getHead(stt);
-    const tail = this.getTail(stt);
-    this.lstCtietBcao = this.lstCtietBcao.filter(e => e.stt !== stt);
-    this.lstCtietBcao.forEach(item => {
-      if (item.stt.startsWith(head) && item.stt != head && this.getTail(item.stt) > tail) {
-        item.stt = head + '.' + (this.getTail(item.stt) - 1).toString();
-      }
-    })
+  deleteLine(id: string) {
+    const stt = this.lstCtietBcao.find(e => e.id === id)?.stt;
+    this.lstCtietBcao = deleteRow(id, this.lstCtietBcao);
     this.sum(stt);
     this.updateEditCache();
   }
@@ -338,12 +342,13 @@ export class PhuLuc4Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].keHoachVon = sumNumber([this.lstCtietBcao[index].keHoachVon, item.keHoachVon]);
-          this.lstCtietBcao[index].dtoanDaGiaoLke = sumNumber([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
-          this.lstCtietBcao[index].qtoanGtriDtoan = sumNumber([this.lstCtietBcao[index].qtoanGtriDtoan, item.qtoanGtriDtoan]);
-          this.lstCtietBcao[index].dtoanDchinhDnghi = sumNumber([this.lstCtietBcao[index].dtoanDchinhDnghi, item.dtoanDchinhDnghi]);
-          this.lstCtietBcao[index].dtoanDchinhDnghiLanNay = sumNumber([this.lstCtietBcao[index].dtoanDchinhDnghiLanNay, item.dtoanDchinhDnghiLanNay]);
-          this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
+          this.lstCtietBcao[index].keHoachVon = Number(sumNumber([this.lstCtietBcao[index].keHoachVon, item.keHoachVon]));
+          this.lstCtietBcao[index].dtoanDaGiaoLke = Number(sumNumber([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]));
+          this.lstCtietBcao[index].qtoanGtriDtoan = Number(sumNumber([this.lstCtietBcao[index].qtoanGtriDtoan, item.qtoanGtriDtoan]));
+          this.lstCtietBcao[index].dtoanDchinhDnghi = Number(sumNumber([this.lstCtietBcao[index].dtoanDchinhDnghi, item.dtoanDchinhDnghi]));
+          this.lstCtietBcao[index].khoachSauDchinh = Number(sumNumber([this.lstCtietBcao[index].khoachSauDchinh, item.khoachSauDchinh]));
+          this.lstCtietBcao[index].dtoanDchinhDnghiLanNay = Number(sumNumber([this.lstCtietBcao[index].dtoanDchinhDnghiLanNay, item.dtoanDchinhDnghiLanNay]));
+          this.lstCtietBcao[index].dtoanVuTvqtDnghi = Number(sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]));
         }
       })
       stt = this.getHead(stt);
@@ -361,42 +366,23 @@ export class PhuLuc4Component implements OnInit {
     };
   }
 
-  tongDieuChinhTang: number;
-  tongDieuChinhGiam: number;
-  dToanVuTang: number;
-  dToanVuGiam: number;
+
   tinhTong() {
-    // this.tongSo = 0;
-    // this.tongSoTd = 0;
-    // this.tongThienNamTruoc = 0;
-    // this.tongDuToan = 0;
-    // this.tongUoc = 0;
-    // this.tongDmuc = 0;
-    // this.lstCtietBcao.forEach(item => {
-    //   if (item.level == "0") {
-    //     this.tongSo += item.ttienNamDtoan;
-    //     this.tongSoTd += item.ttienTd;
-    //     this.tongThienNamTruoc += item.thienNamTruoc;
-    //     this.tongDuToan += item.dtoanNamHtai;
-    //     this.tongUoc += item.uocNamHtai;
-    //     this.tongDmuc += item.dmucNamDtoan;
-    //   }
-    // })
     this.tongDieuChinhGiam = 0;
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.dtoanDchinhDnghiLanNay < 0) {
-        this.tongDieuChinhGiam += item.dtoanDchinhDnghiLanNay;
+        Number(this.tongDieuChinhGiam += item.dtoanDchinhDnghiLanNay);
       } else {
-        this.tongDieuChinhTang += item.dtoanDchinhDnghiLanNay;
+        Number(this.tongDieuChinhTang += item.dtoanDchinhDnghiLanNay);
       }
 
       if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += item.dtoanVuTvqtDnghi;
+        Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
       } else {
-        this.dToanVuTang += item.dtoanVuTvqtDnghi;
+        Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
       }
     })
   };
@@ -424,13 +410,16 @@ export class PhuLuc4Component implements OnInit {
 
 
 
-  getChiMuc(str: string): string {
+  getIndex(str: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
     let xau = "";
     const chiSo: string[] = str.split('.');
     const n: number = chiSo.length - 1;
     let k: number = parseInt(chiSo[n], 10);
     if (n == 0) {
+      xau = String.fromCharCode(k + 64);
+    }
+    if (n == 1) {
       for (let i = 0; i < this.soLaMa.length; i++) {
         while (k >= this.soLaMa[i].gTri) {
           xau += this.soLaMa[i].kyTu;
@@ -438,17 +427,16 @@ export class PhuLuc4Component implements OnInit {
         }
       }
     }
-    if (n == 1) {
+    if (n == 2) {
       xau = chiSo[n];
     }
-    if (n == 2) {
-      // xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-      xau = null;
-    }
     if (n == 3) {
-      xau = String.fromCharCode(k + 96);
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
     }
     if (n == 4) {
+      xau = String.fromCharCode(k + 96);
+    }
+    if (n == 5) {
       xau = "-";
     }
     return xau;
@@ -525,18 +513,12 @@ export class PhuLuc4Component implements OnInit {
 
   addSame(id: string, initItem: ItemData) {
     this.lstCtietBcao = addParent(id, initItem, this.lstCtietBcao);
-    const data = this.lstCtietBcao.find(e => e.maNoiDung == initItem.maNoiDung);
-    this.sum(data.stt);
   };
 
 
   addLow(id: string, initItem: ItemData) {
     this.lstCtietBcao = addChild(id, initItem, this.lstCtietBcao);
-    const data = this.lstCtietBcao.find(e => e.maNoiDung == initItem.maNoiDung);
-    this.sum(data.stt);
   };
-
-
 
 }
 
