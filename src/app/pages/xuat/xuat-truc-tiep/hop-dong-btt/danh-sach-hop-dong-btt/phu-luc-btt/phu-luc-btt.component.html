@@ -170,11 +170,11 @@
                                             [nzLabel]="p.tenDvi"></nz-option>
                                     </nz-select> </td>
                                 <td>{{data.diaChi}}</td>
-                                <td>{{data.tongSoLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{data.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{data.donGiaVat * data.tongSoLuong * 1000| number : '1.0-1' : 'vi_VN'}}
+                                <td>{{data.donGiaVat * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}
                                 </td>
-                                <td></td>
+                                <td>{{ convertTienTobangChu(data.donGiaVat * data.soLuong * 1000)}}
                             </tr>
                         </ng-container>
                     </tbody>

@@ -238,26 +238,24 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataKq.idPdKhDtl);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
-            let hdr = await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataThongTin.idQdHdr);
-            if (hdr.data) {
-              const dataHdr = hdr.data;
-              this.dataTable = dataHdr.children;
-              this.formData.patchValue({
-                idQdKq: dataKq.id,
-                soQdKq: dataKq.soQdKq,
-                ngayMkho: dataKq.ngayMkho,
-                ngayKyQdKq: dataKq.ngayKy,
-                soQdPd: dataThongTin.soQdPd,
-                loaiVthh: dataThongTin.loaiVthh,
-                tenLoaiVthh: dataThongTin.tenLoaiVthh,
-                cloaiVthh: dataThongTin.cloaiVthh,
-                tenCloaiVthh: dataThongTin.tenCloaiVthh,
-                moTaHangHoa: dataThongTin.moTaHangHoa,
-                dviTinh: "kg",
-                donGiaVat: dataThongTin.donGia + (dataThongTin.donGia * dataThongTin.thueGtgt / 100),
-              });
-              this.listDviLquan = dataThongTin.xhTcTtinBttList;
-            }
+            this.dataTable = dataThongTin.children;
+
+            this.formData.patchValue({
+              idQdKq: dataKq.id,
+              soQdKq: dataKq.soQdKq,
+              ngayMkho: dataKq.ngayMkho,
+              ngayKyQdKq: dataKq.ngayKy,
+              soQdPd: dataThongTin.soQdPd,
+              loaiVthh: dataThongTin.loaiVthh,
+              tenLoaiVthh: dataThongTin.tenLoaiVthh,
+              cloaiVthh: dataThongTin.cloaiVthh,
+              tenCloaiVthh: dataThongTin.tenCloaiVthh,
+              moTaHangHoa: dataThongTin.moTaHangHoa,
+              dviTinh: "kg",
+              donGiaVat: dataThongTin.donGia + (dataThongTin.donGia * dataThongTin.thueGtgt / 100),
+            });
+            this.listDviLquan = dataThongTin.xhTcTtinBttList;
+
 
           }
         })
