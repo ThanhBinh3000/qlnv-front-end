@@ -5,10 +5,12 @@ import {StorageService} from "../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {KtKhXdHangNamService} from "../../../../services/kt-kh-xd-hang-nam.service";
 import {DonviService} from "../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {MESSAGE} from "../../../../constants/message";
+import {MmHienTrangMmService} from "../../../../services/mm-hien-trang-mm.service";
+import {DialogMmMuaSamComponent} from "../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
+import {MmThongTinHienTrangComponent} from "./mm-thong-tin-hien-trang/mm-thong-tin-hien-trang.component";
 @Component({
   selector: 'app-mm-hien-trang-ccdc',
   templateUrl: './mm-hien-trang-ccdc.component.html',
@@ -24,18 +26,16 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : KtKhXdHangNamService,
+    private hienTrangSv : MmHienTrangMmService,
     private dviService : DonviService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
       namKeHoach: [null],
       tenCcdc: [null],
       maCcdc: [null],
-      maCuc: [null],
-      maChiCuc: [null],
     });
   }
 
@@ -84,6 +84,23 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
 
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-    this.dsChiCuc = this.dsCuc.filter(item => item.type != "PB")
+    this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB")
   }
+
+  openDialog() {
+      let modalQD = this.modal.create({
+        nzContent: MmThongTinHienTrangComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzStyle : {top : '150px'},
+        nzWidth: '1200',
+        nzFooter: null,
+        nzComponentParams: {
+
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+
+      })
+    }
 }

@@ -1,0 +1,152 @@
+  <div class="bg-trang">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+        <span></span>
+          <span>CẬP NHẬT HIỆN TRẠNG CÔNG CỤ DỤNG CỤ</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16">
+      <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+        <div nz-row [nzGutter]="20">
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đơn vị</label>
+            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input/>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Tên công cụ dụng cụ</label>
+            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input/>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Đơn vị tính</label>
+            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input/>
+          </div>
+          <div nz-col nzSpan="6">
+            <label class="search__label">Năm</label>
+            <input formControlName="tenCcdc" class="search__input" placeholder="Nhập text" nz-input/>
+          </div>
+        </div>
+        <div class="cangiua group-button-search">
+          <button nz-button class="search__button--clear" (click)="clearForm()">
+            <i class="icon  htvbdh_nhap-lai1"></i>
+            Xóa điều kiện
+          </button>
+          <button nz-button class="search__button--search" (click)="search()">
+            <i nz-icon nzType="search"></i>
+            Tìm kiếm
+          </button>
+        </div>
+      </form>
+    </nz-card>
+    <div class="group-button">
+      <h3></h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" >
+          <i class="fa fa-trash-o do"></i>
+          <span>Xóa</span>
+        </button>
+      </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                [nzData]="dataTable">
+        <thead>
+        <tr>
+          <th width="45px">
+            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                   [nzIndeterminate]="indeterminate"></label>
+          </th>
+          <th nzWidth="40px">STT</th>
+          <th nzWidth="">Loại giao dịch</th>
+          <th nzWidth="100px">Số lượng tăng</th>
+          <th nzWidth="100px">Số lượng giảm</th>
+          <th nzWidth="100px">Ngày</th>
+          <th nzWidth="100px">Số phiếu</th>
+          <th nzWidth="200px">Đơn vị chuyển</th>
+          <th nzWidth="200px">Đơn vị nhận</th>
+          <th nzWidth="150px">Tài liệu đính kèm</th>
+          <th nzWidth="100px">Hành động</th>
+        </tr>
+        <tr>
+          <th></th>
+          <th></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th><input nz-input></th>
+          <th class="text-center">
+            <a>
+              <i class="fa fa-plus"></i>
+            </a>
+            <a>
+              <i class="icon  htvbdh_nhap-lai1 "></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td width="45px">
+            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                   [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+          </td>
+          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+          <td>{{ data.maHangHoa }}</td>
+          <td>{{ data.tenHangHoa }}</td>
+          <td>{{ data.donViTinh }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.namKeHoach }}</td>
+          <td style="text-align: center;" >
+            <a >
+              <i class=" fa fa-pencil"></i>
+            </a>
+            <a>
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai"></div>
+          <div class="canphai">
+            <!-- begin phân trang  -->
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              </ng-template>
+            </nz-pagination>
+            <!-- end phân trang  -->
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Đóng
+        </button>
+        <button nz-button (click)="onCancel()" class="modal__button--save ml-2">
+          <i nz-icon nzType="save"></i>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
