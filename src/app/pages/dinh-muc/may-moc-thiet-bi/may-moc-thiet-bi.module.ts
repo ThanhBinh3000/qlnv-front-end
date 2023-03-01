@@ -31,6 +31,7 @@ import {
     MmThemMoiBbGiaoNhanComponent
 } from "./mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/mm-them-moi-bb-giao-nhan.component";
 import { DialogMmBbGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-them-moi-bb-giao-nhan/dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component';
+import { MmThongTinHienTrangComponent } from './mm-hien-trang-ccdc/mm-thong-tin-hien-trang/mm-thong-tin-hien-trang.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { DialogMmBbGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-them-moi
         MmThongTinPhanBoCtComponent,
         MmThemMoiPhuLucComponent,
         MmThemMoiBbGiaoNhanComponent,
-        DialogMmBbGiaoNhanComponent
+        DialogMmBbGiaoNhanComponent,
+        MmThongTinHienTrangComponent
     ],
   imports: [
     CommonModule,
