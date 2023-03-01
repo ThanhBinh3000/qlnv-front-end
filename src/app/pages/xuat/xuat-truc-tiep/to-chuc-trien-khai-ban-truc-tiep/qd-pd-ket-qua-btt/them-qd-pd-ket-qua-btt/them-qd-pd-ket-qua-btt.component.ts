@@ -84,14 +84,21 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
+      if (res) {
+        this.formData.patchValue({
+          soQdKq: res.soQdKq?.split('/')[0],
+        })
+      }
       await this.onChangeTtin(res.idPdKhDtl);
     }
   }
 
   async save(isGuiDuyet?: boolean) {
     let body = this.formData.value;
+    if (this.formData.get('soQdKq').value) {
+      body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
+    }
     body.fileDinhKems = this.fileDinhKem;
-    body.soQdKq = this.formData.value.soQdKq + this.maTrinh;
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {

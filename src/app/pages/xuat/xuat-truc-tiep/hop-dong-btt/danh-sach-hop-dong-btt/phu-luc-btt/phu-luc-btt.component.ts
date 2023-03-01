@@ -45,7 +45,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
-    private donviService: DonviService,
+    private donViService: DonviService,
     private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
@@ -102,10 +102,10 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
-      type: "DV"
+      maDviCha: this.userInfo.MA_DVI,
+      type: [null, 'MLK']
     };
-    let res = await this.donviService.getDonViTheoMaCha(body);
+    let res = await this.donViService.getAll(body);
     if (!isEmpty(res)) {
       this.dsDonvi = res.data;
     } else {
@@ -133,6 +133,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         // tenTrangThaiPhuLuc: this.objHopDongHdr.tenTrangThaiPhuLuc ?? null,
       });
       this.objHopDongHdr.children.forEach(s => {
+        console.log(this.objHopDongHdr, 1111)
         let row = {
           // tenDviHd: s.tenDvi,
           // diaChiHd: s.diaChi,
@@ -141,7 +142,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
           idHdDtl: s.id,
           tenDviHd: s.tenDvi,
           diaChiHd: s.diaChi,
-          tongSoLuong: s.tongSoLuong,
+          soLuong: s.soLuong,
           donGiaVat: s.donGiaVat,
         }
         this.dataTable = [...this.dataTable, row]
