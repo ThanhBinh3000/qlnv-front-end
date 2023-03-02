@@ -9,18 +9,18 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: `dau-gia`,
+        redirectTo: `cuu-tro-vien-tro`,
         pathMatch: 'full',
-      },
-      {
-        path: 'dau-gia',
-        loadChildren: () =>
-          import('./dau-gia/dau-gia.module').then((m) => m.DauGiaModule),
       },
       {
         path: 'cuu-tro-vien-tro',
         loadChildren: () =>
           import('./xuat-cuu-tro-vien-tro/xuat-cuu-tro-vien-tro.module').then((m) => m.XuatCuuTroVienTroModule),
+      },
+      {
+        path: 'dau-gia',
+        loadChildren: () =>
+          import('./dau-gia/dau-gia.module').then((m) => m.DauGiaModule),
       },
       {
         path: 'xuat-truc-tiep',
