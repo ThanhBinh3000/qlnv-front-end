@@ -287,7 +287,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
     await this.search();
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.searchFilter = {
       soQuyetDinh: '',
       ngayKy: '',
@@ -298,7 +298,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
       maChiCuc: '',
       maDiemKho: '',
     };
-    this.search();
+    await this.search();
   }
 
   xoaItem(item: any) {
