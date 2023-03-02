@@ -239,7 +239,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           if (resKq.data) {
             const dataThongTin = resTtin.data;
             this.dataTable = dataThongTin.children;
-
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
