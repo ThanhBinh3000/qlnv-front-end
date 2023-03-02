@@ -304,7 +304,7 @@
                        [(ngModel)]="dataEdit[idx].data.donViTinh"/>
               </td>
               <td>
-                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong"
+                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="data.soLuong"
                                  [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                  [nzMin]="0"
                                  [nzParser]="globals.parser"></nz-input-number>

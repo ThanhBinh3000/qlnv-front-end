@@ -10,6 +10,7 @@ import {Validators} from "@angular/forms";
 import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {STATUS} from "../../../../../constants/status";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',
@@ -22,6 +23,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   listDmTaiSan: any[] = [];
+  listCtieuKh: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -29,7 +31,8 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dxChiCucService: MmDxChiCucService
+    private dxChiCucService: MmDxChiCucService,
+    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -44,7 +47,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
-      trichYeu: [null, Validators.required],
+      trichYeu: [null,],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -58,6 +61,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     try {
       await Promise.all([
         this.getAllDmTaiSan(),
+        this.changeNamKh(this.formData.value.namKeHoach)
       ]);
       if (this.id) {
         this.detail(this.id)
@@ -269,12 +273,52 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       this.spinner.hide();
     }
   }
+
+  async changeNamKh(event) {
+    let res = await this.dxChiCucService.getCtieuKhoach(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listCtieuKh = []
+        this.listCtieuKh.push(res.data)
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
+    }
+  }
+
+  changeSoQdGiaoCt(event) {
+    let ctieuKhNhap = 0
+    let ctieuKhXuat = 0
+    let ctieuTkdn = 0
+    let ctieuKhBq = 0
+    let list = this.listCtieuKh.filter(item => item.id = event);
+    if (list && list.length > 0) {
+      let detail = list[0];
+      if (detail.khLuongThuc && detail.khLuongThuc.length > 0) {
+        let listLt = detail.khLuongThuc.filter(item => item.maDonVi = this.userInfo.MA_DVI)
+        if (listLt && listLt.length > 0) {
+          let detailLt = listLt[0]
+          ctieuKhNhap = detailLt.ntnTongSoQuyThoc ? detailLt.ntnTongSoQuyThoc : 0
+          ctieuKhXuat = detailLt.xtnTongSoQuyThoc ? detailLt.xtnTongSoQuyThoc : 0
+          ctieuTkdn = detailLt.tkdnTongSoQuyThoc ? detailLt.tkdnTongSoQuyThoc : 0
+          ctieuKhBq = ctieuTkdn + ctieuKhNhap - ctieuKhXuat
+        }
+      }
+
+      this.formData.patchValue({
+        klLtBaoQuan : ctieuKhBq,
+        klLtNhap : ctieuKhNhap,
+        klLtXuat : ctieuKhXuat,
+      })
+    }
+  }
 }
 
 export class MmThongTinNcChiCuc {
   id: number;
-  maDvi : string;
-  tenDvi : string;
+  maDvi: string;
+  tenDvi: string;
   tenTaiSan: string;
   maTaiSan: string;
   donViTinh: string;
