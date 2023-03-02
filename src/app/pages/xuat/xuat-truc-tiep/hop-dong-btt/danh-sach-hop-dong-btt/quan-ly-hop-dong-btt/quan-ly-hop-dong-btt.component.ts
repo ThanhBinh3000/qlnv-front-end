@@ -69,20 +69,28 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     if (this.id) {
       await this.getDetail(this.id)
     }
+    this.initForm();
     await this.spinner.hide()
+  }
+
+  initForm() {
+    this.formData.patchValue({
+      tenDvi: this.userInfo.TEN_DVI,
+    })
   }
 
   async getDetail(id) {
     if (id) {
       let res = await this.qdPdKetQuaBttService.getDetail(id);
+
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
+        console.log(data, 999)
         await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(data.idPdKhDtl).then(dataTtin => {
           this.formData.patchValue({
             namKh: data.namKh,
             soQdKq: data.soQdKq,
             soQdPd: dataTtin.data?.soQdPd,
-            tenDvi: data.tenDvi,
             tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
             tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
             trangThaiHd: data.trangThaiHd,

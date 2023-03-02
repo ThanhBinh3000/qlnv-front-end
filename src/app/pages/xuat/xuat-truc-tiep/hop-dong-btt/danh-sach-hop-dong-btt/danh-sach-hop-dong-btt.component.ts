@@ -34,6 +34,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       nhaCungCap: '',
       trangThai: '',
       loaiVthh: '',
+      maDvi: '',
     });
     this.filterTable = {
       namKh: '',
@@ -54,7 +55,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        namKh: dayjs().get('year')
+        namKh: dayjs().get('year'),
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();
       this.spinner.hide();
