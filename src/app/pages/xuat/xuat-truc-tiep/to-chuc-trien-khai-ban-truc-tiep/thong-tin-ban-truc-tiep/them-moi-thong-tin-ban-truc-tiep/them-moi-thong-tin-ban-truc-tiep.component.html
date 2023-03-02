@@ -5,12 +5,12 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="this.userService.isCuc() && formData.value.trangThaiChaoGia == STATUS.HOAN_THANH_CAP_NHAT ||  formData.value.trangThaiChaoGia == STATUS.DANG_CAP_NHAT"
+            *ngIf="this.userService.isCuc() && formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ||  formData.value.trangThai == STATUS.DANG_CAP_NHAT"
             type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
         </button>
-        <button *ngIf="formData.value.trangThaiChaoGia != STATUS.HOAN_THANH_CAP_NHAT"
+        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -21,9 +21,8 @@
     <div class="header header-green-background">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span
-                    [ngClass]="formData.value.trangThaiChaoGia == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
-                    {{ formData.value.tenTrangThaiChaoGia }}
+                <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
+                    {{ formData.value.tenTrangThai }}
                 </span>
                 <span>THÔNG TIN CHÀO GIÁ/ỦY QUYỀN/BÁN LẺ</span>
             </div>
@@ -142,7 +141,7 @@
                         <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Mua lẻ'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
-                                    File đính kèm QĐ giao chi cục mua lẻ
+                                    File đính kèm QĐ giao chi cục bán lẻ
                                     (nếu có)
                                 </nz-form-label>
                                 <div class="list-file">
@@ -187,7 +186,7 @@
                             <th>Hành động</th>
 
                         </tr>
-                        <tr *ngIf="formData.value.trangThaiChaoGia != STATUS.HOAN_THANH_CAP_NHAT">
+                        <tr *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
                             <th class="text-center"> </th>
                             <th><input nz-input [(ngModel)]="rowItem.tochucCanhan" /></th>
                             <th><input nz-input [(ngModel)]="rowItem.mst" /></th>
@@ -258,12 +257,12 @@
                                         <i class="icon htvbdh_tcdt_import "></i>
                                     </a>
                                     <a (click)="startEdit(idx)"
-                                        *ngIf=" formData.value.trangThaiChaoGia != STATUS.HOAN_THANH_CAP_NHAT"
+                                        *ngIf=" formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
                                         class="text-center">
                                         <i class=" fa fa-pencil"></i>
                                     </a>
                                     <a (click)="deleteRow(idx)"
-                                        *ngIf=" formData.value.trangThaiChaoGia != STATUS.HOAN_THANH_CAP_NHAT"
+                                        *ngIf=" formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
                                         class="text-center">
                                         <i class="fa fa-trash-o do"></i>
                                     </a>
@@ -325,11 +324,11 @@
                                     <a (click)="downloadFile(dataEdit[idx].data.fileDinhKems)">
                                         <i class="icon htvbdh_tcdt_import "></i>
                                     </a>
-                                    <a *ngIf="formData.value.trangThaiChaoGia == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiChaoGia == STATUS.DANG_CAP_NHAT"
+                                    <a *ngIf="formData.value.trangThai == STATUS.CHUA_CAP_NHAT || formData.value.trangThai == STATUS.DANG_CAP_NHAT"
                                         (click)="saveEdit(idx)" class="save">
                                         <i class="icon htvbdh_tcdt_save"></i>
                                     </a>
-                                    <a *ngIf="formData.value.trangThaiChaoGia == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiChaoGia == STATUS.DANG_CAP_NHAT"
+                                    <a *ngIf="formData.value.trangThai == STATUS.CHUA_CAP_NHAT || formData.value.trangThai == STATUS.DANG_CAP_NHAT"
                                         (click)="cancelEdit(idx)">
                                         <i class="fa fa-ban do"></i>
                                     </a>

@@ -6,7 +6,7 @@
                     <div nz-col nzSpan="3">
                         <nz-form-item class="form-item">
                             <label> Năm kế hoạch </label>
-                            <nz-select formControlName="namHd">
+                            <nz-select formControlName="namKh">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-item>
@@ -44,13 +44,14 @@
         </nz-card>
 
         <div class="group-button">
-            <h3>Danh sách hợp đồng bán hàng</h3>
+            <h3> DANH SÁCH HỢP ĐỒNG BÁN TRỰC TIẾP </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)">
+                <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)"
+                    *ngIf="userService.isCuc()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm mới</span>
                 </button>
@@ -162,7 +163,7 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </td>
                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                        <td>{{ data.namHd }}</td>
+                        <td>{{ data.namKh }}</td>
                         <td>{{ data.soQdPd }}</td>
                         <td>{{ data.soQdKq }}</td>
                         <td></td>
