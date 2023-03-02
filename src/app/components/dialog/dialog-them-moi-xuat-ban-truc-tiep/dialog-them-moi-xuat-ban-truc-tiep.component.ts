@@ -111,12 +111,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   async loadDonVi() {
     this.listChiCuc = [];
-    let body = {
-      trangThai: "01",
-      maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
-      type: [null, 'MLK']
-    };
-
     if (this.dataChiTieu) {
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         this.dataChiTieu.khLuongThuc?.forEach(item => {
@@ -150,6 +144,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         })
       }
     } else {
+      let body = {
+        trangThai: "01",
+        maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
+        type: [null, 'MLK']
+      };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data.filter(item => item.type == 'DV');
@@ -175,7 +174,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
-
+        diaChi: res.data.diaChi,
         soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');

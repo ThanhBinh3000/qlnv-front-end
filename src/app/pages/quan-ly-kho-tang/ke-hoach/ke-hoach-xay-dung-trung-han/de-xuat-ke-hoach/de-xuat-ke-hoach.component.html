@@ -163,12 +163,12 @@
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.namBatDau + '-' + data.namKetThuc }}</td>
-          <td>{{ data.tmdt }}</td>
+          <td>{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)"
-               *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC || STATUS.DA_DUYET_CBV) || userService.isTongCuc() ">
+               *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC ||  data.trangThai ==  STATUS.DA_DUYET_CBV) || userService.isTongCuc() ">
               <i class="fa fa-eye"></i>
             </a>
             <a

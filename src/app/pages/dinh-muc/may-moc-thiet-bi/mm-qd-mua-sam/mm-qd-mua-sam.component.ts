@@ -33,6 +33,7 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
+      capDvi: [''],
       namKeHoach: [''],
       soQd: [''],
       trichYeu: [''],
@@ -69,7 +70,8 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
       })
     }
     this.formData.patchValue({
-      maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : this.userInfo.CAP_DVI
     })
     await this.search();
   }
@@ -77,7 +79,9 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : this.userInfo.CAP_DVI,
+      loai : '01',
     })
     await this.search();
   }

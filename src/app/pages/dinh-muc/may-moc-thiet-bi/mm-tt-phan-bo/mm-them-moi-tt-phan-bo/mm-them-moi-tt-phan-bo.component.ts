@@ -86,7 +86,9 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
         "paggingReq": {
           "limit": 10,
           "page": 0
-        }
+        },
+        "capDvi" : this.userInfo.CAP_DVI,
+        "maDvi" : this.userInfo.MA_DVI,
       }
       let res = await this.qdMuaSamService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {

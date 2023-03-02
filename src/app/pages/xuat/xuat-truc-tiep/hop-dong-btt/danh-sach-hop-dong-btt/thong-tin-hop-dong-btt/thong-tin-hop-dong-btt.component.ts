@@ -7,15 +7,11 @@ import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { saveAs } from 'file-saver';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { chain } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
@@ -215,15 +211,15 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin Kết quả lựa chọn nhà thầu',
+      nzTitle: 'Thông tin Kết quả chào giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kết quả', 'Số biên bản', 'Mã thông báo'],
-        dataColumn: ['soQdKq', 'soBienBan', 'maThongBao'],
+        dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+        dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listQdKq
       },
     });
@@ -239,10 +235,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.qdPdKetQuaBttService.getDetail(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataKq.idHdr);
+          let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataKq.idPdKhDtl);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
             this.dataTable = dataThongTin.children;
+
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -258,6 +255,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               donGiaVat: dataThongTin.donGia + (dataThongTin.donGia * dataThongTin.thueGtgt / 100),
             });
             this.listDviLquan = dataThongTin.xhTcTtinBttList;
+
+
           }
         })
     }

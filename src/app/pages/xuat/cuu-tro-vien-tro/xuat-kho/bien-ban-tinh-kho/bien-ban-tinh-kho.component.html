@@ -41,7 +41,7 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3 class="text-uppercase">Danh sách phiếu nhập kho</h3>
+            <h3 class="text-uppercase">Danh sách biên bản tịnh kho</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
@@ -110,7 +110,6 @@
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
                                     (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small" />
                             </nz-input-group>
-
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
