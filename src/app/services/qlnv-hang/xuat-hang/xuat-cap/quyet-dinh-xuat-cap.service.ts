@@ -1,12 +1,12 @@
-import { BaseLocalService } from "../../../base-local.service";
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { BaseService } from "../../../base.service";
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class QuyetDinhXuatCapService extends BaseLocalService {
-  GATEWAY = '';
+export class QuyetDinhXuatCapService extends BaseService {
+  GATEWAY = 'qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'cuu-tro/xuat-cap/quyet-dinh', '');
