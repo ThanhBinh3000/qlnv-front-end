@@ -160,62 +160,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   initForm() {
-    this.formData.patchValue(
-      {
-        "idHd": 1,
-        "nam": 2022,
-        "idQdPdKq": 1,
-        "soQdPdKq": "test",
-        "idQdPdKh": 1,
-        "soQdPdKh": "test1",
-        "ngayKyQdPdKh": "2022-12-26",
-        "tgianNkho": "2022-12-26",
-        "soHd": "17",
-        "tenHd": "hợp đồng 17",
-        "ngayKy": "2022-12-26",
-        "ngayKyGhiChu": "",
-        "loaiHdong": "",
-        "loaiHdongGhiChu": "",
-        "soNgayThien": 0,
-        "tgianGnhanTu": "2022-12-26",
-        "tgianGnhanDen": "2022-12-26",
-        "tgianGnhanGhiChu": "2022-12-26",
-        "noiDung": "test",
-        "maDvi": "010102",
-        "loaiVthh": "0101",
-        "tenLoaiVthh": "Thóc tẻ",
-        "cloaiVthh": "010102",
-        "tenCloaiVthh": "Hạt dài",
-        "moTaHangHoa": "thóc hạt rất dài",
-        "donViTinh": "kg",
-        "soLuong": 100,
-        "donGia": 0.0,
-        "donGiaVat": 0.0,
-        "thanhTien": 0.0,
-        "thanhTienBangChu": "",
-        "ghiChu": "",
-        "diaDiemGiaoNhan": [
-          {
-            "serialVersionUID": 0,
-            "TABLE_NAME": "",
-            "id": 1,
-            "idHdr": 1,
-            "maDvi": "01010201",
-            "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
-            "soLuong": 100,
-            "donGiaVat": 1,
-            "stt": 0,
-            "ngayTao": "2022-12-26T08:48:30.428276700",
-            "nguoiTaoId": 0,
-            "ngaySua": "2022-12-26T08:48:30.428276700",
-            "nguoiSuaId": 0
-          }
-        ],
-
-      }
-    )
-    this.dataTable = this.formData.value.diaDiemGiaoNhan;
-    console.log(this.dataTable, 456);
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
@@ -236,10 +180,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
   }
 
   openDialogHopDong() {
-    if (this.isChiTiet) {
-      return;
-    }
-
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin hợp đồng',
       nzContent: DialogTableSelectionComponent,
@@ -259,7 +199,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         let res = await this.hopdongPhulucHopdongService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataTable = [];
-          const data = res.data;
+          const data = res.data[0];
           this.formData.patchValue({
             soHd: data.soHd,
             tenHd: data.tenHd,
@@ -275,7 +215,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
 
           })
           this.dataTable = data.diaDiemGiaoNhan
-          console.log(this.dataTable, "hahaha");
         }
         else {
           this.notification.error(MESSAGE.ERROR, res.msg)
