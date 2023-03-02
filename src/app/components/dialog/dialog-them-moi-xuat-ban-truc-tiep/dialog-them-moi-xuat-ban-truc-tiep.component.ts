@@ -173,7 +173,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tenDvi: res.data.tenTongKho,
+        tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })

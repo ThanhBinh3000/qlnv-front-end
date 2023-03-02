@@ -10,8 +10,8 @@ import { ToChucTrienKhaiBanTrucTiepComponent } from './to-chuc-trien-khai-ban-tr
 import { ToChucTrienKhaiBanTrucTiepModule } from './to-chuc-trien-khai-ban-truc-tiep/to-chuc-trien-khai-ban-truc-tiep.module';
 import { DieuChinhKhBanTrucTiepComponent } from './dieu-chinh-kh-ban-truc-tiep/dieu-chinh-kh-ban-truc-tiep.component';
 import { DieuChinhKhBanTrucTiepModule } from './dieu-chinh-kh-ban-truc-tiep/dieu-chinh-kh-ban-truc-tiep.module';
-import { HopDongBttComponent } from './hop-dong-btt/hop-dong-btt.component';
 import { HopDongBttModule } from './hop-dong-btt/hop-dong-btt.module';
+import { GiaoNvXuatHangBttModule } from './giao-nv-xuat-hang-btt/giao-nv-xuat-hang-btt.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +29,7 @@ import { HopDongBttModule } from './hop-dong-btt/hop-dong-btt.module';
     ToChucTrienKhaiBanTrucTiepModule,
     DieuChinhKhBanTrucTiepModule,
     HopDongBttModule,
+    GiaoNvXuatHangBttModule,
   ],
 })
 export class XuatTrucTiepModule {
