@@ -209,7 +209,7 @@
                             <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{data.tenTrangThai}}</td>
-                            <td></td>
+                            <td>{{data.soQd}}</td>
                             <td>{{data.tenTrangThaiXh}}</td>
                             <td>
                                 <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">
