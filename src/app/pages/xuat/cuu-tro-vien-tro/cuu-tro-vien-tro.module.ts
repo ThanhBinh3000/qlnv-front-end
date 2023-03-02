@@ -17,7 +17,7 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
   declarations: [
     CuuTroVienTroComponent,
     KiemTraChatLuongComponent,
-    XuatKhoComponent,
+    XuatKhoComponent
 
 
   ],
@@ -33,6 +33,9 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
     KiemTraChatLuongModule,
     XuatKhoModule
   ],
+  exports: [
+    CuuTroVienTroComponent
+  ]
 })
 export class CuuTroVienTroModule {
 }

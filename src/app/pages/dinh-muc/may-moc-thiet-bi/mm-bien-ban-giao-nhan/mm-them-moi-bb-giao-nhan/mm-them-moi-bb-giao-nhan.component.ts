@@ -194,6 +194,9 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.listHopDong = data.content;
+        if (this.listHopDong) {
+          this.listHopDong = this.listHopDong.filter(item => item.trangThai == this.STATUS.DA_KY )
+        }
       }
       this.spinner.hide();
     } catch (e) {

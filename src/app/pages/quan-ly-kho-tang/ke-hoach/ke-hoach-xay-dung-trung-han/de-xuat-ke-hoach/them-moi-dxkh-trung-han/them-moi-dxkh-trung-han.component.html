@@ -18,11 +18,11 @@
           <i class="icon htvbdh_tcdt_print"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
-        <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" ((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP) && userService.isCuc()) || (STATUS.DA_DUYET_LDC && userService.isTongCuc())"  (click)="tuChoi()">
+        <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" ((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"  (click)="tuChoi()">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </button>
-        <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP) && userService.isCuc()) || (STATUS.DA_DUYET_LDC && userService.isTongCuc())"  (click)="duyet()">
+        <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP) && userService.isCuc()) || ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"  (click)="duyet()">
           <i class="icon htvbdh_dakyduyet"></i>
           <span>Duyệt</span>
         </button>
