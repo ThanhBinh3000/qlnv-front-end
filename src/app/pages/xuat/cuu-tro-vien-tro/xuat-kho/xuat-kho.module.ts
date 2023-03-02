@@ -9,6 +9,8 @@ import { BangKeCanModule } from "./bang-ke-can/bang-ke-can.module";
 import { ThemMoiPhieuXuatKhoComponent } from './phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
 import { BienBanTinhKhoComponent } from './bien-ban-tinh-kho/bien-ban-tinh-kho.component';
 import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
+import { BienBanHaoDoiComponent } from './bien-ban-hao-doi/bien-ban-hao-doi.component';
+import { ThemMoiBienBanHaoDoiComponent } from './bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component';
 
 
 
@@ -20,6 +22,8 @@ import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho/them-moi-bie
     BangKeCanComponent,
     BienBanTinhKhoComponent,
     ThemMoiBienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    ThemMoiBienBanHaoDoiComponent,
   ],
   imports: [
     CommonModule,
