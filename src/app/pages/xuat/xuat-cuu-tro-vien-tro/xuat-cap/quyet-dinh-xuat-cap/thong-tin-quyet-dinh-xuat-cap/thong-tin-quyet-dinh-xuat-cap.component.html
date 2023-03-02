@@ -402,16 +402,22 @@
                     <div nz-col [nzSpan]="8">
                       <nz-form-item>
                         <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24">
-                          <input [readonly]="true" nz-input name="loaiHinhNhapXuat" />
+                        <nz-form-control [nzErrorTip]="error">
+                          <nz-select formControlName="loaiHinhNhapXuat" (ngModelChange)="onChangeLhNx($event)">
+                            <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                            </nz-option>
+                          </nz-select>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="8">
                       <nz-form-item>
                         <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24">
-                          <input [readonly]="true" nz-input name="kieuNhapXuat" />
+                        <nz-form-control>
+                          <nz-select formControlName="kieuNhapXuat">
+                            <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                            </nz-option>
+                          </nz-select>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -578,23 +584,30 @@
                   <nz-form-item>
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <input [readonly]="true" nz-input name="loaiHangHoa" />
+                      <input [readonly]="true" nz-input formControlName="tenLoaiVthh" />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="8">
                   <nz-form-item>
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <input [readonly]="true" nz-input name="loaiHinhNhapXuat" />
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-select formControlName="loaiHinhNhapXuat" (ngModelChange)="onChangeLhNx($event)"
+                                 [nzDisabled]="false">
+                        <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                        </nz-option>
+                      </nz-select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="8">
                   <nz-form-item>
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
-                    <nz-form-control nz-col [nzSpan]="24">
-                      <input [readonly]="true" nz-input name="kieuNhapXuat" />
+                    <nz-form-control>
+                      <nz-select formControlName="kieuNhapXuat" [nzDisabled]="false">
+                        <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                        </nz-option>
+                      </nz-select>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -639,6 +652,13 @@
                   <div class="title-chi-tieu">
                     <span></span>
                     <span>Phương án xuất cấp thóc gia công phục vụ cứu trợ, viện trợ</span>
+                  </div>
+                  <div>
+                    <button type="button"
+                            class="btn btn-main" (click)="showModal()" *ngIf="!isView">
+                      <i class="icon htvbdh_dau-cong"></i>
+                      <span>Thêm mới</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -738,68 +758,153 @@
           </nz-card>
         </div>
       </nz-card>
-  </div>
+    </div>
 
-  <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
-            (nzOnOk)="handleOk()" nzTitle="Chi tiết phương án">
-    <ng-container *nzModalContent>
-      <!--    <form nz-form>-->
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
-        <nz-form-control>
-          <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto" [readonly]="true">
-          <nz-autocomplete #auto>
-            <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Cục DTNN</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
-                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Chi Cục DTNN</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviChiCuc" (ngModelChange)="changeChiCuc($event)"
-                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.cloaiVthh" nzPlaceHolder="Chọn chủng loại hàng hóa"
-                     nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Số lượng</nz-form-label>
-        <nz-form-control>
-          <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                           [nzSize]="'small'">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
-        <nz-form-control>
-          <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                           [nzSize]="'small'">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-      <!--    </form>-->
-    </ng-container>
-  </nz-modal>
+    <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible"
+              [nzFooter]="modalFooter" [nzClosable]="false"
+              nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
+      <ng-container *nzModalContent>
+        <!--    <form nz-form>-->
+        <div class="modal-card">
+          <nz-card nzTitle="Thông tin giao xuất cứu trợ, viện trợ">
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
+              <nz-form-control>
+                <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto">
+                <nz-autocomplete #auto>
+                  <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
+                  </nz-auto-option>
+                </nz-autocomplete>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Chọn Cục DTNN KV</nz-form-label>
+              <nz-form-control>
+                <div nz-row [nzGutter]="48">
+                  <div nz-col [nzSpan]="16">
+                    <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc"
+                               (ngModelChange)="changeCuc($event)"
+                               [nzDisabled]="userService.isCuc()"
+                               nzPlaceHolder="Chọn đơn vị" nzShowSearch>
+                      <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                    </nz-select>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                      style="color: #001CFF">{{phuongAnRow.tonKhoCuc|number:'1.0-1'}}</span></p>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Tổng SL xuất CT, VT giao Cục (kg)</nz-form-label>
+              <nz-form-control>
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                 [nzSize]="'small'">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-card>
+          <nz-card nzTitle="Thông tin phân bổ xuất cứu trợ, viện trợ thực tế của Cục">
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Chi Cục DTNN</nz-form-label>
+              <nz-form-control [nzErrorTip]="'Vui lòng chọn Chi cục'" [nzValidateStatus]="checkVld('inputChiCuc')">
+                <div nz-row [nzGutter]="48">
+                  <div nz-col [nzSpan]="16">
+                    <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviChiCuc"
+                               (ngModelChange)="changeChiCuc($event)"
+                               nzPlaceHolder="Chọn đơn vị" nzShowSearch>
+                      <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                    </nz-select>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                      style="color: #001CFF">{{phuongAnRow.tonKhoChiCuc|number:'1.0-1'}}</span></p>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
+              <nz-form-control>
+                <div nz-row [nzGutter]="48">
+                  <div nz-col [nzSpan]="16">
+                    <nz-select nzAllowClear [(ngModel)]="phuongAnRow.cloaiVthh"
+                               (ngModelChange)="changeCloaiVthh($event)"
+                               nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
+                      <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+                    </nz-select>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                    <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                      style="color: #001CFF">{{phuongAnRow.tonkhoCloaiVthh|number:'1.0-1'}}</span></p>
+                  </div>
+                </div>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Số lượng xuất cứu trợ, viện trợ</nz-form-label>
+              <nz-form-control>
+                <div nz-row [nzGutter]="48">
+                  <div nz-col [nzSpan]="16">
+                    <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="9999999"
+                                     [nzStep]="1"
+                                     [nzSize]="'small'">
+                    </nz-input-number>
+                  </div>
+                  <div nz-col [nzSpan]="8">
+                    <p style="font-size: 13px;font-weight: 500">Đơn vị tính: <span style="color: #001CFF">kg</span></p>
+                  </div>
+                </div>
+
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
+              <nz-form-control>
+                <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                 [nzSize]="'small'">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzXs]="7">Thành tiền</nz-form-label>
+              <nz-form-control>
+                <nz-input-number [(ngModel)]="phuongAnRow.thanhTien" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                 [nzSize]="'small'">
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-card>
+        </div>
+        <!--    </form>-->
+      </ng-container>
+      <ng-template #modalFooter>
+        <button nz-button (click)="handleCancel()">Đóng</button>
+        <button nz-button class="btn btn-main" (click)="handleOk()">Lưu</button>
+      </ng-template>
+    </nz-modal>
+
+    <!--modal sua noi dung-->
+    <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleSuaNoiDung"
+              [nzFooter]="modalFooterSuaNoiDung" [nzClosable]="false"
+              nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
+      <ng-container *nzModalContent>
+        <!--    <form nz-form>-->
+        <div class="modal-card">
+          <nz-form-item>
+            <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
+            <nz-form-control>
+              <input nz-input [(ngModel)]="phuongAnRow.noiDungEdit">
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </ng-container>
+      <ng-template #modalFooterSuaNoiDung>
+        <button nz-button (click)="handleCancelSuaNoiDung()">Đóng</button>
+        <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>
+      </ng-template>
+    </nz-modal>
   </div>
 
   <ng-template #error let-control>

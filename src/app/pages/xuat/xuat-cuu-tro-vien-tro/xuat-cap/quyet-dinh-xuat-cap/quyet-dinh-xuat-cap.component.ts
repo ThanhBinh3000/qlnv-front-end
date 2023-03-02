@@ -16,6 +16,9 @@ import { Utils } from "../../../../../Utility/utils";
 import { isEmpty } from "lodash";
 import { cloneDeep } from "lodash";
 import { Base2Component } from "../../../../../components/base2/base2.component";
+import {
+  QuyetDinhXuatCapService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cap/quyet-dinh-xuat-cap.service";
 
 @Component({
   selector: 'app-quyet-dinh-xuat-cap',
@@ -31,8 +34,8 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
               modal: NzModalService,
               private datePipe: DatePipe,
               private donviService: DonviService,
-              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
+              private quyetDinhXuatCapService: QuyetDinhXuatCapService) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatCapService);
     this.formData = this.fb.group({
       nam: null,
       soQdXc: null,
@@ -80,12 +83,12 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
 
   async timKiem() {
     if (this.formData.value.ngayHieuLuc) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format("YYYY-MM-DD");
+      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]);
+      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]);
     }
     if (this.formData.value.ngayXuatCtvt) {
-      this.formData.value.ngayXuatCtvtTu = dayjs(this.formData.value.ngayXuatCtvt[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayXuatCtvtDen = dayjs(this.formData.value.ngayXuatCtvt[1]).format("YYYY-MM-DD");
+      this.formData.value.ngayXuatCtvtTu = dayjs(this.formData.value.ngayXuatCtvt[0]);
+      this.formData.value.ngayXuatCtvtDen = dayjs(this.formData.value.ngayXuatCtvt[1]);
     }
     await this.search();
   }

@@ -26,6 +26,7 @@ import {
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { QuanLyHangTrongKhoService } from "../../../../../../services/quanLyHangTrongKho.service";
 
 
 export class QuyetDinhPdDtl {
@@ -87,6 +88,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   listChungLoaiHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   deXuatSelected: any = [];
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
+  errorInputComponent: any[] = [];
+  isVisibleSuaNoiDung = false;
 
   constructor(
     httpClient: HttpClient,
@@ -98,7 +103,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     private danhMucService: DanhMucService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
-    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
@@ -128,7 +134,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         fileDinhKem: [FileDinhKem],
         canCu: [new Array<FileDinhKem>()],
         tenDvi: [],
-        tenLoaiVthh: [],
+        tenLoaiVthh: ["Thóc tẻ"],
         tenCloaiVthh: [],
         tenTrangThai: ["Dự thảo"],
         quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>()]
@@ -648,4 +654,78 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
 
+  async loadDataComboBox() {
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'X');
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
+    }
+  }
+
+  onChangeLhNx($event) {
+    let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
+    if (dataNx.length > 0) {
+      this.formData.patchValue({
+        kieuNx: dataNx[0].ghiChu
+      })
+    }
+  }
+
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
+      this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+  checkVld(inputName: string) {
+    if (this.errorInputComponent.find(s => s === inputName)) {
+      return 'error'
+    } else {
+      return '';
+    }
+  }
+
+  async changeCloaiVthh(event: any) {
+    let body = {
+      maDvi: this.phuongAnRow.maDviChiCuc,
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: event
+    }
+    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.length > 0) {
+          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+        }
+
+      }
+    });
+  }
+
+  handleCancelSuaNoiDung(): void {
+    this.isVisibleSuaNoiDung = false;
+    this.phuongAnRow = {}
+  }
+
+  handleOkSuaNoiDung(): void {
+    let currentNoiDung = this.formData.value.deXuatPhuongAn.filter(s => s.noiDung == this.phuongAnRow.noiDung);
+    currentNoiDung.forEach(s => {
+      s.noiDung = this.phuongAnRow.noiDungEdit;
+    });
+    this.buildTableView();
+    this.isVisibleSuaNoiDung = false;
+
+    //clean
+    this.phuongAnRow = {}
+  }
 }
