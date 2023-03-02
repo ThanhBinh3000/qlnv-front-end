@@ -20,7 +20,7 @@ const routes: Routes = [
       {
         path: 'cuu-tro-vien-tro',
         loadChildren: () =>
-          import('./cuu-tro-vien-tro/cuu-tro-vien-tro.module').then((m) => m.CuuTroVienTroModule),
+          import('./xuat-cuu-tro-vien-tro/xuat-cuu-tro-vien-tro.module').then((m) => m.XuatCuuTroVienTroModule),
       },
       {
         path: 'xuat-truc-tiep',
