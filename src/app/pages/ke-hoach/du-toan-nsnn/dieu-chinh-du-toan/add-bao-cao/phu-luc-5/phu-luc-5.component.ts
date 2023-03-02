@@ -14,26 +14,6 @@ import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Util
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 export class ItemData {
-  // id: any;
-  // khvonphiLapThamDinhCtietId: string;
-  // danhMuc: string;
-  // maDmuc: string;
-  // noiDung: string;
-  // dviTinh: string;
-  // thienNamTruoc: number;
-  // dtoanNamHtai: number;
-  // uocNamHtai: number;
-  // dmucNamDtoan: number;
-  // sluongNamDtoan: number;
-  // ttienNamDtoan: number;
-  // sluongTd: number;
-  // ttienTd: number;
-  // sluongPhanBo: number;
-  // ttienPhanBo: number;
-  // stt: string;
-  // level: any;
-  // checked: boolean;
-
   level: any;
   checked: boolean;
   id: string;

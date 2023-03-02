@@ -88,8 +88,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{total.thanhTien}}</td>
-            <td>{{total.dtoanDaGiaoLke}}</td>
+            <td>{{total.sluongThienTtien}}</td>
+            <td>{{total.dtoanGiaoLke}}</td>
             <td>{{total.dtoanDchinh}}</td>
             <td *ngIf="viewAppraisalValue">{{total.dtoanVuTvqtDnghi}}</td>
             <td>{{total.kphiThieu}}</td>
@@ -146,14 +146,14 @@
               <td>
                 {{data.noiDung}}
               </td>
-              <td>{{data.dviTinh}}</td>
-              <td>{{displayValue(data.sluongDuocGiao)}}</td>
-              <td>{{displayValue(data.sluongThucTe)}}</td>
-              <td>{{displayValue(data.soluongUocThien)}}</td>
-              <td>{{displayValue(data.tongCong)}}</td>
-              <td>{{displayValue(data.dinhMuc)}}</td>
-              <td>{{displayValue(data.thanhTien)}}</td>
-              <td>{{displayValue(data.dtoanDaGiaoLke)}}</td>
+              <td>{{data.maDviTinh}}</td>
+              <td>{{displayValue(data.sluongKhGiao)}}</td>
+              <td>{{displayValue(data.sluongThienTte)}}</td>
+              <td>{{displayValue(data.sluongThienUocThien)}}</td>
+              <td>{{displayValue(data.sluongThienCong)}}</td>
+              <td>{{displayValue(data.sluongThienDmuc)}}</td>
+              <td>{{displayValue(data.sluongThienTtien)}}</td>
+              <td>{{displayValue(data.dtoanGiaoLke)}}</td>
               <td>{{displayValue(data.dtoanDchinh)}}</td>
               <td *ngIf="viewAppraisalValue">
                 {{displayValue(data.dtoanVuTvqtDnghi)}}
@@ -181,16 +181,16 @@
                 {{editCache[data.id].data.noiDung}}
               </td>
               <td>
-                {{editCache[data.id].data.dviTinh}}
+                {{editCache[data.id].data.maDviTinh}}
               </td>
               <ng-container *ngIf="editAppraisalValue; else editAppraisal">
-                <td>{{displayValue(editCache[data.id].data.sluongDuocGiao)}}</td>
-                <td>{{displayValue(editCache[data.id].data.sluongThucTe)}}</td>
-                <td>{{displayValue(editCache[data.id].data.soluongUocThien)}}</td>
-                <td>{{displayValue(editCache[data.id].data.tongCong)}}</td>
-                <td>{{displayValue(editCache[data.id].data.dinhMuc)}}</td>
-                <td>{{displayValue(editCache[data.id].data.thanhTien)}}</td>
-                <td>{{displayValue(editCache[data.id].data.dtoanDaGiaoLke)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongKhGiao)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongThienTte)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongThienUocThien)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongThienCong)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongThienDmuc)}}</td>
+                <td>{{displayValue(editCache[data.id].data.sluongThienTtien)}}</td>
+                <td>{{displayValue(editCache[data.id].data.dtoanGiaoLke)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanDchinh)}}</td>
                 <td>
                   <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
@@ -201,36 +201,36 @@
                 <td>
                   <!-- <fm-input-number nz-input class="search__input"
                                       [(ngModel)]="editCache[data.id].data.thienNamTruoc"></fm-input-number> -->
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongDuocGiao"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongKhGiao"
                     [options]="amount" />
                 </td>
                 <td>
                   <!-- <fm-input-number nz-input class="search__input"
                                       [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThucTe"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThienTte"
                     [options]="amount" />
                 </td>
                 <td>
                   <!-- <fm-input-number nz-input class="search__input"
                                       [(ngModel)]="editCache[data.id].data.uocNamHtai"></fm-input-number> -->
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.soluongUocThien"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThienUocThien"
                     [options]="amount" />
                 </td>
                 <td>
                   <!-- <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
-                  {{editCache[data.id].data.tongCong}}
+                  {{editCache[data.id].data.sluongThienCong}}
                 </td>
                 <td>
-                  {{displayValue(editCache[data.id].data.dinhMuc)}}
+                  {{displayValue(editCache[data.id].data.sluongThienDmuc)}}
                 </td>
                 <td>
-                  {{displayValue(editCache[data.id].data.thanhTien)}}
+                  {{displayValue(editCache[data.id].data.sluongThienTtien)}}
                 </td>
                 <td>
                   <!-- <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.uocNamHtai"></fm-input-number> -->
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaGiaoLke"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanGiaoLke"
                     [options]="amount" />
                 </td>
                 <td>

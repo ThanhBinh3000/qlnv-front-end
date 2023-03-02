@@ -53,7 +53,7 @@ export class DieuChinhService extends BaseService {
     updatePLDieuChinh1(request: any): Observable<any> {
         return this.httpClient.put(
             // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet',
-            'http://localhost:9159/dieu-chinh-du-toan-chi/chi-tiet',
+            'http://192.168.1.228:9159/dieu-chinh-du-toan-chi/chi-tiet',
             request,
         );
     }
@@ -85,7 +85,7 @@ export class DieuChinhService extends BaseService {
     bCDieuChinhDuToanChiTiet1(id: any): Observable<any> {
         return this.httpClient.get(
             // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
-            'http://localhost:9159/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+            'http://192.168.1.228:9159/dieu-chinh-du-toan-chi/chi-tiet/' + id,
         );
     }
 

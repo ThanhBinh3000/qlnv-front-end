@@ -14,44 +14,24 @@ import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Util
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 export class ItemData {
-  // id: any;
-  // khvonphiLapThamDinhCtietId: string;
-  // danhMuc: string;
-  // maDmuc: string;
-  // noiDung: string;
-  // dviTinh: string;
-  // thienNamTruoc: number;
-  // dtoanNamHtai: number;
-  // uocNamHtai: number;
-  // dmucNamDtoan: number;
-  // sluongNamDtoan: number;
-  // ttienNamDtoan: number;
-  // sluongTd: number;
-  // ttienTd: number;
-  // sluongPhanBo: number;
-  // ttienPhanBo: number;
-  // stt: string;
-  // level: any;
-  // checked: boolean;
-
   level: any;
   checked: boolean;
   id: string;
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
   noiDung: string;
-  dviTinh: string;
-  sluongDuocGiao: number;
-  sluongThucTe: number;
-  soluongUocThien: number;
-  tongCong: number;
-  dinhMuc: number;
-  thanhTien: number;
-  dtoanDaGiaoLke: number;
+  maDviTinh: string;
+  sluongKhGiao: number;
+  sluongThienTte: number;
+  sluongThienUocThien: number;
+  sluongThienCong: number;
+  sluongThienDmuc: number;
+  sluongThienTtien: number;
+  dtoanGiaoLke: number;
   dtoanDchinh: number;
   dtoanVuTvqtDnghi: number;
   kphiThieu: number;
-  maNoiDung: string;
+  maNdung: string;
   maDmuc: string;
 }
 
@@ -141,17 +121,17 @@ export class PhuLuc6Component implements OnInit {
 
     this.lstCtietBcao.forEach(item => {
       if (!item.noiDung) {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
+        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
         item.noiDung = dinhMuc?.tenDinhMuc;
-        item.dinhMuc = dinhMuc?.tongDmuc;
-        item.dviTinh = dinhMuc?.donViTinh;
-        item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
+        item.sluongThienDmuc = dinhMuc?.tongDmuc;
+        item.maDviTinh = dinhMuc?.donViTinh;
+        item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
       } else {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
+        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
         // item.noiDung = dinhMuc?.tenDinhMuc;
-        item.dinhMuc = dinhMuc?.tongDmuc;
-        item.dviTinh = dinhMuc?.donViTinh;
-        item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
+        item.sluongThienDmuc = dinhMuc?.tongDmuc;
+        item.maDviTinh = dinhMuc?.donViTinh;
+        item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
       }
     })
 
@@ -217,7 +197,7 @@ export class PhuLuc6Component implements OnInit {
       const stt = '0.' + (i + 1).toString();
       const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
       this.lstCtietBcao[index].stt = stt;
-      const lstDmTemp = this.lstCtietBcao.filter(e => e.maNoiDung == lstVtuTemp[i].maNoiDung && !!e.maDmuc);
+      const lstDmTemp = this.lstCtietBcao.filter(e => e.maNdung == lstVtuTemp[i].maNdung && !!e.maDmuc);
       for (let j = 0; j < lstDmTemp.length; j++) {
         const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
         this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
@@ -318,7 +298,7 @@ export class PhuLuc6Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      if (item.thanhTien > MONEY_LIMIT) {
+      if (item.sluongThienTtien > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -346,7 +326,7 @@ export class PhuLuc6Component implements OnInit {
     }
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
-    request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+    request.lstCtietDchinh = lstCtietBcaoTemp;
     request.trangThai = trangThai;
     if (lyDoTuChoi) {
       request.lyDoTuChoi = lyDoTuChoi;
@@ -529,11 +509,11 @@ export class PhuLuc6Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        if (this.lstCtietBcao.findIndex(e => e.maNoiDung == data.ma) == -1) {
+        if (this.lstCtietBcao.findIndex(e => e.maNdung == data.ma) == -1) {
           //tim so thu tu cho loai vat tu moi
           let index = 1;
           this.lstCtietBcao.forEach(item => {
-            if (item.maNoiDung && !item.maDmuc) {
+            if (item.maNdung && !item.maDmuc) {
               index += 1;
             }
           })
@@ -543,7 +523,7 @@ export class PhuLuc6Component implements OnInit {
             ... new ItemData(),
             id: uuid.v4() + 'FE',
             stt: stt,
-            maNoiDung: data.ma,
+            maNdung: data.ma,
             noiDung: data.ten,
             level: 0,
           })
@@ -553,12 +533,12 @@ export class PhuLuc6Component implements OnInit {
               ...new ItemData(),
               id: uuid.v4() + 'FE',
               stt: stt + '.' + i.toString(),
-              maNoiDung: data.ma,
+              maNdung: data.ma,
               maDmuc: lstTemp[i - 1].loaiDinhMuc,
               noiDung: lstTemp[i - 1].tenDinhMuc,
-              dviTinh: lstTemp[i - 1].donViTinh,
+              maDviTinh: lstTemp[i - 1].donViTinh,
               level: 1,
-              dinhMuc: lstTemp[i - 1].tongDmuc,
+              sluongThienDmuc: lstTemp[i - 1].tongDmuc,
             })
           }
           this.updateEditCache();
@@ -580,7 +560,7 @@ export class PhuLuc6Component implements OnInit {
         noiDung: data.noiDung,
         level: data.level,
         // ttienTd: data.ttienTd,
-        maNoiDung: data.maNoiDung,
+        maNdung: data.maNdung,
         // sluongNamDtoan:data.sluongNamDtoan,
         // ttienNamDtoan: data.ttienNamDtoan,
         // thienNamTruoc: data.thienNamTruoc,
@@ -590,8 +570,8 @@ export class PhuLuc6Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].thanhTien = sumNumber([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
-          this.lstCtietBcao[index].dtoanDaGiaoLke = sumNumber([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
+          this.lstCtietBcao[index].sluongThienTtien = sumNumber([this.lstCtietBcao[index].sluongThienTtien, item.sluongThienTtien]);
+          this.lstCtietBcao[index].dtoanGiaoLke = sumNumber([this.lstCtietBcao[index].dtoanGiaoLke, item.dtoanGiaoLke]);
           this.lstCtietBcao[index].dtoanDchinh = sumNumber([this.lstCtietBcao[index].dtoanDchinh, item.dtoanDchinh]);
           this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
           this.lstCtietBcao[index].kphiThieu = sumNumber([this.lstCtietBcao[index].kphiThieu, item.kphiThieu]);
@@ -615,7 +595,7 @@ export class PhuLuc6Component implements OnInit {
           stt: data.stt,
           noiDung: data.noiDung,
           level: data.level,
-          maNoiDung: data.maNoiDung,
+          maNdung: data.maNdung,
           // sluongNamDtoan: data.sluongNamDtoan,
           // ttienNamDtoan: data.ttienNamDtoan,
           // thienNamTruoc: data.thienNamTruoc,
@@ -626,8 +606,8 @@ export class PhuLuc6Component implements OnInit {
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {
-            this.lstCtietBcao[index].thanhTien = sumNumber([this.lstCtietBcao[index].thanhTien, item.thanhTien]);
-            this.lstCtietBcao[index].dtoanDaGiaoLke = sumNumber([this.lstCtietBcao[index].dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
+            this.lstCtietBcao[index].sluongThienTtien = sumNumber([this.lstCtietBcao[index].sluongThienTtien, item.sluongThienTtien]);
+            this.lstCtietBcao[index].dtoanGiaoLke = sumNumber([this.lstCtietBcao[index].dtoanGiaoLke, item.dtoanGiaoLke]);
             this.lstCtietBcao[index].dtoanDchinh = sumNumber([this.lstCtietBcao[index].dtoanDchinh, item.dtoanDchinh]);
             this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
             this.lstCtietBcao[index].kphiThieu = sumNumber([this.lstCtietBcao[index].kphiThieu, item.kphiThieu]);
@@ -645,8 +625,8 @@ export class PhuLuc6Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
-        this.total.dtoanDaGiaoLke = sumNumber([this.total.dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
+        this.total.sluongThienTtien = sumNumber([this.total.sluongThienTtien, item.sluongThienTtien]);
+        this.total.dtoanGiaoLke = sumNumber([this.total.dtoanGiaoLke, item.dtoanGiaoLke]);
         this.total.dtoanDchinh = sumNumber([this.total.dtoanDchinh, item.dtoanDchinh]);
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
         this.total.kphiThieu = sumNumber([this.total.kphiThieu, item.kphiThieu]);
@@ -691,9 +671,9 @@ export class PhuLuc6Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.tongCong = mulNumber(this.editCache[id].data.sluongThucTe, this.editCache[id].data.soluongUocThien);
-    this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
-    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanDaGiaoLke - this.editCache[id].data.thanhTien
+    this.editCache[id].data.sluongThienCong = mulNumber(this.editCache[id].data.sluongThienTte, this.editCache[id].data.sluongThienUocThien);
+    this.editCache[id].data.sluongThienTtien = mulNumber(this.editCache[id].data.sluongThienDmuc, this.editCache[id].data.sluongThienCong);
+    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanGiaoLke - this.editCache[id].data.sluongThienTtien
   }
 
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1

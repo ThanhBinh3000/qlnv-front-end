@@ -31,27 +31,6 @@ export class ItemData {
   dtoanVuTvqtDnghi: number;
   kphiThieu: number;
   maNoiDung: string;
-
-
-  // id: string;
-  // qlnvKhvonphiDchinhCtietId: string;
-  // stt: string;
-  // tenTaiSan: string;
-  // dvTinh: string;
-  // sluongDuocGiao: number;
-  // sluongThien: number;
-  // sluongUocTh: number;
-  // tongCongTh: number;
-  // dgiaTh: number;
-  // thanhTienTh: number;
-  // dtoanSuDung: number;
-  // dtoanDaGiao: number;
-  // tongCongDtoan: number;
-  // dieuChinhDtoan: number;
-  // vuTvqtDnghiDtoan: number;
-  // kphiConThieu: number;
-  // maTaiSan: string;
-  // checked: boolean;
 }
 
 @Component({
@@ -122,13 +101,13 @@ export class PhuLuc3Component implements OnInit {
 
     if (this.lstCtietBcao.length == 0) {
       // this.linhVucChis.forEach(e => {
-        this.lstCtietBcao.push({
-          ...new ItemData(),
-          id: uuid.v4() + 'FE',
-          stt: "0.1",
-          maNoiDung: this.userInfo.MA_DVI,
-          noiDung: this.userInfo.TEN_DVI,
-        })
+      this.lstCtietBcao.push({
+        ...new ItemData(),
+        id: uuid.v4() + 'FE',
+        stt: "0.1",
+        maNoiDung: this.userInfo.MA_DVI,
+        noiDung: this.userInfo.TEN_DVI,
+      })
       // })
       // this.setLevel();
       // this.lstCtietBcao.forEach(item => {
@@ -405,22 +384,6 @@ export class PhuLuc3Component implements OnInit {
   dToanVuTang: number;
   dToanVuGiam: number;
   tinhTong() {
-    // this.tongSo = 0;
-    // this.tongSoTd = 0;
-    // this.tongThienNamTruoc = 0;
-    // this.tongDuToan = 0;
-    // this.tongUoc = 0;
-    // this.tongDmuc = 0;
-    // this.lstCtietBcao.forEach(item => {
-    //   if (item.level == "0") {
-    //     this.tongSo += item.ttienNamDtoan;
-    //     this.tongSoTd += item.ttienTd;
-    //     this.tongThienNamTruoc += item.thienNamTruoc;
-    //     this.tongDuToan += item.dtoanNamHtai;
-    //     this.tongUoc += item.uocNamHtai;
-    //     this.tongDmuc += item.dmucNamDtoan;
-    //   }
-    // })
     this.tongDieuChinhGiam = 0;
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;

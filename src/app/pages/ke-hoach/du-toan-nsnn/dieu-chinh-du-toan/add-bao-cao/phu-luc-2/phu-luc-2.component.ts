@@ -172,13 +172,13 @@ export class PhuLuc2Component implements OnInit {
   getTotal() {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
-        this.total.dgiaTh = sumNumber([this.total.dgiaTh, item.dgiaTh]);
-        this.total.thanhTienTh = sumNumber([this.total.thanhTienTh, item.thanhTienTh]);
-        this.total.dtoanDaGiao = sumNumber([this.total.dtoanDaGiao, item.dtoanDaGiao]);
-        this.total.dtoanSuDung = sumNumber([this.total.dtoanSuDung, item.dtoanSuDung]);
-        this.total.tongCongDtoan = sumNumber([this.total.tongCongDtoan, item.tongCongDtoan]);
-        this.total.dieuChinhDtoan = sumNumber([this.total.dieuChinhDtoan, item.dieuChinhDtoan]);
-        this.total.kphiConThieu = sumNumber([this.total.kphiConThieu, item.kphiConThieu]);
+      this.total.dgiaTh = sumNumber([this.total.dgiaTh, item.dgiaTh]);
+      this.total.thanhTienTh = sumNumber([this.total.thanhTienTh, item.thanhTienTh]);
+      this.total.dtoanDaGiao = sumNumber([this.total.dtoanDaGiao, item.dtoanDaGiao]);
+      this.total.dtoanSuDung = sumNumber([this.total.dtoanSuDung, item.dtoanSuDung]);
+      this.total.tongCongDtoan = sumNumber([this.total.tongCongDtoan, item.tongCongDtoan]);
+      this.total.dieuChinhDtoan = sumNumber([this.total.dieuChinhDtoan, item.dieuChinhDtoan]);
+      this.total.kphiConThieu = sumNumber([this.total.kphiConThieu, item.kphiConThieu]);
     })
   };
 
@@ -383,38 +383,22 @@ export class PhuLuc2Component implements OnInit {
   tongDieuChinhTang: number;
   tongDieuChinhGiam: number;
   dToanVuTang: number;
-  dToanVuGiam:number;
+  dToanVuGiam: number;
   tinhTong() {
-    // this.tongSo = 0;
-    // this.tongSoTd = 0;
-    // this.tongThienNamTruoc = 0;
-    // this.tongDuToan = 0;
-    // this.tongUoc = 0;
-    // this.tongDmuc = 0;
-    // this.lstCtietBcao.forEach(item => {
-    //   if (item.level == "0") {
-    //     this.tongSo += item.ttienNamDtoan;
-    //     this.tongSoTd += item.ttienTd;
-    //     this.tongThienNamTruoc += item.thienNamTruoc;
-    //     this.tongDuToan += item.dtoanNamHtai;
-    //     this.tongUoc += item.uocNamHtai;
-    //     this.tongDmuc += item.dmucNamDtoan;
-    //   }
-    // })
     this.tongDieuChinhGiam = 0;
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if(item.dieuChinhDtoan < 0 ){
+      if (item.dieuChinhDtoan < 0) {
         this.tongDieuChinhGiam += item.dieuChinhDtoan;
-      }else{
+      } else {
         this.tongDieuChinhTang += item.dieuChinhDtoan;
       }
 
-      if(item.vuTvqtDnghiDtoan < 0){
+      if (item.vuTvqtDnghiDtoan < 0) {
         this.dToanVuGiam += item.vuTvqtDnghiDtoan;
-      }else{
+      } else {
         this.dToanVuTang += item.vuTvqtDnghiDtoan;
       }
     })

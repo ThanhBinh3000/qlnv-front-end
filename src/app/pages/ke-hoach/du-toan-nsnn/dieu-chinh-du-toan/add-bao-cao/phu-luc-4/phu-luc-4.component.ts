@@ -374,9 +374,9 @@ export class PhuLuc4Component implements OnInit {
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.dtoanDchinhDnghiLanNay < 0) {
-        Number(this.tongDieuChinhGiam += item.dtoanDchinhDnghiLanNay);
+        this.tongDieuChinhGiam += Number(item.dtoanDchinhDnghiLanNay);
       } else {
-        Number(this.tongDieuChinhTang += item.dtoanDchinhDnghiLanNay);
+        this.tongDieuChinhTang += Number(item.dtoanDchinhDnghiLanNay);
       }
 
       if (item.dtoanVuTvqtDnghi < 0) {

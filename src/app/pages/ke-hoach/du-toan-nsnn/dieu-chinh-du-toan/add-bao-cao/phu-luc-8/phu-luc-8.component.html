@@ -20,7 +20,7 @@
         </div>
         <div nz-col [nzSpan]="18"></div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
-          <!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
@@ -29,24 +29,30 @@
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
-          </ng-container> -->
+          </ng-container>
         </div>
       </div>
 
       <nz-table nzBordered class="table__body">
         <thead>
           <tr>
+            <th rowspan="2" [hidden]="status" class="text-center">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
+              </label>
+            </th>
             <th rowSpan="2">STT</th>
-            <th rowSpan="2">Mặt hàng</th>
+            <th rowSpan="2" nzWidth="300px">Mặt hàng</th>
             <th rowSpan="2">ĐVT</th>
             <th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
             <th colSpan="3">Lượng hàng thực hiện</th>
-            <th colSpan="2">Định mức</th>
+            <th rowSpan="2">Định mức</th>
             <th rowSpan="2">Tổng nhu cầu dự toán năm {{namBcao}} </th>
-            <th rowSpan="2">Kinh phí được sử dụng năm {{namBcao}} </th>
+            <th colSpan="3">Kinh phí được sử dụng năm {{namBcao}} </th>
             <th rowSpan="2">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
-            <th rowSpan="2">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="2">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
+            <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
+            <th nzWidth="50px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
           </tr>
           <tr>
             <th>Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo (10/05/{{namBcao}})</th>
@@ -56,9 +62,212 @@
             <th>Dự toán năm trước chuyển sang được phép sử dụng cho năm nay</th>
             <th>Dự toán đã giao trong năm</th>
           </tr>
+          <tr>
+            <th [hidden]="status"></th>
+            <th>A</th>
+            <th>B</th>
+            <th>C</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4 = 3 + 2</th>
+            <th>5</th>
+            <th>6 = 5 * 4</th>
+            <th>7 = 8 + 9</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10 = 7 - 6</th>
+            <th *ngIf="viewAppraisalValue">11</th>
+            <th>12</th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status && !editAppraisalValue"></th>
+          </tr>
         </thead>
         <tbody>
+          <tr>
+            <td [hidden]="status"></td>
+            <td></td>
+            <td>Tổng cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{total.tongNcauDtoan}}</td>
+            <td>{{total.kphiCong}}</td>
+            <td>{{total.kphiDtoanNtruoc}}</td>
+            <td>{{total.kphiDtoanGiaoTnam}}</td>
+            <td>{{total.dtoanDchinhDnghi}}</td>
+            <td *ngIf="viewAppraisalValue">{{total.dtoanVuTvqtDnghi}}</td>
+            <td>{{total.dtoanPhiBquanThieu}}</td>
+            <td [hidden]="status"></td>
+            <td [hidden]="status && !editAppraisalValue"></td>
+          </tr>
+          <tr>
+            <td [hidden]="status"></td>
+            <td></td>
+            <td>Phát sinh điều chỉnh tăng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{tongDieuChinhTang}}</td>
+            <td *ngIf="viewAppraisalValue">{{dToanVuTang}}</td>
+            <td></td>
+            <td [hidden]="status"></td>
+            <td [hidden]="status && !editAppraisalValue"></td>
+          </tr>
+          <tr>
+            <td [hidden]="status"></td>
+            <td></td>
+            <td>Phát sinh điều chỉnh giảm</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{tongDieuChinhGiam}}</td>
+            <td *ngIf="viewAppraisalValue">{{dToanVuGiam}}</td>
+            <td></td>
+            <td [hidden]="status"></td>
+            <td [hidden]="status && !editAppraisalValue"></td>
+          </tr>
+          <tr *ngFor="let data of lstCtietBcao; let i = index">
+            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
+              <td [hidden]="status " class="text-center">
+                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td class="text-center">
+                {{getChiMuc(data.stt)}}
+              </td>
+              <td>
+                {{data.matHang}}
+              </td>
+              <td>{{data.maDviTinh}}</td>
+              <td>{{displayValue(data.slBquanKh)}}</td>
+              <td>{{displayValue(data.luongSlBquanTte)}}</td>
+              <td>{{displayValue(data.luongSlBquanUocThien)}}</td>
+              <td>{{displayValue(data.luongSlBquanTcong)}}</td>
+              <td>{{displayValue(data.dinhMuc)}}</td>
+              <td>{{displayValue(data.tongNcauDtoan)}}</td>
+              <td>{{displayValue(data.kphiCong)}}</td>
+              <td>{{displayValue(data.kphiDtoanNtruoc)}}</td>
+              <td>{{displayValue(data.kphiDtoanGiaoTnam)}}</td>
+              <td>{{displayValue(data.dtoanDchinhDnghi)}}</td>
+              <td *ngIf="viewAppraisalValue">
+                {{displayValue(data.dtoanVuTvqtDnghi)}}
+              </td>
+              <td>
+                {{displayValue(data.dtoanPhiBquanThieu)}}
+              </td>
+              <td [hidden]="status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td [hidden]="status && !editAppraisalValue">
+                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+              </td>
 
+            </ng-container>
+            <ng-template #editTemplate>
+              <td [hidden]="status" class="text-center">
+                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                  (ngModelChange)="updateSingleChecked()"></label>
+              </td>
+              <td class="text-center">
+                {{getChiMuc(editCache[data.id].data.stt)}}
+              </td>
+              <td>
+                {{editCache[data.id].data.matHang}}
+              </td>
+              <td>
+                {{editCache[data.id].data.maDviTinh}}
+              </td>
+              <ng-container *ngIf="editAppraisalValue; else editAppraisal">
+                <td>{{displayValue(editCache[data.id].data.slBquanKh)}}</td>
+                <td>{{displayValue(editCache[data.id].data.luongSlBquanTte)}}</td>
+                <td>{{displayValue(editCache[data.id].data.luongSlBquanUocThien)}}</td>
+                <td>{{displayValue(editCache[data.id].data.luongSlBquanTcong)}}</td>
+                <td>{{displayValue(editCache[data.id].data.dinhMuc)}}</td>
+                <td>{{displayValue(editCache[data.id].data.tongNcauDtoan)}}</td>
+                <td>{{displayValue(editCache[data.id].data.kphiCong)}}</td>
+                <td>{{displayValue(editCache[data.id].data.kphiDtoanNtruoc)}}</td>
+                <td>{{displayValue(editCache[data.id].data.kphiDtoanGiaoTnam)}}</td>
+                <td>{{displayValue(editCache[data.id].data.dtoanDchinhDnghi)}}</td>
+                <td>
+                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                </td>
+                <td>{{displayValue(editCache[data.id].data.dtoanPhiBquanThieu)}}</td>
+              </ng-container>
+              <ng-template #editAppraisal>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.slBquanKh"
+                    [options]="amount" />
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.luongSlBquanTte"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.luongSlBquanUocThien"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
+                <td>
+                  {{editCache[data.id].data.luongSlBquanTcong}}
+                </td>
+                <td>
+                  {{displayValue(editCache[data.id].data.dinhMuc)}}
+                </td>
+                <td>
+                  {{displayValue(editCache[data.id].data.tongNcauDtoan)}}
+                </td>
+                <td>
+                  {{editCache[data.id].data.kphiCong}}
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.kphiDtoanNtruoc"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.kphiDtoanGiaoTnam"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
+                <td>
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDchinhDnghi"
+                    [options]="amount" /> -->
+                  {{editCache[data.id].data.dtoanDchinhDnghi}}
+                </td>
+                <td *ngIf="viewAppraisalValue">
+                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanPhiBquanThieu"
+                    [options]="amount" />
+                </td>
+              </ng-template>
+              <td [hidden]="status">
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              </td>
+              <td [hidden]="status && !editAppraisalValue">
+                <a class="save" (click)="saveEdit(editCache[data.id].data.id)" style="margin-right:15px">Lưu</a>
+                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                  (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
+              </td>
+            </ng-template>
+          </tr>
         </tbody>
 
       </nz-table>

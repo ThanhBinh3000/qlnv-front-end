@@ -628,6 +628,388 @@ export class AddBaoCaoComponent implements OnInit {
     switch (formDetail.maLoai) {
       case 'pl01':
         nzContent = PhuLuc1Component;
+        if (isSynthetic == false) {
+          if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) || Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao)) {
+            dataInfo.extraData = [];
+
+            const data2 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl02');
+            let dtoanKphiNamTruoc2 = 0;
+            let dtoanKphiNamNay2 = 0;
+            let tong2 = 0;
+            let dtoanDaThien2 = 0;
+            let dtoanUocThien2 = 0;
+            let tongDtoanTrongNam2 = 0;
+            let dtoanDnghiDchinh2 = 0;
+            let dtoanVuTvqtDnghi2 = 0;
+            if (data2?.trangThai != '3') {
+              data2?.lstCtietDchinh?.forEach(item => {
+                dtoanKphiNamTruoc2 += item.dtoanSuDung;
+                dtoanKphiNamNay2 += item.dtoanDaGiao;
+                tong2 += item.tongCongDtoan;
+                dtoanDaThien2 += (item.sluongThien * item.dgiaTh);
+                dtoanUocThien2 += (item.sluongUocTh * item.dgiaTh);
+                tongDtoanTrongNam2 += item.thanhTienTh;
+                dtoanDnghiDchinh2 += item.dieuChinhDtoan;
+                dtoanVuTvqtDnghi2 += item.vuTvqtDnghiDtoan;
+
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.4.1",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.4.1',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc2,
+                  dtoanKphiNamNay: dtoanKphiNamNay2,
+                  tong: tong2,
+                  dtoanDaThien: dtoanDaThien2,
+                  dtoanUocThien: dtoanUocThien2,
+                  tongDtoanTrongNam: tongDtoanTrongNam2,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh2,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi2,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+
+              })
+            }
+
+            const data3 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl03');
+            let dtoanKphiNamTruoc3 = 0;
+            let dtoanKphiNamNay3 = 0;
+            let tong3 = 0;
+            let dtoanDaThien3 = 0;
+            let dtoanUocThien3 = 0;
+            let tongDtoanTrongNam3 = 0;
+            let dtoanDnghiDchinh3 = 0;
+            let dtoanVuTvqtDnghi3 = 0;
+            if (data3?.trangThai != '3') {
+              data3?.lstCtietDchinh?.forEach(item => {
+                dtoanKphiNamTruoc3 += item?.dtoanSuDung ? item?.dtoanSuDung : 0;
+                dtoanKphiNamNay3 += item?.dtoanDaGiaoLke;
+                tong3 += item?.tongCongDtoan ? item?.tongCongDtoan : 0;
+                dtoanDaThien3 += (item.sluongThucTe * item.dinhMuc);
+                dtoanUocThien3 += (item.sluongUocThien * item.dinhMuc);
+                tongDtoanTrongNam3 += item.thanhTien;
+                dtoanDnghiDchinh3 += item.dtoanDchinh;
+                dtoanVuTvqtDnghi3 += item.dtoanVuTvqtDnghi;
+
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.2.1.2",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.2.1.2',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc3,
+                  dtoanKphiNamNay: dtoanKphiNamNay3,
+                  tong: tong3,
+                  dtoanDaThien: dtoanDaThien3,
+                  dtoanUocThien: dtoanUocThien3,
+                  tongDtoanTrongNam: tongDtoanTrongNam3,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh3,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi3,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+
+              })
+            }
+
+            const data4 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl04');
+            if (data4?.trangThai != '3') {
+              let dtoanKphiNamTruoc4 = 0;
+              let dtoanKphiNamNay4 = 0;
+              let tong4 = 0;
+              let dtoanDaThien4 = 0;
+              let dtoanUocThien4 = 0;
+              let tongDtoanTrongNam4 = 0;
+              let dtoanDnghiDchinh4 = 0;
+              let dtoanVuTvqtDnghi4 = 0;
+              data4?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc4 += item.keHoachVon
+                  dtoanKphiNamNay4 += item.qtoanGtriDtoan
+                  tong4 += item.khoachSauDchinh
+                  dtoanDaThien4 += item.dtoanDaGiaoLke
+                  dtoanUocThien4 += item.keHoachVon
+                  tongDtoanTrongNam4 += item.qtoanGtriDtoan
+                  dtoanDnghiDchinh4 += item.dtoanDchinhDnghi
+                  dtoanVuTvqtDnghi4 += item.dtoanVuTvqtDnghi
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.3",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.3',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc4,
+                  dtoanKphiNamNay: dtoanKphiNamNay4,
+                  tong: tong4,
+                  dtoanDaThien: dtoanDaThien4,
+                  dtoanUocThien: dtoanUocThien4,
+                  tongDtoanTrongNam: tongDtoanTrongNam4,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh4,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi4,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data5 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl05');
+            if (data5?.trangThai != '3') {
+              let dtoanKphiNamTruoc5 = 0;
+              let dtoanKphiNamNay5 = 0;
+              let tong5 = 0;
+              let dtoanDaThien5 = 0;
+              let dtoanUocThien5 = 0;
+              let tongDtoanTrongNam5 = 0;
+              let dtoanDnghiDchinh5 = 0;
+              let dtoanVuTvqtDnghi5 = 0;
+              data5?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc5 += item?.dtoanSuDung ? item?.dtoanSuDung : 0;
+                  dtoanKphiNamNay5 += item?.dtoanDaGiaoLke;
+                  tong5 += item?.tongCongDtoan ? item?.tongCongDtoan : 0;
+                  dtoanDaThien5 += (item.sluongThucTe * item.dinhMuc);
+                  dtoanUocThien5 += (item.soluongUocThien * item.dinhMuc);
+                  tongDtoanTrongNam5 += item.thanhTien;
+                  dtoanDnghiDchinh5 += item.dtoanDchinh;
+                  dtoanVuTvqtDnghi5 += item.dtoanVuTvqtDnghi;
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.2.2",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.2.2',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc5,
+                  dtoanKphiNamNay: dtoanKphiNamNay5,
+                  tong: tong5,
+                  dtoanDaThien: dtoanDaThien5,
+                  dtoanUocThien: dtoanUocThien5,
+                  tongDtoanTrongNam: tongDtoanTrongNam5,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh5,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi5,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data6 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl06');
+            if (data6?.trangThai != '3') {
+              let dtoanKphiNamTruoc6 = 0;
+              let dtoanKphiNamNay6 = 0;
+              let tong6 = 0;
+              let dtoanDaThien6 = 0;
+              let dtoanUocThien6 = 0;
+              let tongDtoanTrongNam6 = 0;
+              let dtoanDnghiDchinh6 = 0;
+              let dtoanVuTvqtDnghi6 = 0;
+              data6?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc6 += item?.dtoanSuDung ? item?.dtoanSuDung : 0;
+                  dtoanKphiNamNay6 += item?.dtoanGiaoLke;
+                  tong6 += item?.sluongThienCong ? item?.sluongThienCong : 0;
+                  dtoanDaThien6 += (item.sluongThienTte * item.sluongThienDmuc);
+                  dtoanUocThien6 += (item.sluongThienUocThien * item.sluongThienDmuc);
+                  tongDtoanTrongNam6 += item.sluongThienTtien;
+                  dtoanDnghiDchinh6 += item.dtoanDchinh;
+                  dtoanVuTvqtDnghi6 += item.dtoanVuTvqtDnghi;
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.2.3",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.2.3',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc6,
+                  dtoanKphiNamNay: dtoanKphiNamNay6,
+                  tong: tong6,
+                  dtoanDaThien: dtoanDaThien6,
+                  dtoanUocThien: dtoanUocThien6,
+                  tongDtoanTrongNam: tongDtoanTrongNam6,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh6,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi6,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data7 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl07');
+            if (data7?.trangThai != '3') {
+              let dtoanKphiNamTruoc7 = 0;
+              let dtoanKphiNamNay7 = 0;
+              let tong7 = 0;
+              let dtoanDaThien7 = 0;
+              let dtoanUocThien7 = 0;
+              let tongDtoanTrongNam7 = 0;
+              let dtoanDnghiDchinh7 = 0;
+              let dtoanVuTvqtDnghi7 = 0;
+              data7?.lstCtietDchinh?.forEach(item => {
+
+                dtoanKphiNamTruoc7 += item?.khoachQdGiaoNvu ? item?.khoachQdGiaoNvu : 0;
+                dtoanKphiNamNay7 += item?.tdiemBcaoDtoan;
+                tong7 += item?.ncauDtoan ? item?.ncauDtoan : 0;
+                dtoanDaThien7 += item.tdiemBcaoDtoan;
+                dtoanUocThien7 += item.dkienThienDtoan;
+                tongDtoanTrongNam7 += item.dtoanLkeDaGiao;
+                dtoanDnghiDchinh7 += item.dtoanDnghiDchinh;
+                dtoanVuTvqtDnghi7 += item.dtoanVuTvqtDnghi;
+
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.2.4",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.2.4',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc7,
+                  dtoanKphiNamNay: dtoanKphiNamNay7,
+                  tong: tong7,
+                  dtoanDaThien: dtoanDaThien7,
+                  dtoanUocThien: dtoanUocThien7,
+                  tongDtoanTrongNam: tongDtoanTrongNam7,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh7,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi7,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data8 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl08');
+            if (data8?.trangThai != '3') {
+              let dtoanKphiNamTruoc8 = 0;
+              let dtoanKphiNamNay8 = 0;
+              let tong8 = 0;
+              let dtoanDaThien8 = 0;
+              let dtoanUocThien8 = 0;
+              let tongDtoanTrongNam8 = 0;
+              let dtoanDnghiDchinh8 = 0;
+              let dtoanVuTvqtDnghi8 = 0;
+              data8?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc8 += item?.kphiDtoanNtruoc;
+                  dtoanKphiNamNay8 += item?.kphiDtoanGiaoTnam;
+                  tong8 += item?.kphiCong;
+                  dtoanDaThien8 += (item.luongSlBquanTte * item.dinhMuc);
+                  dtoanUocThien8 += (item.luongSlBquanUocThien * item.dinhMuc);
+                  tongDtoanTrongNam8 += item.tongNcauDtoan;
+                  dtoanDnghiDchinh8 += item.dtoanDchinhDnghi;
+                  dtoanVuTvqtDnghi8 += item.dtoanVuTvqtDnghi;
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.2.1",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.2.1',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc8,
+                  dtoanKphiNamNay: dtoanKphiNamNay8,
+                  tong: tong8,
+                  dtoanDaThien: dtoanDaThien8,
+                  dtoanUocThien: dtoanUocThien8,
+                  tongDtoanTrongNam: tongDtoanTrongNam8,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh8,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi8,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data9 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl09');
+            if (data9?.trangThai != '3') {
+              let dtoanKphiNamTruoc9 = 0;
+              let dtoanKphiNamNay9 = 0;
+              let tong9 = 0;
+              let dtoanDaThien9 = 0;
+              let dtoanUocThien9 = 0;
+              let tongDtoanTrongNam9 = 0;
+              let dtoanDnghiDchinh9 = 0;
+              let dtoanVuTvqtDnghi9 = 0;
+              data9?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc9 += item?.dtoanKphiDtoanNtruoc;
+                  dtoanKphiNamNay9 += item?.dtoanKphiDaGiao;
+                  tong9 += item?.dtoanKphiCong;
+                  dtoanDaThien9 += item.dtoanDaThien;
+                  dtoanUocThien9 += item.dtoanUocThien;
+                  tongDtoanTrongNam9 += item.tongNcauDtoan;
+                  dtoanDnghiDchinh9 += item.dtoanDnghiDchinh;
+                  dtoanVuTvqtDnghi9 += item.dtoanVuTvqtDnghi;
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.2.1.1",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.2.1.1',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc9,
+                  dtoanKphiNamNay: dtoanKphiNamNay9,
+                  tong: tong9,
+                  dtoanDaThien: dtoanDaThien9,
+                  dtoanUocThien: dtoanUocThien9,
+                  tongDtoanTrongNam: tongDtoanTrongNam9,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh9,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi9,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+            const data10 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl10');
+            if (data10?.trangThai != '3') {
+              let dtoanKphiNamTruoc10 = 0;
+              let dtoanKphiNamNay10 = 0;
+              let tong10 = 0;
+              let dtoanDaThien10 = 0;
+              let dtoanUocThien10 = 0;
+              let tongDtoanTrongNam10 = 0;
+              let dtoanDnghiDchinh10 = 0;
+              let dtoanVuTvqtDnghi10 = 0;
+              data10?.lstCtietDchinh?.forEach(item => {
+                const level = item.stt.split('.').length - 2;
+                if (level == 0) {
+                  dtoanKphiNamTruoc10 += item.kh2021
+                  dtoanKphiNamNay10 += item.gtriCtrinh
+                  tong10 += item.kh2021SauDchinh
+                  dtoanDaThien10 += item.dtoanGiaoLke
+                  dtoanUocThien10 += item.kh2021
+                  tongDtoanTrongNam10 += item.gtriCtrinh
+                  dtoanDnghiDchinh10 += item.dtoanDchinhDnghi
+                  dtoanVuTvqtDnghi10 += item.dtoanVuTvqtDnghi
+                }
+                dataInfo.extraData.push({
+                  // stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                  stt: "0.1.1.1",
+                  // tenNdung: item.tenMatHang,
+                  maNdung: '0.1.1.1',
+                  dtoanKphiNamTruoc: dtoanKphiNamTruoc10,
+                  dtoanKphiNamNay: dtoanKphiNamNay10,
+                  tong: tong10,
+                  dtoanDaThien: dtoanDaThien10,
+                  dtoanUocThien: dtoanUocThien10,
+                  tongDtoanTrongNam: tongDtoanTrongNam10,
+                  dtoanDnghiDchinh: dtoanDnghiDchinh10,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi10,
+                  // tongDchinhTang: tongDchinhTang2,
+                  // tongDchinhGiam: tongDchinhGiam2,
+                  // tongDchinhTaiDvi: tongDchinhTaiDvi2,
+                })
+              })
+            }
+
+
+          }
+        }
         break;
       case 'pl02':
         nzContent = PhuLuc2Component;
