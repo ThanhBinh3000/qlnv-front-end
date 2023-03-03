@@ -6869,7 +6869,7 @@ td.action.ant-table-cell {
     cursor: pointer;
   }
 }
-:host ::ng-deep .ant-form-vertical .ant-form-item-label {
+.ant-form-vertical .ant-form-item-label {
   line-height: 1;
 
   label {
