@@ -49,8 +49,12 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
+      klLtBaoQuanCuc: [null],
+      klLtNhapCuc: [null],
+      klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      soQdGiaoCt: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -106,10 +110,11 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
+        await this.changeNamKh(this.formDataTongHop.value.namKeHoach);
         this.formData.patchValue({
-          klLtBaoQuan: detail.klLtBaoQuan,
-          klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat
+          klLtBaoQuanCuc: detail.klLtBaoQuan,
+          klLtNhapCuc: detail.klLtNhap,
+          klLtXuatCuc: detail.klLtXuat
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -241,6 +246,23 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
+  async changeNamKh(event) {
+    let res = await this.dxChiCucService.getCtieuKhoach(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.formData.patchValue({
+          soQdGiaoCt : res.data.soQuyetDinh,
+          klLtXuat : res.data.ntnTongSoQuyThoc ? res.data.ntnTongSoQuyThoc : 0,
+          klLtNhap : res.data.xtnTongSoQuyThoc ? res.data.xtnTongSoQuyThoc : 0,
+          klLtBaoQuan : res.data.tkdnTongSoQuyThoc ? res.data.tkdnTongSoQuyThoc : 0
+        })
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
+    }
+  }
+
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
@@ -305,6 +327,19 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       return slTc
     } else {
       return sl
+    }
+  }
+
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
     }
   }
 
