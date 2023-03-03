@@ -12,13 +12,16 @@ import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {STATUS} from "../../../../../constants/status";
 import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import {of} from "rxjs";
+import {
+  MmThongTinNcChiCuc
+} from "../../../may-moc-thiet-bi/de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
 
 @Component({
-  selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',
-  templateUrl: './thong-tin-de-xuat-nhu-cau-chi-cuc.component.html',
-  styleUrls: ['./thong-tin-de-xuat-nhu-cau-chi-cuc.component.scss']
+  selector: 'app-them-moi-de-xuat-bao-hiem-cc',
+  templateUrl: './them-moi-de-xuat-bao-hiem-cc.component.html',
+  styleUrls: ['./them-moi-de-xuat-bao-hiem-cc.component.scss']
 })
-export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implements OnInit {
+export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
@@ -32,8 +35,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dxChiCucService: MmDxChiCucService,
-    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService
+    private dxChiCucService: MmDxChiCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -45,9 +47,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       ngayKy: [null, Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
       soQdGiaoCt: [null],
-      klLtBaoQuan: [0, Validators.required],
-      klLtNhap: [0, Validators.required],
-      klLtXuat: [0, Validators.required],
+      klLtBaoQuan: [null, Validators.required],
+      klLtNhap: [null, Validators.required],
+      klLtXuat: [null, Validators.required],
       trichYeu: [null,],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
@@ -399,24 +401,3 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     }
   }
 }
-
-export class MmThongTinNcChiCuc {
-  id: number;
-  maDvi: string;
-  tenDvi: string;
-  tenTaiSan: string;
-  maTaiSan: string;
-  donViTinh: string;
-  slHienCo: number = 0;
-  slNhapThem: number = 0;
-  tongCong: number = 0;
-  slTieuChuan: number = 0;
-  chenhLechThieu: number = 0;
-  chenhLechThua: number = 0;
-  soLuong: number = 0;
-  soLuongTc: number = 0;
-  donGiaTd: number = 0;
-  thanhTienNc: number = 0;
-  ghiChu: number;
-}
-
