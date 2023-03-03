@@ -275,9 +275,6 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   async save(isGuiDuyet?) {
     // this.setValidator(isGuiDuyet);
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + "/" + this.maPhieu;
-    }
     body.fileDinhKems = this.listFileDinhKem;
     body.ketQuaPhanTich = this.dataTableChiTieu;
     let data = await this.createUpdate(body);

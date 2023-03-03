@@ -11,6 +11,8 @@ import {MESSAGE} from "../../../../constants/message";
 import {MmHienTrangMmService} from "../../../../services/mm-hien-trang-mm.service";
 import {saveAs} from 'file-saver';
 import {MmThongTinHienTrangComponent} from "./mm-thong-tin-hien-trang/mm-thong-tin-hien-trang.component";
+import {HienTrangMayMoc} from "../../../../constants/status";
+import dayjs from "dayjs";
 @Component({
   selector: 'app-mm-hien-trang-ccdc',
   templateUrl: './mm-hien-trang-ccdc.component.html',
@@ -20,6 +22,7 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
   isViewDetail : boolean;
   dsCuc : any[] = [];
   dsChiCuc : any[] = [];
+  statusMm = HienTrangMayMoc
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -48,12 +51,26 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
       if (this.userService.isCuc()) {
         this.loadDsChiCuc()
       }
-      await this.search();
+      await this.searchData()
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async searchData() {
+    await this.search();
+    if (this.dataTable && this.dataTable.length >0) {
+      this.dataTable.forEach(item => {
+        let slTon = item.soDuNamTruoc + item.slNhap + item.dieuChinhTang - item.dieuChinhGiam - item.slCanThanhLy
+        if (slTon >= 0) {
+          item.slTon = slTon
+        } else {
+          item.slTon = 0
+        }
+      })
     }
   }
 
@@ -87,7 +104,7 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
     this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB")
   }
 
-  openDialog(data : any) {
+  openDialog(data : any, isView : boolean) {
       let modalQD = this.modal.create({
         nzContent: MmThongTinHienTrangComponent,
         nzMaskClosable: false,
@@ -96,11 +113,14 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
         nzWidth: '1200',
         nzFooter: null,
         nzComponentParams: {
-          dataDetail : data
+          dataDetail : data,
+          isViewDetail : isView
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
-
+        if (data) {
+          await this.searchData()
+        }
       })
     }
 
@@ -129,6 +149,37 @@ export class MmHienTrangCcdcComponent extends Base2Component implements OnInit {
     }
   }
 
+  chotDuLieu() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn chốt dữ liệu năm ' + dayjs().get('year') + '? (Không thể cập nhật lại)',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          let body = {
+            namKeHoach : dayjs().get('year'),
+            paggingReq : {
+              limit: this.pageSize,
+              page: this.page - 1
+            }
+          }
+          let res = await this.hienTrangSv.chotDuLieu(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, 'Chốt dữ liệu thành công!');
+            await this.searchData()
+          } else {
+            this.notification.error(MESSAGE.ERROR, 'Thao tác thất bại!');
+          }
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
 }
 
 

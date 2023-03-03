@@ -7,6 +7,12 @@ import { ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent } from './tong-hop-de-xu
 import { TongHopDeXuatNhuCauBaoHiemCucComponent } from './tong-hop-de-xuat-nhu-cau-bao-hiem-cuc/tong-hop-de-xuat-nhu-cau-bao-hiem-cuc.component';
 import { TongHopDeXuatNhuCauBaoHiemChiCucComponent } from './tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc/tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc.component';
 import { ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent } from './tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-chi-cuc.component';
+import { QdMuaSamBaoHiemComponent } from './qd-mua-sam-bao-hiem/qd-mua-sam-bao-hiem.component';
+import { TongHopGtriBaoHiemComponent } from './tong-hop-gtri-bao-hiem/tong-hop-gtri-bao-hiem.component';
+import { DeXuatHopDongChiCucComponent } from './de-xuat-hop-dong-chi-cuc/de-xuat-hop-dong-chi-cuc.component';
+import {
+  ThemMoiDeXuatBaoHiemCcComponent
+} from "./de-xuat-hop-dong-chi-cuc/them-moi-de-xuat-bao-hiem-cc/them-moi-de-xuat-bao-hiem-cc.component";
 
 @NgModule({
   imports: [
@@ -20,6 +26,10 @@ import { ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent } from './tong-hop-de
     ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent,
     TongHopDeXuatNhuCauBaoHiemChiCucComponent,
     ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent,
+    QdMuaSamBaoHiemComponent,
+    TongHopGtriBaoHiemComponent,
+    DeXuatHopDongChiCucComponent,
+    ThemMoiDeXuatBaoHiemCcComponent,
   ],
   exports: [
     BaoHiemComponent,

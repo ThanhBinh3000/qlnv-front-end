@@ -287,12 +287,12 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
       this.changeCuc(this.phuongAnRow.maDviCuc);
     }
-    /* if (data) {
+     if (data) {
        this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
        this.changeCuc(this.phuongAnRow.maDviCuc);
        this.phuongAnRow.noiDung = data.childData[0].noiDung;
        this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-     }*/
+     }
   }
 
   handleOk(): void {
@@ -380,7 +380,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   async changeCuc(event: any) {
     if (event) {
       let existRow = this.formData.value.deXuatPhuongAn
-        .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
+        .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDviCuc === this.phuongAnRow.maDviCuc);
       if (existRow) {
         this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
       } else {

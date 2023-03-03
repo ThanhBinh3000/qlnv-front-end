@@ -173,12 +173,12 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenTaiSan}}</td>
         <td>{{data.donViTinh}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>{{sumSoLuong(data)}}</td>
         <td>{{data.donGiaTd | number: '1.0-1' }}</td>
         <td>{{sumSoLuong(data)  * data.donGiaTd | number: '1.0-1' }}</td>
@@ -190,12 +190,12 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
+          <td>{{item.slHienCo | number: '1.0-1' }}</td>
+          <td>{{item.slNhapThem | number: '1.0-1' }}</td>
+          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
+          <td>{{item.slTieuChuan | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThieu | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThua | number: '1.0-1' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"

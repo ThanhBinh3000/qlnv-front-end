@@ -49,8 +49,12 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
+      klLtBaoQuanCuc: [null],
+      klLtNhapCuc: [null],
+      klLtXuatCuc: [null],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      soQdGiaoCt: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -98,18 +102,19 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? dayjs(body.ngayDx[0]).format('DD/MM/YYYY') : null
-    body.ngayDxDen = body.ngayDx ? dayjs(body.ngayDx[1]).format('DD/MM/YYYY') : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
+        await this.changeNamKh(this.formDataTongHop.value.namKeHoach);
         this.formData.patchValue({
-          klLtBaoQuan: detail.klLtBaoQuan,
-          klLtNhap: detail.klLtNhap,
-          klLtXuat: detail.klLtXuat
+          klLtBaoQuanCuc: detail.klLtBaoQuan,
+          klLtNhapCuc: detail.klLtNhap,
+          klLtXuatCuc: detail.klLtXuat
         })
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
@@ -194,6 +199,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       } else {
         this.goBack()
       }
+    } else {
+      this.convertListData()
     }
   }
 
@@ -236,6 +243,23 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       this.spinner.hide();
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async changeNamKh(event) {
+    let res = await this.dxChiCucService.getCtieuKhoach(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.formData.patchValue({
+          soQdGiaoCt : res.data.soQuyetDinh,
+          klLtXuat : res.data.ntnTongSoQuyThoc ? res.data.ntnTongSoQuyThoc : 0,
+          klLtNhap : res.data.xtnTongSoQuyThoc ? res.data.xtnTongSoQuyThoc : 0,
+          klLtBaoQuan : res.data.tkdnTongSoQuyThoc ? res.data.tkdnTongSoQuyThoc : 0
+        })
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
     }
   }
 
@@ -303,6 +327,19 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       return slTc
     } else {
       return sl
+    }
+  }
+
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
     }
   }
 
