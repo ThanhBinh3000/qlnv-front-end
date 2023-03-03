@@ -102,8 +102,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? dayjs(body.ngayDx[0]).format('DD/MM/YYYY') : null
-    body.ngayDxDen = body.ngayDx ? dayjs(body.ngayDx[1]).format('DD/MM/YYYY') : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
