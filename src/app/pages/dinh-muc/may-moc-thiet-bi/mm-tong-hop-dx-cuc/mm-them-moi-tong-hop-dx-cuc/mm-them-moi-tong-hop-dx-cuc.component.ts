@@ -194,6 +194,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       } else {
         this.goBack()
       }
+    } else {
+      this.convertListData()
     }
   }
 

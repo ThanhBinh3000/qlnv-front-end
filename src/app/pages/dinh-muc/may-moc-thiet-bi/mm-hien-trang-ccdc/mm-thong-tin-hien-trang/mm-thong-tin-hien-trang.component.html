@@ -30,7 +30,7 @@
     </form>
   </nz-card>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card mg-t-10">
-    <nz-table nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+    <nz-table nzBordered  [nzFrontPagination]="false" [nzShowPagination]="false"
               [nzData]="dataTable" [nzScroll]="dataTable && dataTable.length ? { y: '350px' } : null">
       <thead>
       <tr>
@@ -43,7 +43,7 @@
         <th nzWidth="200px">Đơn vị chuyển</th>
         <th nzWidth="200px">Đơn vị nhận</th>
         <th nzWidth="250px">Tài liệu đính kèm</th>
-        <th nzWidth="100px" *ngIf="!isViewDetail">Hành động</th>
+        <th nzWidth="150px" *ngIf="!isViewDetail" >Hành động</th>
       </tr>
       <tr *ngIf="!isViewDetail">
         <th></th>
@@ -94,7 +94,7 @@
             </ng-template>
           </nz-form-control>
         </th>
-        <th class="text-center">
+        <th class="text-center" >
           <a (click)="themMoiCtiet()">
             <i class="fa fa-plus"></i>
           </a>
@@ -116,7 +116,10 @@
           <td>{{ data.tenDonViChuyen }}</td>
           <td>{{ data.tenDonViNhan }}</td>
           <td>{{ data.fileDinhKem?.fileName }}</td>
-          <td style="text-align: center;" *ngIf="!isViewDetail">
+          <td style="text-align: center;" *ngIf="!isViewDetail" >
+            <a (click)="downloadFile(data.fileDinhKem)">
+              <i class="icon htvbdh_tcdt_import "></i>
+            </a>
             <a (click)="editRow(i)">
               <i class=" fa fa-pencil"></i>
             </a>
@@ -177,7 +180,10 @@
               </ng-template>
             </nz-form-control>
           </td>
-          <td *ngIf="!isViewDetail" class="text-center">
+          <td *ngIf="!isViewDetail" class="text-center" >
+            <a (click)="downloadFile(dataEdit[i].data.fileDinhKem)">
+              <i class="icon htvbdh_tcdt_import "></i>
+            </a>
             <a (click)="saveEdit(i)">
               <i class="fa fa-save"></i>
             </a>

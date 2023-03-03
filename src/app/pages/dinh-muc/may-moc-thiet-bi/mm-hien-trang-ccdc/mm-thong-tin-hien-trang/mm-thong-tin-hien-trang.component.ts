@@ -12,6 +12,7 @@ import {FileDinhKem} from "../../../../../models/FileDinhKem";
 import {HienTrangMayMoc} from "../../../../../constants/status";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../../services/donvi.service";
+import {saveAs} from "file-saver";
 
 @Component({
   selector: 'app-mm-thong-tin-hien-trang',
@@ -65,6 +66,16 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     }
   }
 
+  downloadFile(item: FileDinhKem) {
+    if (item) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy file đính kèm');
+    }
+  }
+
   async getDetail(id) {
     this.spinner.show();
     try {
@@ -104,14 +115,16 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     }
   }
 
-  async themMoiCtiet() {
+   themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
       this.spinner.hide();
       return;
     }
-    console.log(this.rowItem)
+    if (!this.dataTable) {
+      this.dataTable = []
+    }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmHienTrangCt();
     this.updateEditCache();
