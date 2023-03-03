@@ -72,10 +72,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   deXuatPhuongAnCache: any[] = [];
   phuongAnView: any[] = [];
   phuongAnViewCache: any[] = [];
-  listThanhTien: number[];
-  listSoLuong: number[];
-  listThanhTienCache: number[];
-  listSoLuongCache: number[];
+  listThanhTien: number[] = [0];
+  listSoLuong: number[] = [0];
+  listThanhTienCache: number[] = [0];
+  listSoLuongCache: number[] = [0];
+  slXuatCap: number = 0;
   expandSetString = new Set<string>();
   expandSetStringCache = new Set<string>();
   tongSoLuongDxuat = 0;
@@ -125,6 +126,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         type: ['TH', [Validators.required]],
+        xuatCap: [false],
         ngayPduyet: [],
         fileDinhKem: [FileDinhKem],
         canCu: [new Array<FileDinhKem>()],
@@ -229,7 +231,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         }
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
-        console.log(this.formData.value, 28282);
         await this.selectRow();
         // this.dataInput = null;
         // this.dataInputCache = null;
@@ -438,7 +439,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   handleOk(): void {
-
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuidv4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
     let index = this.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
@@ -448,9 +448,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       table = [...table, this.phuongAnRow]
     }
-
-    this.deXuatPhuongAn = table
-
+    // this.deXuatPhuongAn = table
+    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
+    quyetDinhPdDtlFormData.quyetDinhPdDx = table
     this.buildTableView();
     this.isVisible = false;
 
@@ -465,6 +465,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   async selectRow(item?: any) {
+
     await this.spinner.show();
     if (item) {
       this.deXuatSelected = item;
@@ -473,11 +474,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       i.selected = false
     });
     this.deXuatSelected.selected = true;
-    console.log(this.deXuatSelected, 'this.deXuatSelected11')
-    console.log(this.formData.value.quyetDinhPdDtl, 'this.deXuatSelected11')
-
+    console.log(this.deXuatSelected);
     let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
-    console.log(dataEdit, 'dataEdit');
     let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
     dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
     dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
@@ -494,33 +492,60 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
-          .map((v, k) => ({
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
-            })
+          .map((v, k) => {
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              console.log(rowCuc, 'rowCuc');
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
+            }
           ).value();
-        return {idVirtual: uuidv4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        return {
+          idVirtual: uuidv4(),
+          noiDung: key,
+          soLuongXuat: soLuongXuat,
+          soLuongXuatThucTe: soLuongXuatThucTe,
+          childData: rs
+        };
       }).value();
     this.phuongAnViewCache = dataViewCache;
     //
-    console.log(this.deXuatPhuongAn, "this.deXuatPhuongAn")
     let dataView = chain(this.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
-          .map((v, k) => ({
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
-            })
+          .map((v, k) => {
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              console.log(rowCuc, 'rowCuc');
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
+            }
           ).value();
-        return {idVirtual: uuidv4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        return {
+          idVirtual: uuidv4(),
+          noiDung: key,
+          soLuongXuat: soLuongXuat,
+          soLuongXuatThucTe: soLuongXuatThucTe,
+          childData: rs
+        };
       }).value();
     this.phuongAnView = dataView;
     this.expandAll()
@@ -657,5 +682,4 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         });
     }
   }
-
 }
