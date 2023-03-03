@@ -14,7 +14,6 @@ export class DialogMmMuaSamComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.listTh)
   }
 
   handleOk(data  :any) {

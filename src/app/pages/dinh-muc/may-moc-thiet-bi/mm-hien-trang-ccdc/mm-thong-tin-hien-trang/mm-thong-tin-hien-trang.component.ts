@@ -6,13 +6,13 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {MmHienTrangMmService} from "../../../../../services/mm-hien-trang-mm.service";
-import {DonviService} from "../../../../../services/donvi.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {
-  MmThongTinNcChiCuc
-} from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {FileDinhKem} from "../../../../../models/FileDinhKem";
+import {HienTrangMayMoc} from "../../../../../constants/status";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../services/donvi.service";
+import {saveAs} from "file-saver";
 
 @Component({
   selector: 'app-mm-thong-tin-hien-trang',
@@ -22,10 +22,11 @@ import {FileDinhKem} from "../../../../../models/FileDinhKem";
 export class MmThongTinHienTrangComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
   dataDetail: any
-  danhSachLoaiGd : any[] = [];
+  danhSachloaiGiaoDich : any[] = [];
+  dsChiCuc : any[] = [];
   rowItem: MmHienTrangCt = new MmHienTrangCt();
   dataEdit: { [key: string]: { edit: boolean; data: MmHienTrangCt } } = {};
-
+  statusMm = HienTrangMayMoc
 
   constructor(
     private httpClient: HttpClient,
@@ -36,6 +37,7 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     private hienTrangSv: MmHienTrangMmService,
     private danhMucSv: DanhMucService,
     private _modalRef: NzModalRef,
+    private dviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hienTrangSv);
     super.ngOnInit()
@@ -53,12 +55,46 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     this.spinner.show();
     try {
       this.initForm();
-      this.loadDsLoaiGd()
+      this.getDetail(this.dataDetail.id)
+      this.loadDsloaiGiaoDich()
+      this.loadDsChiCuc()
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  downloadFile(item: FileDinhKem) {
+    if (item) {
+      this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+        saveAs(blob, item.fileName);
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy file đính kèm');
+    }
+  }
+
+  async getDetail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.hienTrangSv.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.dataTable = data.listQlDinhMucPhiHienTrangMmtbDtl
+          this.updateEditCache()
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
     }
   }
 
@@ -69,21 +105,25 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
       donViTinh: this.dataDetail.donViTinh,
       namKeHoach: this.dataDetail.namKeHoach
     })
+    this.updateEditCache()
   }
 
-  async loadDsLoaiGd() {
+  async loadDsloaiGiaoDich() {
     let res = await this.danhMucSv.danhMucChungGetAll("LOAI_GD_MMTB");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.danhSachLoaiGd = res.data;
+      this.danhSachloaiGiaoDich = res.data;
     }
   }
 
-  async themMoiCtiet() {
+   themMoiCtiet() {
     let msgRequired = this.required(this.rowItem);
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
       this.spinner.hide();
       return;
+    }
+    if (!this.dataTable) {
+      this.dataTable = []
     }
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmHienTrangCt();
@@ -133,12 +173,9 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
 
   required(item: MmHienTrangCt) {
     let msgRequired = '';
-    //validator
-    // if (!item.maTaiSan) {
-    //   msgRequired = "Loại tài sản không được để trống";
-    // } else if (!item.soLuong) {
-    //   msgRequired = "Số lượng không được để trống";
-    // }
+    if (!item.loaiGiaoDich || !item.ngayGd ) {
+      msgRequired = "Vui lòng nhập đủ dữ liệu!";
+    }
     return msgRequired;
   }
 
@@ -151,6 +188,17 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
         };
       });
     }
+  }
+
+  async loadDsChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.DON_VI.maDviCha,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.dviService.layDonViTheoCapDo(body);
+    this.dsChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB")
   }
 
   refresh() {
@@ -200,21 +248,51 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
     });
   }
 
-  handleOk(data: any) {
-    this._modalRef.close(data);
+  async handleOk(data : string) {
+    let body = this.dataDetail
+    if (!this.dataTable) {
+      this.notification.error(MESSAGE.ERROR,'Vui lòng nhập danh sách chi tiết!')
+      return;
+    }
+    body.listQlDinhMucHienTrangMmtbDtlReq = this.dataTable
+    let res = await this.createUpdate(body);
+    if (res) {
+      this._modalRef.close(data);
+    }
   }
 
   onCancel() {
     this._modalRef.close();
   }
 
-  changeLoaiGd(event , type? : any) {
-    let list = this.danhSachLoaiGd.filter(item => item.ma == event);
+  changeloaiGiaoDich(event , type? : any) {
+    let list = this.danhSachloaiGiaoDich.filter(item => item.ma == event);
     if (list && list.length > 0) {
       if (type) {
-        type.tenLoaiGd = list[0].giaTri
+        type.tenLoaiGiaoDich = list[0].giaTri
       } else {
-        this.rowItem.tenLoaiGd = list[0].giaTri
+        this.rowItem.tenLoaiGiaoDich = list[0].giaTri
+      }
+    }
+  }
+
+  changDvi(even, loai : string, type?  :any) {
+    console.log(this.dsChiCuc)
+    console.log(even)
+    let list = this.dsChiCuc.filter(item => item.maDvi == even);
+    if (list && list.length > 0) {
+      if (type) {
+        if (loai == 'nhan') {
+          type.tenDonViNhan = list[0].tenDvi
+        } else {
+          type.tenDonViChuyen = list[0].tenDvi
+        }
+      } else {
+        if (loai == 'nhan') {
+          this.rowItem.tenDonViNhan = list[0].tenDvi
+        } else {
+          this.rowItem.tenDonViChuyen = list[0].tenDvi
+        }
       }
     }
   }
@@ -222,13 +300,15 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
 
 export class MmHienTrangCt {
   id : number;
-  loaiGd : string;
-  tenLoaiGd : string;
-  slTang: number;
-  slGiam : number;
-  ngay : any;
+  loaiGiaoDich : string;
+  tenLoaiGiaoDich: string;
+  tenDonViNhan: string;
+  tenDonViChuyen: string;
+  slTang: number = 0;
+  slGiam : number = 0;
+  ngayGd : any;
   soPhieu : string;
-  dviChuyen : string;
-  dviNhan : string;
+  donViNhan : string;
+  donViChuyen : string;
   fileDinhKem: FileDinhKem = new FileDinhKem();
 }

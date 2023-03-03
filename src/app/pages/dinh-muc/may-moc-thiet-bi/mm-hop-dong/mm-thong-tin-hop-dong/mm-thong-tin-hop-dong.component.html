@@ -153,12 +153,12 @@
             <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
           </th>
           <th>
-            <input type="text" [(ngModel)]="rowItem.soLuong" readonly nz-input/>
-          </th>
-          <th>
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzMin]="0" [nzDisabled]="isView"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.soLuong" [nzMin]="0" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
+          </th>
+          <th>
+            <input type="text" [(ngModel)]="rowItem.donGia" readonly nz-input/>
           </th>
           <th>
             <input type="text" [(ngModel)]="rowItem.donGia * rowItem.soLuong " readonly nz-input/>
@@ -199,12 +199,12 @@
               <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input/>
             </td>
             <td>
-              <input type="text" [(ngModel)]="dataEdit[idx].data.soLuong" readonly nz-input/>
-            </td>
-            <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0" [nzMax]="data.soLuong"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
+            </td>
+            <td>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.donGia" readonly nz-input/>
             </td>
             <td>
               <input type="text" [(ngModel)]="dataEdit[idx].data.donGia * dataEdit[idx].data.soLuong " readonly nz-input/>
