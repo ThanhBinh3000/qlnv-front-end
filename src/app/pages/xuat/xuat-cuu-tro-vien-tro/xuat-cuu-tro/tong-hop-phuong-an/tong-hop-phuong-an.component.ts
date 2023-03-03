@@ -72,13 +72,13 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       await this.timKiem();
-      await this.spinner.hide();
-
     }
     catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      await this.spinner.hide();
     }
   }
 
