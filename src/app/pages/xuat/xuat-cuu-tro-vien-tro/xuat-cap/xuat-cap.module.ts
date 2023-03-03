@@ -6,11 +6,14 @@ import { ComponentsModule } from "../../../../components/components.module";
 import { DirectivesModule } from "../../../../directives/directives.module";
 import { QuyetDinhPhuongAnModule } from "./quyet-dinh-phuong-an/quyet-dinh-phuong-an.module";
 import { QuyetDinhXuatCapModule } from "./quyet-dinh-xuat-cap/quyet-dinh-xuat-cap.module";
+import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import { KiemTraChatLuongModule } from "./kiem-tra-chat-luong/kiem-tra-chat-luong.module";
 
 
 @NgModule({
   declarations: [
-    XuatCapComponent
+    XuatCapComponent,
+
 
   ],
   exports: [
@@ -22,7 +25,8 @@ import { QuyetDinhXuatCapModule } from "./quyet-dinh-xuat-cap/quyet-dinh-xuat-ca
     ComponentsModule,
     DirectivesModule,
     QuyetDinhPhuongAnModule,
-    QuyetDinhXuatCapModule
+    QuyetDinhXuatCapModule,
+    KiemTraChatLuongModule
   ]
 })
 export class XuatCapModule {
