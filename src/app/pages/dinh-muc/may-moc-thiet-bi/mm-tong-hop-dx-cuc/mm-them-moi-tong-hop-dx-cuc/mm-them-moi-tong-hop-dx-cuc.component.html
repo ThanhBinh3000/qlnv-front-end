@@ -89,19 +89,25 @@
         <div nz-col nzSpan="4">
           <nz-form-label class="text-wrap">Khối lượng thực nhập theo chỉ tiêu (tấn)</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="klLtNhap" [readonly]="true"/>
+            <nz-input-number formControlName="klLtNhap" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-label class="text-wrap">Khối lượng thực xuất theo chỉ tiêu (tấn)</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="klLtXuat" [readonly]="true"/>
+            <nz-input-number formControlName="klLtXuat" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-label>Khối lượng thực bảo quản (tấn)</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <input nz-input formControlName="klLtBaoQuan" [readonly]="true"/>
+            <nz-input-number formControlName="klLtBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="8">
@@ -189,19 +195,19 @@
         <td>{{idx + 1}}</td>
         <td>{{data.tenTaiSan}}</td>
         <td>{{data.donViTinh}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td>{{sumSoLuong(data, 'child')}}</td>
         <td>{{data.donGiaTd | number: '1.0-1' }}</td>
         <td>{{sumSoLuong(data,' child')  * data.donGiaTd | number: '1.0-1' }}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
-        <td>{{sumSoLuong(data, 'tong')}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{sumSoLuong(data, 'tong')  | number: '1.0-1'}}</td>
         <td>{{data.donGiaTd | number: '1.0-1' }}</td>
         <td>{{sumSoLuong(data, 'tong')  * data.donGiaTd | number: '1.0-1' }}</td>
         <td></td>
@@ -212,12 +218,12 @@
           <td>{{idx + 1}}.{{y + 1}}</td>
           <td>{{item.tenDvi}}</td>
           <td>{{item.donViTinh}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
+          <td>{{item.slHienCo | number: '1.0-1' }}</td>
+          <td>{{item.slNhapThem | number: '1.0-1' }}</td>
+          <td>{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
+          <td>{{item.slTieuChuan | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThieu | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThua | number: '1.0-1' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"

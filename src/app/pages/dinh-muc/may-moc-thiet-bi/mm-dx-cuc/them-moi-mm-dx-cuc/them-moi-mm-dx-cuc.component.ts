@@ -133,6 +133,19 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     }
   }
 
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
+    }
+  }
+
   async loadDsDxCc() {
     this.spinner.show();
     try {
@@ -234,6 +247,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       this.dataTable.forEach(item => {
           if (item && item.dataChild && item.dataChild.length > 0) {
             item.dataChild.forEach(data => {
+              this.loadSlThuaThieu(data)
               item.donViTinh = data.donViTinh
               item.donGiaTd = data.donGiaTd
             })

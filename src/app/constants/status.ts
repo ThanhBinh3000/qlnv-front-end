@@ -77,6 +77,11 @@ export enum TrangThaiHoatDong {
   KHONG_HOAT_DONG = "00"
 }
 
+export enum HienTrangMayMoc {
+  DA_CHOT = '01',
+  CHUA_CHOT = '00'
+}
+
 
 export enum LOAI_DON_VI {
   MLK = "MLK",

@@ -38,7 +38,7 @@
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
-          <button nz-button class="search__button--search" (click)="search()">
+          <button nz-button class="search__button--search" (click)="searchData()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -52,52 +52,57 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
+        <button type="button"  class="btn btn-sub xanh-nhat" (click)="chotDuLieu()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Chốt dữ liệu năm</span>
+        </button>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
                 [nzData]="dataTable">
         <thead>
         <tr>
           <th nzWidth="40px">STT</th>
           <th nzWidth="250px" *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
-          <th nzWidth="250px" *ngIf="userService.isCuc()">Chi cục DTNN</th>
+          <th nzWidth="250px" *ngIf="!userService.isChiCuc()">Chi cục DTNN</th>
           <th nzWidth="120px">Mã CCDC</th>
           <th nzWidth="120px">Tên CCDC</th>
-          <th nzWidth="120px">Đơn vị tính</th>
+          <th nzWidth="100px">Đơn vị tính</th>
           <th nzWidth="100px">Năm kế hoạch</th>
           <th nzWidth="100px">Số dư năm trước(1)</th>
           <th nzWidth="100px">Số lượng nhập(2)</th>
-          <th nzWidth="100px">Số lượng điều chỉnh tăng(3)</th>
-          <th nzWidth="100px">Số lượng điều chỉnh giảm(4)</th>
-          <th nzWidth="100px">Số lượng cần sửa chữa(5)</th>
-          <th nzWidth="100px">Số lượng phải thanh lý(6)</th>
-          <th nzWidth="100px">Số lượng tồn(7)=1+2+3-4-6</th>
+          <th nzWidth="140px">Số lượng điều chỉnh tăng(3)</th>
+          <th nzWidth="140px">Số lượng điều chỉnh giảm(4)</th>
+          <th nzWidth="140px">Số lượng cần sửa chữa(5)</th>
+          <th nzWidth="140px">Số lượng phải thanh lý(6)</th>
+          <th nzWidth="140px">Số lượng tồn(7)=1+2+3-4-6</th>
           <th nzWidth="100px" nzRight>Hành động</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
-          <td *ngIf="userService.isCuc()">{{ data.tenDvi }}</td>
+          <td *ngIf="userService.isTongCuc()">{{ data.tenDviCha }}</td>
+          <td *ngIf="!userService.isChiCuc()">{{ data.tenDvi }}</td>
           <td>{{ data.maTaiSan }}</td>
           <td>{{ data.tenTaiSan}}</td>
           <td>{{ data.donViTinh }}</td>
           <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.soDuNamTruoc }}</td>
-          <td>{{ data.slNhap }}</td>
-          <td>{{ data.dieuChinhTang }}</td>
-          <td>{{ data.dieuChinhGiam }}</td>
-          <td>{{ data.slCanSuaChua }}</td>
-          <td>{{ data.slCanThanhLy }}</td>
-          <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.soDuNamTruoc | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
           <td nzRight>
-            <a>
+            <a  (click)="openDialog(data, true)"  *ngIf="data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()" >
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="openDialog(data)">
+              (click)="openDialog(data, false)" *ngIf="data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc() ">
               <i class="fa fa-pencil"></i>
             </a>
           </td>
