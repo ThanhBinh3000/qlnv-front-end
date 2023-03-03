@@ -132,7 +132,7 @@
           <td>{{ data.giaTriDx | number : '1.0-1'  : 'vi-VN' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) || userService.isCuc()">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) ||!userService.isChiCuc()">
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="((data.trangThai == STATUS.TUCHOI_CB_CUC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc())"
