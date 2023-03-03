@@ -80,10 +80,40 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="isTongHop">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" >
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-label class="text-wrap">Số QĐ giao chỉ tiêu</nz-form-label>
           <nz-form-control>
-            <input nz-input [readonly]="true"/>
+            <input nz-input [readonly]="true" formControlName="soQdGiaoCt"/>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3" *ngIf="disableForm()">
+          <nz-form-label>Năm kế hoạch</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-select [nzDisabled]="isView" formControlName="namKeHoach"
+                       nzAllowClear>
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <input nz-input formControlName="id" [readonly]="true"/>
+          </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="disableForm() ? 10 : 14">
+          <nz-form-label nzRequired >Trích yếu</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <input nz-input formControlName="trichYeu" [readonly]="isView"/>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label nzRequired>Ngày ký</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
+                            formControlName="ngayKy">
+            </nz-date-picker>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
@@ -110,36 +140,28 @@
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="8">
-        </div>
-        <div nz-col nzSpan="4" *ngIf="disableForm()">
-          <nz-form-label>Năm kế hoạch</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isView" formControlName="namKeHoach"
-                       nzAllowClear>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-              </nz-option>
-            </nz-select>
+        <div nz-col nzSpan="4">
+          <nz-form-label class="text-wrap">Khối lượng thực nhập theo ĐX Cục (tấn)</nz-form-label>
+          <nz-form-control>
+            <nz-input-number formControlName="klLtNhap" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <input nz-input formControlName="id" [readonly]="true"/>
-          </nz-form-control>
-        </div>
-        <div nz-col [nzSpan]="disableForm() ? 12 : 16">
-          <nz-form-label nzRequired >Trích yếu</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <input nz-input formControlName="trichYeu" [readonly]="isView"/>
+          <nz-form-label class="text-wrap">Khối lượng thực xuất theo ĐX Cục (tấn)</nz-form-label>
+          <nz-form-control>
+            <nz-input-number formControlName="klLtXuat" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label nzRequired>Ngày ký</nz-form-label>
+          <nz-form-label>Khối lượng thực bảo quản theo ĐX Cục (tấn)</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
-                            formControlName="ngayKy">
-            </nz-date-picker>
+            <nz-input-number formControlName="klLtBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
         </div>
       </div>
@@ -152,7 +174,7 @@
       </div>
     </div>
   </div>
-  <nz-table class="nowrap pd-10"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+  <nz-table class="nowrap mg-t-10"  [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
             [nzShowPagination]="false" nzBordered >
     <thead>
     <tr>
