@@ -112,6 +112,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         await this.changeNamKh(this.formDataTongHop.value.namKeHoach);
         this.formData.patchValue({
+          namKeHoach : this.formDataTongHop.value.namKeHoach,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
           klLtXuatCuc: detail.klLtXuat
