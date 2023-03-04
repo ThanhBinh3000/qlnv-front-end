@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import { FormArray, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -27,9 +27,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  fileDinhKems: any[] = [];
   dataDetail: any;
   radioValue: string = 'Chào giá';
+  fileDinhKemUyQuyen: any[] = [];
+  fileDinhKemMuaLe: any[] = [];
 
   @Output()
   dataTableChange = new EventEmitter<any>();
@@ -48,18 +49,18 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         id: [],
         idDtl: [],
         namKh: [dayjs().get("year"), [Validators.required]],
-        soQdPd: [''],
+        soQdPd: ['', [Validators.required]],
         maDvi: [''],
-        tenDvi: [''],
+        tenDvi: ['', [Validators.required]],
         pthucBanTrucTiep: [''],
-        diaDiemChaoGia: [''],
-        ngayMkho: [],
-        ngayKthuc: [],
+        diaDiemChaoGia: ['', [Validators.required]],
+        ngayMkho: ['', [Validators.required]],
+        ngayKthuc: ['', [Validators.required]],
+        loaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: ['', [Validators.required]],
+        cloaiVthh: ['', [Validators.required]],
+        tenCloaiVthh: ['', [Validators.required]],
         moTaHangHoa: [''],
-        loaiVthh: [''],
-        tenLoaiVthh: [''],
-        cloaiVthh: [''],
-        tenCloaiVthh: [''],
         trangThai: [STATUS.CHUA_CAP_NHAT],
         tenTrangThai: ['Chưa cập nhật'],
         soQdPdKq: [''],
@@ -115,13 +116,25 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
             loaiVthh: dataDtl.xhQdPdKhBttHdr.loaiVthh,
             moTaHangHoa: dataDtl.xhQdPdKhBttHdr.moTaHangHoa,
           })
-
+          this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
+          this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
         })
         .catch((e) => {
           console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
+    }
+  }
+
+  deleteTaiLieuDinhKemTag(data: any) {
+    if (!this.isView) {
+      this.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen.filter(
+        (x) => x.id !== data.id,
+      );
+      this.fileDinhKemMuaLe = this.fileDinhKemMuaLe.filter(
+        (x) => x.id !== data.id,
+      );
     }
   }
 
@@ -175,7 +188,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     let body = this.formData.value;
     body.children = this.dataTable;
     body.pthucBanTrucTiep = this.radioValue;
-    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
+    body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
     let res = await this.chaoGiaMuaLeUyQuyenService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -320,6 +334,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
       saveAs(blob, item.fileName);
     });
+  }
+
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) {
+      return false
+    } else {
+      return true
+    }
   }
 
 }

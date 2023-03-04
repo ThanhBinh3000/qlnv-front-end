@@ -8,12 +8,14 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { STATUS } from 'src/app/constants/status';
 import { MESSAGE } from 'src/app/constants/message';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { L } from '@angular/cdk/keycodes';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import { saveAs } from 'file-saver';
+import { ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+
 
 @Component({
   selector: 'app-them-qd-pd-ket-qua-btt',
@@ -61,6 +63,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
+      fileName: [],
     });
   }
 
@@ -88,8 +91,9 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         this.formData.patchValue({
           soQdKq: res.soQdKq?.split('/')[0],
         })
+        this.dataTable = res.children;
+        this.fileDinhKem = res.fileDinhKems;
       }
-      await this.onChangeTtin(res.idPdKhDtl);
     }
   }
 
@@ -99,6 +103,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
     body.fileDinhKems = this.fileDinhKem;
+    body.children = this.dataTable;
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -178,7 +183,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     let res = await this.chaoGiaMuaLeUyQuyenService.search(body);
     if (res.data) {
       listTb = res.data.content;
-      console.log(listTb, 999)
     }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách thông tin chào giá',
@@ -217,7 +221,59 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         idPdKhDtl: data.id,
         idPdKhHdr: data.xhQdPdKhBttHdr.id
       })
-      this.dataTable = data.xhTcTtinBttList
+      this.dataTable = data.xhTcTtinBttList;
+      if (this.dataTable) {
+        console.log(this.dataTable, 999)
+        this.dataTable.forEach(s => {
+          s.fileDinhKems.id = null;
+          s.fileDinhKems.dataType = null;
+          s.fileDinhKems.dataId = null;
+        }
+        );
+      }
+    }
+  }
+  dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
+  startEdit(index: number): void {
+    this.dataTable[index].edit = true
+  }
+
+  saveEdit(index: number): void {
+    this.dataTable[index].edit = false
+    this.formData.patchValue({
+
+    })
+  }
+  cancelEdit(index: number): void {
+    this.dataTable[index].edit = false
+    this.formData.patchValue({
+
+    })
+
+  }
+
+  downloadFile(item: FileDinhKem) {
+    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+      saveAs(blob, item.fileName);
+    });
+  }
+
+  getNameFileQD($event: any) {
+    if ($event.target.files) {
+      const itemFile = {
+        name: $event.target.files[0].name,
+        file: $event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          let fileDinhKemQd = new FileDinhKem();
+          fileDinhKemQd.fileName = resUpload.filename;
+          fileDinhKemQd.fileSize = resUpload.size;
+          fileDinhKemQd.fileUrl = resUpload.url;
+          fileDinhKemQd.idVirtual = new Date().getTime();
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
+        });
     }
   }
 

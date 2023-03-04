@@ -37,7 +37,7 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
       loaiVthh: [''],
       trichYeu: [''],
       ngayKy: [],
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: [''],
       tenDvi: [],
     });
     this.filterTable = {
@@ -59,7 +59,7 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();
       await this.initData()
