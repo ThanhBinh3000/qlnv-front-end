@@ -28,3 +28,16 @@ export class ChiTietThongTinBanTrucTiepChaoGia {
   fileDinhKems: FileDinhKem = new FileDinhKem();
 }
 
+export class ChiTietCacChiCucHopDong {
+  id: number;
+  idHdr: number;
+  maDvi: string;
+  soLuong: number;
+  diaDiemChaoGia: string;
+  diaChi: string;
+}
+
+
+
+
+

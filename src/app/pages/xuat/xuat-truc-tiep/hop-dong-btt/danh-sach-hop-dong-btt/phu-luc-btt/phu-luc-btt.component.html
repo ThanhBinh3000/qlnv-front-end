@@ -34,7 +34,7 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Số Hợp đồng </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <input nz-input formControlName="soHd" />
+                            <input [readonly]="true" nz-input formControlName="soHd" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -42,37 +42,42 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Tên hợp đồng</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <input nz-input formControlName="tenHd" />
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true">Ngày
-                            hiệu lực HĐ</nz-form-label>
-                        <nz-date-picker [nzDisabled]="isDisabled()" nzFormat="dd/MM/yyyy" formControlName="ngayHluc">
-                        </nz-date-picker>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="4">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd"> Số
-                            phụ lục hợp đồng
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
-                                <input nz nz-input formControlName="soPhuLuc" />
-                            </nz-input-group>
+                            <input [readonly]="true" nz-input formControlName="tenHd" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="3">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Ngày
-                            hiệu lực của phụ lục HĐ </nz-form-label>
-                        <nz-date-picker [nzDisabled]="isDisabled()" nzFormat="dd/MM/yyyy"
-                            formControlName="ngayHlucPhuLuc">
-                        </nz-date-picker>
+                            hiệu lực HĐ </nz-form-label>
+                        <nz-form-control nz-col [nzErrorTip]="error">
+                            <nz-date-picker nzDisabled formControlName="ngayHluc" nzFormat="dd/MM/yyyy">
+                            </nz-date-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số
+                            phụ lục hợp đồng </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
+                                <nz-input-number formControlName="soPhuLuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                    [nzSize]="'small'" [nzDisabled]="isDisabled()">
+                                </nz-input-number>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="3">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true">Ngày
+                            hiệu lực của phụ lục HĐ</nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-date-picker [nzDisabled]="isDisabled()" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayHlucPhuLuc">
+                            </nz-date-picker>
+                        </nz-form-control>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="24">
@@ -80,7 +85,8 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Nội dung Phụ lục HĐ
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <textarea nz-input [rows]="3" formControlName="noiDungPhuLuc"></textarea>
+                            <textarea [readonly]="isDisabled()" nz-input [rows]="3"
+                                formControlName="noiDungPhuLuc"></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -96,7 +102,7 @@
                                     ngày - đến ngày)
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy">
+                                    <nz-range-picker nzDisabled formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy">
                                     </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -107,7 +113,8 @@
                                     ngày - đến ngày)
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-range-picker formControlName="thoiGianDuKienSauDc" nzFormat="dd/MM/yyyy">
+                                    <nz-range-picker formControlName="thoiGianDuKienSauDc" nzFormat="dd/MM/yyyy"
+                                        [nzDisabled]="isDisabled()">
                                     </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -119,7 +126,7 @@
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group>
-                                        <nz-input-number nz nz-input formControlName="tgianThienHd"
+                                        <nz-input-number nzDisabled nz nz-input formControlName="tgianThienHd"
                                             [nzSize]="'small'"></nz-input-number>
                                     </nz-input-group>
                                 </nz-form-control>
@@ -132,8 +139,10 @@
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group>
-                                        <nz-input-number nz nz-input formControlName="tgianThienHdSauDc"
-                                            [nzSize]="'small'"></nz-input-number>
+                                        <nz-input-number formControlName="tgianThienHdSauDc" [nzMin]="1"
+                                            [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
+                                            [nzDisabled]="isDisabled()">
+                                        </nz-input-number>
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -189,18 +198,19 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Nội dung điều chỉnh khác
                                 </nz-form-label>
-                                <nz-form-control nz-col [nzErrorTip]="error">
-                                    <textarea nz-input [rows]="3" formControlName="noiDungDcKhac"></textarea>
+                                <nz-form-control nz-col>
+                                    <textarea [readonly]="isDisabled()" nz-input [rows]="3"
+                                        formControlName="noiDungDcKhac"></textarea>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true">
+                                <nz-form-label [nzNoColon]="true">
                                     Tài liệu đính kèm
                                 </nz-form-label>
                                 <div class="list-file">
-                                    <file-list [disabled]="isDisabled()"></file-list>
+                                    <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -214,8 +224,9 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú
                         </nz-form-label>
-                        <nz-form-control nz-col [nzErrorTip]="error">
-                            <textarea nz-input [rows]="3" formControlName="ghiChuPhuLuc"></textarea>
+                        <nz-form-control nz-col>
+                            <textarea [readonly]="isDisabled()" nz-input [rows]="3"
+                                formControlName="ghiChuPhuLuc"></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
