@@ -29,7 +29,7 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       ngayKyDc: null,
       soQdDc: null,
       soQdPd: null,

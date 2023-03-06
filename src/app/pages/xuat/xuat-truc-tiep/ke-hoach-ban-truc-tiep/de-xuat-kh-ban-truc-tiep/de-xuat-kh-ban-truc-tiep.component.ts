@@ -32,7 +32,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [],
       soDxuat: [],
       maDvi: [],
       tenDvi: [],

@@ -27,7 +27,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: '',
       ngayThop: '',
       loaiVthh: '',
       tenLoaiVthh: '',

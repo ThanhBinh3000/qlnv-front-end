@@ -27,7 +27,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,

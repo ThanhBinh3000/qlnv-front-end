@@ -147,7 +147,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       let body = {
         trangThai: "01",
         maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
-        type: [null, 'MLK']
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
