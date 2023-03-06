@@ -107,6 +107,7 @@ export class PhuLucTongHopComponent implements OnInit {
     this.isSynthetic = this.dataInfo?.isSynthetic;
     this.statusBtnOk = this.dataInfo?.statusBtnOk;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
+    
 
     this.lstCtietBcao = this.dataInfo.data.lstCtietDchinh;
     if (this.isSynthetic && this.isSynthetic == true) {
