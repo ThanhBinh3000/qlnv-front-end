@@ -49,6 +49,11 @@ export class DanhMucService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  getAllVthhByCap(cap): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/cap/${cap}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   phuongThucDauThauGetAll(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/PT_DTHAU`;
     return this.httpClient.get<any>(url).toPromise();

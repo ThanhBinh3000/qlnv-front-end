@@ -29,6 +29,11 @@ export class MmDxChiCucService extends BaseService{
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
+  getCtieuKhTc(body) {
+    const url = `${environment.SERVICE_API}/qlnv-khoach/chi-tieu-ke-hoach-nam/chi-tieu-cua-tong-cuc`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
   getSlHienCo(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/so-luong-hien-co`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();

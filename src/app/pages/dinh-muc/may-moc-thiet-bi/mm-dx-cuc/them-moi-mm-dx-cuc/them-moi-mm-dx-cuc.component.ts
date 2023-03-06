@@ -44,7 +44,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id : [null],
       maDvi : [null],
-      namKeHoach : [null],
+      namKeHoach : [dayjs().get('year')],
       soCv : [null, Validators.required],
       klLtBaoQuan: [null],
       klLtNhap: [null],
@@ -106,6 +106,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
+          namKeHoach : this.formDataTongHop.value.namKeHoach,
           klLtBaoQuan : detail.klLtBaoQuan,
           klLtNhap : detail.klLtNhap,
           klLtXuat : detail.klLtXuat
