@@ -10,7 +10,6 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './bieu-mau-17.constant';
 
 export class ItemData {
     id: string;
@@ -23,7 +22,6 @@ export class ItemData {
     ncauNamN1: number;
     ncauNamN2: number;
 }
-
 
 @Component({
     selector: 'app-bieu-mau-17',
