@@ -25,6 +25,8 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
   @Input() id: number;
   @Input() isView: boolean;
   listDxCuc: any[] = [];
+  listCtieuKh: any[] = [];
+  detailCtieuKh : any
   isTongHop: boolean = false;
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
@@ -45,7 +47,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
-      namKeHoach: [null],
+      namKeHoach: [dayjs().get('year')],
       klLtBaoQuan: [null],
       klLtNhap: [null],
       klLtXuat: [null],
@@ -72,6 +74,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     this.spinner.show();
     try {
       await this.loadDsDxCc();
+      await this.getCtieuKhTc(this.formData.value.namKeHoach);
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -83,6 +86,18 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
+  async getCtieuKhTc(event) {
+    let res = await this.dxChiCucService.getCtieuKhTc({
+      namKeHoach: event
+    });
+    if (res.data) {
+      this.formData.patchValue({
+        soQdGiaoCt : res.data.soQuyetDinh
+      })
+      await this.changeSoQdGiaoCt(res.data.id)
+      this.detailCtieuKh = res.data
+    }
+  }
 
   async tongHop() {
     this.helperService.markFormGroupTouched(this.formDataTongHop);
@@ -102,17 +117,20 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data;
+      if (detail && detail.listQlDinhMucDxTbmmTbcd && detail.listQlDinhMucDxTbmmTbcd.length > 0 ) {
+        this.listDxCuc = [];
+        this.listDxCuc = detail.listQlDinhMucDxTbmmTbcd.map(item => item.maDvi)
+      }
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
-        await this.changeNamKh(this.formDataTongHop.value.namKeHoach);
         this.formData.patchValue({
-          namKeHoach : this.formDataTongHop.value.namKeHoach,
+          namKeHoach: this.formDataTongHop.value.namKeHoach,
           klLtBaoQuanCuc: detail.klLtBaoQuan,
           klLtNhapCuc: detail.klLtNhap,
           klLtXuatCuc: detail.klLtXuat
@@ -247,23 +265,6 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
-  async changeNamKh(event) {
-    let res = await this.dxChiCucService.getCtieuKhoach(event);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.formData.patchValue({
-          soQdGiaoCt : res.data.soQuyetDinh,
-          klLtXuat : res.data.ntnTongSoQuyThoc ? res.data.ntnTongSoQuyThoc : 0,
-          klLtNhap : res.data.xtnTongSoQuyThoc ? res.data.xtnTongSoQuyThoc : 0,
-          klLtBaoQuan : res.data.tkdnTongSoQuyThoc ? res.data.tkdnTongSoQuyThoc : 0
-        })
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      return;
-    }
-  }
-
   async pheDuyet() {
     let trangThai;
     switch (this.formData.value.trangThai) {
@@ -331,14 +332,14 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
-  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+  async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
       item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
     } else {
       item.chenhLechThieu = 0
     }
-    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }
@@ -373,4 +374,22 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
       this.expandSet.delete(id);
     }
   }
+  changeSoQdGiaoCt(event) {
+    // let ctieuKhNhap = 0
+    // let ctieuKhXuat = 0
+    // let ctieuTkdn = 0
+    // let ctieuKhBq = 0
+    //     if (listLt && listLt.length > 0) {
+    //       let detailLt = listLt[0]
+    //       ctieuKhNhap = detailLt.ntnTongSoQuyThoc ? detailLt.ntnTongSoQuyThoc : 0
+    //       ctieuKhXuat = detailLt.xtnTongSoQuyThoc ? detailLt.xtnTongSoQuyThoc : 0
+    //       ctieuTkdn = detailLt.tkdnTongSoQuyThoc ? detailLt.tkdnTongSoQuyThoc : 0
+    //       ctieuKhBq = ctieuTkdn + ctieuKhNhap - ctieuKhXuat
+    //     }
+    //   this.formData.patchValue({
+    //     klLtBaoQuan : ctieuKhBq,
+    //     klLtNhap : ctieuKhNhap,
+    //     klLtXuat : ctieuKhXuat,
+    //   })
+    }
 }
