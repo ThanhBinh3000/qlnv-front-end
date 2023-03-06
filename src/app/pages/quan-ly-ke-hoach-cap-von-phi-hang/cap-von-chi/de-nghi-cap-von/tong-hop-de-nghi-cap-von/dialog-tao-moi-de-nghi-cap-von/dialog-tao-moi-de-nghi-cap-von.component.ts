@@ -107,6 +107,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 			this.response.soLan = 1;
 			this.response.trangThai = Utils.TT_BC_1;
 			this.response.maDviTien = '1';
+			this.response.lstFiles = [];
 			//bao cao chua ton tai
 			if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
 				if (this.response.loaiDnghi == Utils.MUA_VTU) {
