@@ -36,7 +36,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       ngayChaoGia: null,
       toChucCaNhan: null,
       maDvi: null,
