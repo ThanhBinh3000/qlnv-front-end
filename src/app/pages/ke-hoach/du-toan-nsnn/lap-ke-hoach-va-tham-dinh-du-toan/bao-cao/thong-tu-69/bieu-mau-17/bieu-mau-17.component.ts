@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -45,6 +45,7 @@ export class BieuMau17Component implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -74,14 +75,20 @@ export class BieuMau17Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
-        const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM17');
-        if (category) {
-            this.linhVucs = category.data;
-        }
+
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.namBcao = this.dataInfo?.namBcao;
         this.status = !this.dataInfo?.status;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM17');
+            if (category) {
+                this.linhVucs = category.data;
+            }
+            this.scrollX = (510 + 4 * BOX_NUMBER_WIDTH).toString() + 'px';
+        } else {
+            this.scrollX = (450 + 4 * BOX_NUMBER_WIDTH).toString() + 'px';
+        }
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

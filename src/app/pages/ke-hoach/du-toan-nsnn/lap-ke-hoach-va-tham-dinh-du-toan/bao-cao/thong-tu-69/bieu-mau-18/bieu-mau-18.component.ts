@@ -85,15 +85,16 @@ export class BieuMau18Component implements OnInit {
 
 	async initialization() {
 		this.spinner.show();
-		const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM18');
-		if (category) {
-			this.linhVucChis = category.data;
-		}
+
 		this.formDetail = this.dataInfo?.data;
 		this.thuyetMinh = this.formDetail?.thuyetMinh;
 		this.status = !this.dataInfo?.status;
 		if (this.status) {
-			this.scrollX = (1200 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+			const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM18');
+			if (category) {
+				this.linhVucChis = category.data;
+			}
+			this.scrollX = (1210 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
 		} else {
 			this.scrollX = (1150 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
 		}
