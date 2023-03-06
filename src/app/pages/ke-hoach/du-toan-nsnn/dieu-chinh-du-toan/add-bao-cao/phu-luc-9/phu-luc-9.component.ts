@@ -12,6 +12,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { DON_VI_TIEN, LA_MA, AMOUNT, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
   level: any;
@@ -63,6 +64,18 @@ export class ItemData {
   dtoanVuTvqtDnghi: number;
 }
 
+export const AMOUNT1 = {
+  allowZero: true,
+  allowNegative: true,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
   selector: 'app-phu-luc-9',
   templateUrl: './phu-luc-9.component.html',
@@ -95,6 +108,7 @@ export class PhuLuc9Component implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   soLaMa: any[] = LA_MA;
   amount = AMOUNT;
+  amount1 = AMOUNT1;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -115,6 +129,7 @@ export class PhuLuc9Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
+    console.log(this.dataInfo)
     this.userInfo = this.userService.getUserLogin();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;

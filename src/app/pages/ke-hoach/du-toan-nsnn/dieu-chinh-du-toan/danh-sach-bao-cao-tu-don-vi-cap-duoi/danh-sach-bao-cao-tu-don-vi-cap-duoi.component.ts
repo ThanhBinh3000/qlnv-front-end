@@ -179,7 +179,7 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
   viewDetail(data: any) {
     const obj = {
       id: data.id,
-      tabSelected: 'baocao',
+      tabSelected: 'addbaocao',
     }
     this.dataChange.emit(obj);
   }

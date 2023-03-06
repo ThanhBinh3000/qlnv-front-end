@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -31,6 +32,18 @@ export class ItemData {
   maNoiDung: string;
 }
 
+export const AMOUNT1 = {
+  allowZero: true,
+  allowNegative: true,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
   selector: 'app-phu-luc-4',
   templateUrl: './phu-luc-4.component.html',
@@ -55,6 +68,7 @@ export class PhuLuc4Component implements OnInit {
   listIdDelete = "";
   allChecked = false;
   amount = AMOUNT;
+  amount1 = AMOUNT1;
   formDetail: any;
   maDviTao: any;
   userInfo: any;

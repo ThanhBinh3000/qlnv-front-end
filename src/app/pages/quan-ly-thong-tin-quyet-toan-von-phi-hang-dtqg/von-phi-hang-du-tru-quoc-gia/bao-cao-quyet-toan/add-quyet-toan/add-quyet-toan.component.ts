@@ -1050,7 +1050,7 @@ export class AddQuyetToanComponent implements OnInit {
       })
       stt = this.getHead(stt);
     }
-    this.getTotal();
+    // this.getTotal();
   };
 
   getTotal() {

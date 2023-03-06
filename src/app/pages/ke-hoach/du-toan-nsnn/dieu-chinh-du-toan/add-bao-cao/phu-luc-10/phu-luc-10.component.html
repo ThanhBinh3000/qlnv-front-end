@@ -174,8 +174,8 @@
                 <td>{{displayValue(editCache[data.id].data.kh2021SauDchinh)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanDnghiDchinhLnay)}}</td>
                 <td>
-                  <fm-input-number nz-input class="search__input"
-                    [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"></fm-input-number>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
                 <td>{{editCache[data.id].data.ghiChu}}</td>
               </ng-container>
@@ -207,7 +207,8 @@
                   {{editCache[data.id].data.dtoanDnghiDchinhLnay}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
-                  {{displayValue(editCache[data.id].data.dtoanVuTvqtDnghi)}}
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
                 <td>
                   <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />

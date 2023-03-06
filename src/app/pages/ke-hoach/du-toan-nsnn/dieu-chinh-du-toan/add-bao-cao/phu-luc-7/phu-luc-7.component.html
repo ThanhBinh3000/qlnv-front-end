@@ -206,8 +206,10 @@
                 <td>{{displayValue(editCache[data.id].data.dtoanLkeDaGiao)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}</td>
                 <td>
-                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                  <!-- <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
+                    <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
                 <td>{{editCache[data.id].data.ghiChu}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanNamConThieu)}}</td>
@@ -258,8 +260,8 @@
                   {{editCache[data.id].data.dtoanDnghiDchinh}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
-                  <fm-input-number nz-input class="search__input"
-                    [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"></fm-input-number>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
                 <td>
                   <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />

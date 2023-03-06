@@ -13,6 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 export class ItemData {
   level: any;
   checked: boolean;
@@ -33,6 +34,18 @@ export class ItemData {
   kphiThieu: number;
   maNdung: string;
   maDmuc: string;
+}
+
+export const AMOUNT1 = {
+  allowZero: true,
+  allowNegative: true,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
 @Component({
@@ -62,6 +75,7 @@ export class PhuLuc6Component implements OnInit {
   soLaMa: any[] = LA_MA;
   allChecked = false;
   amount = AMOUNT;
+  amount1 = AMOUNT1;
   tongSo: number;
   tongSoTd: number;
   tongThienNamTruoc: number;

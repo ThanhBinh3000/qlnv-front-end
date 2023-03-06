@@ -16,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DCDT, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { PHU_LUC } from './add-bao-cao.constant';
+import { PHU_LUC, PHU_LUC_TH } from './add-bao-cao.constant';
 import { PhuLuc1Component } from './phu-luc-1/phu-luc-1.component';
 import { PhuLuc10Component } from './phu-luc-10/phu-luc-10.component';
 import { PhuLuc2Component } from './phu-luc-2/phu-luc-2.component';
@@ -27,6 +27,7 @@ import { PhuLuc6Component } from './phu-luc-6/phu-luc-6.component';
 import { PhuLuc7Component } from './phu-luc-7/phu-luc-7.component';
 import { PhuLuc8Component } from './phu-luc-8/phu-luc-8.component';
 import { PhuLuc9Component } from './phu-luc-9/phu-luc-9.component';
+import { PhuLucTongHopComponent } from './phu-luc-tong-hop/phu-luc-tong-hop.component';
 
 export class ItemCongVan {
   fileName: string;
@@ -71,7 +72,7 @@ export class BaoCao {
   lstDviTrucThuoc: any[];
   lstFiles: any[];
   fileDinhKems: any[];
-  listIdFiles: any[];
+  listIdFiles: string[];
   tongHopTuIds: any[];
 }
 
@@ -102,7 +103,7 @@ export class AddBaoCaoComponent implements OnInit {
   viewRecommendedValue = true;
 
   baoCao: BaoCao = new BaoCao();
-  listAppendix: any[] = PHU_LUC;
+  listAppendix: any[] = [];
 
   fileDetail: NzUploadFile;
   fileList: NzUploadFile[] = [];
@@ -222,6 +223,7 @@ export class AddBaoCaoComponent implements OnInit {
     this.baoCao.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
     this.getListUser();
+    await this.getChildUnit();
 
     if (this.baoCao.id) {
       await this.getDetailReport();
@@ -237,7 +239,7 @@ export class AddBaoCaoComponent implements OnInit {
       this.baoCao.ngayNhap = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
       this.baoCao.tongHopTuIds = [];
       this.baoCao.lstFiles = [];
-      this.baoCao.listIdFiles = [];
+      // this.baoCao.listIdFiles = [];
       this.baoCao.dotBcao = this.data?.dotBcao
 
       await this.dieuChinhDuToanService.sinhMaBaoCaoDieuChinh().toPromise().then(
@@ -254,6 +256,7 @@ export class AddBaoCaoComponent implements OnInit {
       );
 
       if (this.baoCao.lstDviTrucThuoc.length == 0) {
+        this.listAppendix = PHU_LUC
         this.listAppendix.forEach(e => {
           this.baoCao.lstDchinh.push({
             ...new ItemData(),
@@ -266,13 +269,19 @@ export class AddBaoCaoComponent implements OnInit {
           });
         });
       } else {
+        this.listAppendix = PHU_LUC_TH
+        this.baoCao?.lstDchinh.forEach(item => {
+          const pl = this.listAppendix.find(e => e.id == item.maLoai);
+          item.tenPl = pl.tenPl;
+          item.tenDm = pl.tenDm;
+        })
         this.baoCao?.lstDviTrucThuoc.forEach(e => {
-          if (e.ngayDuyetTBP.includes('/')) {
-            e.ngayDuyetTBP = e.ngayDuyetTBP;
-            e.ngayDuyetLD = e.ngayDuyetLD;
+          if (e.ngayDuyet.includes('/')) {
+            e.ngayDuyet = e.ngayDuyet;
+            e.ngayPheDuyet = e.ngayPheDuyet;
           } else {
-            e.ngayDuyetTBP = this.datePipe.transform(e.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
-            e.ngayDuyetLD = this.datePipe.transform(e.ngayDuyetLD, Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
           }
         });
       }
@@ -281,6 +290,25 @@ export class AddBaoCaoComponent implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   };
+
+  async getChildUnit() {
+    const request = {
+        maDviCha: this.baoCao.maDvi,
+        trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+        data => {
+            if (data.statusCode == 0) {
+                this.childUnit = data.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        },
+        (err) => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+        }
+    )
+}
 
   getStatusButton() {
     const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
@@ -322,15 +350,11 @@ export class AddBaoCaoComponent implements OnInit {
   };
 
   async getDetailReport() {
-    await this.dieuChinhDuToanService.bCDieuChinhDuToanChiTiet(this.baoCao.id).toPromise().then(
+    await this.dieuChinhDuToanService.bCDieuChinhDuToanChiTiet1(this.baoCao.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
-          this.baoCao.lstDchinh.forEach(item => {
-            const appendix = this.listAppendix.find(e => e.id == item.maLoai);
-            item.tenPl = appendix.tenPl;
-            item.tenDm = appendix.tenDm;
-          })
+
           this.baoCao.trangThaiBaoCao = data.data.trangThai
           this.baoCao.ngayNhap = data.data.ngayTao;
           this.baoCao.ngayTrinhDuyet = data.data.ngayTrinh;
@@ -342,9 +366,21 @@ export class AddBaoCaoComponent implements OnInit {
           this.baoCao.ngayDuyetTBP = this.datePipe.transform(this.baoCao.ngayDuyetTBP, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayDuyetLD = this.datePipe.transform(this.baoCao.ngayDuyetLD, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayCapTrenTraKq = this.datePipe.transform(this.baoCao.ngayCapTrenTraKq, Utils.FORMAT_DATE_STR);
+          this.baoCao.nguoiNhap = data.data.nguoiTao;
+          this.baoCao.listIdFiles = this.baoCao.listIdFiles;
           this.baoCao.lstDviTrucThuoc.forEach(item => {
             item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
             item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          })
+          if (this.baoCao.lstDviTrucThuoc.length == 0) {
+            this.listAppendix = PHU_LUC
+          } else {
+            this.listAppendix = PHU_LUC_TH
+          }
+          this.baoCao.lstDchinh.forEach(item => {
+            const appendix = this.listAppendix.find(e => e.id == item.maLoai);
+            item.tenPl = appendix.tenPl;
+            item.tenDm = appendix.tenDm;
           })
           this.listFile = [];
           this.getStatusButton();
@@ -424,7 +460,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     //call service them moi
     if (!this.baoCao.id) {
-      this.dieuChinhDuToanService.trinhDuyetDieuChinhService(baoCaoTemp).toPromise().then(
+      this.dieuChinhDuToanService.trinhDuyetDieuChinhService1(baoCaoTemp).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -445,7 +481,7 @@ export class AddBaoCaoComponent implements OnInit {
         },
       );
     } else {
-      this.dieuChinhDuToanService.updateDieuChinh(baoCaoTemp).toPromise().then(
+      this.dieuChinhDuToanService.updateDieuChinh1(baoCaoTemp).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1037,6 +1073,9 @@ export class AddBaoCaoComponent implements OnInit {
         break;
       case 'pl10':
         nzContent = PhuLuc10Component;
+        break;
+      case 'pl01TH':
+        nzContent = PhuLucTongHopComponent;
         break;
       default:
         break;
