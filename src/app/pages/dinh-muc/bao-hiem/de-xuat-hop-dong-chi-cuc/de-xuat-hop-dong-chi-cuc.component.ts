@@ -69,8 +69,8 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
       })
     }
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi :this.userInfo.CAP_DVI
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : 3
     })
     await this.search();
   }
@@ -85,8 +85,8 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi :this.userInfo.CAP_DVI
+      maDvi : this.userInfo.MA_DVI,
+      capDvi : 3
     })
     await this.search();
   }
