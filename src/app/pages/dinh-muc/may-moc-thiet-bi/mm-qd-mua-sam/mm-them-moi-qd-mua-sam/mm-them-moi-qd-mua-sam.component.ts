@@ -191,6 +191,9 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           if(this.userService.isCuc()) {
             this.dataTable = this.dataTable.filter(item => item.maDvi = this.userInfo.MA_DVI)
           }
+          this.dataTable.forEach(item => {
+            this.loadSlThuaThieu(item)
+          })
           this.convertListData()
           this.expandAll();
         }
@@ -298,9 +301,11 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
             this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
             if (this.dataTable && this.dataTable.length > 0) {
               this.dataTable.forEach(item => {
+                this.loadSlThuaThieu(item)
                 item.id = null;
                 item.ghiChu = null;
                 item.soLuong = item.soLuongTc
+                item.slTieuChuan = item.slTieuChuanTc
               })
               this.convertListData()
               this.expandAll();
@@ -361,6 +366,19 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           await this.changSoTh(data.id);
         }
       })
+    }
+  }
+
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
     }
   }
 
