@@ -3,8 +3,14 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Hợp đồng/Phụ lục hợp đồng
         </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Bảng kê bán lẻ
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
     <app-danh-sach-hop-dong-btt [loaiVthh]="loaiVthh"></app-danh-sach-hop-dong-btt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-bang-ke-ban-hang [loaiVthh]="loaiVthh"></app-bang-ke-ban-hang>
 </ng-container>
