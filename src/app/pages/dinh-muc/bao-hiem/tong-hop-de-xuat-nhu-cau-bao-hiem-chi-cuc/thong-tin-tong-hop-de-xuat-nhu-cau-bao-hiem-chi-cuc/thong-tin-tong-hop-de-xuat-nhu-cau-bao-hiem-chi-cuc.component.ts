@@ -26,42 +26,44 @@ import {
 export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  listDxChiCuc : any[] = [];
+  listDxChiCuc: any[] = [];
   isTongHop: boolean = false;
   rowItem: BaoHiemKhoDangChuaHang = new BaoHiemKhoDangChuaHang();
   dataEdit: { [key: string]: { edit: boolean; data: BaoHiemKhoDangChuaHang } } = {};
-  formDataTongHop : FormGroup
+  formDataTongHop: FormGroup
   expandSet = new Set<number>();
   maCv: string;
   tableHangDtqg: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatBaoHiemSv : DeXuatNhuCauBaoHiemService
+    private deXuatBaoHiemSv: DeXuatNhuCauBaoHiemService
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatBaoHiemSv)
     super.ngOnInit()
     this.formData = this.fb.group({
-      id : [null],
-      maDvi : [null],
-      namKeHoach : [dayjs().get('year')],
-      soCv : [null, Validators.required],
-      trichYeu : [null, Validators.required],
-      ngayKy : [null, Validators.required],
-      trangThai : ['00'],
-      tenTrangThai : ['Dự thảo'],
-      fileDinhKems : [null],
-      lyDoTuChoi : [null],
-      listQlDinhMucDxBhHdtqg : [null],
-      listQlDinhMucDxBhKhoChua : [null],
+      id: [null],
+      maDvi: [null],
+      namKeHoach: [dayjs().get('year')],
+      soCv: [null, Validators.required],
+      trichYeu: [null, Validators.required],
+      ngayKy: [null, Validators.required],
+      trangThai: ['00'],
+      giaTriDx: [null],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKems: [null],
+      lyDoTuChoi: [null],
+      listQlDinhMucDxBhHdtqg: [null],
+      listQlDinhMucDxBhKhoChua: [null],
     });
     this.formDataTongHop = this.fb.group({
-      namKeHoach : [dayjs().get('year'), Validators.required],
-      ngayDx : [null],
-      listSoCv : [null]
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      ngayDx: [null],
+      listSoCv: [null]
     });
   }
 
@@ -99,8 +101,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
-    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.deXuatBaoHiemSv.tongHop(body);
@@ -108,10 +110,18 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxBhKhoChua) {
         this.formData.patchValue({
-          namKeHoach : this.formDataTongHop.value.namKeHoach,
+          namKeHoach: this.formDataTongHop.value.namKeHoach,
         })
         this.dataTable = detail.listQlDinhMucDxBhKhoChua
         this.dataTable.forEach(item => {
+          let arr = detail.listQlDinhMucDxBaoHiemHdr;
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              if (dtl.id == item.bhHdrId) {
+                item.maDvi = dtl.maDvi
+              }
+            })
+          }
           item.id = null;
           item.ghiChu = null;
           idVirtual:uuid.v4()
@@ -121,6 +131,14 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       if (detail && detail.listQlDinhMucDxBhHdtqg) {
         this.tableHangDtqg = detail.listQlDinhMucDxBhHdtqg
         this.tableHangDtqg.forEach(item => {
+          let arr = detail.listQlDinhMucDxBaoHiemHdr;
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              if (dtl.id == item.bhHdrId) {
+                item.maDvi = dtl.maDvi
+              }
+            })
+          }
           item.id = null;
           item.ghiChu = null;
           idVirtual:uuid.v4()
@@ -167,7 +185,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
 
   async save() {
     this.formData.patchValue({
-      namKeHoach : this.formDataTongHop.value.namKeHoach
+      namKeHoach: this.formDataTongHop.value.namKeHoach,
+      giaTriDx  : this.sumslKho('giaTriBhDx', null, 'tong')
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
@@ -198,9 +217,12 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
-          this.convertListData()
-          this.expandAll('kho');
+          this.dataTable = data.listQlDinhMucDxBhKhoChua;
+          this.tableHangDtqg = data.listQlDinhMucDxBhHdtqg;
+          await this.convertListData()
+          await this.buildDiaDiemTc()
+          await this.expandAll('kho');
+          await this.expandAll('dtqg');
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -231,7 +253,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenDonVi').map((value, key) => ({ tenDonVi: key, dataChild: value, idVirtual: uuid.v4(),})
+      this.dataTable = chain(this.dataTable).groupBy('tenDonVi').map((value, key) => ({
+          tenDonVi: key,
+          dataChild: value,
+          idVirtual: uuid.v4(),
+        })
       ).value()
     }
     this.expandAll('kho');
@@ -257,7 +283,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           item.childData.forEach(data => {
             if (data.childData && data.childData.length > 0) {
               data.childData.forEach(dtl => {
-                arr.push(dtl)
+                if (dtl.childData && dtl.childData.length > 0) {
+                  dtl.childData.forEach(dtl1 => {
+                    arr.push(dtl1)
+                  })
+                }
               })
             }
           })
@@ -265,6 +295,28 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
       })
       this.tableHangDtqg = arr
     }
+  }
+
+  conVertArrayHang() : any[] {
+    let arr = [];
+    if (this.tableHangDtqg) {
+      this.tableHangDtqg.forEach(item => {
+        if (item.childData && item.childData.length > 0) {
+          item.childData.forEach(data => {
+            if (data.childData && data.childData.length > 0) {
+              data.childData.forEach(dtl => {
+                if (dtl.childData && dtl.childData.length > 0) {
+                  dtl.childData.forEach(dtl1 => {
+                    arr.push(dtl1)
+                  })
+                }
+              })
+            }
+          })
+        }
+      })
+    }
+    return arr;
   }
 
   buildDiaDiemTc() {
@@ -275,11 +327,20 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           let rs = chain(value)
             .groupBy("tenHangHoaCha")
             .map((v, k) => {
+                let res = chain(v)
+                  .groupBy("tenHangHoa")
+                  .map((v1, k1) => {
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenHangHoa: k1,
+                      childData: v1
+                    }
+                  }).value();
                 return {
                   idVirtual: uuid.v4(),
                   tenHangHoaCha: k,
-                  childData: v
-                }
+                  childData: res
+                };
               }
             ).value();
           return {
@@ -292,14 +353,90 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     this.expandAll('dtqg');
   }
 
-  sumSoLuong(data : any) {
-    let sl = 0;
-    if (data && data.dataChild && data.dataChild.length > 0) {
-      data.dataChild.forEach(item => {
-        sl = sl + item.soLuong
-      })
+  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
+    let array = this.conVertArrayHang();
+    let result = 0;
+    if (array && array.length > 0) {
+      switch (type) {
+        case 'tenHangHoa' : {
+          if (array) {
+            let arr = array.filter(item => item.tenHangHoa == tenHangHoa)
+            if (arr && arr.length > 0) {
+              const sum = arr.reduce((prev, cur) => {
+                prev += cur[column];
+                return prev;
+              }, 0);
+              result = sum
+            }
+          }
+          break;
+        }
+        case 'tenHangHoaCha' : {
+          if (array) {
+            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            const sum = arr.reduce((prev, cur) => {
+              prev += cur[column];
+              return prev;
+            }, 0);
+            result = sum
+          }
+          break;
+        }
+        case 'tenLoaiVthh' : {
+          if (array) {
+            let arr = array.filter(item => item.tenLoaiVthh == tenLoaiVthh)
+            const sum = arr.reduce((prev, cur) => {
+              prev += cur[column];
+              return prev;
+            }, 0);
+            result = sum
+          }
+          break;
+        }
+        case 'tong' : {
+          if (array) {
+            const sum = array.reduce((prev, cur) => {
+              prev += cur[column];
+              return prev;
+            }, 0);
+            result = sum
+          }
+          break;
+        }
+      }
     }
-    return sl
+    return result;
+  }
+
+  sumslKho(column?: string, tenDvi? : string, type?: string) : number {
+    let result = 0;
+    let arr = [];
+    this.dataTable.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data)
+        })
+      }
+    })
+    if (arr && arr.length > 0) {
+      if (type) {
+          const sum = arr.reduce((prev, cur) => {
+            prev += cur[column];
+            return prev;
+          }, 0);
+          result = sum
+      } else {
+        let list = arr.filter(item => item.tenDonVi == tenDvi )
+        if(list && list.length > 0) {
+          const sum = list.reduce((prev, cur) => {
+            prev += cur[column];
+            return prev;
+          }, 0);
+          result = sum
+        }
+      }
+    }
+    return result;
   }
 
   disableForm() {
@@ -317,21 +454,25 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
   }
 
 
-
   expandAll(type: string) {
     if (type == 'kho') {
       this.dataTable.forEach(s => {
         this.expandSet.add(s.idVirtual);
       })
     } else {
-        this.tableHangDtqg.forEach(s => {
-          this.expandSet.add(s.idVirtual);
-          if (s.childData && s.childData.length > 0) {
-            s.childData.forEach(item => {
-              this.expandSet.add(item.idVirtual);
-            })
-          }
-        })
+      this.tableHangDtqg.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+        if (s.childData && s.childData.length > 0) {
+          s.childData.forEach(item => {
+            this.expandSet.add(item.idVirtual);
+            if (item.childData && item.childData.length > 0) {
+              item.childData.forEach(item1 => {
+                this.expandSet.add(item1.idVirtual);
+              })
+            }
+          })
+        }
+      })
     }
   }
 
