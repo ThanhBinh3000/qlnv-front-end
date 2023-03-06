@@ -411,8 +411,11 @@ export class MmThongTinNcChiCuc {
   slNhapThem: number = 0;
   tongCong: number = 0;
   slTieuChuan: number = 0;
+  slTieuChuanTc: number = 0;
   chenhLechThieu: number = 0;
+  chenhLechThieuTc: number = 0;
   chenhLechThua: number = 0;
+  chenhLechThuaTc: number = 0;
   soLuong: number = 0;
   soLuongTc: number = 0;
   donGiaTd: number = 0;

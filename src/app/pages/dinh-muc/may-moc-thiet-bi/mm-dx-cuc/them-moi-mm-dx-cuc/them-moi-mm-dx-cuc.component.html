@@ -203,7 +203,7 @@
           </td>
           <td>{{item.donGiaTd  | number: '1.0-1' }}</td>
           <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1' }}</td>
-          <td>{{item.ghiChu}}</td>
+          <td><input nz-input [(ngModel)]="item.ghiChu"></td>
         </tr>
       </ng-container>
     </ng-container>
