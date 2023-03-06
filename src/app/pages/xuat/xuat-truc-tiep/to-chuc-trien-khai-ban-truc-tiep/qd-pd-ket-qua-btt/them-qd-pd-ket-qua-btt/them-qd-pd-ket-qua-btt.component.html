@@ -220,8 +220,8 @@
                             <th width="200px">Địa chỉ</th>
                             <th width="200px">Số điện thoại</th>
                             <th width="100px">Ngày chào giá</th>
-                            <th width="100px">Số lượng(Kg)</th>
-                            <th width="100px">Đơn giá chưa bao gồm thuế(VNĐ)</th>
+                            <th width="100px">Số lượng (Kg)</th>
+                            <th width="100px">Đơn giá chưa bao gồm thuế (VNĐ)</th>
                             <th width="100px">Thuế GTGT</th>
                             <th width="100px">Thành tiền</th>
                             <th width="100px">File đính kèm</th>
@@ -237,7 +237,7 @@
                                 <td nzLeft>{{data.mst}}</td>
                                 <td nzLeft>{{data.diaDiemChaoGia}}</td>
                                 <td nzLeft>{{data.sdt}}</td>
-                                <td nzLeft>{{data.ngayChaoGia}}</td>
+                                <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/YYYY'}}</td>
                                 <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td nzLeft>{{data.thueGtgt}}</td>
