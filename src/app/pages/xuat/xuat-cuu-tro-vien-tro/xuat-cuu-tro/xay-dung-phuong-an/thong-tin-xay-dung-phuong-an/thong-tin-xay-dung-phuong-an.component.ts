@@ -287,12 +287,12 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
       this.changeCuc(this.phuongAnRow.maDviCuc);
     }
-     if (data) {
-       this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
-       this.changeCuc(this.phuongAnRow.maDviCuc);
-       this.phuongAnRow.noiDung = data.childData[0].noiDung;
-       this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-     }
+    if (data) {
+      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+      this.changeCuc(this.phuongAnRow.maDviCuc);
+      this.phuongAnRow.noiDung = data.childData[0].noiDung;
+      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+    }
   }
 
   handleOk(): void {
@@ -307,7 +307,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     let table = this.formData.value.deXuatPhuongAn;
     table.filter(s => s.noiDung === this.phuongAnRow.noiDung && s.maDviCuc === this.phuongAnRow.maDviCuc)
       .forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
-
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
     } else {
@@ -317,6 +316,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       deXuatPhuongAn: table
     })
     this.buildTableView();
+    //set tong sl xuat cuc
+    table.forEach(s => {
+      s.soLuongXuat = this.phuongAnView.find(s1 => s1.noiDung === s.noiDung).soLuongXuat;
+    })
     this.isVisible = false;
     //clean
     this.errorInputComponent = [];
@@ -531,4 +534,5 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       return '';
     }
   }
+
 }
