@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, Input, OnInit, Output } from '@angular/core';
+import { Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
 import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -7,15 +7,15 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { STATUS } from 'src/app/constants/status';
 import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { L } from '@angular/cdk/keycodes';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import { saveAs } from 'file-saver';
+import { ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+
 
 @Component({
   selector: 'app-them-qd-pd-ket-qua-btt',
@@ -41,7 +41,8 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
       id: [],
-      idHdr: [],
+      idPdKhDtl: [],
+      idPdKhHdr: [],
       namKh: [dayjs().get('year'), [Validators.required]],
       soQdKq: [, [Validators.required]],
       ngayHluc: [, [Validators.required]],
@@ -62,6 +63,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
+      fileName: [],
     });
   }
 
@@ -85,14 +87,23 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   async getDetail(idInput) {
     if (idInput) {
       let res = await this.detail(idInput);
-      await this.onChangeTtin(res.idHdr);
+      if (res) {
+        this.formData.patchValue({
+          soQdKq: res.soQdKq?.split('/')[0],
+        })
+        this.dataTable = res.children;
+        this.fileDinhKem = res.fileDinhKems;
+      }
     }
   }
 
   async save(isGuiDuyet?: boolean) {
     let body = this.formData.value;
+    if (this.formData.get('soQdKq').value) {
+      body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
+    }
     body.fileDinhKems = this.fileDinhKem;
-    body.soQdKq = this.formData.value.soQdKq + this.maTrinh;
+    body.children = this.dataTable;
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -159,17 +170,17 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
 
   async openThongtinChaoGia() {
     let body = {
-      "namKh": this.formData.value.namKh,
-      "loaiVthh": this.loaiVthh,
-
-      "trangThaiChaoGia": STATUS.HOAN_THANH_CAP_NHAT,
-      "paggingReq": {
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      maDvi: this.userInfo.MA_DVI,
+      paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       }
     }
     let listTb = [];
-    let res = await this.quyetDinhPdKhBanTrucTiepService.search(body);
+    let res = await this.chaoGiaMuaLeUyQuyenService.search(body);
     if (res.data) {
       listTb = res.data.content;
     }
@@ -182,7 +193,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại vật tư hàng háo', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
         dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -193,13 +204,12 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     });
   }
 
-  async onChangeTtin(idHdr) {
-    let res = await this.quyetDinhPdKhBanTrucTiepService.getDetail(idHdr);
+  async onChangeTtin(idPdKhDtl) {
+    let res = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(idPdKhDtl);
     if (res.data) {
       const data = res.data;
-      console.log(data, 999)
       this.formData.patchValue({
-        soQdPd: data.soQdPd,
+        soQdPd: data.xhQdPdKhBttHdr.soQdPd,
         diaDiemChaoGia: data.diaDiemChaoGia,
         ngayMkho: data.ngayMkho,
         ngayKthuc: data.ngayKthuc,
@@ -208,9 +218,61 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
-        idHdr: data.id,
+        idPdKhDtl: data.id,
+        idPdKhHdr: data.xhQdPdKhBttHdr.id
       })
-      this.dataTable = data.xhTcTtinBttList
+      this.dataTable = data.xhTcTtinBttList;
+      if (this.dataTable) {
+        this.dataTable.forEach(s => {
+          s.fileDinhKems.id = null;
+          s.fileDinhKems.dataType = null;
+          s.fileDinhKems.dataId = null;
+        }
+        );
+      }
+    }
+  }
+  dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
+  startEdit(index: number): void {
+    this.dataTable[index].edit = true
+  }
+
+  saveEdit(index: number): void {
+    this.dataTable[index].edit = false
+    this.formData.patchValue({
+
+    })
+  }
+  cancelEdit(index: number): void {
+    this.dataTable[index].edit = false
+    this.formData.patchValue({
+
+    })
+
+  }
+
+  downloadFile(item: FileDinhKem) {
+    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+      saveAs(blob, item.fileName);
+    });
+  }
+
+  getNameFileQD($event: any) {
+    if ($event.target.files) {
+      const itemFile = {
+        name: $event.target.files[0].name,
+        file: $event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          let fileDinhKemQd = new FileDinhKem();
+          fileDinhKemQd.fileName = resUpload.filename;
+          fileDinhKemQd.fileSize = resUpload.size;
+          fileDinhKemQd.fileUrl = resUpload.url;
+          fileDinhKemQd.idVirtual = new Date().getTime();
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
+        });
     }
   }
 

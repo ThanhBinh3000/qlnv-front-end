@@ -26,12 +26,13 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
 export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input() listTongHop: any[] = [];
+  listTongHop: any[] = [];
+  listDxCuc: any[] = [];
   maQd: string
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
-
+  typeQd : string
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -47,7 +48,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null, Validators.required],
+      maTh: [null],
+      maDx: [null],
       soQd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -65,6 +67,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     try {
       this.maQd = '/QĐ-TCDT'
       await this.loadDsDxCc();
+      await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -93,11 +96,44 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         this.listTongHop = data.content;
         if (this.listTongHop) {
          this.listTongHop =  this.listTongHop.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.soQdMuaSam == null )
+            // (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.soQdMuaSam == null )
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV  )
           )
         }
       } else {
         this.listTongHop = [];
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async loadDxCuc() {
+    this.spinner.show();
+    try {
+      let body = {
+        "capDvi": "2",
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.dxChiCucService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.listDxCuc = data.content;
+        if (this.listDxCuc) {
+          this.listDxCuc =  this.listDxCuc.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP )
+          )
+        }
+      } else {
+        this.listDxCuc = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
@@ -145,11 +181,19 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           this.formData.patchValue({
             soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
           })
+          if (this.formData.value.maTh) {
+            this.typeQd ='TH'
+          } else {
+            this.typeQd = 'DX'
+          }
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
           if(this.userService.isCuc()) {
             this.dataTable = this.dataTable.filter(item => item.maDvi = this.userInfo.MA_DVI)
           }
+          this.dataTable.forEach(item => {
+            this.loadSlThuaThieu(item)
+          })
           this.convertListData()
           this.expandAll();
         }
@@ -252,13 +296,16 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         let res = await this.dxChiCucService.getDetail(detailTh.id);
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
+            this.dataTable= []
             const data = res.data;
             this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
             if (this.dataTable && this.dataTable.length > 0) {
               this.dataTable.forEach(item => {
+                this.loadSlThuaThieu(item)
                 item.id = null;
                 item.ghiChu = null;
                 item.soLuong = item.soLuongTc
+                item.slTieuChuan = item.slTieuChuanTc
               })
               this.convertListData()
               this.expandAll();
@@ -272,28 +319,68 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   }
 
   chonMaTongHop() {
-    if (!this.isView) {
+    if (!this.isView && this.typeQd == 'TH') {
       let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
+        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh: this.listTongHop,
-          type : this.formData.value.loai
+          listTh:  this.listTongHop ,
+          type :this.formData.value.loai
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+            this.formData.patchValue({
+              maTh :  data.id,
+              maDx :  null,
+            })
+            await this.changSoTh(data.id);
+        }
+      })
+    }
+  }
+  chonSoDxCuc() {
+    if (!this.isView && this.typeQd == 'DX') {
+      let modalQD = this.modal.create({
+        nzTitle:'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
+        nzContent: DialogMmMuaSamComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzComponentParams: {
+          listTh:  this.listDxCuc ,
+          type : "02"
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maTh : data.id
+            maDx :  data.soCv,
+            maTh :  null,
           })
           await this.changSoTh(data.id);
         }
       })
     }
   }
+
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
+    }
+  }
+
 }
 

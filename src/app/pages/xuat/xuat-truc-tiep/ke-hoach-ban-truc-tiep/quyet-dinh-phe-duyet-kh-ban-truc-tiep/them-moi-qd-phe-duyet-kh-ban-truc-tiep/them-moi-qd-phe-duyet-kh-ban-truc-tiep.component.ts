@@ -14,10 +14,6 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from "../../../../../../constants/status";
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -79,7 +75,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
-      soQdCc: ['']
+      soQdCc: [''],
+      fileName: [],
     })
   }
 
@@ -381,23 +378,21 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.hide();
   }
 
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
+  getNameFileQD($event: any) {
+    if ($event.target.files) {
       const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
+        name: $event.target.files[0].name,
+        file: $event.target.files[0] as File,
       };
       this.uploadFileService
         .uploadFile(itemFile.file, itemFile.name)
         .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-          })
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
+          let fileDinhKemQd = new FileDinhKem();
+          fileDinhKemQd.fileName = resUpload.filename;
+          fileDinhKemQd.fileSize = resUpload.size;
+          fileDinhKemQd.fileUrl = resUpload.url;
+          fileDinhKemQd.idVirtual = new Date().getTime();
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
     }
   }

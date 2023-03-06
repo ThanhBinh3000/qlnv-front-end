@@ -35,7 +35,7 @@ export class DieuchinhLuachonNhathauComponent extends Base2Component implements 
     super(httpClient, storageService, notification, spinner, modal, dieuChinhQuyetDinhPdKhlcntService);
     super.ngOnInit()
     this.formData = this.fb.group({
-      nam: [dayjs().get('year')],
+      nam: [''],
       soQdDc: [''],
       trichYeu: [''],
       loaiVthh: ['']

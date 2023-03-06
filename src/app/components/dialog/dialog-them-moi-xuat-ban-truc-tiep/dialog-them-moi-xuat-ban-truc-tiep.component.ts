@@ -111,12 +111,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   async loadDonVi() {
     this.listChiCuc = [];
-    let body = {
-      trangThai: "01",
-      maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
-      type: [null, 'MLK']
-    };
-
     if (this.dataChiTieu) {
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         this.dataChiTieu.khLuongThuc?.forEach(item => {
@@ -150,6 +144,10 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         })
       }
     } else {
+      let body = {
+        trangThai: "01",
+        maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
+      };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data.filter(item => item.type == 'DV');
@@ -174,8 +172,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tenDvi: res.data.tenTongKho,
-
+        tenDvi: res.data.tenDvi,
+        diaChi: res.data.diaChi,
         soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
@@ -200,7 +198,13 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         let data = res.data;
         if (data.length > 0) {
           this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
-          this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
+          this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
+          if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+            this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
+          } else {
+            this.thongTinXuatBanTrucTiep.dviTinh = 'Kg';
+          }
+
         }
       }
     });
@@ -410,7 +414,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
         if (column == 'tienDatTruocDduyet') {
-          prev += (cur.soLuong * cur.donGiaVat)
+          prev += (cur.soLuong * cur.donGiaVat * 1000)
         } else {
           prev += cur[column];
         }

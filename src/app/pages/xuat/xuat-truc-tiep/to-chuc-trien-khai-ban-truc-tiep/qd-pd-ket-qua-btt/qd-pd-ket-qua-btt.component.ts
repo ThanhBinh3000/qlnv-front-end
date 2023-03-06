@@ -33,11 +33,11 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [''],
       loaiVthh: [''],
       trichYeu: [''],
       ngayKy: [],
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: [''],
       tenDvi: [],
     });
     this.filterTable = {
@@ -59,6 +59,7 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       this.formData.patchValue({
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
         loaiVthh: this.loaiVthh
       })
       await this.search();

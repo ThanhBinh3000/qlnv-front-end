@@ -10,8 +10,11 @@
         <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
             Điều chỉnh KH bán trực tiếp
         </li>
-        <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isChiCuc()">
-            Hợp đồng/Bảng kê,phiếu bán hàng
+        <li nz-menu-item (click)="selectTab(3)">
+            Hợp đồng/Bảng kê, phiếu bán hàng
+        </li>
+        <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
+            Quyết định giao nhiệm vụ xuất hàng
         </li>
     </ul>
 </nz-affix>
@@ -29,5 +32,8 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
         <app-hop-dong-btt></app-hop-dong-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+        <app-giao-nv-xuat-hang-btt></app-giao-nv-xuat-hang-btt>
     </ng-container>
 </div>

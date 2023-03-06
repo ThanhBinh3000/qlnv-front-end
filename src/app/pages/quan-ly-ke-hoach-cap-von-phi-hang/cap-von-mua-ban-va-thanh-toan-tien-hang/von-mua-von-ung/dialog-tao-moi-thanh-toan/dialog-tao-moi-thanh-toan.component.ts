@@ -41,6 +41,9 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
         } else {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+            if (this.userService.isChiCuc()) {
+                this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
+            }
         }
         if (this.userService.isChiCuc()) {
             this.response.canCuVeGia = Utils.QD_DON_GIA;

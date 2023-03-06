@@ -5,11 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './bieu-mau-17.constant';
 
 export class ItemData {
     id: string;
@@ -22,7 +22,6 @@ export class ItemData {
     ncauNamN1: number;
     ncauNamN2: number;
 }
-
 
 @Component({
     selector: 'app-bieu-mau-17',
@@ -40,12 +39,13 @@ export class BieuMau17Component implements OnInit {
     thuyetMinh: string;
     namBcao: number;
     //danh muc
-    linhVucs: any[] = DANH_MUC;
+    linhVucs: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -59,6 +59,7 @@ export class BieuMau17Component implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
+        private danhMucService: DanhMucDungChungService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -74,10 +75,20 @@ export class BieuMau17Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
+
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.namBcao = this.dataInfo?.namBcao;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM17');
+            if (category) {
+                this.linhVucs = category.data;
+            }
+            this.scrollX = (510 + 4 * BOX_NUMBER_WIDTH).toString() + 'px';
+        } else {
+            this.scrollX = (450 + 4 * BOX_NUMBER_WIDTH).toString() + 'px';
+        }
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

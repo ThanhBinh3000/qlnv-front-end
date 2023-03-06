@@ -35,7 +35,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHLCNTService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: '',
       ngayTongHop: '',
       loaiVthh: '',
       tenVthh: '',

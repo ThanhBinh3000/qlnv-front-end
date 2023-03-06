@@ -86,7 +86,7 @@
                         <th class="text-center" style="width: 15%;" *ngIf="userService.isTongCuc()">Đơn vị</th>
                         <th class="text-center" style="width: 7%;">Ngày lập KH</th>
                         <th class="text-center" style="width: 7%;" *ngIf="userService.isCuc()">Ngày duyệt KH</th>
-                        <th class="text-center" style="width: 5%;">Số QĐ duyệt KH bán TT</th>
+                        <th class="text-center" style="width: 5%;">Số QĐ PD KH BTT</th>
                         <th class="text-center" style="width: 9%;">Ngày ký QĐ</th>
                         <th class="text-center" style="width: 10%;">Trích yếu</th>
                         <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
@@ -220,14 +220,14 @@
                         <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td *ngIf="userService.isCuc()">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{ data.soQdPd}}</td>
+                        <td class="text-blue">{{ data.soQdPd}}</td>
                         <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td></td>
                         <td></td>
-                        <td>{{ data.soQdCtieu}}</td>
+                        <td class="text-blue">{{ data.soQdCtieu}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td>{{ data.tenTrangThaiTh}}
                         <td class="text-left">

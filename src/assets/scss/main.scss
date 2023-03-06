@@ -3571,7 +3571,7 @@ nz-upload {
   }
 }
 
-td {
+td,th {
   a {
 
     i,
@@ -4593,7 +4593,7 @@ th {
       &>.ant-menu-item {
         font-size: 13px;
         font-weight: 500;
-        padding: 0 8px;
+        padding: 0 16px;
       }
 
       &>.ant-menu-item-selected,
@@ -6869,7 +6869,35 @@ td.action.ant-table-cell {
     cursor: pointer;
   }
 }
+.ant-form-vertical .ant-form-item-label {
+  line-height: 1;
 
+  label {
+    height: 32px;
+    line-height: 16px;
+  }
+}
+
+
+.rdo-input {
+  display: flex;
+
+  .ant-form-item {
+    margin-right: 20px;
+    padding-top: 10px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
+  }
+
+  label {
+    padding-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    height: 32px;
+  }
+}
 
 
 // end lấy từ default qua....................................................

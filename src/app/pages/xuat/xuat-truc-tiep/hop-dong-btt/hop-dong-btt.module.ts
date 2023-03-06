@@ -8,6 +8,7 @@ import { DanhSachHopDongBttComponent } from './danh-sach-hop-dong-btt/danh-sach-
 import { ThongTinHopDongBttComponent } from './danh-sach-hop-dong-btt/thong-tin-hop-dong-btt/thong-tin-hop-dong-btt.component';
 import { QuanLyHopDongBttComponent } from './danh-sach-hop-dong-btt/quan-ly-hop-dong-btt/quan-ly-hop-dong-btt.component';
 import { PhuLucBttComponent } from './danh-sach-hop-dong-btt/phu-luc-btt/phu-luc-btt.component';
+import { BangKeBanHangComponent } from './bang-ke-ban-hang/bang-ke-ban-hang.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { PhuLucBttComponent } from './danh-sach-hop-dong-btt/phu-luc-btt/phu-luc
     DanhSachHopDongBttComponent,
     ThongTinHopDongBttComponent,
     QuanLyHopDongBttComponent,
-    PhuLucBttComponent
+    PhuLucBttComponent,
+    BangKeBanHangComponent
   ],
   imports: [
     CommonModule,
