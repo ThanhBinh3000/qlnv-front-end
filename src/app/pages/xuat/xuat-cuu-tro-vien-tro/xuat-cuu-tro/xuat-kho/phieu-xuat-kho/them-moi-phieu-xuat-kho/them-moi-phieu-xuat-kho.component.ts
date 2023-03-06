@@ -106,7 +106,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
       }
     );
-    this.maPhieu = 'PNK-' + this.userInfo.DON_VI.tenVietTat;
+    this.maPhieu = 'PXK-' + this.userInfo.DON_VI.tenVietTat;
 
     // this.setTitle();
   }

@@ -33,7 +33,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     soQd: null,
     loaiVthh: null,
     ngayQd: null,
-    namKhoach: dayjs().get('year'),
+    namKhoach: null,
     trichYeu: null,
     tuNgayQd: null,
     denNgayQd: null,

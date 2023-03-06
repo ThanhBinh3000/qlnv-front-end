@@ -33,7 +33,7 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [''],
       loaiVthh: [''],
       trichYeu: [''],
       ngayKy: [],
@@ -60,6 +60,7 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     try {
       this.formData.patchValue({
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        loaiVthh: this.loaiVthh
       })
       await this.search();
       await this.initData()
