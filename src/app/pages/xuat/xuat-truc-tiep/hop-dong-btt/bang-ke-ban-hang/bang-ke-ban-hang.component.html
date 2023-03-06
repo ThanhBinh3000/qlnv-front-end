@@ -186,7 +186,7 @@
                                 (click)="goDetail(data.id,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM','XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM'])">
                                 <i class="fa fa-pencil"></i>
                             </a> -->
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO )"
+                            <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isChiCuc()"
                                 (click)="delete(data,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
