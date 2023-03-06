@@ -143,7 +143,7 @@
                 <td>{{ displayValue(editCache[data.id].data.dtoanDnghiDchinh) }}</td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
-                    [options]="amount" />
+                    [options]="amount1" />
                 </td>
               </ng-container>
               <ng-template #editRecommended>
@@ -172,7 +172,7 @@
                 </td>
                 <td *ngIf="viewRecommendedValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
-                    [options]="amount" />
+                    [options]="amount1" />
                 </td>
               </ng-template>
               <td>

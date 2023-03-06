@@ -10,6 +10,7 @@ import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, LA_MA } from 'src/app/Utility/utils';
 import { DANH_MUC_PL10 } from './phu-luc-1.constant';
 import * as uuid from "uuid";
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
   level: any;
@@ -34,6 +35,18 @@ export class ItemData {
   maNoiDung: string;
 }
 
+export const AMOUNT1 = {
+  allowZero: true,
+  allowNegative: true,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
   selector: 'app-phu-luc-1',
   templateUrl: './phu-luc-1.component.html',
@@ -56,6 +69,7 @@ export class PhuLuc1Component implements OnInit {
   editRecommendedValue: boolean;
   viewRecommendedValue: boolean;
   amount = AMOUNT;
+  amount1 = AMOUNT1;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   formDetail: any;
   noiDungs: any[] = DANH_MUC_PL10;
@@ -483,7 +497,7 @@ export class PhuLuc1Component implements OnInit {
     }
 
     this.spinner.show();
-    this.dieuChinhDuToanService.updatePLDieuChinh(request).toPromise().then(
+    this.dieuChinhDuToanService.updatePLDieuChinh1(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

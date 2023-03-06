@@ -13,6 +13,7 @@ import { exchangeMoney, displayNumber, getTail, sumNumber, mulNumber } from 'src
 import { DON_VI_TIEN, AMOUNT, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-8.constant';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
   level: any;
@@ -39,6 +40,18 @@ export class ItemData {
 
 }
 
+export const AMOUNT1 = {
+  allowZero: true,
+  allowNegative: true,
+  precision: 4,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 @Component({
   selector: 'app-phu-luc-8',
   templateUrl: './phu-luc-8.component.html',
@@ -58,6 +71,7 @@ export class PhuLuc8Component implements OnInit {
   maDviTien: string = '1';
   thuyetMinh: string;
   amount = AMOUNT;
+  amount1 = AMOUNT1;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   tongDieuChinhTang: number;

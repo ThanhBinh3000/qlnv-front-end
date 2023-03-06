@@ -37,7 +37,7 @@
         <thead>
           <tr>
             <th rowSpan="4">STT</th>
-            <th rowSpan="4">Tên đơn vị(Biên chế thực tế có mặt)</th>
+            <th rowSpan="4" nzWidth="300px">Tên đơn vị(Biên chế thực tế có mặt)</th>
             <th rowSpan="4">Biên chế {{namBcao}} được giao</th>
             <th rowSpan="4">Biên chế có mặt</th>
             <th rowSpan="4">Biên chế chưa tuyển</th>
@@ -384,8 +384,8 @@
                 <td>{{displayValue(editCache[data.id].data.tongNcauDtoan)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}</td>
                 <td>
-                  <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
 
               </ng-container>
@@ -396,178 +396,175 @@
                 </td> -->
                 <td>{{displayValue(editCache[data.id].data.bcheGiao2021)}}</td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.bcheCoMat"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.bcheCoMat"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.bcheChuaTuyen"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.bcheChuaTuyen"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTso"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTso"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.hslPcapTso)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapHsl"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapHsl"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTong"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.hslPcapTong)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapChucVu"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapChucVu"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTnhiem"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTnhiem"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask
+                  <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.hslPcapTnienVkhung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapHsbl"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapHsbl"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapCongVu"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapCongVu"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTnien"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTnien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapUdai"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapUdai"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapKvuc"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapKvuc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapKhac"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapKhac"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTso"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTso"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTluong"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTluong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.tqtlPcapTluong)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTong"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapChucVu"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapChucVu"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.tqtlPcapChucVu)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTniem"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTniem"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask
+                  <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.tqtlPcapTnienVkhung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapHsbl"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapHsbl"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapCongVu"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapCongVu"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTnien"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTnien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapUdai"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapUdai"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapKvuc"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapKvuc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapKhac"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapKhac"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongNcauTluong"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongNcauTluong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.tongNcauTluong)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask
+                  <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.baoGomTluongBche"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomKhoanDgop"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomKhoanDgop"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomLuongCbcc"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomLuongCbcc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask
+                  <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.baoGomLuongDhoaChung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask
+                  <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.dtoanKphiDtoanNtruoc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanKphiDaGiao"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanKphiDaGiao"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanKphiCong"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanKphiCong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.dtoanKphiCong)}}
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaThien"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaThien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanUocThien"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanUocThien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongNcauDtoan"
+                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongNcauDtoan"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.tongNcauDtoan)}}
                 </td>
                 <td>
-                  <!-- <input nz-input class="money-input" currencyMask
+                  <!-- <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.dtoanDnghiDchinh"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
 
                   {{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
-                  <!-- <fm-input-number nz-input class="search__input"
-                    [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"></fm-input-number> -->
-                  <input nz-input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                    <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                    [options]="amount1" />
                 </td>
               </ng-template>
               <!-- <td [hidden]="status">
