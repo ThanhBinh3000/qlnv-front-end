@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
@@ -40,7 +41,7 @@ export class BieuMau17Component implements OnInit {
     thuyetMinh: string;
     namBcao: number;
     //danh muc
-    linhVucs: any[] = DANH_MUC;
+    linhVucs: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
@@ -59,6 +60,7 @@ export class BieuMau17Component implements OnInit {
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
+        private danhMucService: DanhMucDungChungService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -74,10 +76,14 @@ export class BieuMau17Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM17');
+        if (category) {
+            this.linhVucs = category.data;
+        }
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.namBcao = this.dataInfo?.namBcao;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

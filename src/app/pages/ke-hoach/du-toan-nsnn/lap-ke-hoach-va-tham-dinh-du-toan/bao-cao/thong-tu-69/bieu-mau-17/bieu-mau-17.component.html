@@ -6,7 +6,7 @@
 					Đơn vị:
 				</div>
 				<div nz-col [nzSpan]="2">
-					<ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+					<ng-container *ngIf="status || !editMoneyUnit; else editMoney">
 						<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
 					</ng-container>
 					<ng-template #editMoney>
@@ -18,16 +18,16 @@
 					</ng-template>
 				</div>
 			</div>
-			<nz-table nzBordered class="table__body">
+			<nz-table nzBordered class="table__body" [nzScroll]="{x: '80vw'}">
 				<thead>
 					<tr>
-						<th class="text-center" nzWidth="100px">STT</th>
+						<th class="text-center" nzWidth="50px">STT</th>
 						<th nzWidth="400px">Lĩnh vực/Nội dung chi</th>
 						<th>Thực hiện năm hiện hành {{namBcao -1}}</th>
 						<th>Nhu cầu dự toán năm {{namBcao}}</th>
 						<th>Nhu cầu năm {{namBcao + 1}}</th>
 						<th>Nhu cầu năm {{namBcao + 2}}</th>
-						<th nzWidth="50px" [hidden]="status"></th>
+						<th nzWidth="50px" *ngIf="status"></th>
 					</tr>
 					<tr>
 						<th></th>
@@ -36,7 +36,7 @@
 						<th>{{displayValue(total.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(total.ncauNamN1)}}</th>
 						<th>{{displayValue(total.ncauNamN2)}}</th>
-						<th [hidden]="status"></th>
+						<th *ngIf="status"></th>
 					</tr>
 					<tr>
 						<th></th>
@@ -45,7 +45,7 @@
 						<th>{{displayValue(chiCoSo.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN1)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN2)}}</th>
-						<th [hidden]="status"></th>
+						<th *ngIf="status"></th>
 					</tr>
 					<tr>
 						<th></th>
@@ -54,7 +54,7 @@
 						<th>{{displayValue(chiMoi.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN1)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN2)}}</th>
-						<th [hidden]="status"></th>
+						<th *ngIf="status"></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -70,7 +70,7 @@
 							<td>{{displayValue(data.ncauNamDtoanN)}}</td>
 							<td>{{displayValue(data.ncauNamN1)}}</td>
 							<td>{{displayValue(data.ncauNamN2)}}</td>
-							<td [hidden]="status">
+							<td *ngIf="status">
 								<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 							</td>
 						</ng-container>
@@ -116,7 +116,7 @@
 		<div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
 			<div nz-col nzSpan="24">
 				<label class="search__label">Thuyết minh</label>
-				<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+				<textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
 			</div>
 		</div>
 	</div>
