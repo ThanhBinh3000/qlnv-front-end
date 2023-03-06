@@ -250,9 +250,9 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.fileDinhKems = this.fileDinhKem;
     body.children = this.dataTable;
     body.phanLoai = this.radioValue
+    body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -311,6 +311,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         soQd: data.soQd?.split('/')[0]
       })
       this.dataTable = data.children;
+      this.fileDinhKem = data.fileDinhKems;
     };
   }
 
