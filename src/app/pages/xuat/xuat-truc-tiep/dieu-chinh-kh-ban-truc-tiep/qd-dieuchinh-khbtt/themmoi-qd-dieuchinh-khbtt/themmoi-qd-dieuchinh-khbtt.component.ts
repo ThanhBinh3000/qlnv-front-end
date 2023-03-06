@@ -182,8 +182,8 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
     if (this.formData.value.soQdDc) {
       body.soQdDc = this.formData.value.soQdDc + "/" + this.maQd;
     }
-    body.fileDinhKems = this.fileDinhKem;
     body.children = this.dataTable;
+    body.fileDinhKems = this.fileDinhKem;
     console.log(body);
     let data = await this.createUpdate(body);
     console.log("🚀 ~ save ~ data", data)
@@ -254,8 +254,9 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
           })
         }
       }
+      this.fileDinhKem = data.fileDinhKems;
     }
-    ;
+    this.spinner.hide()
   }
 
   index = 0;

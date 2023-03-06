@@ -63,8 +63,8 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
-        ngayKyTu : dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
-        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+        ngayKyTu : this.formData.value.ngayKy[0],
+        ngayKyDen : this.formData.value.ngayKy[1]
       })
     }
     this.formData.patchValue({

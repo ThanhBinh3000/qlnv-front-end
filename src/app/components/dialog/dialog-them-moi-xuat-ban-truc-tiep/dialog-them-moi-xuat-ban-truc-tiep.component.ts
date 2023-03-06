@@ -147,7 +147,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       let body = {
         trangThai: "01",
         maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
-        type: [null, 'MLK']
       };
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
@@ -199,7 +198,13 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         let data = res.data;
         if (data.length > 0) {
           this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
-          this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
+          this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
+          if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+            this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
+          } else {
+            this.thongTinXuatBanTrucTiep.dviTinh = 'Kg';
+          }
+
         }
       }
     });
@@ -409,7 +414,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
         if (column == 'tienDatTruocDduyet') {
-          prev += (cur.soLuong * cur.donGiaVat)
+          prev += (cur.soLuong * cur.donGiaVat * 1000)
         } else {
           prev += cur[column];
         }

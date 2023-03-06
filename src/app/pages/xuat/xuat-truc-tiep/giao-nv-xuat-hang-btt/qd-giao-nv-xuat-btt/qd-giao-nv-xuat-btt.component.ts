@@ -30,7 +30,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       maDvi: null,
       maChiCuc: null,
       soQd: null,

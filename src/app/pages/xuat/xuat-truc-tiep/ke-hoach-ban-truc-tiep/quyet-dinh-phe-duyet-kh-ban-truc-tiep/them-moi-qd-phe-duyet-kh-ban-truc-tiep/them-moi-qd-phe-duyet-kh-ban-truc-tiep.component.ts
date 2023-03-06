@@ -75,7 +75,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
-      soQdCc: ['']
+      soQdCc: [''],
+      fileName: [],
     })
   }
 
@@ -161,7 +162,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       body.soQdPd = this.formData.value.soQdPd + "/" + this.maQd;
     }
     body.children = this.danhsachDx;
-    body.fileDinhKem = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -377,23 +378,21 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.hide();
   }
 
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
+  getNameFileQD($event: any) {
+    if ($event.target.files) {
       const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
+        name: $event.target.files[0].name,
+        file: $event.target.files[0] as File,
       };
       this.uploadFileService
         .uploadFile(itemFile.file, itemFile.name)
         .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-          })
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
+          let fileDinhKemQd = new FileDinhKem();
+          fileDinhKemQd.fileName = resUpload.filename;
+          fileDinhKemQd.fileSize = resUpload.size;
+          fileDinhKemQd.fileUrl = resUpload.url;
+          fileDinhKemQd.idVirtual = new Date().getTime();
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
     }
   }

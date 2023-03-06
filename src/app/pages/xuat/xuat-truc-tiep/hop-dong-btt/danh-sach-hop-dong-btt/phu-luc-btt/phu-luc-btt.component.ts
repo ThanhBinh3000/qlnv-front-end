@@ -3,7 +3,6 @@ import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import dayjs from 'dayjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -25,16 +24,12 @@ import { MESSAGE } from 'src/app/constants/message';
 export class PhuLucBttComponent extends Base2Component implements OnInit {
   @Input() idPhuLuc: number;
   @Input() detailHopDong: any = {};
-
   @Input() isViewPhuLuc: boolean;
-
   @Input() loaiVthh: String;
   @Input() objHopDongHdr: any = {}
-
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  fileDinhKem: Array<FileDinhKem> = [];
   maHopDongSuffix: string = '';
   dsDonvi: any[] = [];
 
@@ -54,20 +49,20 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         id: [],
         idHd: [],
         namHd: [dayjs().get('year')],
-        soHd: [null, [Validators.required]],
-        tenHd: [null, [Validators.required]],
+        soHd: ['', [Validators.required]],
+        tenHd: ['', [Validators.required]],
         ngayHluc: [null, [Validators.required]],
-        soPhuLuc: [],
-        ngayHlucPhuLuc: [],
-        noiDungPhuLuc: [],
-        thoiGianDuKien: [],
+        soPhuLuc: ['', [Validators.required]],
+        ngayHlucPhuLuc: [null, [Validators.required]],
+        noiDungPhuLuc: ['', [Validators.required]],
+        thoiGianDuKien: [null, [Validators.required]],
         tgianGnhanTu: [],
         tgianGnhanDen: [],
-        thoiGianDuKienSauDc: [],
+        thoiGianDuKienSauDc: [null, [Validators.required]],
         ngayHlucSauDcTu: [],
         ngayHlucSauDcDen: [],
         tgianThienHd: [],
-        tgianThienHdSauDc: [],
+        tgianThienHdSauDc: [null, [Validators.required]],
         noiDungDcKhac: [],
         ghiChuPhuLuc: [],
         trangThaiPhuLuc: STATUS.DU_THAO,
@@ -97,13 +92,14 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
     })
     this.dataTable = data.phuLucDtl;
+    this.fileDinhKem = data.fileDinhKems;
+
   }
 
   async loadDsDonVi() {
     let body = {
-      trangThai: "01",
       maDviCha: this.userInfo.MA_DVI,
-      type: [null, 'MLK']
+      trangThai: '01',
     };
     let res = await this.donViService.getAll(body);
     if (!isEmpty(res)) {
@@ -168,6 +164,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     }
     body.soPhuLuc = this.formData.value.soPhuLuc + this.maHopDongSuffix;
     body.phuLucDtl = this.dataTable;
+    body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -224,7 +221,11 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
   }
 
   isDisabled() {
-    return false;
+    if (this.formData.value.trangThaiPhuLuc == STATUS.DU_THAO) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   convertTienTobangChu(tien: number): string {

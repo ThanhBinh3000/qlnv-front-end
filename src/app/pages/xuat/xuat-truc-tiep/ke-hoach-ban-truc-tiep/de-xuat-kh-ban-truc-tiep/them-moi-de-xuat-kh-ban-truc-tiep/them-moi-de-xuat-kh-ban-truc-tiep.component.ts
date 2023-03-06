@@ -153,6 +153,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           thoiGianDuKien: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null
         })
         this.dataTable = data.children;
+        this.fileDinhKem = data.fileDinhKems;
         this.calculatorTable();
       }
     }
@@ -208,13 +209,12 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
-          console.log(data, 999)
           this.formData.patchValue({
             donGiaVat: data.giaQdVat
           })
-          if (!data.giaQdVat) {
-            this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
-          }
+          // if (!data.giaQdVat) {
+          //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+          // }
         }
         if (res.statusCode == API_STATUS_CODE.SUCCESS) {
           this.formData.patchValue({
@@ -307,7 +307,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
       body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
     }
-    body.fileDinhKem = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKem;
     body.children = this.dataTable;
     let res = await this.createUpdate(body);
     if (res) {
@@ -332,11 +332,14 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
         +this.formData.get('namKh').value,
       );
+    console.log(res2, 99)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQdCtieu: res2.data.soQuyetDinh
-      });
+      if (this.dataChiTieu) {
+        this.formData.patchValue({
+          soQdCtieu: res2.data.soQuyetDinh
+        });
+      }
     } else {
       this.formData.patchValue({
         soQdCtieu: 189

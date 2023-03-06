@@ -3,21 +3,14 @@
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="20">
                 <div nz-col [nzSpan]="3">
-                    <nz-form-item class="form-item">
-                        <label> Năm kế hoạch </label>
-                        <nz-select formControlName="namKh">
-                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                        </nz-select>
-                    </nz-form-item>
+                    <label> Năm kế hoạch </label>
+                    <nz-select formControlName="namKh">
+                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
                 </div>
-                <div nz-col [nzSpan]="5">
-                    <nz-form-item class="form-item">
-                        <nz-form-label nzFor="ngay-ky">Ngày chào giá</nz-form-label>
-                        <nz-form-control>
-                            <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy">
-                            </nz-range-picker>
-                        </nz-form-control>
-                    </nz-form-item>
+                <div nz-col [nzSpan]="4">
+                    <label>Ngày chào giá</label>
+                    <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </div>
                 <div nz-col [nzSpan]="6">
                     <label>Tên đơn vị</label>
@@ -42,10 +35,10 @@
     <div class="group-button">
         <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
         <div class="buttons">
-            <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
+            <!-- <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
                 <i class="fa fa-trash-o do"></i>
                 <span>Xoá</span>
-            </button>
+            </button> -->
             <button type="button" (click)="exportData()" class="btn btn-sub">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
@@ -138,7 +131,7 @@
                     <td>{{ data.soQdKq }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.tenDvi }}</td>
-                    <td>{{ data.soQdPd }}</td>
+                    <td class="text-blue">{{ data.soQdPd }}</td>
                     <td>{{ data.tenLoaiVthh }}</td>
                     <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.tenTrangThai }}</td>

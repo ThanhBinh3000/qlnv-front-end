@@ -44,7 +44,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id : [null],
       maDvi : [null],
-      namKeHoach : [null],
+      namKeHoach : [dayjs().get('year')],
       soCv : [null, Validators.required],
       klLtBaoQuan: [null],
       klLtNhap: [null],
@@ -97,8 +97,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       body.listSoCv = body.listSoCv.toString();
     }
-    body.ngayDxTu = body.ngayDx ? dayjs(body.ngayDx[0]).format('DD/MM/YYYY') : null
-    body.ngayDxDen = body.ngayDx ? dayjs(body.ngayDx[1]).format('DD/MM/YYYY') : null
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0]: null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1]: null
     body.trangThai = STATUS.DADUYET_CB_CUC;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
@@ -106,6 +106,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       let detail = res.data;
       if (detail && detail.listQlDinhMucDxTbmmTbcdDtl) {
         this.formData.patchValue({
+          namKeHoach : this.formDataTongHop.value.namKeHoach,
           klLtBaoQuan : detail.klLtBaoQuan,
           klLtNhap : detail.klLtNhap,
           klLtXuat : detail.klLtXuat
@@ -130,6 +131,19 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
       return;
+    }
+  }
+
+  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+    if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
+      item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
+    } else {
+      item.chenhLechThieu = 0
+    }
+    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    } else {
+      item.chenhLechThua = 0
     }
   }
 
@@ -234,6 +248,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       this.dataTable.forEach(item => {
           if (item && item.dataChild && item.dataChild.length > 0) {
             item.dataChild.forEach(data => {
+              this.loadSlThuaThieu(data)
               item.donViTinh = data.donViTinh
               item.donGiaTd = data.donGiaTd
             })

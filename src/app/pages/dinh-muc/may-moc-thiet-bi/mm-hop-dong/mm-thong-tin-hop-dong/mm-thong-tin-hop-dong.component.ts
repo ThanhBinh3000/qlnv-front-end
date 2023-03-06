@@ -259,6 +259,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmHopDongCt();
     this.updateEditCache();
+    let arr = this.dataTable.map(value => value.maHangHoa)
+    await this.loadDsHangHoa(this.formData.value.soQdpdKhMuaSam ,arr)
   }
 
   checkExitsData(item, dataItem): boolean {
@@ -367,7 +369,6 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
             soQdpdKhMuaSam: data.soQd
           })
           await this.changeSoQdMs(data.soQd)
-          await this.loadDsHangHoa(data.soQd)
         }
       })
     }
@@ -387,7 +388,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadDsHangHoa(soQdMs: string) {
+  async loadDsHangHoa(soQdMs: string, tableHangHoa : any[]) {
     let body = {
       soQdMs: soQdMs,
       paggingReq: {
@@ -399,15 +400,18 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
     let res = await this.qdMuaSamService.listTtPbo(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDiaDiem = res.data
-      if (this.userService.isCuc()) {
-        this.listDiaDiem = this.listDiaDiem.filter(item => item.tenDviCha == this.userInfo.TEN_DVI)
+      if (res.data && res.data.length > 0) {
+        if (this.userService.isCuc()) {
+          this.listDiaDiem = res.data.filter(item => item.tenDviCha == this.userInfo.TEN_DVI)
+        }
+        this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item))
+        this.buildDiaDiemTc()
+      } else {
+        if (!this.listDiaDiem) {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
+          return;
+        }
       }
-      if (!this.listDiaDiem) {
-        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
-        return;
-      }
-      this.buildDiaDiemTc()
     }
   }
 

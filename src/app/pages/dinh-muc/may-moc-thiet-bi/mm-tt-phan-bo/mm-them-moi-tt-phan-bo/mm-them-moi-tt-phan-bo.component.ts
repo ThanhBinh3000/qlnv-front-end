@@ -14,7 +14,6 @@ import {
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../constants/status";
 import {QuyetDinhMuaSamService} from "../../../../../services/quyet-dinh-mua-sam.service";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-tin-phan-bo-ct.component";
@@ -117,6 +116,11 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
       this.spinner.hide();
       return;
     }
+    if (this.checkTableHhSave(this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Chưa phân bổ hết hàng hóa!!!')
+      this.spinner.hide();
+      return;
+    }
     this.conVertTreToList();
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
@@ -129,6 +133,18 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
     if (data) {
         this.goBack()
     }
+  }
+
+  checkTableHhSave(dataTable : any[]) : boolean {
+    let check = false
+    if (dataTable && dataTable.length > 0) {
+      dataTable.forEach(item => {
+        if (!item.dataChild) {
+          check = true
+        }
+      })
+    }
+    return check;
   }
 
   async detail(id) {
@@ -174,16 +190,6 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
       }
     })
     this.dataTable = arr
-  }
-
-  sumSoLuong(data: any) {
-    let sl = 0;
-    if (data && data.dataChild && data.dataChild.length > 0) {
-      data.dataChild.forEach(item => {
-        sl = sl + item.soLuongTc
-      })
-    }
-    return sl
   }
 
 
@@ -283,6 +289,7 @@ import {MmThongTinPhanBoCtComponent} from "./mm-thong-tin-phan-bo-ct/mm-thong-ti
           if (item && item.dataChild && item.dataChild.length > 0) {
             item.dataChild.forEach(data => {
               item.donViTinh = data.donViTinh
+              item.maTaiSan = data.maTaiSan
               item.soLuongTc = data.soLuongTc
             })
           }
