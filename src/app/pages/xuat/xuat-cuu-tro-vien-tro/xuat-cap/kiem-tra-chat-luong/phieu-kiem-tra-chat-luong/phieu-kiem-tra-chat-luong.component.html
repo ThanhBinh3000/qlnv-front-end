@@ -14,13 +14,14 @@
                         <input placeholder="" nz-input formControlName="soQdGiaoNvXh" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số phiếu kiểm nghiệm chất lượng</label>
-                        <input placeholder="" nz-input formControlName="soPhieuKnCl" />
+                        <label>Số phiếu kiểm tra chất lượng</label>
+                        <input placeholder="" nz-input formControlName="soPhieuKtCl" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Ngày kiểm nghiệm</label>
+                        <label>Ngày kiểm tra</label>
                         <nz-range-picker formControlName="ngayKnMau" Format="dd/MM/yyyy"></nz-range-picker>
                     </div>
+
                 </div>
             </form>
             <div nz-col class="cangiua group-button-search">
@@ -63,8 +64,8 @@
                         <th width="">Số QĐ giao nhiệm vụ XH</th>
                         <th width="">Năm KH</th>
                         <th width="">Thời hạn xuat CT,VT</th>
-                        <th width="">Số phiếu KNCL</th>
-                        <th width="">Ngày kiểm nghiệm</th>
+                        <th width="">Số phiếu KTCL</th>
+                        <th width="">Ngày kiểm tra</th>
                         <th width="">Điểm Kho</th>
                         <th width="">Lô kho</th>
                         <th width="">Số BB tịnh kho</th>
@@ -101,8 +102,8 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieuKnCl"
-                                    (input)="filterInTable('soPhieuKnCl',filterTable.soPhieuKnCl)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieuKtCl"
+                                    (input)="filterInTable('soPhieuKtCl',filterTable.soPhieuKtCl)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -178,7 +179,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{lv1.soPhieuKnCl}}</td>
+                                    <td>{{lv1.soPhieuKtCl}}</td>
                                     <td>{{lv1.ngayKnMau}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td>{{lv1.tenLoKho}}</td>
@@ -188,7 +189,7 @@
                                         <a (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || ((lv1.trangThai==STATUS.TU_CHOI_LDC || lv1.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())) && isOwner(lv1.maDvi)"
+                                        <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || ((lv1.trangThai==STATUS.TU_CHOI_LDCC ) && userService.isCuc())) && isOwner(lv1.maDvi)"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
@@ -224,6 +225,6 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
-    </app-them-moi-phieu-kiem-nghiem-chat-luong>
+    <app-them-moi-phieu-kiem-tra-chat-luong [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+    </app-them-moi-phieu-kiem-tra-chat-luong>
 </div>
