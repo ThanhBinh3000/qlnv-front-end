@@ -46,7 +46,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label>Năm kế hoạch</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach"
+            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach" (ngModelChange)="getCtieuKhTc($event)"
                        nzAllowClear>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
               </nz-option>
@@ -83,7 +83,7 @@
         <div nz-col nzSpan="3">
           <nz-form-label class="text-wrap">Số QĐ giao chỉ tiêu</nz-form-label>
           <nz-form-control>
-            <input nz-input [readonly]="true" formControlName="soQdGiaoCt"/>
+            <input nz-input formControlName="soQdGiaoCt" [readonly]="true"/>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="3" *ngIf="disableForm()">
@@ -143,7 +143,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label class="text-wrap">Khối lượng thực nhập theo ĐX Cục (tấn)</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="klLtNhap" [nzSize]="'small'" [nzDisabled]="true"
+            <nz-input-number formControlName="klLtNhapCuc" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
@@ -151,7 +151,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label class="text-wrap">Khối lượng thực xuất theo ĐX Cục (tấn)</nz-form-label>
           <nz-form-control>
-            <nz-input-number formControlName="klLtXuat" [nzSize]="'small'" [nzDisabled]="true"
+            <nz-input-number formControlName="klLtXuatCuc" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
@@ -159,7 +159,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label>Khối lượng thực bảo quản theo ĐX Cục (tấn)</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-number formControlName="klLtBaoQuan" [nzSize]="'small'" [nzDisabled]="true"
+            <nz-input-number formControlName="klLtBaoQuanCuc" [nzSize]="'small'" [nzDisabled]="true"
                              [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser"></nz-input-number>
           </nz-form-control>
@@ -183,7 +183,7 @@
       <th rowSpan="3" width="200px">Nội dung</th>
       <th rowSpan="3" width="90px">ĐVT</th>
       <th rowSpan="3" width="100px">Số lượng hiện có</th>
-      <th rowSpan="3" width="100px">Số lượng sẽ nhập <br> thêm năm 2021</th>
+      <th rowSpan="3" width="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach -1 }}</th>
       <th rowSpan="3" width="100px">Tổng cộng</th>
       <th colSpan="6" width="500px">Nhu cầu theo đề xuất của Cục</th>
       <th colSpan="6" width="500px">Số lượng trang bị cho đơn vị</th>
@@ -195,7 +195,7 @@
       <th colSpan="3" class="text-center" >Nhu cầu trang bị năm 2022</th>
       <th rowSpan="2" class="text-center" >SL theo <br> tiêu chuẩn <br> định mức</th>
       <th colSpan="2" class="text-center" >Chênh lệch</th>
-      <th colSpan="3" class="text-center" >Nhu cầu trang bị năm 2022</th>
+      <th colSpan="3" class="text-center" >Nhu cầu trang bị năm  {{formData.value.namKeHoach}}</th>
     </tr>
     <tr>
       <th class="text-center" >Còn thiếu</th>
@@ -214,24 +214,24 @@
     <ng-container *ngFor="let data of dataTable , let idx = index">
       <tr>
         <td [nzExpand]="expandSet.has(data.idVirtual)"  (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-        <td>{{idx + 1}}</td>
-        <td>{{data.tenTaiSan}}</td>
-        <td>{{data.donViTinh}}</td>
+        <td class="font-weight-bold">{{idx + 1}}</td>
+        <td class="font-weight-bold">{{data.tenTaiSan}}</td>
+        <td class="font-weight-bold">{{data.donViTinh}}</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td>{{sumSoLuong(data, 'child')}}</td>
-        <td>{{data.donGiaTd | number: '1.0-1' }}</td>
-        <td>{{sumSoLuong(data,' child')  * data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data, 'child')}}</td>
+        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data,' child')  * data.donGiaTd | number: '1.0-1' }}</td>
         <td></td>
         <td></td>
         <td></td>
-        <td>{{sumSoLuong(data, 'tong')  | number: '1.0-1'}}</td>
-        <td>{{data.donGiaTd | number: '1.0-1' }}</td>
-        <td>{{sumSoLuong(data, 'tong')  * data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  | number: '1.0-1'}}</td>
+        <td class="font-weight-bold">{{data.donGiaTd | number: '1.0-1' }}</td>
+        <td class="font-weight-bold">{{sumSoLuong(data, 'tong')  * data.donGiaTd | number: '1.0-1' }}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -253,9 +253,9 @@
           </td>
           <td>{{item.donGiaTd  | number: '1.0-1' }}</td>
           <td>{{item.donGiaTd * item.soLuong   | number: '1.0-1' }}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
-          <td>{{0}}</td>
+          <td>{{item.slTieuChuanTc | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThieuTc | number: '1.0-1' }}</td>
+          <td>{{item.chenhLechThuaTc | number: '1.0-1' }}</td>
           <td>
             <nz-input-number [(ngModel)]="item.soLuongTc" [nzSize]="'small'" [nzDisabled]="isView"
                              [nzFormatter]="globals.formatter"

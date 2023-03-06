@@ -18,9 +18,9 @@
     <li nz-menu-item (click)="selectTab(3)">
       Kiểm tra chất lượng
     </li>
-    <!--    <li nz-menu-item (click)="selectTab(6)">-->
-    <!--      Xuất kho-->
-    <!--    </li>-->
+    <li nz-menu-item (click)="selectTab(4)">
+      Xuất kho
+    </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -43,8 +43,8 @@
     <ng-container *ngIf="tabSelected == 3">
       <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
     </ng-container>
-    <!--    <ng-container *ngIf="tabSelected == 6">-->
-    <!--      <app-xuat-kho></app-xuat-kho>-->
-    <!--    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 4">
+      <app-xuat-kho></app-xuat-kho>
+    </ng-container>
   </div>
 </div>

@@ -11,10 +11,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -154,6 +154,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
+        type: "XUAT_CAP",
       });
     }
 
