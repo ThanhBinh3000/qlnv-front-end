@@ -6,7 +6,7 @@
                     Đơn vị:
                 </div>
                 <div nz-col [nzSpan]="2">
-                    <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                    <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
                         <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                     </ng-container>
                     <ng-template #editMoney>
@@ -18,44 +18,44 @@
                     </ng-template>
                 </div>
             </div>
-            <nz-table nzBordered class="table__body">
+            <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
                 <thead>
                     <tr>
-                        <th rowspan="4" class="text-center" nzWidth="100px">STT</th>
-                        <th rowspan="4" nzWidth="300px">Lĩnh vực chi</th>
-                        <th rowspan="4" nzWidth="150px">Mục tiêu nhiệm vụ</th>
-                        <th rowspan="4" nzWidth="150px">Cơ sở pháp lý/thực tiễn</th>
-                        <th rowspan="4" nzWidth="150px"> Hoạt động chủ yếu</th>
-                        <th rowspan="4" nzWidth="150px">Nguồn kinh phí</th>
+                        <th rowspan="4" nzWidth="50px" nzLeft>STT</th>
+                        <th rowspan="4" nzWidth="300px" nzLeft>Lĩnh vực chi</th>
+                        <th rowspan="4" style="width: 200px;">Mục tiêu nhiệm vụ</th>
+                        <th rowspan="4" style="width: 200px;">Cơ sở pháp lý/thực tiễn</th>
+                        <th rowspan="4" style="width: 200px;"> Hoạt động chủ yếu</th>
+                        <th rowspan="4" style="width: 200px;">Nguồn kinh phí</th>
                         <th colspan="12">Nhu cầu chi</th>
-                        <th rowspan="4" [hidden]="status"></th>
+                        <th rowspan="4" style="width: 50px;" *ngIf="status" nzRight></th>
                     </tr>
                     <tr>
-                        <th nzWidth="100px" rowspan="3">Tổng số</th>
+                        <th rowspan="3">Tổng số</th>
                         <th colspan="2">Trong đó</th>
                         <th colspan="9">Chia ra</th>
                     </tr>
                     <tr>
-                        <th nzWidth="100px" rowspan="2">Chi cơ sở</th>
-                        <th nzWidth="100px" rowspan="2">Chi mới</th>
-                        <th nzWidth="100px" rowspan="2">Đầu tư phát triển</th>
+                        <th rowspan="2">Chi cơ sở</th>
+                        <th rowspan="2">Chi mới</th>
+                        <th rowspan="2">Đầu tư phát triển</th>
                         <th colspan="2">Trong đó</th>
-                        <th nzWidth="100px" rowspan="2">Chi thường xuyên</th>
+                        <th rowspan="2">Chi thường xuyên</th>
                         <th colspan="2">Trong đó</th>
-                        <th nzWidth="100px" rowspan="2">Chi DTQG</th>
+                        <th rowspan="2">Chi DTQG</th>
                         <th colspan="2">Trong đó</th>
                     </tr>
                     <tr>
-                        <th nzWidth="100px">Chi cơ sở</th>
-                        <th nzWidth="100px">Chi mới</th>
-                        <th nzWidth="100px">Chi cơ sở</th>
-                        <th nzWidth="100px">Chi mới</th>
-                        <th nzWidth="100px">Chi cơ sở</th>
-                        <th nzWidth="100px">Chi mới</th>
+                        <th>Chi cơ sở</th>
+                        <th>Chi mới</th>
+                        <th>Chi cơ sở</th>
+                        <th>Chi mới</th>
+                        <th>Chi cơ sở</th>
+                        <th>Chi mới</th>
                     </tr>
                     <tr>
-                        <th class="text-center">1</th>
-                        <th>2</th>
+                        <th nzLeft>1</th>
+                        <th nzLeft>2</th>
                         <th>3</th>
                         <th>4</th>
                         <th>5</th>
@@ -72,16 +72,16 @@
                         <th>16=17+18</th>
                         <th>17</th>
                         <th>18</th>
-                        <th nzWidth="2.5%" [hidden]="status"></th>
+                        <th *ngIf="status" nzRight></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                            <td class="text-center">
+                            <td nzLeft>
                                 {{getChiMuc(data.stt)}}
                             </td>
-                            <td>
+                            <td nzLeft>
                                 {{data.tenLvuc}}
                             </td>
                             <td>{{data.mtieuNvu}}</td>
@@ -100,15 +100,15 @@
                             <td>{{displayValue(data.ncauChiChiaRaChiDtqg)}}</td>
                             <td>{{displayValue(data.ncauChiChiaRaChiCs3)}}</td>
                             <td>{{displayValue(data.ncauChiChiaRaChiMoi3)}}</td>
-                            <td [hidden]="status">
+                            <td *ngIf="status" nzRight>
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
                         </ng-container>
                         <ng-template #editTemplate>
-                            <td class="text-center">
+                            <td nzLeft>
                                 {{getChiMuc(editCache[data.id].data.stt)}}
                             </td>
-                            <td>
+                            <td nzLeft>
                                 {{editCache[data.id].data.tenLvuc}}
                             </td>
                             <td>
@@ -173,7 +173,7 @@
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi3"
                                     (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
-                            <td>
+                            <td nzRight>
                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                     (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -183,8 +183,8 @@
                         </ng-template>
                     </tr>
                     <tr>
-                        <td></td>
-                        <td>Tổng cộng</td>
+                        <td nzLeft></td>
+                        <td nzLeft>Tổng cộng</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -201,7 +201,7 @@
                         <td>{{displayValue(total.ncauChiChiaRaChiDtqg)}}</td>
                         <td>{{displayValue(total.ncauChiChiaRaChiCs3)}}</td>
                         <td>{{displayValue(total.ncauChiChiaRaChiMoi3)}}</td>
-                        <td [hidden]="status"></td>
+                        <td *ngIf="status" nzRight></td>
                     </tr>
                 </tbody>
             </nz-table>
@@ -209,7 +209,7 @@
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
             <div nz-col nzSpan="24">
                 <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
             </div>
         </div>
     </div>
