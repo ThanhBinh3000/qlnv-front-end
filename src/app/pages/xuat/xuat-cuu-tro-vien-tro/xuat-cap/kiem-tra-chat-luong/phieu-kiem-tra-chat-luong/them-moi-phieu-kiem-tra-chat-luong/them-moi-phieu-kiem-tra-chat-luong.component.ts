@@ -17,20 +17,21 @@ import { Validators } from '@angular/forms';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from 'src/app/models/PhieuKiemNghiemChatLuongThoc';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import { PhieuKiemNghiemChatLuongService } from './../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
+import { PhieuKiemTraChatLuongService } from './../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service';
 
 @Component({
-  selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
-  templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
-  styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss']
+  selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
+  templateUrl: './them-moi-phieu-kiem-tra-chat-luong.component.html',
+  styleUrls: ['./them-moi-phieu-kiem-tra-chat-luong.component.scss']
 })
-export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
+export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  radioValue: string = 'yes';
   fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   listSoQuyetDinh: any[] = []
@@ -57,11 +58,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
     private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
 
   ) {
-    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
 
     this.formData = this.fb.group(
       {
@@ -69,7 +70,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],
-        soPhieuKnCl: [],
+        soPhieuKtCl: [],
         ngayLapPhieu: [],
         idQdGiaoNvXh: [],
         soQdGiaoNvXh: [],
@@ -84,8 +85,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         maNganKho: [],
         maLoKho: [],
         hinhThucBq: [],
-        noiDung: [],
+        ketQua: [],
         ketLuan: [],
+        soLuongXuat: [],
+        soLuongNhan: [],
         trangThai: [STATUS.DU_THAO],
         ngayGduyet: [],
         nguoiGduyetId: [],
@@ -108,7 +111,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
       }
     );
-    this.maPhieu = 'PKNCL-' + this.userInfo.DON_VI.tenVietTat;
+    this.maPhieu = 'PKTCL-' + this.userInfo.DON_VI.tenVietTat;
 
     // this.setTitle();
   }
@@ -135,13 +138,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   async loadDetail(idInput: number) {
     if (idInput > 0) {
-      await this.phieuKiemNghiemChatLuongService.getDetail(idInput)
+      await this.phieuKiemTraChatLuongService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             const data = res.data;
             this.listFileDinhKem = data.fileDinhKems;
             this.dataTableChiTieu = data.ketQuaPhanTich;
+            this.radioValue = data.type;
           }
         })
         .catch((e) => {
@@ -157,7 +161,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         maQhNs: this.userInfo.DON_VI.maQhns,
         nguoiKn: this.userInfo.TEN_DAY_DU,
         truongPhong: this.userInfo.MA_KTBQ,
-        soPhieuKnCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
+        soPhieuKtCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
       });
     }
@@ -231,6 +235,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       thoiHanXuatCtVt: data.ngayKy,
+      soLuongXuat: data.soLuong,
     });
     this.listDiaDiemNhap = data.noiDungCuuTro;
     console.log(this.listDiaDiemNhap, 555555);
@@ -298,6 +303,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     body.ketQuaPhanTich = this.dataTableChiTieu;
+    body.type = this.radioValue;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -312,21 +318,15 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+        trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
@@ -336,14 +336,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   tuChoi() {
     let trangThai = '';
-
     switch (this.formData.value.trangThai) {
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.TU_CHOI_TP;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_LDC;
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
     }
@@ -352,7 +347,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC) {
       return true
     }
     return false;

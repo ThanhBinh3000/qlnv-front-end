@@ -6,6 +6,8 @@ import { MainPhieuKiemTraChatLuongComponent } from './main-phieu-kiem-tra-chat-l
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
+import { PhieuKiemTraChatLuongComponent } from './phieu-kiem-tra-chat-luong/phieu-kiem-tra-chat-luong.component';
+import { ThemMoiPhieuKiemTraChatLuongComponent } from './phieu-kiem-tra-chat-luong/them-moi-phieu-kiem-tra-chat-luong/them-moi-phieu-kiem-tra-chat-luong.component';
 
 
 
@@ -14,7 +16,9 @@ import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
     PhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
     MainPhieuKiemTraChatLuongComponent,
-    KiemTraChatLuongComponent
+    KiemTraChatLuongComponent,
+    PhieuKiemTraChatLuongComponent,
+    ThemMoiPhieuKiemTraChatLuongComponent
   ],
   imports: [
     CommonModule,
