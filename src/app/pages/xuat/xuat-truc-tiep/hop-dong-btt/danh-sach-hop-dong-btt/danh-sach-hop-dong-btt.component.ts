@@ -55,7 +55,6 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        namKh: dayjs().get('year'),
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();

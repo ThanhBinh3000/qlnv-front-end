@@ -36,7 +36,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   searchFilter = {
     soDx: '',
-    namKh: dayjs().get('year'),
+    namKh: '',
     ngayTongHop: '',
     loaiVthh: '',
     trichYeu: ''
@@ -234,7 +234,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.namKh = null;
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;

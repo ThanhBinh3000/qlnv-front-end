@@ -49,7 +49,7 @@ export class ThongtinDauthauComponent implements OnInit {
   yearNow: number = 0;
   STATUS = STATUS
   searchFilter = {
-    namKhoach: dayjs().get('year'),
+    namKhoach: '',
     soQd: '',
     ngayQd: '',
     loaiVthh: '',
@@ -197,7 +197,7 @@ export class ThongtinDauthauComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.namKhoach = null;
     this.searchFilter.soQd = null;
     this.searchFilter.ngayQd = null;
     this.searchFilter.maDvi = null;

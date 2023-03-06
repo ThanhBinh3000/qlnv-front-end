@@ -31,7 +31,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [],
       soBangKe: [],
       soQd: [],
       tenNguoiMua: [],

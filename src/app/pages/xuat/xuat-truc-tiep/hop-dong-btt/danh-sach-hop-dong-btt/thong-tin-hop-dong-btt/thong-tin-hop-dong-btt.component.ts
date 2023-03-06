@@ -18,7 +18,7 @@ import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-t
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { STATUS } from 'src/app/constants/status';
-import { ChiTietCacChiCucHopDong, ChiTietThongTinBanTrucTiepChaoGia } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+import { ChiTietCacChiCucHopDong } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -259,7 +259,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               donGiaVat: dataThongTin.donGia + (dataThongTin.donGia * dataThongTin.thueGtgt / 100),
               soLuongKhBanTt: dataThongTin.tongSoLuong * 1000
             });
-            this.listDviLquan = dataKq.children;
+            this.listDviLquan = dataKq.children.filter(s => s.luaChon == true);
           }
         })
     }

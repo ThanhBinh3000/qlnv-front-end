@@ -43,7 +43,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   searchFilter = {
     soQdPdKhlcnt: '',
     soQdinh: '',
-    namKhoach: dayjs().get('year'),
+    namKhoach: '',
     ngayTongHop: '',
     loaiVthh: '',
     trichYeu: '',
@@ -164,7 +164,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.namKhoach = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.searchFilter.ngayTongHop = null;
