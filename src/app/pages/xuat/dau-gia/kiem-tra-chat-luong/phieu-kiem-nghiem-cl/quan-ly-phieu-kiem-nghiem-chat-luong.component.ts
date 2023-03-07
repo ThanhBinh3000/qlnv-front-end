@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
 import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -25,7 +26,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private bienBanLayMauXhService: BienBanLayMauXhService,
+    private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
@@ -87,7 +88,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
           let body = {
             id: item.id
           };
-          this.bienBanLayMauXhService.delete(body).then(async () => {
+          this.xhPhieuKnghiemCluongService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
