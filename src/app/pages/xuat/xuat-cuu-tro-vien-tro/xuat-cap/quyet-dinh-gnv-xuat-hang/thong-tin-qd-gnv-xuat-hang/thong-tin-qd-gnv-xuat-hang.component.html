@@ -132,7 +132,7 @@
         </div>
         <div [nzSpan]="5" nz-col>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Căn cứ trên QĐ PD phương án</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Căn cứ trên QĐ xuất cấp</nz-form-label>
             <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
               <nz-select (ngModelChange)="changeQdPd($event)"
                          [nzDisabled]="formData.value.trangThai !== STATUS.DU_THAO" formControlName="idQdPd"

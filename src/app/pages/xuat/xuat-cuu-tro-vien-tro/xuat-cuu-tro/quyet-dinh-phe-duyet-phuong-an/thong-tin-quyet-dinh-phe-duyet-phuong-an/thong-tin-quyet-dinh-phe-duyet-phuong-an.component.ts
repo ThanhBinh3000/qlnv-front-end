@@ -77,6 +77,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   listThanhTienCache: number[] = [0];
   listSoLuongCache: number[] = [0];
   slXuatCap: number = 0;
+  slXuatCapCache: number = 0;
   expandSetString = new Set<string>();
   expandSetStringCache = new Set<string>();
   tongSoLuongDxuat = 0;
@@ -450,8 +451,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
     // this.deXuatPhuongAn = table
     let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
-    quyetDinhPdDtlFormData.quyetDinhPdDx = table
+    quyetDinhPdDtlFormData.quyetDinhPdDx = table;
     this.buildTableView();
+    this.tinhXuatCap();
     this.isVisible = false;
 
     //clean
@@ -681,5 +683,15 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           fileDinhKem.fileUrl = resUpload.url;
         });
     }
+  }
+
+  tinhXuatCap() {
+    let tongSoLuongXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
+    let tongSoLuongXuatThucTe = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
+    this.slXuatCap = tongSoLuongXuat - tongSoLuongXuatThucTe;
+
+    let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
+    let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
+    this.slXuatCapCache = tongSoLuongXuatCache - tongSoLuongXuatThucTeCache;
   }
 }
