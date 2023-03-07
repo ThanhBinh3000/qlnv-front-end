@@ -82,7 +82,7 @@
                                     tiếp</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
-                                        formControlName="ngayHluc">
+                                        formControlName="ngayMkho">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -247,7 +247,7 @@
                                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.thueGtgt }}</td>
-                                <td>{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.fileDinhKems?.fileName }}</td>
                                 <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
                                 <td>
@@ -287,7 +287,11 @@
                                         </nz-date-picker>
                                     </nz-input-group>
                                 </td>
-                                <td>{{ dataEdit[idx].data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>
+                                    <nz-input-number nz-input [nzSize]="'small'"
+                                        [(ngModel)]="dataEdit[idx].data.soLuong " [nzFormatter]="globals.formatter"
+                                        [nzParser]="globals.parser"></nz-input-number>
+                                </td>
                                 <td>
                                     <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia"
                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>

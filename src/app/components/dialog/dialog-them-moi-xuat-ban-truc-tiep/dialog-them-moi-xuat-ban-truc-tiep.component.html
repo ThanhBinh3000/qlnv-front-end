@@ -75,10 +75,6 @@
                 <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg) (4)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
-                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ) = (3) * % khoản tiền đặt
-                    trước</th>
-                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ) = (5) * % khoản tiền đặt
-                    trước</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>
             <tr>
@@ -122,16 +118,14 @@
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat | number : '1.0-1' :
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number : '1.0-1'
+                    :
                     'vi_VN'}}</th>
                 <th>{{ thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN'
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1' :
+                    'vi_VN'
                     }}</th>
-                <th>{{ (thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat )
-                    | number : '1.0-1'
-                    : 'vi_VN'}}</th>
-                <th>{{ (thongTinXuatBanTrucTiep.soLuong *
-                    thongTinXuatBanTrucTiep.donGiaVat ) | number : '1.0-1' : 'vi_VN' }}</th>
+
                 <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -154,14 +148,9 @@
                     <td>{{ data.duDau | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{ data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ data.donGiaVat }}</td>
-                    <td>{{ data.soLuong * data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ (data.soLuong * data.donGiaDeXuat) | number :
-                        '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ (data.soLuong * data.donGiaVat )
-                        | number :
-                        '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.soLuong * data.donGiaDeXuat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
                         <a (click)="startEdit(i)">
                             <i class="fa fa-pencil"></i>
@@ -211,16 +200,17 @@
                     </td>
 
                     <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.giaKhongVat" [nzMin]=" 1"
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.donGiaDeXuat" [nzMin]=" 1"
                             [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{thongTinXuatBanTrucTiep.giaKhoiDiem}}</td>
-                    <td>{{thongTinXuatBanTrucTiep.donGiaVat}}</td>
-                    <td>{{thongTinXuatBanTrucTiep.giaKhoiDiemDduyet}}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number :
+                        '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1'
+                        : 'vi_VN'}}</td>
+
                     <td class="text-center">
                         <a (click)="saveEdit(i)" class="save">
                             <i class="icon htvbdh_tcdt_save"></i>
@@ -239,7 +229,7 @@
                 </th>
                 <th class="background-last-row text-left"> {{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN' }}
                 </th>
-                <th colspan="5">
+                <th colspan="3">
                 </th>
                 <th class="background-last-row text-left"> {{ calcTong('tienDatTruocDduyet') | number : '1.0-1' :
                     'vi_VN' }}

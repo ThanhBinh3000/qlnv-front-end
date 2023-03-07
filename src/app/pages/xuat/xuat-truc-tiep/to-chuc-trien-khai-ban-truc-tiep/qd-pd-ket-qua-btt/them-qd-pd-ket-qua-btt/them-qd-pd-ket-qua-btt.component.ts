@@ -193,7 +193,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại vật tư hàng háo', 'Chủng loại hàng hóa'],
+        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
         dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
@@ -223,7 +223,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       })
       this.dataTable = data.xhTcTtinBttList;
       if (this.dataTable) {
-        console.log(this.dataTable, 999)
         this.dataTable.forEach(s => {
           s.fileDinhKems.id = null;
           s.fileDinhKems.dataType = null;

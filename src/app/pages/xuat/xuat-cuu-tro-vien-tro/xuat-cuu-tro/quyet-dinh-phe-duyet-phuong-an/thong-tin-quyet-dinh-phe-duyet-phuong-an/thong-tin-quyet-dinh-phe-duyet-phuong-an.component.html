@@ -266,7 +266,7 @@
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-statistic [nzValueStyle]="{ color: 'red'}"
-                                          [nzValue]="slXuatCap|number: '1.0-1'"></nz-statistic>
+                                          [nzValue]="slXuatCapCache|number: '1.0-1'"></nz-statistic>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -537,7 +537,7 @@
                   </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt xuất cấp</label>
+                <label nz-checkbox (ngModelChange)="tinhXuatCap()" [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt xuất cấp</label>
               </nz-card>
             </div>
           </nz-card>
