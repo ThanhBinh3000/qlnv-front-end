@@ -13,8 +13,8 @@ export class FileDinhKem {
 }
 
 export class ChiTietThongTinBanTrucTiepChaoGia {
-  idDtl: number;
   id: number;
+  idDviDtl: number;
   tochucCanhan: string;
   mst: string;
   diaDiemChaoGia: string;
