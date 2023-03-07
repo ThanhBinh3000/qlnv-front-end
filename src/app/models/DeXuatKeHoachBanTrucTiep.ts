@@ -14,6 +14,7 @@ export class FileDinhKem {
 
 export class ChiTietThongTinBanTrucTiepChaoGia {
   id: number;
+  idDtl: number;
   idDviDtl: number;
   tochucCanhan: string;
   mst: string;
