@@ -5,13 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DANH_MUC } from '../../thong-tu-342/bieu-mau-15-2/bieu-mau-15-2.constant';
 
 export class ItemData {
   id: any;
@@ -64,8 +62,6 @@ export class ItemData {
 export class BieuMau152Component implements OnInit {
   @Input() dataInfo;
 
-
-
   donViTiens: any[] = DON_VI_TIEN;
   editMoneyUnit = false;
   maDviTien: string = '1';
@@ -76,7 +72,7 @@ export class BieuMau152Component implements OnInit {
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
   statusPrint: boolean;
-  listDonVi: any[] = DANH_MUC;
+  listDonVi: any[] = [];
   lstVatTuFull = [];
   isDataAvailable = false;
   dsDinhMuc: any[] = [];
@@ -87,22 +83,23 @@ export class BieuMau152Component implements OnInit {
   namBaoCao: string;
   namTruoc: string;
   namKeHoach: string;
+  BOX_SIZE = 250;
 
-
+  scrollX: string;
 
   checkViewTD: boolean;
   checkEditTD: boolean;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   amount = AMOUNT;
+
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private lapThamDinhService: LapThamDinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private danhMucService: DanhMucHDVService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
+    private danhMucService: DanhMucDungChungService,
   ) {
   }
 
@@ -122,7 +119,16 @@ export class BieuMau152Component implements OnInit {
     this.namTruoc = (Number(this.namBaoCao) - 1).toString();
     this.namKeHoach = (Number(this.namBaoCao) + 1).toString();
     this.thuyetMinh = this.formDetail?.thuyetMinh;
-    this.status = this.dataInfo?.status;
+    this.status = !this.dataInfo?.status;
+    if (this.status) {
+      const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM152');
+      if (category) {
+        this.listDonVi = category.data;
+      }
+      this.scrollX = (560 + this.BOX_SIZE * 35).toString() + 'px';
+    } else {
+      this.scrollX = (400 + this.BOX_SIZE * 35).toString() + 'px';
+    }
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     // this.checkEditTD = this.dataInfo?.editAppraisalValue;
