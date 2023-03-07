@@ -129,7 +129,7 @@ export class PhuLuc10Component implements OnInit {
 
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0]?.stt) {
-        this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNoiDung');
+        this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maCongTrinh');
       } else {
         this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
       }
