@@ -24,8 +24,8 @@ import {
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {chain} from 'lodash';
 import {v4 as uuidv4} from 'uuid';
+import {chain, cloneDeep} from 'lodash';
 export class QuyetDinhPdDtl {
   idVirtual: number;
   id: number;
@@ -123,6 +123,7 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         type: ['TH', [Validators.required]],
+        xuatCap: [false],
         ngayPduyet: [],
         fileDinhKem: [FileDinhKem],
         canCu: [new Array<FileDinhKem>()],
@@ -170,7 +171,8 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
       }
       this.formData.patchValue(data);
       this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0]
+        soQd: data.soQd?.split('/')[0],
+        quyetDinhPdDtl: this.formData.value.quyetDinhPdDtl
       })
       this.fileDinhKem = data.fileDinhKem;
       await this.buildTableView();
@@ -208,7 +210,6 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         }));
         //truong hop tao moi
         if (!this.idInput) {
-          console.log("hahaha")
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -227,7 +228,6 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
         }
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
-        console.log(this.formData.value, 28282);
         await this.selectRow();
         // this.dataInput = null;
         // this.dataInputCache = null;
@@ -436,7 +436,6 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
   }
 
   handleOk(): void {
-
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuidv4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
     let index = this.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
@@ -446,9 +445,9 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
     } else {
       table = [...table, this.phuongAnRow]
     }
-
-    this.deXuatPhuongAn = table
-
+    // this.deXuatPhuongAn = table
+    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
+    quyetDinhPdDtlFormData.quyetDinhPdDx = table
     this.buildTableView();
     this.isVisible = false;
 
@@ -464,7 +463,6 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
 
   async selectRow(item?: any) {
 
-    console.log(this.formData.value.quyetDinhPdDtl, 11111);
     await this.spinner.show();
     if (item) {
       this.deXuatSelected = item;
@@ -473,13 +471,12 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
       i.selected = false
     });
     this.deXuatSelected.selected = true;
-    console.log(this.deXuatSelected, 222222)
     let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
-    let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx !== this.deXuatSelected.idDx);
+    let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
     dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
     dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
-    Object.assign(this.deXuatPhuongAn, dataEdit.quyetDinhPdDx);
-    Object.assign(this.deXuatPhuongAnCache, dataCache.quyetDinhPdDx);
+    this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
+    this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
     await this.buildTableView();
     await this.spinner.hide();
   }
@@ -491,33 +488,60 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
-          .map((v, k) => ({
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
-            })
+          .map((v, k) => {
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              console.log(rowCuc, 'rowCuc');
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
+            }
           ).value();
-        return {idVirtual: uuidv4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        return {
+          idVirtual: uuidv4(),
+          noiDung: key,
+          soLuongXuat: soLuongXuat,
+          soLuongXuatThucTe: soLuongXuatThucTe,
+          childData: rs
+        };
       }).value();
     this.phuongAnViewCache = dataViewCache;
     //
-    console.log(this.deXuatPhuongAn, "this.deXuatPhuongAn")
     let dataView = chain(this.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
-          .map((v, k) => ({
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
-            })
+          .map((v, k) => {
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              console.log(rowCuc, 'rowCuc');
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
+            }
           ).value();
-        return {idVirtual: uuidv4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        return {
+          idVirtual: uuidv4(),
+          noiDung: key,
+          soLuongXuat: soLuongXuat,
+          soLuongXuatThucTe: soLuongXuatThucTe,
+          childData: rs
+        };
       }).value();
     this.phuongAnView = dataView;
     this.expandAll()
@@ -612,23 +636,12 @@ export class ThongTinQuyetDinhPhuongAnComponent extends Base2Component implement
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
   }
 
-  async xoaPhuongAn(data: any) {
-    this.deXuatPhuongAn = [];
-    this.deXuatSelected.quyetDinhPdDx = this.deXuatSelected.quyetDinhPdDx.filter(qd => qd.id !== data.id);
-    Object.assign(this.deXuatPhuongAn, this.deXuatSelected.quyetDinhPdDx);
-    await this.buildTableView();
-    /*if (data.id) {
-      this.formData.value.quyetDinhPdDtl.forEach(s => {
-        s.quyetDinhPdDx = s.quyetDinhPdDx.filter(qd => qd.id !== data.id);
-      });
-    } else if (data.idVirtual) {
-      this.formData.value.quyetDinhPdDtl.forEach(s => {
-        s.quyetDinhPdDx = s.quyetDinhPdDx.filter(qd => qd.idVirtual !== data.idVirtual);
-      });
-    }
-    this.deXuatSelected =
-    await this.selectRow();*/
-  }
+  // async xoaPhuongAn(data: any) {
+  //   this.deXuatPhuongAn = [];
+  //   this.deXuatSelected.quyetDinhPdDx = this.deXuatSelected.quyetDinhPdDx.filter(qd => qd.id !== data.id);
+  //   this.deXuatPhuongAn = cloneDeep(this.deXuatSelected.quyetDinhPdDx);
+  //   await this.buildTableView();
+  // }
 
   summaryData() {
     this.tongSoLuongDxuat = this.formData.value.quyetDinhPdDtl.reduce((prev, cur) => prev + cur.tongSoLuongDx, 0)
