@@ -63,15 +63,16 @@
             <th>Số QĐ giao nhiệm vụ XH</th>
             <th>Năm KH</th>
             <th>Thời gian XH trước ngày</th>
-            <th>Số BB LM/BGM</th>
-            <th>Ngày lấy mẫu</th>
+            <th>Số phiếu KNCL</th>
+            <th>Ngày kiểm nghiệm</th>
             <th>Điểm kho</th>
             <th>Nhà kho</th>
             <th>Ngăn kho</th>
             <th>Lô kho</th>
+            <th>Số BB LM/BGM</th>
+            <th>Ngày lấy mẫu</th>
             <th>Số BB tịnh kho</th>
             <th>Ngày xuất dốc kho</th>
-            <th>Số BB hao dôi</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -84,6 +85,7 @@
               <td>{{ data.soQd }}</td>
               <td>{{ data.nam }}</td>
               <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -107,28 +109,29 @@
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
-              <tr *ngFor="let dataChild of data.xhBbLayMauList">
+              <tr *ngFor="let dataChild of data.xhPhieuKnghiemCluongList">
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ dataChild.soBienBan }}</td>
-                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                <td>{{ dataChild.soPhieu }}</td>
+                <td>{{ dataChild.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                 <td>{{ dataChild.tenDiemKho }}</td>
                 <td>{{ dataChild.tenNhaKho }}</td>
                 <td>{{ dataChild.tenNganKho }}</td>
                 <td>{{ dataChild.tenLoKho }}</td>
-                <td>BB tịnh kho</td>
+                <td>{{ dataChild.soBbLayMau }}</td>
+                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                 <td>BB tịnh kho</td>
                 <td>BB tịnh kho</td>
                 <td>{{ dataChild.tenTrangThai }}</td>
                 <td class="text-left">
-                  <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC"
+                  <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDC"
                     (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDCC"
+                  <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDC"
                     (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>

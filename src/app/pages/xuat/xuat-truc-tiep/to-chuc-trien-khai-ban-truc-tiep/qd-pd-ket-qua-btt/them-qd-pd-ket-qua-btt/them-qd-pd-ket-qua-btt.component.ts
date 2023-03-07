@@ -27,6 +27,8 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   @Input() idInput: number;
 
   maTrinh: String;
+  listOfData: any[] = [];
+  showFromTT: boolean;
 
   constructor(
     private httpClient: HttpClient,
@@ -91,8 +93,9 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         this.formData.patchValue({
           soQdKq: res.soQdKq?.split('/')[0],
         })
-        this.dataTable = res.children;
         this.fileDinhKem = res.fileDinhKems;
+        this.dataTable = res.children;
+
       }
     }
   }
@@ -103,7 +106,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
     body.fileDinhKems = this.fileDinhKem;
-    body.children = this.dataTable;
+    body.children = this.listOfData;
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
@@ -221,30 +224,34 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         idPdKhDtl: data.id,
         idPdKhHdr: data.xhQdPdKhBttHdr.id
       })
-      this.dataTable = data.xhTcTtinBttList;
+      this.dataTable = data.children;
       if (this.dataTable) {
-        this.dataTable.forEach(s => {
-          s.fileDinhKems.id = null;
-          s.fileDinhKems.dataType = null;
-          s.fileDinhKems.dataId = null;
-        }
-        );
+        this.dataTable.forEach((item) => {
+          item.children.forEach((chila) => {
+            chila.children.forEach((s) => {
+              s.fileDinhKems.id = null;
+              s.fileDinhKems.dataType = null;
+              s.fileDinhKems.dataId = null;
+            })
+          })
+        })
       }
     }
   }
+
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
   startEdit(index: number): void {
-    this.dataTable[index].edit = true
+    this.listOfData[index].edit = true
   }
 
   saveEdit(index: number): void {
-    this.dataTable[index].edit = false
+    this.listOfData[index].edit = false
     this.formData.patchValue({
 
     })
   }
   cancelEdit(index: number): void {
-    this.dataTable[index].edit = false
+    this.listOfData[index].edit = false
     this.formData.patchValue({
 
     })
@@ -274,6 +281,13 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
           this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
     }
+  }
+
+  selectRow($event, item) {
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
+    this.listOfData = item.children;
+    this.showFromTT = true;
   }
 
 }

@@ -210,8 +210,52 @@
     <nz-collapse>
         <nz-collapse-panel nzActive="true" nzHeader="Quyết định lựa chọn chào giá">
             <nz-card class="mg-t-16 flex-card p-lr16">
-                <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-                    [nzShowPagination]="false">
+
+                <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+                    <thead>
+                        <tr>
+                            <th width="60px" class="text-center"></th>
+                            <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+                            <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
+
+                            <th class="text-center wrap">Lô kho</th>
+                            <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
+                            <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
+                            <th nzWidth="100px" class="text-center wrap">ĐVT</th>
+                            <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of dataTable , let i = index">
+                            <tr>
+                                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                <td colspan="4">{{item.tenDvi}}</td>
+                                <td>{{item.soLuong}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <ng-container *ngIf="expandSet.has(i)">
+                                <tr *ngFor="let children of item.children, let y = index"
+                                    (click)="selectRow($event,children)">
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{children.tenDiemKho}}</td>
+                                    <td>{{children.tenLoKho}}</td>
+                                    <td>{{children.maDviTsan}}</td>
+                                    <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{children.dviTinh}}</td>
+                                    <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                                    <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </nz-table>
+
+                <nz-table class="nowrap pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
+                    [nzShowPagination]="false" *ngIf="showFromTT">
                     <thead>
                         <tr>
                             <th style="width: 2%;">STT</th>
@@ -230,7 +274,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of dataTable , let i = index">
+                        <tr *ngFor="let data of listOfData , let i = index">
                             <ng-container *ngIf="!data.edit; else editTemplate">
                                 <td class="text-center">{{i + 1}}</td>
                                 <td nzLeft>{{data.tochucCanhan}}</td>
@@ -243,7 +287,7 @@
                                 <td nzLeft>{{data.thueGtgt}}</td>
                                 <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
-                                <td nzLeft> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
+                                <td nzLeft>{{data.luaChon}}</td>
                                 <td>
                                     <a (click)="startEdit(i)" class="text-center"
                                         *ngIf=" formData.value.trangThai != STATUS.BAN_HANH">
