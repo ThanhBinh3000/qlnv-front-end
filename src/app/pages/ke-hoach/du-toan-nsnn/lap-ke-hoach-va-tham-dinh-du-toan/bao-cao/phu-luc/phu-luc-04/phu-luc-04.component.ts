@@ -5,11 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './phu-luc-04.constant';
 
 export class ItemData {
     id: string;
@@ -50,7 +50,7 @@ export class PhuLuc04Component implements OnInit {
     thuyetMinh: string;
     namBcao: number;
     //danh muc
-    duAns: any[] = DANH_MUC;
+    duAns: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
@@ -67,10 +67,13 @@ export class PhuLuc04Component implements OnInit {
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
     amount = AMOUNT;
+    scrollX: string;
+
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
+        private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -88,11 +91,26 @@ export class PhuLuc04Component implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.namBcao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
-        this.status = this.dataInfo?.status;
+        this.status = !this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
+        if (this.status) {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_PL4');
+            if (category) {
+                this.duAns = category.data;
+            }
+            this.scrollX = (460 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+        } else {
+            if (this.editAppraisalValue) {
+                this.scrollX = (410 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
+            } else if (this.viewAppraisalValue) {
+                this.scrollX = (350 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
+            } else {
+                this.scrollX = (350 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+            }
+        }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,

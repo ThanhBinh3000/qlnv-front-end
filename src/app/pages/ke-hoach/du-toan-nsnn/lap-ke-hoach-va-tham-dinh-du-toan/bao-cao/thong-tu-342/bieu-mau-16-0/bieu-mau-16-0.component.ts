@@ -96,6 +96,12 @@ export class BieuMau160Component implements OnInit {
 		this.formDetail = this.dataInfo?.data;
 		this.thuyetMinh = this.formDetail?.thuyetMinh;
 		this.status = !this.dataInfo?.status;
+		this.namHienHanh = Number(this.dataInfo?.namBcao) - 1;
+		this.namKhoach = this.dataInfo?.namBcao;
+		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+		this.statusPrint = this.dataInfo?.statusBtnPrint;
+		this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
+		this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
 		if (this.status) {
 			this.scrollX = (550 + 200 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
 		} else {
@@ -107,12 +113,6 @@ export class BieuMau160Component implements OnInit {
 				this.scrollX = (350 + 200 + BOX_NUMBER_WIDTH * 8).toString() + 'px';
 			}
 		}
-		this.namHienHanh = Number(this.dataInfo?.namBcao) - 1;
-		this.namKhoach = this.dataInfo?.namBcao;
-		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-		this.statusPrint = this.dataInfo?.statusBtnPrint;
-		this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
-		this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
 			this.lstCtietBcao.push({
 				...item,

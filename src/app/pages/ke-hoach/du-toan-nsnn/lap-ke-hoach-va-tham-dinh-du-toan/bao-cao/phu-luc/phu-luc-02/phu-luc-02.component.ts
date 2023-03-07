@@ -1,19 +1,17 @@
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { startWith } from 'rxjs/operators';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, } from "src/app/Utility/utils";
-import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
-import * as uuid from "uuid";
-import { DANH_MUC } from './phu-luc-02.constant';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA } from "src/app/Utility/utils";
+import * as uuid from "uuid";
 
 export class ItemData {
 	id: string;
@@ -53,7 +51,7 @@ export class PhuLuc02Component implements OnInit {
 	namBcao: number;
 	namKeHoach: string;
 	//danh muc
-	linhVucChis: any[] = DANH_MUC;
+	linhVucChis: any[] = [];
 	soLaMa: any[] = LA_MA;
 	lstCtietBcao: ItemData[] = [];
 	donViTiens: any[] = DON_VI_TIEN;
@@ -68,24 +66,26 @@ export class PhuLuc02Component implements OnInit {
 	checkEditTD: boolean;
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-	listVatTu: any[] = [];
-	listVatTu1: any[] = [];
-	luongThuc: any[] = [];
+	// listVatTu: any[] = [];
+	// listVatTu1: any[] = [];
+	// luongThuc: any[] = [];
 	lstVatTuFull: any[] = [];
-	lstvatTu: any[] = [];
+	// lstvatTu: any[] = [];
 	loaiHang: string;
 	dsDinhMuc: any[] = [];
 	allChecked = false;
 	maDviTao: string;
 	isSynthetic: any;
 	amount = AMOUNT;
+	scrollX: string;
+
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
 		private lapThamDinhService: LapThamDinhService,
 		private notification: NzNotificationService,
 		private modal: NzModalService,
-		private danhMucService: DanhMucHDVService,
+		private danhMucService: DanhMucDungChungService,
 		private quanLyVonPhiService: QuanLyVonPhiService,
 
 	) {
@@ -106,11 +106,20 @@ export class PhuLuc02Component implements OnInit {
 		this.namTruoc = (Number(this.namBcao) - 1).toString();
 		this.namKeHoach = (Number(this.namBcao) + 1).toString();
 		this.thuyetMinh = this.formDetail?.thuyetMinh;
-		this.status = this.dataInfo?.status;
+		this.status = !this.dataInfo?.status;
 		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
 		this.statusPrint = this.dataInfo?.statusBtnPrint;
 		this.checkViewTD = this.dataInfo?.viewAppraisalValue;
 		this.checkEditTD = this.dataInfo?.editAppraisalValue;
+		if (this.status) {
+			const category = await this.danhMucService.danhMucChungGetAll('LTD_PL2');
+			if (category) {
+				this.linhVucChis = category.data;
+			}
+			this.scrollX = (460 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
+		} else {
+			this.scrollX = (350 + BOX_NUMBER_WIDTH * 10).toString() + 'px';
+		}
 		this.isSynthetic = this.dataInfo?.isSynthetic;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
 			this.lstCtietBcao.push({

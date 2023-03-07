@@ -79,6 +79,10 @@ export class BieuMau138Component implements OnInit {
 		this.namBcao = this.dataInfo?.namBcao;
 		this.thuyetMinh = this.formDetail?.thuyetMinh;
 		this.status = !this.dataInfo?.status;
+		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+		this.statusPrint = this.dataInfo?.statusBtnPrint;
+		this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
+		this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
 		if (this.status) {
 			const category = await this.danhMucService.danhMucChungGetAll('LTD_TT342_BM138');
 			if (category) {
@@ -94,10 +98,6 @@ export class BieuMau138Component implements OnInit {
 				this.scrollX = (700 + BOX_NUMBER_WIDTH * 4).toString() + 'px';
 			}
 		}
-		this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-		this.statusPrint = this.dataInfo?.statusBtnPrint;
-		this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
-		this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
 			this.lstCtietBcao.push({
 				...item,
