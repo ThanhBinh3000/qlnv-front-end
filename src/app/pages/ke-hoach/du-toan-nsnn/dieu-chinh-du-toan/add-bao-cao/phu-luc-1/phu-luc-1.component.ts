@@ -497,7 +497,7 @@ export class PhuLuc1Component implements OnInit {
     }
 
     this.spinner.show();
-    this.dieuChinhDuToanService.updatePLDieuChinh1(request).toPromise().then(
+    this.dieuChinhDuToanService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

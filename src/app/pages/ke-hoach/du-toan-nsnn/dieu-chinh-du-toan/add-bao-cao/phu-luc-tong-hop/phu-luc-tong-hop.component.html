@@ -28,10 +28,11 @@
         <tr>
           <th rowspan="2" nzWidth="100px">STT</th>
           <th rowspan="2" nzWidth="300px">Nhóm</th>
-          <th rowspan="2">Số trần chi đơn vị cấp trên giao</th>
-          <th rowspan="2">Tổng cộng</th>
+          <th rowspan="2">Tổng điều chỉnh giảm </th>
+          <th rowspan="2">Tổng điều chỉnh tăng</th>
+          <!-- <th rowspan="2">Tổng cộng</th> -->
 
-          <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
+          <th colspan="{{lstDvi.length}}" >Danh sách đơn vị</th>
           <th rowspan="2" colspan="3" [hidden]="status"></th>
         </tr>
         <tr>
@@ -47,7 +48,7 @@
             </td>
             <td>
               <div *ngFor="let item of noiDungs">
-                <div *ngIf="item.ma ==data.maNdung">
+                <div *ngIf="item.ma ==data.maNoiDung">
                   {{item.tenDm}}
                 </div>
               </div>
@@ -70,17 +71,17 @@
             </td>
             <td>
               <div *ngFor="let item of noiDungs">
-                <div *ngIf="item.ma ==data.maNdung">
-                  {{item.tenDm}}
+                <div *ngIf="item.ma ==data.maNoiDung">
+                  {{item.giaTri}}
                 </div>
               </div>
             </td>
-            <td>{{displayValue(data.tongCong)}}</td>
-            <td>{{displayValue(data.dtoanGiao)}}</td>
+            <td>{{displayValue(data.tongDchinhGiam)}}</td>
+            <td>{{displayValue(data.tongDchinhTang)}}</td>
             <td *ngFor="let item of lstDvi">
               <div *ngFor="let e of data.child;">
                 <div *ngIf="e.maDviBcao == item.maDvi">
-                  {{displayValue(e.dtoanVuTvqtDnghiDvi)}}
+                  {{displayValue(e.dtoanVuTvqtDnghi)}}
                 </div>
               </div>
             </td>
@@ -106,8 +107,8 @@
             </td>
             <td>
               <div *ngFor="let item of noiDungs;">
-                <div *ngIf="item.ma ==data.maNdung">
-                  {{item.tenDm}}
+                <div *ngIf="item.ma == data.maNoiDung">
+                  {{item.giaTri}}
                 </div>
               </div>
             </td>
@@ -120,8 +121,8 @@
             <td *ngFor="let item of lstDvi">
               <div *ngFor="let e of editCache[data.id].data.child">
                 <div *ngIf="e.maDviBcao == item.maDvi">
-                  <input class="money-input" currencyMask [(ngModel)]="e.dtoanVuTvqtDnghiDvi"
-                    [class]="(e.dtoanVuTvqtDnghiDvi || e.dtoanVuTvqtDnghiDvi === 0) && e.dtoanVuTvqtDnghiDvi >= 0 ?'' : 'input-error-validate'"
+                  <input class="money-input" currencyMask [(ngModel)]="e.dtoanVuTvqtDnghi"
+                    [class]="(e.dtoanVuTvqtDnghi || e.dtoanVuTvqtDnghi === 0) && e.dtoanVuTvqtDnghi >= 0 ?'' : 'input-error-validate'"
                     (ngModelChange)="changeModel(data.id)" [options]="amount" />
                 </div>
               </div>

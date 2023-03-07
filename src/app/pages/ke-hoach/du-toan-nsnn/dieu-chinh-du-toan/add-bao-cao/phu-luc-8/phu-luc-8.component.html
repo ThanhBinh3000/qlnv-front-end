@@ -86,20 +86,20 @@
         <tbody>
           <tr>
             <td [hidden]="status"></td>
-            <td></td>
-            <td>Tổng cộng</td>
-            <td></td>
-            <td></td>
+            <td ></td>
+            <td nzWidth="300px">Tổng cộng</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{total.tongNcauDtoan}}</td>
-            <td>{{total.kphiCong}}</td>
-            <td>{{total.kphiDtoanNtruoc}}</td>
-            <td>{{total.kphiDtoanGiaoTnam}}</td>
-            <td>{{total.dtoanDchinhDnghi}}</td>
-            <td *ngIf="viewAppraisalValue">{{total.dtoanVuTvqtDnghi}}</td>
-            <td>{{total.dtoanPhiBquanThieu}}</td>
+            <td></td>
+            <td></td>
+            <td>{{displayValue(total.tongNcauDtoan)}}</td>
+            <td>{{displayValue(total.kphiCong)}}</td>
+            <td>{{displayValue(total.kphiDtoanNtruoc)}}</td>
+            <td>{{displayValue(total.kphiDtoanGiaoTnam)}}</td>
+            <td>{{displayValue(total.dtoanDchinhDnghi)}}</td>
+            <td *ngIf="viewAppraisalValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
+            <td>{{displayValue(total.dtoanPhiBquanThieu)}}</td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editAppraisalValue"></td>
           </tr>
@@ -117,8 +117,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhTang}}</td>
-            <td *ngIf="viewAppraisalValue">{{dToanVuTang}}</td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editAppraisalValue"></td>
@@ -137,8 +137,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhGiam}}</td>
-            <td *ngIf="viewAppraisalValue">{{dToanVuGiam}}</td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editAppraisalValue"></td>
@@ -152,7 +152,7 @@
               <td class="text-center">
                 {{getChiMuc(data.stt)}}
               </td>
-              <td>
+              <td nzWidth="300px">
                 {{data.matHang}}
               </td>
               <td>{{data.maDviTinh}}</td>
@@ -225,7 +225,7 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  {{editCache[data.id].data.luongSlBquanTcong}}
+                  {{displayValue(editCache[data.id].data.luongSlBquanTcong)}}
                 </td>
                 <td>
                   {{displayValue(editCache[data.id].data.dinhMuc)}}
@@ -234,7 +234,7 @@
                   {{displayValue(editCache[data.id].data.tongNcauDtoan)}}
                 </td>
                 <td>
-                  {{editCache[data.id].data.kphiCong}}
+                  {{displayValue(editCache[data.id].data.kphiCong)}}
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.kphiDtoanNtruoc"
@@ -247,7 +247,7 @@
                 <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDchinhDnghi"
                     [options]="amount" /> -->
-                  {{editCache[data.id].data.dtoanDchinhDnghi}}
+                  {{displayValue(editCache[data.id].data.dtoanDchinhDnghi)}}
                 </td>
                 <td *ngIf="viewAppraisalValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"

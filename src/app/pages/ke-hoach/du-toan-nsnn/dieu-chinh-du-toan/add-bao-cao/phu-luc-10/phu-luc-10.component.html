@@ -74,13 +74,13 @@
             <td [hidden]="status"></td>
             <td></td>
             <td>Tổng cộng</td>
-            <td>{{total.kh2021}}</td>
-            <td>{{total.dtoanGiaoLke}}</td>
-            <td>{{total.gtriCtrinh}}</td>
-            <td>{{total.dtoanDchinhDnghi}}</td>
-            <td>{{total.kh2021SauDchinh}}</td>
-            <td>{{total.dtoanDnghiDchinhLnay}}</td>
-            <td *ngIf="viewRecommendedValue">{{total.dtoanVuTvqtDnghi}}</td>
+            <td>{{displayValue(total.kh2021)}}</td>
+            <td>{{displayValue(total.dtoanGiaoLke)}}</td>
+            <td>{{displayValue(total.gtriCtrinh)}}</td>
+            <td>{{displayValue(total.dtoanDchinhDnghi)}}</td>
+            <td>{{displayValue(total.kh2021SauDchinh)}}</td>
+            <td>{{displayValue(total.dtoanDnghiDchinhLnay)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status"></td>
@@ -95,8 +95,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhTang}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuTang}}</td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status"></td>
@@ -111,8 +111,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhGiam}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuGiam}}</td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status"></td>
@@ -199,12 +199,12 @@
                 <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.khoachSauDchinh"
                     [options]="amount" /> -->
-                  {{editCache[data.id].data.kh2021SauDchinh}}
+                  {{displayValue(editCache[data.id].data.kh2021SauDchinh)}}
                 </td>
                 <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDchinhDnghiLanNay"
                     [options]="amount" /> -->
-                  {{editCache[data.id].data.dtoanDnghiDchinhLnay}}
+                  {{displayValue(editCache[data.id].data.dtoanDnghiDchinhLnay)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"

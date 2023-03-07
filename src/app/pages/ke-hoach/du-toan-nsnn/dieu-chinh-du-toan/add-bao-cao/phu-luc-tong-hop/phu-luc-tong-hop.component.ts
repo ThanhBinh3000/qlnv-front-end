@@ -13,12 +13,13 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
 export class ItemData {
   id: string;
   stt: string;
   level: number;
-  maNdung: number;
+  maNoiDung: string;
   tongCong: number;
   dtoanGiao: number;
   tongDchinhGiam: number;
@@ -30,7 +31,7 @@ export class ItemData {
 export class ItemDvi {
   id: string;
   maDviBcao: string;
-  dtoanVuTvqtDnghiDvi: number;
+  dtoanVuTvqtDnghi: number;
 }
 
 @Component({
@@ -69,7 +70,7 @@ export class PhuLucTongHopComponent implements OnInit {
     private userService: UserService,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private giaoDuToanService: GiaoDuToanChiService,
+    private dieuChinhDuToanService: DieuChinhService,
 
   ) { }
 
@@ -113,7 +114,7 @@ export class PhuLucTongHopComponent implements OnInit {
     if (this.isSynthetic && this.isSynthetic == true) {
       let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.maDvi);
       let lstDvi2 = []
-      this.dataInfo.data?.lstCtietDchinh[0].child.forEach(s => {
+      this.dataInfo.data?.lstCtietDchinh[0]?.child.forEach(s => {
         const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviBcao)[0]
         lstDvi2.push(Dvi2)
       })
@@ -123,8 +124,8 @@ export class PhuLucTongHopComponent implements OnInit {
     }
     if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
       this.dataInfo.extraData.forEach(item => {
-        if (item.maNdung) {
-          const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+        if (item.maNoiDung) {
+          const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNoiDung);
           this.lstCtietBcao[index].child = item.child;
           // this.sum(this.lstCtietBcao[index].stt)
         }
@@ -208,7 +209,7 @@ export class PhuLucTongHopComponent implements OnInit {
   changeModel(id: string) {
     this.editCache[id].data.dtoanGiao = 0;
     this.editCache[id].data.child.forEach(item => {
-      this.editCache[id].data.dtoanGiao += item.dtoanVuTvqtDnghiDvi;
+      this.editCache[id].data.dtoanGiao += item.dtoanVuTvqtDnghi;
     })
   };
 
@@ -234,11 +235,11 @@ export class PhuLucTongHopComponent implements OnInit {
     // check dòng có số âm, chưa có dữ liệu
     let tongTranChi = 0;
     for (let itm of this.editCache[id].data.child) {
-      if (itm.dtoanVuTvqtDnghiDvi < 0) {
+      if (itm.dtoanVuTvqtDnghi < 0) {
         this.notification.warning(MESSAGE.WARNING, 'giá trị nhập không được âm')
         return;
       }
-      tongTranChi += itm.dtoanVuTvqtDnghiDvi;
+      tongTranChi += itm.dtoanVuTvqtDnghi;
     }
     if (tongTranChi == null) {
       this.notification.warning(MESSAGE.WARNING, 'Dòng chưa có dữ liệu, vui lòng nhập!')
@@ -249,7 +250,7 @@ export class PhuLucTongHopComponent implements OnInit {
       data.push({
         id: item.id,
         maDviBcao: item.maDviBcao,
-        dtoanVuTvqtDnghiDvi: item.dtoanVuTvqtDnghiDvi,
+        dtoanVuTvqtDnghi: item.dtoanVuTvqtDnghi,
       })
     })
     this.lstCtietBcao[index] = {
@@ -277,7 +278,7 @@ export class PhuLucTongHopComponent implements OnInit {
         id: data.id,
         stt: data.stt,
         level: data.level,
-        maNdung: data.maNdung,
+        maNoiDung: data.maNoiDung,
         tongCong: data.tongCong,
         dtoanGiao: data.dtoanGiao,
         tongDchinhTang: data.tongDchinhTang,
@@ -289,17 +290,17 @@ export class PhuLucTongHopComponent implements OnInit {
         if (this.getHead(item.stt) == stt) {
           item.child.forEach(e => {
             const ind = this.lstCtietBcao[index].child.findIndex(i => i.maDviBcao == e.maDviBcao);
-            this.lstCtietBcao[index].child[ind].dtoanVuTvqtDnghiDvi += Number(e.dtoanVuTvqtDnghiDvi);
+            this.lstCtietBcao[index].child[ind].dtoanVuTvqtDnghi += Number(e.dtoanVuTvqtDnghi);
           })
         }
       });
+      this.lstCtietBcao[index].tongDchinhGiam = 0
+      this.lstCtietBcao[index].tongDchinhTang = 0
       this.lstCtietBcao[index].child.forEach(item => {
-        this.lstCtietBcao[index].tongDchinhGiam = 0
-        this.lstCtietBcao[index].tongDchinhTang = 0
-        if(item.dtoanVuTvqtDnghiDvi < 0){
-          this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghiDvi);
+        if(item.dtoanVuTvqtDnghi < 0){
+          this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
         }else{
-          this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghiDvi);
+          this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);
         }
       })
       stt = this.getHead(stt);
@@ -318,7 +319,7 @@ export class PhuLucTongHopComponent implements OnInit {
       data.push({
         id: item.id,
         maDviBcao: item.maDviBcao,
-        dtoanVuTvqtDnghiDvi: item.dtoanVuTvqtDnghiDvi,
+        dtoanVuTvqtDnghi: item.dtoanVuTvqtDnghi,
       })
     })
     this.editCache[id] = {
@@ -351,7 +352,7 @@ export class PhuLucTongHopComponent implements OnInit {
           data.push({
             id: e.id,
             maDviBcao: e.maDviBcao,
-            dtoanVuTvqtDnghiDvi: e.dtoanVuTvqtDnghiDvi,
+            dtoanVuTvqtDnghi: e.dtoanVuTvqtDnghi,
           });
         })
       }
@@ -361,7 +362,7 @@ export class PhuLucTongHopComponent implements OnInit {
           id: item.id,
           stt: item.stt,
           level: item.level,
-          maNdung: item.maNdung,
+          maNoiDung: item.maNoiDung,
           tongCong: item.tongCong,
           dtoanGiao: item.dtoanGiao,
           tongDchinhGiam: item.tongDchinhGiam,
@@ -468,7 +469,7 @@ export class PhuLucTongHopComponent implements OnInit {
     }
     request.trangThai = trangThai;
     this.spinner.show();
-    this.giaoDuToanService.updateCTietBcao(request).toPromise().then(
+    this.dieuChinhDuToanService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -515,9 +516,14 @@ export class PhuLucTongHopComponent implements OnInit {
     this.lstCtietBcao.forEach(item => {
       const sttItem = item.stt
       const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
+      this.lstCtietBcao[index].tongDchinhGiam = 0
+      this.lstCtietBcao[index].tongDchinhTang = 0
       this.lstCtietBcao[index].child.forEach(item => {
-        this.lstCtietBcao[index].dtoanGiao = 0
-        this.lstCtietBcao[index].dtoanGiao += Number(item.dtoanVuTvqtDnghiDvi);
+        if(item.dtoanVuTvqtDnghi < 0){
+          this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
+        } else {
+          this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);
+        }
       })
     })
   };

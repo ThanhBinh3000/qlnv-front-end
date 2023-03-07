@@ -162,11 +162,14 @@ export class PhuLuc9Component implements OnInit {
       //   item.tenDanhMuc += this.getName(item.level, item.maDanhMuc);
       // })
     } 
-    // else if (!this.lstCtietBcao[0]?.stt) {
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.stt = item.maDvi;
-    //   })
-    // }
+    else if (!this.lstCtietBcao[0]?.stt) {
+      let sttItem = 1
+      this.lstCtietBcao.forEach(item => {
+        sttItem += sttItem
+        const stt = "0." + sttItem
+        item.stt = stt;
+      })
+    }
 
     // else if (this.lstCtietBcao.length > 0) {
     //   if (!this.lstCtietBcao[0]?.stt) {
