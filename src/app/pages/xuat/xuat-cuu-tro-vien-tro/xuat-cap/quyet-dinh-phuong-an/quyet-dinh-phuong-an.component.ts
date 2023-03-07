@@ -46,13 +46,16 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
       soDx: null,
       tenDvi: null,
       maDvi: null,
-      ngayDx: null,
-      ngayDxTu: null,
-      ngayDxDen: null,
+      ngayKetThucDx: null,
+      ngayKetThucDxTu: null,
+      ngayKetThucDxDen: null,
       ngayKetThuc: null,
-      type: null,
       trangThai: this.globals.prop.NHAP_BAN_HANH,
-      loaiVthh: LOAI_HANG_DTQG.GAO
+      loaiVthh: LOAI_HANG_DTQG.GAO,
+      xuatCap: true,
+      ngayKy: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
     });
     this.filterTable = {
       soQd: "",
@@ -73,17 +76,6 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
-
-  loaiHanghoa: any[] = [
-    {
-      id: 1,
-      tenDm: "Gạo nếp"
-    },
-    {
-      id: 2,
-      tenDm: "Gạo tẻ"
-    }
-  ];
 
 
   async ngOnInit() {
@@ -114,9 +106,9 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
   }
 
   async timKiem() {
-    if (this.formData.value.ngayDx) {
-      this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format("YYYY-MM-DD");
-      this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format("YYYY-MM-DD");
+    if (this.formData.value.ngayKetThucDx) {
+      this.formData.value.ngayKetThucDxTu = dayjs(this.formData.value.ngayKetThucDx[0]).format("YYYY-MM-DD");
+      this.formData.value.ngayKetThucDxDen = dayjs(this.formData.value.ngayKetThucDx[1]).format("YYYY-MM-DD");
     }
     if (this.formData.value.ngayKy) {
       this.formData.value.ngaykyTu = dayjs(this.formData.value.ngayKy[0]).format("YYYY-MM-DD");
