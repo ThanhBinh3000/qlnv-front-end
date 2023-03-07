@@ -86,8 +86,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     } finally {
       this.spinner.hide();
     }
-    this.emitDataTable()
-    this.updateEditCache()
   }
 
   initForm() {
@@ -253,8 +251,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
+    if (this.listOfData) {
+      this.listOfData.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
           data: { ...item },
@@ -361,6 +359,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData.patchValue({
       idDviDtl: item.id,
     })
-
+    this.emitDataTable()
+    this.updateEditCache()
   }
 }
