@@ -19,7 +19,7 @@ export enum PATH {
   QD_DC = 'qd-dieu-chinh', // Quyết định điều chỉnh
   QD_GNV_XH = 'qd-gnv-xh', // Quyết định giao nhiệm vụ xuất hàng
   BB_LAY_MAU = 'bban-lay-mau',
-
+  KNGHIEM_CLUONG = "knghiem-cluong",
 
   // Menu 0
   BAN_TRUC_TIEP = "ban-truc-tiep",

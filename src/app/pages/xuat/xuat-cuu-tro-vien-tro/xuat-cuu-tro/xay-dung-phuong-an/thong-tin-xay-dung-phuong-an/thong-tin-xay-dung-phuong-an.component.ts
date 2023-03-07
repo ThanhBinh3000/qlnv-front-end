@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output,} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -85,6 +85,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   expandSetString = new Set<string>();
   phuongAnView = [];
   phuongAnRow: any = {};
+  phuongAnRowDiff: any;
   isVisible = false;
   isVisibleSuaNoiDung = false;
   listNoiDung = []
@@ -121,9 +122,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         maDvi: [''],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        soDx: [''],
+        soDx: ['', [Validators.required]],
         trichYeu: [''],
-        loaiVthh: [''],
+        loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         tenVthh: [''],
         tonKho: [0],
@@ -280,6 +281,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
     this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
@@ -420,6 +426,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           let data = res.data;
           if (data.length > 0) {
             this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+            this.phuongAnRow.tenDonViTinh = data[0].tenDonViTinh;
+          } else {
+            this.phuongAnRow.tonKhoChiCuc = 0;
+            this.phuongAnRow.tenDonViTinh = '';
           }
         }
       });
@@ -437,9 +447,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data.length > 0) {
-          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+          this.phuongAnRow.tonKhoCloaiVthh = data[0].slHienThoi;
+        } else {
+          this.phuongAnRow.tonKhoCloaiVthh = 0;
         }
-
       }
     });
   }
