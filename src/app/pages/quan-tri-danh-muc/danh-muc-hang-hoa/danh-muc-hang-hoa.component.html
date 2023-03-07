@@ -138,10 +138,21 @@
                 <input nz-input formControlName="tchuanCluong" [readonly]="true"/>
               </nz-form-item>
             </div>
-            <div nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16">
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label>Thời hạn lưu kho</nz-form-label>
                 <input nz-input formControlName="thoiHanLk" [readonly]="true"/>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+              <nz-form-item>
+                <nz-form-label >Nhóm bảo hiểm</nz-form-label>
+                <nz-form-control >
+                  <nz-select [nzDisabled]="!isEditData" formControlName="nhomHhBaoHiem"  nzAllowClear="true">
+                    <nz-option  *ngFor="let p of listBaoHiem" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">

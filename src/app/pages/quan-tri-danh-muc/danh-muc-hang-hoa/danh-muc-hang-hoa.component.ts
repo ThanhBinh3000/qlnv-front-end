@@ -44,6 +44,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   listLoaiHang: any[] = [];
   listDviQly: any[] = [];
   listDviTinh: any[] = [];
+  listBaoHiem: any[] = [];
   listPpLayMau: any[] = [];
   listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
   listOfTagOption: any[] = [];
@@ -74,6 +75,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       ma: ['', Validators.required],
       ghiChu: ['',],
       trangThai: ["01"],
+      nhomHhBaoHiem: [''],
     })
   }
 
@@ -88,6 +90,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       this.loadListHtbq(),
       this.loadListLoaiHang(),
       this.loadListDviQly(),
+      this.loadListNhomBaoHiem(),
     ]);
     this.spinner.hide();
   }
@@ -170,6 +173,14 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
   }
 
+  async loadListNhomBaoHiem() {
+    this.listBaoHiem = [];
+    let res = await this.dmHangService.danhMucChungGetAll('NHOM_HH_BAO_HIEM');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listBaoHiem = res.data;
+    }
+  }
+
   async loadListDviQly() {
     this.listOfOption = [];
     let res = await this.dmHangService.layTatCaDviQly();
@@ -234,6 +245,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             kyHieu: this.nodeDetail.kyHieu,
             ma: this.nodeDetail.ma,
             ghiChu: this.nodeDetail.ghiChu,
+            nhomHhBaoHiem: this.nodeDetail.nhomHhBaoHiem,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
           })
           this.loadTieuChuanCluong(this.detailHangHoa.value.ma);
