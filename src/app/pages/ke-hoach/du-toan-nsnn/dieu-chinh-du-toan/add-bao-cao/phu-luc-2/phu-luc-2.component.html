@@ -40,7 +40,8 @@
               </label>
             </th>
             <th rowSpan="2" class="text-center" nzWidth="50px">STT</th>
-            <th rowSpan="2">Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)</th>
+            <th rowSpan="2" nzWidth="300px">Tên tài sản (theo danh mục được phê duyệt tại Quyết định số 149/QĐ-TCDT)
+            </th>
             <th rowSpan="2">ĐVT</th>
             <th rowSpan="2">Số lượng theo KH được giao năm {{namBcao}}</th>
             <th colSpan="5">Số thực hiện năm {{namBcao}}</th>
@@ -92,14 +93,14 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{total.dgiaTh}}</td>
-            <td>{{total.thanhTienTh}}</td>
-            <td>{{total.dtoanSuDung}}</td>
-            <td>{{total.dtoanDaGiao}}</td>
-            <td>{{total.tongCongDtoan}}</td>
-            <td>{{total.dieuChinhDtoan}}</td>
-            <td *ngIf="viewRecommendedValue">{{total.vuTvqtDnghiDtoan}}</td>
-            <td>{{total.kphiConThieu}}</td>
+            <td>{{displayValue(total.dgiaTh)}}</td>
+            <td>{{displayValue(total.thanhTienTh)}}</td>
+            <td>{{displayValue(total.dtoanSuDung)}}</td>
+            <td>{{displayValue(total.dtoanDaGiao)}}</td>
+            <td>{{displayValue(total.tongCongDtoan)}}</td>
+            <td>{{displayValue(total.dieuChinhDtoan)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.vuTvqtDnghiDtoan)}}</td>
+            <td>{{displayValue(total.kphiConThieu)}}</td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editRecommendedValue"></td>
           </tr>
@@ -117,8 +118,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhTang}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuTang}}</td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editRecommendedValue"></td>
@@ -137,8 +138,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhGiam}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuGiam}}</td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editRecommendedValue"></td>
@@ -184,12 +185,9 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
               <td class="text-center">
-                <!-- {{getChiMuc(editCache[data.id].data.stt)}} -->
                 {{i + 1}}
               </td>
               <td>
-                <!-- {{editCache[data.id].data.tenTaiSan}} -->
-
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn tài sản"
                   [(ngModel)]="editCache[data.id].data.maTaiSan" (ngModelChange)="onChangeTaiSan($event, data.id)"
                   [class]="editCache[data.id].data.maTaiSan ?'' : 'input-error-validate'">
@@ -212,8 +210,6 @@
                 <td>{{displayValue(editCache[data.id].data.tongCongDtoan)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dieuChinhDtoan)}}</td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.vuTvqtDnghiDtoan"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.vuTvqtDnghiDtoan"
                     [options]="amount1" />
                 </td>
@@ -221,64 +217,42 @@
               </ng-container>
               <ng-template #editRecommended>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.thienNamTruoc"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongDuocGiao"
                     [options]="amount" />
                 </td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongUocTh"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongCongTh"
-                    [options]="amount" /> -->
-                  {{editCache[data.id].data.tongCongTh}}
+                  {{displayValue(editCache[data.id].data.tongCongTh)}}
                 </td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dgiaTh"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.thanhTienTh"
-                    [options]="amount" /> -->
-                  {{editCache[data.id].data.thanhTienTh}}
+                  {{displayValue(editCache[data.id].data.thanhTienTh)}}
                 </td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanSuDung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <fm-input-number nz-input class="search__input"
-                          [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaGiao"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongCongDtoan"
-                    [options]="amount" /> -->
-                  {{editCache[data.id].data.tongCongDtoan}}
+                  {{displayValue(editCache[data.id].data.tongCongDtoan)}}
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dieuChinhDtoan"
-                    [options]="amount" /> -->
-                  {{editCache[data.id].data.dieuChinhDtoan}}
+                  {{displayValue(editCache[data.id].data.dieuChinhDtoan)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
-                  <!-- <fm-input-number nz-input class="search__input"
-                    [(ngModel)]="editCache[data.id].data.vuTvqtDnghiDtoan"></fm-input-number> -->
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.vuTvqtDnghiDtoan"
                     [options]="amount1" />
                 </td>

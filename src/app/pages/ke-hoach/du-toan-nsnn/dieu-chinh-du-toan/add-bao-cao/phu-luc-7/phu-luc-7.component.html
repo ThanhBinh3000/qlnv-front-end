@@ -91,19 +91,19 @@
             <td [hidden]="status"></td>
             <td></td>
             <td>Tổng cộng</td>
-            <td>{{total.khoachQdGiaoNvu}}</td>
-            <td>{{total.khoachLuong}}</td>
-            <td>{{total.tdiemBcaoLuong}}</td>
-            <td>{{total.tdiemBcaoDtoan}}</td>
-            <td>{{total.tdiemBcaoCcu}}</td>
-            <td>{{total.dkienThienDtoan}}</td>
-            <td>{{total.dkienThienLuong}}</td>
-            <td>{{total.ncauDtoan}}</td>
-            <td>{{total.dtoanLkeDaGiao}}</td>
-            <td>{{total.dtoanDnghiDchinh}}</td>
-            <td *ngIf="viewRecommendedValue">{{total.dtoanVuTvqtDnghi}}</td>
+            <td>{{displayValue(total.khoachQdGiaoNvu)}}</td>
+            <td>{{displayValue(total.khoachLuong)}}</td>
+            <td>{{displayValue(total.tdiemBcaoLuong)}}</td>
+            <td>{{displayValue(total.tdiemBcaoDtoan)}}</td>
+            <td>{{displayValue(total.tdiemBcaoCcu)}}</td>
+            <td>{{displayValue(total.dkienThienDtoan)}}</td>
+            <td>{{displayValue(total.dkienThienLuong)}}</td>
+            <td>{{displayValue(total.ncauDtoan)}}</td>
+            <td>{{displayValue(total.dtoanLkeDaGiao)}}</td>
+            <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td></td>
-            <td>{{total.dtoanNamConThieu}}</td>
+            <td>{{displayValue(total.dtoanNamConThieu)}}</td>
             <td [hidden]="status"></td>
             <td [hidden]="status && !editRecommendedValue"></td>
           </tr>
@@ -120,8 +120,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhTang}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuTang}}</td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
             <td></td>
             <td [hidden]="status"></td>
@@ -140,8 +140,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhGiam}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuGiam}}</td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
             <td></td>
             <td [hidden]="status"></td>
@@ -250,14 +250,14 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  {{editCache[data.id].data.ncauDtoan}}
+                  {{displayValue(editCache[data.id].data.ncauDtoan)}}
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanLkeDaGiao"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  {{editCache[data.id].data.dtoanDnghiDchinh}}
+                  {{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"

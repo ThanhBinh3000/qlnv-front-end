@@ -85,7 +85,7 @@
               <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                 <button nz-button>
                   <i nz-icon nzType="upload"></i>
-                  Select File
+                  Chọn tệp
                 </button>
               </nz-upload>
               <div class="tep__sqd" (click)="downloadFileCv()">
@@ -96,9 +96,6 @@
             <td>{{baoCao.ngayDuyetTBP}}</td>
             <td>{{baoCao.ngayDuyetLD}}</td>
             <td>{{baoCao.ngayCapTrenTraKq}}</td>
-            <!-- <td>
-              {{getStatusName(trangThaiBaoCao)}}
-            </td> -->
           </tr>
         </tbody>
       </nz-table>
@@ -152,14 +149,14 @@
                       </ng-template>
                     </td>
                     <td>
-                      <!-- <ng-container *ngIf="baoCao.id"> -->
+                      <ng-container *ngIf="baoCao.id">
                       <a *ngIf="!status && (userInfo?.sub == data.giaoCho)">
                         <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
                       </a>
                       <a *ngIf="(status || userInfo?.sub != data.giaoCho) && data.giaoCho">
                         <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
                       </a>
-                      <!-- </ng-container> -->
+                      </ng-container>
                       <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiNhap)">
                         <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
                       </a>

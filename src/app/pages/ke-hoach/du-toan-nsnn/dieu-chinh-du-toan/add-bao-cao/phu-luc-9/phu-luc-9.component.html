@@ -145,46 +145,46 @@
           <tr>
             <td></td>
             <td>Tổng số</td>
-            <td>{{total.bcheGiao2021}}</td>
-            <td>{{total.bcheCoMat}}</td>
-            <td>{{total.bcheChuaTuyen}}</td>
-            <td>{{total.hslPcapTso}}</td>
-            <td>{{total.hslPcapHsl}}</td>
-            <td>{{total.hslPcapTong}}</td>
-            <td>{{total.hslPcapChucVu}}</td>
-            <td>{{total.hslPcapTnhiem}}</td>
-            <td>{{total.hslPcapTnienVkhung}}</td>
-            <td>{{total.hslPcapHsbl}}</td>
-            <td>{{total.hslPcapCongVu}}</td>
-            <td>{{total.hslPcapTnien}}</td>
-            <td>{{total.hslPcapUdai}}</td>
-            <td>{{total.hslPcapKvuc}}</td>
-            <td>{{total.hslPcapKhac}}</td>
-            <td>{{total.tqtlPcapTso}}</td>
-            <td>{{total.tqtlPcapTluong}}</td>
-            <td>{{total.tqtlPcapTong}}</td>
-            <td>{{total.tqtlPcapChucVu}}</td>
-            <td>{{total.tqtlPcapTniem}}</td>
-            <td>{{total.tqtlPcapTnienVkhung}}</td>
-            <td>{{total.tqtlPcapHsbl}}</td>
-            <td>{{total.tqtlPcapCongVu}}</td>
-            <td>{{total.tqtlPcapTnien}}</td>
-            <td>{{total.tqtlPcapUdai}}</td>
-            <td>{{total.tqtlPcapKvuc}}</td>
-            <td>{{total.tqtlPcapKhac}}</td>
-            <td>{{total.tongNcauTluong}}</td>
-            <td>{{total.baoGomTluongBche}}</td>
-            <td>{{total.baoGomKhoanDgop}}</td>
-            <td>{{total.baoGomLuongCbcc}}</td>
-            <td>{{total.baoGomLuongDhoaChung}}</td>
-            <td>{{total.dtoanKphiDtoanNtruoc}}</td>
-            <td>{{total.dtoanKphiDaGiao}}</td>
-            <td>{{total.dtoanKphiCong}}</td>
-            <td>{{total.dtoanDaThien}}</td>
-            <td>{{total.dtoanUocThien}}</td>
-            <td>{{total.tongNcauDtoan}}</td>
-            <td>{{total.dtoanDnghiDchinh}}</td>
-            <td *ngIf="viewRecommendedValue">{{total.dtoanVuTvqtDnghi}}</td>
+            <td>{{displayValue(total.bcheGiao2021)}}</td>
+            <td>{{displayValue(total.bcheCoMat)}}</td>
+            <td>{{displayValue(total.bcheChuaTuyen)}}</td>
+            <td>{{displayValue(total.hslPcapTso)}}</td>
+            <td>{{displayValue(total.hslPcapHsl)}}</td>
+            <td>{{displayValue(total.hslPcapTong)}}</td>
+            <td>{{displayValue(total.hslPcapChucVu)}}</td>
+            <td>{{displayValue(total.hslPcapTnhiem)}}</td>
+            <td>{{displayValue(total.hslPcapTnienVkhung)}}</td>
+            <td>{{displayValue(total.hslPcapHsbl)}}</td>
+            <td>{{displayValue(total.hslPcapCongVu)}}</td>
+            <td>{{displayValue(total.hslPcapTnien)}}</td>
+            <td>{{displayValue(total.hslPcapUdai)}}</td>
+            <td>{{displayValue(total.hslPcapKvuc)}}</td>
+            <td>{{displayValue(total.hslPcapKhac)}}</td>
+            <td>{{displayValue(total.tqtlPcapTso)}}</td>
+            <td>{{displayValue(total.tqtlPcapTluong)}}</td>
+            <td>{{displayValue(total.tqtlPcapTong)}}</td>
+            <td>{{displayValue(total.tqtlPcapChucVu)}}</td>
+            <td>{{displayValue(total.tqtlPcapTniem)}}</td>
+            <td>{{displayValue(total.tqtlPcapTnienVkhung)}}</td>
+            <td>{{displayValue(total.tqtlPcapHsbl)}}</td>
+            <td>{{displayValue(total.tqtlPcapCongVu)}}</td>
+            <td>{{displayValue(total.tqtlPcapTnien)}}</td>
+            <td>{{displayValue(total.tqtlPcapUdai)}}</td>
+            <td>{{displayValue(total.tqtlPcapKvuc)}}</td>
+            <td>{{displayValue(total.tqtlPcapKhac)}}</td>
+            <td>{{displayValue(total.tongNcauTluong)}}</td>
+            <td>{{displayValue(total.baoGomTluongBche)}}</td>
+            <td>{{displayValue(total.baoGomKhoanDgop)}}</td>
+            <td>{{displayValue(total.baoGomLuongCbcc)}}</td>
+            <td>{{displayValue(total.baoGomLuongDhoaChung)}}</td>
+            <td>{{displayValue(total.dtoanKphiDtoanNtruoc)}}</td>
+            <td>{{displayValue(total.dtoanKphiDaGiao)}}</td>
+            <td>{{displayValue(total.dtoanKphiCong)}}</td>
+            <td>{{displayValue(total.dtoanDaThien)}}</td>
+            <td>{{displayValue(total.dtoanUocThien)}}</td>
+            <td>{{displayValue(total.tongNcauDtoan)}}</td>
+            <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
           </tr>
           <tr>
@@ -228,8 +228,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhTang}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuTang}}</td>
+            <td>{{displayValue(tongDieuChinhTang)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
           </tr>
           <tr>
@@ -273,8 +273,8 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{tongDieuChinhGiam}}</td>
-            <td *ngIf="viewRecommendedValue">{{dToanVuGiam}}</td>
+            <td>{{displayValue(tongDieuChinhGiam)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -426,8 +426,7 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.hslPcapTnienVkhung"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.hslPcapTnienVkhung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
@@ -477,8 +476,7 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.tqtlPcapTnienVkhung"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTnienVkhung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
@@ -511,8 +509,7 @@
                   {{displayValue(editCache[data.id].data.tongNcauTluong)}}
                 </td>
                 <td>
-                  <input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.baoGomTluongBche"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomTluongBche"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
@@ -524,13 +521,11 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.baoGomLuongDhoaChung"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.baoGomLuongDhoaChung"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask
-                    [(ngModel)]="editCache[data.id].data.dtoanKphiDtoanNtruoc"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanKphiDtoanNtruoc"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
@@ -563,7 +558,7 @@
                   {{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
-                    <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                     [options]="amount1" />
                 </td>
               </ng-template>
