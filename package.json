@@ -35,6 +35,7 @@
     "ngx-print": "1.2.1",
     "ngx-spinner": "^12.0.0",
     "rxjs": "~6.6.0",
+    "sass-math": "^1.0.0",
     "tslib": "^2.1.0",
     "vn-num2words": "^1.0.4",
     "xlsx": "^0.18.3",

@@ -91,9 +91,9 @@ export class BieuMau13Component implements OnInit {
             if (category) {
                 this.noiDungs = category.data;
             }
-            this.scrollX = (410 + BOX_NUMBER_WIDTH * 13).toString() + 'px';
+            this.scrollX = (410 + 180 + BOX_NUMBER_WIDTH * 11).toString() + 'px';
         } else {
-            this.scrollX = (350 + BOX_NUMBER_WIDTH * 13).toString() + 'px';
+            this.scrollX = (350 + 180 + BOX_NUMBER_WIDTH * 11).toString() + 'px';
         }
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;

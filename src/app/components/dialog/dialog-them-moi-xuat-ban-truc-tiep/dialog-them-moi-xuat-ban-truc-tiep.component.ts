@@ -239,7 +239,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (index >= 0) {
       let nhakho = this.listNhaKho.filter(item => item.value == this.editCache[index].data.maNhaKho);
       if (nhakho.length > 0) {
-        this.editCache[index].data.tenNhakho = nhakho[0].text;
+        this.editCache[index].data.tenNhaKho = nhakho[0].text;
       }
       this.listNganKho = [];
       for (let i = 0; i < nhakho[0].listNganKhoEdit?.child.length; i++) {
@@ -255,7 +255,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     } else {
       let nhakho = this.listNhaKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maNhaKho)[0];
       this.listNganKho = nhakho.children;
-      this.thongTinXuatBanTrucTiep.tenNhakho = nhakho.tenDvi;
+      this.thongTinXuatBanTrucTiep.tenNhaKho = nhakho.tenDvi;
     }
   }
 

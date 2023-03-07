@@ -324,7 +324,7 @@
                                 <td>{{lv2.tenChiCuc}}</td>
                                 <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
                                 <td>{{lv2.tenCloaiVthh}}</td>
-                                <td>{{lv2.tonkhoCloaiVthh|number:'1.0-1'}}</td>
+                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
                                 <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
                                 <td>{{lv2.donViTinh}}</td>
                                 <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
@@ -392,7 +392,6 @@
                     <th [colspan]="2">Chi cục DTNN</th>
                     <th [colspan]="2">Chủng loại hàng hóa</th>
                     <th [colspan]="4">SL xuất CT, VT của từng chi cục</th>
-                    <th [rowspan]="2" style="width: 10%">Hành động</th>
                   </tr>
                   <tr>
                     <th>Tên cục</th>
@@ -427,7 +426,6 @@
                       <td></td>
                       <td></td>
                       <td>{{item.thanhTien|number:'1.0-1'}}</td>
-                      <td></td>
                     </tr>
                     <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                       <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -437,7 +435,6 @@
                           <td></td>
                           <td></td>
                           <td>{{lv1.tenCuc}}</td>
-                          <td></td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -460,19 +457,11 @@
                               <td>{{lv2.tenChiCuc}}</td>
                               <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
                               <td>{{lv2.tenCloaiVthh}}</td>
-                              <td>{{lv2.tonkhoCloaiVthh|number:'1.0-1'}}</td>
+                              <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
                               <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
                               <td>{{lv2.donViTinh}}</td>
                               <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
                               <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
-                              <td>
-                                <a>
-                                  <i class="fa fa-edit" *ngIf="!isView" (click)="suaPhuongAn(lv2)"></i>
-                                </a>
-                                <a>
-                                  <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv2)"></i>
-                                </a>
-                              </td>
                             </tr>
                           </ng-container>
                         </ng-container>
@@ -481,6 +470,7 @@
                   </ng-container>
                   </tbody>
                 </nz-table>
+                <label nz-checkbox [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt xuất cấp</label>
               </nz-card>
             </div>
           </nz-card>
@@ -488,66 +478,6 @@
       </div>
     </nz-card>
   </div>
-  <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
-            (nzOnOk)="handleOk()" nzTitle="Chi tiết phương án">
-    <ng-container *nzModalContent>
-      <!--    <form nz-form>-->
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
-        <nz-form-control>
-          <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto" [readonly]="true">
-          <nz-autocomplete #auto>
-            <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Cục DTNN</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
-                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Chi Cục DTNN</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviChiCuc" (ngModelChange)="changeChiCuc($event)"
-                     nzPlaceHolder="Chọn đơn vị" nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
-        <nz-form-control>
-          <nz-select nzAllowClear [(ngModel)]="phuongAnRow.cloaiVthh" nzPlaceHolder="Chọn chủng loại hàng hóa"
-                     nzShowSearch [nzDisabled]="true">
-            <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Số lượng</nz-form-label>
-        <nz-form-control>
-          <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                           [nzSize]="'small'">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-      <nz-form-item>
-        <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
-        <nz-form-control>
-          <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                           [nzSize]="'small'">
-          </nz-input-number>
-        </nz-form-control>
-      </nz-form-item>
-      <!--    </form>-->
-    </ng-container>
-  </nz-modal>
 
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>

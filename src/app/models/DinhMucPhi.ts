@@ -11,6 +11,7 @@ export class DinhMucPhiNxBq {
   htBaoQuan:string;
   donViTinh: string;
   tongDinhMucTc: number = 0;
+  tcTongCucDieuHanhKv: number = 0;
   nvChuyenMonTc: number = 0;
   ttCaNhanTc: number = 0;
   tcDieuHanhTc: number = 0;

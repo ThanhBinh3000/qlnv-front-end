@@ -8,17 +8,18 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhGiaoNvCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 import {DanhMucService} from "src/app/services/danhmuc.service";
 import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import dayjs from "dayjs";
 import {MESSAGE} from "src/app/constants/message";
-import {
-  QuyetDinhPheDuyetPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
+
 import {STATUS} from "src/app/constants/status";
 import * as uuid from "uuid";
 import {DonviService} from "src/app/services/donvi.service";
+import {
+  QuyetDinhPheDuyetPhuongAnCuuTroService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 
 /*export class noiDungCuuTro {
   idVirtual: number;
@@ -38,7 +39,7 @@ import {DonviService} from "src/app/services/donvi.service";
 }*/
 
 @Component({
-  selector: 'app-thong-tin-qd-gnv-xuat-hang',
+  selector: 'app-thong-tin-qd-gnv-xuat-hang-xc',
   templateUrl: './thong-tin-qd-gnv-xuat-hang.component.html',
   styleUrls: ['./thong-tin-qd-gnv-xuat-hang.component.scss']
 })
@@ -209,6 +210,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                 noiDungCuuTro: noiDungCuuTro[0].quyetDinhPdDx
               });
               this.selectHangHoa(res.data.loaiVthh);
+              console.log(JSON.stringify(this.formData.value), 2929)
               this.buildTableView()
             }
           }
@@ -501,16 +503,11 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     let table = this.formData.value.noiDungCuuTro;
     let index = table.findIndex(s => s.idVirtual === this.noiDungRow.idVirtual);
 
-    // table.forEach(s => {
-    //   s.soLuongXuatCuc = this.noiDungRow.soLuongXuatCuc
-    // })
-
     if (index != -1) {
       table.splice(index, 1, this.noiDungRow);
     } else {
       table = [...table, this.noiDungRow]
     }
-    // table = table.filter(s => s.maDiemKho);
     this.formData.patchValue({
       noiDungCuuTro: table
     })

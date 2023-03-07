@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output,} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -85,6 +85,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   expandSetString = new Set<string>();
   phuongAnView = [];
   phuongAnRow: any = {};
+  phuongAnRowDiff: any;
   isVisible = false;
   isVisibleSuaNoiDung = false;
   listNoiDung = []
@@ -121,9 +122,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         maDvi: [''],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        soDx: [''],
+        soDx: ['', [Validators.required]],
         trichYeu: [''],
-        loaiVthh: [''],
+        loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         tenVthh: [''],
         tonKho: [0],
@@ -280,6 +281,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
     this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
@@ -287,12 +293,12 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.phuongAnRow.maDviCuc = this.userInfo.MA_DVI;
       this.changeCuc(this.phuongAnRow.maDviCuc);
     }
-     if (data) {
-       this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
-       this.changeCuc(this.phuongAnRow.maDviCuc);
-       this.phuongAnRow.noiDung = data.childData[0].noiDung;
-       this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
-     }
+    if (data) {
+      this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc).maDvi;
+      this.changeCuc(this.phuongAnRow.maDviCuc);
+      this.phuongAnRow.noiDung = data.childData[0].noiDung;
+      this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
+    }
   }
 
   handleOk(): void {
@@ -307,7 +313,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     let table = this.formData.value.deXuatPhuongAn;
     table.filter(s => s.noiDung === this.phuongAnRow.noiDung && s.maDviCuc === this.phuongAnRow.maDviCuc)
       .forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
-
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
     } else {
@@ -317,6 +322,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       deXuatPhuongAn: table
     })
     this.buildTableView();
+    //set tong sl xuat cuc
+    table.forEach(s => {
+      s.soLuongXuat = this.phuongAnView.find(s1 => s1.noiDung === s.noiDung).soLuongXuat;
+    })
     this.isVisible = false;
     //clean
     this.errorInputComponent = [];
@@ -417,6 +426,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           let data = res.data;
           if (data.length > 0) {
             this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+            this.phuongAnRow.tenDonViTinh = data[0].tenDonViTinh;
+          } else {
+            this.phuongAnRow.tonKhoChiCuc = 0;
+            this.phuongAnRow.tenDonViTinh = '';
           }
         }
       });
@@ -434,9 +447,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data.length > 0) {
-          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+          this.phuongAnRow.tonKhoCloaiVthh = data[0].slHienThoi;
+        } else {
+          this.phuongAnRow.tonKhoCloaiVthh = 0;
         }
-
       }
     });
   }
@@ -531,4 +545,5 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       return '';
     }
   }
+
 }
