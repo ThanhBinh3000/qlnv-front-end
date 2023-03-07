@@ -131,7 +131,7 @@ export class DanhSachXuatBanTrucTiep {
     diaDiemKho: string;
     tenDiemKho: string
     maNhaKho: string;
-    tenNhakho: string;
+    tenNhaKho: string;
     maNganKho: string;
     tenNganKho: string;
     maLoKho: string;
