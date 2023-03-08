@@ -41,7 +41,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
   async tongHop() {
     this.spinner.show();
-    await this.dieuChinhService.tongHopDieuChinhDuToan1(this.response).toPromise().then(
+    await this.dieuChinhService.tongHopDieuChinhDuToan(this.response).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.response.lstDieuChinhs = data.data.lstDchinhs;

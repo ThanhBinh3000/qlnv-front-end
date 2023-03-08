@@ -883,7 +883,7 @@ export class AddBaoCaoComponent implements OnInit {
   getStatusName(status: string) {
     const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
     const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-    if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
+    if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
       return 'Mới';
     } else {
       return this.trangThais.find(e => e.id == status)?.tenDm;
@@ -934,7 +934,7 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
-    console.log("this.userInfo", this.userInfo)
+    console.log(this.userService)
     // let isParent
     // if (this.userInfo.CAP_DVI == "1") {
     //   this.childUnit.forEach(s => {
@@ -942,14 +942,14 @@ export class AddBaoCaoComponent implements OnInit {
     //       isParent = true
     //     }
     //   })
-    // } else if (this.userInfo.CAP_DVI == "2") {
+    // } else if (this.userInfo.CAP_DVI == "2" ) {
     //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
     //   isParent = this.userInfo.MA_DVI == maDviCha;
     // }
 
-    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
+    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
     //kiem tra quyen cua cac user
     const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
     const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
