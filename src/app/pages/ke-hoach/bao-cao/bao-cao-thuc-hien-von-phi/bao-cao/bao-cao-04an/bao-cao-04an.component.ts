@@ -520,11 +520,11 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     getDmValue(cuc: number, vp: number) {
-        if (this.userService.isChiCuc()) {
-            return cuc;
-        }
         if (this.data.isOffice) {
             return vp;
+        }
+        if (this.userService.isChiCuc()) {
+            return cuc;
         }
         return sumNumber([cuc, vp]);
     }

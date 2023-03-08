@@ -30,7 +30,6 @@ import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
 import { PhuLuc04Component } from './phu-luc/phu-luc-04/phu-luc-04.component';
 import { PhuLuc05Component } from './phu-luc/phu-luc-05/phu-luc-05.component';
 import { PhuLuc06Component } from './phu-luc/phu-luc-06/phu-luc-06.component';
-import { PhuLuc07Component } from './phu-luc/phu-luc-07/phu-luc-07.component';
 import { PhuLucDuAnComponent } from './phu-luc/phu-luc-du-an/phu-luc-du-an.component';
 import { BieuMau131Component } from './thong-tu-342/bieu-mau-13-1/bieu-mau-13-1.component';
 import { BieuMau1310Component } from './thong-tu-342/bieu-mau-13-10/bieu-mau-13-10.component';

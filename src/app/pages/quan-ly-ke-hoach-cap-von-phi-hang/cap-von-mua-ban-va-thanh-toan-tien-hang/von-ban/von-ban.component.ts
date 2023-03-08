@@ -113,7 +113,7 @@ export class VonBanComponent implements OnInit {
             maDvi: this.userInfo?.DON_VI?.maDviCha,
             loaiDnghi: loai,
             canCuVeGia: canCu,
-            namBcao: nam,
+            namDnghi: nam,
             paggingReq: {
                 limit: 10,
                 page: 1,

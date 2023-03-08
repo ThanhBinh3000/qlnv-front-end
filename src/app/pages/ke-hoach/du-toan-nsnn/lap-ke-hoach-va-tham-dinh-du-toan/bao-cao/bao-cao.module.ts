@@ -6,14 +6,13 @@ import { BaoCaoComponent } from './bao-cao.component';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
 import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
 import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
-import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc01XuatComponent } from './phu-luc/phu-luc-01-xuat/phu-luc-01-xuat.component';
+import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
 import { PhuLuc04Component } from './phu-luc/phu-luc-04/phu-luc-04.component';
 import { PhuLuc05Component } from './phu-luc/phu-luc-05/phu-luc-05.component';
 import { PhuLuc06Component } from './phu-luc/phu-luc-06/phu-luc-06.component';
-import { PhuLuc07Component } from './phu-luc/phu-luc-07/phu-luc-07.component';
 import { PhuLucDuAnComponent } from './phu-luc/phu-luc-du-an/phu-luc-du-an.component';
 import { BieuMau131Component } from './thong-tu-342/bieu-mau-13-1/bieu-mau-13-1.component';
 import { BieuMau1310Component } from './thong-tu-342/bieu-mau-13-10/bieu-mau-13-10.component';
@@ -55,7 +54,6 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         PhuLuc04Component,
         PhuLuc05Component,
         PhuLuc06Component,
-        PhuLuc07Component,
         PhuLucDuAnComponent,
         BaoHiemHangComponent,
         BaoHiemKhoComponent,
