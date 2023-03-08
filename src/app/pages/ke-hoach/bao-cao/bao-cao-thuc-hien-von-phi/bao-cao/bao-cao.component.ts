@@ -210,6 +210,7 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
+        console.log(this.userInfo);
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
 
         await this.danhMucService.dMDviCon().toPromise().then(
