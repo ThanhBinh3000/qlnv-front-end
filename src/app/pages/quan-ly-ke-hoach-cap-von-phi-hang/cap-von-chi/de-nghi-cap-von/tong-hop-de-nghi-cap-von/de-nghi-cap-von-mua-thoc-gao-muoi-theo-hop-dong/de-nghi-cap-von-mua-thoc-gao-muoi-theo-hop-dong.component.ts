@@ -484,9 +484,9 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			this.total.slHopDong = sumNumber([this.total.slHopDong, item.slHopDong]);
 			this.total.gtHopDong = sumNumber([this.total.gtHopDong, item.gtHopDong]);
 			this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
-			this.total.luyKeCong = sumNumber([this.total.luyKeCapUng, this.total.luyKeCapVon]);
 			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
 			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
+			this.total.luyKeCong = sumNumber([this.total.luyKeCapUng, this.total.luyKeCapVon]);
 			this.total.tongVonVaDtDaCap = sumNumber([this.total.duToanDaGiao, this.total.luyKeCong]);
 			this.total.vonDnghiCapLanNay = sumNumber([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
 			this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
