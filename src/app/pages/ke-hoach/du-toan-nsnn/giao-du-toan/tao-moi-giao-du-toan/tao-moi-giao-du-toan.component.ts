@@ -513,7 +513,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       ngayTao: this.ngayTao,
-      maLoaiDan: "1",
+      maLoaiDan: "3",
       maGiao: this.maGiao,
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
@@ -668,31 +668,31 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       trangThai: this.trangThaiBanGhi,
       thuyetMinh: this.thuyetMinh,
       ngayTao: this.ngayTao,
-      maLoaiDan: "1",
+      maLoaiDan: "3",
       maGiao: this.maGiao,
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
     }));
-    const request1 = JSON.parse(JSON.stringify({
-      id: null,
-      idPaBTC: this.idPaBTC,
-      fileDinhKems: this.lstFiles,
-      listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-      lstCtiets: lstCtietBcaoTemp,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maPa: this.maPa,
-      maPaCha: this.maPaCha,
-      namPa: this.namPa,
-      maPhanGiao: "2",
-      trangThai: this.trangThaiBanGhi,
-      thuyetMinh: this.thuyetMinh,
-      ngayTao: this.ngayTao,
-      maLoaiDan: "1",
-      maGiao: this.maGiao,
-      soQd: this.soQd,
-      tongHopTuIds: tongHopTuIds,
-    }));
+    // const request1 = JSON.parse(JSON.stringify({
+    //   id: null,
+    //   idPaBTC: this.idPaBTC,
+    //   fileDinhKems: this.lstFiles,
+    //   listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+    //   lstCtiets: lstCtietBcaoTemp,
+    //   maDvi: this.maDonViTao,
+    //   maDviTien: this.maDviTien,
+    //   maPa: this.maPa,
+    //   maPaCha: this.maPaCha,
+    //   namPa: this.namPa,
+    //   maPhanGiao: "2",
+    //   trangThai: this.trangThaiBanGhi,
+    //   thuyetMinh: this.thuyetMinh,
+    //   ngayTao: this.ngayTao,
+    //   maLoaiDan: "1",
+    //   maGiao: this.maGiao,
+    //   soQd: this.soQd,
+    //   tongHopTuIds: tongHopTuIds,
+    // }));
     //get file cong van url
     const file: any = this.fileDetail;
     if (file) {
@@ -703,9 +703,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         request.soQd = await this.uploadFile(file);
       }
     }
-    if (file) {
-      request1.soQd = await this.uploadFile(file);
-    }
+    // if (file) {
+    //   request1.soQd = await this.uploadFile(file);
+    // }
     // if (!request.soQd) {
     //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
     //   return;
@@ -717,7 +717,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     // =================================================================
     this.spinner.show();
     if (!this.id) {
-      this.giaoDuToanChiService.giaoDuToan(request1).toPromise().then(
+      this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
@@ -1498,7 +1498,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           maDviTien: this.maDviTien,
           soQd: this.soQd,
           listCtiet: lstCtiet,
-          maLoaiDan: "1",
+          maLoaiDan: "3",
           namDtoan: this.namPa,
           ngayGiao: this.ngayTao,
           ngayTao: this.ngayTao,
@@ -1514,7 +1514,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           maDviTien: this.maDviTien,
           soQd: this.soQd,
           listCtiet: lstCtiet,
-          maLoaiDan: "1",
+          maLoaiDan: "3",
           namDtoan: this.namPa,
           ngayGiao: this.ngayTao,
           ngayTao: this.ngayTao,
@@ -1546,7 +1546,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 maDviTien: this.maDviTien,
                 soQd: this.soQd,
                 listCtiet: lstCtiet,
-                maLoaiDan: "1",
+                maLoaiDan: "3",
                 namDtoan: this.namPa,
                 ngayGiao: this.ngayTao,
                 ngayTao: this.ngayTao,
@@ -1562,7 +1562,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 maDviTien: this.maDviTien,
                 soQd: this.soQd,
                 listCtiet: lstCtiet,
-                maLoaiDan: "1",
+                maLoaiDan: "3",
                 namDtoan: this.namPa,
                 ngayGiao: this.ngayTao,
                 ngayTao: this.ngayTao,
@@ -1572,7 +1572,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         });
       }
     }
-    this.giaoDuToanChiService.giaoSoTranChiGiaoDuToan1(lstGiao).toPromise().then(
+    this.giaoDuToanChiService.giaoSoTranChiGiaoDuToan(lstGiao).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           if (maDviNhan) {

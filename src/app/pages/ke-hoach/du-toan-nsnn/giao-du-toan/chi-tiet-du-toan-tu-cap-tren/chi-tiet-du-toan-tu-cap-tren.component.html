@@ -9,28 +9,26 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Tiếp nhận</span>
       </button>
-      <ng-template #contentTemplate>
+      <!-- <ng-template #contentTemplate>
         <div class="contentTemplate_chonpa">
           <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
             án phân bổ giao dự toán chi</a>
           <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
             án giao, điều chỉnh dự toán chi</a>
         </div>
-      </ng-template>
-      <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate"
-        nzPopoverTrigger="click" [hidden]="statusBtnNew">
+      </ng-template> -->
+      <button class="btn btn-main" nz-button (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Tạo phương án</span>
       </button>
 
-      <ng-template #contentTemplate1>
+      <!-- <ng-template #contentTemplate1>
         <div class="contentTemplate_chonpa">
           <a (click)="taoMoiBaoCao(1)" class="contentTemplate_chonpa__con">1. Báo cáo phân bổ giao dự toán chi</a>
           <a (click)="taoMoiBaoCao(2)" class="contentTemplate_chonpa__con">2. Báo cáo giao, điều chỉnh dự toán chi</a>
         </div>
-      </ng-template>
-      <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate1"
-        nzPopoverTrigger="click" [hidden]="userInfo.CAP_DVI !== '3' ">
+      </ng-template> -->
+      <button class="btn btn-main" nz-button (click)="taoMoiBaoCao()" [hidden]="userInfo.CAP_DVI !== '3' ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Tạo Báo cáo</span>
       </button>

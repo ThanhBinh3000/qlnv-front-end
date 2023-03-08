@@ -110,7 +110,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         loaiTimKiem: "0",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: this.searchFilter.loaiDuAn,
+        loaiDuAn: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -129,7 +129,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         loaiTimKiem: "0",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: this.searchFilter.loaiDuAn,
+        loaiDuAn: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -227,7 +227,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         const obj = {
           ...res,
           id: null,
-          tabSelected: 'baocao',
+          tabSelected: 'addBaoCao',
           isSynthetic: false,
         }
         this.dataChange.emit(obj);

@@ -341,7 +341,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           phuongAn = data.data.content[0]?.id;
-          loaiPa = data.data.content[0]?.maLoaiDan;
+          // loaiPa = data.data.content[0]?.maLoaiDan;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -352,7 +352,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     );
     let data = {
       id: phuongAn,
-      loaiPa: loaiPa
+      // loaiPa: loaiPa
     }
     this._modalRef.close(data);
   }

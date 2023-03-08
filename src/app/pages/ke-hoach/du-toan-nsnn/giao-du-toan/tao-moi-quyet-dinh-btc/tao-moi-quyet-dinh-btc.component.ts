@@ -494,7 +494,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
-      // maPa: this.maPa,
+      maLoaiDan: "3",
       maPa: this.maPa,
       namPa: this.namPa,
       maPhanGiao: '1',
@@ -571,7 +571,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   };
 
 
-  async taoMoiPhuongAn(loaiPa) {
+  async taoMoiPhuongAn() {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
     let maPa
@@ -621,40 +621,40 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       maPaCha: maPaCha,
       namPa: this.namPa,
       maPhanGiao: "2",
-      maLoaiDan: '1',
+      maLoaiDan: '3',
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
       tabSelected: 'phuongAnGiaoDuToan',
     };
 
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstCtiets: lstCtietBcaoTemp,
-      maDvi: this.maDonViTao,
-      maDviTien: this.maDviTien,
-      maPa: maPa,
-      maPaCha: maPaCha,
-      namPa: this.namPa,
-      maPhanGiao: "2",
-      maLoaiDan: '2',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: this.id,
-      tabSelected: 'phuongAnGiaoDieuChinh',
-    };
+    // const request2 = {
+    //   id: null,
+    //   fileDinhKems: [],
+    //   listIdDeleteFiles: [],
+    //   lstCtiets: lstCtietBcaoTemp,
+    //   maDvi: this.maDonViTao,
+    //   maDviTien: this.maDviTien,
+    //   maPa: maPa,
+    //   maPaCha: maPaCha,
+    //   namPa: this.namPa,
+    //   maPhanGiao: "2",
+    //   maLoaiDan: '2',
+    //   trangThai: "1",
+    //   thuyetMinh: "",
+    //   idPaBTC: this.id,
+    //   tabSelected: 'phuongAnGiaoDieuChinh',
+    // };
 
-    if (loaiPa) {
-      if (loaiPa == 1) {
+    // if (loaiPa) {
+    //   if (loaiPa == 1) {
         this.dataChange.emit(request1);
-      }
+      // }
 
-      if (loaiPa == 2) {
-        this.dataChange.emit(request2);
-      }
-    }
+    //   if (loaiPa == 2) {
+    //     this.dataChange.emit(request2);
+    //   }
+    // }
   };
 
   showDialogCopy() {

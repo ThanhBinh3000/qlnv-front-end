@@ -42,6 +42,7 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     loaiTimKiem: '1',
     maPhanGiao: '2',
     maLoai: '1',
+    maLoaiDan: [3],
     namGiao: null,
     ngayTaoTu: "",
     ngayTaoDen: "",
