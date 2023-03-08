@@ -195,6 +195,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                                 id: uuid.v4() + 'FE',
                                 isParent: true,
                                 qdPheDuyetKqNhaThau: item.soQdPdKhlcnt,
+                                donGia: null,
                             })
                         } else {
                             if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {

@@ -41,7 +41,7 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         if (!this.userService.isTongCuc() || this.request.maLoai == 3) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
-        if (this.request.maLoai == 3) {
+        if (this.request.maLoai == 3 && this.userService.isCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
         }
         this.response.maLoai = this.request.maLoai;

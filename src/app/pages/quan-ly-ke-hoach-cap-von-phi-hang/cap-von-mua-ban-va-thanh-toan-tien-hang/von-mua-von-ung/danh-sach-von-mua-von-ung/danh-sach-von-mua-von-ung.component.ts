@@ -441,7 +441,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             loaiTimKiem: '0',
             maLoai: 6,
             maDvi: this.userInfo?.MA_DVI,
-            namBcao: nam,
+            namDnghi: nam,
             paggingReq: {
                 limit: 10,
                 page: 1,
