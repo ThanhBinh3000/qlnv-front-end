@@ -299,19 +299,21 @@ export class PhanBoDuToanComponent implements OnInit {
   };
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
-      const obj = {
-        id: id,
-        tabSelected: 'phuongAnGiaoDieuChinh',
-      }
-      this.dataChange.emit(obj);
-    } else {
+    }
+    // else if (maLoaiDan == "3") {
+    //   const obj = {
+    //     id: id,
+    //     tabSelected: 'phuongAnGiaoDieuChinh',
+    //   }
+    //   this.dataChange.emit(obj);
+    // }
+    else {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     }
   }
@@ -353,7 +355,7 @@ export class PhanBoDuToanComponent implements OnInit {
       },
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
-      if (res && res?.loaiPa == "1") {
+      if (res ) {
         let obj = {
           id: res.id,
           tabSelected: 'phuongAnGiaoDuToan',
@@ -361,14 +363,14 @@ export class PhanBoDuToanComponent implements OnInit {
         }
         this.dataChange.emit(obj);
       }
-      if (res && res?.loaiPa == "2") {
-        let obj = {
-          id: res.id,
-          tabSelected: 'phuongAnGiaoDieuChinh',
-          isSynthetic: false,
-        }
-        this.dataChange.emit(obj);
-      }
+      // if (res && res?.loaiPa == "2") {
+      //   let obj = {
+      //     id: res.id,
+      //     tabSelected: 'phuongAnGiaoDieuChinh',
+      //     isSynthetic: false,
+      //   }
+      //   this.dataChange.emit(obj);
+      // }
     });
   };
 

@@ -935,17 +935,19 @@ export class AddBaoCaoComponent implements OnInit {
 
   getStatusButton() {
     console.log("this.userInfo", this.userInfo)
-    let isParent
-    if (this.userInfo.CAP_DVI == "1") {
-      this.childUnit.forEach(s => {
-        if (s.maDvi == this.baoCao.maDvi) {
-          isParent = true
-        }
-      })
-    } else if (this.userInfo.CAP_DVI == "2") {
-      const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-      isParent = this.userInfo.MA_DVI == maDviCha;
-    }
+    // let isParent
+    // if (this.userInfo.CAP_DVI == "1") {
+    //   this.childUnit.forEach(s => {
+    //     if (s.maDvi == this.baoCao.maDvi) {
+    //       isParent = true
+    //     }
+    //   })
+    // } else if (this.userInfo.CAP_DVI == "2") {
+    //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
+    //   isParent = this.userInfo.MA_DVI == maDviCha;
+    // }
+
+    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
     //kiem tra quyen cua cac user

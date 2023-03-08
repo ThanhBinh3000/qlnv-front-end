@@ -60,7 +60,7 @@ export class GiaoDuToanChiService extends BaseService {
   // trinh duyet giao du toan chi nsnn
   giaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.228:30101/giao_du_toan/them-moi',
+      'http://localhost:9159/giao_du_toan/them-moi',
       request,
     );
   };
@@ -75,7 +75,7 @@ export class GiaoDuToanChiService extends BaseService {
   // update list giao du toan
   updateLapThamDinhGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.put(
-      'http://192.168.1.228:30101/giao_du_toan/cap-nhat',
+      'http://localhost:9159/giao_du_toan/cap-nhat',
       request,
     );
   };
@@ -84,6 +84,15 @@ export class GiaoDuToanChiService extends BaseService {
   tongHopGiaoDuToan(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/bao_cao_du_toan/tong-hop',
+      // 'http://192.168.1.228:30101/bao_cao_du_toan/tong-hop',
+      request,
+    );
+  };
+
+  //tong hop giao du toan
+  tongHopGiaoThucTe(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/tong-hop',
       // 'http://192.168.1.228:30101/bao_cao_du_toan/tong-hop',
       request,
     );

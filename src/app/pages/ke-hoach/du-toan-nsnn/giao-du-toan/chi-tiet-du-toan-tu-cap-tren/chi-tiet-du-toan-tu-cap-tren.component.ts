@@ -393,7 +393,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async taoMoiPhuongAn(loaiPa) {
+  async taoMoiPhuongAn() {
     const listCtietDvi: any[] = [];
 
     let maPa
@@ -443,43 +443,43 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       maPhanGiao: "2",
-      maLoaiDan: '1',
+      maLoaiDan: '3',
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
       tabSelected: 'phuongAnGiaoDuToan',
     };
 
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstCtiets: lstCtietBcaoTemp,
-      maDvi: this.maDviTao,
-      maDviTien: this.maDviTien,
-      maPa: maPa,
-      maPaCha: this.maPaCha,
-      namPa: this.namDtoan,
-      maPhanGiao: "2",
-      maLoaiDan: '2',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: this.id,
-      tabSelected: 'phuongAnGiaoDieuChinh',
-    };
+    // const request2 = {
+    //   id: null,
+    //   fileDinhKems: [],
+    //   listIdDeleteFiles: [],
+    //   lstCtiets: lstCtietBcaoTemp,
+    //   maDvi: this.maDviTao,
+    //   maDviTien: this.maDviTien,
+    //   maPa: maPa,
+    //   maPaCha: this.maPaCha,
+    //   namPa: this.namDtoan,
+    //   maPhanGiao: "2",
+    //   maLoaiDan: '2',
+    //   trangThai: "1",
+    //   thuyetMinh: "",
+    //   idPaBTC: this.id,
+    //   tabSelected: 'phuongAnGiaoDieuChinh',
+    // };
 
-    if (loaiPa) {
-      if (loaiPa === 1) {
-        this.dataChange.emit(request1);
-      }
+    // if (loaiPa) {
+    //   if (loaiPa === 1) {
+    this.dataChange.emit(request1);
+    //   }
 
-      if (loaiPa === 2) {
-        this.dataChange.emit(request2);
-      }
-    }
+    //   if (loaiPa === 2) {
+    //     this.dataChange.emit(request2);
+    //   }
+    // }
   };
 
-  async taoMoiBaoCao(loaiPa) {
+  async taoMoiBaoCao() {
     const listCtietDvi: any[] = [];
     let maBcao
     await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
@@ -533,45 +533,45 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       namPa: this.namDtoan,
       soQd: this.soQd,
       maPhanGiao: "2",
-      maLoaiDan: '1',
+      maLoaiDan: '3',
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
       tabSelected: 'addBaoCao',
     };
 
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstCtiets: lstCtietBcaoTemp,
-      lstCtiets1: lstCtietBcaoTemp,
-      maDvi: this.maDviTao,
-      maDviTien: this.maDviTien,
-      maBcao: maBcao,
-      maPa: this.maPa,
-      maPaCha: this.maPaCha,
-      namPa: this.namDtoan,
-      soQd: this.soQd,
-      maPhanGiao: "2",
-      maLoaiDan: '2',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: this.id,
-      tabSelected: 'addBaoCao',
-    };
+    // const request2 = {
+    //   id: null,
+    //   fileDinhKems: [],
+    //   listIdDeleteFiles: [],
+    //   lstCtiets: lstCtietBcaoTemp,
+    //   lstCtiets1: lstCtietBcaoTemp,
+    //   maDvi: this.maDviTao,
+    //   maDviTien: this.maDviTien,
+    //   maBcao: maBcao,
+    //   maPa: this.maPa,
+    //   maPaCha: this.maPaCha,
+    //   namPa: this.namDtoan,
+    //   soQd: this.soQd,
+    //   maPhanGiao: "2",
+    //   maLoaiDan: '2',
+    //   trangThai: "1",
+    //   thuyetMinh: "",
+    //   idPaBTC: this.id,
+    //   tabSelected: 'addBaoCao',
+    // };
 
-    if (loaiPa) {
-      if (loaiPa === 1) {
-        localStorage.setItem("idChiTiet", this.id);
-        this.dataChange.emit(request1);
-      }
+    // if (loaiPa) {
+    //   if (loaiPa === 1) {
+    localStorage.setItem("idChiTiet", this.id);
+    this.dataChange.emit(request1);
+    // }
 
-      if (loaiPa === 2) {
-        localStorage.setItem("idChiTiet", this.id);
-        this.dataChange.emit(request2);
-      }
-    }
+    // if (loaiPa === 2) {
+    //   localStorage.setItem("idChiTiet", this.id);
+    //   this.dataChange.emit(request2);
+    //   }
+    // }
   };
 
 

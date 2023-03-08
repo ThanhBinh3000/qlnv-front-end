@@ -133,11 +133,12 @@
           <nz-table #fixedTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzScroll]="{x: '500%'}">
             <thead>
               <tr>
-                <th rowspan="2" nzWidth="150px">STT</th>
-                <th rowspan="2" nzWidth="700px">Nhóm</th>
-                <th rowspan="2" nzWidth="150px">Tổng số</th>
-                <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
-                <th rowspan="2" [hidden]="status"></th>
+                <th nzWidth="150px">STT</th>
+                <th nzWidth="700px">Nhóm</th>
+                <th nzWidth="150px">Tổng số</th>
+                <th nzWidth="150px">Đơn vị cấp dưới đã thực hiện</th>
+                <th nzWidth="150px">Chênh lệch</th>
+                <th [hidden]="status"></th>
 
                 <!-- <th rowspan="2" [hidden]="status">
                   <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
@@ -166,13 +167,13 @@
                     </div>
                   </td>
                   <td>{{displayValue(data.tongCong)}}</td>
-                  <td *ngFor="let item of lstDvi">
+                  <!-- <td *ngFor="let item of lstDvi">
                     <div *ngFor="let e of data.lstCtietDvis;">
                       <div *ngIf="e.maDviNhan == item.maDvi">
                         {{displayValue(e.soTranChi)}}
                       </div>
                     </div>
-                  </td>
+                  </td> -->
                   <!-- <td [hidden]="status">
                     <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                   </td> -->
