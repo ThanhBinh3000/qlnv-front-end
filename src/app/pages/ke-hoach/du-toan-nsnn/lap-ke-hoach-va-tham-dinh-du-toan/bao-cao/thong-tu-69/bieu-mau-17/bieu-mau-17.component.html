@@ -21,64 +21,64 @@
 			<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 				<thead>
 					<tr>
-						<th class="text-center" nzWidth="50px">STT</th>
-						<th nzWidth="400px">Lĩnh vực/Nội dung chi</th>
+						<th class="text-center" nzWidth="50px" nzLeft>STT</th>
+						<th nzWidth="400px" nzLeft>Lĩnh vực/Nội dung chi</th>
 						<th>Thực hiện năm hiện hành {{namBcao -1}}</th>
 						<th>Nhu cầu dự toán năm {{namBcao}}</th>
 						<th>Nhu cầu năm {{namBcao + 1}}</th>
 						<th>Nhu cầu năm {{namBcao + 2}}</th>
-						<th nzWidth="50px" *ngIf="status"></th>
+						<th style="width: 60px;" *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
-						<th></th>
-						<th>Tổng Nhu cầu chi thường xuyên</th>
+						<th nzLeft></th>
+						<th nzLeft>Tổng Nhu cầu chi thường xuyên</th>
 						<th>{{displayValue(total.thNamHienHanhN1)}}</th>
 						<th>{{displayValue(total.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(total.ncauNamN1)}}</th>
 						<th>{{displayValue(total.ncauNamN2)}}</th>
-						<th *ngIf="status"></th>
+						<th *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
-						<th></th>
-						<th>Trong đó - Chi thường xuyên cơ sở</th>
+						<th nzLeft></th>
+						<th nzLeft>Trong đó - Chi thường xuyên cơ sở</th>
 						<th>{{displayValue(chiCoSo.thNamHienHanhN1)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN1)}}</th>
 						<th>{{displayValue(chiCoSo.ncauNamN2)}}</th>
-						<th *ngIf="status"></th>
+						<th *ngIf="status" nzRight></th>
 					</tr>
 					<tr>
-						<th></th>
-						<th>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
+						<th nzLeft></th>
+						<th nzLeft>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - Chi thường xuyên mới</th>
 						<th>{{displayValue(chiMoi.thNamHienHanhN1)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamDtoanN)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN1)}}</th>
 						<th>{{displayValue(chiMoi.ncauNamN2)}}</th>
-						<th *ngIf="status"></th>
+						<th *ngIf="status" nzRight></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr *ngFor="let data of lstCtietBcao; let i = index">
 						<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-							<td class="text-center">
+							<td class="text-center" nzLeft>
 								{{getChiMuc(data.stt)}}
 							</td>
-							<td>
+							<td nzLeft>
 								{{data.tenLvucNdChi}}
 							</td>
 							<td>{{displayValue(data.thNamHienHanhN1)}}</td>
 							<td>{{displayValue(data.ncauNamDtoanN)}}</td>
 							<td>{{displayValue(data.ncauNamN1)}}</td>
 							<td>{{displayValue(data.ncauNamN2)}}</td>
-							<td *ngIf="status">
+							<td *ngIf="status" nzRight>
 								<i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
 							</td>
 						</ng-container>
 						<ng-template #editTemplate>
-							<td class="text-center">
+							<td class="text-center" nzLeft>
 								{{getChiMuc(editCache[data.id].data.stt)}}
 							</td>
-							<td>
+							<td nzLeft>
 								{{editCache[data.id].data.tenLvucNdChi}}
 							</td>
 							<td>
@@ -101,7 +101,7 @@
 									[(ngModel)]="editCache[data.id].data.ncauNamN2"
 									[class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) ?'' : 'input-error-validate'" />
 							</td>
-							<td>
+							<td nzRight>
 								<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 								<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 									(nzOnConfirm)="cancelEdit(data.id)" class="save">
