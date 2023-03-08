@@ -21,14 +21,14 @@
         <label class="search__label">Mã báo cáo</label>
         <input class="search__input" nz-input [(ngModel)]="searchFilter.maBaoCao" />
       </div>
-      <div nz-col nzSpan="3">
+      <!-- <div nz-col nzSpan="3">
         <label class="search__label">Loại dự án</label>
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại" [(ngModel)]="searchFilter.loaiDuAn"
           [class]="searchFilter.loaiDuAn ?'' : 'input-error-validate'">
           <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
           </nz-option>
         </nz-select>
-      </div>
+      </div> -->
       <div nz-col nzSpan="3">
         <label class="search__label">Trạng thái</label>
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">

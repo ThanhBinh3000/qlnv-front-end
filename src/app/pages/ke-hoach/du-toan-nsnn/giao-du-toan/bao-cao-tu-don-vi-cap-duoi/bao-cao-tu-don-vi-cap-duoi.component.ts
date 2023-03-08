@@ -252,13 +252,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
   xemChiTiet(id: string, maLoaiDan: string) {
     console.log({ "id": id, "maLoaiDan": maLoaiDan });
 
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
+    } else if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',

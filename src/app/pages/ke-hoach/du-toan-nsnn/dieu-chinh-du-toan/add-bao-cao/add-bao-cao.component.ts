@@ -460,7 +460,7 @@ export class AddBaoCaoComponent implements OnInit {
 
     //call service them moi
     if (!this.baoCao.id) {
-      this.dieuChinhDuToanService.trinhDuyetDieuChinhService1(baoCaoTemp).toPromise().then(
+      this.dieuChinhDuToanService.trinhDuyetDieuChinhService(baoCaoTemp).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -481,7 +481,7 @@ export class AddBaoCaoComponent implements OnInit {
         },
       );
     } else {
-      this.dieuChinhDuToanService.updateDieuChinh1(baoCaoTemp).toPromise().then(
+      this.dieuChinhDuToanService.updateDieuChinh(baoCaoTemp).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
