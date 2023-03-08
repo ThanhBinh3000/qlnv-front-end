@@ -296,6 +296,12 @@ export class GiaoDuToanChiService extends BaseService {
       // 'http://192.168.1.228:30101/bao_cao_du_toan/chi-tiet/' + id,
     );
   }
+  chiTietBaoCao1(id: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/bao_cao_du_toan/chi-tiet/' + id,
+      'http://localhost:9159/bao_cao_du_toan/chi-tiet/' + id,
+    );
+  }
 
   SinhMaBaoCao(): Observable<any> {
     return this.httpClient.get(
