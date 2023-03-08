@@ -50,7 +50,7 @@
                         <th colspan="2">Nhu cầu trang bị trong năm {{namBcao+1}}</th>
                         <th colspan="2">Nhu cầu trang bị trong năm {{namBcao+2}}</th>
                         <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
-                        <th rowspan="2" style="width: 60px;" *ngIf="status || checkViewTD" nzRight></th>
+                        <th rowspan="2" style="width: 60px;" *ngIf="status || checkEditTD" nzRight></th>
                         <th rowspan="2" style="width: 50px;" *ngIf="status" nzRight></th>
                     </tr>
                     <tr>
@@ -78,7 +78,7 @@
                         <th>9</th>
                         <th>(10=4*9)</th>
                         <th *ngIf="status" nzRight></th>
-                        <th *ngIf="status || checkViewTD" nzRight></th>
+                        <th *ngIf="status || checkEditTD" nzRight></th>
                         <th *ngIf="status" nzRight></th>
                     </tr>
                     <tr>
@@ -96,7 +96,7 @@
                         <th></th>
                         <th>{{displayValue(total.ncauTbiNamN2Ttien)}}</th>
                         <th *ngIf="status" nzRight></th>
-                        <th *ngIf="status || checkViewTD" nzRight></th>
+                        <th *ngIf="status || checkEditTD" nzRight></th>
                         <th *ngIf="status" nzRight></th>
                     </tr>
                 </thead>
@@ -128,7 +128,7 @@
                             <td *ngIf="status" nzRight>
                                 <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                             </td>
-                            <td *ngIf="status || checkViewTD" nzRight>
+                            <td *ngIf="status || checkEditTD" nzRight>
                                 <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
                             <td *ngIf="status" nzRight>
