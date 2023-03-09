@@ -13,13 +13,13 @@
     <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC')">
       Tổng hợp đề xuất nhu cầu của các cục
     </li>
-    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM')">
       Quyết định mua sắm
     </li>
     <li nz-menu-item (click)="selectTab('thongtinphanbo')" >
      Thông tin phân bổ
     </li>
-    <li nz-menu-item (click)="selectTab('hopdong')" >
+    <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM')" >
       Hợp đồng
     </li>
     <li nz-menu-item (click)="selectTab('bienbangiaonhan')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN')" >
