@@ -115,6 +115,16 @@
 								<th>5</th>
 								<th [hidden]="status"></th>
 							</tr>
+							<tr>
+								<th>Tổng cộng</th>
+								<th></th>
+								<th>{{displayValue(total.slKeHoach)}}</th>
+								<th>{{displayValue(total.slHopDong)}}</th>
+								<th></th>
+								<th>{{displayValue(total.gtHopDong)}}</th>
+								<th></th>
+								<th [hidden]="status"></th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let data of baoCao.dnghiCvHopDongCtiets; let i = index">

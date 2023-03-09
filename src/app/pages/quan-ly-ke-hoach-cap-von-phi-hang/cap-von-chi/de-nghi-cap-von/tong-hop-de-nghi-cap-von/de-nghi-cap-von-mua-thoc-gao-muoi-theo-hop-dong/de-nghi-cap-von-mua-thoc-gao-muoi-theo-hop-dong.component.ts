@@ -166,10 +166,11 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			await this.getDetailReport();
 		} else {
 			this.baoCao = this.data?.baoCao;
+			this.sum();
 		}
 		this.updateEditCache();
 		this.getStatusButton();
-		this.sum();
+		// this.sum();
 		this.getTotal();
 	}
 
@@ -498,44 +499,15 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 	}
 
 	sum() {
-		const index = this.baoCao.dnghiCapvonCtiets.findIndex(e => e)
 		this.baoCao.dnghiCapvonCtiets.forEach(item => {
-			this.baoCao.dnghiCapvonCtiets[index].vonDnghiCapLanNay = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].gtHopDong,
-				-this.baoCao.dnghiCapvonCtiets[index].duToanDaGiao,
-				-this.baoCao.dnghiCapvonCtiets[index].luyKeCapUng,
-				-this.baoCao.dnghiCapvonCtiets[index].luyKeCapVon,
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].luyKeCong = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCapVon,
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCapUng
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].tongVonVaDtDaCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].duToanDaGiao,
-				this.baoCao.dnghiCapvonCtiets[index].luyKeCong
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].vonDuyetCong = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCapVon,
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCapUng
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].tongCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].tongVonVaDtDaCap,
-				this.baoCao.dnghiCapvonCtiets[index].vonDuyetCong
-			]);
-			this.baoCao.dnghiCapvonCtiets[index].soConDuocCap = sumNumber([
-				this.baoCao.dnghiCapvonCtiets[index].gtHopDong,
-				-this.baoCao.dnghiCapvonCtiets[index].tongCap
-			]);
+			if (item.isParent) {
+				item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
+				item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
+				item.tongCap = sumNumber([item.tongVonVaDtDaCap, item.vonDuyetCong]);
+				item.soConDuocCap = sumNumber([item.gtHopDong, -item.tongCap]);
+			}
 		})
 	}
-
-	// getSum() {
-	//   this.sum = new ItemRequest()
-	//   this.baoCao.dnghiCapvonCtiets.forEach(item => {
-	//     this.sum.vonDnghiCapLanNay = sumNumber([this.sum.gtHopDong, -this.sum.duToanDaGiao, -this.sum.luyKeCapUng, -this.sum.luyKeCapVon])
-	//     console.log(item.vonDnghiCapLanNay)
-	//   })
-	// }
 
 	showDialogCopy() {
 		// const obj = {
