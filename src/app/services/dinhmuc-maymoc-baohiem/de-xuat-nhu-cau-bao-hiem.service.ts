@@ -18,4 +18,8 @@ export class DeXuatNhuCauBaoHiemService extends BaseService{
     const url = `${environment.SERVICE_API}/qlnv-luukho/hang-trong-kho/trang-thai-ht`
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+  tongHop(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cuc-th/tra-cuu-dx-chi-cuc`
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

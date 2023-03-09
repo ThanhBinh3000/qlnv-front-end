@@ -611,6 +611,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         })
         let body = {
           trangThai: STATUS.DA_DUYET_LDCC,
+          type: "XUAT_CAP"
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
