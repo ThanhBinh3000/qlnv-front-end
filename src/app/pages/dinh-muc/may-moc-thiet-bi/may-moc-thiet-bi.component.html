@@ -1,31 +1,31 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected == 'dinhmuctrangbi'" (click)="selectTab('dinhmuctrangbi')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dinhmuctrangbi'" (click)="selectTab('dinhmuctrangbi')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_ĐMTBMTBCD')">
       Định mức trang bị
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC')">
       Đề xuất nhu cầu của Chi cục
     </li>
-    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC')">
       {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}
     </li>
-    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC')">
       Tổng hợp đề xuất nhu cầu của các cục
     </li>
-    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM')">
       Quyết định mua sắm
     </li>
     <li nz-menu-item (click)="selectTab('thongtinphanbo')" >
      Thông tin phân bổ
     </li>
-    <li nz-menu-item (click)="selectTab('hopdong')" >
+    <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HDMUASAM')" >
       Hợp đồng
     </li>
-    <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
+    <li nz-menu-item (click)="selectTab('bienbangiaonhan')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_BBGN')" >
       Biên bản giao nhận
     </li>
-    <li nz-menu-item (click)="selectTab('hientrangmaymoc')">
+    <li nz-menu-item (click)="selectTab('hientrangmaymoc')" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD')">
       Hiện trạng máy móc, thiết bị
     </li>
   </ul>
