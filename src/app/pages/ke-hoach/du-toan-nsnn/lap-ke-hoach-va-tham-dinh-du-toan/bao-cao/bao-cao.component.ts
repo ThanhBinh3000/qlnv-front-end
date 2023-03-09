@@ -23,6 +23,7 @@ import { PHU_LUC } from './bao-cao.constant';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
 import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
 import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
+import { KhoComponent } from './phu-luc/bao-hiem/kho/kho.component';
 import { PhuLuc01XuatComponent } from './phu-luc/phu-luc-01-xuat/phu-luc-01-xuat.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
@@ -858,315 +859,315 @@ export class BaoCaoComponent implements OnInit {
                 nzContent = BaoHiemHangComponent;
                 break;
             case 'pl_bh_kho':
-                nzContent = BaoHiemKhoComponent;
+                nzContent = KhoComponent;
                 break;
             case 'pl_bh':
                 nzContent = BaoHiemComponent;
-                dataInfo.extraData = [];
-                //phu luc bao hiem hang 
-                const dataBaoHiemHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang').lstCtietLapThamDinhs;
-                const lstMuoi = []
-                dataBaoHiemHang.forEach(item => {
-                    const loaiHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.loaiHang;
-                    const tenHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.ten;
-                    const maDviTinh = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.maDviTinh;
-                    if (loaiHang == "LT") {
-                        let tongSoLuongTu = 0
-                        let tongSoLuongDuoi = 0
-                        let tongGiaTriTu = 0
-                        let tongGiaTriDuoi = 0
-                        if (item.khoiTich >= 5000) {
-                            tongSoLuongTu += item.soLuong;
-                            tongGiaTriTu += item.giaTri;
-                        }
-                        if (item.khoiTich < 5000) {
-                            tongSoLuongDuoi += item.soLuong;
-                            tongGiaTriDuoi += item.giaTri
-                        }
+                // dataInfo.extraData = [];
+                // //phu luc bao hiem hang 
+                // const dataBaoHiemHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang').lstCtietLapThamDinhs;
+                // const lstMuoi = []
+                // dataBaoHiemHang.forEach(item => {
+                //     const loaiHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.loaiHang;
+                //     const tenHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.ten;
+                //     const maDviTinh = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.maDviTinh;
+                //     if (loaiHang == "LT") {
+                //         let tongSoLuongTu = 0
+                //         let tongSoLuongDuoi = 0
+                //         let tongGiaTriTu = 0
+                //         let tongGiaTriDuoi = 0
+                //         if (item.khoiTich >= 5000) {
+                //             tongSoLuongTu += item.soLuong;
+                //             tongGiaTriTu += item.giaTri;
+                //         }
+                //         if (item.khoiTich < 5000) {
+                //             tongSoLuongDuoi += item.soLuong;
+                //             tongGiaTriDuoi += item.giaTri
+                //         }
 
-                        if (dataInfo.extraData.length == 0) {
-                            dataInfo.extraData.push({
-                                stt: '0.3.1.1',
-                                maVtu: '0.3.1.1',
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "2",
-                            })
-                        } else {
-                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
-                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
-                            dataInfo.extraData.push({
-                                stt: '0.3.1.' + sttObj,
-                                maVtu: '0.3.1.' + sttObj,
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "2",
-                            })
-                        }
-                    }
-
-
-                    if (loaiHang == "M") {
-                        let tongSoLuongTu = 0
-                        let tongSoLuongDuoi = 0
-                        let tongGiaTriTu = 0
-                        let tongGiaTriDuoi = 0
-                        if (item.khoiTich >= 5000) {
-                            tongSoLuongTu += item.soLuong;
-                            tongGiaTriTu += item.giaTri
-                        }
-                        if (item.khoiTich < 5000) {
-                            tongSoLuongDuoi += item.soLuong;
-                            tongGiaTriDuoi += item.giaTri
-                        }
-                        lstMuoi.push({
-                            stt: '0.3.3',
-                            maVtu: '0.3.3',
-                            tenVtu: 'Muối',
-                            maDviTinh: "kg",
-                            slTuM3: tongSoLuongTu,
-                            slDuoiM3: tongSoLuongDuoi,
-                            slTong: tongSoLuongTu + tongSoLuongDuoi,
-                            gtTuM3: tongGiaTriTu,
-                            gtDuoiM3: tongGiaTriDuoi,
-                            gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                            level: "2",
-                        })
-                    }
-
-                    let checkCS = tenHang.includes("cứu sinh")
-                    if (checkCS && loaiHang == "VT") {
-                        let tongSoLuongTu = 0
-                        let tongSoLuongDuoi = 0
-                        let tongGiaTriTu = 0
-                        let tongGiaTriDuoi = 0
-                        let stt = '0.3.2.1.1';
-                        if (item.khoiTich >= 5000) {
-                            tongSoLuongTu += item.soLuong;
-                            tongGiaTriTu += item.giaTri
-                        }
-                        if (item.khoiTich < 5000) {
-                            tongSoLuongDuoi += item.soLuong;
-                            tongGiaTriDuoi += item.giaTri
-                        }
-
-                        if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
-                            dataInfo.extraData.push({
-                                stt: '0.3.2.1.1',
-                                maVtu: '0.3.2.1.1',
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "3",
-                            })
-                        } else {
-                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
-                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
-                            dataInfo.extraData.push({
-                                stt: '0.3.2.1.' + sttObj,
-                                maVtu: '0.3.2.1.' + sttObj,
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "3",
-                            })
-                        }
-
-                    } else if (loaiHang == "VT" && !item.tenHang.includes('cứu sinh')) {
-                        let tongSoLuongTu = 0
-                        let tongSoLuongDuoi = 0
-                        let tongGiaTriTu = 0
-                        let tongGiaTriDuoi = 0
-                        let stt = '0.3.2.2.1';
-                        if (item.khoiTich >= 5000) {
-                            tongSoLuongTu += item.soLuong;
-                            tongGiaTriTu += item.giaTri
-                        }
-                        if (item.khoiTich < 5000) {
-                            tongSoLuongDuoi += item.soLuong;
-                            tongGiaTriDuoi += item.giaTri
-                        }
-
-                        if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
-                            dataInfo.extraData.push({
-                                stt: '0.3.2.2.1',
-                                maVtu: '0.3.2.2.1',
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "3",
-                            })
-                        } else {
-                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
-                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
-                            dataInfo.extraData.push({
-                                stt: '0.3.2.2.' + sttObj,
-                                maVtu: '0.3.2.2.' + sttObj,
-                                tenVtu: item.tenHang,
-                                maDviTinh: maDviTinh,
-                                slTuM3: tongSoLuongTu,
-                                slDuoiM3: tongSoLuongDuoi,
-                                slTong: tongSoLuongTu + tongSoLuongDuoi,
-                                gtTuM3: tongGiaTriTu,
-                                gtDuoiM3: tongGiaTriDuoi,
-                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                                level: "3",
-                            })
-                        }
-                    }
+                //         if (dataInfo.extraData.length == 0) {
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.1.1',
+                //                 maVtu: '0.3.1.1',
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "2",
+                //             })
+                //         } else {
+                //             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                //             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.1.' + sttObj,
+                //                 maVtu: '0.3.1.' + sttObj,
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "2",
+                //             })
+                //         }
+                //     }
 
 
-                })
-                let slTuM31 = 0;
-                let slDuoiM31 = 0;
-                let slTong1 = 0;
-                let gtTuM31 = 0;
-                let gtDuoiM31 = 0;
-                let gtTong1 = 0;
-                lstMuoi.forEach(item => {
-                    slTuM31 += item.slTuM3;
-                    slDuoiM31 += item.slDuoiM3;
-                    slTong1 += item.slTong;
-                    gtTuM31 += item.gtTuM3;
-                    gtDuoiM31 += item.gtDuoiM3;
-                    gtTong1 += item.gtTong;
-                })
-                dataInfo.extraData.push({
-                    stt: '0.3.3',
-                    maVtu: '0.3.3',
-                    tenVtu: 'Muối',
-                    maDviTinh: "kg",
-                    slTuM3: slTuM31,
-                    slDuoiM3: slDuoiM31,
-                    slTong: slTuM31 + slDuoiM31,
-                    gtTuM3: gtTuM31,
-                    gtDuoiM3: gtDuoiM31,
-                    gtTong: gtTuM31 + gtDuoiM31,
-                    level: "2",
-                })
+                //     if (loaiHang == "M") {
+                //         let tongSoLuongTu = 0
+                //         let tongSoLuongDuoi = 0
+                //         let tongGiaTriTu = 0
+                //         let tongGiaTriDuoi = 0
+                //         if (item.khoiTich >= 5000) {
+                //             tongSoLuongTu += item.soLuong;
+                //             tongGiaTriTu += item.giaTri
+                //         }
+                //         if (item.khoiTich < 5000) {
+                //             tongSoLuongDuoi += item.soLuong;
+                //             tongGiaTriDuoi += item.giaTri
+                //         }
+                //         lstMuoi.push({
+                //             stt: '0.3.3',
+                //             maVtu: '0.3.3',
+                //             tenVtu: 'Muối',
+                //             maDviTinh: "kg",
+                //             slTuM3: tongSoLuongTu,
+                //             slDuoiM3: tongSoLuongDuoi,
+                //             slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //             gtTuM3: tongGiaTriTu,
+                //             gtDuoiM3: tongGiaTriDuoi,
+                //             gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //             level: "2",
+                //         })
+                //     }
 
-                //phu luc bao hiem kho
-                let dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
-                let lstLv1 = []
-                dataBaoHiemKho.forEach(item => {
-                    if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
-                        lstLv1.push({
-                            ...item,
-                            level: "1"
-                        })
-                    }
-                })
-                for (let i = 1; i <= lstLv1.length; i++) {
-                    lstLv1.forEach(item => {
-                        item.stt = "0." + i;
-                    })
-                }
-                let lstCon = [];
-                dataBaoHiemKho.forEach(item => {
-                    if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
-                        lstCon.push({
-                            ...item,
-                            level: "2"
-                        })
-                    }
-                })
-                let indexArr = []
-                lstLv1.forEach(item => {
-                    lstCon.forEach(itm => {
-                        if (itm.maDvi.startsWith(item.maDvi)) {
-                            indexArr.push(itm)
-                            for (let i = 1; i <= indexArr.length; i++) {
-                                itm.stt = item.stt + "." + i;
-                            }
-                        }
-                    })
-                })
-                let a = lstLv1.concat(lstCon);
-                dataBaoHiemKho = a
+                //     let checkCS = tenHang.includes("cứu sinh")
+                //     if (checkCS && loaiHang == "VT") {
+                //         let tongSoLuongTu = 0
+                //         let tongSoLuongDuoi = 0
+                //         let tongGiaTriTu = 0
+                //         let tongGiaTriDuoi = 0
+                //         let stt = '0.3.2.1.1';
+                //         if (item.khoiTich >= 5000) {
+                //             tongSoLuongTu += item.soLuong;
+                //             tongGiaTriTu += item.giaTri
+                //         }
+                //         if (item.khoiTich < 5000) {
+                //             tongSoLuongDuoi += item.soLuong;
+                //             tongGiaTriDuoi += item.giaTri
+                //         }
 
-                const lstTemp = []
+                //         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.2.1.1',
+                //                 maVtu: '0.3.2.1.1',
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "3",
+                //             })
+                //         } else {
+                //             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                //             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.2.1.' + sttObj,
+                //                 maVtu: '0.3.2.1.' + sttObj,
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "3",
+                //             })
+                //         }
 
-                dataBaoHiemKho.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    let tongGtTu = 0;
-                    let tongDtDuoi = 0;
-                    let slNhaKhoTu1 = 0;
-                    let slNhaKhoDuoi1 = 0;
-                    if (level == 0) {
-                        tongGtTu += item.tuTongGtKho;
-                        tongDtDuoi += item.duoiTongGtKho;
-                        slNhaKhoTu1 += item.slNhaKhoTu;
-                        slNhaKhoDuoi1 += item.slNhaKhoDuoi;
-                    }
-                    lstTemp.push({
-                        stt: '0.2',
-                        maVtu: '0.2',
-                        tenVtu: 'Kho Hàng DTQG',
-                        maDviTinh: "",
-                        slTuM3: slNhaKhoTu1,
-                        slDuoiM3: slNhaKhoDuoi1,
-                        slTong: slNhaKhoTu1 + slNhaKhoDuoi1,
-                        gtTuM3: tongGtTu,
-                        gtDuoiM3: tongDtDuoi,
-                        gtTong: tongGtTu + tongDtDuoi,
-                        level: "0",
-                    })
-                })
-                let slTuM3 = 0;
-                let slDuoiM3 = 0;
-                let slTong = 0;
-                let gtTuM3 = 0;
-                let gtDuoiM3 = 0;
-                let gtTong = 0;
-                lstTemp.forEach(item => {
-                    slTuM3 += item.slTuM3;
-                    slDuoiM3 += item.slDuoiM3;
-                    slTong += item.slTong;
-                    gtTuM3 += item.gtTuM3;
-                    gtDuoiM3 += item.gtDuoiM3;
-                    gtTong += item.gtTong;
-                })
+                //     } else if (loaiHang == "VT" && !item.tenHang.includes('cứu sinh')) {
+                //         let tongSoLuongTu = 0
+                //         let tongSoLuongDuoi = 0
+                //         let tongGiaTriTu = 0
+                //         let tongGiaTriDuoi = 0
+                //         let stt = '0.3.2.2.1';
+                //         if (item.khoiTich >= 5000) {
+                //             tongSoLuongTu += item.soLuong;
+                //             tongGiaTriTu += item.giaTri
+                //         }
+                //         if (item.khoiTich < 5000) {
+                //             tongSoLuongDuoi += item.soLuong;
+                //             tongGiaTriDuoi += item.giaTri
+                //         }
 
-                dataInfo.extraData.push({
-                    stt: '0.2',
-                    maVtu: '0.2',
-                    tenVtu: 'Kho Hàng DTQG',
-                    maDviTinh: "",
-                    slTuM3: slTuM3,
-                    slDuoiM3: slDuoiM3,
-                    slTong: slTuM3 + slDuoiM3,
-                    gtTuM3: gtTuM3,
-                    gtDuoiM3: gtDuoiM3,
-                    gtTong: gtTuM3 + gtDuoiM3,
-                    level: "0",
-                })
+                //         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.2.2.1',
+                //                 maVtu: '0.3.2.2.1',
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "3",
+                //             })
+                //         } else {
+                //             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                //             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
+                //             dataInfo.extraData.push({
+                //                 stt: '0.3.2.2.' + sttObj,
+                //                 maVtu: '0.3.2.2.' + sttObj,
+                //                 tenVtu: item.tenHang,
+                //                 maDviTinh: maDviTinh,
+                //                 slTuM3: tongSoLuongTu,
+                //                 slDuoiM3: tongSoLuongDuoi,
+                //                 slTong: tongSoLuongTu + tongSoLuongDuoi,
+                //                 gtTuM3: tongGiaTriTu,
+                //                 gtDuoiM3: tongGiaTriDuoi,
+                //                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                //                 level: "3",
+                //             })
+                //         }
+                //     }
+
+
+                // })
+                // let slTuM31 = 0;
+                // let slDuoiM31 = 0;
+                // let slTong1 = 0;
+                // let gtTuM31 = 0;
+                // let gtDuoiM31 = 0;
+                // let gtTong1 = 0;
+                // lstMuoi.forEach(item => {
+                //     slTuM31 += item.slTuM3;
+                //     slDuoiM31 += item.slDuoiM3;
+                //     slTong1 += item.slTong;
+                //     gtTuM31 += item.gtTuM3;
+                //     gtDuoiM31 += item.gtDuoiM3;
+                //     gtTong1 += item.gtTong;
+                // })
+                // dataInfo.extraData.push({
+                //     stt: '0.3.3',
+                //     maVtu: '0.3.3',
+                //     tenVtu: 'Muối',
+                //     maDviTinh: "kg",
+                //     slTuM3: slTuM31,
+                //     slDuoiM3: slDuoiM31,
+                //     slTong: slTuM31 + slDuoiM31,
+                //     gtTuM3: gtTuM31,
+                //     gtDuoiM3: gtDuoiM31,
+                //     gtTong: gtTuM31 + gtDuoiM31,
+                //     level: "2",
+                // })
+
+                // //phu luc bao hiem kho
+                // let dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
+                // let lstLv1 = []
+                // dataBaoHiemKho.forEach(item => {
+                //     if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
+                //         lstLv1.push({
+                //             ...item,
+                //             level: "1"
+                //         })
+                //     }
+                // })
+                // for (let i = 1; i <= lstLv1.length; i++) {
+                //     lstLv1.forEach(item => {
+                //         item.stt = "0." + i;
+                //     })
+                // }
+                // let lstCon = [];
+                // dataBaoHiemKho.forEach(item => {
+                //     if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
+                //         lstCon.push({
+                //             ...item,
+                //             level: "2"
+                //         })
+                //     }
+                // })
+                // let indexArr = []
+                // lstLv1.forEach(item => {
+                //     lstCon.forEach(itm => {
+                //         if (itm.maDvi.startsWith(item.maDvi)) {
+                //             indexArr.push(itm)
+                //             for (let i = 1; i <= indexArr.length; i++) {
+                //                 itm.stt = item.stt + "." + i;
+                //             }
+                //         }
+                //     })
+                // })
+                // let a = lstLv1.concat(lstCon);
+                // dataBaoHiemKho = a
+
+                // const lstTemp = []
+
+                // dataBaoHiemKho.forEach(item => {
+                //     const level = item.stt.split('.').length - 2;
+                //     let tongGtTu = 0;
+                //     let tongDtDuoi = 0;
+                //     let slNhaKhoTu1 = 0;
+                //     let slNhaKhoDuoi1 = 0;
+                //     if (level == 0) {
+                //         tongGtTu += item.tuTongGtKho;
+                //         tongDtDuoi += item.duoiTongGtKho;
+                //         slNhaKhoTu1 += item.slNhaKhoTu;
+                //         slNhaKhoDuoi1 += item.slNhaKhoDuoi;
+                //     }
+                //     lstTemp.push({
+                //         stt: '0.2',
+                //         maVtu: '0.2',
+                //         tenVtu: 'Kho Hàng DTQG',
+                //         maDviTinh: "",
+                //         slTuM3: slNhaKhoTu1,
+                //         slDuoiM3: slNhaKhoDuoi1,
+                //         slTong: slNhaKhoTu1 + slNhaKhoDuoi1,
+                //         gtTuM3: tongGtTu,
+                //         gtDuoiM3: tongDtDuoi,
+                //         gtTong: tongGtTu + tongDtDuoi,
+                //         level: "0",
+                //     })
+                // })
+                // let slTuM3 = 0;
+                // let slDuoiM3 = 0;
+                // let slTong = 0;
+                // let gtTuM3 = 0;
+                // let gtDuoiM3 = 0;
+                // let gtTong = 0;
+                // lstTemp.forEach(item => {
+                //     slTuM3 += item.slTuM3;
+                //     slDuoiM3 += item.slDuoiM3;
+                //     slTong += item.slTong;
+                //     gtTuM3 += item.gtTuM3;
+                //     gtDuoiM3 += item.gtDuoiM3;
+                //     gtTong += item.gtTong;
+                // })
+
+                // dataInfo.extraData.push({
+                //     stt: '0.2',
+                //     maVtu: '0.2',
+                //     tenVtu: 'Kho Hàng DTQG',
+                //     maDviTinh: "",
+                //     slTuM3: slTuM3,
+                //     slDuoiM3: slDuoiM3,
+                //     slTong: slTuM3 + slDuoiM3,
+                //     gtTuM3: gtTuM3,
+                //     gtDuoiM3: gtDuoiM3,
+                //     gtTong: gtTuM3 + gtDuoiM3,
+                //     level: "0",
+                // })
                 break;
             //thong tu 342
             case 'TT342_13.1':
