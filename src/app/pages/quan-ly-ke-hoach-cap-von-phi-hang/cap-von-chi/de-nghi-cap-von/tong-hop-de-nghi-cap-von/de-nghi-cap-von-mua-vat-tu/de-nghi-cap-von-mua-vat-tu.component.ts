@@ -467,7 +467,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
         this.baoCao.dnghiCapvonCtiets = [];
         lstParent.forEach(item => {
             this.baoCao.dnghiCapvonCtiets.push(item);
-            this.baoCao.dnghiCapvonCtiets = this.baoCao.dnghiCapvonCtiets.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+            this.baoCao.dnghiCapvonCtiets = this.baoCao.dnghiCapvonCtiets.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
         })
     }
 

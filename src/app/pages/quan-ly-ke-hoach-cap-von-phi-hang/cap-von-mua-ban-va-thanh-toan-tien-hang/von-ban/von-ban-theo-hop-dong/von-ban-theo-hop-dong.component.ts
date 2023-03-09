@@ -559,7 +559,7 @@ export class VonBanTheoHopDongComponent implements OnInit {
         this.lstCtietBcaos = [];
         lstParent.forEach(item => {
             this.lstCtietBcaos.push(item);
-            this.lstCtietBcaos = this.lstCtietBcaos.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+            this.lstCtietBcaos = this.lstCtietBcaos.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
         })
     }
 

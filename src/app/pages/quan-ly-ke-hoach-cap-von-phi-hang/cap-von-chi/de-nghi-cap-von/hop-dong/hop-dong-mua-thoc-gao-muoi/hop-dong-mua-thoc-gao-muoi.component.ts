@@ -441,7 +441,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         this.baoCao.dnghiCvHopDongCtiets = [];
         lstParent.forEach(item => {
             this.baoCao.dnghiCvHopDongCtiets.push(item);
-            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.find(e => e.maDvi == item.maDvi && !e.isParent));
+            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.filter(e => e.maDvi == item.maDvi && !e.isParent));
         })
     }
 
