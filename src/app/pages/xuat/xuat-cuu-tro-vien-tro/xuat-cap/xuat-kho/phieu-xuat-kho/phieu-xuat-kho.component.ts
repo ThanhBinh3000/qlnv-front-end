@@ -73,7 +73,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       this.timKiem();
-      console.log(this.loaiVthh, 55555);
     }
     catch (e) {
       console.log('error: ', e)
@@ -83,6 +82,8 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
+    this.formData.value.loaiVthh = this.loaiVthh;
+    this.formData.value.type = "XUAT_CAP";
     await super.search(roles);
     this.buildTableView();
   }
@@ -102,15 +103,17 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
-    if (this.formData.value.ngayXuatKho) {
-      this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+    await this.spinner.show();
+    try {
+      if (this.formData.value.ngayXuatKho) {
+        this.formData.value.ngayXuatKhoTu = dayjs(this.formData.value.ngayXuatKho[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayXuatKhoDen = dayjs(this.formData.value.ngayXuatKho[1]).format('YYYY-MM-DD')
+      }
+      await this.search();
+    } catch (e) {
+      console.log(e)
     }
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
-    await this.search();
-    this.dataTable.forEach(s => s.idVirtual = uuid.v4());
-    this.buildTableView();
+    await this.spinner.hide();
   }
 
   buildTableView() {
@@ -121,11 +124,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-            let diDiem = v.find(s => s.tenDiemKho === k)
+            let diaDiem = v.find(s => s.tenDiemKho === k)
             return {
               idVirtual: uuid.v4(),
               tenDiemKho: k,
-              tenLoKho: diDiem.tenLoKho,
+              tenLoKho: diaDiem.tenLoKho,
               childData: v
             }
           }
@@ -143,7 +146,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.expandAll()
 
   }
-
   expandAll() {
     this.children.forEach(s => {
       this.expandSetString.add(s.idVirtual);
