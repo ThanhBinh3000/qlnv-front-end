@@ -201,6 +201,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    this.formData.value.soCv = this.formData.value.soCv + this.maCv
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
