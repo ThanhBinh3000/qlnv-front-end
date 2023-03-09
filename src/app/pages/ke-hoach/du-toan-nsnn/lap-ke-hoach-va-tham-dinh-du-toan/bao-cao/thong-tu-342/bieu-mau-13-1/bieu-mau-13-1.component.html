@@ -20,10 +20,10 @@
 		<nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
 			<thead>
 				<tr>
-					<th rowspan="2" class="text-center" nzWidth="50px" nzLeft>STT</th>
-					<th rowspan="2" nzWidth="400px">Chỉ tiêu</th>
+					<th rowspan="2" nzWidth="50px" nzLeft>STT</th>
+					<th rowspan="2" nzWidth="400px" nzLeft>Chỉ tiêu</th>
 					<th rowspan="2">Đơn vị tính</th>
-					<th rowspan="2">Số thực hiện năm {{namBcao - 2}}</th>
+					<th rowspan="2">Số thực hiện <br> năm {{namBcao - 2}}</th>
 					<th colspan="2"> Năm {{namBcao-1}}</th>
 					<th rowspan="2">Dự kiến năm {{namBcao}}</th>
 					<th *ngIf="viewAppraisalValue" rowspan="2">Giá trị thẩm định</th>
@@ -34,7 +34,7 @@
 					<th>Ước thực hiện</th>
 				</tr>
 				<tr>
-					<th class="text-center" nzLeft>A</th>
+					<th nzLeft>A</th>
 					<th nzLeft>B</th>
 					<th>1</th>
 					<th>2</th>
@@ -59,7 +59,7 @@
 			<tbody>
 				<tr *ngFor="let data of lstCtietBcao; let i = index">
 					<ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-						<td class="text-center" nzLeft>
+						<td nzLeft>
 							{{getChiMuc(data.stt)}}
 						</td>
 						<td nzLeft>
@@ -78,7 +78,7 @@
 						</td>
 					</ng-container>
 					<ng-template #editTemplate>
-						<td class="text-center" nzLeft>
+						<td nzLeft>
 							{{getChiMuc(editCache[data.id].data.stt)}}
 						</td>
 						<td nzLeft>

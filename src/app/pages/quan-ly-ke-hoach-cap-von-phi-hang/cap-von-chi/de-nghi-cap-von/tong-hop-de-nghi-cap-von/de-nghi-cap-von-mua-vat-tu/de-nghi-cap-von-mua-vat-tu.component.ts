@@ -165,6 +165,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.baoCao = this.data?.baoCao;
+            this.sum();
         }
         this.updateEditCache();
         this.sortReport();
@@ -467,7 +468,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
         this.baoCao.dnghiCapvonCtiets = [];
         lstParent.forEach(item => {
             this.baoCao.dnghiCapvonCtiets.push(item);
-            this.baoCao.dnghiCapvonCtiets = this.baoCao.dnghiCapvonCtiets.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+            this.baoCao.dnghiCapvonCtiets = this.baoCao.dnghiCapvonCtiets.concat(lstCtietBcao.filter(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
         })
     }
 
@@ -475,6 +476,15 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
         this.editCache[id].data.gtriThucHien = mulNumber(this.editCache[id].data.slThucHien, this.editCache[id].data.donGia);
         this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.gtriThucHien, -this.editCache[id].data.soTtLuyKe]);
         this.editCache[id].data.soConDuocTtSauTtLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhchiNienSoTien]);
+    }
+
+    sum() {
+        this.baoCao.dnghiCapvonCtiets.forEach(item => {
+            if (item.isParent) {
+                item.soConDuocTt = sumNumber([item.gtriThucHien, -item.soTtLuyKe]);
+                item.soConDuocTtSauTtLanNay = sumNumber([item.soConDuocTt, -item.uyNhchiNienSoTien]);
+            }
+        })
     }
 
     showDialogCopy() {

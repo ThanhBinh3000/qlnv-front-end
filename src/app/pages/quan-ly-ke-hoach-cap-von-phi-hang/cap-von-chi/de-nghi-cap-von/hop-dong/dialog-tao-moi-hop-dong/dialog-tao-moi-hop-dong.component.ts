@@ -199,7 +199,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             })
                         } else {
                             if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
                             }
                             this.response.dnghiCvHopDongCtiets[index].slHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
                             this.response.dnghiCvHopDongCtiets[index].slKeHoach = sumNumber([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);

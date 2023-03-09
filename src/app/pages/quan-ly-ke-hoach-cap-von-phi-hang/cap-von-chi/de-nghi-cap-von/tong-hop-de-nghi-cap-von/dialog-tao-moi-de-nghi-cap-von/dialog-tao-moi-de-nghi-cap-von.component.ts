@@ -182,13 +182,13 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 					item.luyKeCapUng = sumNumber([item.luyKeCapUng, item.vonDuyetCapUng]);
 					item.luyKeCapVon = sumNumber([item.luyKeCapVon, item.vonDuyetCapVon]);
 					item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhchiNienSoTien]);
-					item.vonDuyetCong = 0;
-					item.vonDuyetCapUng = 0;
-					item.vonDuyetCapVon = 0;
+					item.vonDuyetCong = null;
+					item.vonDuyetCapUng = null;
+					item.vonDuyetCapVon = null;
 					item.uyNhchiNgay = null;
 					item.uyNhchiMaNguonNs = null;
 					item.uyNhchiNienDoNs = null;
-					item.uyNhchiNienSoTien = 0;
+					item.uyNhchiNienSoTien = null;
 				}
 			})
 			if (this.response.loaiDnghi != Utils.MUA_VTU) {
@@ -262,7 +262,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 							})
 						} else {
 							if (this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-								this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+								this.response.dnghiCapvonCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.soQdPdKhlcnt;
 							}
 							this.response.dnghiCapvonCtiets[index].slHopDong = sumNumber([this.response.dnghiCapvonCtiets[index].slHopDong, temp.slHopDong]);
 							this.response.dnghiCapvonCtiets[index].slKeHoach = sumNumber([this.response.dnghiCapvonCtiets[index].slKeHoach, temp.slKeHoach]);
