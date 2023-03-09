@@ -104,7 +104,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
     body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
-    body.trangThai = STATUS.DADUYET_CB_CUC;
+    body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.deXuatBaoHiemSv.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
