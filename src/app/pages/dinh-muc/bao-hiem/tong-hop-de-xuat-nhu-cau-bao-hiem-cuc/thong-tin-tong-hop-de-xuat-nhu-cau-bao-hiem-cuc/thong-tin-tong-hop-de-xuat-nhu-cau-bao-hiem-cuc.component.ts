@@ -34,7 +34,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   expandSet = new Set<number>();
   maCv: string;
   tableHangDtqg: any[] = [];
-
+  test : ['1', '2', '3']
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
