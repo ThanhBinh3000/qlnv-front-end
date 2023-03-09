@@ -24,6 +24,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
   danhMucList: any[] = [];
   sysTypeList: any[] = [];
   optionsDonVi: any[] = [];
+  optionsChucVu: any[] = [];
   options: any[] = [];
   optionsPhongBan: any[] = [];
   optionsPhongBanFilter: any[] = [];
@@ -73,7 +74,8 @@ export class DialogThongTinCanBoComponent implements OnInit {
     await Promise.all([
       this.getDmList(),
       this.getSysType(),
-      this.laytatcadonvi()
+      this.laytatcadonvi(),
+      this.getListChucVu()
     ])
     await this.bindingData(this.dataEdit)
   }
@@ -137,6 +139,11 @@ export class DialogThongTinCanBoComponent implements OnInit {
     }
   }
 
+  async getListChucVu() {
+    let res = await this.dmService.danhMucChungGetAll("VAI_TRO_CHUC_VU");
+    this.optionsChucVu = res.data;
+  }
+
   async getSysType() {
     let res = await this.dmService.danhMucChungGetAll("KIEU_XT");
     this.sysTypeList = res.data;
@@ -164,7 +171,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     }
     let body = this.formData.value;
     body.dvql = this.formData.get('dvql').value.split('-')[0].trim();
-    body.department = this.formData.get('department').value.split('-')[0].trim();
+    body.department =  this.formData.get('department').value ?  this.formData.get('department').value.split('-')[0].trim() : '';
     let res
     if (this.dataEdit != null) {
       res = await this.qlNSDService.update(body);
