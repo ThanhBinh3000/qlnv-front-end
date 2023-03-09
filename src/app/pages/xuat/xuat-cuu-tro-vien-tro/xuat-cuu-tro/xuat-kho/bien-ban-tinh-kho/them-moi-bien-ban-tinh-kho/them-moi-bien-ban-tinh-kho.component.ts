@@ -16,7 +16,6 @@ import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-ha
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -131,6 +130,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
             const data = res.data;
             this.fileDinhKems = data.fileDinhKems;
             this.dataTable = data.listPhieuXuatKho;
+
           }
         })
         .catch((e) => {
@@ -148,7 +148,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-
+        type: "XUAT_CTVT",
       });
     }
 
@@ -172,7 +172,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -249,6 +249,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
+        type: "XUAT_CTVT",
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
@@ -256,6 +257,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
+        s.soBkCanHang = s.soBangKeCh
       }
       )
     }
@@ -267,6 +269,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
+
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
