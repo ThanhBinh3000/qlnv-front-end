@@ -114,6 +114,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       this.notification.error(MESSAGE.ERROR, "Vui lòng nhập nhà kho khác!!!");
       return;
     }
+    this.rowItemKho.maDvi = this.userInfo.MA_DVI
     this.dataTable = [...this.dataTable, this.rowItemKho];
     this.rowItemKho = new BaoHiemKhoDangChuaHang();
     this.updateEditCache();
@@ -321,6 +322,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       this.notification.error(MESSAGE.ERROR, "Vui lòng nhập nhà kho khác!!!");
       return;
     }
+    this.rowItemHh.maDvi = this.userInfo.MA_DVI
     this.tableHangDtqg = [...this.tableHangDtqg, this.rowItemHh];
     this.rowItemHh = new BaoHiemHangDtqg();
     this.updateEditCacheHh();
@@ -438,6 +440,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
 export class BaoHiemKhoDangChuaHang {
   id: number;
   bhHdrId: number;
+  maDvi: string;
   diemKho: string;
   nhaKho: string;
   tenDiemKho: string;
@@ -452,6 +455,7 @@ export class BaoHiemKhoDangChuaHang {
 
 export class BaoHiemHangDtqg {
   id: number;
+  maDvi: string;
   bhHdrId: number;
   donViTinh: string;
   maHangHoa: string;

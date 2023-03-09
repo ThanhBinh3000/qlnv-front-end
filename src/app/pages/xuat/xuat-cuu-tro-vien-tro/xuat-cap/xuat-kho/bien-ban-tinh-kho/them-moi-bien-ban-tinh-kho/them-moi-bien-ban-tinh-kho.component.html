@@ -269,10 +269,10 @@
                         <nz-form-label [nzNoColon]="true">
                             SL chênh lệch giữa thực tế và sổ sách
                         </nz-form-label>
-                        <nz-form-control nz-col [nzErrorTip]="error">
+                        <div nz-row nzSpan="24">
                             <div nz-col nzSpan="12">Thừa</div>
                             <div nz-col nzSpan="12">Thiếu</div>
-                        </nz-form-control>
+                        </div>
                     </nz-form-item>
                 </div>
 
@@ -294,6 +294,17 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <textarea rows="3" class="search__input" nz-input formControlName="kienNghi"
+                                [disabled]="isView"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Ghi chú
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzErrorTip]="error">
+                            <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
                                 [disabled]="isView"></textarea>
                         </nz-form-control>
                     </nz-form-item>

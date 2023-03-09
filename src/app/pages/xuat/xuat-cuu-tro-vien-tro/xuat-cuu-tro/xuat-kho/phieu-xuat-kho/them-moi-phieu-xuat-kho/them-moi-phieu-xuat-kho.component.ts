@@ -154,6 +154,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
+        type: "XUAT_CTVT",
       });
     }
 
@@ -177,7 +178,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
