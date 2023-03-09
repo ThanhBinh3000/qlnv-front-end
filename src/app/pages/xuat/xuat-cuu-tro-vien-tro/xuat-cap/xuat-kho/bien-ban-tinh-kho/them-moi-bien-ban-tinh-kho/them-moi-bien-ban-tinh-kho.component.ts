@@ -173,7 +173,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -250,6 +250,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
+        type: "XUAT_CAP"
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
@@ -257,6 +258,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
+        s.soBkCanHang = s.soBangKeCh
       }
       )
     }
