@@ -143,15 +143,15 @@ export class PhuLuc01Component implements OnInit {
 			}
 		})
 
-		await this.danhMucService.dMVatTu().toPromise().then(res => {
-			if (res.statusCode == 0) {
-				this.listVattu = res.data;
-			} else {
-				this.notification.error(MESSAGE.ERROR, res?.msg);
-			}
-		}, err => {
-			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		})
+		// await this.danhMucService.dMVatTu().toPromise().then(res => {
+		// 	if (res.statusCode == 0) {
+		// 		this.listVattu = res.data;
+		// 	} else {
+		// 		this.notification.error(MESSAGE.ERROR, res?.msg);
+		// 	}
+		// }, err => {
+		// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+		// })
 		this.sortByIndex();
 		this.sum1();
 		this.tinhTong();

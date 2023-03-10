@@ -109,6 +109,7 @@ export class KhoComponent implements OnInit {
                 diaDiem?.children.forEach(kho => {
                     this.lstCtietBcao.push({
                         ...new ItemData(),
+                        stt: '0.1',
                         maDvi: this.donVi.maDvi,
                         tenDvi: this.donVi.tenDvi,
                         maDiaChi: diaDiem.maDvi,
@@ -152,6 +153,24 @@ export class KhoComponent implements OnInit {
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             })
+    }
+
+    getIndex(stt: string) {
+        let xau = '';
+        const lst = stt.split('.');
+        if (lst?.length == 2) {
+            let k = parseInt(lst[1], 10);
+            for (let i = 0; i < this.soLaMa.length; i++) {
+                while (k >= this.soLaMa[i].gTri) {
+                    xau += this.soLaMa[i].kyTu;
+                    k -= this.soLaMa[i].gTri;
+                }
+            }
+        }
+        if (lst?.length == 3) {
+            xau = lst[2];
+        }
+        return xau;
     }
 
     // luu
