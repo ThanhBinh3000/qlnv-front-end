@@ -101,14 +101,14 @@ export class PhuLuc04Component implements OnInit {
             if (category) {
                 this.duAns = category.data;
             }
-            this.scrollX = (460 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+            this.scrollX = (500 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
         } else {
             if (this.editAppraisalValue) {
-                this.scrollX = (410 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
+                this.scrollX = (450 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
             } else if (this.viewAppraisalValue) {
-                this.scrollX = (350 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
+                this.scrollX = (390 + BOX_NUMBER_WIDTH * 16).toString() + 'px';
             } else {
-                this.scrollX = (350 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
+                this.scrollX = (390 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
             }
         }
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

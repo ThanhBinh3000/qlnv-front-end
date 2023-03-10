@@ -304,16 +304,16 @@ export class BaoCaoComponent implements OnInit {
             }
         }
 
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.listVattu = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        await this.addVatTu();
+        // await this.danhMucService.dMVatTu().toPromise().then(res => {
+        //     if (res.statusCode == 0) {
+        //         this.listVattu = res.data;
+        //     } else {
+        //         this.notification.error(MESSAGE.ERROR, res?.msg);
+        //     }
+        // }, err => {
+        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        // })
+        // await this.addVatTu();
         await this.getChildUnit();
 
         this.getStatusButton();
