@@ -23,6 +23,7 @@ import { PHU_LUC } from './bao-cao.constant';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
 import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
 import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
+import { HangComponent } from './phu-luc/bao-hiem/hang/hang.component';
 import { KhoComponent } from './phu-luc/bao-hiem/kho/kho.component';
 import { PhuLuc01XuatComponent } from './phu-luc/phu-luc-01-xuat/phu-luc-01-xuat.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
@@ -856,7 +857,7 @@ export class BaoCaoComponent implements OnInit {
                 nzContent = PhuLucDuAnComponent;
                 break;
             case 'pl_bh_hang':
-                nzContent = BaoHiemHangComponent;
+                nzContent = HangComponent;
                 break;
             case 'pl_bh_kho':
                 nzContent = KhoComponent;
