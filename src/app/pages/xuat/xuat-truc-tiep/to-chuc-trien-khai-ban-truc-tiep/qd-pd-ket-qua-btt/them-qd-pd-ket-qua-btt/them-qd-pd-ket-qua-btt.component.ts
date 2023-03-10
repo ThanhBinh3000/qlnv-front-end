@@ -95,7 +95,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         })
         this.fileDinhKem = res.fileDinhKems;
         this.dataTable = res.children;
-
       }
     }
   }
@@ -106,7 +105,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       body.soQdKq = this.formData.get('soQdKq').value + this.maTrinh;
     }
     body.fileDinhKems = this.fileDinhKem;
-    body.children = this.listOfData;
+    body.children = this.dataTable;
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {

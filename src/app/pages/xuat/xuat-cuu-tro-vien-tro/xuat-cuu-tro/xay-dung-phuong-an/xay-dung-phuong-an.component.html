@@ -184,21 +184,21 @@
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+                  (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
               </nz-input-group>
 
             </th>
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+                  (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
               </nz-input-group>
 
             </th>
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                       (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+                  (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
               </nz-input-group>
 
             </th>
@@ -227,15 +227,17 @@
             <td>{{ data.soQdPd }}</td>
             <td>{{ data.tenTrangThaiQd }}</td>
             <td class="text-left">
-              <a (click)="redirectDetail(data.id, true)">
+              <a (click)="redirectDetail(data.id, true)"
+                *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())||
-              (data.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isOwner(data.maDvi)"
+              (data.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isOwner(data.maDvi)  && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XOA')"
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO && isOwner(data.maDvi)" (click)="delete(data)">
+              <a *ngIf="data.trangThai==STATUS.DU_THAO && isOwner(data.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XEM')"
+                (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

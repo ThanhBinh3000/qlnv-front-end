@@ -48,11 +48,11 @@
     <div class="group-button">
       <h3>DANH SÁCH CÔNG CỤ DỤNG CỤ</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub ml-2" (click)="exportData()">
+        <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button"  class="btn btn-sub xanh-nhat" (click)="chotDuLieu()">
+        <button type="button"  class="btn btn-sub xanh-nhat" (click)="chotDuLieu()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Chốt dữ liệu năm</span>
         </button>
@@ -98,11 +98,11 @@
           <td>{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
           <td nzRight>
-            <a  (click)="openDialog(data, true)"  *ngIf="data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()" >
+            <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')" >
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="openDialog(data, false)" *ngIf="data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc() ">
+              (click)="openDialog(data, false)" *ngIf="(data.trangThai == statusMm.CHUA_CHOT && userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_SUA') ">
               <i class="fa fa-pencil"></i>
             </a>
           </td>

@@ -49,8 +49,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')">
+        <button type="button" class="btn btn-main" (click)="goDetail(null)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')
+          && userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -189,14 +189,16 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectDetail(data.id, true)">
+              <a *ngIf=" data.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XEM')"
+                (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="redirectDetail(data.id, false)">
+              <a *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV ) && userService.isTongCuc() 
+              && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')" (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() &&
-            (userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA'))" (click)="delete(data)">
+              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA')"
+                (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

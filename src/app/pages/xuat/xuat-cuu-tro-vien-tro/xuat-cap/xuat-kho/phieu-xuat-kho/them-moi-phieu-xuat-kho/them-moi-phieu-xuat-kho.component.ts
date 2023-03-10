@@ -178,7 +178,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -266,15 +266,15 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzComponentParams: {
         dataTable: this.listPhieuKtraCl,
         dataHeader: ['Số phiếu', 'Ngày giám định'],
-        dataColumn: ['soPhieu', 'ngayKnMau']
+        dataColumn: ['soPhieuKnCl', 'ngayLapPhieu']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          soPhieuKnCl: data.soPhieu,
+          soPhieuKnCl: data.soPhieuKnCl,
           ktvBaoQuan: data.nguoiKn,
-          ngayKn: data.ngayKnMau,
+          ngayKn: data.ngayLapPhieu,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
