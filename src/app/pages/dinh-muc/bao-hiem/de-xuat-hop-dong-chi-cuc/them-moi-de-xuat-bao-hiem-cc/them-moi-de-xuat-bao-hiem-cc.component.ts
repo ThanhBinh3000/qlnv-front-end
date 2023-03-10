@@ -450,6 +450,7 @@ export class BaoHiemKhoDangChuaHang {
   giaTriDk: number;
   giaTriHt: number;
   tichLuong: number;
+  giaTriTc: number;
 }
 
 
@@ -465,5 +466,6 @@ export class BaoHiemHangDtqg {
   giaTriHt: number;
   soLuongHt: number;
   soLuongDk: number;
+  giaTriTc: number;
 }
 

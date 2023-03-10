@@ -28,12 +28,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   @Input() isView: boolean;
   listDxChiCuc: any[] = [];
   isTongHop: boolean = false;
-  rowItem: BaoHiemKhoDangChuaHang = new BaoHiemKhoDangChuaHang();
-  dataEdit: { [key: string]: { edit: boolean; data: BaoHiemKhoDangChuaHang } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
   maCv: string;
   tableHangDtqg: any[] = [];
+  dataHang : any[] = [];
   test : ['1', '2', '3']
   constructor(
     httpClient: HttpClient,
@@ -84,6 +83,42 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
   }
 
+  convertList(listHh) {
+    if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+      this.dataHang = listHh.listQlDinhMucDxBhKhoChua
+      this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
+        tenDonViCha: key,
+          idVirtual: uuid.v4(),
+        })
+      ).value()
+      this.dataHang.forEach(item => {
+        if (listHh.listQlDinhMucDxBhKhoChua &&  listHh.listQlDinhMucDxBhKhoChua.length > 0) {
+          if (!item.dataChildKho) {
+            item.dataChildKho = []
+          }
+          let arrKho = listHh.listQlDinhMucDxBhKhoChua
+          let arrDetailKho = arrKho.filter(data => data.tenDonViCha == item.tenDonViCha)
+          arrDetailKho = this.convertListData(arrDetailKho);
+          if (arrDetailKho) {
+            item.dataChildKho = arrDetailKho
+          }
+        }
+
+        if (listHh.listQlDinhMucDxBhHdtqg &&  listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+          if (!item.dataChildHang) {
+            item.dataChildHang = []
+          }
+          let arrHang = listHh.listQlDinhMucDxBhHdtqg
+          let detailArrHang = arrHang.filter(data => data.tenDonViCha == item.tenDonViCha)
+          detailArrHang = this.buildDiaDiemTc(detailArrHang);
+          if (detailArrHang) {
+            item.dataChildHang = detailArrHang
+          }
+        }
+      })
+    }
+  }
+
   async tongHop() {
     this.helperService.markFormGroupTouched(this.formDataTongHop);
     if (this.formDataTongHop.invalid) {
@@ -108,46 +143,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.deXuatBaoHiemSv.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let detail = res.data;
-      if (detail && detail.listQlDinhMucDxBhKhoChua) {
-        this.formData.patchValue({
-          namKeHoach: this.formDataTongHop.value.namKeHoach,
-        })
-        this.dataTable = detail.listQlDinhMucDxBhKhoChua
-        this.dataTable.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual:uuid.v4()
-        })
-        this.convertListData()
-      }
-      if (detail && detail.listQlDinhMucDxBhHdtqg) {
-        this.tableHangDtqg = detail.listQlDinhMucDxBhHdtqg
-        this.tableHangDtqg.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual:uuid.v4()
-        })
-        this.buildDiaDiemTc()
-      }
-
       this.isTongHop = true;
+      let detail = res.data;
+      this.convertList(detail)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
       return;
@@ -185,9 +183,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   }
 
   async save(isOther: boolean) {
+    this.convertAllTreToArray()
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
-      giaTriDx  : this.sumslKho('giaTriBhDx', null, 'tong')
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
@@ -196,8 +194,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.conVertTreToList();
-    this.convertListHangDtqg();
+    this.formData.value.soCv = this.formData.value.soCv + this.maCv
     this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
@@ -209,8 +206,31 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       } else {
         this.goBack()
       }
-    } else {
-      this.convertListData()
+    }
+  }
+
+  convertAllTreToArray() {
+    this.dataTable = [];
+    this.tableHangDtqg = []
+    if (this.dataHang && this.dataHang.length > 0 ) {
+      this.dataHang.forEach(item => {
+        if (item.dataChildHang && item.dataChildHang.length > 0 ) {
+            let arr = this.conVertArrayHang(item.dataChildHang);
+            if (arr && arr.length > 0) {
+              arr.forEach(dtl => {
+                this.tableHangDtqg = [...this.tableHangDtqg, dtl]
+              })
+            }
+        }
+        if (item.dataChildKho && item.dataChildKho.length > 0 ) {
+            let arr = this.conVertTreToList(item.dataChildKho);
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              this.dataTable = [...this.dataTable, dtl]
+            })
+          }
+        }
+      })
     }
   }
 
@@ -227,10 +247,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
             soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTable = data.listQlDinhMucDxBhKhoChua;
-          this.tableHangDtqg = data.listQlDinhMucDxBhHdtqg;
-          await this.convertListData()
-          await this.buildDiaDiemTc()
+          this.convertList(res.data)
           await this.expandAll('kho');
           await this.expandAll('dtqg');
         }
@@ -250,67 +267,47 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_CBV : {
-        trangThai = STATUS.DA_KY;
+      case STATUS.TU_CHOI_LDV : {
+        trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.DA_KY : {
-        trangThai = STATUS.DA_DUYET_CBV
+      case STATUS.CHO_DUYET_LDV : {
+        trangThai = STATUS.DA_DUYET_LDV
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
-  convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenDonVi').map((value, key) => ({
+  convertListData(table : any) : any[] {
+    if (table && table.length > 0) {
+      table = chain(table).groupBy('tenDonVi').map((value, key) => ({
           tenDonVi: key,
           dataChild: value,
           idVirtual: uuid.v4(),
         })
       ).value()
     }
-    this.expandAll('kho');
+    return table
   }
 
-  conVertTreToList() {
+  conVertTreToList(table : any[]) : any[] {
     let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data)
-        })
-      }
-    })
-    this.dataTable = arr
-  }
-
-  convertListHangDtqg() {
-    let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
-        if (item.childData && item.childData.length > 0) {
-          item.childData.forEach(data => {
-            if (data.childData && data.childData.length > 0) {
-              data.childData.forEach(dtl => {
-                if (dtl.childData && dtl.childData.length > 0) {
-                  dtl.childData.forEach(dtl1 => {
-                    arr.push(dtl1)
-                  })
-                }
-              })
-            }
+    if(table && table.length > 0) {
+      table.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data)
           })
         }
       })
-      this.tableHangDtqg = arr
     }
+    return arr
   }
 
-  conVertArrayHang() : any[] {
+  conVertArrayHang(talbe :any[]) : any[] {
     let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
+    if(talbe && talbe.length > 0) {
+      talbe.forEach(item => {
         if (item.childData && item.childData.length > 0) {
           item.childData.forEach(data => {
             if (data.childData && data.childData.length > 0) {
@@ -329,9 +326,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return arr;
   }
 
-  buildDiaDiemTc() {
-    if (this.tableHangDtqg && this.tableHangDtqg.length > 0) {
-      this.tableHangDtqg = chain(this.tableHangDtqg)
+  buildDiaDiemTc(table : any[]) : any[] {
+    if (table && table.length > 0) {
+      table = chain(table)
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
@@ -360,11 +357,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           };
         }).value();
     }
-    this.expandAll('dtqg');
+    return table;
   }
 
-  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
-    let array = this.conVertArrayHang();
+  sumSoLuongHang(table : any[] , column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
+    let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
       switch (type) {
@@ -418,10 +415,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return result;
   }
 
-  sumslKho(column?: string, tenDvi? : string, type?: string) : number {
+  sumslKho(table : any[], column?: string, tenDvi? : string, type?: string) : number {
     let result = 0;
     let arr = [];
-    this.dataTable.forEach(item => {
+    table.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
           arr.push(data)
