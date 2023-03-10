@@ -157,9 +157,10 @@
     <tbody>
     <tr *ngFor="let item of tableGiaTriBh, let idx = index">
       <td>{{idx + 1}}</td>
-      <td class="text-right">{{item.dienTich | number: '1.0-1' }}</td>
-      <td class="text-right">{{item.giaTriHt | number: '1.0-1' }}</td>
-      <td class="text-right">{{item.giaTriDk | number: '1.0-1' }}</td>
+      <td>{{item.tenTsHh}}</td>
+      <td class="text-right">{{item.gtThamGiaBh | number: '1.0-1' }}</td>
+      <td class="text-right">{{item.tiLePhiCoBan | number: '1.0-1' }}</td>
+      <td class="text-right">{{item.tiLePhiCoBan * item.gtThamGiaBh  | number: '1.0-1' }}</td>
     </tr>
     </tbody>
   </nz-table>
