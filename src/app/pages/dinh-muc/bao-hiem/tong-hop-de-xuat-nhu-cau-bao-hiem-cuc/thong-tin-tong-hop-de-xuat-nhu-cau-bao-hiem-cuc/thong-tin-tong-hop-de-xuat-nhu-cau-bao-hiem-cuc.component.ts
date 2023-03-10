@@ -14,9 +14,6 @@ import {STATUS} from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
-import {
-  BaoHiemKhoDangChuaHang
-} from "../../de-xuat-hop-dong-chi-cuc/them-moi-de-xuat-bao-hiem-cc/them-moi-de-xuat-bao-hiem-cc.component";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc',
@@ -33,7 +30,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   maCv: string;
   tableHangDtqg: any[] = [];
   dataHang : any[] = [];
-  test : ['1', '2', '3']
+  tableGiaTriBh : any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -117,6 +115,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         }
       })
     }
+    if (listHh.listQlDinhMucDxBhKhoChua && listHh.listQlDinhMucDxBhKhoChua.length >0) {
+      this.tableGiaTriBh = listHh.listQlDinhMucDxBhKhoChua
+    }
   }
 
   async tongHop() {
@@ -199,6 +200,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    this.formData.value.giaTriDx = this.calcGiaTriBh();
     let data = await this.createUpdate(this.formData.value)
     if (data) {
       if (isOther) {
@@ -207,6 +209,22 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         this.goBack()
       }
     }
+  }
+
+  calcGiaTriBh() {
+    let sum1 = 0
+    let sum2 = 0
+    const sum3 = this.dataTable.reduce((prev, cur) => {
+      prev += cur.giaTriTc;
+      return prev;
+    }, 0);
+    sum1 = sum3
+    const sum4= this.tableHangDtqg.reduce((prev, cur) => {
+      prev += cur.giaTriTc;
+      return prev;
+    }, 0);
+    sum2=sum4
+    return sum1 + sum2
   }
 
   convertAllTreToArray() {
@@ -218,6 +236,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
             let arr = this.conVertArrayHang(item.dataChildHang);
             if (arr && arr.length > 0) {
               arr.forEach(dtl => {
+                dtl.id = null
                 this.tableHangDtqg = [...this.tableHangDtqg, dtl]
               })
             }
@@ -226,6 +245,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
             let arr = this.conVertTreToList(item.dataChildKho);
           if (arr && arr.length > 0) {
             arr.forEach(dtl => {
+              dtl.id = null
               this.dataTable = [...this.dataTable, dtl]
             })
           }
