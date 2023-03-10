@@ -56,12 +56,12 @@
       <h3 class="text-uppercase">danh sách quyết định mức trang bị máy móc thiết bị chuyên dùng</h3>
       <div class="buttons">
         <button type="button"
-                class="btn btn-sub" (click)="exportData()">
+                class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button
-          type="button" class="btn btn-main" *ngIf="userService.isTongCuc()" (click)="redirectToChiTiet(0,false)">
+          type="button" class="btn btn-main" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_THEM')" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -145,13 +145,13 @@
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td >
-            <a *ngIf="(data.trangThai != STATUS.DU_THAO && userService.isTongCuc()) || userService.isCuc()" (click)="redirectToChiTiet(data.id, true)">
+            <a *ngIf="((data.trangThai != STATUS.DU_THAO && userService.isTongCuc()) || userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XEM')" (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()" (click)="redirectToChiTiet(data.id)">
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_SUA')" (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()" (click)="delete(data)">
+            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_ĐMTBMTBCD_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

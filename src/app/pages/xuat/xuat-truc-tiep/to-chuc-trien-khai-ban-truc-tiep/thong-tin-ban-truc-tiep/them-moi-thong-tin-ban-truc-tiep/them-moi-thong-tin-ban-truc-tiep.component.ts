@@ -139,10 +139,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   hoanThanhCapNhat() {
-    if (this.listOfData.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
-      return
-    }
+    // if (this.listOfData.length == 0) {
+    //   this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
+    //   return
+    // }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

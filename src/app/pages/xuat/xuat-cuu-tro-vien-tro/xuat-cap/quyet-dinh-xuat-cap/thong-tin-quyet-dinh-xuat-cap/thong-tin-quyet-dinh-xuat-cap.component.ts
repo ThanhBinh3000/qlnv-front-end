@@ -43,13 +43,13 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   @Input() idInput: number;
   listLoaiHinhNhapXuat: any[] = [];
   listKieuNhapXuat: any[] = [];
-  listPhuongAn: any[] = [];
   deXuatPhuongAnCache: any[] = [];
   phuongAnView = [];
   phuongAnViewCache: any[] = [];
   phuongAnRow: any = {};
   maQd: string = null;
   isChonPhuongAn: boolean = false;
+  isChecked: boolean = false;
   tongSoLuongDxuat = 0;
   expandSetString = new Set<string>();
   expandSetStringCache = new Set<string>();
@@ -66,8 +66,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   quyetDinhPdDtl: any[]= [new Array<QuyetDinhPdDtl>()];
   deXuatSelected: any = []
   quyetDinhPdDtlCache: any[] = [];
-
-
+  quyetDinhPdDx: Array<any> = [];
+  deXuatPhuongAn: any[] = [];
+  tenLoaiVthh: string = null;
+  loaiNhapXuat: string = null;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -136,14 +138,15 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   async changePhuongAn(event) {
-    await this.loadChiTietPhuongAnChuyenXc(event);
-  }
-
-  async loadChiTietPhuongAnChuyenXc(id: number) {
-    debugger
     await this.spinner.show();
-    let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id);
-    this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
+    if (event != null) {
+      let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
+      this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
+      this.deXuatPhuongAnCache = data.data.quyetDinhPdDtl[0].quyetDinhPdDx;
+      this.tenLoaiVthh = data.data.tenLoaiVthh;
+      this.loaiNhapXuat = data.data.loaiNhapXuat;
+      this.buildTableView()
+    }
     await this.spinner.hide();
   }
 
@@ -261,8 +264,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       i.selected = false
     });
     this.deXuatSelected.selected = true;
+    let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+    dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
     let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
     dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
+    this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
+    this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
     await this.buildTableView();
 
   }
@@ -288,6 +295,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
 
   showModal(data?: any): void {
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
+    if (this.isChonPhuongAn == true && this.isChecked == true) {
+      this.isChonPhuongAn = false;
+    }
     this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
     if (this.userService.isCuc()) {
@@ -344,16 +354,20 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       deXuatPhuongAn: table
     });
     this.buildTableView();
+    if (this.isChecked == true && this.isChonPhuongAn == false) {
+      this.isChonPhuongAn = true
+    }
     this.isVisible = false;
-    //clean
     this.errorInputComponent = [];
     this.phuongAnRow = {};
     this.listChiCuc = [];
   }
 
   handleCancel(): void {
+    if (this.isChecked == true && this.isChonPhuongAn == false) {
+      this.isChonPhuongAn = true
+    }
     this.isVisible = false;
-    //clean
     this.errorInputComponent = [];
     this.phuongAnRow = {};
     this.listChiCuc = [];
@@ -434,6 +448,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   showModalSuaNoiDung(): void {
+    if (this.isChonPhuongAn == true && this.isChecked == true) {
+      this.isChonPhuongAn = false;
+    }
     this.isVisibleSuaNoiDung = true;
   }
 
@@ -443,6 +460,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       s.noiDung = this.phuongAnRow.noiDungEdit;
     });
     this.buildTableView();
+    if (this.isChecked == true && this.isChonPhuongAn == false) {
+      this.isChonPhuongAn = true
+    }
     this.isVisibleSuaNoiDung = false;
 
     //clean
@@ -450,6 +470,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   handleCancelSuaNoiDung(): void {
+    if (this.isChecked == true && this.isChonPhuongAn == false) {
+      this.isChonPhuongAn = true
+    }
     this.isVisibleSuaNoiDung = false;
     this.phuongAnRow = {};
   }
@@ -556,7 +579,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   checkChonPhuongAn() {
+    this.isChecked = !this.isChecked
     this.isChonPhuongAn = !this.isChonPhuongAn;
+    this.formData.get('qdPaXuatCapId').setValue(null);
+    this.deXuatPhuongAnCache = null;
+    this.phuongAnViewCache = null;
   }
 
 }
