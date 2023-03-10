@@ -28,7 +28,7 @@ export class DialogTongHopComponent implements OnInit {
     lstCtietBcao: [],
     lstDviTrucThuoc: [],
     maBcao: null,
-    loai: null,
+    loai: "3",
     maPa: null,
     maPaCha: null,
     idSoTranChi: null,
@@ -121,10 +121,30 @@ export class DialogTongHopComponent implements OnInit {
       maDvi: this.obj.maDvi,
       namPa: this.response.namHienTai
     };
+    this.lstPaLoai = []
     await this.giaoDuToanChiService.dsPaTongHop(requestReport).toPromise().then(res => {
       if (res.statusCode == 0) {
         this.lstPa = res.data;
         // this.lstPa = this.lstPa.filter(item => item.listTtCtiet.every(e => e.trangThai == '1'));
+        let lstPaTemp = []
+        lstPaTemp = this.lstPa.filter(s => s.maLoaiDan == this.response.loai);
+        if (this.userInfo.CAP_DVI == "1") {
+          lstPaTemp.forEach(s => {
+            this.lstPaLoai.push(
+              {
+                maPa: s.maPaCha
+              }
+            )
+          })
+        } else {
+          lstPaTemp.forEach(s => {
+            this.lstPaLoai.push(
+              {
+                maPa: s.maPa
+              }
+            )
+          })
+        }
         console.log(res.data);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -211,38 +231,7 @@ export class DialogTongHopComponent implements OnInit {
       idPaBTC: null,
       tabSelected: 'addBaoCao',
     };
-
-    const request2 = {
-      id: null,
-      fileDinhKems: [],
-      listIdDeleteFiles: [],
-      lstGiaoDtoanTrucThuocs: this.response.lstDviTrucThuoc,
-      lstCtiets: this.response.lstCtietBcao,
-      maDvi: this.response.maDvi,
-      maDviTien: "1",
-      maBcao: maBcao,
-      maPa: this.response.maPa,
-      maPaCha: this.response.maPaCha,
-      namPa: this.response.namHienTai,
-      // soQd: null,
-      maPhanGiao: "2",
-      maLoaiDan: '3',
-      trangThai: "1",
-      thuyetMinh: "",
-      idPaBTC: null,
-      tabSelected: 'addBaoCao',
-    };
-
-    if (this.response.loai == "1") {
-      this._modalRef.close(request1);
-    }
-    if (this.response.loai == "2") {
-      this._modalRef.close(request2);
-    }
-
-    // console.log(this.response);
-
-    // this._modalRef.close(this.response);
+    this._modalRef.close(request1);
   }
 
   handleCancel() {

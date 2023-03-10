@@ -673,26 +673,26 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       soQd: this.soQd,
       tongHopTuIds: tongHopTuIds,
     }));
-    // const request1 = JSON.parse(JSON.stringify({
-    //   id: null,
-    //   idPaBTC: this.idPaBTC,
-    //   fileDinhKems: this.lstFiles,
-    //   listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
-    //   lstCtiets: lstCtietBcaoTemp,
-    //   maDvi: this.maDonViTao,
-    //   maDviTien: this.maDviTien,
-    //   maPa: this.maPa,
-    //   maPaCha: this.maPaCha,
-    //   namPa: this.namPa,
-    //   maPhanGiao: "2",
-    //   trangThai: this.trangThaiBanGhi,
-    //   thuyetMinh: this.thuyetMinh,
-    //   ngayTao: this.ngayTao,
-    //   maLoaiDan: "1",
-    //   maGiao: this.maGiao,
-    //   soQd: this.soQd,
-    //   tongHopTuIds: tongHopTuIds,
-    // }));
+    const request1 = JSON.parse(JSON.stringify({
+      id: null,
+      idPaBTC: this.idPaBTC,
+      fileDinhKems: this.lstFiles,
+      listIdDeleteFiles: this.listIdFilesDelete, // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDonViTao,
+      maDviTien: this.maDviTien,
+      maPa: this.maPa,
+      maPaCha: this.maPaCha,
+      namPa: this.namPa,
+      maPhanGiao: "2",
+      trangThai: this.trangThaiBanGhi,
+      thuyetMinh: this.thuyetMinh,
+      ngayTao: this.ngayTao,
+      maLoaiDan: "3",
+      maGiao: this.maGiao,
+      soQd: this.soQd,
+      tongHopTuIds: tongHopTuIds,
+    }));
     //get file cong van url
     const file: any = this.fileDetail;
     if (file) {
@@ -717,7 +717,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     // =================================================================
     this.spinner.show();
     if (!this.id) {
-      this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;

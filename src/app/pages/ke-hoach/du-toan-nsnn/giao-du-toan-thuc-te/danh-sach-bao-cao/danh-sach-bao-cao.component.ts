@@ -27,7 +27,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     maBaoCao: "",
     donViTao: "",
     trangThai: Utils.TT_BC_1,
-    loaiDuAn: null,
+    loaiDuAn: [1,2],
   };
 
   userInfo: any;
@@ -36,11 +36,11 @@ export class DanhSachBaoCaoComponent implements OnInit {
   dataTableAll: any[] = [];
   loaiDuAns: any[] = [
     {
-      id: '1',
+      id: [1],
       tenDm: 'Giao dự toán'
     },
     {
-      id: '2',
+      id: [2],
       tenDm: 'Giao, diều chỉnh dự toán'
     }
   ];

@@ -53,6 +53,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '3',
     maLoai: '2',
+    maLoaiDan: [3],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
@@ -254,13 +255,13 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   xemChiTiet(id: string, maLoaiDan: string) {
     console.log({ "id": id, "maLoaiDan": maLoaiDan });
 
-    if (maLoaiDan == "1") {
+    if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
-    } else if (maLoaiDan == "2") {
+    } else if (maLoaiDan == "3") {
       const obj = {
         id: id,
         tabSelected: 'addBaoCao',

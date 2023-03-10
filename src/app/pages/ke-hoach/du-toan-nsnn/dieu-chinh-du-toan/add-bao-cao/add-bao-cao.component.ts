@@ -273,7 +273,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao?.lstDchinh.forEach(item => {
           const pl = this.listAppendix.find(e => e.id == item.maLoai);
           item.tenPl = pl.tenPl;
-          item.tenDm = pl.tenDm;
+          item.tenDm = pl.tenDm + 'năm' + this.baoCao.namBcao;
         })
         this.baoCao?.lstDviTrucThuoc.forEach(e => {
           if (e.ngayDuyet.includes('/')) {

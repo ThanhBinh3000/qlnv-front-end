@@ -99,11 +99,11 @@ export class PhanBoDuToanComponent implements OnInit {
   trangThais: any = TRANG_THAI_TIM_KIEM;
   loaiDuAns: any[] = [
     {
-      id: '1',
+      id: [1],
       tenDm: 'Giao dự toán'
     },
     {
-      id: '2',
+      id: [2],
       tenDm: 'Giao, diều chỉnh dự toán'
     }
   ];
@@ -212,7 +212,7 @@ export class PhanBoDuToanComponent implements OnInit {
     this.searchFilter.maPa = null;
     this.trangThai = null;
     this.trangThaiGiao = null;
-    this.searchFilter.maLoaiDan = null;
+    this.searchFilter.maLoaiDan = [1,2];
     this.search();
   };
 

@@ -98,6 +98,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     const requestReport = {
       maPhanGiao: '1',
       maLoai: '2',
+      maLoaiDan: [1,2],
       maPa: this.searchFilter.maPa,
       namPa: this.searchFilter.namPa,
       ngayTaoDen: this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR),
@@ -111,7 +112,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
+    await this.giaoDuToanChiService.timBaoCaoGiao1(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.dataTable = [];
