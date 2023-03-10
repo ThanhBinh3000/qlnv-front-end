@@ -54,6 +54,7 @@ export const TAB_LIST = [
             GDT.EDIT_REPORT_TH,
             GDT.XOA_REPORT_TH,
             GDT.XEM_PA_TONGHOP_PBDT,
+            GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },

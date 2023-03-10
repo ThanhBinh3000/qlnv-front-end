@@ -97,6 +97,12 @@ export class GiaoDuToanChiService extends BaseService {
       request,
     );
   };
+  tongHopGiaoThucTe1(request: any): Observable<any> {
+    return this.httpClient.post(
+      'http://localhost:9159/giao_du_toan/tong-hop',
+      request,
+    );
+  };
   //tong hop giao du toan
   tongHopGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(

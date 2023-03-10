@@ -825,7 +825,7 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   async getDetailReport() {
-    await this.giaoDuToanChiService.chiTietBaoCao(this.baoCao.id).toPromise().then(
+    await this.giaoDuToanChiService.chiTietBaoCao1(this.baoCao.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;

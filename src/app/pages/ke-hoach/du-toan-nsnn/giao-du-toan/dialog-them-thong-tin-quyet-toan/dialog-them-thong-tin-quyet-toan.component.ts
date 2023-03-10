@@ -293,7 +293,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
         "8",
         "9"],
       maPa: this.maPa,
-      maLoaiDan: null,
+      maLoaiDan: [3],
       soQd: "",
       trangThaiGiaos: ["0",
         "1",
