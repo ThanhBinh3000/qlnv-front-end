@@ -194,7 +194,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -303,7 +303,19 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let msg = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_KTVBQ:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_KTVBQ;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -324,13 +336,21 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.TU_CHOI_KTVBQ;
+        break;
+      }
     }
     this.reject(this.idInput, trangThai)
   }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDCC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_KTVBQ) {
       return true
     }
     return false;

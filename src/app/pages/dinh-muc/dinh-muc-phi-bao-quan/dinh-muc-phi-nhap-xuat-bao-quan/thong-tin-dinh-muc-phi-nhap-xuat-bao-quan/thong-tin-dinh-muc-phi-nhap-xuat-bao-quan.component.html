@@ -1,4 +1,4 @@
-<div class="bg-trang">
+<div class="bg-trang" xmlns="http://www.w3.org/1999/html">
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -111,10 +111,13 @@
         <th rowspan="3" width="100px">Tên định mức</th>
         <th rowspan="3" width="200px">Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
         <th rowspan="3" [nzWidth]="'150px'">Đơn vị tính</th>
+        <th rowspan="3" width="150px" *ngIf="capDvi == 2">Tổng định mức theo <br/> QĐ của TCDT</th>
         <th rowspan="3" width="150px">Tổng định mức</th>
+        <th rowspan="3" width="150px" *ngIf="capDvi == 2">Tổng định mức chi <br/> tại Cục DTNN KV</th>
         <th colspan="5" width="680px">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
         <th colspan="5"
             width="680px">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
+        <th rowspan="3" width="200px" *ngIf="capDvi == 2">TỔng cục điều hành <br/> (Nghiệp vụ chuyên môn)</th>
         <th rowspan="3" width="100px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
@@ -171,14 +174,19 @@
         <th>
           <input type="text" [disabled]="true" [(ngModel)]="rowItem.donViTinh" nz-input/>
         </th>
-        <th *ngIf="capDvi == 1">
+        <th *ngIf="capDvi == 2">
           <input type="text" [disabled]="true"
-                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv"
+                 [(ngModel)]="rowItem.tongDinhMucTc"
+                 nz-input/>
+        </th>
+        <th>
+          <input type="text" [disabled]="true"
+                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv + rowItem.tcTongCucDieuHanhKv"
                  nz-input/>
         </th>
         <th *ngIf="capDvi == 2">
           <input type="text" [disabled]="true"
-                 [(ngModel)]="rowItem.tongDinhMucTc"
+                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc  + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv"
                  nz-input/>
         </th>
         <th>
@@ -261,6 +269,11 @@
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
+        <th *ngIf="capDvi == 2">
+          <input type="text" [disabled]="true"
+                 [(ngModel)]="rowItem.tcTongCucDieuHanhKv"
+                 nz-input/>
+        </th>
         <th class="text-center" *ngIf="!isViewDetail">
           <a (click)="addDetailDinhMuc()" [ngClass]="{'isDisabled' : !isAddDetail}">
             <i class="icon htvbdh_dau-cong"></i>
@@ -279,17 +292,20 @@
           <td>{{data.tenDinhMuc}}</td>
           <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
-          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv}}</td>
-          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc}}</td>
-          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc }}</td>
+          <td>{{data.tongDinhMucTc}}</td>
+          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number}}</td>
+          <td>2222</td>
+          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc | number}}</td>
+          <td>{{data.nvChuyenMonTc + data.ttCaNhanTc | number }}</td>
           <td>{{data.nvChuyenMonTc | number}}</td>
           <td>{{data.ttCaNhanTc | number}}</td>
           <td>{{data.tcDieuHanhTc | number}}</td>
           <td>{{data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv | number}}</td>
           <td>{{data.nvChuyenMonKv + data.ttCaNhanKv  | number}}</td>
-          <td>{{data.nvChuyenMonKv}}</td>
-          <td>{{data.ttCaNhanKv}}</td>
-          <td>{{data.tcDieuHanhKv}}</td>
+          <td>{{data.nvChuyenMonKv | number}}</td>
+          <td>{{data.ttCaNhanKv | number}}</td>
+          <td>{{data.tcDieuHanhKv | number}}</td>
+          <td *ngIf="capDvi == 2">{{data.tcTongCucDieuHanhKv | number}}</td>
           <td *ngIf="!isViewDetail">
             <a (click)="editRow(idx)">
               <i class="fa fa-pencil"></i>

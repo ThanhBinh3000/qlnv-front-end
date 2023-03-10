@@ -15,7 +15,7 @@ export class QuyetDinhPheDuyetPhuongAnCuuTroService extends BaseLocalService {
   }
 
   getDsQdPaChuyenXc(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/qd-pa-xuat-cap`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/qd-pa-xuat-cap`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 }

@@ -15,6 +15,7 @@ import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -56,19 +57,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         maDvi: [],
         maQhNs: [],
         soPhieuXuatKho: [],
-        ngayTaoPhieu: [],
-        ngayXuatKho: [],
+        ngayTaoPhieu: ['', [Validators.required]],
+        ngayXuatKho: ['', [Validators.required]],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idQdGiaoNvXh: [],
         soQdGiaoNvXh: [],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
         idPhieuKnCl: [],
-        soPhieuKnCl: [],
+        soPhieuKnCl: ['', [Validators.required]],
         ngayKn: [],
         loaiVthh: [],
         cloaiVthh: [],
@@ -154,6 +155,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
+        type: "XUAT_CTVT",
       });
     }
 
@@ -177,7 +179,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

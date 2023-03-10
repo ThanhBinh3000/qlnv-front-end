@@ -96,6 +96,8 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
+    this.formData.value.loaiVthh = this.loaiVthh;
+    this.formData.value.type = "XUAT_CTVT";
     await super.search(roles);
     this.buildTableView();
   }
@@ -115,18 +117,21 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
-    if (this.formData.value.ngayBatDauXuat) {
-      this.formData.value.ngayBatDauXuatTu = dayjs(this.formData.value.ngayBatDauXuat[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayBatDauXuatDen = dayjs(this.formData.value.ngayBatDauXuat[1]).format('YYYY-MM-DD')
+    await this.spinner.show();
+    try {
+      if (this.formData.value.ngayBatDauXuat) {
+        this.formData.value.ngayBatDauXuatTu = dayjs(this.formData.value.ngayBatDauXuat[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayBatDauXuatDen = dayjs(this.formData.value.ngayBatDauXuat[1]).format('YYYY-MM-DD')
+      }
+      if (this.formData.value.ngayKetThucXuat) {
+        this.formData.value.ngayKetThucXuatTu = dayjs(this.formData.value.ngayKetThucXuat[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayKetThucXuatDen = dayjs(this.formData.value.ngayKetThucXuat[1]).format('YYYY-MM-DD')
+      }
+      await this.search();
+    } catch (e) {
+      console.log(e)
     }
-    if (this.formData.value.ngayKetThucXuat) {
-      this.formData.value.ngayKetThucXuatTu = dayjs(this.formData.value.ngayKetThucXuat[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKetThucXuatDen = dayjs(this.formData.value.ngayKetThucXuat[1]).format('YYYY-MM-DD')
-    }
-    this.formData.value.loaiVthh = this.loaiVthh;
-    await this.search();
-    this.dataTable.forEach(s => s.idVirtual = uuid.v4());
-    this.buildTableView();
+    await this.spinner.hide();
   }
 
   buildTableView() {
