@@ -288,13 +288,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
       case STATUS.TU_CHOI_KTVBQ:
-      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KTVBQ: {
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -318,6 +317,14 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.TU_CHOI_KTVBQ;
         break;
       }
     }
