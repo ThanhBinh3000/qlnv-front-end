@@ -141,6 +141,15 @@
     </div>
     <div nz-col nzSpan="19">
       <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 0">
+          <app-kh-tong-hop-nhap-xuat></app-kh-tong-hop-nhap-xuat>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 1">
+          <app-kh-tang-hang-dtqg></app-kh-tang-hang-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 2">
+          <app-kh-giam-hang-dtqg></app-kh-giam-hang-dtqg>
+        </ng-container>
         <ng-container *ngIf="tabSelected == 5">
           <app-thong-tu1452013></app-thong-tu1452013>
         </ng-container>
