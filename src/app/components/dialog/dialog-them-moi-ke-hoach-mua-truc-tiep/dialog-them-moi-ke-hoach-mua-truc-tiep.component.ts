@@ -112,7 +112,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let body = {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI,
-      type: [null, 'MLK']
     };
     if (this.dataChiTieu) {
       if (this.loaiVthh === LOAI_HANG_DTQG.THOC) {
