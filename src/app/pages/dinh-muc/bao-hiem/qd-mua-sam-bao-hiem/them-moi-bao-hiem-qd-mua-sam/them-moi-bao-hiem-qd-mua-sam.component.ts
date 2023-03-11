@@ -17,6 +17,7 @@ import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-m
 import {
   MmThongTinNcChiCuc
 } from "../../../may-moc-thiet-bi/de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
+import {QdMuaSamBhService} from "../../../../../services/qd-mua-sam-bh.service";
 
 @Component({
   selector: 'app-them-moi-bao-hiem-qd-mua-sam',
@@ -43,7 +44,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dxChiCucService: MmDxChiCucService,
-    private qdMuaSamService: QuyetDinhMuaSamService
+    private qdMuaSamService: QdMuaSamBhService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()
@@ -386,7 +387,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   }
 
   sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
-    let array = this.conVertArrayHang();
+    let array = [];
     let result = 0;
     if (array && array.length > 0) {
       switch (type) {

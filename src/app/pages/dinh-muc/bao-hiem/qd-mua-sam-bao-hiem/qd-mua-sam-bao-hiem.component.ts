@@ -9,6 +9,7 @@ import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
 import {QuyetDinhMuaSamService} from "../../../../services/quyet-dinh-mua-sam.service";
+import {QdMuaSamBhService} from "../../../../services/qd-mua-sam-bh.service";
 
 @Component({
   selector: 'app-qd-mua-sam-bao-hiem',
@@ -27,7 +28,7 @@ export class QdMuaSamBaoHiemComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdMuaSamService: QuyetDinhMuaSamService
+    private qdMuaSamService: QdMuaSamBhService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()

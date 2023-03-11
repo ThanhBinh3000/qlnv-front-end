@@ -13,6 +13,7 @@ import { DeXuatHopDongChiCucComponent } from './de-xuat-hop-dong-chi-cuc/de-xuat
 import {
   ThemMoiDeXuatBaoHiemCcComponent
 } from "./de-xuat-hop-dong-chi-cuc/them-moi-de-xuat-bao-hiem-cc/them-moi-de-xuat-bao-hiem-cc.component";
+import { ThemMoiBaoHiemQdMuaSamComponent } from './qd-mua-sam-bao-hiem/them-moi-bao-hiem-qd-mua-sam/them-moi-bao-hiem-qd-mua-sam.component';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import {
         DeXuatHopDongChiCucComponent,
         ThemMoiDeXuatBaoHiemCcComponent,
         ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent,
+        ThemMoiBaoHiemQdMuaSamComponent,
     ],
   exports: [
     BaoHiemComponent,
