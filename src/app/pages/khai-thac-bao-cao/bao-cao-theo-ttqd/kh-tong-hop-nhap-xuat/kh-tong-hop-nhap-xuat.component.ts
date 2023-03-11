@@ -15,7 +15,6 @@ import { StorageService } from "../../../../services/storage.service";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { DanhMucService } from "../../../../services/danhmuc.service";
 import { LOAI_HANG_DTQG } from "../../../../constants/config";
-import { Base2LocalComponent } from "../../../../components/base2/base2-local.component";
 
 @Component({
   selector: "app-kh-tong-hop-nhap-xuat",
