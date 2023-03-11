@@ -54,6 +54,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       ngayKy: ['',],
       idHd: [],
       soHd: [''],
+      ngayHd: [],
       idQdPdKh: [],
       soQdPd: [''],
       maDviTsan: [''],
@@ -158,6 +159,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
               this.formData.patchValue({
                 soHd: data.soHd,
                 idHd: data.id,
+                ngayHd: data.ngayPduyet,
                 maDviTsan: data.maDviTsan,
                 loaiVthh: data.loaiVthh,
                 tenLoaiVthh: data.tenLoaiVthh,
