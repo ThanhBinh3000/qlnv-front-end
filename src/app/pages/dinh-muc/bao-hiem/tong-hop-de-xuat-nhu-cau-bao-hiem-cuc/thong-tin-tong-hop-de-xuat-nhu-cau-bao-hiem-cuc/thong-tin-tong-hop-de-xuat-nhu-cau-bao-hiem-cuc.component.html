@@ -97,10 +97,10 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired>Số công văn</nz-form-label>
+            <nz-form-label nzRequired>Mã tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group [nzAddOnAfter]="maCv">
-                <input nz-input formControlName="soCv" [readonly]="isView"/>
+              <nz-input-group>
+                <input nz-input formControlName="id" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -299,10 +299,13 @@
             <th rowSpan="2" nzWidth="10%">Đơn vị tính</th>
             <th colSpan="2" nzWidth="15%">Đến thời điểm hiện tại(đ)</th>
             <th colSpan="2" nzWidth="15%">Dự kiến đến hết 31/12(đ)</th>
+            <th colSpan="2" nzWidth="15%">Tại thời điểm tổng hợp</th>
             <th rowSpan="2" nzWidth="10%">Giá trị bảo hểm đề xuất(đ)</th>
             <th rowSpan="2" nzWidth="10%">Giá trị bảo hểm TC phê duyệt(đ)</th>
           </tr>
           <tr>
+            <th class="text-center">Số lượng</th>
+            <th class="text-center">Giá trị (đ)</th>
             <th class="text-center">Số lượng</th>
             <th class="text-center">Giá trị (đ)</th>
             <th class="text-center">Số lượng</th>
@@ -329,6 +332,10 @@
               <td
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', item1.tenLoaiVthh, null, null, 'tenLoaiVthh') | number: '1.0-3'}}</td>
               <td
+                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', item1.tenLoaiVthh, null, null, 'tenLoaiVthh') | number: '1.0-3'}}</td>
+              <td
+                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', item1.tenLoaiVthh, null, null, 'tenLoaiVthh') | number: '1.0-3'}}</td>
+              <td
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', item1.tenLoaiVthh, null, null, 'tenLoaiVthh') | number: '1.0-3'}}</td>
               <td
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', item1.tenLoaiVthh, null, null, 'tenLoaiVthh') | number: '1.0-3'}}</td>
@@ -342,20 +349,24 @@
                       style="width: 35px"></td>
                   <td></td>
                   <td></td>
-                  <td class="font-weight-bold">{{lv1.tenHangHoaCha}}</td>
+                  <td class="font-weight-bold">{{lv1.tenNhomTiLeBaoHiem}}</td>
                   <td></td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                  <td
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                  <td
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(lv1.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -377,6 +388,10 @@
                       <td
                         class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, null, lv2.tenHangHoa, 'tenHangHoa') | number: '1.0-3'}}</td>
                       <td
+                        class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, null, lv2.tenHangHoa, 'tenHangHoa') | number: '1.0-3'}}</td>
+                      <td
+                        class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, null, lv2.tenHangHoa, 'tenHangHoa') | number: '1.0-3'}}</td>
+                      <td
                         class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, null, lv2.tenHangHoa, 'tenHangHoa') | number: '1.0-3'}}</td>
                       <td
                         class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, null, lv2.tenHangHoa, 'tenHangHoa') | number: '1.0-3'}}</td>
@@ -394,6 +409,8 @@
                           <td class="text-right">{{lv3.giaTriHt | number: '1.0-3' }}</td>
                           <td class="text-right">{{lv3.soLuongDk | number: '1.0-3' }}</td>
                           <td class="text-right">{{lv3.giaTriDk | number: '1.0-3' }}</td>
+                          <td class="text-right">{{lv3.soLuongTh | number: '1.0-3' }}</td>
+                          <td class="text-right">{{lv3.giaTriTh | number: '1.0-3' }}</td>
                           <td class="text-right">{{lv3.giaTriBhDx | number: '1.0-3' }}</td>
                           <td>
                             <nz-input-number [(ngModel)]="lv3.giaTriTc" [nzSize]="'small'" [nzDisabled]="isView"
@@ -422,6 +439,10 @@
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
               <td
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
+              <td
+                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
+              <td
+                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
               <td
                 class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, null, null, 'tong') | number: '1.0-3'}}</td>
               <td

@@ -14,7 +14,6 @@ import {STATUS} from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
-import {sum} from "ng-zorro-antd/core/util";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc',
@@ -48,7 +47,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       maDvi: [null],
       capDvi: [null],
       namKeHoach: [dayjs().get('year')],
-      soCv: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
@@ -192,7 +190,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   }
 
   async save(isOther: boolean) {
-    this.convertAllTreToArray()
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
     })
@@ -200,10 +197,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     if (this.formData.invalid) {
       return;
     }
+    this.convertAllTreToArray()
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.soCv = this.formData.value.soCv + this.maCv
     this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
@@ -255,13 +252,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           this.isTongHop = true;
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.patchValue({
-            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
-          })
           this.fileDinhKem = data.listFileDinhKems;
           this.convertList(res.data)
-          await this.expandAll('kho');
-          await this.expandAll('dtqg');
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -344,7 +336,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -357,7 +349,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -372,7 +364,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return table;
   }
 
-  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string): number {
+  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
     let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
@@ -390,9 +382,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;
@@ -471,30 +463,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
     return check;
   }
-
-
-  expandAll(type: string) {
-    if (type == 'kho') {
-      this.dataTable.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-      })
-    } else {
-      this.tableHangDtqg.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-        if (s.childData && s.childData.length > 0) {
-          s.childData.forEach(item => {
-            this.expandSet.add(item.idVirtual);
-            if (item.childData && item.childData.length > 0) {
-              item.childData.forEach(item1 => {
-                this.expandSet.add(item1.idVirtual);
-              })
-            }
-          })
-        }
-      })
-    }
-  }
-
 
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
