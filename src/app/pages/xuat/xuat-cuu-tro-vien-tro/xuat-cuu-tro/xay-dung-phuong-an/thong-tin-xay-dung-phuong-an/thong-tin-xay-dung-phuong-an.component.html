@@ -376,7 +376,7 @@
                       [nzTitle]="'Tổng số lượng viện trợ, cứu trợ'"></nz-statistic>
       </div>
       <div nz-col [nzSpan]="4">
-        <nz-statistic [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'"
+        <nz-statistic nzSuffix="đ" [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'"
                       [nzTitle]="'Thành tiền'"></nz-statistic>
         <!--<nz-form-item>
           <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
@@ -496,7 +496,7 @@
                     <td>{{lv2.tenCloaiVthh}}</td>
                     <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
                     <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
-                    <td>{{lv2.donViTinh}}</td>
+                    <td>{{lv2.tenDonViTinh}}</td>
                     <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
                     <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
                     <td> <!--<a (click)="addChiCuc(i,item.label)">

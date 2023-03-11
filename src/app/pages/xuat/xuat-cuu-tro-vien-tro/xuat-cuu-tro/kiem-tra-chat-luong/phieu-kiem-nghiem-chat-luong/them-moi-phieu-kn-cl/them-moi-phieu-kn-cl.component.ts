@@ -71,7 +71,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
         ngayLapPhieu: [],
         ngayKnMau: [],
         idBienBan: [],
-        soBienBan: [],
+        soBienBan: ['', [Validators.required]],
         ngayLayMau: [],
         idQdGiaoNvXh: [],
         soQdGiaoNvXh: [],
@@ -291,19 +291,6 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   pheDuyet() {
     let trangThai = '';
     let msg = '';
-    switch (this.formData.value.trangThai) {
-      case STATUS.TU_CHOI_LDCC:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-    }
     switch (this.formData.get('trangThai').value) {
       case STATUS.TU_CHOI_LDC:
       case STATUS.TU_CHOI_TP:

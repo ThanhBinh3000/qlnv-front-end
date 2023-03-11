@@ -17,4 +17,9 @@ export class ThongTu1452013Service extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/nhap-xuat-ton`;
     return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
   }
+
+  reportKhNhapXuatHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/kh-tong-hop-nhap-xuat`;
+    return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
+  }
 }
