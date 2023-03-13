@@ -51,7 +51,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)"
-                    *ngIf="userService.isCuc()">
+                    *ngIf="!userService.isTongCuc()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm mới</span>
                 </button>

@@ -72,7 +72,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         soPhieuKnCl: [],
         ngayLapPhieu: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         thoiHanXuatCtVt: [],
         nguoiKn: [],
         truongPhong: [],

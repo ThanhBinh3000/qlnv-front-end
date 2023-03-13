@@ -1,24 +1,26 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
-import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import { HttpClient } from '@angular/common/http';
-import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
+import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 
-
-// cần thay đổi services khi có
 @Component({
-  selector: 'app-bien-ban-hao-doi',
-  templateUrl: './bien-ban-hao-doi.component.html',
-  styleUrls: ['./bien-ban-hao-doi.component.scss'],
+  selector: 'app-bien-ban-lay-mau-btt',
+  templateUrl: './bien-ban-lay-mau-btt.component.html',
+  styleUrls: ['./bien-ban-lay-mau-btt.component.scss']
 })
-export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
+export class BienBanLayMauBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+
+  selectedId: number = 0;
+  isView: boolean = false;
+  isTatCa: boolean = false;
+  idQdGiaoNvXh: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -26,23 +28,22 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService
+    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
+    private bienBanLayMauBttService: BienBanLayMauBttService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
-      nam: dayjs().get('year'),
+      soBienBan: null,
       soQd: null,
-      loaiVthh: null,
       trichYeu: null,
-      ngayTao: null,
+      ngayLayMau: null,
       maChiCuc: null,
       trangThai: this.STATUS.BAN_HANH
     })
 
     this.filterTable = {
-      nam: '',
       soQd: '',
+      namKh: '',
       ngayTao: '',
       soHd: '',
       tenLoaiVthh: '',
@@ -89,7 +90,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
           let body = {
             id: item.id
           };
-          this.xhPhieuKnghiemCluongService.delete(body).then(async () => {
+          this.bienBanLayMauBttService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -101,4 +102,13 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
       },
     });
   }
+
+
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvXh?: number) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+    this.idQdGiaoNvXh = idQdGiaoNvXh;
+  }
+
 }
