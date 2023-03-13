@@ -2,12 +2,11 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span *ngIf="isTongHop"
-              [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span *ngIf="!isTongHop"></span>
-        <span>TỔNG HỢP NHU CẦU BẢO HIỂM CỦA CÁC CỤC</span>
+        <span>QUYẾT ĐỊNH MUA SẮM BẢO HIỂM</span>
       </div>
     </div>
     <div class="btn-group">
@@ -15,75 +14,38 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2" (click)="save(true)"
-              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) ">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <button class="btn btn-sub ml-2" (click)="save(true)"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
+        <i class="icon htvbdh_trinh"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub do ml-2"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()"
-              (click)="reject(id, STATUS.TU_CHOI_LDV)">
-        <i class="icon htvbdh_tcdt_tuchoi "></i>
+      <button type="button" class="btn btn-sub btn-xoa  ml-2"
+              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
+              (click)="reject(id, STATUS.TU_CHOI_LDTC)">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat ml-2"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" (click)=" pheDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <button type="button" class="btn btn-sub xanh-nhat  ml-2"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
+              (click)="pheDuyet()">
+        <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save(false)"
-              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) ">
+              *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </div>
   </div>
-  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_CBV " nzShowIcon nzType="error" class="mg-t-10"
+  <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDTC " nzShowIcon nzType="error" class="mg-t-10"
             nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-  <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="!disableForm()">
-    <form [nzLayout]="'vertical'" nz-form [formGroup]="formDataTongHop">
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="4">
-          <nz-form-label>Năm kế hoạch</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach"
-                       nzAllowClear>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-              </nz-option>
-            </nz-select>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label>Số công văn đề xuất của các Cục</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isTongHop" nzMode="multiple" nzPlaceHolder="Chọn số công văn" nzAllowClear
-                       formControlName="listSoCv">
-              <nz-option *ngFor="let option of listDxChiCuc" [nzValue]="option.soCv"
-                         [nzLabel]="option.soCv"></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label>Ngày đề xuất</nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-range-picker [nzDisabled]="isTongHop" formControlName="ngayDx" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </nz-form-control>
-        </div>
-      </div>
-    </form>
-    <div class="cangiua group-button-search">
-      <button *ngIf="userService.isTongCuc() && !isTongHop" type="button" class="btn btn-main" (click)="tongHop()">
-        <i class="icon htvbdh_dau-cong"></i>
-        <span>Tổng hợp</span>
-      </button>
-    </div>
-  </nz-card>
-  <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngIf="isTongHop">
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4" *ngIf="isView">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label>Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -95,17 +57,39 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Mã tổng hợp</nz-form-label>
+            <nz-form-label nzRequired>Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input nz-input formControlName="id" [readonly]="true"/>
+              <nz-input-group [nzAddOnAfter]="maQd">
+                <input nz-input formControlName="soQd" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="isView ? 12 : 16">
+        <div nz-col nzSpan="6">
+          <nz-radio-group
+            [nzDisabled]="formData.value.trangThai !== '00'"
+            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">
+            <nz-form-item >
+              <label nz-radio nzValue="TH">Số tổng hợp</label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
+                  <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <label nz-radio nzValue="DX">Số đề xuất/tờ trình</label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">
+                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-radio-group>
+        </div>
+        <div nz-col [nzSpan]="9">
           <nz-form-item>
             <nz-form-label nzRequired>Trích yếu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -113,7 +97,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired>Ngày ký</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -125,25 +109,25 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Tài liệu đính kèm
-            </nz-form-label>
-            <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
-            </div>
+            <nz-form-label [nzNoColon]="true">Tài liệu đính kèm</nz-form-label>
+            <nz-form-control>
+              <div class="list-file">
+                <file-list [data]="fileDinhKem"></file-list>
+              </div>
+            </nz-form-control>
           </nz-form-item>
         </div>
       </div>
     </form>
   </nz-card>
-  <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
+  <div class="header header-green-background mg-t-10" >
     <div class="header-text">
       <div class="title-chi-tieu">
         <span class="text-uppercase font-weight-bold">Tổng hợp giá trị mua bảo hiểm</span>
       </div>
     </div>
   </div>
-  <nz-table class="nowrap mg-t-10" [nzFrontPagination]="false" *ngIf="isTongHop"
+  <nz-table class="nowrap mg-t-10" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
@@ -154,7 +138,7 @@
       <th nzWidth="250px">Tổng phí bảo hiểm (chưa VAT)(%)</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody *ngIf="tableGiaTriBh.length > 0">
     <tr *ngFor="let item of tableGiaTriBh, let idx = index">
       <td>{{item.stt}}</td>
       <td  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-left' : ''">{{item.tenTsHh}}</td>
@@ -188,18 +172,19 @@
       <td class="font-weight-bold text-right">{{(tableGiaTriBh[0].gtThamGiaBh  * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) * 11/10 | number : '1.0-3' : 'vi-VN'}}</td>
     </tr>
     </tbody>
+    <tbody *ngIf="tableGiaTriBh.length == 0"></tbody>
   </nz-table>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngFor="let item of dataHang, let idx = index">
-    <nz-collapse *ngIf="isTongHop">
+    <nz-collapse >
       <nz-collapse-panel [nzActive]="idx == 0 ? true : false" [nzHeader]="item.tenDonViCha">
-        <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
+        <div class="header header-green-background mg-t-10" >
           <div class="header-text">
             <div class="title-chi-tieu">
               <span class="text-uppercase font-weight-bold">Kho đang chứa hàng</span>
             </div>
           </div>
         </div>
-        <nz-table class="nowrap mg-t-10 pd-10" [nzFrontPagination]="false" *ngIf="isTongHop"
+        <nz-table class="nowrap mg-t-10 pd-10" [nzFrontPagination]="false"
                   [nzShowPagination]="false" nzBordered>
           <thead>
           <tr>
@@ -280,14 +265,14 @@
           </ng-container>
           </tbody>
         </nz-table>
-        <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
+        <div class="header header-green-background mg-t-10" >
           <div class="header-text">
             <div class="title-chi-tieu">
               <span class="text-uppercase font-weight-bold">HÀNG DỮ TRỮ QUỐC GIA</span>
             </div>
           </div>
         </div>
-        <nz-table class="nowrap mg-t-10 pd-10" [nzFrontPagination]="false" *ngIf="isTongHop"
+        <nz-table class="nowrap mg-t-10 pd-10" [nzFrontPagination]="false"
                   [nzShowPagination]="false" nzBordered>
           <thead>
           <tr>
@@ -349,24 +334,24 @@
                       style="width: 35px"></td>
                   <td></td>
                   <td></td>
-                  <td class="font-weight-bold">{{lv1.tenNhomTiLeBaoHiem}}</td>
+                  <td class="font-weight-bold">{{lv1.tenHangHoaCha}}</td>
                   <td></td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(lv1.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
