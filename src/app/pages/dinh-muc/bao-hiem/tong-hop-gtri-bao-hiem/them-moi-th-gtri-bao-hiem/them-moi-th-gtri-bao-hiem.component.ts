@@ -18,11 +18,11 @@ import {
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
 
 @Component({
-  selector: 'app-them-moi-bao-hiem-qd-mua-sam',
-  templateUrl: './them-moi-bao-hiem-qd-mua-sam.component.html',
-  styleUrls: ['./them-moi-bao-hiem-qd-mua-sam.component.scss']
+  selector: 'app-them-moi-th-gtri-bao-hiem',
+  templateUrl: './them-moi-th-gtri-bao-hiem.component.html',
+  styleUrls: ['./them-moi-th-gtri-bao-hiem.component.scss']
 })
-export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements OnInit {
+export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   listTongHop: any[] = [];

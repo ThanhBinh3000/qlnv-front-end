@@ -116,8 +116,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
     if (listHh.listQlDinhMucThGiaTriBaoHiem && listHh.listQlDinhMucThGiaTriBaoHiem.length > 0) {
       this.tableGiaTriBh = listHh.listQlDinhMucThGiaTriBaoHiem
-      if (this.tableGiaTriBh && this.tableGiaTriBh.length > 0) {
-      }
     }
   }
 
