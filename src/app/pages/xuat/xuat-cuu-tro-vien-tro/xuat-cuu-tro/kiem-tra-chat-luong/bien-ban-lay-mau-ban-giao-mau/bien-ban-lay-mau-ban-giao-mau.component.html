@@ -209,7 +209,7 @@
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_LDCC  && userService.isCuc()
+                                        <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_LDCC)  && userService.isCuc()
                                          && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>

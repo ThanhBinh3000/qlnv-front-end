@@ -74,7 +74,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
         soBienBan: ['', [Validators.required]],
         ngayLayMau: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
         nguoiKn: [],
         truongPhong: [],
