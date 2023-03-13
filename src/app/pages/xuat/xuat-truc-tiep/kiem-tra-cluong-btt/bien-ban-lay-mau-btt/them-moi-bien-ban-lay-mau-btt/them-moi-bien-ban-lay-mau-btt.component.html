@@ -8,12 +8,13 @@
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và Gửi duyệt</span>
     </button>
-    <button class="btn btn-do btn-sub do" (click)="pheDuyet(false)" *ngIf="isDisabled()  && userService.isChiCuc()">
+    <button class="btn btn-do btn-sub do" (click)="pheDuyet(false)"
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isChiCuc()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
     <button class="btn btn-xanh btn-sub xanh-nhat" (click)="pheDuyet(true)"
-      *ngIf="isDisabled()  && userService.isChiCuc()">
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC)  && userService.isChiCuc()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
@@ -207,7 +208,7 @@
             <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
-                <nz-form-control>
+                <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
                     <input nz-input formControlName="tenNganKho" readonly />
                   </nz-input-group>

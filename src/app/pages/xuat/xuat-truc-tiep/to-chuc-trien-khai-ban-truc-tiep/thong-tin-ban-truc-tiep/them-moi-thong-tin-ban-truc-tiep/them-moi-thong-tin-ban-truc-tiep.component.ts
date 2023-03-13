@@ -220,9 +220,9 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   clearItemRow() {
-    let soLuong = this.rowItem.soLuong;
+    // let soLuong = this.rowItem.soLuong;
     this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
-    this.rowItem.soLuong = soLuong;
+    // this.rowItem.soLuong = soLuong;
     this.rowItem.id = null;
   }
 
