@@ -81,7 +81,7 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       maDvi : this.userInfo.MA_DVI,
       capDvi : this.userInfo.CAP_DVI,
-      loai : '01',
+      loai : '00',
     })
     await this.search();
   }

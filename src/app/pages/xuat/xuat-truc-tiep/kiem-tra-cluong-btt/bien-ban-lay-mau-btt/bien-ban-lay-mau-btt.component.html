@@ -86,7 +86,7 @@
                             <td></td>
                             <td></td>
                             <td class="text-left">
-                                <a (click)="redirectToChiTiet(false, 0,data.id)">
+                                <a (click)="redirectToChiTiet(false, 0,data.id)" *ngIf="userService.isChiCuc()">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
@@ -102,9 +102,9 @@
                                 <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                                 <td>{{ dataChild.tenDiemKho }}</td>
                                 <td>{{ dataChild.tenLoKho }}</td>
+                                <td>BB tịnh kho</td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>BB tịnh kho</td>
                                 <td>{{ dataChild.tenTrangThai }}</td>
                                 <td class="text-left">
                                     <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC "

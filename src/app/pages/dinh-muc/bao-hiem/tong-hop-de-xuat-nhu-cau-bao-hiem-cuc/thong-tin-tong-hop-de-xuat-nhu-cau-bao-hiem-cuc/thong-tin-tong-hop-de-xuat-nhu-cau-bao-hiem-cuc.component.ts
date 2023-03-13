@@ -14,9 +14,6 @@ import {STATUS} from "../../../../../constants/status";
 import {
   DeXuatNhuCauBaoHiemService
 } from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
-import {
-  BaoHiemKhoDangChuaHang
-} from "../../de-xuat-hop-dong-chi-cuc/them-moi-de-xuat-bao-hiem-cc/them-moi-de-xuat-bao-hiem-cc.component";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-bao-hiem-cuc',
@@ -28,12 +25,12 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   @Input() isView: boolean;
   listDxChiCuc: any[] = [];
   isTongHop: boolean = false;
-  rowItem: BaoHiemKhoDangChuaHang = new BaoHiemKhoDangChuaHang();
-  dataEdit: { [key: string]: { edit: boolean; data: BaoHiemKhoDangChuaHang } } = {};
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
   maCv: string;
   tableHangDtqg: any[] = [];
+  dataHang: any[] = [];
+  tableGiaTriBh: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -50,7 +47,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       maDvi: [null],
       capDvi: [null],
       namKeHoach: [dayjs().get('year')],
-      soCv: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
@@ -84,10 +80,51 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
   }
 
+  convertList(listHh) {
+    if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+      this.dataHang = listHh.listQlDinhMucDxBhKhoChua
+      this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
+          tenDonViCha: key,
+          idVirtual: uuid.v4(),
+        })
+      ).value()
+      this.dataHang.forEach(item => {
+        if (listHh.listQlDinhMucDxBhKhoChua && listHh.listQlDinhMucDxBhKhoChua.length > 0) {
+          if (!item.dataChildKho) {
+            item.dataChildKho = []
+          }
+          let arrKho = listHh.listQlDinhMucDxBhKhoChua
+          let arrDetailKho = arrKho.filter(data => data.tenDonViCha == item.tenDonViCha)
+          arrDetailKho = this.convertListData(arrDetailKho);
+          if (arrDetailKho) {
+            item.dataChildKho = arrDetailKho
+          }
+        }
+
+        if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+          if (!item.dataChildHang) {
+            item.dataChildHang = []
+          }
+          let arrHang = listHh.listQlDinhMucDxBhHdtqg
+          let detailArrHang = arrHang.filter(data => data.tenDonViCha == item.tenDonViCha)
+          detailArrHang = this.buildDiaDiemTc(detailArrHang);
+          if (detailArrHang) {
+            item.dataChildHang = detailArrHang
+          }
+        }
+      })
+    }
+    if (listHh.listQlDinhMucThGiaTriBaoHiem && listHh.listQlDinhMucThGiaTriBaoHiem.length > 0) {
+      this.tableGiaTriBh = listHh.listQlDinhMucThGiaTriBaoHiem
+    }
+  }
+
   async tongHop() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formDataTongHop);
     if (this.formDataTongHop.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      this.spinner.hide()
       return;
     }
     let body = this.formDataTongHop.value;
@@ -108,50 +145,16 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.deXuatBaoHiemSv.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let detail = res.data;
-      if (detail && detail.listQlDinhMucDxBhKhoChua) {
-        this.formData.patchValue({
-          namKeHoach: this.formDataTongHop.value.namKeHoach,
-        })
-        this.dataTable = detail.listQlDinhMucDxBhKhoChua
-        this.dataTable.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual:uuid.v4()
-        })
-        this.convertListData()
-      }
-      if (detail && detail.listQlDinhMucDxBhHdtqg) {
-        this.tableHangDtqg = detail.listQlDinhMucDxBhHdtqg
-        this.tableHangDtqg.forEach(item => {
-          let arr = detail.listQlDinhMucDxBaoHiemHdr;
-          if (arr && arr.length > 0) {
-            arr.forEach(dtl => {
-              if (dtl.id == item.bhHdrId) {
-                item.maDvi = dtl.maDvi
-              }
-            })
-          }
-          item.id = null;
-          item.ghiChu = null;
-          idVirtual:uuid.v4()
-        })
-        this.buildDiaDiemTc()
-      }
-
       this.isTongHop = true;
+      let detail = res.data;
+      this.convertList(detail)
+      this.spinner.hide()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
+      this.spinner.hide()
       return;
     }
+    this.spinner.hide()
   }
 
   async loadDsDxCc() {
@@ -169,7 +172,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
         }
       } else {
         this.listDxChiCuc = [];
@@ -187,21 +190,20 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
   async save(isOther: boolean) {
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach,
-      giaTriDx  : this.sumslKho('giaTriBhDx', null, 'tong')
     })
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
     }
+    this.convertAllTreToArray()
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.conVertTreToList();
-    this.convertListHangDtqg();
     this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
     let data = await this.createUpdate(this.formData.value)
     if (data) {
       if (isOther) {
@@ -209,8 +211,33 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       } else {
         this.goBack()
       }
-    } else {
-      this.convertListData()
+    }
+  }
+
+  convertAllTreToArray() {
+    this.dataTable = [];
+    this.tableHangDtqg = []
+    if (this.dataHang && this.dataHang.length > 0) {
+      this.dataHang.forEach(item => {
+        if (item.dataChildHang && item.dataChildHang.length > 0) {
+          let arr = this.conVertArrayHang(item.dataChildHang);
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              dtl.id = null
+              this.tableHangDtqg = [...this.tableHangDtqg, dtl]
+            })
+          }
+        }
+        if (item.dataChildKho && item.dataChildKho.length > 0) {
+          let arr = this.conVertTreToList(item.dataChildKho);
+          if (arr && arr.length > 0) {
+            arr.forEach(dtl => {
+              dtl.id = null
+              this.dataTable = [...this.dataTable, dtl]
+            })
+          }
+        }
+      })
     }
   }
 
@@ -223,16 +250,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           this.isTongHop = true;
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.patchValue({
-            soCv: this.formData.value.soCv ? this.formData.value.soCv.split('/')[0] : null
-          })
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTable = data.listQlDinhMucDxBhKhoChua;
-          this.tableHangDtqg = data.listQlDinhMucDxBhHdtqg;
-          await this.convertListData()
-          await this.buildDiaDiemTc()
-          await this.expandAll('kho');
-          await this.expandAll('dtqg');
+          this.convertList(res.data)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -250,67 +269,47 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_CBV : {
-        trangThai = STATUS.DA_KY;
+      case STATUS.TU_CHOI_LDV : {
+        trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.DA_KY : {
-        trangThai = STATUS.DA_DUYET_CBV
+      case STATUS.CHO_DUYET_LDV : {
+        trangThai = STATUS.DA_DUYET_LDV
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
-  convertListData() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenDonVi').map((value, key) => ({
+  convertListData(table: any): any[] {
+    if (table && table.length > 0) {
+      table = chain(table).groupBy('tenDonVi').map((value, key) => ({
           tenDonVi: key,
           dataChild: value,
           idVirtual: uuid.v4(),
         })
       ).value()
     }
-    this.expandAll('kho');
+    return table
   }
 
-  conVertTreToList() {
+  conVertTreToList(table: any[]): any[] {
     let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data)
-        })
-      }
-    })
-    this.dataTable = arr
-  }
-
-  convertListHangDtqg() {
-    let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
-        if (item.childData && item.childData.length > 0) {
-          item.childData.forEach(data => {
-            if (data.childData && data.childData.length > 0) {
-              data.childData.forEach(dtl => {
-                if (dtl.childData && dtl.childData.length > 0) {
-                  dtl.childData.forEach(dtl1 => {
-                    arr.push(dtl1)
-                  })
-                }
-              })
-            }
+    if (table && table.length > 0) {
+      table.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data)
           })
         }
       })
-      this.tableHangDtqg = arr
     }
+    return arr
   }
 
-  conVertArrayHang() : any[] {
+  conVertArrayHang(talbe: any[]): any[] {
     let arr = [];
-    if (this.tableHangDtqg) {
-      this.tableHangDtqg.forEach(item => {
+    if (talbe && talbe.length > 0) {
+      talbe.forEach(item => {
         if (item.childData && item.childData.length > 0) {
           item.childData.forEach(data => {
             if (data.childData && data.childData.length > 0) {
@@ -329,13 +328,13 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return arr;
   }
 
-  buildDiaDiemTc() {
-    if (this.tableHangDtqg && this.tableHangDtqg.length > 0) {
-      this.tableHangDtqg = chain(this.tableHangDtqg)
+  buildDiaDiemTc(table: any[]): any[] {
+    if (table && table.length > 0) {
+      table = chain(table)
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -348,7 +347,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -360,11 +359,11 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           };
         }).value();
     }
-    this.expandAll('dtqg');
+    return table;
   }
 
-  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
-    let array = this.conVertArrayHang();
+  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
+    let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
       switch (type) {
@@ -381,9 +380,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;
@@ -418,10 +417,10 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     return result;
   }
 
-  sumslKho(column?: string, tenDvi? : string, type?: string) : number {
+  sumslKho(table: any[], column?: string, tenDvi?: string, type?: string): number {
     let result = 0;
     let arr = [];
-    this.dataTable.forEach(item => {
+    table.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
           arr.push(data)
@@ -436,8 +435,8 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         }, 0);
         result = sum
       } else {
-        let list = arr.filter(item => item.tenDonVi == tenDvi )
-        if(list && list.length > 0) {
+        let list = arr.filter(item => item.tenDonVi == tenDvi)
+        if (list && list.length > 0) {
           const sum = list.reduce((prev, cur) => {
             prev += cur[column];
             return prev;
@@ -462,30 +461,6 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
     }
     return check;
   }
-
-
-  expandAll(type: string) {
-    if (type == 'kho') {
-      this.dataTable.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-      })
-    } else {
-      this.tableHangDtqg.forEach(s => {
-        this.expandSet.add(s.idVirtual);
-        if (s.childData && s.childData.length > 0) {
-          s.childData.forEach(item => {
-            this.expandSet.add(item.idVirtual);
-            if (item.childData && item.childData.length > 0) {
-              item.childData.forEach(item1 => {
-                this.expandSet.add(item1.idVirtual);
-              })
-            }
-          })
-        }
-      })
-    }
-  }
-
 
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
