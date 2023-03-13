@@ -241,8 +241,8 @@
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_KTVBQ || lv1.trangThai==STATUS.TU_CHOI_KT
-                                         || lv1.trangThai==STATUS.TU_CHOI_LDCC && userService.isChiCuc() && isOwner(lv1.maDvi)
+                                        <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_KTVBQ || lv1.trangThai==STATUS.TU_CHOI_KT
+                                         || lv1.trangThai==STATUS.TU_CHOI_LDCC )&& userService.isChiCuc() && isOwner(lv1.maDvi)
                                         && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBHD_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>

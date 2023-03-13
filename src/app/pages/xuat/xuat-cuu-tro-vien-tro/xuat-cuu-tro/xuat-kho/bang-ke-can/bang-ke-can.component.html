@@ -150,7 +150,7 @@
                             (click)="editRow(lv2,true)"></i>
                         </a>
                         <a>
-                          <i class="fa fa-edit" *ngIf="lv2.trangThai === STATUS.DU_THAO || lv2.trangThai === STATUS.TU_CHOI_LDCC 
+                          <i class="fa fa-edit" *ngIf="(lv2.trangThai === STATUS.DU_THAO || lv2.trangThai === STATUS.TU_CHOI_LDCC )
                            && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_THEM')"
                             (click)="editRow(lv2,false)"></i>
                         </a>

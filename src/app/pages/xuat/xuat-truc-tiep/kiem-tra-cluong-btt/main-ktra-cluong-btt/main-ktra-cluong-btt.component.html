@@ -1,0 +1,10 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)">
+            Biên bản lấy mẫu/bàn giao mẫu
+        </li>
+    </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+    <app-bien-ban-lay-mau-btt [loaiVthh]="loaiVthh"></app-bien-ban-lay-mau-btt>
+</ng-container>

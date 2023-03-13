@@ -1,24 +1,25 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {chain, cloneDeep} from 'lodash';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { chain, cloneDeep } from 'lodash';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
+import { MESSAGE } from "src/app/constants/message";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import {STATUS} from "src/app/constants/status";
+import { STATUS } from "src/app/constants/status";
 import * as uuid from "uuid";
-import {DonviService} from "src/app/services/donvi.service";
+import { DonviService } from "src/app/services/donvi.service";
+import { Validators } from '@angular/forms';
 
 /*export class noiDungCuuTro {
   idVirtual: number;
@@ -67,15 +68,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   statusForm: any = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
-              private danhMucService: DanhMucService,
-              private donViService: DonviService,
-              private danhMucTieuChuanService: DanhMucTieuChuanService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private danhMucService: DanhMucService,
+    private donViService: DonviService,
+    private danhMucTieuChuanService: DanhMucTieuChuanService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
       id: [],
@@ -84,7 +85,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       maDvi: [],
       ngayKy: [],
       idQdPd: [],
-      soQdPd: [],
+      soQdPd: ['', [Validators.required]],
       soBbHaoDoi: [],
       soBbTinhKho: [],
       loaiVthh: [],
@@ -162,17 +163,17 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => ({
-              idVirtual: uuid.v4(),
-              tenChiCuc: k,
-              soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
-              tenCloaiVthh: v[0].tenCloaiVthh,
-              tonKhoChiCuc: v[0].tonKhoChiCuc,
-              childData: v
-            })
+            idVirtual: uuid.v4(),
+            tenChiCuc: k,
+            soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
+            tenCloaiVthh: v[0].tenCloaiVthh,
+            tonKhoChiCuc: v[0].tonKhoChiCuc,
+            childData: v
+          })
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
         let donViTinh = value[0].donViTinh;
-        return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh};
+        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh };
       }).value();
     this.noiDungCuuTroView = dataView
     console.log(JSON.stringify(this.noiDungCuuTroView), 'noiDungCuuTroView')
@@ -554,7 +555,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   async selectHangHoa(event: any) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
