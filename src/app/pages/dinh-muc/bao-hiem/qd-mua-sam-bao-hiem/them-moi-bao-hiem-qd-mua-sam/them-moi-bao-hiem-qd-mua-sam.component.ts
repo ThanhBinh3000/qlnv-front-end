@@ -209,6 +209,9 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+          })
           if (this.formData.value.maTh) {
             this.typeQd ='TH'
           } else {
