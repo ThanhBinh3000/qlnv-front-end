@@ -3,8 +3,14 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Biên bản lấy mẫu/bàn giao mẫu
         </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Phiếu kiểm nghiệm chất lượng
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
     <app-bien-ban-lay-mau-btt [loaiVthh]="loaiVthh"></app-bien-ban-lay-mau-btt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-phieu-ktra-cluong-btt [loaiVthh]="loaiVthh"></app-phieu-ktra-cluong-btt>
 </ng-container>
