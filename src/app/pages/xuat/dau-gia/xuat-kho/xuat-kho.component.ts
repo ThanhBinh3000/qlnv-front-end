@@ -13,19 +13,13 @@ export class XuatKhoComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loaiVTHHGetAll();
   }
   // VTHH: loại vật tư hàng hoá
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -33,6 +27,7 @@ export class XuatKhoComponent implements OnInit {
           element.count = 0;
           this.tabs.push(element);
         });
+        this.selectTab(this.tabs[0].ma)
       }
     }
   }
