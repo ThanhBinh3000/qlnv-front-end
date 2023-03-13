@@ -210,6 +210,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
+    this.formData.value.giaTriDx = this.sumTable(this.dataTable, 'giaTriBhDx') + this.sumTable(this.tableHangDtqg, 'giaTriBhDx')
     this.formData.value.soCv = this.formData.value.soCv + this.maCv
     this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
     this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
@@ -411,8 +412,10 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
     if (list && list.length > 0) {
       if (type) {
         type.donViTinh = list[0].maDviTinh
+        type.tenHangHoa = list[0].ten
       } else {
         this.rowItemHh.donViTinh = list[0].maDviTinh
+        this.rowItemHh.tenHangHoa = list[0].ten
       }
       let body = {
         maDvi: this.userInfo.MA_DVI,
@@ -420,7 +423,7 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
       }
       let res = await this.deXuatBaoHiemSv.trangThaiHt(body);
       if (res && res.data && res.data.length > 0) {
-        let listHh= res.data.filter(item => item.maVthh == event)
+        let listHh = res.data.filter(item => item.maVthh == event)
         if (listHh) {
           const sum = listHh.reduce((prev, cur) => {
             prev += cur.slHienThoi;
@@ -434,6 +437,16 @@ export class ThemMoiDeXuatBaoHiemCcComponent extends Base2Component implements O
         }
       }
     }
+  }
+
+  sumTable(talbe?: any[], column?: string): number {
+    let result = 0;
+    const sum = talbe.reduce((prev, cur) => {
+      prev += cur[column];
+      return prev;
+    }, 0);
+    result = sum
+    return result;
   }
 }
 
@@ -450,6 +463,7 @@ export class BaoHiemKhoDangChuaHang {
   giaTriDk: number;
   giaTriHt: number;
   tichLuong: number;
+  giaTriTc: number;
 }
 
 
@@ -465,5 +479,6 @@ export class BaoHiemHangDtqg {
   giaTriHt: number;
   soLuongHt: number;
   soLuongDk: number;
+  giaTriTc: number;
 }
 

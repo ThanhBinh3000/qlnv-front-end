@@ -68,7 +68,7 @@ export class TongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component im
       })
     }
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       capDvi : 2
     })
     await this.search();
@@ -77,8 +77,8 @@ export class TongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component im
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
-      capDvi :2
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : 2
     })
     await this.search();
   }

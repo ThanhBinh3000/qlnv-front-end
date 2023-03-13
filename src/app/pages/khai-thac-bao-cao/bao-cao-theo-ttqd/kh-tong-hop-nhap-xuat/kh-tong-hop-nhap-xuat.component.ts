@@ -14,7 +14,6 @@ import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { DanhMucService } from "../../../../services/danhmuc.service";
-import { LOAI_HANG_DTQG } from "../../../../constants/config";
 
 @Component({
   selector: "app-kh-tong-hop-nhap-xuat",
@@ -51,7 +50,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
-        cloaiVthh: [],
+        cloaiVthh: []
       }
     );
   }
@@ -88,6 +87,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async preView() {
     try {
       this.spinner.show();
+      this.setListCondition();
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
@@ -154,15 +154,26 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     }
   }
 
-  changeCloaiVthh(event) {
-
-  }
-  addRow () {
-    this.rows.push({})
+  addRow() {
+    this.rows.push({});
   }
 
   deleteRow(index: number) {
-    this.rows.splice(index, 1)
+    this.rows.splice(index, 1);
+  }
+
+  setListCondition() {
+    debugger
+    let listVthhCondition = [];
+    let listCloaiVthhCondition = [];
+    listVthhCondition.push(this.selectedVthhCache);
+    listCloaiVthhCondition.push(this.selectedCloaiVthhCache);
+    this.rows.forEach((item) => {
+      listVthhCondition.push(item.loaiVthh);
+      listCloaiVthhCondition.push(item.cloaiVthh);
+    });
+    this.formData.get("loaiVthh").setValue(listVthhCondition);
+    this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
 
 }
