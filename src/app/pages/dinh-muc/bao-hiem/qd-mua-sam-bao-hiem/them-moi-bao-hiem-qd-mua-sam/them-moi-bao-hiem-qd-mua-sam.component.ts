@@ -249,6 +249,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   convertList(listHh) {
     if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+      this.dataHang = []
       this.dataHang = listHh.listQlDinhMucDxBhKhoChua
       this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
           tenDonViCha: key,
@@ -282,6 +283,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
       })
     }
     if (listHh.listQlDinhMucThGiaTriBaoHiem && listHh.listQlDinhMucThGiaTriBaoHiem.length > 0) {
+      this.tableGiaTriBh = []
       this.tableGiaTriBh = listHh.listQlDinhMucThGiaTriBaoHiem
     }
   }
@@ -372,9 +374,13 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   }
 
 
-  async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
+  async changSoTh(event, type? : string) {
+      let result;
+    if (type == 'DX') {
+      result =this.listDxCuc.filter(item => item.id = event)
+    } else {
+      result = this.listTongHop.filter(item => item.id = event)
+    }
       if (result && result.length > 0) {
         let detailTh = result[0]
         let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
@@ -386,7 +392,6 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
       }
-    }
   }
 
   chonMaTongHop() {
@@ -409,7 +414,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
             maTh :  data.id,
             maDx :  null,
           })
-          await this.changSoTh(data.id);
+          await this.changSoTh(data.id, 'TH');
         }
       })
     }
@@ -434,7 +439,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
             maDx :  data.soCv,
             maTh :  null,
           })
-          await this.changSoTh(data.id);
+          await this.changSoTh(data.id, 'DX');
         }
       })
     }

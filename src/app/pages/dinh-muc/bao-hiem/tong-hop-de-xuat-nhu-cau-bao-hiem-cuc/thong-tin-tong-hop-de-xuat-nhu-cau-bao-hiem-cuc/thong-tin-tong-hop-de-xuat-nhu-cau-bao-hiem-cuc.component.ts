@@ -172,7 +172,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
         }
       } else {
         this.listDxChiCuc = [];

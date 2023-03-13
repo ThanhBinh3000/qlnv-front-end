@@ -168,7 +168,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
         }
       } else {
         this.listDxChiCuc = [];
@@ -326,7 +326,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -339,7 +339,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -354,7 +354,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
     this.expandAll('dtqg');
   }
 
-  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string) : number {
+  sumSoLuongHang(column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string) : number {
     let array = this.conVertArrayHang();
     let result = 0;
     if (array && array.length > 0) {
@@ -372,9 +372,9 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Comp
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;

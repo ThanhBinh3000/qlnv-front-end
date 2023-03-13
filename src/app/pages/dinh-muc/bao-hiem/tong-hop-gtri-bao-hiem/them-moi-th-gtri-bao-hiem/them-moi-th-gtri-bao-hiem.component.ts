@@ -11,11 +11,7 @@ import * as uuid from "uuid";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {QdMuaSamBhService} from "../../../../../services/qd-mua-sam-bh.service";
-import {
-  DeXuatNhuCauBaoHiemService
-} from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {TongHopGtriBaoHiemService} from "../../../../../services/tong-hop-gtri-bao-hiem.service";
 
 @Component({
   selector: 'app-them-moi-th-gtri-bao-hiem',
@@ -25,8 +21,6 @@ import {
 export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  listTongHop: any[] = [];
-  listDxCuc: any[] = [];
   tableHangDtqg: any[] = [];
   maQd: string
   expandSet = new Set<number>();
@@ -39,10 +33,10 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatBaoHiemSv: DeXuatNhuCauBaoHiemService,
-    private qdMuaSamService: QdMuaSamBhService
+    private gtriBaoHiemService: TongHopGtriBaoHiemService
+
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
+    super(httpClient, storageService, notification, spinner, modal, gtriBaoHiemService)
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
@@ -68,6 +62,8 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     try {
       if (this.id > 0) {
         await this.detail(this.id);
+      } else {
+        this.getDetailCtiet()
       }
       this.spinner.hide();
     } catch (e) {
@@ -76,6 +72,15 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async getDetailCtiet() {
+    let res =await  this.gtriBaoHiemService.getDetailCtiet()
+    if (res.msg == MESSAGE.SUCCESS ) {
+      console.log(res.data, 222222)
+    }
+  }
+
+
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -135,7 +140,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
   async detail(id) {
     this.spinner.show();
     try {
-      let res = await this.qdMuaSamService.getDetail(id);
+      let res = await this.gtriBaoHiemService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
@@ -297,75 +302,6 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
         }).value();
     }
     return table;
-  }
-
-
-  async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.convertList(res.data)
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
-        }
-      }
-    }
-  }
-
-  chonMaTongHop() {
-    if (!this.isView && this.typeQd == 'TH') {
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂm CỦA CÁC CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listTongHop ,
-          type :this.formData.value.loai
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maTh :  data.id,
-            maDx :  null,
-          })
-          await this.changSoTh(data.id);
-        }
-      })
-    }
-  }
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
-          })
-          await this.changSoTh(data.id);
-        }
-      })
-    }
   }
 
   sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string): number {

@@ -288,9 +288,13 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
+  async changSoTh(event, type? : string) {
+      let result;
+    if (type == 'DX') {
+      result = this.listDxCuc.filter(item => item.id = event)
+    } else {
+      result = this.listTongHop.filter(item => item.id = event)
+    }
       if (result && result.length > 0) {
         let detailTh = result[0]
         let res = await this.dxChiCucService.getDetail(detailTh.id);
@@ -315,7 +319,6 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           this.notification.error(MESSAGE.ERROR, res.msg)
         }
       }
-    }
   }
 
   chonMaTongHop() {
@@ -338,7 +341,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
               maTh :  data.id,
               maDx :  null,
             })
-            await this.changSoTh(data.id);
+            await this.changSoTh(data.id,'TH');
         }
       })
     }
@@ -363,7 +366,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
             maDx :  data.soCv,
             maTh :  null,
           })
-          await this.changSoTh(data.id);
+          await this.changSoTh(data.id,'DX');
         }
       })
     }

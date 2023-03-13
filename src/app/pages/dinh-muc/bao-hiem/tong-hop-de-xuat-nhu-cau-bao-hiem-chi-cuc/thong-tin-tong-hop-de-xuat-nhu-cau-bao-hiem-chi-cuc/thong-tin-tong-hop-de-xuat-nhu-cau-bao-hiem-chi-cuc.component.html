@@ -266,18 +266,18 @@
                 style="width: 35px"></td>
             <td></td>
             <td></td>
-            <td class="font-weight-bold">{{lv1.tenHangHoaCha}}</td>
+            <td class="font-weight-bold">{{lv1.tenNhomTiLeBaoHiem}}</td>
             <td></td>
             <td
-              class="font-weight-bold text-center">{{sumSoLuongHang('soLuongHt',null,  lv1.tenHangHoaCha, null,  'tenHangHoaCha') | number: '1.0-1'}}</td>
+              class="font-weight-bold text-center">{{sumSoLuongHang('soLuongHt',null,  lv1.tenNhomTiLeBaoHiem, null,  'tenNhomTiLeBaoHiem') | number: '1.0-1'}}</td>
             <td
-              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriHt', null, lv1.tenHangHoaCha, null,  'tenHangHoaCha') | number: '1.0-1'}}</td>
+              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriHt', null, lv1.tenNhomTiLeBaoHiem, null,  'tenNhomTiLeBaoHiem') | number: '1.0-1'}}</td>
             <td
-              class="font-weight-bold text-center">{{sumSoLuongHang('soLuongDk', null, lv1.tenHangHoaCha, null,   'tenHangHoaCha') | number: '1.0-1'}}</td>
+              class="font-weight-bold text-center">{{sumSoLuongHang('soLuongDk', null, lv1.tenNhomTiLeBaoHiem, null,   'tenNhomTiLeBaoHiem') | number: '1.0-1'}}</td>
             <td
-              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriDk',  null, lv1.tenHangHoaCha,  null, 'tenHangHoaCha') | number: '1.0-1'}}</td>
+              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriDk',  null, lv1.tenNhomTiLeBaoHiem,  null, 'tenNhomTiLeBaoHiem') | number: '1.0-1'}}</td>
             <td
-              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriBhDx', null,  lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-1'}}</td>
+              class="font-weight-bold text-center">{{sumSoLuongHang('giaTriBhDx', null,  lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-1'}}</td>
           </tr>
           <ng-container *ngIf="expandSet.has(lv1.idVirtual)">
             <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
