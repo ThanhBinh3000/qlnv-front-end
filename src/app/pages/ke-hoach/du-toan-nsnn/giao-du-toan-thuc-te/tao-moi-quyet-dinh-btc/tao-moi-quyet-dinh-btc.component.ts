@@ -494,6 +494,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
+      maLoaiDan: "1",
       // maPa: this.maPa,
       maPa: this.maPa,
       namPa: this.namPa,

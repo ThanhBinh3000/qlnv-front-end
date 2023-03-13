@@ -98,6 +98,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     const requestReport = {
       maPhanGiao: '1',
       maLoai: '2',
+      maLoaiDan: [1,2],
       maPa: this.searchFilter.maPa,
       namPa: this.searchFilter.namPa,
       ngayTaoDen: this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR),

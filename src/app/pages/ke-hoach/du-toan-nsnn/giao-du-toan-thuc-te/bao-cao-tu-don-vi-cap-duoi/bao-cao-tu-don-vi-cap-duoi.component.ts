@@ -51,6 +51,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '2',
     maLoai: '2',
+    maLoaiDan: [1,2],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,

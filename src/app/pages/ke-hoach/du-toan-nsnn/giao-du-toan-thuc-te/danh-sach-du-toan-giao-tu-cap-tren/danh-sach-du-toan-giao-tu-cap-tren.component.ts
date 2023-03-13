@@ -63,11 +63,11 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
   trangThai!: string;
   loaiDuAns: any[] = [
     {
-      id: '1',
+      id: [1],
       tenDm: 'Giao dự toán'
     },
     {
-      id: '2',
+      id: [2],
       tenDm: 'Giao, diều chỉnh dự toán'
     }
   ];

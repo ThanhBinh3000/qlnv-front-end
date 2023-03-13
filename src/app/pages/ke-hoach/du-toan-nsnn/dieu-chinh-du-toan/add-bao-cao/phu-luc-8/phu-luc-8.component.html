@@ -41,7 +41,7 @@
               </label>
             </th>
             <th rowSpan="2">STT</th>
-            <th rowSpan="2" nzWidth="300px">Mặt hàng</th>
+            <th nzWidth="300px" rowSpan="2" >Mặt hàng</th>
             <th rowSpan="2">ĐVT</th>
             <th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
             <th colSpan="3">Lượng hàng thực hiện</th>
@@ -86,8 +86,9 @@
         <tbody>
           <tr>
             <td [hidden]="status"></td>
-            <td ></td>
-            <td nzWidth="300px">Tổng cộng</td>
+            <td></td>
+            <td>Tổng cộng</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -106,7 +107,7 @@
           <tr>
             <td [hidden]="status"></td>
             <td></td>
-            <td>Phát sinh điều chỉnh tăng</td>
+            <td>Phát sinh điều chỉnh giảm</td>
             <td></td>
             <td></td>
             <td></td>
@@ -152,7 +153,7 @@
               <td class="text-center">
                 {{getChiMuc(data.stt)}}
               </td>
-              <td nzWidth="300px">
+              <td>
                 {{data.matHang}}
               </td>
               <td>{{data.maDviTinh}}</td>

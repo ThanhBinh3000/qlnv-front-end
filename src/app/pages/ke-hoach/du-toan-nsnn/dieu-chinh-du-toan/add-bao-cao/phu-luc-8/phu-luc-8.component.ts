@@ -55,7 +55,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-8',
   templateUrl: './phu-luc-8.component.html',
-  styleUrls: ['./phu-luc-8.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc8Component implements OnInit {
   @Input() dataInfo;
@@ -186,6 +186,7 @@ export class PhuLuc8Component implements OnInit {
     })
     this.sortByIndex();
     this.sum1();
+    this.getTotal()
     // this.tinhTong();
     this.updateEditCache();
     this.getStatusButton();

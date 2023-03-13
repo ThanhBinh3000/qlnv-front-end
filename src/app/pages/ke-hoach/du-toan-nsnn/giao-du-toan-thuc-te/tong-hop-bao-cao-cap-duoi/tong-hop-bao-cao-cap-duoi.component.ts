@@ -53,10 +53,11 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '2',
     maLoai: '2',
+    maLoaiDan: [1,2],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
-    maBcao: "",
+    maPa: "",
     donViTao: "",
     // trangThai: "",
     paggingReq: {
@@ -246,7 +247,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     this.searchFilter.namPa = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
-    this.searchFilter.maBcao = null
+    this.searchFilter.maPa = null
+    this.searchFilter.maLoaiDan = [1,2]
     this.trangThai = null;
     this.onSubmit();
   }
@@ -257,13 +259,13 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     if (maLoaiDan == "1") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
     } else if (maLoaiDan == "2") {
       const obj = {
         id: id,
-        tabSelected: 'addBaoCao',
+        tabSelected: 'phuongAnGiaoDieuChinh',
       }
       this.dataChange.emit(obj);
     } else {

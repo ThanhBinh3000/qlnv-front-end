@@ -28,7 +28,7 @@
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Mã báo cáo</label>
-        <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
+        <input class="search__input" nz-input [(ngModel)]="searchFilter.maPa" />
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Trạng thái</label>
@@ -117,7 +117,7 @@
           <td>
             {{getUnitName(item.maDvi)}}
           </td>
-          <td>{{item.maBcao}}</td>
+          <td>{{item.maPa}}</td>
           <td>{{item.ngayTao}}</td>
           <td>
             {{item.namPa}}

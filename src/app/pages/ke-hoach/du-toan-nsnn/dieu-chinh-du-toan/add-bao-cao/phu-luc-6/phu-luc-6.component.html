@@ -60,6 +60,7 @@
             <th>Thành tiền (đồng) (Tổng nhu cầu năm nay)</th>
           </tr>
           <tr>
+            <th [hidden]="status"></th>
             <th>A</th>
             <th>B</th>
             <th>C</th>
@@ -206,11 +207,11 @@
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThienTte"
-                    [options]="amount" />
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" [options]="amount" />
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.sluongThienUocThien"
-                    [options]="amount" />
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" [options]="amount" />
                 </td>
                 <td>
                   {{displayValue(editCache[data.id].data.sluongThienCong)}}
@@ -223,11 +224,10 @@
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanGiaoLke"
-                    [options]="amount" />
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDchinh"
-                    [options]="amount" />
+                  {{displayValue(editCache[data.id].data.dtoanDchinh)}}
                 </td>
                 <td *ngIf="viewAppraisalValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"

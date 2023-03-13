@@ -10,7 +10,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getHead, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CurrencyMaskInputMode } from 'ngx-currency';
@@ -51,7 +51,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-5',
   templateUrl: './phu-luc-5.component.html',
-  styleUrls: ['./phu-luc-5.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc5Component implements OnInit {
   @Input() dataInfo;
@@ -649,43 +649,30 @@ export class PhuLuc5Component implements OnInit {
   };
 
   tinhTong() {
-    // this.tongSo = 0;
-    // this.tongSoTd = 0;
-    // this.tongThienNamTruoc = 0;
-    // this.tongDuToan = 0;
-    // this.tongUoc = 0;
-    // this.tongDmuc = 0;
-    // this.lstCtietBcao.forEach(item => {
-    //   if (item.level == "0") {
-    //     this.tongSo += item.ttienNamDtoan;
-    //     this.tongSoTd += item.ttienTd;
-    //     this.tongThienNamTruoc += item.thienNamTruoc;
-    //     this.tongDuToan += item.dtoanNamHtai;
-    //     this.tongUoc += item.uocNamHtai;
-    //     this.tongDmuc += item.dmucNamDtoan;
-    //   }
-    // })
     this.tongDieuChinhGiam = 0;
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if (item.dtoanDchinh < 0) {
-        this.tongDieuChinhGiam += item.dtoanDchinh;
-      } else {
-        this.tongDieuChinhTang += item.dtoanDchinh;
-      }
+      const str = item.stt
+      if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+        if (item.dtoanDchinh < 0) {
+          this.tongDieuChinhGiam += item.dtoanDchinh;
+        } else {
+          this.tongDieuChinhTang += item.dtoanDchinh;
+        }
 
-      if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += item.dtoanVuTvqtDnghi;
-      } else {
-        this.dToanVuTang += item.dtoanVuTvqtDnghi;
+        if (item.dtoanVuTvqtDnghi < 0) {
+          this.dToanVuGiam += item.dtoanVuTvqtDnghi;
+        } else {
+          this.dToanVuTang += item.dtoanVuTvqtDnghi;
+        }
       }
     })
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.tongCong = mulNumber(this.editCache[id].data.sluongThucTe, this.editCache[id].data.soluongUocThien);
+    this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.sluongThucTe, this.editCache[id].data.soluongUocThien]);
     this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
     this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanDaGiaoLke - this.editCache[id].data.thanhTien
   }
