@@ -3,22 +3,33 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
-                    <div nz-col nzSpan="4">
-                        <label>Biên bản lấy mẫu/bàn giao mẫu</label>
-                        <input placeholder="Nhập số quyết định" nz-input formControlName="soBienBan" />
+                    <div nz-col nzSpan="2">
+                        <label> Năm kế hoạch </label>
+                        <nz-select formControlName="namKh">
+                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                        </nz-select>
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số QĐ giao nhiệm vụ xuất hàng</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="soQd" />
+                        <label>Số QĐ giao NV xuất hàng</label>
+                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQd" />
                     </div>
-                    <div nz-col nzSpan="10">
-                        <label>Đơn vị kiểu nghiệm</label>
+                    <div nz-col nzSpan="4">
+                        <label>Số phiếu kiểm nghiệm chất lượng</label>
+                        <input placeholder="Nhập nội dung" nz-input formControlName="soPhieu" />
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <label>Ngày kiểm nghiệm</label>
+                        <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <label>Số biên bản lấy mẫu/ bàn giao mẫu</label>
                         <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Ngày lấy mẫu</label>
-                        <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label>Số biên bản xuất dốc kho</label>
+                        <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
                     </div>
+
                 </div>
             </form>
             <div class="cangiua group-button-search">
@@ -40,8 +51,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-                    (click)="redirectToChiTiet(false, 0)">
+                <button type="button" class="btn btn-main" *ngIf="userService.isCuc()" (click)="goDetail(null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -58,13 +68,14 @@
                         <th>Số QĐ giao nhiệm vụ XH</th>
                         <th>Năm KH</th>
                         <th>Thời gian XH trước ngày</th>
-                        <th>Số BB LM/BGM</th>
-                        <th>Ngày lấy mẫu</th>
+                        <th>Số phiếu KNCL</th>
+                        <th>Ngày kiểm nghiệm</th>
                         <th>Điểm kho</th>
                         <th>Lô kho</th>
+                        <th>Số BB LM/BGM</th>
+                        <th>Ngày lấy mẫu</th>
                         <th>Số BB tịnh kho</th>
                         <th>Ngày xuất dốc kho</th>
-                        <th>Số BB hao dôi</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -85,38 +96,36 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                             <td class="text-left">
-                                <a (click)="redirectToChiTiet(false, 0,data.id)" *ngIf="userService.isChiCuc()">
-                                    <i class="fa fa-plus"></i>
-                                </a>
                             </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <tr *ngFor="let dataChild of data.xhBbLayMauBttHdrList">
+                            <tr *ngFor="let dataChild of data.xhPhieuKtraCluongBttHdrList">
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{ dataChild.soBienBan }}</td>
-                                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                                <td>{{ dataChild.soPhieu }}</td>
+                                <td>{{ dataChild.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                                 <td>{{ dataChild.tenDiemKho }}</td>
                                 <td>{{ dataChild.tenLoKho }}</td>
+                                <td>{{ dataChild.soBienBan }}</td>
+                                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
                                 <td>BB tịnh kho</td>
-                                <td></td>
                                 <td>BB tịnh kho</td>
                                 <td>{{ dataChild.tenTrangThai }}</td>
                                 <td class="text-left">
-                                    <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC "
-                                        (click)="redirectToChiTiet(true, dataChild.id)">
+                                    <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDC"
+                                        (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
                                         <i class="fa fa-eye"></i>
                                     </a>
-                                    <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDCC "
-                                        (click)="redirectToChiTiet(false, dataChild.id)">
+                                    <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDC"
+                                        (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a *ngIf="dataChild.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()"
-                                        (click)="delete(dataChild)">
+                                    <a *ngIf="dataChild.trangThai == STATUS.DU_THAO" (click)="delete(dataChild)">
                                         <i class="fa fa-trash-o do"></i>
                                     </a>
                                 </td>
@@ -145,7 +154,6 @@
     </div>
 </div>
 <div *ngIf="isDetail">
-    <app-them-moi-bien-ban-lay-mau-btt [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-        [loaiVthh]="loaiVthh" [idQdGiaoNvXh]="idQdGiaoNvXh">
-    </app-them-moi-bien-ban-lay-mau-btt>
+    <app-them-phieu-ktra-cluong-btt [loaiVthh]="loaiVthh" [id]="idSelected" (showListEvent)="showList()">
+    </app-them-phieu-ktra-cluong-btt>
 </div>
