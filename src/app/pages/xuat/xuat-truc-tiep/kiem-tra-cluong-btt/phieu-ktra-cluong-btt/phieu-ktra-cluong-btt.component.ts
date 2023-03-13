@@ -1,26 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { MESSAGE } from 'src/app/constants/message';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
+import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
 
 @Component({
-  selector: 'app-bien-ban-lay-mau-btt',
-  templateUrl: './bien-ban-lay-mau-btt.component.html',
-  styleUrls: ['./bien-ban-lay-mau-btt.component.scss']
+  selector: 'app-phieu-ktra-cluong-btt',
+  templateUrl: './phieu-ktra-cluong-btt.component.html',
+  styleUrls: ['./phieu-ktra-cluong-btt.component.scss']
 })
-export class BienBanLayMauBttComponent extends Base2Component implements OnInit {
+export class PhieuKtraCluongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
-  selectedId: number = 0;
-  isView: boolean = false;
-  isTatCa: boolean = false;
-  idQdGiaoNvXh: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -29,16 +24,17 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
-    private bienBanLayMauBttService: BienBanLayMauBttService,
+    private phieuKtraCluongBttService: PhieuKtraCluongBttService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
-      soBienBan: null,
+      namKh: null,
       soQd: null,
-      trichYeu: null,
-      ngayLayMau: null,
-      maChiCuc: null,
+      soPhieu: null,
       loaiVthh: null,
+      trichYeu: null,
+      ngayTao: null,
+      maChiCuc: null,
       trangThai: this.STATUS.BAN_HANH
     })
 
@@ -46,15 +42,14 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
       soQd: '',
       namKh: '',
       ngayTao: '',
-      soHd: '',
-      tenLoaiVthh: '',
-      tenCloaiVthh: '',
-      tgianGnhan: '',
-      trichYeu: '',
-      bbTinhKho: '',
-      bbHaoDoi: '',
+      soPhieu: '',
+      ngayKnghiem: '',
+      tenDiemKho: '',
+      tenLoKho: '',
+      soBienBan: '',
+      ngayLayMau: '',
       tenTrangThai: '',
-      tenTrangThaiXh: '',
+
     };
   }
 
@@ -91,7 +86,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
           let body = {
             id: item.id
           };
-          this.bienBanLayMauBttService.delete(body).then(async () => {
+          this.phieuKtraCluongBttService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -104,12 +99,5 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     });
   }
 
-
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvXh?: number) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = isView;
-    this.idQdGiaoNvXh = idQdGiaoNvXh;
-  }
 
 }

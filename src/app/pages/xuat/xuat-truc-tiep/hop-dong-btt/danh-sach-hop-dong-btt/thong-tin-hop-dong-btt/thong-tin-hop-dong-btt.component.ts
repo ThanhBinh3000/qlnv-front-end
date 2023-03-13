@@ -207,34 +207,67 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async openDialogKqBTT() {
     this.spinner.show()
     let listQdKq: any[] = [];
-    let body = {
-      loaiVthh: this.loaiVthh,
-      namKh: this.formData.value.namHd,
-      maDvi: this.userInfo.MA_DVI
-    };
-    let res = await this.qdPdKetQuaBttService.search(body)
-    if (res.data) {
-      listQdKq = res.data?.content;
-    }
-    this.spinner.hide();
-    const modalQD = this.modal.create({
-      nzTitle: 'Thông tin Kết quả chào giá',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-        dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
-        dataTable: listQdKq
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.onChangeKqBTT(data.id);
+    if (this.userService.isCuc()) {
+      let body = {
+        loaiVthh: this.loaiVthh,
+        namKh: this.formData.value.namHd,
+        maDvi: this.userInfo.MA_DVI
+      };
+
+      let res = await this.qdPdKetQuaBttService.search(body)
+      if (res.data) {
+        listQdKq = res.data?.content;
       }
-    });
+      this.spinner.hide();
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin Kết quả chào giá',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+          dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
+          dataTable: listQdKq
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.onChangeKqBTT(data.id);
+        }
+      });
+    } else {
+      let body = {
+        loaiVthh: this.loaiVthh,
+        namKh: this.formData.value.namHd,
+        maChiCuc: this.userInfo.MA_DVI
+      };
+
+      let res = await this.qdPdKetQuaBttService.search(body)
+      if (res.data) {
+        listQdKq = res.data?.content;
+      }
+      this.spinner.hide();
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin Kết quả chào giá',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+          dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
+          dataTable: listQdKq
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.onChangeKqBTT(data.id);
+        }
+      });
+    }
   }
 
   async onChangeKqBTT(id) {

@@ -304,7 +304,22 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   }
 
   deleteRow(i: number) {
-    this.dataTable = this.dataTable.filter((item, index) => index != i);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async save(isGuiDuyet?) {

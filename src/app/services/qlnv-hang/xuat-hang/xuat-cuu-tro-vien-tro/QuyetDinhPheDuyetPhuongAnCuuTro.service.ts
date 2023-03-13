@@ -8,7 +8,7 @@ import {environment} from "../../../../../environments/environment";
   providedIn: 'root',
 })
 export class QuyetDinhPheDuyetPhuongAnCuuTroService extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'cuu-tro/quyet-dinh', '');
