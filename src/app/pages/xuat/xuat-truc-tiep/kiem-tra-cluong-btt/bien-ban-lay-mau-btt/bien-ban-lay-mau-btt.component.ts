@@ -38,6 +38,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
       trichYeu: null,
       ngayLayMau: null,
       maChiCuc: null,
+      loaiVthh: null,
       trangThai: this.STATUS.BAN_HANH
     })
 

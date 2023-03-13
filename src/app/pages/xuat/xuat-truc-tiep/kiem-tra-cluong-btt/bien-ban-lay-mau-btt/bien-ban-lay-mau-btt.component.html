@@ -86,7 +86,7 @@
                             <td></td>
                             <td></td>
                             <td class="text-left">
-                                <a (click)="redirectToChiTiet(false, 0,data.id)">
+                                <a (click)="redirectToChiTiet(false, 0,data.id)" *ngIf="userService.isChiCuc()">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
