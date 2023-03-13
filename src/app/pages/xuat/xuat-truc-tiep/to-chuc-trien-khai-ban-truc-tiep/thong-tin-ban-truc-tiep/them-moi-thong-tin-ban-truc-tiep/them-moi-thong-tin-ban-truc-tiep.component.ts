@@ -55,7 +55,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         maDvi: [''],
         tenDvi: ['', [Validators.required]],
         pthucBanTrucTiep: [''],
-        diaDiemChaoGia: [null, [Validators.required]],
+        diaDiemChaoGia: [],
         ngayMkho: [null, [Validators.required]],
         ngayKthuc: [null, [Validators.required]],
         loaiVthh: ['', [Validators.required]],

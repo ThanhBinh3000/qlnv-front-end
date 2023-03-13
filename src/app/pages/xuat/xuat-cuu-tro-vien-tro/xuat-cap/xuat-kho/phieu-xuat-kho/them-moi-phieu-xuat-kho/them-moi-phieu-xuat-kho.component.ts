@@ -15,6 +15,7 @@ import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-ha
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -55,20 +56,20 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         nam: [dayjs().get("year")],
         maDvi: [],
         maQhNs: [],
-        soPhieuXuatKho: [],
+        soPhieuXuatKho: ['', [Validators.required]],
         ngayTaoPhieu: [],
         ngayXuatKho: [],
         taiKhoanNo: [],
         taiKhoanCo: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
         idPhieuKnCl: [],
-        soPhieuKnCl: [],
+        soPhieuKnCl: ['', [Validators.required]],
         ngayKn: [],
         loaiVthh: [],
         cloaiVthh: [],
