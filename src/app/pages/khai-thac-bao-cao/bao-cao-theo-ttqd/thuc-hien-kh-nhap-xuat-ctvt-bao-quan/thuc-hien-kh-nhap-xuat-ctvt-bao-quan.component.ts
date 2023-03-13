@@ -1,26 +1,26 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { Globals } from "../../../../shared/globals";
-import * as dayjs from "dayjs";
-import { saveAs } from "file-saver";
-import { MESSAGE } from "../../../../constants/message";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
-import { Base2Component } from "../../../../components/base2/base2.component";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
+import { UserService } from "../../../../services/user.service";
+import { DonviService } from "../../../../services/donvi.service";
 import { DanhMucService } from "../../../../services/danhmuc.service";
+import { Globals } from "../../../../shared/globals";
+import * as dayjs from "dayjs";
+import { Validators } from "@angular/forms";
+import { MESSAGE } from "../../../../constants/message";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { saveAs } from "file-saver";
 
 @Component({
-  selector: "app-kh-tong-hop-nhap-xuat",
-  templateUrl: "./kh-tong-hop-nhap-xuat.component.html",
-  styleUrls: ["./kh-tong-hop-nhap-xuat.component.scss"]
+  selector: "app-thuc-hien-kh-nhap-xuat-ctvt-bao-quan",
+  templateUrl: "./thuc-hien-kh-nhap-xuat-ctvt-bao-quan.component.html",
+  styleUrls: ["./thuc-hien-kh-nhap-xuat-ctvt-bao-quan.component.scss"]
 })
-export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit {
+export class ThucHienKhNhapXuatCtvtBaoQuanComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   pdfBlob: any;
   selectedVthhCache: any;
@@ -50,7 +50,10 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
         maCuc: [],
         maChiCuc: [],
         loaiVthh: [],
-        cloaiVthh: []
+        cloaiVthh: [],
+        donViNhan: [],
+        moTai: [],
+        stk: [],
       }
     );
   }
@@ -89,6 +92,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
       this.spinner.show();
       this.setListCondition();
       let body = this.formData.value;
+      console.log("body", body);
       body.typeFile = "pdf";
       body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
       body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
@@ -175,5 +179,4 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     this.formData.get("loaiVthh").setValue(listVthhCondition);
     this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
   }
-
 }

@@ -1,26 +1,26 @@
-import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { Globals } from "../../../../shared/globals";
-import * as dayjs from "dayjs";
-import { saveAs } from "file-saver";
-import { MESSAGE } from "../../../../constants/message";
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
-import { Base2Component } from "../../../../components/base2/base2.component";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
+import { UserService } from "../../../../services/user.service";
+import { DonviService } from "../../../../services/donvi.service";
 import { DanhMucService } from "../../../../services/danhmuc.service";
+import { Globals } from "../../../../shared/globals";
+import * as dayjs from "dayjs";
+import { Validators } from "@angular/forms";
+import { MESSAGE } from "../../../../constants/message";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { saveAs } from "file-saver";
 
 @Component({
-  selector: "app-kh-tong-hop-nhap-xuat",
-  templateUrl: "./kh-tong-hop-nhap-xuat.component.html",
-  styleUrls: ["./kh-tong-hop-nhap-xuat.component.scss"]
+  selector: 'app-kh-luan-phien-doi-hang',
+  templateUrl: './kh-luan-phien-doi-hang.component.html',
+  styleUrls: ['./kh-luan-phien-doi-hang.component.scss']
 })
-export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit {
+export class KhLuanPhienDoiHangComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   pdfBlob: any;
   selectedVthhCache: any;
@@ -47,10 +47,16 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        maCuc: [],
-        maChiCuc: [],
-        loaiVthh: [],
-        cloaiVthh: []
+        maCuc: null,
+        maChiCuc: null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        thoiGianSx: null,
+        thoiGianSxTu: null,
+        thoiGianSxDen: null,
+        thoiGianNhapKho: null,
+        thoiGianNhapKhoTu: null,
+        thoiGianNhapKhoDen: null,
       }
     );
   }
@@ -77,7 +83,7 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.pdf");
+    saveAs(this.pdfBlob, "bc_kh_giam_hang_du_tru_quoc_gia.pdf");
   }
 
   closeDlg() {
@@ -87,11 +93,18 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   async preView() {
     try {
       this.spinner.show();
-      this.setListCondition();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      if (this.formData.value.thoiGianNhapKho) {
+        this.formData.value.thoiGianNhapKhoTu = dayjs(this.formData.value.thoiGianNhapKho[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianNhapKhoDen = dayjs(this.formData.value.thoiGianNhapKho[1]).format("YYYY-MM-DD");
+      }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
+      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
         this.pdfBlob = s;
@@ -154,26 +167,14 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
     }
   }
 
-  addRow() {
-    this.rows.push({});
+  changeCloaiVthh(event) {
+
+  }
+  addRow () {
+    this.rows.push({})
   }
 
   deleteRow(index: number) {
-    this.rows.splice(index, 1);
+    this.rows.splice(index, 1)
   }
-
-  setListCondition() {
-    debugger
-    let listVthhCondition = [];
-    let listCloaiVthhCondition = [];
-    listVthhCondition.push(this.selectedVthhCache);
-    listCloaiVthhCondition.push(this.selectedCloaiVthhCache);
-    this.rows.forEach((item) => {
-      listVthhCondition.push(item.loaiVthh);
-      listCloaiVthhCondition.push(item.cloaiVthh);
-    });
-    this.formData.get("loaiVthh").setValue(listVthhCondition);
-    this.formData.get("cloaiVthh").setValue(listCloaiVthhCondition);
-  }
-
 }
