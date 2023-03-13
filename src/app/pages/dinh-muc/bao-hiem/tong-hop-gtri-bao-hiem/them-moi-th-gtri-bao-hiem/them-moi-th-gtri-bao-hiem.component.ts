@@ -66,9 +66,6 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.maQd = '/QĐ-TCDT'
-      await this.loadDsDxCc();
-      await this.loadDxCuc();
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -77,72 +74,6 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-
-  async loadDsDxCc() {
-    this.spinner.show();
-    try {
-      let body = {
-        "capDvi": "1",
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.deXuatBaoHiemSv.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listTongHop = data.content;
-        if (this.listTongHop) {
-          this.listTongHop =  this.listTongHop.filter(
-            // (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.soQdMuaSam == null )
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV  )
-          )
-        }
-      } else {
-        this.listTongHop = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
-  async loadDxCuc() {
-    this.spinner.show();
-    try {
-      let body = {
-        "capDvi": "2",
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.deXuatBaoHiemSv.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listDxCuc = data.content;
-        if (this.listDxCuc) {
-          this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP )
-          )
-        }
-      } else {
-        this.listDxCuc = [];
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
     }
   }
 

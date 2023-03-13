@@ -3,10 +3,10 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  || formData.value.trangThai == STATUS.DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span>QUYẾT ĐỊNH MUA SẮM MÁY MÓC, THIẾT BỊ CHUYÊN DÙNG</span>
+        <span>TỔNG HỢP GIÁ TRỊ BẢO HIỂM ĐẾN HẾT 31/12 HÀNG NĂM</span>
       </div>
     </div>
     <div class="btn-group">
@@ -59,37 +59,15 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số quyết định</nz-form-label>
+            <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group [nzAddOnAfter]="maQd">
-                <input nz-input formControlName="soQd" [readonly]="isView"/>
+              <nz-input-group>
+                <input nz-input readonly formControlName="id"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
-          <nz-radio-group
-            [nzDisabled]="formData.value.trangThai !== '00'"
-            nzSize="small" class="rdo-input" [(ngModel)]="typeQd"   [ngModelOptions]="{standalone: true}">
-            <nz-form-item >
-              <label nz-radio nzValue="TH">Số tổng hợp</label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                  <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-            <nz-form-item>
-              <label nz-radio nzValue="DX">Số đề xuất/tờ trình</label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonSoDxCuc()">
-                  <input [readonly]="true" nz-input formControlName="maDx" readonly="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </nz-radio-group>
-        </div>
-        <div nz-col [nzSpan]="9">
+        <div nz-col [nzSpan]="14">
           <nz-form-item>
             <nz-form-label nzRequired>Trích yếu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -97,9 +75,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired>Ngày ký</nz-form-label>
+            <nz-form-label nzRequired>Ngày tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
                               formControlName="ngayKy">

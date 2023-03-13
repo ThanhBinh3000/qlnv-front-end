@@ -9,6 +9,7 @@ import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
 import {QdMuaSamBhService} from "../../../../services/qd-mua-sam-bh.service";
+import {TongHopGtriBaoHiemService} from "../../../../services/tong-hop-gtri-bao-hiem.service";
 
 @Component({
   selector: 'app-tong-hop-gtri-bao-hiem',
@@ -27,20 +28,19 @@ export class TongHopGtriBaoHiemComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdMuaSamService: QdMuaSamBhService
+    private gtriBaoHiemService: TongHopGtriBaoHiemService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
+    super(httpClient, storageService, notification, spinner, modal, gtriBaoHiemService)
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
-      soQd: [''],
+      soTh: [''],
       trichYeu: [''],
-      ngayKy: [''],
-      ngayKyTu: [''],
-      ngayKyDen: [''],
-      loai: ['00']
+      ngayTongHop: [''],
+      ngayTongHopTu: [''],
+      ngayTongHopDen: [''],
     });
     this.filterTable = {};
   }
@@ -63,10 +63,10 @@ export class TongHopGtriBaoHiemComponent extends Base2Component implements OnIni
   }
 
   async filter() {
-    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
+    if (this.formData.value.ngayTongHop && this.formData.value.ngayTongHop.length > 0) {
       this.formData.patchValue({
-        ngayKyTu :  dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
-        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+        ngayTongHopTu :  dayjs(this.formData.value.ngayTongHop[0]).format('DD/MM/YYYY'),
+        ngayTongHopDen : dayjs(this.formData.value.ngayTongHop[1]).format('DD/MM/YYYY')
       })
     }
     this.formData.patchValue({
@@ -101,10 +101,10 @@ export class TongHopGtriBaoHiemComponent extends Base2Component implements OnIni
           limit: this.pageSize,
           page: this.page - 1
         }
-        this.qdMuaSamService
+        this.gtriBaoHiemService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-quyet-dinh-mua-sam.xlsx'),
+            saveAs(blob, 'gia-tri-bao-hiem.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

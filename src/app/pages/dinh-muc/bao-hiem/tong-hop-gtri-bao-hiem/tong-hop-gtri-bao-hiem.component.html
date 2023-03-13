@@ -10,16 +10,16 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="3">
-            <label class="search__label">Số quyết định</label>
-            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd"/>
+            <label class="search__label">Số tổng hợp</label>
+            <input class="search__input" placeholder="Nhập text" nz-input formControlName="soTh"/>
           </div>
           <div nz-col nzSpan="14">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" placeholder="Nhập text" nz-input formControlName="trichYeu" />
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Ngày ký</label>
-            <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <label class="search__label">Ngày tổng hợp</label>
+            <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
         </div>
       </form>
@@ -59,28 +59,26 @@
                 [nzData]="dataTable">
         <thead>
         <tr>
-          <th width="45px">
+          <th nzWidth="45px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th width="45px">STT</th>
-          <th width="130px">Số quyết định</th>
-          <th width="130px">Năm kế hoạch</th>
-          <th width="130px">Ngày ký</th>
+          <th nzWidth="45px">STT</th>
+          <th nzWidth="130px">Số tổng hợp</th>
+          <th nzWidth="130px">Năm kế hoạch</th>
+          <th nzWidth="130px">Ngày tổng hợp</th>
           <th>Trích yếu</th>
-          <th width="130px">Giá trị bảo hiểm</th>
-          <th width="130px">Số tổng hợp</th>
-          <th width="130px">Mã đề xuất</th>
-          <th width="130px">Trạng thái</th>
-          <th width="120px">Hành động</th>
+          <th nzWidth="130px">Giá trị bảo hiểm</th>
+          <th nzWidth="130px">Trạng thái</th>
+          <th nzWidth="120px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTongHop"
+                     (input)="filterInTable('soTongHop',filterTable.soTongHop)" />
             </nz-input-group>
           </th>
           <th>
@@ -91,8 +89,8 @@
           </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
+                     (input)="filterInTable('ngayTongHop',filterTable.ngayTongHop)" />
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="calendar"></i>
@@ -106,20 +104,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGiaoCt"
-                     (input)="filterInTable('soQdCtieu',filterTable.soQdGiaoCt)" />
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTh"
-                     (input)="filterInTable('maTh',filterTable.maTh)" />
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maDx"
-                     (input)="filterInTable('maDx',filterTable.maDx)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaTriDx"
+                     (input)="filterInTable('giaTriDx',filterTable.giaTriDx)" />
             </nz-input-group>
           </th>
           <th>
@@ -134,7 +120,7 @@
         <tbody>
 
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td nzWidth="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
           </td>
@@ -143,9 +129,7 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soQdGiaoCt }}</td>
-          <td>{{ data.maTh }}</td>
-          <td>{{ data.maDx }}</td>
+          <td>{{ data.giaTriDx | number : '1.0-1' }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_XEM') &&(((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH) && userService.isTongCuc()) || userService.isCuc())">

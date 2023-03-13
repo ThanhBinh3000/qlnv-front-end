@@ -392,7 +392,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   chonMaTongHop() {
     if (!this.isView && this.typeQd == 'TH') {
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂm CỦA CÁC CỤC',
+        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂM CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
