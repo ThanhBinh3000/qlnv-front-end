@@ -50,7 +50,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
       namKeHoach: [dayjs().get('year'), Validators.required],
       maTh: [null],
       maDx: [null],
-      giaTriDx: [null],
+      tongGiaTri: [null],
       soQd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
@@ -97,8 +97,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         this.listTongHop = data.content;
         if (this.listTongHop) {
           this.listTongHop =  this.listTongHop.filter(
-            // (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.soQdMuaSam == null )
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV  )
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.qdMuaSamBhId == null )
           )
         }
       } else {
@@ -130,7 +129,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
           this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP )
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP && item.qdMuaSamBhId == null )
           )
         }
       } else {
@@ -148,8 +147,13 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
+    if (this.formData.invalid ) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.spinner.hide();
+      return;
+    }
+    if (!this.formData.value.maTh && ! this.formData.value.maDx) {
+      this.notification.error(MESSAGE.ERROR, 'Chọn số tổng hợp hoặc số đề xuất!')
       this.spinner.hide();
       return;
     }
@@ -159,7 +163,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
     }
     this.formData.value.listQlDinhMucQdMuaSamBhHdtqg = this.tableHangDtqg;
     this.formData.value.listQlDinhMucQdMuaSamBhKho = this.dataTable;
-    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    this.formData.value.tongGiaTri = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd
@@ -268,7 +272,6 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
             item.dataChildKho = arrDetailKho
           }
         }
-
         if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
           if (!item.dataChildHang) {
             item.dataChildHang = []
@@ -345,7 +348,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -358,7 +361,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -396,6 +399,8 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
 
   chonMaTongHop() {
     if (!this.isView && this.typeQd == 'TH') {
+      this.formData.controls["maDx"].clearValidators();
+      this.formData.controls["maTh"].setValidators([Validators.required])
       let modalQD = this.modal.create({
         nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂM CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
@@ -421,6 +426,8 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
   }
   chonSoDxCuc() {
     if (!this.isView && this.typeQd == 'DX') {
+        this.formData.controls["maTh"].clearValidators();
+        this.formData.controls["maDx"].setValidators([Validators.required]);
       let modalQD = this.modal.create({
         nzTitle:'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
         nzContent: DialogMmMuaSamComponent,
@@ -445,7 +452,7 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
     }
   }
 
-  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string): number {
+  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
     let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
@@ -463,9 +470,9 @@ export class ThemMoiBaoHiemQdMuaSamComponent extends Base2Component implements O
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;

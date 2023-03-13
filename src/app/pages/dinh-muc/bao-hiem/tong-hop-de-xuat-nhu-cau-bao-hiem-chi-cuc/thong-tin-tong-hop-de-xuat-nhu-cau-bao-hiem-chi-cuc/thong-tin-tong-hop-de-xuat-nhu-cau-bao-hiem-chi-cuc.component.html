@@ -192,20 +192,22 @@
           </td>
         </tr>
       </ng-container>
-      <tr>
-        <td></td>
-        <td></td>
-        <td class="font-weight-bold">Tổng</td>
-        <td></td>
-        <td></td>
-        <td class="font-weight-bold text-center">{{sumslKho('tichLuong', null, 'tong') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-center">{{sumslKho('dienTich', null, 'tong')| number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-center">{{sumslKho('giaTriHt', null, 'tong') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-center">{{sumslKho('giaTriDk', null, 'tong') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-center">{{sumslKho('giaTriBhDx', null, 'tong') | number: '1.0-1'}}</td>
-      </tr>
     </ng-container>
     </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td class="font-weight-bold">Tổng</td>
+      <td></td>
+      <td></td>
+      <td class="font-weight-bold text-center">{{sumslKho('tichLuong', null, 'tong') | number: '1.0-1'}}</td>
+      <td class="font-weight-bold text-center">{{sumslKho('dienTich', null, 'tong')| number: '1.0-1'}}</td>
+      <td class="font-weight-bold text-center">{{sumslKho('giaTriHt', null, 'tong') | number: '1.0-1'}}</td>
+      <td class="font-weight-bold text-center">{{sumslKho('giaTriDk', null, 'tong') | number: '1.0-1'}}</td>
+      <td class="font-weight-bold text-center">{{sumslKho('giaTriBhDx', null, 'tong') | number: '1.0-1'}}</td>
+    </tr>
+    </tfoot>
   </nz-table>
   <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
     <div class="header-text">
@@ -326,27 +328,28 @@
           </ng-container>
         </ng-container>
       </ng-container>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="font-weight-bold">Tổng</td>
-        <td></td>
-        <td
-          class="font-weight-bold text-center">{{sumSoLuongHang('soLuongHt',  null, null,null, 'tong') | number: '1.0-1'}}</td>
-        <td
-          class="font-weight-bold text-center">{{sumSoLuongHang('giaTriHt',  null, null, null,'tong') | number: '1.0-1'}}</td>
-        <td
-          class="font-weight-bold text-center">{{sumSoLuongHang('soLuongDk', null, null,  null, 'tong') | number: '1.0-1'}}</td>
-        <td
-          class="font-weight-bold text-center">{{sumSoLuongHang('giaTriDk',  null, null, null, 'tong') | number: '1.0-1'}}</td>
-        <td
-          class="font-weight-bold text-center">{{sumSoLuongHang('giaTriBhDx',  null, null, null,'tong') | number: '1.0-1'}}</td>
-      </tr>
     </ng-container>
-
     </tbody>
+    <tfoot>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="font-weight-bold">Tổng</td>
+      <td></td>
+      <td
+        class="font-weight-bold text-center">{{sumSoLuongHang('soLuongHt',  null, null,null, 'tong') | number: '1.0-1'}}</td>
+      <td
+        class="font-weight-bold text-center">{{sumSoLuongHang('giaTriHt',  null, null, null,'tong') | number: '1.0-1'}}</td>
+      <td
+        class="font-weight-bold text-center">{{sumSoLuongHang('soLuongDk', null, null,  null, 'tong') | number: '1.0-1'}}</td>
+      <td
+        class="font-weight-bold text-center">{{sumSoLuongHang('giaTriDk',  null, null, null, 'tong') | number: '1.0-1'}}</td>
+      <td
+        class="font-weight-bold text-center">{{sumSoLuongHang('giaTriBhDx',  null, null, null,'tong') | number: '1.0-1'}}</td>
+    </tr>
+    </tfoot>
   </nz-table>
 </div>
 <ng-template #error let-control>

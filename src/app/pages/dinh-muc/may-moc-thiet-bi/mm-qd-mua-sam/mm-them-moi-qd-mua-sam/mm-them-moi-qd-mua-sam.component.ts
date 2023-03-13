@@ -4,7 +4,7 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import { Validators} from "@angular/forms";
+import {Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
 import {v4 as uuidv4} from 'uuid';
@@ -32,7 +32,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   expandSet = new Set<number>();
-  typeQd : string
+  typeQd: string
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -58,7 +59,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
       fileDinhKems: [null],
       lyDoTuChoi: [null],
       listQlDinhMucQdMuaSamDtlReq: [null],
-      loai : ['00']
+      loai: ['00']
     });
   }
 
@@ -95,9 +96,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         let data = res.data;
         this.listTongHop = data.content;
         if (this.listTongHop) {
-         this.listTongHop =  this.listTongHop.filter(
-            // (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && item.soQdMuaSam == null )
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV  )
+          this.listTongHop = this.listTongHop.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_LDV && !item.qdMuaSamId)
           )
         }
       } else {
@@ -128,8 +128,8 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         let data = res.data;
         this.listDxCuc = data.content;
         if (this.listDxCuc) {
-          this.listDxCuc =  this.listDxCuc.filter(
-            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP )
+          this.listDxCuc = this.listDxCuc.filter(
+            (item) => (item.trangThai == this.STATUS.DA_DUYET_CBV && !item.qdMuaSamId && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
           )
         }
       } else {
@@ -179,16 +179,16 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd : this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
+            soQd: this.formData.value.soQd ? this.formData.value.soQd.split('/')[0] : null
           })
           if (this.formData.value.maTh) {
-            this.typeQd ='TH'
+            this.typeQd = 'TH'
           } else {
             this.typeQd = 'DX'
           }
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucQdMuaSamDtl;
-          if(this.userService.isCuc()) {
+          if (this.userService.isCuc()) {
             this.dataTable = this.dataTable.filter(item => item.maDvi = this.userInfo.MA_DVI)
           }
           this.dataTable.forEach(item => {
@@ -288,98 +288,99 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  async changSoTh(event, type? : string) {
-      let result;
+  async changSoTh(event, type?: string) {
+    let result;
     if (type == 'DX') {
       result = this.listDxCuc.filter(item => item.id = event)
     } else {
       result = this.listTongHop.filter(item => item.id = event)
     }
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.dxChiCucService.getDetail(detailTh.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.dataTable= []
-            const data = res.data;
-            this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
-            if (this.dataTable && this.dataTable.length > 0) {
-              this.dataTable.forEach(item => {
-                this.loadSlThuaThieu(item)
-                item.id = null;
-                item.ghiChu = null;
-                item.soLuong = item.soLuongTc
-                item.slTieuChuan = item.slTieuChuanTc
-              })
-              this.convertListData()
-              this.expandAll();
-            }
+    if (result && result.length > 0) {
+      let detailTh = result[0]
+      let res = await this.dxChiCucService.getDetail(detailTh.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.dataTable = []
+          const data = res.data;
+          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(item => {
+              this.loadSlThuaThieu(item)
+              item.id = null;
+              item.ghiChu = null;
+              item.soLuong = item.soLuongTc
+              item.slTieuChuan = item.slTieuChuanTc
+            })
+            this.convertListData()
+            this.expandAll();
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg)
       }
+    }
   }
 
   chonMaTongHop() {
     if (!this.isView && this.typeQd == 'TH') {
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
+        nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh:  this.listTongHop ,
-          type :this.formData.value.loai
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-            this.formData.patchValue({
-              maTh :  data.id,
-              maDx :  null,
-            })
-            await this.changSoTh(data.id,'TH');
-        }
-      })
-    }
-  }
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
+          listTh: this.listTongHop,
+          type: this.formData.value.loai
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
+            maTh: data.id,
+            maDx: null,
           })
-          await this.changSoTh(data.id,'DX');
+          await this.changSoTh(data.id, 'TH');
         }
       })
     }
   }
 
-  async loadSlThuaThieu(item : MmThongTinNcChiCuc) {
+  chonSoDxCuc() {
+    if (!this.isView && this.typeQd == 'DX') {
+      let modalQD = this.modal.create({
+        nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
+        nzContent: DialogMmMuaSamComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '700px',
+        nzFooter: null,
+        nzComponentParams: {
+          listTh: this.listDxCuc,
+          type: "02"
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.formData.patchValue({
+            maDx: data.soCv,
+            maTh: null,
+          })
+          await this.changSoTh(data.id, 'DX');
+        }
+      })
+    }
+  }
+
+  async loadSlThuaThieu(item: MmThongTinNcChiCuc) {
     if ((item.slTieuChuan - item.slNhapThem - item.slHienCo) >= 0) {
       item.chenhLechThieu = item.slTieuChuan - item.slNhapThem - item.slHienCo
     } else {
       item.chenhLechThieu = 0
     }
-    if (( item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
-      item.chenhLechThua = item.slNhapThem + item.slHienCo -item.slTieuChuan
+    if ((item.slNhapThem + item.slHienCo - item.slTieuChuan) >= 0) {
+      item.chenhLechThua = item.slNhapThem + item.slHienCo - item.slTieuChuan
     } else {
       item.chenhLechThua = 0
     }
