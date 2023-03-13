@@ -83,16 +83,16 @@ export class DialogTongHopComponent implements OnInit {
           console.log(data);
           this.response.lstCtietBcao = data.data.lstPa;
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
-          this.response.maPaCha = data.data.maPaCha;
+          // this.response.maPaCha = data.data.maPaCha;
           this.response.lstCtietBcao.forEach(item => {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
             }
-            item.lstCtietBcaos.forEach(itm => {
-              if (!itm.id) {
-                itm.id = uuid.v4() + 'FE';
-              }
-            });
+            // item.lstCtietBcaos.forEach(itm => {
+            //   if (!itm.id) {
+            //     itm.id = uuid.v4() + 'FE';
+            //   }
+            // });
           })
           // this.response.lstDviTrucThuoc.forEach(item => {
           //   item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);

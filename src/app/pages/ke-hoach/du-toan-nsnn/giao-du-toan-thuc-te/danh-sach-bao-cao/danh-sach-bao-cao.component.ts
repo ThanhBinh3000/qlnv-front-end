@@ -107,8 +107,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
     let requestReport
     if (this.userInfo.CAP_DVI == "3") {
       requestReport = {
-        loaiTimKiem: "0",
-        maPhanGiao: "3",
+        loaiTimKiem: "3",
+        maPhanGiao: "2",
         maLoai: "2",
         loaiDuAn: this.searchFilter.loaiDuAn,
         maBcao: this.searchFilter.maBaoCao,
@@ -126,10 +126,11 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     if (this.userInfo.CAP_DVI !== "3") {
       requestReport = {
-        loaiTimKiem: "0",
-        maPhanGiao: "3",
+        loaiTimKiem: "3",
+        // ma phan giao 4 de tim bao cao tong hop
+        maPhanGiao: "2",
         maLoai: "2",
-        loaiDuAn: this.searchFilter.loaiDuAn,
+        maLoaiDan: this.searchFilter.loaiDuAn,
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,

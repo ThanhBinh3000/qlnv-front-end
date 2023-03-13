@@ -112,7 +112,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.giaoDuToanChiService.timBaoCaoGiao1(requestReport).toPromise().then(
+    await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.dataTable = [];

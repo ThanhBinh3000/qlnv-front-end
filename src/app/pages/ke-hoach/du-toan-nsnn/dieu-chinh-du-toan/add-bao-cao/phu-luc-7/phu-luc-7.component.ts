@@ -38,7 +38,7 @@ export class ItemData {
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
   dmucHang: string;
-  khoachQdGiaoNvu: number;
+  khoachQdGiaoNvu: string;
   khoachLuong: number;
   tdiemBcaoLuong: number;
   tdiemBcaoDtoan: number;
@@ -69,7 +69,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-7',
   templateUrl: './phu-luc-7.component.html',
-  styleUrls: ['./phu-luc-7.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc7Component implements OnInit {
   @Input() dataInfo;
@@ -161,7 +161,6 @@ export class PhuLuc7Component implements OnInit {
   getTotal() {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
-      this.total.khoachQdGiaoNvu = sumNumber([this.total.khoachQdGiaoNvu, item.khoachQdGiaoNvu]);
       this.total.khoachLuong = sumNumber([this.total.khoachLuong, item.khoachLuong]);
       this.total.tdiemBcaoLuong = sumNumber([this.total.tdiemBcaoLuong, item.tdiemBcaoLuong]);
       this.total.tdiemBcaoDtoan = sumNumber([this.total.tdiemBcaoDtoan, item.tdiemBcaoDtoan]);
@@ -439,7 +438,7 @@ export class PhuLuc7Component implements OnInit {
       stt: "0",
       checked: false,
       dmucHang: "",
-      khoachQdGiaoNvu: 0,
+      khoachQdGiaoNvu: "",
       khoachLuong: 0,
       tdiemBcaoLuong: 0,
       tdiemBcaoDtoan: 0,

@@ -47,7 +47,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-4',
   templateUrl: './phu-luc-4.component.html',
-  styleUrls: ['./phu-luc-4.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc4Component implements OnInit {
   @Input() dataInfo;
@@ -98,6 +98,17 @@ export class PhuLuc4Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
+
+    this.userInfo = this.userService.getUserLogin();
+    this.formDetail = this.dataInfo?.data;
+    this.maDviTao = this.dataInfo?.maDvi;
+    this.thuyetMinh = this.formDetail?.thuyetMinh;
+    this.status = this.dataInfo?.status;
+    this.namBcao = this.dataInfo?.namBcao;
+    this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
+    this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
+    this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
     const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
     if (category) {
       category.data.forEach(
@@ -110,16 +121,6 @@ export class PhuLuc4Component implements OnInit {
         }
       )
     }
-    this.userInfo = this.userService.getUserLogin();
-    this.formDetail = this.dataInfo?.data;
-    this.maDviTao = this.dataInfo?.maDvi;
-    this.thuyetMinh = this.formDetail?.thuyetMinh;
-    this.status = this.dataInfo?.status;
-    this.namBcao = this.dataInfo?.namBcao;
-    this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-    this.statusPrint = this.dataInfo?.statusBtnPrint;
-    this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
-    this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -387,16 +388,19 @@ export class PhuLuc4Component implements OnInit {
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if (item.dtoanDchinhDnghiLanNay < 0) {
-        this.tongDieuChinhGiam += Number(item.dtoanDchinhDnghiLanNay);
-      } else {
-        this.tongDieuChinhTang += Number(item.dtoanDchinhDnghiLanNay);
-      }
+      const str = item.stt
+      if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+        if (item.dtoanDchinhDnghiLanNay < 0) {
+          this.tongDieuChinhGiam += Number(item.dtoanDchinhDnghiLanNay);
+        } else {
+          this.tongDieuChinhTang += Number(item.dtoanDchinhDnghiLanNay);
+        }
 
-      if (item.dtoanVuTvqtDnghi < 0) {
-        Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
-      } else {
-        Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+        if (item.dtoanVuTvqtDnghi < 0) {
+          Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
+        } else {
+          Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+        }
       }
     })
   };

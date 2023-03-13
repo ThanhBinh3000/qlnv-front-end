@@ -263,7 +263,7 @@ export class AddBaoCaoComponent implements OnInit {
             id: uuid.v4() + 'FE',
             maLoai: e.id,
             tenPl: e.tenPl,
-            tenDm: e.tenDm + 'năm' + this.baoCao.namBcao,
+            tenDm: e.tenDm + 'năm ' + this.baoCao.namBcao,
             trangThai: "3",
             lstCtietDchinh: [],
           });
@@ -273,7 +273,7 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao?.lstDchinh.forEach(item => {
           const pl = this.listAppendix.find(e => e.id == item.maLoai);
           item.tenPl = pl.tenPl;
-          item.tenDm = pl.tenDm + 'năm' + this.baoCao.namBcao;
+          item.tenDm = pl.tenDm + 'năm ' + this.baoCao.namBcao;
         })
         this.baoCao?.lstDviTrucThuoc.forEach(e => {
           if (e.ngayDuyet.includes('/')) {
@@ -293,22 +293,22 @@ export class AddBaoCaoComponent implements OnInit {
 
   async getChildUnit() {
     const request = {
-        maDviCha: this.baoCao.maDvi,
-        trangThai: '01',
+      maDviCha: this.baoCao.maDvi,
+      trangThai: '01',
     }
     await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-        data => {
-            if (data.statusCode == 0) {
-                this.childUnit = data.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, data?.msg);
-            }
-        },
-        (err) => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      data => {
+        if (data.statusCode == 0) {
+          this.childUnit = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
         }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
     )
-}
+  }
 
   getStatusButton() {
     const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
@@ -380,7 +380,7 @@ export class AddBaoCaoComponent implements OnInit {
           this.baoCao.lstDchinh.forEach(item => {
             const appendix = this.listAppendix.find(e => e.id == item.maLoai);
             item.tenPl = appendix.tenPl;
-            item.tenDm = appendix.tenDm;
+            item.tenDm = appendix.tenDm + 'năm ' + this.baoCao.namBcao;
           })
           this.listFile = [];
           this.getStatusButton();
