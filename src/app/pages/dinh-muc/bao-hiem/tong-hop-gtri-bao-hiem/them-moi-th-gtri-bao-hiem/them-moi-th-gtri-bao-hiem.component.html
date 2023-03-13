@@ -79,7 +79,8 @@
           <nz-form-item>
             <nz-form-label nzRequired>Ngày tổng hợp</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày tổng hợp"
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY"
+                              nzPlaceHolder="Ngày tổng hợp"
                               formControlName="ngayTongHop">
               </nz-date-picker>
             </nz-form-control>
@@ -98,7 +99,7 @@
       </div>
     </form>
   </nz-card>
-  <div class="header header-green-background mg-t-10" >
+  <div class="header header-green-background mg-t-10">
     <div class="header-text">
       <div class="title-chi-tieu">
         <span class="text-uppercase font-weight-bold">Tổng hợp giá trị mua bảo hiểm</span>
@@ -119,46 +120,57 @@
     <tbody *ngIf="tableGiaTriBh.length > 0">
     <tr *ngFor="let item of tableGiaTriBh, let idx = index">
       <td>{{item.stt}}</td>
-      <td  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-left' : ''">{{item.tenTsHh}}</td>
-      <td *ngIf="item.stt != '2' && item.stt != '2.2'"  [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.gtThamGiaBh | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{( tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
-      <td [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt != '2' && item.stt != '2.2'" [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan * item.gtThamGiaBh  | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2'" class="font-weight-bold text-right">{{(tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
-      <td *ngIf="item.stt == '2.2'" class="font-weight-bold text-right">{{(tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
+      <td [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-left' : ''">{{item.tenTsHh}}</td>
+      <td *ngIf="item.stt != '2' && item.stt != '2.2'"
+          [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.gtThamGiaBh | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt == '2'"
+          class="font-weight-bold text-right">{{(tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt == '2.2'"
+          class="font-weight-bold text-right">{{(tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
+      <td
+        [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt != '2' && item.stt != '2.2'"
+          [class]="item.stt == '1' || item.stt == '2' ? 'font-weight-bold text-right' : 'text-right'">{{item.tiLePhiCoBan * item.gtThamGiaBh  | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt == '2'"
+          class="font-weight-bold text-right">{{(tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) | number: '1.0-3' }}</td>
+      <td *ngIf="item.stt == '2.2'"
+          class="font-weight-bold text-right">{{(tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh)  | number: '1.0-3' }}</td>
     </tr>
     <tr>
       <td></td>
       <td class="font-weight-bold text-left">Tổng cộng (chưa VAT)</td>
-      <td class="font-weight-bold text-right">{{tableGiaTriBh[0].gtThamGiaBh+  tableGiaTriBh[2].gtThamGiaBh +tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh | number : '1.0-3' : 'vi-VN'}}</td>
+      <td
+        class="font-weight-bold text-right">{{tableGiaTriBh[0].gtThamGiaBh + tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].gtThamGiaBh | number : '1.0-3' : 'vi-VN'}}</td>
       <td></td>
-      <td class="font-weight-bold text-right">{{tableGiaTriBh[0].gtThamGiaBh  * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh | number : '1.0-3' : 'vi-VN'}}</td>
+      <td
+        class="font-weight-bold text-right">{{tableGiaTriBh[0].gtThamGiaBh * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh | number : '1.0-3' : 'vi-VN'}}</td>
     </tr>
     <tr>
       <td></td>
       <td class="font-weight-bold text-left">VAT(10%)</td>
       <td></td>
       <td></td>
-      <td class="font-weight-bold text-right">{{(tableGiaTriBh[0].gtThamGiaBh  * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) * 1/10 | number : '1.0-3' : 'vi-VN'}}</td>
+      <td
+        class="font-weight-bold text-right">{{(tableGiaTriBh[0].gtThamGiaBh * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) * 1 / 10 | number : '1.0-3' : 'vi-VN'}}</td>
     </tr>
     <tr>
       <td></td>
       <td class="font-weight-bold text-left">Tổng cộng</td>
       <td></td>
       <td></td>
-      <td class="font-weight-bold text-right">{{(tableGiaTriBh[0].gtThamGiaBh  * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) * 11/10 | number : '1.0-3' : 'vi-VN'}}</td>
+      <td
+        class="font-weight-bold text-right">{{(tableGiaTriBh[0].gtThamGiaBh * tableGiaTriBh[0].tiLePhiCoBan + tableGiaTriBh[2].tiLePhiCoBan * tableGiaTriBh[2].gtThamGiaBh + tableGiaTriBh[4].tiLePhiCoBan * tableGiaTriBh[4].gtThamGiaBh + tableGiaTriBh[5].tiLePhiCoBan * tableGiaTriBh[5].gtThamGiaBh) * 11 / 10 | number : '1.0-3' : 'vi-VN'}}</td>
     </tr>
     </tbody>
     <tbody *ngIf="tableGiaTriBh.length == 0"></tbody>
   </nz-table>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10" *ngFor="let item of dataHang, let idx = index">
-    <nz-collapse >
+    <nz-collapse class="text-uppercase font-weight-bold">
       <nz-collapse-panel [nzActive]="idx == 0 ? true : false" [nzHeader]="item.tenDonViCha">
-        <div class="header header-green-background mg-t-10" >
+        <div class="header header-green-background mg-t-10 ml-10">
           <div class="header-text">
             <div class="title-chi-tieu">
-              <span class="text-uppercase font-weight-bold">Kho đang chứa hàng</span>
+              <span style="font-weight: normal">Kho đang chứa hàng</span>
             </div>
           </div>
         </div>
@@ -173,7 +185,7 @@
             <th nzWidth="200px">Nhà kho</th>
             <th nzWidth="140px">Tích lượng (tấn)</th>
             <th nzWidth="140px">Diện tích (m2)</th>
-            <th nzWidth="220px">Giá trị bảo hiểm </th>
+            <th nzWidth="220px">Giá trị bảo hiểm</th>
           </tr>
           </thead>
           <tbody>
@@ -202,7 +214,8 @@
                 <td class="text-right">{{item.tichLuong | number: '1.0-3' }}</td>
                 <td class="text-right">{{item.dienTich | number: '1.0-3' }}</td>
                 <td>
-                  <nz-input-number class="text-center" [(ngModel)]="item.gtBaoHiem" [nzSize]="'small'" (ngModelChange)="sumKho()"
+                  <nz-input-number class="text-center" [(ngModel)]="item.gtBaoHiem" [nzSize]="'small'"
+                                   (ngModelChange)="sumKho()"
                                    [nzDisabled]="isView"
                                    [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
@@ -226,10 +239,10 @@
           </tr>
           </tfoot>
         </nz-table>
-        <div class="header header-green-background mg-t-10" >
+        <div class="header header-green-background mg-t-10 ml-10">
           <div class="header-text">
             <div class="title-chi-tieu">
-              <span class="text-uppercase font-weight-bold">HÀNG DỮ TRỮ QUỐC GIA</span>
+              <span style="font-weight: normal">HÀNG DỮ TRỮ QUỐC GIA</span>
             </div>
           </div>
         </div>
