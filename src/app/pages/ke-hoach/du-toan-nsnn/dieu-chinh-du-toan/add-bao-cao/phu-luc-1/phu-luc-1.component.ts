@@ -50,7 +50,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-1',
   templateUrl: './phu-luc-1.component.html',
-  styleUrls: ['./phu-luc-1.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc1Component implements OnInit {
   @Input() dataInfo;

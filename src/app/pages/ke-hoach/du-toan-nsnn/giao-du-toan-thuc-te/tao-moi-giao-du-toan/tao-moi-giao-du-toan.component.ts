@@ -956,7 +956,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
   // submit các nút chức năng check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-    debugger
     if (this.id) {
       const requestGroupButtons = {
         id: this.id,

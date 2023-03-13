@@ -296,7 +296,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       //     this.updateEditCache();
       //   }
       // });
-      debugger
       this.listIdFilesDelete = this.data?.listIdDeleteFiles;
       this.lstCtietBcao = this.data?.lstCtiets;
       this.maDvi = this.data?.maDvi;
