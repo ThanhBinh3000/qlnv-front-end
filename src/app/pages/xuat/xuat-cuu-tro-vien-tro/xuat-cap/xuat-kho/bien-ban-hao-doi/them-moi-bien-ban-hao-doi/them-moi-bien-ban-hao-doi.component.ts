@@ -17,6 +17,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
+import { Validators } from '@angular/forms';
 
 
 @Component({
@@ -62,9 +63,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: [],
         ngayTaoBb: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
@@ -72,7 +73,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         cloaiVthh: [],
         moTaHangHoa: [],
         idBbTinhKho: [],
-        soBbTinhKho: [],
+        soBbTinhKho: ['', [Validators.required]],
         ngayBatDauXuat: [],
         ngayKetThucXuat: [],
         tongSlNhap: [],
@@ -89,9 +90,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tiLeHaoDuoiDm: [],
         dinhMucHaoHut: [],
         sLHaoHutTheoDm: [],
-        nguyenNhan: [],
-        kienNghi: [],
-        ghiChu: [],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],

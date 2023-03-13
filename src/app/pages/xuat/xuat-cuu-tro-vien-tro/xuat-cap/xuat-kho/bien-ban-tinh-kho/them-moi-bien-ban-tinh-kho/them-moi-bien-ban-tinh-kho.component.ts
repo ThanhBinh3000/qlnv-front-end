@@ -17,6 +17,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { filter } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -60,9 +61,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         soBbTinhKho: [],
         ngayTaoBb: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
@@ -77,9 +78,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         slThucTeCon: [],
         slThua: [],
         slThieu: [],
-        nguyenNhan: [],
-        kienNghi: [],
-        ghiChu: [],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],
