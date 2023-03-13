@@ -113,7 +113,7 @@
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{userInfo.MA_QD}}">
                 <nz-input-number [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO"
-                                 [nzMax]="9999999" [nzMin]="1" [nzSize]="'small'" [nzStep]="1"
+                                 [nzMax]="999999999999" [nzMin]="1" [nzSize]="'small'" [nzStep]="1"
                                  formControlName="soQd">
                 </nz-input-number>
               </nz-input-group>
@@ -380,7 +380,7 @@
     <nz-form-item>
       <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
       <nz-form-control>
-        <nz-input-number [(ngModel)]="noiDungRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+        <nz-input-number [(ngModel)]="noiDungRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                          [nzSize]="'small'">
         </nz-input-number>
       </nz-form-control>
@@ -450,7 +450,7 @@
     <nz-form-item>
       <nz-form-label [nzXs]="7">Số lượng</nz-form-label>
       <nz-form-control>
-        <nz-input-number [(ngModel)]="noiDungRow.soLuongGiao" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+        <nz-input-number [(ngModel)]="noiDungRow.soLuongGiao" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                          [nzSize]="'small'">
         </nz-input-number>
       </nz-form-control>
@@ -458,7 +458,7 @@
     <nz-form-item>
       <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
       <nz-form-control>
-        <nz-input-number [(ngModel)]="noiDungRow.donGiaKhongVat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+        <nz-input-number [(ngModel)]="noiDungRow.donGiaKhongVat" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                          [nzSize]="'small'">
         </nz-input-number>
       </nz-form-control>
