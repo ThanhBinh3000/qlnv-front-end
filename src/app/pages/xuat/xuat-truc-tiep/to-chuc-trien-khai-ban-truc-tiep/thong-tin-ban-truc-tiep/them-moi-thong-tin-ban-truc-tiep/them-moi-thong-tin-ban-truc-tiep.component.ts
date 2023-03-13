@@ -55,7 +55,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         maDvi: [''],
         tenDvi: ['', [Validators.required]],
         pthucBanTrucTiep: [''],
-        diaDiemChaoGia: [null, [Validators.required]],
+        diaDiemChaoGia: [],
         ngayMkho: [null, [Validators.required]],
         ngayKthuc: [null, [Validators.required]],
         loaiVthh: ['', [Validators.required]],
@@ -139,10 +139,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   hoanThanhCapNhat() {
-    if (this.listOfData.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
-      return
-    }
+    // if (this.listOfData.length == 0) {
+    //   this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
+    //   return
+    // }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -220,9 +220,9 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   clearItemRow() {
-    let soLuong = this.rowItem.soLuong;
+    // let soLuong = this.rowItem.soLuong;
     this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
-    this.rowItem.soLuong = soLuong;
+    // this.rowItem.soLuong = soLuong;
     this.rowItem.id = null;
   }
 

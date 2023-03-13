@@ -47,16 +47,15 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       namKh: [''],
       soQdKq: [],
       soQdPd: [],
+      tenHd: [],
       tenDvi: [],
-      tenLoaiHdong: [],
-      soLuongDviTsan: [],
-      soLuongDviTsanTrung: [],
-      soLuongDviTsanTruot: [],
+      thanhTien: [],
+      tongSoLuongQdKh: [],
+      tongSoLuongQdKhDaky: [],
+      tongSoLuongQdKhChuaky: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       vat: ['5'],
-      soLuong: [],
-      tongTien: [''],
       trangThaiHd: [''],
       tenTrangThaiHd: [''],
     });
@@ -85,7 +84,6 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
 
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data, 999)
         await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(data.idPdKhDtl).then(dataTtin => {
           this.formData.patchValue({
             namKh: data.namKh,
@@ -95,6 +93,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
             tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
             trangThaiHd: data.trangThaiHd,
             tenTrangThaiHd: data.tenTrangThaiHd
+
           })
           this.dataTable = data.listHopDongBtt;
         });
@@ -108,6 +107,23 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
     $event.target.parentElement.classList.add('selectedRow')
     this.idHopDong = id;
     this.spinner.hide();
+
+    await this.hopDongBttService.getDetail(this.idHopDong)
+      .then(async (res) => {
+        const dataDtl = res.data;
+        this.formData.patchValue({
+          thanhTien: dataDtl.thanhTien,
+          tongSoLuongQdKh: dataDtl.tongSoLuongQdKh,
+          tongSoLuongQdKhDaky: dataDtl.tongSoLuongQdKhDaky,
+          tongSoLuongQdKhChuaky: dataDtl.tongSoLuongQdKhChuaky,
+        })
+
+      })
+      .catch((e) => {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
   }
 
   async redirectHopDong(isShowHd: boolean, id: number) {

@@ -17,6 +17,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
+import { Validators } from '@angular/forms';
 
 
 @Component({
@@ -62,9 +63,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: [],
         ngayTaoBb: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
@@ -72,7 +73,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         cloaiVthh: [],
         moTaHangHoa: [],
         idBbTinhKho: [],
-        soBbTinhKho: [],
+        soBbTinhKho: ['', [Validators.required]],
         ngayBatDauXuat: [],
         ngayKetThucXuat: [],
         tongSlNhap: [],
@@ -89,9 +90,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tiLeHaoDuoiDm: [],
         dinhMucHaoHut: [],
         sLHaoHutTheoDm: [],
-        nguyenNhan: [],
-        kienNghi: [],
-        ghiChu: [],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],
@@ -158,6 +159,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
+        type: "XUAT_CTVT",
 
       });
     }
@@ -181,6 +183,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoBbTinhKho() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
+      type: "XUAT_CTVT",
     }
     let res = await this.bienBanTinhKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -193,7 +196,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -303,7 +306,19 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let msg = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_KTVBQ:
       case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_KTVBQ;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -324,13 +339,21 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.TU_CHOI_KTVBQ;
+        break;
+      }
     }
     this.reject(this.idInput, trangThai)
   }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
-    if (trangThai == STATUS.CHO_DUYET_LDCC) {
+    if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.CHO_DUYET_KT || trangThai == STATUS.CHO_DUYET_KTVBQ) {
       return true
     }
     return false;

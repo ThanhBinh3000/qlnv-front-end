@@ -101,7 +101,12 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     };*/
     const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
+      if (this.userService.isTongCuc()) {
+        this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
+      } else {
+        this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
+      }
+
     }
 
   }

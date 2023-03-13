@@ -43,11 +43,13 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Chức vụ </nz-form-label>
-        <nz-form-control [nzErrorTip]="error">
-          <nz-input-group>
-            <input nz-input formControlName="position" [readOnly]="isView">
-          </nz-input-group>
-        </nz-form-control>
+<!--          <nz-input-group>-->
+<!--            <input nz-input formControlName="position" [readOnly]="isView">-->
+<!--          </nz-input-group>-->
+          <nz-select formControlName="position" nzAllowClear>
+            <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of optionsChucVu">
+            </nz-option>
+          </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">

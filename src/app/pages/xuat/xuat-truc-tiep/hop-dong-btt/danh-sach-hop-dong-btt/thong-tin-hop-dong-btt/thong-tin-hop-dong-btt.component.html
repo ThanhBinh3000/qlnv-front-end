@@ -90,10 +90,10 @@
                             <div nz-col [nzSpan]="2">
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
-                                    <nz-form-control>
+                                    <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group>
-                                            <nz-select nzMode="multiple" formControlName="maDviTsan"
-                                                [nzDisabled]="isDisabled()">
+                                            <nz-select nzMode="multiple" formControlName="listMaDviTsan"
+                                                (ngModelChange)="selectMaDviTsan()">
                                                 <nz-option *ngFor="let item of listDviTsan" [nzValue]="item.maDviTsan"
                                                     [nzLabel]="item.maDviTsan">
                                                 </nz-option>
@@ -101,7 +101,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="6">
+                            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" nzRequired> Chọn đơn vị cung cấp
                                     </nz-form-label>
@@ -289,11 +289,8 @@
                             </div>
                             <div nz-col [nzSpan]="12">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true"> Địa chỉ </nz-form-label>
-                                    <nz-form-control nz-col [nzErrorTip]="error">
-                                        <input placeholder="" nz-input formControlName="diaChi"
-                                            [readonly]="isDisabled()" />
-                                    </nz-form-control>
+                                    <nz-form-label [nzNoColon]="true"> Địa chỉ </nz-form-label>
+                                    <input nz-input [readonly]="true" formControlName="diaChi" />
                                 </nz-form-item>
                             </div>
                             <div nz-col [nzSpan]="6">
@@ -336,7 +333,7 @@
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Fax </nz-form-label>
                                     <nz-form-control nz-col [nzErrorTip]="error">
-                                        <input placeholder="" nz-input formControlName="fix"
+                                        <input placeholder="" nz-input formControlName="fax"
                                             [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -393,11 +390,9 @@
                             </div>
                             <div nz-col [nzSpan]="6">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true"> Mã số thuế </nz-form-label>
-                                    <nz-form-control nz-col [nzErrorTip]="error">
-                                        <input placeholder="" nz-input formControlName="mstDviMua"
-                                            [readonly]="isDisabled()" />
-                                    </nz-form-control>
+                                    <nz-form-label [nzNoColon]="true"> Mã số thuế </nz-form-label>
+                                    <input nz-input [readonly]="true" placeholder="Mã số thuế"
+                                        formControlName="mstDviMua" />
                                 </nz-form-item>
                             </div>
                             <div nz-col [nzSpan]="6">
@@ -483,7 +478,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="8">
+                            <div nz-col [nzSpan]="14">
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                                     <nz-form-control>
@@ -499,7 +494,7 @@
                             </div>
                             <div nz-col [nzSpan]="3">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Số lượng
+                                    <nz-form-label [nzNoColon]="true"> Số lượng bán TT
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
                                         <span class="text-green">{{formData.value.soLuong | number : '1.0-1' : 'vi_VN'
@@ -507,16 +502,11 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="6">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true">Đơn giá gồm thuế</nz-form-label>
-                                    <input [readonly]="true" nz-input formControlName="donGiaGomThue" readonly="true" />
-                                </nz-form-item>
-                            </div>
+
                             <div nz-col [nzSpan]="5">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
-                                    <input [readonly]="true" nz-input formControlName="tongTien" readonly="true" />
+                                    <input [readonly]="true" nz-input formControlName="thanhTien" readonly="true" />
                                 </nz-form-item>
                             </div>
                             <div nz-col [nzSpan]="1">
@@ -530,11 +520,11 @@
                             <div nz-col [nzSpan]="18">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
-                                    <input [ngModel]=" convertTienTobangChu(formData.value.tongTien)" nz-input readonly
+                                    <input [ngModel]=" convertTienTobangChu(formData.value.thanhTien)" nz-input readonly
                                         [ngModelOptions]="{standalone: true}" />
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="18">
+                            <div nz-col [nzSpan]="6">
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú
                                     </nz-form-label>
@@ -546,11 +536,37 @@
                             </div>
                             <div nz-col [nzSpan]="6">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Số lượng theo QĐ phê duyệt KH bán trực tiếp chưa
-                                        ký HĐ
+                                    <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán TT theo QĐ phê duyệt KH bán trực
+                                        tiếp
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-green">{{formData.value.soLuongQdChuaKy | number : '1.0-1' :
+                                        <span class="text-green">{{formData.value.tongSoLuongQdKh | number : '1.0-1' :
+                                            'vi_VN'
+                                            }}</span>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="6">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán TT theo QĐ phê duyệt KH bán trực
+                                        tiếp đã ký HĐ
+                                    </nz-form-label>
+                                    <nz-form-control nz-col [nzSpan]="24">
+                                        <span class="text-green">{{formData.value.tongSoLuongQdKhDaky | number : '1.0-1'
+                                            :
+                                            'vi_VN'
+                                            }}</span>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col [nzSpan]="6">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> SL xuất bán TT theo QĐ phê duyệt KH bán trực tiếp
+                                        chưa ký HĐ
+                                    </nz-form-label>
+                                    <nz-form-control nz-col [nzSpan]="24">
+                                        <span class="text-red">{{formData.value.tongSoLuongQdKhChuaky | number : '1.0-1'
+                                            :
                                             'vi_VN'
                                             }}</span>
                                     </nz-form-control>
@@ -562,65 +578,46 @@
             </nz-collapse>
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'Địa điểm giao, nhận hàng'" [nzActive]="true">
-                    <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-                        [nzShowPagination]="false">
+                    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                         <thead>
                             <tr>
-                                <th style="width: 2%;">STT</th>
-                                <th width="300px">Chi cục</th>
-                                <th width="300px">Địa chỉ</th>
-                                <th width="300px">SL bán trực tiếp</th>
-                                <th width="300px">Đơn giá đã bao gồm VAT(đ/kg)</th>
-                                <th width="300px">Thành tiền (đồng)</th>
-                                <th width="300px">Bằng chữ</th>
-                                <th width="300px" *ngIf=" formData.value.trangThai != STATUS.DA_KY">Hành Động</th>
+                                <th width="60px" class="text-center"></th>
+                                <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+                                <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
 
+                                <th class="text-center wrap">Lô kho</th>
+                                <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
+                                <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
+                                <th nzWidth="100px" class="text-center wrap">ĐVT</th>
+                                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
+                                <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let data of dataTable , let i = index">
-                                <ng-container *ngIf="!data.edit; else editTemplate">
-                                    <td class="text-center">{{i + 1}}</td>
-                                    <td>{{data.tenDvi}}</td>
-                                    <td>{{data.diaChi}}</td>
-                                    <td class="text-blue">{{data.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td class="text-blue">{{data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td class="text-blue">{{data.donGiaVat * data.soLuong * 1000| number : '1.0-1' :
-                                        'vi_VN'}}</td>
-                                    <td>{{ convertTienTobangChu(data.donGiaVat * data.soLuong * 1000)}}</td>
-                                    <td *ngIf=" formData.value.trangThai != STATUS.DA_KY">
-                                        <a (click)="startEdit(i)" class="text-center">
-                                            <i class=" fa fa-pencil"></i>
-                                        </a>
-                                        <a (click)="deleteRow(i)" class="text-center">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
+                            <ng-container *ngFor="let item of dataTable , let i = index">
+                                <tr>
+                                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                    <td colspan="4">{{item.tenDvi}}</td>
+                                    <td>{{item.soLuong}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <ng-container *ngIf="expandSet.has(i)">
+                                    <tr *ngFor="let children of item.children, let y = index">
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{children.tenDiemKho}}</td>
+                                        <td>{{children.tenLoKho}}</td>
+                                        <td>{{children.maDviTsan}}</td>
+                                        <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{children.dviTinh}}</td>
+                                        <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                                        <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}
+                                        </td>
+                                    </tr>
                                 </ng-container>
-                                <ng-template #editTemplate>
-                                    <td class="text-center">{{i + 1}}</td>
-                                    <td>{{data.tenDvi}}</td>
-                                    <td>{{data.diaChi}}</td>
-                                    <td>
-                                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong"
-                                            [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                                        </nz-input-number>
-                                    </td>
-                                    <td>{{data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{data.donGiaVat * data.soLuong * 1000| number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{ convertTienTobangChu(data.donGiaVat * data.soLuong * 1000)}}</td>
-                                    <td class="text-center" *ngIf=" formData.value.trangThai != STATUS.DA_KY">
-                                        <a (click)="saveEdit(i)" class="save">
-                                            <i class="icon htvbdh_tcdt_save"></i>
-                                        </a>
-                                        <a (click)="cancelEdit(i)">
-                                            <i class="fa fa-ban do"></i>
-                                        </a>
-                                    </td>
-                                </ng-template>
-                            </tr>
-
+                            </ng-container>
                         </tbody>
                     </nz-table>
                 </nz-collapse-panel>

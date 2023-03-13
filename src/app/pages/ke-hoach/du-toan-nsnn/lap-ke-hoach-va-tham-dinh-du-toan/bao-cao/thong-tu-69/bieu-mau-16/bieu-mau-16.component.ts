@@ -311,9 +311,9 @@ export class BieuMau16Component implements OnInit {
 
     //gia tri cac o input thay doi thi tinh toan lai
     changeModel(id: string): void {
-        this.editCache[id].data.clechTranChiVsNcauChiN = sumNumber([this.editCache[id].data.ncauChiN, -this.editCache[id].data.tranChiN]);
-        this.editCache[id].data.clechTranChiVsNcauChiN1 = sumNumber([this.editCache[id].data.ncauChiN1, -this.editCache[id].data.tranChiN1]);
-        this.editCache[id].data.clechTranChiVsNcauChiN2 = sumNumber([this.editCache[id].data.ncauChiN2, -this.editCache[id].data.tranChiN2]);
+        this.editCache[id].data.clechTranChiVsNcauChiN = sumNumber([this.editCache[id].data.tranChiN, -this.editCache[id].data.ncauChiN]);
+        this.editCache[id].data.clechTranChiVsNcauChiN1 = sumNumber([this.editCache[id].data.tranChiN1, -this.editCache[id].data.ncauChiN1]);
+        this.editCache[id].data.clechTranChiVsNcauChiN2 = sumNumber([this.editCache[id].data.tranChiN2, -this.editCache[id].data.ncauChiN2]);
     }
 
     getTotal() {
@@ -332,6 +332,7 @@ export class BieuMau16Component implements OnInit {
                 this.total.clechTranChiVsNcauChiN2 = sumNumber([this.total.clechTranChiVsNcauChiN2, item.clechTranChiVsNcauChiN2]);
             }
         })
+        this.getInTotal();
     }
 
     getInTotal() {

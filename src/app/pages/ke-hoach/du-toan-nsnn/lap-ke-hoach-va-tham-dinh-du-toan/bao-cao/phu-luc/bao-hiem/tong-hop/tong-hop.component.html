@@ -1,0 +1,243 @@
+<ng-container *ngIf="isDataAvailable">
+    <div class="modal__content">
+        <div id="tablePrint">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                <div nz-col [nzSpan]="2">
+                    Đơn vị:
+                </div>
+                <div nz-col [nzSpan]="2">
+                    <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
+                        <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                    </ng-container>
+                    <ng-template #editMoney>
+                        <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                            (ngModelChange)="editMoneyUnit=false">
+                            <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </ng-template>
+                </div>
+            </div>
+            <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
+                <thead>
+                    <tr *ngIf="childUnit.length != 0">
+                        <th nzWidth="50px" nzLeft></th>
+                        <th nzWidth="400px" nzLeft></th>
+                        <th colspan="11"></th>
+                        <th *ngFor="let item of childUnit" colspan="10">{{item.tenDvi}}</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="3" nzWidth="50px" nzLeft>STT</th>
+                        <th rowspan="3" nzWidth="400px" nzLeft>Danh mục hàng DTQG</th>
+                        <th rowspan="3">Đơn vị tính</th>
+                        <th colspan="3">Tổng số lượng hàng trong kho các đơn vị cấp dưới</th>
+                        <th colspan="7">Tổng giá trị hàng trong kho của các đơn vị cấp dưới (VNĐ)</th>
+                        <ng-container *ngFor="let item of childUnit">
+                            <th colspan="3">Số lượng</th>
+                            <th colspan="7">Giá trị (VNĐ)</th>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Kho từ 5000m3 trở lên</th>
+                        <th rowspan="2">Kho dưới 5000m3</th>
+                        <th rowspan="2">Tổng SL</th>
+                        <th colspan="3">Kho từ 5000m3 trở lên</th>
+                        <th colspan="3">Kho dưới 5000m3</th>
+                        <th rowspan="2">Tổng GT</th>
+                        <ng-container *ngFor="let item of childUnit">
+                            <th rowspan="2"> Kho từ 5000m3 trở lên</th>
+                            <th rowspan="2"> Kho dưới 5000m3</th>
+                            <th rowspan="2"> Tổng SL</th>
+                            <th colspan="3"> Kho từ 5000m3 trở lên</th>
+                            <th colspan="3"> Kho dưới 5000m3</th>
+                            <th rowspan="2"> Tổng GT</th>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <th>Giá trị</th>
+                        <th>Tỷ lệ phí bảo hiểm</th>
+                        <th>Giá trị bảo hiểm</th>
+                        <th>Giá trị</th>
+                        <th>Tỷ lệ phí bảo hiểm</th>
+                        <th>Giá trị bảo hiểm</th>
+                        <ng-container *ngFor="let item of childUnit">
+                            <th>Giá trị</th>
+                            <th>Tỷ lệ phí bảo hiểm</th>
+                            <th>Giá trị bảo hiểm</th>
+                            <th>Giá trị</th>
+                            <th>Tỷ lệ phí bảo hiểm</th>
+                            <th>Giá trị bảo hiểm</th>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <th nzLeft>A</th>
+                        <th nzLeft>B</th>
+                        <th>C</th>
+                        <th>1</th>
+                        <th>2</th>
+                        <th>3</th>
+                        <th>4</th>
+                        <th>5</th>
+                        <th>6=4*5</th>
+                        <th>7</th>
+                        <th>8</th>
+                        <th>9=7*8</th>
+                        <th>10=6+9</th>
+                        <ng-container *ngFor="let item of childUnit">
+                            <th>(1)</th>
+                            <th>(2)</th>
+                            <th>(3)</th>
+                            <th>(4)</th>
+                            <th>(5)</th>
+                            <th>(6)</th>
+                            <th>(7)</th>
+                            <th>(8)</th>
+                            <th>(9)</th>
+                            <th>(10)</th>
+                        </ng-container>
+                    </tr>
+                    <tr>
+                        <th nzLeft></th>
+                        <th nzLeft>Tổng cộng</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>{{displayValue(total.gtTrenGt)}}</th>
+                        <th></th>
+                        <th>{{displayValue(total.gtTrenGtBh)}}</th>
+                        <th>{{displayValue(total.gtDuoiGt)}}</th>
+                        <th></th>
+                        <th>{{displayValue(total.gtDuoiGtBh)}}</th>
+                        <th></th>
+                        <ng-container *ngFor="let item of total.lstDviCapDuoi">
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>{{displayValue(item.gtTrenGt)}}</th>
+                            <th></th>
+                            <th>{{displayValue(item.gtTrenGtBh)}}</th>
+                            <th>{{displayValue(item.gtDuoiGt)}}</th>
+                            <th></th>
+                            <th>{{displayValue(item.gtDuoiGtBh)}}</th>
+                            <th></th>
+                        </ng-container>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of lstCtietBcao; let i = index">
+                        <td nzLeft>
+                            {{getChiMuc(data.stt)}}
+                        </td>
+                        <td nzLeft>
+                            {{data.tenDanhMuc}}
+                        </td>
+                        <td>
+                            {{data.dviTinh}}
+                        </td>
+                        <td>
+                            {{displayNumber(data.slTren)}}
+                        </td>
+                        <td>
+                            {{displayNumber(data.slDuoi)}}
+                        </td>
+                        <td>
+                            {{displayNumber(data.slTong)}}
+                        </td>
+                        <td>
+                            {{displayValue(data.gtTrenGt)}}
+                        </td>
+                        <td>
+                            {{displayNumber(data.gtTrenTyLeBh)}}
+                        </td>
+                        <td>
+                            {{displayValue(data.gtTrenGtBh)}}
+                        </td>
+                        <td>
+                            {{displayValue(data.gtDuoiGt)}}
+                        </td>
+                        <td>
+                            {{displayNumber(data.gtDuoiTyLeBh)}}
+                        </td>
+                        <td>
+                            {{displayValue(data.gtDuoiGtBh)}}
+                        </td>
+                        <td>
+                            {{displayValue(data.tong)}}
+                        </td>
+                        <ng-container *ngFor="let item of data.lstDviCapDuoi">
+                            <td>
+                                {{displayNumber(item.slTren)}}
+                            </td>
+                            <td>
+                                {{displayNumber(item.slDuoi)}}
+                            </td>
+                            <td>
+                                {{displayNumber(item.slTong)}}
+                            </td>
+                            <td>
+                                {{displayValue(item.gtTrenGt)}}
+                            </td>
+                            <td>
+                                {{displayNumber(item.gtTrenTyLeBh)}}
+                            </td>
+                            <td>
+                                {{displayValue(item.gtTrenGtBh)}}
+                            </td>
+                            <td>
+                                {{displayValue(item.gtDuoiGt)}}
+                            </td>
+                            <td>
+                                {{displayNumber(item.gtDuoiTyLeBh)}}
+                            </td>
+                            <td>
+                                {{displayValue(item.gtDuoiGtBh)}}
+                            </td>
+                            <td>
+                                {{displayValue(item.tong)}}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+            <div nz-col nzSpan="24">
+                <label class="search__label">Thuyết minh</label>
+                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="!status"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="nut">
+            <div class="cantrai">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
+                    <i nz-icon nzType="printer" nzTheme="outline"></i>
+                    <span>In</span>
+                </button>
+                <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>Hoàn tất nhập liệu</span>
+                </button>
+                <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+                <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
+                    <i nz-icon nzType="check" nzTheme="outline"></i>
+                    <span>OK</span>
+                </button>
+                <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+                    <i nz-icon nzType="close" nzTheme="outline"></i>
+                    <span>Not OK</span>
+                </button>
+            </div>
+            <div class="canphai">
+                <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                    <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-container>

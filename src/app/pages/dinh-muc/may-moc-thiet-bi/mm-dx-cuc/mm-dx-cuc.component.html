@@ -38,16 +38,16 @@
     <div class="group-button">
       <h3>DANH SÁCH ĐỀ XUẤT NHU CẦU MÁY MÓC THIẾT BỊ CHUYÊN DÙNG CỦA CỤC</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
-                *ngIf="userService.isCuc()">
+                *ngIf="userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
@@ -148,14 +148,14 @@
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DA_DUYET_CBV) && userService.isCuc()) || userService.isTongCuc()">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DA_DUYET_CBV) && userService.isCuc()) || userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XEM')">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.DU_THAO) && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_SUA')"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isCuc()" (click)="delete(data)">
+            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

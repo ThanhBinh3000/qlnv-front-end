@@ -475,7 +475,7 @@ export class PhuLuc02Component implements OnInit {
 					this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
 					// this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
 					// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
-					this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho]) * sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
+					this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
 					this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])

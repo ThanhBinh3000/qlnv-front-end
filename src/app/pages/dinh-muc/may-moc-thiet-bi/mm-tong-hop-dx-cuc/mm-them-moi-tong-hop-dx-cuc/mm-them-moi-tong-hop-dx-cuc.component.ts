@@ -379,7 +379,6 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     this.dataTable.forEach(s => {
       this.expandSet.add(s.idVirtual);
     })
-    console.log(this.expandSet, 128912893)
   }
 
 

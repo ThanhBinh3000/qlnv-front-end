@@ -8,16 +8,18 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, QUATITY } from "src/app/Utility/utils";
+import { UserService } from 'src/app/services/user.service';
+import { displayNumber, exchangeMoney, getHead, getTail, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import * as uuid from "uuid";
 
 export class ItemData {
     id: string;
     stt: string;
     maDvi: string;
     tenDvi: string;
-    maDiaChi: string;
-    diaChiKho: string;
+    maDiaChiKho: string;
+    tenDiaChiKho: string;
     maNhaKho: string;
     tenNhaKho: string;
     khoiTichTren: number;
@@ -34,6 +36,7 @@ export class ItemData {
     tong: number;
     unitSpan: number;
     locationSpan: number;
+    level: number;
 }
 
 @Component({
@@ -92,7 +95,9 @@ export class KhoComponent implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = !this.dataInfo?.status;
         if (this.status) {
-            await this.getDmKho();
+            if (!this.dataInfo?.isSynthetic) {
+                await this.getDmKho();
+            }
             this.scrollX = (620 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
         } else {
             this.scrollX = (560 + BOX_NUMBER_WIDTH * 12).toString() + 'px';
@@ -109,11 +114,12 @@ export class KhoComponent implements OnInit {
                 diaDiem?.children.forEach(kho => {
                     this.lstCtietBcao.push({
                         ...new ItemData(),
+                        id: uuid.v4() + 'FE',
                         stt: '0.1',
                         maDvi: this.donVi.maDvi,
                         tenDvi: this.donVi.tenDvi,
-                        maDiaChi: diaDiem.maDvi,
-                        diaChiKho: diaDiem.tenDvi,
+                        maDiaChiKho: diaDiem.maDvi,
+                        tenDiaChiKho: diaDiem.tenDvi,
                         maNhaKho: kho.maDvi,
                         tenNhaKho: kho.tenDvi,
                     })
@@ -122,8 +128,13 @@ export class KhoComponent implements OnInit {
         }
 
         this.sortReport();
-
-        // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        if (this.formDetail.trangThai == '3') {
+            this.lstCtietBcao.forEach(item => {
+                if (item.level == 0) {
+                    this.sum(item.stt + '.1');
+                }
+            })
+        }
 
         this.getTotal();
         this.updateEditCache();
@@ -191,7 +202,12 @@ export class KhoComponent implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-
+            if (item.tong > MONEY_LIMIT) {
+                checkMoneyRange = false;
+            }
+            lstCtietBcaoTemp.push({
+                ...item,
+            })
         })
 
         if (!checkMoneyRange) {
@@ -309,6 +325,10 @@ export class KhoComponent implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        if (this.editCache[id].data.khoiTichTren && this.editCache[id].data.khoiTichTren < 5000) {
+            this.notification.warning(MESSAGE.WARNING, "Giá trị của khối kho từ 5000m3 trở lên không phù hợp!");
+            return;
+        }
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -317,86 +337,121 @@ export class KhoComponent implements OnInit {
     }
 
     changeModel(id: string): void {
-        // this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-        // this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-        // this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiChiaRaChiDtqg = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs3, this.editCache[id].data.ncauChiChiaRaChiMoi3]);
-        // this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+        this.editCache[id].data.slTong = sumNumber([this.editCache[id].data.slTren, this.editCache[id].data.slDuoi]);
+        this.editCache[id].data.gtTrenTong = sumNumber([this.editCache[id].data.gtTrenGtConLai, this.editCache[id].data.gtTrenHetKhauHao]);
+        this.editCache[id].data.gtDuoiTong = sumNumber([this.editCache[id].data.gtDuoiGtConLai, this.editCache[id].data.gtDuoiHetKhauHao]);
+        this.editCache[id].data.tong = sumNumber([this.editCache[id].data.gtTrenTong, this.editCache[id].data.gtDuoiTong]);
+    }
+
+    countWarehouse(id: string) {
+        if (this.editCache[id].data.khoiTichTren) {
+            this.editCache[id].data.slTren = 1;
+            this.editCache[id].data.slDuoi = null;
+        } else if (this.editCache[id].data.khoiTichDuoi) {
+            if (this.editCache[id].data.khoiTichDuoi >= 5000) {
+                this.editCache[id].data.khoiTichDuoi = 4999;
+            }
+            this.editCache[id].data.slTren = null;
+            this.editCache[id].data.slDuoi = 1;
+        } else {
+            this.editCache[id].data.slTren = null;
+            this.editCache[id].data.slDuoi = null;
+        }
     }
 
     sum(stt: string) {
-        // stt = getHead(stt);
-        // while (stt != '0') {
-        // 	const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-        // 	const data = this.lstCtietBcao[index];
-        // 	this.lstCtietBcao[index] = {
-        // 		...new ItemData(),
-        // 		id: data.id,
-        // 		stt: data.stt,
-        // 		tenLvuc: data.tenLvuc,
-        // 		maLvuc: data.maLvuc,
-        // 		level: data.level,
-        // 	}
-        // 	this.lstCtietBcao.forEach(item => {
-        // 		if (getHead(item.stt) == stt) {
-        // 			this.lstCtietBcao[index].ncauChiTongSo = sumNumber([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
-        // 			this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-        // 			this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiCs3 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs3, item.ncauChiChiaRaChiCs3]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiMoi3 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi3, item.ncauChiChiaRaChiMoi3]);
-        // 			this.lstCtietBcao[index].ncauChiChiaRaChiDtqg = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
-        // 		}
-        // 	})
-        // 	stt = getHead(stt);
-        // }
-        // this.getTotal();
+        stt = getHead(stt);
+        while (stt != '0') {
+            const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            const data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                ...new ItemData(),
+                id: data.id,
+                stt: data.stt,
+                maDvi: data.maDvi,
+                tenDvi: data.tenDvi,
+                maDiaChiKho: data.maDiaChiKho,
+                tenDiaChiKho: data.tenDiaChiKho,
+                maNhaKho: data.maNhaKho,
+                tenNhaKho: data.tenNhaKho,
+                unitSpan: data.unitSpan,
+                locationSpan: data.locationSpan,
+                level: data.level,
+                khoiTichDuoi: data.khoiTichDuoi,
+                khoiTichTren: data.khoiTichTren,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].slTren = sumNumber([this.lstCtietBcao[index].slTren, item.slTren]);
+                    this.lstCtietBcao[index].slDuoi = sumNumber([this.lstCtietBcao[index].slDuoi, item.slDuoi]);
+                    this.lstCtietBcao[index].slTong = sumNumber([this.lstCtietBcao[index].slTong, item.slTong]);
+                    this.lstCtietBcao[index].gtTrenGtConLai = sumNumber([this.lstCtietBcao[index].gtTrenGtConLai, item.gtTrenGtConLai]);
+                    this.lstCtietBcao[index].gtTrenHetKhauHao = sumNumber([this.lstCtietBcao[index].gtTrenHetKhauHao, item.gtTrenHetKhauHao]);
+                    this.lstCtietBcao[index].gtTrenTong = sumNumber([this.lstCtietBcao[index].gtTrenTong, item.gtTrenTong]);
+                    this.lstCtietBcao[index].gtDuoiGtConLai = sumNumber([this.lstCtietBcao[index].gtDuoiGtConLai, item.gtDuoiGtConLai]);
+                    this.lstCtietBcao[index].gtDuoiHetKhauHao = sumNumber([this.lstCtietBcao[index].gtDuoiHetKhauHao, item.gtDuoiHetKhauHao]);
+                    this.lstCtietBcao[index].gtDuoiTong = sumNumber([this.lstCtietBcao[index].gtDuoiTong, item.gtDuoiTong]);
+                    this.lstCtietBcao[index].tong = sumNumber([this.lstCtietBcao[index].tong, item.tong]);
+                }
+            })
+            stt = getHead(stt);
+        }
+        this.getTotal();
     }
 
     getTotal() {
-        // this.total = new ItemData();
-        // this.lstCtietBcao.forEach(item => {
-        // 	if (item.level == 0) {
-        // 		this.total.ncauChiTongSo = sumNumber([this.total.ncauChiTongSo, item.ncauChiTongSo]);
-        // 		this.total.ncauChiTrongDoChiCs = sumNumber([this.total.ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-        // 		this.total.ncauChiTrongDoChiMoi = sumNumber([this.total.ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-        // 		this.total.ncauChiChiaRaDtuPtrien = sumNumber([this.total.ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-        // 		this.total.ncauChiChiaRaChiCs1 = sumNumber([this.total.ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-        // 		this.total.ncauChiChiaRaChiMoi1 = sumNumber([this.total.ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-        // 		this.total.ncauChiChiaRaChiTx = sumNumber([this.total.ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-        // 		this.total.ncauChiChiaRaChiCs2 = sumNumber([this.total.ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-        // 		this.total.ncauChiChiaRaChiMoi2 = sumNumber([this.total.ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-        // 		this.total.ncauChiChiaRaChiCs3 = sumNumber([this.total.ncauChiChiaRaChiCs3, item.ncauChiChiaRaChiCs3]);
-        // 		this.total.ncauChiChiaRaChiMoi3 = sumNumber([this.total.ncauChiChiaRaChiMoi3, item.ncauChiChiaRaChiMoi3]);
-        // 		this.total.ncauChiChiaRaChiDtqg = sumNumber([this.total.ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
-        // 	}
-        // })
+        this.total = new ItemData();
+        this.lstCtietBcao.forEach(item => {
+            if (item.level == 0) {
+                this.total.slTren = sumNumber([this.total.slTren, item.slTren]);
+                this.total.slDuoi = sumNumber([this.total.slDuoi, item.slDuoi]);
+                this.total.slTong = sumNumber([this.total.slTong, item.slTong]);
+                this.total.gtTrenGtConLai = sumNumber([this.total.gtTrenGtConLai, item.gtTrenGtConLai]);
+                this.total.gtTrenHetKhauHao = sumNumber([this.total.gtTrenHetKhauHao, item.gtTrenHetKhauHao]);
+                this.total.gtTrenTong = sumNumber([this.total.gtTrenTong, item.gtTrenTong]);
+                this.total.gtDuoiGtConLai = sumNumber([this.total.gtDuoiGtConLai, item.gtDuoiGtConLai]);
+                this.total.gtDuoiHetKhauHao = sumNumber([this.total.gtDuoiHetKhauHao, item.gtDuoiHetKhauHao]);
+                this.total.gtDuoiTong = sumNumber([this.total.gtDuoiTong, item.gtDuoiTong]);
+                this.total.tong = sumNumber([this.total.tong, item.tong]);
+            }
+        })
+    }
+
+    setLevel() {
+        this.lstCtietBcao.forEach(item => {
+            item.level = item.stt.split('.')?.length - 2;
+        })
     }
 
     sortReport() {
+        this.setLevel();
         this.lstCtietBcao.sort((a, b) => {
-            if (parseInt(a.maDvi, 10) > parseInt(b.maDvi, 10)) {
+            //level nho hon dat len truoc
+            if (a.level > b.level) {
                 return 1;
             }
-            if (parseInt(a.maDvi, 10) > parseInt(b.maDvi, 10)) {
+            if (a.level < b.level) {
                 return -1;
             }
-            if (parseInt(a.maDiaChi, 10) > parseInt(b.maDiaChi, 10)) {
+            //ban ghi co stt nho hon dat len truoc
+            if (getTail(a.stt) > getTail(b.stt)) {
                 return 1;
             }
-            if (parseInt(a.maDiaChi, 10) > parseInt(b.maDiaChi, 10)) {
+            if (getTail(a.stt) < getTail(b.stt)) {
                 return -1;
             }
+            //ban ghi co ma dia chi nho hon dat len truoc
+            if (parseInt(a.maDiaChiKho, 10) > parseInt(b.maDiaChiKho, 10)) {
+                return 1;
+            }
+            if (parseInt(a.maDiaChiKho, 10) < parseInt(b.maDiaChiKho, 10)) {
+                return -1;
+            }
+            //ban ghi co ma nha kho nho hon dat len truoc
             if (parseInt(a.maNhaKho, 10) > parseInt(b.maNhaKho, 10)) {
                 return 1;
             }
-            if (parseInt(a.maNhaKho, 10) > parseInt(b.maNhaKho, 10)) {
+            if (parseInt(a.maNhaKho, 10) < parseInt(b.maNhaKho, 10)) {
                 return -1;
             }
             return 0;
@@ -405,8 +460,8 @@ export class KhoComponent implements OnInit {
             if (i == 0 || this.lstCtietBcao[i].maDvi != this.lstCtietBcao[i - 1].maDvi) {
                 this.lstCtietBcao[i].unitSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi)?.length;
             }
-            if (i == 0 || this.lstCtietBcao[i].maDiaChi != this.lstCtietBcao[i - 1].maDiaChi) {
-                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDiaChi == this.lstCtietBcao[i].maDiaChi)?.length;
+            if (i == 0 || this.lstCtietBcao[i].maDiaChiKho != this.lstCtietBcao[i - 1].maDiaChiKho) {
+                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho)?.length;
             }
         }
     }
@@ -432,6 +487,10 @@ export class KhoComponent implements OnInit {
         WindowPrt.focus();
         WindowPrt.print();
         WindowPrt.close();
+    }
+
+    displayNumber(num: number): string {
+        return displayNumber(num);
     }
 
     displayValue(num: number): string {

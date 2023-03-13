@@ -17,6 +17,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { filter } from 'rxjs/operators';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -60,9 +61,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         soBbTinhKho: [],
         ngayTaoBb: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
-        maDiemKho: [],
+        maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
         maLoKho: [],
@@ -77,9 +78,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         slThucTeCon: [],
         slThua: [],
         slThieu: [],
-        nguyenNhan: [],
-        kienNghi: [],
-        ghiChu: [],
+        nguyenNhan: ['', [Validators.required]],
+        kienNghi: ['', [Validators.required]],
+        ghiChu: ['', [Validators.required]],
         thuKho: [],
         ktvBaoQuan: [],
         keToan: [],
@@ -173,7 +174,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
+      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -250,6 +251,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
+        type: "XUAT_CAP"
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
@@ -257,6 +259,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
+        s.soBkCanHang = s.soBangKeCh
       }
       )
     }
@@ -286,13 +289,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       case STATUS.TU_CHOI_LDCC:
       case STATUS.TU_CHOI_KT:
       case STATUS.TU_CHOI_KTVBQ:
-      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KTVBQ: {
+      case STATUS.CHO_DUYET_KT: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -316,6 +318,14 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.TU_CHOI_KTVBQ;
         break;
       }
     }

@@ -50,7 +50,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   STATUS = STATUS
 
   searchFilter = {
-    namKh: dayjs().get('year'),
+    namKh: '',
     ngayHluc: '',
     canhanTochuc: '',
     tenDvi: '',
@@ -187,7 +187,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.namKh = null;
     this.searchFilter.canhanTochuc = null;
     this.searchFilter.ngayHluc = null;
     this.searchFilter.maDvi = null;

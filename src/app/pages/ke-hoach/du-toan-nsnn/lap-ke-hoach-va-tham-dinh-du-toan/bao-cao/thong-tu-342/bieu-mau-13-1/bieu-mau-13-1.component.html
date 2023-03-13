@@ -25,13 +25,14 @@
 					<th rowspan="2">Đơn vị tính</th>
 					<th rowspan="2">Số thực hiện <br> năm {{namBcao - 2}}</th>
 					<th colspan="2"> Năm {{namBcao-1}}</th>
-					<th rowspan="2">Dự kiến năm {{namBcao}}</th>
-					<th *ngIf="viewAppraisalValue" rowspan="2">Giá trị thẩm định</th>
+					<th colspan="{{viewAppraisalValue ? 2 : 1}}">Dự kiến năm {{namBcao}}</th>
 					<th rowspan="2" style="width: 60px;" *ngIf="status || editAppraisalValue" nzRight></th>
 				</tr>
 				<tr>
 					<th>Dự toán</th>
 					<th>Ước thực hiện</th>
+					<th>Dự kiến</th>
+					<th *ngIf="viewAppraisalValue">Giá trị thẩm định</th>
 				</tr>
 				<tr>
 					<th nzLeft>A</th>

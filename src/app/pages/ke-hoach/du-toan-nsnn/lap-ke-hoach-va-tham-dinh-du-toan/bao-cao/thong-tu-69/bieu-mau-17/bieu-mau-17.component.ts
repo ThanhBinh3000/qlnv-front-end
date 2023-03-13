@@ -300,6 +300,7 @@ export class BieuMau17Component implements OnInit {
                 this.total.ncauNamN2 = sumNumber([this.total.ncauNamN2, item.ncauNamN2]);
             }
         })
+        this.getInTotal();
     }
 
     getInTotal() {
