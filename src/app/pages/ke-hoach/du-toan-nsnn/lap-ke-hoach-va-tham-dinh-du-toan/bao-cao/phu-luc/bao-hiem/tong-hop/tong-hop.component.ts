@@ -7,46 +7,71 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+
+export class UnitItem {
+    id: string;
+    maDvi: string;
+    tenDvi: string;
+    slTren: number;
+    slDuoi: number;
+    slTong: number;
+    gtTrenGt: number;
+    gtTrenTyLeBh: number;
+    gtTrenGtBh: number;
+    gtDuoiGt: number;
+    gtDuoiTyLeBh: number;
+    gtDuoiGtBh: number;
+    tong: number;
+}
 
 export class ItemData {
     id: string;
     stt: string;
+    maDanhMuc: string;
+    tenDanhMuc: string;
     level: number;
-    maLvucNdChi: string;
-    tenLvucNdChi: string;
-    thNamHienHanhN1: number;
-    ncauNamDtoanN: number;
-    ncauNamN1: number;
-    ncauNamN2: number;
+    dviTinh: string;
+
+    slTren: number;
+    slDuoi: number;
+    slTong: number;
+    gtTrenGt: number;
+    gtTrenTyLeBh: number;
+    gtTrenGtBh: number;
+    gtDuoiGt: number;
+    gtDuoiTyLeBh: number;
+    gtDuoiGtBh: number;
+    tong: number;
+    lstDviCapDuoi: UnitItem[];
 }
 
+
 @Component({
-    selector: 'app-bieu-mau-17',
-    templateUrl: './bieu-mau-17.component.html',
-    styleUrls: ['../../bao-cao.component.scss']
+    selector: 'app-tong-hop',
+    templateUrl: './tong-hop.component.html',
+    styleUrls: ['../../../bao-cao.component.scss']
 })
-export class BieuMau17Component implements OnInit {
+export class TongHopComponent implements OnInit {
     @Input() dataInfo;
     //thong tin chi tiet cua bieu mau
     formDetail: any;
     total: ItemData = new ItemData();
-    chiCoSo: ItemData = new ItemData();
-    chiMoi: ItemData = new ItemData();
     maDviTien: string = '1';
     thuyetMinh: string;
-    namBcao: number;
     //danh muc
-    linhVucs: any[] = [];
+    danhMucs: any[] = [];
+    childUnit: any[] = [];
+    lstTyLe: any[] = [];
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
     scrollX: string;
-    BOX_SIZE = 220;
+    BOX_SIZE = 180;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -79,17 +104,8 @@ export class BieuMau17Component implements OnInit {
 
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
-        this.namBcao = this.dataInfo?.namBcao;
         this.status = !this.dataInfo?.status;
-        if (this.status) {
-            const category = await this.danhMucService.danhMucChungGetAll('LTD_TT69_BM17');
-            if (category) {
-                this.linhVucs = category.data;
-            }
-            this.scrollX = (510 + 4 * this.BOX_SIZE).toString() + 'px';
-        } else {
-            this.scrollX = (450 + 4 * this.BOX_SIZE).toString() + 'px';
-        }
+        this.scrollX = (350 + (11 + 10 * this.childUnit.length) * this.BOX_SIZE).toString() + 'px';
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -98,30 +114,53 @@ export class BieuMau17Component implements OnInit {
             })
         })
         if (this.lstCtietBcao.length == 0) {
-            this.linhVucs.forEach(e => {
+            const category = await this.danhMucService.danhMucChungGetAll('LTD_BH');
+            if (category) {
+                this.danhMucs = category.data;
+            }
+            this.danhMucs.forEach(e => {
                 this.lstCtietBcao.push({
                     ...new ItemData(),
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
-                    maLvucNdChi: e.ma,
-                    tenLvucNdChi: e.giaTri,
+                    maDanhMuc: e.ma,
+                    tenDanhMuc: e.giaTri,
+                    dviTinh: e.ghiChu,
+                    lstDviCapDuoi: [],
                 })
             })
-        }
-
-        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
-
-        if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-            this.dataInfo.extraData.forEach(item => {
-                const index = this.lstCtietBcao.findIndex(e => e.maLvucNdChi == item.maNdung);
-                this.lstCtietBcao[index].thNamHienHanhN1 = item.thNamHienHanhN1;
-                this.lstCtietBcao[index].ncauNamDtoanN = item.ncauChiN;
-                this.lstCtietBcao[index].ncauNamN1 = item.ncauChiN1;
-                this.lstCtietBcao[index].ncauNamN2 = item.ncauChiN2;
+        } else {
+            this.lstCtietBcao.forEach(item => {
+                item.stt = item.maDanhMuc;
             })
         }
+
+        this.lstCtietBcao[0].lstDviCapDuoi.forEach(item => {
+            this.childUnit.push({
+                maDvi: item.maDvi,
+                tenDvi: item.tenDvi,
+            })
+        })
+
+        //sap xep lai du lieu
+        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        this.sortUnit();
+
+        //lay du lieu tu cac bieu mau khac
+        if (this.dataInfo?.extraData) {
+            this.dataInfo.extraData.forEach(item => {
+                const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == item.maDanhMuc);
+                if (index != -1) {
+                    this.lstCtietBcao[index].slTren = item.slTren;
+                    this.lstCtietBcao[index].slDuoi = item.slDuoi;
+                    this.lstCtietBcao[index].gtTrenGt = item.gtTrenGt;
+                    this.lstCtietBcao[index].gtDuoiGt = item.gtDuoiGt;
+                    this.sum(this.lstCtietBcao[index].stt);
+                }
+            })
+        }
+
         this.getTotal();
-        this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -136,29 +175,17 @@ export class BieuMau17Component implements OnInit {
 
     // luu
     async save(trangThai: string, lyDoTuChoi: string) {
-        let checkSaveEdit;
-        //check xem tat ca cac dong du lieu da luu chua?
-        //chua luu thi bao loi, luu roi thi cho di
-        this.lstCtietBcao.forEach(element => {
-            if (this.editCache[element.id].edit === true) {
-                checkSaveEdit = false
-            }
-        });
-        if (checkSaveEdit == false) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //tinh lai don vi tien va kiem tra gioi han cua chung
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.thNamHienHanhN1 > MONEY_LIMIT || item.ncauNamDtoanN > MONEY_LIMIT ||
-                item.ncauNamN1 > MONEY_LIMIT || item.ncauNamN2 > MONEY_LIMIT) {
+            if (item.tong > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
+                lstDviCapDuoi: item.lstDviCapDuoi,
             })
         })
 
@@ -172,6 +199,11 @@ export class BieuMau17Component implements OnInit {
             if (item.id?.length == 38) {
                 item.id = null;
             }
+            item.lstDviCapDuoi.forEach(e => {
+                if (e.id?.length == 38) {
+                    e.id = null;
+                }
+            })
         })
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
@@ -221,113 +253,112 @@ export class BieuMau17Component implements OnInit {
     }
 
     // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    getChiMuc(str: string): string {
-        str = str.substring(str.indexOf('.') + 1, str.length);
+    getChiMuc(stt: string): string {
+        let str = stt.substring(stt.indexOf('.') + 1, stt.length);
         let xau = "";
         const chiSo: string[] = str.split('.');
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
-        // if (n == 0) {
-        //     for (let i = 0; i < this.soLaMa.length; i++) {
-        //         while (k >= this.soLaMa[i].gTri) {
-        //             xau += this.soLaMa[i].kyTu;
-        //             k -= this.soLaMa[i].gTri;
-        //         }
-        //     }
-        // }
         if (n == 0) {
-            xau = chiSo[n];
+            for (let i = 0; i < this.soLaMa.length; i++) {
+                while (k >= this.soLaMa[i].gTri) {
+                    xau += this.soLaMa[i].kyTu;
+                    k -= this.soLaMa[i].gTri;
+                }
+            }
+            return xau;
         }
-        // if (n == 2) {
-        //     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        // }
         if (n == 1) {
-            xau = String.fromCharCode(k + 96);
+            return chiSo[n];
+        }
+        if (this.lstCtietBcao.findIndex(e => getHead(e.maDanhMuc) == stt) == -1) {
+            return null;
         }
         if (n == 2) {
-            xau = "-";
+            return chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
-        return xau;
+        if (n == 3) {
+            return '-';
+        }
+        return null;
     }
 
-    // gan editCache.data == lstCtietBcao
-    updateEditCache(): void {
+    getIndex(maDvi: string) {
+        return this.childUnit.findIndex(e => e.maDvi == maDvi);
+    }
+
+    sortUnit() {
+        this.lstCtietBcao.forEach(data => {
+            data.lstDviCapDuoi.sort((a, b) => {
+                if (this.getIndex(a.maDvi) <= this.getIndex(b.maDvi)) {
+                    return 1;
+                }
+                return -1;
+            })
+        })
+    }
+
+    changeModel(): void {
         this.lstCtietBcao.forEach(item => {
-            this.editCache[item.id] = {
-                edit: false,
-                data: { ...item }
-            };
-        });
+            item.slTong = sumNumber([item.slTren, item.slDuoi]);
+            item.gtTrenGtBh = mulNumber(item.gtTrenGt, item.gtTrenTyLeBh);
+            item.gtDuoiGtBh = mulNumber(item.gtDuoiGt, item.gtDuoiTyLeBh);
+            item.tong = sumNumber([item.gtTrenGtBh, item.gtDuoiGtBh]);
+        })
     }
 
-    // start edit
-    startEdit(id: string): void {
-        this.editCache[id].edit = true;
-    }
-
-    // huy thay doi
-    cancelEdit(id: string): void {
-        const index = this.lstCtietBcao.findIndex(item => item.id === id);
-        // lay vi tri hang minh sua
-        this.editCache[id] = {
-            data: { ...this.lstCtietBcao[index] },
-            edit: false
-        };
-    }
-
-    // luu thay doi
-    saveEdit(id: string): void {
-        const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-        Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
-        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        const indexP = this.lstCtietBcao.findIndex(e => e.stt == getHead(this.lstCtietBcao[index].stt));
-        const indexC = this.lstCtietBcao.findIndex(e => getHead(e.stt) == getHead(this.lstCtietBcao[index].stt) && getTail(e.stt) != getTail(this.lstCtietBcao[index].stt));
-        this.lstCtietBcao[indexC].thNamHienHanhN1 = (!this.lstCtietBcao[indexP].thNamHienHanhN1 ? 0 : this.lstCtietBcao[indexP].thNamHienHanhN1) - this.lstCtietBcao[index].thNamHienHanhN1;
-        this.lstCtietBcao[indexC].ncauNamDtoanN = (!this.lstCtietBcao[indexP].ncauNamDtoanN ? 0 : this.lstCtietBcao[indexP].ncauNamDtoanN) - this.lstCtietBcao[index].ncauNamDtoanN;
-        this.lstCtietBcao[indexC].ncauNamN1 = (!this.lstCtietBcao[indexP].ncauNamN1 ? 0 : this.lstCtietBcao[indexP].ncauNamN1) - this.lstCtietBcao[index].ncauNamN1;
-        this.lstCtietBcao[indexC].ncauNamN2 = (!this.lstCtietBcao[indexP].ncauNamN2 ? 0 : this.lstCtietBcao[indexP].ncauNamN2) - this.lstCtietBcao[index].ncauNamN2;
-        this.getInTotal();
-        this.updateEditCache();
+    sum(stt: string) {
+        stt = getHead(stt);
+        while (stt != '0') {
+            const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            const data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                ...new ItemData(),
+                id: data.id,
+                stt: data.stt,
+                maDanhMuc: data.maDanhMuc,
+                tenDanhMuc: data.tenDanhMuc,
+                dviTinh: data.dviTinh,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].gtTrenGt = sumNumber([this.lstCtietBcao[index].gtTrenGt, item.gtTrenGt]);
+                    this.lstCtietBcao[index].gtTrenGtBh = sumNumber([this.lstCtietBcao[index].gtTrenGtBh, item.gtTrenGtBh]);
+                    this.lstCtietBcao[index].gtDuoiGt = sumNumber([this.lstCtietBcao[index].gtDuoiGt, item.gtDuoiGt]);
+                    this.lstCtietBcao[index].gtDuoiGtBh = sumNumber([this.lstCtietBcao[index].gtDuoiGtBh, item.gtDuoiGtBh]);
+                }
+            })
+            stt = getHead(stt);
+        }
+        // this.getTotal();
     }
 
     getTotal() {
         this.total = new ItemData();
-        this.lstCtietBcao.forEach(item => {
-            if (item.level == 0) {
-                this.total.thNamHienHanhN1 = sumNumber([this.total.thNamHienHanhN1, item.thNamHienHanhN1]);
-                this.total.ncauNamDtoanN = sumNumber([this.total.ncauNamDtoanN, item.ncauNamDtoanN]);
-                this.total.ncauNamN1 = sumNumber([this.total.ncauNamN1, item.ncauNamN1]);
-                this.total.ncauNamN2 = sumNumber([this.total.ncauNamN2, item.ncauNamN2]);
-            }
+        this.total.lstDviCapDuoi = [];
+        this.childUnit.forEach(item => {
+            this.total.lstDviCapDuoi.push({
+                ...new UnitItem(),
+                maDvi: item.maDvi,
+                tenDvi: item.tenDvi,
+            })
         })
-        this.getInTotal();
-    }
-
-    getInTotal() {
-        this.chiCoSo = new ItemData();
-        this.chiMoi = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 1) {
-                if (getTail(item.stt) == 1) {
-                    this.chiCoSo.thNamHienHanhN1 = sumNumber([this.chiCoSo.thNamHienHanhN1, item.thNamHienHanhN1]);
-                    this.chiCoSo.ncauNamDtoanN = sumNumber([this.chiCoSo.ncauNamDtoanN, item.ncauNamDtoanN]);
-                    this.chiCoSo.ncauNamN1 = sumNumber([this.chiCoSo.ncauNamN1, item.ncauNamN1]);
-                    this.chiCoSo.ncauNamN2 = sumNumber([this.chiCoSo.ncauNamN2, item.ncauNamN2]);
-                }
-                if (getTail(item.stt) == 2) {
-                    this.chiMoi.thNamHienHanhN1 = sumNumber([this.chiMoi.thNamHienHanhN1, item.thNamHienHanhN1]);
-                    this.chiMoi.ncauNamDtoanN = sumNumber([this.chiMoi.ncauNamDtoanN, item.ncauNamDtoanN]);
-                    this.chiMoi.ncauNamN1 = sumNumber([this.chiMoi.ncauNamN1, item.ncauNamN1]);
-                    this.chiMoi.ncauNamN2 = sumNumber([this.chiMoi.ncauNamN2, item.ncauNamN2]);
+            if (item.stt.split('.')?.length == 2) {
+                this.total.gtTrenGt = sumNumber([this.total.gtTrenGt, item.gtTrenGt]);
+                this.total.gtTrenGtBh = sumNumber([this.total.gtTrenGtBh, item.gtTrenGtBh]);
+                this.total.gtDuoiGt = sumNumber([this.total.gtDuoiGt, item.gtDuoiGt]);
+                this.total.gtDuoiGtBh = sumNumber([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+                for (let i = 0; i < item.lstDviCapDuoi?.length; i++) {
+                    this.total.lstDviCapDuoi[i].gtTrenGt = sumNumber([this.total.lstDviCapDuoi[i].gtTrenGt, item.lstDviCapDuoi[i].gtTrenGt]);
+                    this.total.lstDviCapDuoi[i].gtTrenGtBh = sumNumber([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
+                    this.total.lstDviCapDuoi[i].gtDuoiGt = sumNumber([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
+                    this.total.lstDviCapDuoi[i].gtDuoiGtBh = sumNumber([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
                 }
             }
         })
     }
 
-    checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
-    }
 
     doPrint() {
         const WindowPrt = window.open(
@@ -345,6 +376,10 @@ export class BieuMau17Component implements OnInit {
         WindowPrt.focus();
         WindowPrt.print();
         WindowPrt.close();
+    }
+
+    displayNumber(num: number): string {
+        return displayNumber(num);
     }
 
     displayValue(num: number): string {

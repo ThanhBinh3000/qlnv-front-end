@@ -189,7 +189,7 @@
 									(ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
 							</td>
 						</ng-template>
-						<td *ngIf=" status && !editAppraisalValue" nzRight>
+						<td *ngIf=" status || editAppraisalValue" nzRight>
 							<a (click)="saveEdit(data.id)" class="save">Lưu</a>
 							<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
 								(nzOnConfirm)="cancelEdit(data.id)" class="save">

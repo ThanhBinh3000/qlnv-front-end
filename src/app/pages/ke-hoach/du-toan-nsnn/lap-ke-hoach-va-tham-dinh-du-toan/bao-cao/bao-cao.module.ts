@@ -3,11 +3,9 @@ import { NgModule } from '@angular/core';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { BaoCaoComponent } from './bao-cao.component';
-import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
-import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
-import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
 import { HangComponent } from './phu-luc/bao-hiem/hang/hang.component';
 import { KhoComponent } from './phu-luc/bao-hiem/kho/kho.component';
+import { TongHopComponent } from './phu-luc/bao-hiem/tong-hop/tong-hop.component';
 import { PhuLuc01XuatComponent } from './phu-luc/phu-luc-01-xuat/phu-luc-01-xuat.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
@@ -57,11 +55,9 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         PhuLuc05Component,
         PhuLuc06Component,
         PhuLucDuAnComponent,
-        BaoHiemHangComponent,
-        BaoHiemKhoComponent,
-        BaoHiemComponent,
         KhoComponent,
         HangComponent,
+        TongHopComponent,
     ],
     imports: [CommonModule, ComponentsModule],
     exports: [BaoCaoComponent],
