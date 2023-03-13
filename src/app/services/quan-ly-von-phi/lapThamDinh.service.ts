@@ -14,7 +14,7 @@ export class LapThamDinhService extends BaseService {
     }
 
     urlTest = 'http://localhost:9150';
-    urlDefault = this.urlTest//environment.SERVICE_API + '/qlnv-khoachphi';
+    urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
     //search list bao cao
     timBaoCaoLapThamDinh(request: any): Observable<any> {

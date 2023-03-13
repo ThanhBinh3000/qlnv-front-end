@@ -248,7 +248,6 @@ export class BaoCaoComponent implements OnInit {
             this.listAppendix.forEach(e => {
                 e.tenDm = getName(this.baoCao.namBcao, e.tenDm);
             })
-            console.log(this.listAppendix);
             if (this.data?.idSoTranChi) {
                 // this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
                 this.baoCao.giaoSoTranChiId = this.data?.idSoTranChi;
@@ -871,7 +870,7 @@ export class BaoCaoComponent implements OnInit {
                     dataInfo.extraData = [];
                     //lay du lieu tu bao hiem kho
                     const obj = {
-                        maDanhMuc: '0.1',
+                        danhMuc: '0.1',
                         slTren: null,
                         slDuoi: null,
                         gtTrenGt: null,
@@ -890,31 +889,32 @@ export class BaoCaoComponent implements OnInit {
                         })
                     }
                     dataInfo.extraData.push(obj);
+                    //lay du lieu tu bao hiem hang
+                    const dataHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang');
+                    if (dataHang?.trangThai != '3') {
+                        dataHang.lstCtietLapThamDinhs.forEach(item => {
+                            let index = dataInfo.extraData.findIndex(e => e.danhMuc == item.maHang);
+                            if (index == -1) {
+                                dataInfo.extraData.push({
+                                    danhMuc: item.maHang,
+                                    slTren: null,
+                                    slDuoi: null,
+                                    gtTrenGt: null,
+                                    gtDuoiGt: null,
+                                })
+                                index = dataInfo.extraData.length - 1;
+                            }
+                            if (item.khoiTich < 5000) {
+                                dataInfo.extraData[index].slDuoi = sumNumber([dataInfo.extraData[index].slDuoi, item.soLuong]);
+                                dataInfo.extraData[index].gtDuoiGt = sumNumber([dataInfo.extraData[index].gtDuoiGt, item.giaTri]);
+                            } else {
+                                dataInfo.extraData[index].slTren = sumNumber([dataInfo.extraData[index].slTren, item.soLuong]);
+                                dataInfo.extraData[index].gtTrenGt = sumNumber([dataInfo.extraData[index].gtTrenGt, item.giaTri]);
+                            }
+                        })
+                    }
                 }
-                //lay du lieu tu bao hiem hang
-                const dataHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang');
-                if (dataHang?.trangThai != '3') {
-                    dataHang.lstCtietLapThamDinhs.forEach(item => {
-                        let index = dataInfo.extraData.findIndex(e => e.maDanhMuc == item.maHang);
-                        if (index == -1) {
-                            dataInfo.extraData.push({
-                                maDanhMuc: item.maHang,
-                                slTren: null,
-                                slDuoi: null,
-                                gtTrenGt: null,
-                                gtDuoiGt: null,
-                            })
-                            index = dataInfo.extraData.length - 1;
-                        }
-                        if (item.khoiTich < 5000) {
-                            dataInfo.extraData[index].slDuoi = sumNumber([dataInfo.extraData[index].slDuoi, item.soLuong]);
-                            dataInfo.extraData[index].gtDuoiGt = sumNumber([dataInfo.extraData[index].gtDuoiGt, item.giaTri]);
-                        } else {
-                            dataInfo.extraData[index].slTren = sumNumber([dataInfo.extraData[index].slTren, item.soLuong]);
-                            dataInfo.extraData[index].gtTrenGt = sumNumber([dataInfo.extraData[index].gtTrenGt, item.giaTri]);
-                        }
-                    })
-                }
+
                 break;
             //thong tu 342
             case 'TT342_13.1':
@@ -1082,15 +1082,13 @@ export class BaoCaoComponent implements OnInit {
                     //phu luc bao hiem
                     const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh');
                     if (data7?.trangThai != '3') {
-                        let tongTu = 0;
-                        let tongDuoi = 0;
                         let tong = 0
                         data7?.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
                                 // tongTu = sumNumber([tongTu, item.gtTuM3]);
                                 // tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
-                                tong = sumNumber([tong, item.gtTong])
+                                tong = sumNumber([tong, item.tong])
                             }
                         })
                         dataInfo.extraData.push({

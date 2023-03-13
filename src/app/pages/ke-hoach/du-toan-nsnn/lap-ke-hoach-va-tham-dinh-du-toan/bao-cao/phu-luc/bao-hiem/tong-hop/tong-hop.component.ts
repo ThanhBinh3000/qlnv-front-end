@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -30,7 +30,7 @@ export class UnitItem {
 export class ItemData {
     id: string;
     stt: string;
-    maDanhMuc: string;
+    danhMuc: string;
     tenDanhMuc: string;
     level: number;
     dviTinh: string;
@@ -105,7 +105,7 @@ export class TongHopComponent implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = !this.dataInfo?.status;
-        this.scrollX = (350 + (11 + 10 * this.childUnit.length) * this.BOX_SIZE).toString() + 'px';
+        this.scrollX = (450 + (11 + 10 * this.childUnit.length) * this.BOX_SIZE).toString() + 'px';
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -123,7 +123,7 @@ export class TongHopComponent implements OnInit {
                     ...new ItemData(),
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
-                    maDanhMuc: e.ma,
+                    danhMuc: e.ma,
                     tenDanhMuc: e.giaTri,
                     dviTinh: e.ghiChu,
                     lstDviCapDuoi: [],
@@ -131,7 +131,7 @@ export class TongHopComponent implements OnInit {
             })
         } else {
             this.lstCtietBcao.forEach(item => {
-                item.stt = item.maDanhMuc;
+                item.stt = item.danhMuc;
             })
         }
 
@@ -149,7 +149,7 @@ export class TongHopComponent implements OnInit {
         //lay du lieu tu cac bieu mau khac
         if (this.dataInfo?.extraData) {
             this.dataInfo.extraData.forEach(item => {
-                const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == item.maDanhMuc);
+                const index = this.lstCtietBcao.findIndex(e => e.danhMuc == item.danhMuc);
                 if (index != -1) {
                     this.lstCtietBcao[index].slTren = item.slTren;
                     this.lstCtietBcao[index].slDuoi = item.slDuoi;
@@ -183,9 +183,15 @@ export class TongHopComponent implements OnInit {
                 checkMoneyRange = false;
                 return;
             }
+            const data: UnitItem[] = [];
+            item.lstDviCapDuoi?.forEach(e => {
+                data.push({
+                    ...e,
+                })
+            })
             lstCtietBcaoTemp.push({
                 ...item,
-                lstDviCapDuoi: item.lstDviCapDuoi,
+                lstDviCapDuoi: data,
             })
         })
 
@@ -199,7 +205,7 @@ export class TongHopComponent implements OnInit {
             if (item.id?.length == 38) {
                 item.id = null;
             }
-            item.lstDviCapDuoi.forEach(e => {
+            item.lstDviCapDuoi?.forEach(e => {
                 if (e.id?.length == 38) {
                     e.id = null;
                 }
@@ -271,7 +277,7 @@ export class TongHopComponent implements OnInit {
         if (n == 1) {
             return chiSo[n];
         }
-        if (this.lstCtietBcao.findIndex(e => getHead(e.maDanhMuc) == stt) == -1) {
+        if (this.lstCtietBcao.findIndex(e => getHead(e.danhMuc) == stt) == -1) {
             return null;
         }
         if (n == 2) {
@@ -316,7 +322,7 @@ export class TongHopComponent implements OnInit {
                 ...new ItemData(),
                 id: data.id,
                 stt: data.stt,
-                maDanhMuc: data.maDanhMuc,
+                danhMuc: data.danhMuc,
                 tenDanhMuc: data.tenDanhMuc,
                 dviTinh: data.dviTinh,
             }
