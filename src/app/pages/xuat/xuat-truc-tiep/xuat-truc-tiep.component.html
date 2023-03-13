@@ -16,6 +16,9 @@
         <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
             Quyết định giao nhiệm vụ xuất hàng
         </li>
+        <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
+            Kiểm tra chất lượng
+        </li>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -35,5 +38,8 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
         <app-giao-nv-xuat-hang-btt></app-giao-nv-xuat-hang-btt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+        <app-kiem-tra-cluong-btt></app-kiem-tra-cluong-btt>
     </ng-container>
 </div>
