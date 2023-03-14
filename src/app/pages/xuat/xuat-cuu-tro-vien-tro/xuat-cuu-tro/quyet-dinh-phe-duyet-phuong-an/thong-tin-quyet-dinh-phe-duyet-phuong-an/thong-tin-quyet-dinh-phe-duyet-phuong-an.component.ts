@@ -51,12 +51,11 @@ export class QuyetDinhPdDtl {
 })
 export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  @Input() idInput: number;
   @Input() isView: boolean;
   @Input() idTongHop: number;
+  @Input() idSelected;
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() id: number;
   @Input() dataTongHop: any;
   maQd: string = null;
   dataInput: any;
@@ -144,15 +143,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
-      if (this.idInput) {
-        await this.loadChiTiet(this.idInput)
-      } else {
-        this.initForm();
-      }
       await Promise.all([
         this.bindingDataTongHop(this.dataTongHop),
         this.loadDsDonVi(),
       ]);
+      await this.loadChiTiet(this.idSelected)
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -214,7 +209,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           }
         }));
         //truong hop tao moi
-        if (!this.idInput) {
+        if (!this.idSelected) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -262,7 +257,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           },
           {quyetDinhPdDx: data.deXuatPhuongAn})];
         //truong hop tao moi
-        if (!this.idInput) {
+        if (!this.idSelected) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -306,7 +301,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
-        this.idInput = data.id;
+        this.idSelected = data.id;
         this.guiDuyet();
       } else {
         this.quayLai();
@@ -318,7 +313,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   async guiDuyet() {
     let trangThai = STATUS.BAN_HANH;
     let mesg = 'Văn bản sẵn sàng ban hành ?'
-    this.approve(this.idInput, trangThai, mesg);
+    this.approve(this.idSelected, trangThai, mesg);
   }
 
   quayLai() {

@@ -116,6 +116,6 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    // this.isViewDetail = isView ?? false;
+    this.isView = b;
   }
 }
