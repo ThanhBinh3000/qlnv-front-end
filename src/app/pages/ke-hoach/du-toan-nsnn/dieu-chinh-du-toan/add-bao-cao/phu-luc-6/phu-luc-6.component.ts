@@ -649,7 +649,7 @@ export class PhuLuc6Component implements OnInit {
   };
 
   tinhTong() {
-    
+
     this.tongDieuChinhGiam = 0;
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;
@@ -662,7 +662,7 @@ export class PhuLuc6Component implements OnInit {
         } else {
           this.tongDieuChinhTang += item.dtoanDchinh;
         }
-  
+
         if (item.dtoanVuTvqtDnghi < 0) {
           this.dToanVuGiam += item.dtoanVuTvqtDnghi;
         } else {
@@ -675,7 +675,7 @@ export class PhuLuc6Component implements OnInit {
   changeModel(id: string): void {
     this.editCache[id].data.sluongThienCong = sumNumber([this.editCache[id].data.sluongThienTte, this.editCache[id].data.sluongThienUocThien]);
     this.editCache[id].data.sluongThienTtien = mulNumber(this.editCache[id].data.sluongThienDmuc, this.editCache[id].data.sluongThienCong);
-    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanGiaoLke - this.editCache[id].data.sluongThienTtien
+    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.sluongThienTtien - this.editCache[id].data.dtoanGiaoLke;
   }
 
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1

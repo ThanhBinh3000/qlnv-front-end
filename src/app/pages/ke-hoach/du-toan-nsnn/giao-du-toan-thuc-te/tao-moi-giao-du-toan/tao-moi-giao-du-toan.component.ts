@@ -21,7 +21,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
 // khai báo class data request
@@ -122,7 +122,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   newDate = new Date();
   fileDetail: NzUploadFile;
-
+  scrollX: string;
   // trước khi upload
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -281,7 +281,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.MA_DVI;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
+      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
       this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
       // await this.dataSource.currentData.subscribe(obj => {
@@ -312,6 +312,12 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.location.back();
       }
     }
+
+    if (this.status) {
+			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+		} else {
+			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+		}
 
     this.getStatusButton();
     this.spinner.hide();
@@ -1477,6 +1483,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
   // call api giao số liệu trong cột được chọn
   giaoSoTranChi(maDviNhan: any) {
+    this.spinner.show();
     const lstGiao: any[] = [];
     if (maDviNhan) {
       const lstCtiet: any[] = [];
@@ -1589,6 +1596,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     )
+    this.spinner.hide();
   }
 
   // lấy tên đơn vị trực thuộc

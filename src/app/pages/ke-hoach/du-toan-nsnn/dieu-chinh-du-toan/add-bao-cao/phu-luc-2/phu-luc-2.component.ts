@@ -424,7 +424,7 @@ export class PhuLuc2Component implements OnInit {
     this.editCache[id].data.tongCongTh = this.editCache[id].data.sluongThien + this.editCache[id].data.sluongUocTh;
     this.editCache[id].data.thanhTienTh = this.editCache[id].data.tongCongTh * this.editCache[id].data.dgiaTh;
     this.editCache[id].data.tongCongDtoan = this.editCache[id].data.dtoanSuDung + this.editCache[id].data.dtoanDaGiao;
-    this.editCache[id].data.dieuChinhDtoan = this.editCache[id].data.tongCongDtoan - this.editCache[id].data.thanhTienTh;
+    this.editCache[id].data.dieuChinhDtoan = this.editCache[id].data.thanhTienTh - this.editCache[id].data.tongCongDtoan;
   };
 
   deleteAllChecked() {

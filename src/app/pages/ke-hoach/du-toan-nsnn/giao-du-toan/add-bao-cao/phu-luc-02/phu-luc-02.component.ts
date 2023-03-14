@@ -32,7 +32,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc-02',
   templateUrl: './phu-luc-02.component.html',
-  styleUrls: ['./phu-luc-02.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 
 export class PhuLuc02Component implements OnInit {

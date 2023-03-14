@@ -30,7 +30,7 @@ export class ItemData {
 @Component({
   selector: 'app-phu-luc-01-nhap',
   templateUrl: './phu-luc-01-nhap.component.html',
-  styleUrls: ['./phu-luc-01-nhap.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc01NhapComponent implements OnInit {
   @Input() dataInfo;

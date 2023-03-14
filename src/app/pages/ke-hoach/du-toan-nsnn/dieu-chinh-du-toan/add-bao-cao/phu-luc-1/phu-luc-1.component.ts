@@ -24,8 +24,8 @@ export class ItemData {
   dtoanKphiNamTruoc: number;
   dtoanKphiNamNay: number;
   tong: number;
-  dtoanDaThien: number;
-  dtoanUocThien: number;
+  // dtoanDaThien: number;
+  // dtoanUocThien: number;
   tongDtoanTrongNam: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
@@ -128,8 +128,8 @@ export class PhuLuc1Component implements OnInit {
           this.lstCtietBcao[index].dtoanKphiNamTruoc = item.dtoanKphiNamTruoc;
           this.lstCtietBcao[index].dtoanKphiNamNay = item.dtoanKphiNamNay;
           this.lstCtietBcao[index].tong = item.tong;
-          this.lstCtietBcao[index].dtoanDaThien = item.dtoanDaThien;
-          this.lstCtietBcao[index].dtoanUocThien = item.dtoanUocThien;
+          // this.lstCtietBcao[index].dtoanDaThien = item.dtoanDaThien;
+          // this.lstCtietBcao[index].dtoanUocThien = item.dtoanUocThien;
           this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam;
           this.lstCtietBcao[index].dtoanDnghiDchinh = item.dtoanDnghiDchinh;
           this.lstCtietBcao[index].dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi;
@@ -146,8 +146,8 @@ export class PhuLuc1Component implements OnInit {
             dtoanKphiNamTruoc: item.dtoanKphiNamTruoc,
             dtoanKphiNamNay: item.dtoanKphiNamNay,
             tong: item.tong,
-            dtoanDaThien: item.dtoanDaThien,
-            dtoanUocThien: item.dtoanUocThien,
+            // dtoanDaThien: item.dtoanDaThien,
+            // dtoanUocThien: item.dtoanUocThien,
             tongDtoanTrongNam: item.tongDtoanTrongNam,
             dtoanDnghiDchinh: item.dtoanDnghiDchinh,
             dtoanVuTvqtDnghi: item.dtoanVuTvqtDnghi,
@@ -346,8 +346,8 @@ export class PhuLuc1Component implements OnInit {
           this.lstCtietBcao[index].dtoanKphiNamTruoc = sumNumber([this.lstCtietBcao[index].dtoanKphiNamTruoc, item.dtoanKphiNamTruoc]);
           this.lstCtietBcao[index].dtoanKphiNamNay = sumNumber([this.lstCtietBcao[index].dtoanKphiNamNay, item.dtoanKphiNamNay]);
           this.lstCtietBcao[index].tong = sumNumber([this.lstCtietBcao[index].tong, item.tong]);
-          this.lstCtietBcao[index].dtoanDaThien = sumNumber([this.lstCtietBcao[index].dtoanDaThien, item.dtoanDaThien]);
-          this.lstCtietBcao[index].dtoanUocThien = sumNumber([this.lstCtietBcao[index].dtoanUocThien, item.dtoanUocThien]);
+          // this.lstCtietBcao[index].dtoanDaThien = sumNumber([this.lstCtietBcao[index].dtoanDaThien, item.dtoanDaThien]);
+          // this.lstCtietBcao[index].dtoanUocThien = sumNumber([this.lstCtietBcao[index].dtoanUocThien, item.dtoanUocThien]);
           this.lstCtietBcao[index].tongDtoanTrongNam = sumNumber([this.lstCtietBcao[index].tongDtoanTrongNam, item.tongDtoanTrongNam]);
           this.lstCtietBcao[index].dtoanDnghiDchinh = sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
           this.lstCtietBcao[index].dtoanVuTvqtDnghi = sumNumber([this.lstCtietBcao[index].dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
@@ -366,8 +366,8 @@ export class PhuLuc1Component implements OnInit {
         this.total.dtoanKphiNamTruoc = sumNumber([this.total.dtoanKphiNamTruoc, item.dtoanKphiNamTruoc]);
         this.total.dtoanKphiNamNay = sumNumber([this.total.dtoanKphiNamNay, item.dtoanKphiNamNay]);
         this.total.tong = sumNumber([this.total.tong, item.tong]);
-        this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
-        this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
+        // this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
+        // this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
         this.total.tongDtoanTrongNam = sumNumber([this.total.tongDtoanTrongNam, item.tongDtoanTrongNam]);
         this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
         this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
@@ -386,7 +386,7 @@ export class PhuLuc1Component implements OnInit {
 
   changeModel(id: string): void {
     this.editCache[id].data.tong = sumNumber([this.editCache[id].data.dtoanKphiNamTruoc, this.editCache[id].data.dtoanKphiNamNay]);
-    this.editCache[id].data.tongDtoanTrongNam = sumNumber([this.editCache[id].data.dtoanDaThien, this.editCache[id].data.dtoanUocThien]);
+    // this.editCache[id].data.tongDtoanTrongNam = sumNumber([this.editCache[id].data.dtoanDaThien, this.editCache[id].data.dtoanUocThien]);
     this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongDtoanTrongNam - this.editCache[id].data.tong
   };
 

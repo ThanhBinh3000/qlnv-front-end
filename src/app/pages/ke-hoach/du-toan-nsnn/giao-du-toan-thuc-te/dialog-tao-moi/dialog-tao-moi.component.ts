@@ -9,6 +9,7 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
+import * as dayjs from 'dayjs';
 @Component({
   selector: 'app-dialog-tao-moi',
   templateUrl: './dialog-tao-moi.component.html',
@@ -21,7 +22,7 @@ export class DialogTaoMoiComponent implements OnInit {
     namPa: null,
   };
   userInfo: any;
-
+  lstNam: number[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private notification: NzNotificationService,
@@ -31,6 +32,10 @@ export class DialogTaoMoiComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     // this.response.maDvi = this.userInfo?.MA_DVI;
+    const thisYear = dayjs().get('year');
+    for (let i = -50; i < 30; i++) {
+      this.lstNam.push(thisYear + i);
+    }
   };
 
   async handleOk() {

@@ -10,7 +10,7 @@ export const TAB_LIST = [
         isSelected: false,
     },
     {
-        name: 'Phân bổ dự toán',
+        name: 'Phân bổ số trần chi ',
         code: 'dsphanBo',
         status: true,
         role: [
@@ -22,7 +22,7 @@ export const TAB_LIST = [
         isSelected: false,
     },
     {
-        name: 'Dự toán giao từ đơn vị cấp trên',
+        name: 'Số trần chi giao từ đơn vị cấp trên',
         code: 'dsGiaoTuCapTren',
         status: true,
         role: [GDT.NHAN_PA_PBDT],

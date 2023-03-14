@@ -47,9 +47,9 @@
             <th rowSpan="4">Tổng nhu cầu tiền lương năm {{namBcao}} </th>
             <th colSpan="4">Bao gồm</th>
             <th colSpan="3">Dự toán, kinh phí được sử dụng trong năm</th>
-            <th rowSpan="4">Dự toán đã thực hiện đến thời điểm báo cáo</th>
-            <th rowSpan="4">Dự toán ước thực hiện đến cuối năm</th>
-            <th rowSpan="4">Tổng nhu cầu dự toán trong năm</th>
+            <!-- <th rowSpan="4">Dự toán đã thực hiện đến thời điểm báo cáo</th>
+            <th rowSpan="4">Dự toán ước thực hiện đến cuối năm</th> -->
+            <!-- <th rowSpan="4">Tổng nhu cầu dự toán trong năm</th> -->
             <th rowSpan="4">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
             <th rowSpan="4" *ngIf="viewRecommendedValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="4" [hidden]="status && !viewRecommendedValue"></th>
@@ -133,10 +133,8 @@
             <th>33</th>
             <th>34</th>
             <th>35 = 34 + 33</th>
-            <th>36</th>
+            <th>36 = 28 - 38</th>
             <th>37</th>
-            <th>38 = 37 + 36</th>
-            <th>39 = 38 - 28</th>
             <th *ngIf="viewRecommendedValue">40</th>
             <th [hidden]="status && !viewRecommendedValue"></th>
           </tr>
@@ -180,9 +178,9 @@
             <td>{{displayValue(total.dtoanKphiDtoanNtruoc)}}</td>
             <td>{{displayValue(total.dtoanKphiDaGiao)}}</td>
             <td>{{displayValue(total.dtoanKphiCong)}}</td>
-            <td>{{displayValue(total.dtoanDaThien)}}</td>
-            <td>{{displayValue(total.dtoanUocThien)}}</td>
-            <td>{{displayValue(total.tongNcauDtoan)}}</td>
+            <!-- <td>{{displayValue(total.dtoanDaThien)}}</td>
+            <td>{{displayValue(total.dtoanUocThien)}}</td> -->
+            <!-- <td>{{displayValue(total.tongNcauDtoan)}}</td> -->
             <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
@@ -225,9 +223,9 @@
             <td></td>
             <td></td>
             <td></td>
+            <!-- <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td></td> -->
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
@@ -270,9 +268,9 @@
             <td></td>
             <td></td>
             <td></td>
+            <!-- <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td></td> -->
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
@@ -324,9 +322,9 @@
               <td>{{displayValue(data.dtoanKphiDtoanNtruoc)}}</td>
               <td>{{displayValue(data.dtoanKphiDaGiao)}}</td>
               <td>{{displayValue(data.dtoanKphiCong)}}</td>
-              <td>{{displayValue(data.dtoanDaThien)}}</td>
+              <!-- <td>{{displayValue(data.dtoanDaThien)}}</td>
               <td>{{displayValue(data.dtoanUocThien)}}</td>
-              <td>{{displayValue(data.tongNcauDtoan)}}</td>
+              <td>{{displayValue(data.tongNcauDtoan)}}</td> -->
               <td>{{displayValue(data.dtoanDnghiDchinh)}}</td>
               <td *ngIf="viewRecommendedValue">{{displayValue(data.dtoanVuTvqtDnghi)}}</td>
               <!-- <td [hidden]="status">
@@ -379,9 +377,9 @@
                 <td>{{displayValue(editCache[data.id].data.dtoanKphiDtoanNtruoc)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanKphiDaGiao)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanKphiCong)}}</td>
-                <td>{{displayValue(editCache[data.id].data.dtoanDaThien)}}</td>
+                <!-- <td>{{displayValue(editCache[data.id].data.dtoanDaThien)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dtoanUocThien)}}</td>
-                <td>{{displayValue(editCache[data.id].data.tongNcauDtoan)}}</td>
+                <td>{{displayValue(editCache[data.id].data.tongNcauDtoan)}}</td> -->
                 <td>{{displayValue(editCache[data.id].data.dtoanDnghiDchinh)}}</td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
@@ -537,7 +535,7 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.dtoanKphiCong)}}
                 </td>
-                <td>
+                <!-- <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaThien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
@@ -546,10 +544,8 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongNcauDtoan"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
                   {{displayValue(editCache[data.id].data.tongNcauDtoan)}}
-                </td>
+                </td> -->
                 <td>
                   <!-- <input class="money-input" currencyMask
                     [(ngModel)]="editCache[data.id].data.dtoanDnghiDchinh"

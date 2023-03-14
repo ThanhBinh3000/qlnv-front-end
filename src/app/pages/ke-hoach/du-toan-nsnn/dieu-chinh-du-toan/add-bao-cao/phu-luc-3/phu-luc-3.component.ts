@@ -422,7 +422,7 @@ export class PhuLuc3Component implements OnInit {
     // // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
     this.editCache[id].data.tongCong = this.editCache[id].data.sluongThucTe + this.editCache[id].data.sluongUocThien;
     this.editCache[id].data.thanhTien = this.editCache[id].data.tongCong * this.editCache[id].data.dinhMuc;
-    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanDaGiaoLke - this.editCache[id].data.thanhTien;
+    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.thanhTien - this.editCache[id].data.dtoanDaGiaoLke;
   };
 
   deleteAllChecked() {
