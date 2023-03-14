@@ -225,6 +225,11 @@
                 (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
+              <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC)
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') : ( userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_LDCUC')) )"
+                (click)="detail(data)">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+              </a>
               <a *ngIf="data.trangThai=='00'
               && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA'))"
                 (click)="xoaItem(data)">
