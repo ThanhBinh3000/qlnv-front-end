@@ -195,7 +195,7 @@ export class BaoCao04bComponent implements OnInit {
     }
 
     async getListNdung() {
-        const data = await this.danhMucService.danhMucChungGetAll('BC_VP_04A');
+        const data = await this.danhMucService.danhMucChungGetAll('BC_VP_04B');
         if (data) {
             data.data.forEach(
                 item => {
