@@ -403,7 +403,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     await this.spinner.show();
     // Get data tờ trình
     let bodyDx = {
-      trangThaiList: [STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC],
+      trangThaiList: [STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_TAO_CBV],
       maTongHop: "Chưa tổng hợp",
       nam: this.formData.get('nam').value,
       loaiVthh: this.loaiVthh,
