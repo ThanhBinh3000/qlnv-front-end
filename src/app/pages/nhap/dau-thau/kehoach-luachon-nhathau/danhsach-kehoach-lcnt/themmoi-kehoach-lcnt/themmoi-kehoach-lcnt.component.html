@@ -405,19 +405,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3" *ngIf="!loaiVthhInput.startsWith('02')">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá bao gồm VAT (đ/kg)
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" formControlName="donGiaVat" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
@@ -494,9 +481,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm
-            nhập hàng'
-            }}</span>
+          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'}}</span>
         </div>
       </div>
       <div class="buttons">
