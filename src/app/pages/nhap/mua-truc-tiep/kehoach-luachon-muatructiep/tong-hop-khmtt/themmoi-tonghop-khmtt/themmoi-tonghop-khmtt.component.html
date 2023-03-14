@@ -105,7 +105,7 @@
                   Nội dung tổng hợp
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <textarea formControlName="noiDung" nz-input [rows]="3" [readonly]="isDisable()"></textarea>
+                  <textarea formControlName="noiDungThop" nz-input [rows]="3" [readonly]="isDisable()"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -128,7 +128,6 @@
               <th>Tên dự án</th>
               <th>Số lượng (Tấn)</th>
               <th>Tổng tiền đã bao gồm thuế (đồng)</th>
-              <th>Trang thái</th>
               <th>Hành động</th>
             </tr>
           </thead>
@@ -142,7 +141,6 @@
               <td>{{ data.tenDuAn }}</td>
               <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
               <td>{{ data.tongSoLuong * data.donGiaVat *1000| number: '1.0-1' : 'vi_VN' }}</td>
-              <td>{{ data.tenTrangThaiDx }}</td>
               <td>
                 <a (click)="showDetail($event,data.idDxHdr)">
                   <i class="fa fa-eye"></i>
