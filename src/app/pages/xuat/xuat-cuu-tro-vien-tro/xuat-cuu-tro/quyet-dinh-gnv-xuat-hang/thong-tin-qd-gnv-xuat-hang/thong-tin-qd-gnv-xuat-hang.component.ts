@@ -80,12 +80,12 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
       id: [],
-      nam: [dayjs().get('year')],
-      soQd: [],
+      nam: [dayjs().get('year'),[Validators.required]],
+      soQd: [,[Validators.required]],
       maDvi: [],
       ngayKy: [],
-      idQdPd: [],
-      soQdPd: ['', [Validators.required]],
+      idQdPd: [,[Validators.required]],
+      soQdPd: [''],
       soBbHaoDoi: [],
       soBbTinhKho: [],
       loaiVthh: [],
