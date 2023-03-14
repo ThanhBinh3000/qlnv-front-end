@@ -4,18 +4,14 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import { Validators} from "@angular/forms";
+import {Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
-import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {QdMuaSamBhService} from "../../../../../services/qd-mua-sam-bh.service";
-import {
-  DeXuatNhuCauBaoHiemService
-} from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {TongHopGtriBaoHiemService} from "../../../../../services/tong-hop-gtri-bao-hiem.service";
 
 @Component({
   selector: 'app-them-moi-th-gtri-bao-hiem',
@@ -25,41 +21,34 @@ import {
 export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  listTongHop: any[] = [];
-  listDxCuc: any[] = [];
   tableHangDtqg: any[] = [];
   maQd: string
   expandSet = new Set<number>();
-  typeQd : string
+  typeQd: string
   tableGiaTriBh: any[] = [];
-  dataHang : any[] = [];
+  dataHang: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatBaoHiemSv: DeXuatNhuCauBaoHiemService,
-    private qdMuaSamService: QdMuaSamBhService
+    private gtriBaoHiemService: TongHopGtriBaoHiemService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
+    super(httpClient, storageService, notification, spinner, modal, gtriBaoHiemService)
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year'), Validators.required],
-      maTh: [null],
-      maDx: [null],
-      giaTriDx: [null],
-      soQd: [null, Validators.required],
+      giaTriBh: [null],
       trichYeu: [null, Validators.required],
-      ngayKy: [null, Validators.required],
+      ngayTongHop: [null, Validators.required],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
-      listQlDinhMucQdMuaSamDtlReq: [null],
-      loai : ['00']
     });
   }
 
@@ -68,6 +57,8 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     try {
       if (this.id > 0) {
         await this.detail(this.id);
+      } else {
+        await this.getDetailCtiet()
       }
       this.spinner.hide();
     } catch (e) {
@@ -76,6 +67,20 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async getDetailCtiet() {
+    this.spinner.show()
+    let res = await this.gtriBaoHiemService.getDetailCtiet()
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.convertList(res.data)
+      this.spinner.hide()
+    } else {
+      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin giá trị bảo hiểm!')
+      this.spinner.hide();
+      return;
+    }
+  }
+
 
   async save(isOther: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -88,16 +93,15 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.listQlDinhMucQdMuaSamBhHdtqg = this.tableHangDtqg;
-    this.formData.value.listQlDinhMucQdMuaSamBhKho = this.dataTable;
-    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    this.formData.value.listQlDinhMucThGiatriBhHdtqg = this.tableHangDtqg;
+    this.formData.value.listQlDinhMucThGiatriBhKho = this.dataTable;
+    this.formData.value.giaTriBh = (this.tableGiaTriBh[0].gtThamGiaBh * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11 / 10
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
-    body.soQd = body.soQd + this.maQd
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDTC, "Bạn có chắc chắn muốn gửi duyệt?");
+        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
       }
@@ -135,18 +139,18 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
   async detail(id) {
     this.spinner.show();
     try {
-      let res = await this.qdMuaSamService.getDetail(id);
+      let res = await this.gtriBaoHiemService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           if (this.formData.value.maTh) {
-            this.typeQd ='TH'
+            this.typeQd = 'TH'
           } else {
             this.typeQd = 'DX'
           }
           this.fileDinhKem = data.listFileDinhKems;
-          this.convertListDetail(res.data)
+          this.convertList(res.data)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -164,31 +168,35 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
+      case STATUS.TU_CHOI_LDV : {
+        trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.BAN_HANH
+      case STATUS.CHO_DUYET_LDV : {
+        trangThai = STATUS.DA_DUYET_LDV
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
   convertList(listHh) {
-    if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
-      this.dataHang = listHh.listQlDinhMucDxBhKhoChua
+    if (listHh.listQlDinhMucThGiatriBhHdtqg && listHh.listQlDinhMucThGiatriBhHdtqg.length > 0) {
+      this.dataHang = listHh.listQlDinhMucThGiatriBhKho
+
       this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
           tenDonViCha: key,
           idVirtual: uuid.v4(),
         })
       ).value()
       this.dataHang.forEach(item => {
-        if (listHh.listQlDinhMucDxBhKhoChua && listHh.listQlDinhMucDxBhKhoChua.length > 0) {
+        if (listHh.listQlDinhMucThGiatriBhKho
+          && listHh.listQlDinhMucThGiatriBhKho
+            .length > 0) {
           if (!item.dataChildKho) {
             item.dataChildKho = []
           }
-          let arrKho = listHh.listQlDinhMucDxBhKhoChua
+          let arrKho = listHh.listQlDinhMucThGiatriBhKho
+
           let arrDetailKho = arrKho.filter(data => data.tenDonViCha == item.tenDonViCha)
           arrDetailKho = this.convertListData(arrDetailKho);
           if (arrDetailKho) {
@@ -196,50 +204,11 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
           }
         }
 
-        if (listHh.listQlDinhMucDxBhHdtqg && listHh.listQlDinhMucDxBhHdtqg.length > 0) {
+        if (listHh.listQlDinhMucThGiatriBhHdtqg && listHh.listQlDinhMucThGiatriBhHdtqg.length > 0) {
           if (!item.dataChildHang) {
             item.dataChildHang = []
           }
-          let arrHang = listHh.listQlDinhMucDxBhHdtqg
-          let detailArrHang = arrHang.filter(data => data.tenDonViCha == item.tenDonViCha)
-          detailArrHang = this.buildDiaDiemTc(detailArrHang);
-          if (detailArrHang) {
-            item.dataChildHang = detailArrHang
-          }
-        }
-      })
-    }
-    if (listHh.listQlDinhMucThGiaTriBaoHiem && listHh.listQlDinhMucThGiaTriBaoHiem.length > 0) {
-      this.tableGiaTriBh = listHh.listQlDinhMucThGiaTriBaoHiem
-    }
-  }
-
-  convertListDetail(listHh) {
-    if (listHh.listQlDinhMucQdMuaSamBhHdtqg && listHh.listQlDinhMucQdMuaSamBhHdtqg.length > 0) {
-      this.dataHang = listHh.listQlDinhMucQdMuaSamBhKho
-      this.dataHang = chain(this.dataHang).groupBy('tenDonViCha').map((value, key) => ({
-          tenDonViCha: key,
-          idVirtual: uuid.v4(),
-        })
-      ).value()
-      this.dataHang.forEach(item => {
-        if (listHh.listQlDinhMucQdMuaSamBhKho && listHh.listQlDinhMucQdMuaSamBhKho.length > 0) {
-          if (!item.dataChildKho) {
-            item.dataChildKho = []
-          }
-          let arrKho = listHh.listQlDinhMucQdMuaSamBhKho
-          let arrDetailKho = arrKho.filter(data => data.tenDonViCha == item.tenDonViCha)
-          arrDetailKho = this.convertListData(arrDetailKho);
-          if (arrDetailKho) {
-            item.dataChildKho = arrDetailKho
-          }
-        }
-
-        if (listHh.listQlDinhMucQdMuaSamBhHdtqg && listHh.listQlDinhMucQdMuaSamBhHdtqg.length > 0) {
-          if (!item.dataChildHang) {
-            item.dataChildHang = []
-          }
-          let arrHang = listHh.listQlDinhMucQdMuaSamBhHdtqg
+          let arrHang = listHh.listQlDinhMucThGiatriBhHdtqg
           let detailArrHang = arrHang.filter(data => data.tenDonViCha == item.tenDonViCha)
           detailArrHang = this.buildDiaDiemTc(detailArrHang);
           if (detailArrHang) {
@@ -271,7 +240,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -284,7 +253,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -299,76 +268,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     return table;
   }
 
-
-  async changSoTh(event) {
-    if (this.listTongHop && this.listTongHop.length > 0) {
-      let result = this.listTongHop.filter(item => item.id = event)
-      if (result && result.length > 0) {
-        let detailTh = result[0]
-        let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            this.convertList(res.data)
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg)
-        }
-      }
-    }
-  }
-
-  chonMaTongHop() {
-    if (!this.isView && this.typeQd == 'TH') {
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂm CỦA CÁC CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listTongHop ,
-          type :this.formData.value.loai
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maTh :  data.id,
-            maDx :  null,
-          })
-          await this.changSoTh(data.id);
-        }
-      })
-    }
-  }
-  chonSoDxCuc() {
-    if (!this.isView && this.typeQd == 'DX') {
-      let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
-        nzContent: DialogMmMuaSamComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          listTh:  this.listDxCuc ,
-          type : "02"
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            maDx :  data.soCv,
-            maTh :  null,
-          })
-          await this.changSoTh(data.id);
-        }
-      })
-    }
-  }
-
-  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string): number {
+  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
     let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
@@ -386,9 +286,9 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;
@@ -490,4 +390,27 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     return arr
   }
 
+  sumKho() {
+    let result = 0;
+    let arr = [];
+    this.dataHang.forEach(item => {
+      if (item.dataChildKho && item.dataChildKho.length > 0) {
+        item.dataChildKho.forEach(data => {
+          if (data.dataChild && data.dataChild.length > 0) {
+            data.dataChild.forEach(dtl => {
+              arr.push(dtl)
+            })
+          }
+        })
+      }
+    })
+    const sum = arr.reduce((prev, cur) => {
+      prev += cur.gtBaoHiem;
+      return prev;
+    }, 0);
+    result = sum
+    if (this.tableGiaTriBh && this.tableGiaTriBh.length > 0) {
+      this.tableGiaTriBh[0].gtThamGiaBh = result ? result  :0
+    }
+  }
 }

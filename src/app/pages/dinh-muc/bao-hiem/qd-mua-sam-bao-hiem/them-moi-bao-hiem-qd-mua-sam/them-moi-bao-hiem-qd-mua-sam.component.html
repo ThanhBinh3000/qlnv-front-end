@@ -243,27 +243,30 @@
                 </td>
               </tr>
             </ng-container>
-            <tr>
-              <td></td>
-              <td></td>
-              <td class="font-weight-bold">Tổng</td>
-              <td></td>
-              <td></td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'tichLuong', null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'dienTich', null, 'tong')| number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriHt', null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriDk', null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriBhDx', null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriTc', null, 'tong') | number: '1.0-3'}}</td>
-            </tr>
           </ng-container>
           </tbody>
+          <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="font-weight-bold">Tổng</td>
+            <td></td>
+            <td></td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'tichLuong', null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'dienTich', null, 'tong')| number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriHt', null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriDk', null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriBhDx', null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumslKho(item.dataChildKho, 'giaTriTc', null, 'tong') | number: '1.0-3'}}</td>
+          </tr>
+
+          </tfoot>
         </nz-table>
         <div class="header header-green-background mg-t-10" >
           <div class="header-text">
@@ -327,33 +330,33 @@
             </tr>
             <ng-container *ngIf="expandSet.has(item1.idVirtual)">
               <ng-container *ngFor="let lv1 of item1.childData,let i1=index">
-                <tr>
+                <tr *ngIf="item1.tenLoaiVthh == 'Vật tư'">
                   <td></td>
                   <td (nzExpandChange)="onExpandChange(lv1.idVirtual, $event)"
                       [nzExpand]="expandSet.has(lv1.idVirtual)" nzShowExpand="true"
                       style="width: 35px"></td>
                   <td></td>
                   <td></td>
-                  <td class="font-weight-bold">{{lv1.tenHangHoaCha}}</td>
+                  <td class="font-weight-bold">{{lv1.tenNhomTiLeBaoHiem}}</td>
                   <td></td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                   <td
-                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenHangHoaCha, null, 'tenHangHoaCha') | number: '1.0-3'}}</td>
+                    class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                 </tr>
-                <ng-container *ngIf="expandSet.has(lv1.idVirtual)">
+                <ng-container *ngIf="expandSet.has(item1.tenLoaiVthh  == 'Vật tư' ? lv1.idVirtual :  item1.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                     <tr>
                       <td></td>
@@ -409,33 +412,35 @@
                 </ng-container>
               </ng-container>
             </ng-container>
-            <tr>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td class="font-weight-bold">Tổng</td>
-              <td></td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, null, null, 'tong') | number: '1.0-3'}}</td>
-              <td
-                class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, null, null, 'tong') | number: '1.0-3'}}</td>
-            </tr>
           </ng-container>
-
           </tbody>
+          <tfoot>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="font-weight-bold">Tổng</td>
+            <td></td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongHt', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriHt', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriDk', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'soLuongTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTh', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriBhDx', null, null, null, 'tong') | number: '1.0-3'}}</td>
+            <td
+              class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, null, null, 'tong') | number: '1.0-3'}}</td>
+          </tr>
+
+          </tfoot>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>

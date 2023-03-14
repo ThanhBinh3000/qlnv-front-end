@@ -8,7 +8,6 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
-import {QdMuaSamBhService} from "../../../../services/qd-mua-sam-bh.service";
 import {TongHopGtriBaoHiemService} from "../../../../services/tong-hop-gtri-bao-hiem.service";
 
 @Component({

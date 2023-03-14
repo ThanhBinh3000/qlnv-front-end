@@ -170,6 +170,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+            if (res.data.isChonPhuongAn == true) {
+              this.isChecked = true;
+              this.isChonPhuongAn = true;
+              this.changePhuongAn(res.data.qdPaXuatCapId);
+            }
             this.buildTableView();
           }
         })

@@ -38,7 +38,7 @@
     <div class="group-button">
       <h3>DANH SÁCH ĐỀ XUẤT MUA SẮM</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>

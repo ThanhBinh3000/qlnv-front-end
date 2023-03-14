@@ -1,28 +1,9 @@
-<!--<ng-container *ngIf="!isBienBan">
+<ng-container>
   <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
     <div class="btn-group">
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
-      </button>
-
-      <button type="button" class="btn btn-sub do"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
-              (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button class="btn btn-sub xanh-nhat"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
-              (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet "></i>
-        <span>Duyệt</span>
-      </button>
-      <button type="button" class="btn btn-sub xanh-nhat"
-              *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
-              (click)="save(true)">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh"
               *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
@@ -48,7 +29,7 @@
               nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
     </nz-alert>
 
-    &lt;!&ndash;Thông tin chung&ndash;&gt;
+    <!--Thông tin chung-->
     <nz-card class="mg-t-16 flex-card p-lr16">
       <div class="header header-green-background mg-t-16">
         <div class="header-text">
@@ -59,7 +40,7 @@
         </div>
       </div>
       <form nzLayout="vertical" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="[24]">
+        <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="2">
             <nz-form-item class="form-item">
               <nz-form-label [nzNoColon]="true" nzRequired>
@@ -85,7 +66,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
+              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu (Khi nhập)
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
@@ -129,10 +110,21 @@
               </nz-form-control>
             </nz-form-item>
           </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu (Khi xuất)
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMauXuat()">
+                  <input [readonly]="true" nz-input formControlName="soBbLayMauXuat" readonly />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
       </form>
     </nz-card>
-    &lt;!&ndash;End thông tin chung&ndash;&gt;
+    <!--End thông tin chung-->
 
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -252,11 +244,30 @@
       </tr>
       </tbody>
     </nz-table>
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Kết quả kiểm tra hồ sơ kỹ thuật trước khi xuất kho</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mg-t-10" nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-radio-group [(ngModel)]="formData.value.kqKiemTra" nzSpan="8" (ngModelChange)="test()">
+            <label nz-radio [nzValue]="o.value" *ngFor="let o of radioData">{{ o.label }}</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
     <ng-template #error let-control>
       <app-template-error #error [control]="control"></app-template-error>
     </ng-template>
   </div>
-</ng-container>-->
+</ng-container>
 <!--
 <ng-container *ngIf="isBienBan">
   <app-thong-tin-ho-so-ky-thuat [id]="idBienBan" [loai]="loaiBienBan" [idHoSoKyThuat]="id"
