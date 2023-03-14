@@ -63,7 +63,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],

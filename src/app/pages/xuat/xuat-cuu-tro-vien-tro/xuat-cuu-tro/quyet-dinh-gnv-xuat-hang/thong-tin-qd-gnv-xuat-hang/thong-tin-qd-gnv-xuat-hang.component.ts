@@ -79,7 +79,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
               private danhMucTieuChuanService: DanhMucTieuChuanService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
-      id: [],
+      id: [0],
       nam: [dayjs().get('year'),[Validators.required]],
       soQd: [,[Validators.required]],
       maDvi: [],

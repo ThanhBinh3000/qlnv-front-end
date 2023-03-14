@@ -105,7 +105,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
-        id: [],
+        id: [0],
         maDvi: [],
         nam: [dayjs().get("year"), [Validators.required]],
         soQd: [, [Validators.required]],

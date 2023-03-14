@@ -56,7 +56,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [],
         maQhNs: [],

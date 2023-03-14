@@ -52,7 +52,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [],
         maQhNs: [],
