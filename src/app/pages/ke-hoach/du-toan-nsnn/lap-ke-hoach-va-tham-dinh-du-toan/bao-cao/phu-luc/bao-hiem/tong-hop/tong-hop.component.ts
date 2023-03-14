@@ -105,7 +105,7 @@ export class TongHopComponent implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = !this.dataInfo?.status;
-        this.scrollX = (450 + (11 + 10 * this.childUnit.length) * this.BOX_SIZE).toString() + 'px';
+
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -142,6 +142,7 @@ export class TongHopComponent implements OnInit {
             })
         })
 
+        this.scrollX = (450 + (11 + 10 * this.childUnit.length) * this.BOX_SIZE).toString() + 'px';
         //sap xep lai du lieu
         this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
         this.sortUnit();
