@@ -112,7 +112,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nam: dayjs().get('year'),
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.DA_DUYET_LDCC,
-      maDvi: this.userInfo.MA_DVI
+      // maDvi: this.userInfo.MA_DVI
     }
     let res = await this.bienBanLayMauXhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

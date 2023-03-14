@@ -106,7 +106,6 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   async search(roles?): Promise<void> {
     await this.spinner.show()
     this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
