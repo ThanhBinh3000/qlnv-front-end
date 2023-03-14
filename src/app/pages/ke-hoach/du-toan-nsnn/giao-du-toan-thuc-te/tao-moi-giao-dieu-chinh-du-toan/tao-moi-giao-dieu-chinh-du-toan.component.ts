@@ -122,7 +122,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   newDate = new Date();
   fileDetail: NzUploadFile;
-
+  scrollX: string;
   // trước khi upload
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -279,7 +279,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       this.trangThaiBanGhi = '1';
       this.maDonViTao = this.userInfo?.MA_DVI;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
+      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
       this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
       // await this.dataSource.currentData.subscribe(obj => {
@@ -310,6 +310,12 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       if (!this.maPa) {
         this.location.back();
       }
+    }
+
+    if (this.status) {
+      this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+    } else {
+      this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
     }
 
     this.getStatusButton();
@@ -572,6 +578,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
   // lưu phương án
   async save() {
+    this.spinner.show();
     let checkSaveEdit;
     if (!this.maDviTien) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
@@ -709,7 +716,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
     //   return;
     // }
-    this.spinner.show();
+
     if (!this.id) {
       this.giaoDuToanChiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
@@ -1473,6 +1480,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
   // call api giao số liệu trong cột được chọn
   giaoSoTranChi(maDviNhan: any) {
+    this.spinner.show();
     const lstGiao: any[] = [];
     if (maDviNhan) {
       const lstCtiet: any[] = [];
@@ -1547,6 +1555,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     )
+    this.spinner.hide();
   }
 
   // lấy tên đơn vị trực thuộc

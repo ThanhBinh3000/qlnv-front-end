@@ -42,7 +42,7 @@ export class ItemData {
   khoachLuong: number;
   tdiemBcaoLuong: number;
   tdiemBcaoDtoan: number;
-  tdiemBcaoCcu: number;
+  tdiemBcaoCcu: string;
   dkienThienLuong: number;
   dkienThienDtoan: number;
   ncauDtoan: number;
@@ -164,7 +164,6 @@ export class PhuLuc7Component implements OnInit {
       this.total.khoachLuong = sumNumber([this.total.khoachLuong, item.khoachLuong]);
       this.total.tdiemBcaoLuong = sumNumber([this.total.tdiemBcaoLuong, item.tdiemBcaoLuong]);
       this.total.tdiemBcaoDtoan = sumNumber([this.total.tdiemBcaoDtoan, item.tdiemBcaoDtoan]);
-      this.total.tdiemBcaoCcu = sumNumber([this.total.tdiemBcaoCcu, item.tdiemBcaoCcu]);
       this.total.dkienThienLuong = sumNumber([this.total.dkienThienLuong, item.dkienThienLuong]);
       this.total.dkienThienDtoan = sumNumber([this.total.dkienThienDtoan, item.dkienThienDtoan]);
       this.total.ncauDtoan = sumNumber([this.total.ncauDtoan, item.ncauDtoan]);
@@ -442,7 +441,7 @@ export class PhuLuc7Component implements OnInit {
       khoachLuong: 0,
       tdiemBcaoLuong: 0,
       tdiemBcaoDtoan: 0,
-      tdiemBcaoCcu: 0,
+      tdiemBcaoCcu: "",
       dkienThienDtoan: 0,
       dkienThienLuong: 0,
       ncauDtoan: 0,

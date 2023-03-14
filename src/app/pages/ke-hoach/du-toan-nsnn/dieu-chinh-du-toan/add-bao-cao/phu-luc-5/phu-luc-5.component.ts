@@ -674,7 +674,7 @@ export class PhuLuc5Component implements OnInit {
   changeModel(id: string): void {
     this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.sluongThucTe, this.editCache[id].data.soluongUocThien]);
     this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
-    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.dtoanDaGiaoLke - this.editCache[id].data.thanhTien
+    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.thanhTien - this.editCache[id].data.dtoanDaGiaoLke
   }
 
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1

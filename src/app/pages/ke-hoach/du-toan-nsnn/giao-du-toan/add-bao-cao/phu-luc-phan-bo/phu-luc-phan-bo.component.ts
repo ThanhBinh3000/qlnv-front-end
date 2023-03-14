@@ -34,7 +34,7 @@ export class ItemDvi {
 @Component({
   selector: 'app-phu-luc-phan-bo',
   templateUrl: './phu-luc-phan-bo.component.html',
-  styleUrls: ['./phu-luc-phan-bo.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLucPhanBoComponent implements OnInit {
   @Input() dataInfo;

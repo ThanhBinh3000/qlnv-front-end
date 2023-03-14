@@ -57,9 +57,6 @@ export class ItemData {
   dtoanKphiDtoanNtruoc: number;
   dtoanKphiDaGiao: number;
   dtoanKphiCong: number;
-  dtoanDaThien: number;
-  dtoanUocThien: number;
-  tongNcauDtoan: number;
   dtoanDnghiDchinh: number;
   dtoanVuTvqtDnghi: number;
 }
@@ -233,9 +230,6 @@ export class PhuLuc9Component implements OnInit {
       this.total.dtoanKphiDtoanNtruoc = sumNumber([this.total.dtoanKphiDtoanNtruoc, item.dtoanKphiDtoanNtruoc]);
       this.total.dtoanKphiDaGiao = sumNumber([this.total.dtoanKphiDaGiao, item.dtoanKphiDaGiao]);
       this.total.dtoanKphiCong = sumNumber([this.total.dtoanKphiCong, item.dtoanKphiCong]);
-      this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
-      this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
-      this.total.tongNcauDtoan = sumNumber([this.total.tongNcauDtoan, item.tongNcauDtoan]);
       this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
       this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
     })
@@ -453,10 +447,6 @@ export class PhuLuc9Component implements OnInit {
     this.editCache[id].data.dtoanKphiCong = sumNumber([
       this.editCache[id].data.dtoanKphiDtoanNtruoc,
       this.editCache[id].data.dtoanKphiDaGiao
-    ])
-    this.editCache[id].data.tongNcauDtoan = sumNumber([
-      this.editCache[id].data.dtoanDaThien,
-      this.editCache[id].data.dtoanUocThien
     ])
     this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.dtoanKphiCong - this.editCache[id].data.tongNcauTluong
   };

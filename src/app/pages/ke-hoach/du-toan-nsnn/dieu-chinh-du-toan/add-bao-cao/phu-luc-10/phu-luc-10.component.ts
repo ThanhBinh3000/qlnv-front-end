@@ -387,16 +387,19 @@ export class PhuLuc10Component implements OnInit {
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if (item.dtoanDnghiDchinhLnay < 0) {
-        Number(this.tongDieuChinhGiam += item.dtoanDnghiDchinhLnay);
-      } else {
-        Number(this.tongDieuChinhTang += item.dtoanDnghiDchinhLnay);
-      }
+      const str = item.stt
+      if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+        if (item.dtoanDnghiDchinhLnay < 0) {
+          Number(this.tongDieuChinhGiam += item.dtoanDnghiDchinhLnay);
+        } else {
+          Number(this.tongDieuChinhTang += item.dtoanDnghiDchinhLnay);
+        }
 
-      if (item.dtoanVuTvqtDnghi < 0) {
-        Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
-      } else {
-        Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+        if (item.dtoanVuTvqtDnghi < 0) {
+          Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
+        } else {
+          Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+        }
       }
     })
   };
