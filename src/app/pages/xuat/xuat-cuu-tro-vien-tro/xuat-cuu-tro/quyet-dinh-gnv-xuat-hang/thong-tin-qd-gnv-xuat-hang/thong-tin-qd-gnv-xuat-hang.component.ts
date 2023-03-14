@@ -19,6 +19,7 @@ import {
 import {STATUS} from "src/app/constants/status";
 import * as uuid from "uuid";
 import {DonviService} from "src/app/services/donvi.service";
+import {Validators} from '@angular/forms';
 
 /*export class noiDungCuuTro {
   idVirtual: number;
@@ -79,12 +80,12 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
       id: [],
-      nam: [dayjs().get('year')],
-      soQd: [],
+      nam: [dayjs().get('year'),[Validators.required]],
+      soQd: [,[Validators.required]],
       maDvi: [],
       ngayKy: [],
-      idQdPd: [],
-      soQdPd: [],
+      idQdPd: [,[Validators.required]],
+      soQdPd: [''],
       soBbHaoDoi: [],
       soBbTinhKho: [],
       loaiVthh: [],
@@ -485,7 +486,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   handleOk() {
-    if (!this.noiDungRow.maDiemKho || !this.noiDungRow.maNhaKho || !this.noiDungRow.maNganKho) {
+    if (this.userService.isChiCuc() && (!this.noiDungRow.maDiemKho || !this.noiDungRow.maNhaKho || !this.noiDungRow.maNganKho)) {
       this.statusForm = 'error';
       this.notification.error(MESSAGE.ERROR, 'Bạn cần điền đầy đủ thông tin');
       return;

@@ -18,6 +18,8 @@ import {
 } from './phieu-kiem-nghiem-chat-luong/them-moi-phieu-kn-cl/them-moi-phieu-kn-cl.component';
 import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong.component";
 import {MainXuatKhoComponent} from "../xuat-kho/main-xuat-kho/main-xuat-kho.component";
+import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component';
+import { ChiTietHoSoKyThuatComponent } from './ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
 
 
 @NgModule({
@@ -28,7 +30,9 @@ import {MainXuatKhoComponent} from "../xuat-kho/main-xuat-kho/main-xuat-kho.comp
     ThanhPhanThamGiaComponent,
     PhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKnClComponent,
-    KiemTraChatLuongComponent
+    KiemTraChatLuongComponent,
+    HoSoKyThuatComponent,
+    ChiTietHoSoKyThuatComponent
   ],
   imports: [
     CommonModule,

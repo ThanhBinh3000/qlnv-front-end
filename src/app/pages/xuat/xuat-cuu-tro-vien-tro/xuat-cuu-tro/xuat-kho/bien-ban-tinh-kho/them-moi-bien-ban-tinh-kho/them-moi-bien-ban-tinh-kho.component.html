@@ -4,9 +4,8 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-            (click)="save(true)">
+        <button class="btn btn-sub xanh-nhat" type="button" *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC 
+            && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KTVBQ') " (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
 
@@ -16,7 +15,9 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()"
+        <button class="btn btn-sub xanh-nhat"
+            *ngIf="  this.userService.isChiCuc() && isDisabled() 
+        && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KT')  || userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_LDCCUC')"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
@@ -269,10 +270,10 @@
                         <nz-form-label [nzNoColon]="true">
                             SL chênh lệch giữa thực tế và sổ sách
                         </nz-form-label>
-                        <nz-form-control nz-col [nzErrorTip]="error">
+                        <div nz-row nzSpan="24">
                             <div nz-col nzSpan="12">Thừa</div>
                             <div nz-col nzSpan="12">Thiếu</div>
-                        </nz-form-control>
+                        </div>
                     </nz-form-item>
                 </div>
 
@@ -294,6 +295,17 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
                             <textarea rows="3" class="search__input" nz-input formControlName="kienNghi"
+                                [disabled]="isView"></textarea>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="24">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Ghi chú
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzErrorTip]="error">
+                            <textarea rows="3" class="search__input" nz-input formControlName="ghiChu"
                                 [disabled]="isView"></textarea>
                         </nz-form-control>
                     </nz-form-item>

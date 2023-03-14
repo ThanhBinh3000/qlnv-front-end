@@ -70,10 +70,10 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],
-        soPhieuKtCl: [],
+        soPhieuKtCl: [, [Validators.required]],
         ngayLapPhieu: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: [],
+        soQdGiaoNvXh: [, [Validators.required]],
         thoiHanXuatCtVt: [],
         nguoiKn: [],
         truongPhong: [],
@@ -238,7 +238,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       soLuongXuat: data.soLuong,
     });
     this.listDiaDiemNhap = data.noiDungCuuTro;
-    console.log(this.listDiaDiemNhap, 555555);
     await this.spinner.hide();
   }
 
@@ -264,7 +263,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   }
 
   async bindingDataDdNhap(data, isChiTiet) {
-    console.log(data, 123);
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
@@ -283,15 +281,12 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         thuKho: data.tenThuKho,
       })
       if (!isChiTiet) {
-        console.log(data.cloaiVthh, 321);
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        console.log(dmTieuChuan, 666);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = dmTieuChuan.data.children;
           this.dataTableChiTieu.forEach(element => {
             element.edit = false
           });
-          console.log(this.dataTableChiTieu, 666);
         }
       }
     }

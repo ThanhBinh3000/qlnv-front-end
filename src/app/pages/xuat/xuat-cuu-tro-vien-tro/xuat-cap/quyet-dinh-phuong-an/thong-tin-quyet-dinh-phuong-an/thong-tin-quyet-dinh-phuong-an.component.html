@@ -47,7 +47,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
+                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'"
                                    [nzDisabled]="isDisabled()">
                   </nz-input-number>
                 </nz-input-group>
@@ -324,7 +324,7 @@
                                 <td>{{lv2.tenChiCuc}}</td>
                                 <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
                                 <td>{{lv2.tenCloaiVthh}}</td>
-                                <td>{{lv2.tonkhoCloaiVthh|number:'1.0-1'}}</td>
+                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
                                 <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
                                 <td>{{lv2.donViTinh}}</td>
                                 <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
@@ -457,7 +457,7 @@
                               <td>{{lv2.tenChiCuc}}</td>
                               <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
                               <td>{{lv2.tenCloaiVthh}}</td>
-                              <td>{{lv2.tonkhoCloaiVthh|number:'1.0-1'}}</td>
+                              <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
                               <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
                               <td>{{lv2.donViTinh}}</td>
                               <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>

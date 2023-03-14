@@ -179,14 +179,16 @@
             <td>{{ data.noiDungThop }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectDetail(data.id, true)">
+              <a *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XEM')"
+                (click)="redirectDetail(data.id, true) ">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV"
+              <a *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_THEM')"
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc()" (click)="delete(data)">
+              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc()  && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XOA')"
+                (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

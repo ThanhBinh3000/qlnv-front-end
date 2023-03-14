@@ -85,6 +85,7 @@
             <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
             <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
             <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
+            <th class="text-center" style="width: 10%;">Chủng loại hàng hóa</th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'" class="text-center" style="width: 12%;">Chủng loại
               hàng hóa</th>
             <th class="text-center" style="width: 5%;">Tổng số gói thầu</th>
@@ -183,6 +184,12 @@
                   (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
               </nz-input-group>
             </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
+                  (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
+              </nz-input-group>
+            </th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
@@ -206,6 +213,7 @@
             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.tenCloaiVthh }}</td>
             <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">{{ data.tenCloaiVthh }}</td>
             <td>{{ data.soGoiThau}}</td>
             <td>{{ data.soGthauTrung}}</td>

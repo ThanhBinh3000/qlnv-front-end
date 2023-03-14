@@ -27,11 +27,12 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  dataDetail: any;
+  dataDetail: any[] = [];
   radioValue: string = 'Chào giá';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
-
+  listOfData: any[] = [];
+  showFromTT: boolean;
   @Output()
   dataTableChange = new EventEmitter<any>();
   constructor(
@@ -47,15 +48,16 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         id: [],
+        idDviDtl: [],
         idDtl: [],
         namKh: [dayjs().get("year"), [Validators.required]],
         soQdPd: ['', [Validators.required]],
         maDvi: [''],
         tenDvi: ['', [Validators.required]],
         pthucBanTrucTiep: [''],
-        diaDiemChaoGia: ['', [Validators.required]],
-        ngayMkho: ['', [Validators.required]],
-        ngayKthuc: ['', [Validators.required]],
+        diaDiemChaoGia: [],
+        ngayMkho: [null, [Validators.required]],
+        ngayKthuc: [null, [Validators.required]],
         loaiVthh: ['', [Validators.required]],
         tenLoaiVthh: ['', [Validators.required]],
         cloaiVthh: ['', [Validators.required]],
@@ -84,8 +86,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     } finally {
       this.spinner.hide();
     }
-    this.emitDataTable()
-    this.updateEditCache()
   }
 
   initForm() {
@@ -100,7 +100,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          this.dataTable = dataDtl.xhTcTtinBttList
+          this.dataTable = dataDtl.children
           this.formData.patchValue({
             idDtl: id,
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
@@ -138,15 +138,11 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
-
   hoanThanhCapNhat() {
-    if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
-      return
-    }
+    // if (this.listOfData.length == 0) {
+    //   this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhập, chi tiết thông tin đấu giá không được để trống");
+    //   return
+    // }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -167,7 +163,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
             this.loadDetail(this.idInput);
-            this.quayLai()
+            this.goBack()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -183,44 +179,55 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     });
   }
 
+
   async save() {
-    await this.spinner.show()
-    let body = this.formData.value;
-    body.children = this.dataTable;
-    body.pthucBanTrucTiep = this.radioValue;
-    body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
-    body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
-    let res = await this.chaoGiaMuaLeUyQuyenService.create(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      await this.loadDetail(this.idInput)
-      this.quayLai()
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    this.spinner.show();
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
+      }
+      let body = this.formData.value;
+      body.children = this.listOfData;
+      body.pthucBanTrucTiep = this.radioValue;
+      body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
+      body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
+      let res = await this.chaoGiaMuaLeUyQuyenService.create(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        await this.loadDetail(this.idInput)
+        this.goBack()
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
     }
-    await this.spinner.hide()
+
   }
 
-
   addRow(): void {
-    if (!this.dataTable) {
-      this.dataTable = [];
+    if (!this.listOfData) {
+      this.listOfData = [];
     }
-    this.dataTable = [...this.dataTable, this.rowItem];
+    this.listOfData = [...this.listOfData, this.rowItem];
     this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
     this.emitDataTable();
     this.updateEditCache()
   }
 
   clearItemRow() {
-    let soLuong = this.rowItem.soLuong;
+    // let soLuong = this.rowItem.soLuong;
     this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
-    this.rowItem.soLuong = soLuong;
+    // this.rowItem.soLuong = soLuong;
     this.rowItem.id = null;
   }
 
   emitDataTable() {
-    this.dataTableChange.emit(this.dataTable);
+    this.dataTableChange.emit(this.listOfData);
   }
 
   deleteRow(index: any) {
@@ -234,7 +241,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
+          this.listOfData.splice(index, 1);
           this.updateEditCache();
         } catch (e) {
           console.log('error', e);
@@ -244,8 +251,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
+    if (this.listOfData) {
+      this.listOfData.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
           data: { ...item },
@@ -254,19 +261,19 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  startEdit(stt: number) {
-    this.dataEdit[stt].edit = true;
+  startEdit(index: number) {
+    this.dataEdit[index].edit = true;
   }
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: { ...this.dataTable[stt] },
+      data: { ...this.listOfData[stt] },
       edit: false
     };
   }
 
   saveEdit(idx: number): void {
-    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }
 
@@ -344,4 +351,15 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
+  selectRow($event, item) {
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
+    this.listOfData = item.children;
+    this.showFromTT = true;
+    this.formData.patchValue({
+      idDviDtl: item.id,
+    })
+    this.emitDataTable()
+    this.updateEditCache()
+  }
 }

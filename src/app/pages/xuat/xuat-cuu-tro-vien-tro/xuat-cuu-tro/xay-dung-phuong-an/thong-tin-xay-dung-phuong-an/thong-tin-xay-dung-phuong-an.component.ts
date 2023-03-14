@@ -1,31 +1,31 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import { ChangeDetectorRef, Component, EventEmitter, Input, KeyValueDiffers, OnInit, Output, } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan,} from 'src/app/models/KeHoachBanDauGia';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan, } from 'src/app/models/KeHoachBanDauGia';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
-import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {STATUS} from "src/app/constants/status";
-import {DatePipe} from "@angular/common";
-import {chain} from 'lodash';
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
-import {DiaDiemNhapKho} from 'src/app/models/CuuTro';
-import {Base2Component} from "src/app/components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
+import { STATUS } from "src/app/constants/status";
+import { DatePipe } from "@angular/common";
+import { chain } from 'lodash';
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { DiaDiemNhapKho } from 'src/app/models/CuuTro';
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
 import * as uuid from "uuid";
-import {FileDinhKem} from "src/app/models/DeXuatKeHoachuaChonNhaThau";
-import {QuanLyHangTrongKhoService} from "src/app/services/quanLyHangTrongKho.service";
+import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-thong-tin-xay-dung-phuong-an',
@@ -85,6 +85,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   expandSetString = new Set<string>();
   phuongAnView = [];
   phuongAnRow: any = {};
+  phuongAnRowDiff: any;
   isVisible = false;
   isVisibleSuaNoiDung = false;
   listNoiDung = []
@@ -121,9 +122,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         maDvi: [''],
         loaiNhapXuat: [''],
         kieuNhapXuat: [''],
-        soDx: [''],
-        trichYeu: [''],
-        loaiVthh: [''],
+        soDx: ['', [Validators.required]],
+        trichYeu: ['', [Validators.required]],
+        loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         tenVthh: [''],
         tonKho: [0],
@@ -258,13 +259,13 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   changeLoaiHinhNhapXuat(event: any) {
     let loaiHinh = this.listLoaiHinhNhapXuat.find(s => s.ma == event);
     if (loaiHinh) {
-      this.formData.patchValue({kieuNhapXuat: loaiHinh.ghiChu.split('-')[0]})
+      this.formData.patchValue({ kieuNhapXuat: loaiHinh.ghiChu.split('-')[0] })
     }
   }
 
   async selectHangHoa(event: any) {
     console.log(event)
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
@@ -280,6 +281,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return;
+    }
+
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
     this.isVisible = true;
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
@@ -343,26 +349,30 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              console.log(rowCuc, 'rowCuc');
-              return {
-                idVirtual: uuid.v4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            console.log(rowCuc, 'rowCuc');
+            return {
+              idVirtual: uuid.v4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        let thanhTienXuatThucTe = rs.reduce((prev, cur) => prev + cur.thanhTienXuatCucThucTe, 0);
         return {
           idVirtual: uuid.v4(),
           noiDung: key,
           soLuongXuat: soLuongXuat,
           soLuongXuatThucTe: soLuongXuatThucTe,
+          thanhTienXuatThucTe: thanhTienXuatThucTe,
           childData: rs
         };
       }).value();
@@ -420,6 +430,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           let data = res.data;
           if (data.length > 0) {
             this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+            this.phuongAnRow.tenDonViTinh = data[0].tenDonViTinh;
+          } else {
+            this.phuongAnRow.tonKhoChiCuc = 0;
+            this.phuongAnRow.tenDonViTinh = '';
           }
         }
       });
@@ -437,17 +451,16 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data.length > 0) {
-          this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
+          this.phuongAnRow.tonKhoCloaiVthh = data[0].slHienThoi;
+        } else {
+          this.phuongAnRow.tonKhoCloaiVthh = 0;
         }
-
       }
     });
   }
 
   async save() {
-    this.formData.patchValue({
-      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
-    })
+
     let result = await this.createUpdate(this.formData.value);
     if (result) {
       this.quayLai();
@@ -455,14 +468,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async saveAndSend() {
-    this.formData.patchValue({
-      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
-    })
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
     } else {
-      console.log('hhaaa')
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
     }
