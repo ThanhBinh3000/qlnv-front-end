@@ -62,7 +62,8 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.search();
+      await this.timKiem();
+      await this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)

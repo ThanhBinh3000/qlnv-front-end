@@ -37,7 +37,7 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   yearNow: number = 0;
 
   searchFilter = {
-    namKh: dayjs().get('year'),
+    namKh: '',
     ngayKy: '',
     tenDvi: '',
   };
@@ -143,7 +143,7 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.namKh = null;
     this.searchFilter.ngayKy = null;
     this.searchFilter.tenDvi = null;
 
