@@ -102,6 +102,22 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
 
 
   async changeDm(event, type?: any) {
+    let result = this.listCcdc.filter(item => item.maCcdc == event)
+    if (result && result.length > 0) {
+      if (!type) {
+        this.rowItem.tenCcdc = result[0].tenCcdc
+        this.rowItem.donViTinh = result[0].donViTinh;
+        this.rowItem.moTaCcdc = result[0].moTa;
+      } else {
+        type.tenCcdc = result[0].tenCcdc
+        type.donViTinh = result[0].donViTinh;
+        type.moTaCcdc = result[0].moTa;
+      }
+    }
+  }
+
+  async getDinhMuc(maHH) {
+
   }
 
 
@@ -155,7 +171,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     let msgRequired = '';
     //validator
     if (!item.maCcdc) {
-      msgRequired = "Loại tài sản không được để trống";
+      msgRequired = "Loại Ccdc không được để trống";
     } else if (!item.nhuCauTb || !item.slTieuChuan) {
       msgRequired = "Số lượng không được để trống";
     }
@@ -235,6 +251,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    this.formData.value.soCv =this.formData.value.soCv + this.maQd;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
@@ -249,8 +266,11 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            soCv : this.formData.value.soCv  ? this.formData.value.soCv.split('/')[0] : null
+          })
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+          this.dataTable = data.listQlDinhMucPvcDxCcdcDtl;
           this.updateEditCache();
         }
       } else {
@@ -266,16 +286,16 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   async changeNamKh(event) {
-    // let res = await this.dxChiCucService.getCtieuKhoach(event);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   if (res.data) {
-    //     this.listCtieuKh = []
-    //     this.listCtieuKh.push(res.data)
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    //   return;
-    // }
+    let res = await this.dxChiCucService.getCtieuKhoach(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listCtieuKh = []
+        this.listCtieuKh.push(res.data)
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+      return;
+    }
   }
 
   changeSoQdGiaoCt(event) {

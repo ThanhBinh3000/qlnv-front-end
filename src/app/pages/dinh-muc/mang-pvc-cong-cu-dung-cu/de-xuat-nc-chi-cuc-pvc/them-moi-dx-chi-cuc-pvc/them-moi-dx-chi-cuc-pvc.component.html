@@ -73,7 +73,7 @@
               </nz-form-label>
               <nz-select nzAllowClear (ngModelChange)="changeSoQdGiaoCt($event)" formControlName="soQdGiaoCt"
                          [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.id" [nzLabel]="p.soQuyetDinh"></nz-option>
+                <nz-option *ngFor="let p of listCtieuKh" [nzValue]="p.soQuyetDinh" [nzLabel]="p.soQuyetDinh"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -113,7 +113,7 @@
       <th nzWidth="40px">STT</th>
       <th nzWidth="150px">Tên CCDC</th>
       <th>Mô tả</th>
-      <th nzWidth="100px">Đơn vị tính</th>
+      <th nzWidth="120px">Đơn vị tính</th>
       <th nzWidth="100px">Số lượng hiện có(1)</th>
       <th nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }}(2)</th>
       <th nzWidth="100px">Tổng cộng(3=1+2)</th>
@@ -125,9 +125,9 @@
     <tr *ngIf="!isView">
       <th></th>
       <th>
-        <nz-select [(ngModel)]="rowItem.tenCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
+        <nz-select [(ngModel)]="rowItem.maCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
                    nzAllowClear="true">
-          <nz-option *ngFor="let p of listCcdc" [nzValue]="p.tenCcdc" [nzLabel]="p.maCcdc">
+          <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
           </nz-option>
         </nz-select>
       </th>
@@ -154,11 +154,11 @@
       </th>
       <th>
         <nz-input-number [(ngModel)]="rowItem.slTieuChuan" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         nzDisabled [nzMin]="0"
+                          [nzMin]="0"
                          [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
-        <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled
+        <nz-input-number [(ngModel)]="rowItem.nhuCauTb" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                          [nzMin]="0"
                          [nzParser]="globals.parser"></nz-input-number>
       </th>
@@ -202,7 +202,7 @@
         <th>
           <nz-select [(ngModel)]="dataEdit[idx].data.tenCcdc" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
                      nzAllowClear="true">
-            <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
+            <nz-option *ngFor="let p of listCcdc" [nzValue]="p.maCcdc" [nzLabel]="p.tenCcdc">
             </nz-option>
           </nz-select>
         </th>

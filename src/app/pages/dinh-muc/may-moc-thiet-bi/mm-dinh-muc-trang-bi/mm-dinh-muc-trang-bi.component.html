@@ -109,9 +109,11 @@
             </nz-input-group>
           </td>
           <td>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHieuLuc"
-                     (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)"/>
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày hiệu lực"
+                               [(ngModel)]="filterTable.ngayHieuLuc"
+                               (ngModelChange)="filterInTable('ngayHieuLuc', convertDateToString(filterTable.ngayHieuLuc))"
+              ></nz-date-picker>
             </nz-input-group>
           </td>
           <td>
