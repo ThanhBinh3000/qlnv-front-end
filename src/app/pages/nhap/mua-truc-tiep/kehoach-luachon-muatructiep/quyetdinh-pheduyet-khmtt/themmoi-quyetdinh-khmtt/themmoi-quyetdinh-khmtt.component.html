@@ -155,8 +155,8 @@
                 <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ data.tenDuAn }}</td>
-                <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                <td>{{ data.tongTienVat| number: '1.0-1' }}</td>
+                <td>{{ data.tongSoLuong *1000 | number: '1.0-1' }}</td>
+                <td>{{ data.tongTienGomThue| number: '1.0-1' }}</td>
               </tr>
             </tbody>
           </nz-table>

@@ -283,4 +283,11 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     }
   }
 
+  isDisabled() {
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.BAN_HANH) {
+      return true
+    } else {
+      return false;
+    }
+  }
 }

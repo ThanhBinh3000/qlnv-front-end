@@ -344,4 +344,12 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     });
   }
 
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == STATUS.CHUA_CAP_NHAT || this.formData.value.trangThai == STATUS.DANG_CAP_NHAT) {
+      return false
+    } else {
+      return true
+    }
+  }
+
 }
