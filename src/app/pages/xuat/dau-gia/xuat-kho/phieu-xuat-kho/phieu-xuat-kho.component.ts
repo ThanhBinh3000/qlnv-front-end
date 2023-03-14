@@ -10,7 +10,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-phieu-xuat-kho',
@@ -83,7 +83,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
     await super.search(roles);
     this.buildTableView();
   }
@@ -121,25 +120,14 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let rs = chain(value)
-          .groupBy("tenDiemKho")
-          .map((v, k) => {
-            let diaDiem = v.find(s => s.tenDiemKho === k)
-            return {
-              idVirtual: uuid.v4(),
-              tenDiemKho: k,
-              tenLoKho: diaDiem.tenLoKho,
-              childData: v
-            }
-          }
-          ).value();
+
         let nam = quyetDinh.nam;
         let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
         return {
           idVirtual: uuid.v4(),
           soQdGiaoNvXh: key, nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-          childData: rs
+          childData: value
         };
       }).value();
     this.children = dataView

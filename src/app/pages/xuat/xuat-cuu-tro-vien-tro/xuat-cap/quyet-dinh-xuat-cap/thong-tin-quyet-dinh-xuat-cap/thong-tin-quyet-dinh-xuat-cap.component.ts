@@ -90,7 +90,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       });
     }
     this.formData = this.fb.group({
-        id: [],
+        id: [0],
         nam: [dayjs().get("year"), [Validators.required]],
         soQd: [, [Validators.required]],
         ngayKy: [, [Validators.required]],

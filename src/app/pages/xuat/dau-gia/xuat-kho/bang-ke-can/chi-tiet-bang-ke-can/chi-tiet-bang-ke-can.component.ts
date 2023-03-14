@@ -10,13 +10,7 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhMucService } from "src/app/services/danhmuc.service";
-import { DeXuatKeHoachBanDauGiaService } from "src/app/services/deXuatKeHoachBanDauGia.service";
 import { DonviService } from "src/app/services/donvi.service";
-import { TinhTrangKhoHienThoiService } from "src/app/services/tinhTrangKhoHienThoi.service";
-import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
 import { MESSAGE } from "src/app/constants/message";
@@ -27,15 +21,10 @@ import { chain, cloneDeep } from 'lodash';
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {
-  QuyetDinhGiaoNvCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import {
-  PhieuKiemNghiemChatLuongService
-} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
-import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import { BangKeCanService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 
 @Component({
   selector: 'app-chi-tiet-bang-ke-can',
@@ -52,6 +41,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   cacheData: any[] = [];
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
+  listDiaDiemNhap: any[] = [];
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   titleStatus: string = '';
@@ -112,19 +102,13 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private donViService: DonviService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private dmTieuChuanService: DanhMucTieuChuanService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuXuatKhoService: PhieuXuatKhoService,
-    private bangKeCanCtvtService: BangKeCanCtvtService,
-    private cdr: ChangeDetectorRef,
+    private bangKeCanService: BangKeCanService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -138,9 +122,12 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDvi: [''],
         maQhns: [''],
         soBangKe: [''],
-        idQdGiaoNvXh: ['', Validators.required],
-        soQdGiaoNvXh: [''],
+        idQdGiaoNvXh: [''],
+        soQdGiaoNvXh: ['', Validators.required],
         ngayQdGiaoNvXh: [''],
+        idHdong: [''],
+        soHdong: [''],
+        ngayKyHd: [''],
         maDiemKho: ['', Validators.required],
         maNhaKho: [''],
         maNganKho: [''],
@@ -248,7 +235,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     let body = {
       trangThai: STATUS.BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
+    let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dsQdGnv = data.content;
@@ -260,7 +247,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async loadDetail(idInput: number) {
     console.log(idInput, 'idInput')
     if (idInput > 0) {
-      await this.bangKeCanCtvtService.getDetail(idInput)
+      await this.bangKeCanService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
@@ -279,7 +266,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
-        type: "XUAT_CAP",
       })
     }
 
@@ -564,16 +550,22 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         await this.spinner.show();
-        let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(data.id)
+        let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(data.id)
         this.formData.patchValue({
           soQdGiaoNvXh: dataRes.data.soQd,
           idQdGiaoNvXh: dataRes.data.id,
           ngayQdGiaoNvXh: dataRes.data.ngayKy,
+          soHdong: dataRes.data.soHd,
+          idHdong: dataRes.data.idHd,
+          ngayKyHd: dataRes.data.ngayKyHd,
           bangKeDtl: this.formData.value.bangKeDtl
         });
-        let dataChiCuc = dataRes.data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+        let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc) {
-          this.dsDiaDiem = dataChiCuc;
+          dataChiCuc.forEach(e => {
+            this.listDiaDiemNhap = e.children
+          });
+
         }
         await this.spinner.hide();
       }

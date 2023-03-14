@@ -62,6 +62,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       tongSoLuong: [null],
       tongThanhTien: [null],
       tongThanhTienVat: [null],
+      soLuong: [null],
     });
   }
 
@@ -152,7 +153,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         tenDvi: res.data.tenTongKho,
         soLuongKhDd: soLuongDaLenKh.data,
         soLuongChiTieu: chiCuc?.soLuongNhap * 1000
-
       })
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
@@ -164,6 +164,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.listDiemKho.push(item);
       };
       this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
+      this.thongTinMuaTrucTiep.donGiaVat = this.donGiaVat;
     }
   }
 
@@ -181,11 +182,12 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.thongTinMuaTrucTiep.diaDiemNhap = diemKho[0].diaDiemNhap;
       }
     }
+    this.thongTinMuaTrucTiep.donGia = this.formData.get('donGia').value;
+    this.thongTinMuaTrucTiep.soLuong = this.formData.get('soLuong').value;
   }
 
   addDiemKho() {
-    // if (this.validateDiemKho()) {
-    this.thongTinMuaTrucTiep.donGia = this.formData.get('donGia').value;
+    this.thongTinMuaTrucTiep.donGiaVat = this.donGiaVat;
     this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
     this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
     this.calcTongSLnhapTrucTiepDeXuat();
@@ -197,23 +199,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   }
 
-  // validateDiemKho(): boolean {
-  //   if (this.thongTinMuaTrucTiep.maDiemKho) {
-  //     let data = this.listOfData.filter(item => item.maDiemKho == this.thongTinMuaTrucTiep.maDiemKho);
-  //     if (data.length > 0) {
-  //       this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
-  //       return false;
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
-  //       return false;
-  //     }
-  //     return true;
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-  //     return false
-  //   }
-
-  // }
 
   validateSoLuong(isAdd?) {
     return true;
@@ -299,19 +284,5 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         +this.formData.get('donGiaVat').value,
     });
   }
-
-
-  // calcTong() {
-  //   if (this.listOfData) {
-  //     const sum = this.listOfData.reduce((prev, cur) => {
-  //       prev += cur.soLuong;
-  //       return prev;
-  //     }, 0);
-  //     this.formData.get('soLuong').setValue(sum);
-
-  //     return sum;
-  //   }
-  // }
-
 
 }
