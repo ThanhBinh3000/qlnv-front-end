@@ -68,14 +68,16 @@
           <tr>
             <th style="width: 35px">STT</th>
             <th></th>
-            <th>Số QĐ giao NVXH</th>
-            <th>Năm kế hoạch</th>
-            <th>Thời hạn xuất hàng</th>
+            <th>Số QĐ giao nhiệm vụ XH</th>
+            <th>Năm KH</th>
+            <th>Thời hạn NK trước ngày</th>
+            <th>Số bảng kê</th>
+            <th>Số phiếu xuất kho</th>
+            <th>Ngày xuất kho</th>
             <th>Điểm kho</th>
+            <th>Nhà kho</th>
+            <th>Ngăn kho</th>
             <th>Lô kho</th>
-            <th>Số bảng kê XLT</th>
-            <th>Số phiếu XK</th>
-            <th>Ngày XK</th>
             <th>Trạng thái</th>
             <th style="width: 10%">Hành động</th>
           </tr>
@@ -89,6 +91,8 @@
               <td>{{ item.soQdGiaoNvXh }}</td>
               <td>{{item.nam}}</td>
               <td>{{item.thoiGianGiaoNhan}}</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -111,57 +115,31 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>{{lv1.soBangKe}}</td>
+                  <td>{{lv1.soPhieuXuatKho}}</td>
+                  <td>{{lv1.ngayXuat}}</td>
                   <td>{{lv1.tenDiemKho}}</td>
+                  <td>{{lv1.tenNhaKho}}</td>
+                  <td>{{lv1.tenNganKho}}</td>
                   <td>{{lv1.tenKho}}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <!--<td>
-                  <a>
-                    <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
-                  </a>
-                  <a>
-                    <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(item)"></i>
-                  </a>
-                </td>-->
+                  <td>{{lv1.tenTrangThai}}</td>
+                  <td>
+                    <a>
+                      <i class="fa fa-eye"
+                        *ngIf="lv1.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XEM')"
+                        (click)="editRow(lv1,true)"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa-edit" *ngIf="(lv1.trangThai === STATUS.DU_THAO || lv1.trangThai === STATUS.TU_CHOI_LDCC )
+                       && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_THEM')"
+                        (click)="editRow(lv1,false)"></i>
+                    </a>
+                    <a (click)="deleteRow(lv1)"
+                      *ngIf="lv1.trangThai === STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XOA')">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
                 </tr>
-                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
-                  <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{lv2.soBangKe}}</td>
-                      <td>{{lv2.soPhieuXuatKho}}</td>
-                      <td>{{lv2.ngayXuat}}</td>
-                      <td>{{lv2.tenTrangThai}}</td>
-                      <td>
-                        <a>
-                          <i class="fa fa-eye"
-                            *ngIf="lv2.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XEM')"
-                            (click)="editRow(lv2,true)"></i>
-                        </a>
-                        <a>
-                          <i class="fa fa-edit" *ngIf="(lv2.trangThai === STATUS.DU_THAO || lv2.trangThai === STATUS.TU_CHOI_LDCC )
-                           && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_THEM')"
-                            (click)="editRow(lv2,false)"></i>
-                        </a>
-                        <a (click)="deleteRow(lv2)"
-                          *ngIf="lv2.trangThai === STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XOA')">
-                          <i class="fa fa-trash-o do"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  </ng-container>
-                </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
