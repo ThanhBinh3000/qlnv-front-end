@@ -172,6 +172,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       if (data.type == 'TH') {
         await this.selectMaTongHop(data.idTongHop);
       } else {
+        await this.selectMaDeXuat(data.idDx);
       }
       this.formData.patchValue(data);
       this.formData.patchValue({
@@ -230,6 +231,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             quyetDinhPdDtl: listDeXuat
           });
         }
+        console.log(this.formData.value, 'this.formData.value11')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
         await this.selectRow();
@@ -239,6 +241,56 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
+    await this.spinner.hide()
+  }
+
+  async selectMaDeXuat(event) {
+    await this.spinner.show()
+    if (event) {
+      let res = await this.deXuatPhuongAnCuuTroService.getDetail(event);
+      if (res.msg === MESSAGE.SUCCESS) {
+        let data = res.data;
+        let listDeXuat = [...[], Object.assign({
+            idDx: event,
+            tenDviDx: data.tenDvi,
+            soDx: data.soDx,
+            ngayPduyetDx: data.ngayPduyet,
+            trichYeuDx: data.trichYeu,
+            tongSoLuongDx: data.tongSoLuong,
+            thanhTienDx: data.thanhTien
+          },
+          {quyetDinhPdDx: data.deXuatPhuongAn})];
+        //truong hop tao moi
+        if (!this.idInput) {
+          this.formData.patchValue({
+            cloaiVthh: data.cloaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            loaiVthh: data.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            loaiNhapXuat: data.loaiNhapXuat,
+            idTongHop: null,
+            maTongHop: data.maTongHop,
+            tongSoLuongDx: data.tongSlCtVt,
+            soLuongXuaCap: data.tongSlXuatCap,
+            idDx: event,
+            soDx: data.soDx,
+            ngayDx: data.ngayDx,
+            quyetDinhPdDtl: listDeXuat
+          });
+        }
+        console.log(this.formData.value, 'this.formData.value22')
+        this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
+        this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
+        await this.selectRow();
+        // this.dataInput = null;
+        // this.dataInputCache = null;
+        this.summaryData();
+      } else {
+        console.log(MESSAGE.ERROR, res.msg);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide()
   }
@@ -381,9 +433,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.onChangeIdTrHdr(data);
-        this.tongSoLuongDxuat = data.tongSoLuong;
-        this.tongThanhTienDxuat = data.thanhTien;
+        await this.selectMaDeXuat(data.id);
       }
     });
   }
