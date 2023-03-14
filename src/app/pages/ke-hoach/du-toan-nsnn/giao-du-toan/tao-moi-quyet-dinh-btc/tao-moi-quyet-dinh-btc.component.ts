@@ -216,7 +216,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     } else {
       this.isStatus = this.data.isStatus;
       this.maDonViTao = this.userInfo?.MA_DVI;
-      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
+      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.maDviTien = '1';
       this.spinner.show();
@@ -348,7 +348,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
-          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
+          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {

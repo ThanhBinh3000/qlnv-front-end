@@ -95,7 +95,7 @@
             <td>{{displayValue(total.khoachLuong)}}</td>
             <td>{{displayValue(total.tdiemBcaoLuong)}}</td>
             <td>{{displayValue(total.tdiemBcaoDtoan)}}</td>
-            <td>{{displayValue(total.tdiemBcaoCcu)}}</td>
+            <td></td>
             <td>{{displayValue(total.dkienThienDtoan)}}</td>
             <td>{{displayValue(total.dkienThienLuong)}}</td>
             <td>{{displayValue(total.ncauDtoan)}}</td>
@@ -164,7 +164,7 @@
               <td>{{displayValue(data.khoachLuong)}}</td>
               <td>{{displayValue(data.tdiemBcaoLuong)}}</td>
               <td>{{displayValue(data.tdiemBcaoDtoan)}}</td>
-              <td>{{displayValue(data.tdiemBcaoCcu)}}</td>
+              <td>{{data.tdiemBcaoCcu}}</td>
               <td>{{displayValue(data.dkienThienDtoan)}}</td>
               <td>{{displayValue(data.dkienThienLuong)}}</td>
               <td>{{displayValue(data.ncauDtoan)}}</td>
@@ -200,7 +200,7 @@
                 <td>{{displayValue(editCache[data.id].data.khoachLuong)}}</td>
                 <td>{{displayValue(editCache[data.id].data.tdiemBcaoLuong)}}</td>
                 <td>{{displayValue(editCache[data.id].data.tdiemBcaoDtoan)}}</td>
-                <td>{{displayValue(editCache[data.id].data.tdiemBcaoCcu)}}</td>
+                <td>{{editCache[data.id].data.tdiemBcaoCcu}}</td>
                 <td>{{displayValue(editCache[data.id].data.dkienThienLuong)}}</td>
                 <td>{{displayValue(editCache[data.id].data.dkienThienDtoan)}}</td>
                 <td>{{displayValue(editCache[data.id].data.ncauDtoan)}}</td>
@@ -228,9 +228,7 @@
                     [options]="amount" />
                 </td>
                 <td>
-
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu"
-                    [options]="amount" />
+                  <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu" />
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dkienThienLuong"

@@ -186,10 +186,8 @@
                                     <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                                     </td> -->
-                                    <td>
-                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                                    </td>
                                     <td [hidden]="status">
+                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
                                             Hủy

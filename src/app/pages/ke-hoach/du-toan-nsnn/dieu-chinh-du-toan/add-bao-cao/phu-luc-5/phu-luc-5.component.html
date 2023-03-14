@@ -47,7 +47,7 @@
             <th colspan="5">Số lượng thực hiện năm {{namBcao}}</th>
             <th rowspan="2">Dự toán đã giao lũy kế</th>
             <th rowSpan="2">Dự toán điều chỉnh</th>
-            <th *ngIf="viewAppraisalValue" colspan="2">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="2">Kinh phí thiếu năm {{namBcao}}</th>
             <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
             <th nzWidth="50px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
@@ -71,7 +71,7 @@
             <th>5</th>
             <th>6 = 4 * 5</th>
             <th>7</th>
-            <th>8= 7 - 6</th>
+            <th>8= 6 - 7</th>
             <th *ngIf="viewAppraisalValue">9</th>
             <th>10</th>
             <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
@@ -109,7 +109,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <!-- <td></td> -->
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
@@ -128,7 +128,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <!-- <td></td> -->
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>

@@ -179,7 +179,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
 
   addNewReport() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Thông tin tạo mới báo cáo điều chỉnh dự toán chi ngân sách nhà nước',
+      nzTitle: 'Tạo mới quyết định Bộ Tài Chính',
       nzContent: DialogTaoMoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
