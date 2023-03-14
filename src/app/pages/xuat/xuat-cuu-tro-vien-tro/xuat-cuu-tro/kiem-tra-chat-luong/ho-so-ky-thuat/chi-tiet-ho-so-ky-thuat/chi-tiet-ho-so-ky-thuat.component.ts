@@ -118,7 +118,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      id: [],
+      id: [0],
       nam: [],
       idQdGiaoNvNh: [],
       soQdGiaoNvNh: [],

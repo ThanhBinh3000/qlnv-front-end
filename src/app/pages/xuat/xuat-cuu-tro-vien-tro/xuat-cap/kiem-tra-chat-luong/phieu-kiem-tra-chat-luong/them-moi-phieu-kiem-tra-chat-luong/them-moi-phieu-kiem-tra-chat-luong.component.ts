@@ -66,7 +66,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],

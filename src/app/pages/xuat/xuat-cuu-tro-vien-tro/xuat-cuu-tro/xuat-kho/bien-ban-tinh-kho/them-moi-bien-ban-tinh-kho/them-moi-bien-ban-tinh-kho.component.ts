@@ -53,7 +53,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [],
         maQhNs: [],
