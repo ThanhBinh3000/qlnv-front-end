@@ -66,7 +66,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
+              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu (Khi nhập)
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
@@ -107,6 +107,17 @@
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                 <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu (Khi xuất)
+              </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMauXuat()">
+                  <input [readonly]="true" nz-input formControlName="soBbLayMauXuat" readonly />
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -233,6 +244,25 @@
       </tr>
       </tbody>
     </nz-table>
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span></span>
+          <span>Kết quả kiểm tra hồ sơ kỹ thuật trước khi xuất kho</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mg-t-10" nz-col nzSpan="24">
+      <nz-form-item>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-radio-group [(ngModel)]="formData.value.kqKiemTra" nzSpan="8" (ngModelChange)="test()">
+            <label nz-radio [nzValue]="o.value" *ngFor="let o of radioData">{{ o.label }}</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
     <ng-template #error let-control>
       <app-template-error #error [control]="control"></app-template-error>
     </ng-template>

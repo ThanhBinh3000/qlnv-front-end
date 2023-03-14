@@ -23,6 +23,9 @@ import {
   DialogTableSelectionComponent
 } from "../../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {
+  BienBanLayMauBanGiaoMauService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service";
 
 @Component({
   selector: 'app-chi-tiet-ho-so-ky-thuat',
@@ -96,6 +99,10 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
       loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT
     }
   ];
+  radioData = [
+    {label: 'Đã đạt yêu cầu để có thể xuất hàng', value: 1},
+    {label: 'Không đạt yêu cầu', value: 0},
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -105,21 +112,30 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     modal: NzModalService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    private bienBanLayMauService: QuanLyBienBanLayMauService
+    private bienBanLayMauService: QuanLyBienBanLayMauService,
+    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
-      nam: [dayjs().get('year'), [Validators.required]],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
-      soBbLayMau: [null, [Validators.required]],
-      soHoSoKyThuat: [null, [Validators.required]],
-      idQdGiaoNvNh: [null, [Validators.required]],
-      soQdGiaoNvNh: [null, [Validators.required]],
-      soHd: [null, [Validators.required]],
+      nam: [],
+      idQdGiaoNvNh: [],
+      soQdGiaoNvNh: [],
+      soBbLayMau: [],
+      soHd: [],
+      maDvi: [],
+      tenDvi: [],
+      soHoSoKyThuat: [],
+      idBbLayMauXuat: [],
+      soBbLayMauXuat: [],
+      kqKiemTra: [0],
+      loaiNhap: [],
+      maDiemKho: [],
+      maNhaKho: [],
+      maNganKho: [],
+      maLoKho: [],
+      ngayTao: [],
       ldoTuchoi: [],
       trangThai: [],
       tenTrangThai: [],
@@ -134,6 +150,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
         await this.loadChiTiet(this.id);
       } else {
         this.initForm();
+      }
+      if (!this.formData.value.kqKiemTra) {
+        this.formData.patchValue({kqKiemTra: 1})
       }
       this.spinner.hide();
     } catch (e) {
@@ -152,14 +171,12 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
         if (data.listHoSoBienBan) {
           this.dataTableBienBan.forEach(item => {
             let bb = data.listHoSoBienBan.filter(x => x.loaiBb == item.loai);
-            console.log(data.listHoSoBienBan, bb);
             if (bb.length > 0) {
               item.id = bb[0].id
               item.trangThai = bb[0].trangThai
               item.tenTrangThai = bb[0].tenTrangThai
             }
           });
-          console.log(this.dataTableBienBan);
         }
       }
     }
@@ -232,6 +249,47 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     });
   };
 
+  async openDialogBbLayMauXuat() {
+    let body = {
+      "maDvi": this.userInfo.MA_DVI,
+      "loaiVthh": this.loaiVthh,
+      "paggingReq": {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
+      "trangThai": STATUS.BAN_HANH,
+
+    }
+    let res = await this.bienBanLayMauBanGiaoMauService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listBanGiaoMau = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách biên bản lấy mẫu/bàn giao mẫu',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listBanGiaoMau,
+        dataHeader: ['Số biên bản', 'Loại hàng hóa'],
+        dataColumn: ['soBienBan', 'tenLoaiVthh'],
+      },
+    })
+    modalQD.afterClose.subscribe(async (dataChose) => {
+      if (dataChose) {
+        this.formData.patchValue({
+          idBbLayMauXuat: dataChose.id,
+          soBbLayMauXuat: dataChose.soBb
+        });
+      }
+    });
+  };
+
   tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -270,6 +328,9 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
     });
   }
 
+  async luu(){
+    console.log(this.formData.value,'this.formData.value')
+  }
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -366,4 +427,7 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
   }
 
 
+  test() {
+    console.log(this.formData.value.kqKiemTra)
+  }
 }
