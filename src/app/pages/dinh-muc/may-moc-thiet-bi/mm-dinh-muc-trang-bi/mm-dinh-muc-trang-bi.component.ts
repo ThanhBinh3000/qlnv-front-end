@@ -18,7 +18,11 @@ export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit 
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.HET_HIEU_LUC, giaTri: 'Hết hiệu lực' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
