@@ -94,9 +94,11 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo" >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayGiaoNhan"
-                     (input)="filterInTable('ngayGiaoNhan',filterTable.ngayGiaoNhan)" />
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày giao nhận"
+                               [(ngModel)]="filterTable.ngayGiaoNhan"
+                               (ngModelChange)="filterInTable('ngayGiaoNhan', convertDateToString(filterTable.ngayGiaoNhan))"
+              ></nz-date-picker>
             </nz-input-group>
           </th>
           <th>

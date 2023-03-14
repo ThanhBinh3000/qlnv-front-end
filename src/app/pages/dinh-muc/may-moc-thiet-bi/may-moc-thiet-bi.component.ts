@@ -22,7 +22,7 @@ export class MayMocThietBiComponent implements OnInit {
     this.$routerChange.unsubscribe();
   }
 
-  tabSelected = this.userService.isChiCuc() ? 'dexuatchicuc' : 'dinhmuctrangbi' ;
+  tabSelected = null;
   selectTab(tab) {
     this.tabSelected = tab;
   }

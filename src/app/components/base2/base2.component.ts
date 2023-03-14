@@ -516,4 +516,12 @@ export class Base2Component implements OnInit {
     return true;
   }
 
+  convertDateToString(event: any) : string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return  result;
+  }
+
 }
