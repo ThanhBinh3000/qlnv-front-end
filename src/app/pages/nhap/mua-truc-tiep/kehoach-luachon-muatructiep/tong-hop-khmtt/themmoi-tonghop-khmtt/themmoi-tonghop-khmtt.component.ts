@@ -70,7 +70,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [''],
       namKh: [, [Validators.required]],
-      noiDung: ['', [Validators.required]],
+      noiDungThop: ['', [Validators.required]],
       trangThai: [''],
       ghiChu: ['',],
       tchuanCluong: [''],
@@ -101,7 +101,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
         this.formData.patchValue({
           idTh: data.id
         })
-        this.dataTable = data.hhDxKhMttThopDtls;
+        this.dataTable = data.children;
       }
       else {
         this.isTongHop = false;
@@ -127,7 +127,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
           idTh: idTh,
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
-        this.dataTable = dataDetail.hhDxKhMttThopDtls;
+        this.dataTable = dataDetail.children;
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);

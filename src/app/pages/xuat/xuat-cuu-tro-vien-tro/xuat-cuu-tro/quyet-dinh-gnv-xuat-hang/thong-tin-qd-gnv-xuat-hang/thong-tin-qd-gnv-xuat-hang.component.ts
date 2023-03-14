@@ -135,6 +135,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
+            //phan quyen du lieu
             this.formData.patchValue(res.data);
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
@@ -154,6 +155,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   buildTableView() {
     let data = cloneDeep(this.formData.value.noiDungCuuTro);
+    if (this.userService.isCuc()) {
+      data = data.filter(s => s.maDviChiCuc.substring(0,6) === this.userInfo.MA_DVI);
+    }
     if (this.userService.isChiCuc()) {
       data = data.filter(s => s.maDviChiCuc === this.userInfo.MA_DVI);
     }
