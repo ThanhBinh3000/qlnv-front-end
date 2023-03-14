@@ -7,10 +7,6 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import {
-  DeXuatNcChiCucPvc,
-  ThongTinNcChiCucPvc
-} from "../../de-xuat-nhu-cau/thong-tin-de-xuat-nhu-cau/thong-tin-de-xuat-nhu-cau.component";
 import {ChiTiet} from "../../../../../models/BienBanGuiHang";
 import {MESSAGE} from "../../../../../constants/message";
 
