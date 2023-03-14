@@ -6,8 +6,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
-import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 @Component({
@@ -20,6 +18,13 @@ export class MmTongHopDxCucComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt LĐ-Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt LĐ-Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ' },
+  ];
+
 
   constructor(
     httpClient: HttpClient,
