@@ -64,6 +64,7 @@ export class FileListComponent implements OnInit {
             if (!this.fileAdd) {
               this.fileAdd = new FileDinhKem();
             }
+            this.fileAdd.noiDung = resUpload.filename;
             this.fileAdd.fileName = resUpload.filename;
             this.fileAdd.fileSize = resUpload.size;
             this.fileAdd.fileUrl = resUpload.url;

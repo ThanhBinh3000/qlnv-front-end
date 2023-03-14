@@ -23,6 +23,7 @@ import { DanhMucService } from "../../../../services/danhmuc.service";
 export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit {
   pdfSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -78,6 +79,26 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
 
   downloadPdf() {
     saveAs(this.pdfBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.pdf");
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      this.setListCondition();
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_tong_hop_nhap_xuat_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch tổng hợp nhập, xuất hàng dự trữ quốc gia";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+        this.excelBlob = s;
+        saveAs(this.excelBlob, "bc_kh_tong_hop_nhap_xuat_hang_dtqg.xls");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   closeDlg() {
@@ -163,7 +184,6 @@ export class KhTongHopNhapXuatComponent extends Base2Component implements OnInit
   }
 
   setListCondition() {
-    debugger
     let listVthhCondition = [];
     let listCloaiVthhCondition = [];
     listVthhCondition.push(this.selectedVthhCache);
