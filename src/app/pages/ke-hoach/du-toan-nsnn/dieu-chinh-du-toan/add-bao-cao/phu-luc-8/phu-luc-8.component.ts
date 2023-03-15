@@ -345,6 +345,7 @@ export class PhuLuc8Component implements OnInit {
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.updateEditCache();
     this.sum(this.lstCtietBcao[index].stt);
+    this.getTotal()
   };
 
   cancelEdit(id: string): void {

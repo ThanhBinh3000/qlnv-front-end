@@ -269,7 +269,11 @@ export class AddBaoCaoComponent implements OnInit {
           });
         });
       } else {
-        this.listAppendix = PHU_LUC_TH
+        if (this.userInfo.CAP_DVI == "2") {
+          this.listAppendix = PHU_LUC
+        } else {
+          this.listAppendix = PHU_LUC_TH
+        }
         this.baoCao?.lstDchinh.forEach(item => {
           const pl = this.listAppendix.find(e => e.id == item.maLoai);
           item.tenPl = pl.tenPl;
@@ -391,7 +395,11 @@ export class AddBaoCaoComponent implements OnInit {
           if (this.baoCao.lstDviTrucThuoc.length == 0) {
             this.listAppendix = PHU_LUC
           } else {
-            this.listAppendix = PHU_LUC_TH
+            if (this.userInfo.CAP_DVI == "2") {
+              this.listAppendix = PHU_LUC
+            } else {
+              this.listAppendix = PHU_LUC_TH
+            }
           }
           this.baoCao.lstDchinh.forEach(item => {
             const appendix = this.listAppendix.find(e => e.id == item.maLoai);
@@ -696,7 +704,7 @@ export class AddBaoCaoComponent implements OnInit {
                 dtoanKphiNamNay2 += item.dtoanDaGiao;
                 tong2 += item.tongCongDtoan;
                 tongDtoanTrongNam2 += item.thanhTienTh;
-                dtoanDnghiDchinh2 += item.dieuChinhDtoan;
+                dtoanDnghiDchinh2 += item?.dieuChinhDtoan;
 
                 dataInfo.extraData.push({
                   stt: "0.1.1.4.1",
@@ -724,7 +732,7 @@ export class AddBaoCaoComponent implements OnInit {
                 dtoanKphiNamNay3 += item?.dtoanDaGiaoLke;
                 tong3 += item?.dtoanDaGiaoLke;
                 tongDtoanTrongNam3 += item.thanhTien;
-                dtoanDnghiDchinh3 += item.dtoanDchinh;
+                dtoanDnghiDchinh3 += item?.dtoanDchinh ? item?.dtoanDchinh : 0;
 
                 dataInfo.extraData.push({
                   stt: "0.2.1.2",
@@ -749,10 +757,10 @@ export class AddBaoCaoComponent implements OnInit {
               data4?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
-                  dtoanKphiNamNay4 += item.dtoanDaGiaoLke
-                  tong4 += item.dtoanDaGiaoLke
-                  tongDtoanTrongNam4 += item.khoachSauDchinh
-                  dtoanDnghiDchinh4 += item.dtoanDchinhDnghiLanNay
+                  dtoanKphiNamNay4 += item.dtoanDaGiaoLke;
+                  tong4 += item.dtoanDaGiaoLke;
+                  tongDtoanTrongNam4 += item.khoachSauDchinh;
+                  dtoanDnghiDchinh4 += item?.dtoanDchinhDnghiLanNay ? item?.dtoanDchinhDnghiLanNay : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.3",
@@ -779,7 +787,7 @@ export class AddBaoCaoComponent implements OnInit {
                   dtoanKphiNamNay5 += item?.dtoanDaGiaoLke;
                   tong5 += item?.dtoanDaGiaoLke;
                   tongDtoanTrongNam5 += item.thanhTien;
-                  dtoanDnghiDchinh5 += item.dtoanDchinh;
+                  dtoanDnghiDchinh5 += item?.dtoanDchinh ? item?.dtoanDchinh : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.2.2",
@@ -806,7 +814,7 @@ export class AddBaoCaoComponent implements OnInit {
                   dtoanKphiNamNay6 += item?.dtoanGiaoLke;
                   tong6 += item?.dtoanGiaoLke;
                   tongDtoanTrongNam6 += item.sluongThienTtien;
-                  dtoanDnghiDchinh6 += item.dtoanDchinh;
+                  dtoanDnghiDchinh6 += item?.dtoanDchinh ? item?.dtoanDchinh : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.2.3",
@@ -823,7 +831,7 @@ export class AddBaoCaoComponent implements OnInit {
 
             const data7 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl07');
             if (data7?.trangThai != '3') {
-              
+
               let dtoanKphiNamNay7 = 0;
               let tong7 = 0;
               let tongDtoanTrongNam7 = 0;
@@ -832,7 +840,7 @@ export class AddBaoCaoComponent implements OnInit {
                 dtoanKphiNamNay7 += item?.dtoanLkeDaGiao;
                 tong7 += item?.dtoanLkeDaGiao;
                 tongDtoanTrongNam7 += item.ncauDtoan;
-                dtoanDnghiDchinh7 += item.dtoanDnghiDchinh;
+                dtoanDnghiDchinh7 += item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
 
                 dataInfo.extraData.push({
                   stt: "0.1.1.2.4",
@@ -861,7 +869,7 @@ export class AddBaoCaoComponent implements OnInit {
                   dtoanKphiNamNay8 += item?.kphiDtoanGiaoTnam;
                   tong8 += item?.kphiCong;
                   tongDtoanTrongNam8 += item.tongNcauDtoan;
-                  dtoanDnghiDchinh8 += item.dtoanDchinhDnghi;
+                  dtoanDnghiDchinh8 += item?.dtoanDchinhDnghi ? item?.dtoanDchinhDnghi : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.2.1",
@@ -888,9 +896,9 @@ export class AddBaoCaoComponent implements OnInit {
                 if (level == 0) {
                   dtoanKphiNamTruoc9 += item?.dtoanKphiDtoanNtruoc;
                   dtoanKphiNamNay9 += item?.dtoanKphiDaGiao;
-                  tong9 += item?.tongNcauTluong;
-                  tongDtoanTrongNam9 += item.tongNcauDtoan;
-                  dtoanDnghiDchinh9 += item.dtoanDnghiDchinh;
+                  tong9 += item.dtoanKphiCong;
+                  tongDtoanTrongNam9 += item.tongNcauTluong;
+                  dtoanDnghiDchinh9 += item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.2.1.1",
@@ -916,10 +924,10 @@ export class AddBaoCaoComponent implements OnInit {
               data10?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
-                  dtoanKphiNamNay10 += item.dtoanGiaoLke
-                  tong10 += item.dtoanGiaoLke
-                  tongDtoanTrongNam10 += item.kh2021SauDchinh
-                  dtoanDnghiDchinh10 += item.dtoanDnghiDchinhLnay
+                  dtoanKphiNamNay10 += item.dtoanGiaoLke;
+                  tong10 += item.dtoanGiaoLke;
+                  tongDtoanTrongNam10 += item.kh2021SauDchinh;
+                  dtoanDnghiDchinh10 += item?.dtoanDnghiDchinhLnay ? item?.dtoanDnghiDchinhLnay : 0;
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.1",

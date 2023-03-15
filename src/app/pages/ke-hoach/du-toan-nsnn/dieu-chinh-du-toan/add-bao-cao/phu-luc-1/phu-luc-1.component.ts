@@ -5,7 +5,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { displayNumber, exchangeMoney, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, LA_MA } from 'src/app/Utility/utils';
 import { DANH_MUC_PL10 } from './phu-luc-1.constant';
 import * as uuid from "uuid";
@@ -113,6 +113,12 @@ export class PhuLuc1Component implements OnInit {
           stt: e.ma,
           maNoiDung: e.ma,
           noiDung: e.giaTri,
+          dtoanDnghiDchinh: 0,
+          dtoanVuTvqtDnghi: 0,
+          tong: 0,
+          dtoanKphiNamNay: 0,
+          dtoanKphiNamTruoc: 0,
+          tongDtoanTrongNam: 0,
         })
       })
     }
@@ -131,8 +137,13 @@ export class PhuLuc1Component implements OnInit {
           // this.lstCtietBcao[index].dtoanDaThien = item.dtoanDaThien;
           // this.lstCtietBcao[index].dtoanUocThien = item.dtoanUocThien;
           this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam;
-          this.lstCtietBcao[index].dtoanDnghiDchinh = item.dtoanDnghiDchinh;
-          this.lstCtietBcao[index].dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi;
+          if(item?.dtoanDnghiDchinh){
+            this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh;
+          }else{
+            this.lstCtietBcao[index].dtoanDnghiDchinh = 0;
+
+          }
+          this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi;
           // this.lstCtietBcao[index].tongDchinhTang = item.tongDchinhTang;
           // this.lstCtietBcao[index].tongDchinhGiam = item.tongDchinhGiam;
           // this.lstCtietBcao[index].tongDchinhTaiDvi = item.tongDchinhTaiDvi;
@@ -146,17 +157,16 @@ export class PhuLuc1Component implements OnInit {
             dtoanKphiNamTruoc: item.dtoanKphiNamTruoc,
             dtoanKphiNamNay: item.dtoanKphiNamNay,
             tong: item.tong,
-            // dtoanDaThien: item.dtoanDaThien,
-            // dtoanUocThien: item.dtoanUocThien,
             tongDtoanTrongNam: item.tongDtoanTrongNam,
-            dtoanDnghiDchinh: item.dtoanDnghiDchinh,
-            dtoanVuTvqtDnghi: item.dtoanVuTvqtDnghi,
+            dtoanDnghiDchinh: item?.dtoanDnghiDchinh,
+            dtoanVuTvqtDnghi: item?.dtoanVuTvqtDnghi,
           })
         }
         this.sum(item.stt);
       })
     }
     this.sortByIndex();
+    this.getTotal();
     this.tinhTong();
     this.updateEditCache();
     this.getStatusButton();
@@ -306,17 +316,24 @@ export class PhuLuc1Component implements OnInit {
     this.tongDieuChinhTang = 0;
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
+    console.log(this.lstCtietBcao);
+    
     this.lstCtietBcao.forEach(item => {
-      if (item.dtoanDnghiDchinh < 0) {
-        this.tongDieuChinhGiam += item.dtoanDnghiDchinh;
-      } else {
-        this.tongDieuChinhTang += item.dtoanDnghiDchinh;
-      }
-
-      if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += item.dtoanVuTvqtDnghi;
-      } else {
-        this.dToanVuTang += item.dtoanVuTvqtDnghi;
+      const str = item.stt
+      if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+        if (item?.dtoanDnghiDchinh) {
+          if (item?.dtoanDnghiDchinh < 0) {
+            this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh);
+          } else {
+            this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh);
+          }
+    
+          if (item.dtoanVuTvqtDnghi < 0) {
+            this.dToanVuGiam += item?.dtoanVuTvqtDnghi;
+          } else {
+            this.dToanVuTang += item?.dtoanVuTvqtDnghi;
+          }
+        }
       }
     })
   };
@@ -356,7 +373,7 @@ export class PhuLuc1Component implements OnInit {
       stt = this.getHead(stt);
     }
     this.getTotal();
-    this.tinhTong();
+    // this.tinhTong();
   };
 
   getTotal() {
@@ -405,6 +422,7 @@ export class PhuLuc1Component implements OnInit {
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.updateEditCache();
     this.sum(this.lstCtietBcao[index].stt);
+    this.tinhTong();
   };
 
   cancelEdit(id: string): void {

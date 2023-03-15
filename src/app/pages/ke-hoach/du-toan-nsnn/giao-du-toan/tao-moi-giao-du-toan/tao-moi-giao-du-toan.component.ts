@@ -232,8 +232,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
   }
 
   async initialization() {
-    console.log(this.data);
-
     this.spinner.show();
     // lấy id bản ghi từ router
     this.id = this.data.id;
@@ -551,6 +549,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
   // đóng
   back() {
     const obj = {
+      id: this.data?.idPaBTC,
       tabSelected: this.data?.preTab,
     }
     this.dataChange.emit(obj);
