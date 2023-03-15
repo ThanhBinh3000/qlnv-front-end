@@ -68,7 +68,7 @@
           <th width="130px">Năm kế hoạch</th>
           <th width="130px">Ngày ký</th>
           <th>Trích yếu</th>
-          <th width="130px">Giá trị bảo hiểm</th>
+          <th width="130px">Số QĐ giao chỉ tiêu</th>
           <th width="130px">Số tổng hợp</th>
           <th width="130px">Mã đề xuất</th>
           <th width="130px">Trạng thái</th>
@@ -107,8 +107,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongGiaTri"
-                     (input)="filterInTable('tongGiaTri',filterTable.tongGiaTri)" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGiaoCtieu"
+                     (input)="filterInTable('soQdGiaoCtieu',filterTable.soQdGiaoCtieu)" />
             </nz-input-group>
           </th>
           <th>
@@ -149,8 +149,11 @@
           <td>{{ data.maDx }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM') &&(((data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.BAN_HANH) && userService.isTongCuc()) || userService.isCuc())">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM')">
               <i class="fa fa-eye"></i>
+            </a>
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM') &&((( data.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc()) || userService.isCuc())">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_SUA') && ((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc())"
                (click)="redirectToChiTiet(false, data.id)">

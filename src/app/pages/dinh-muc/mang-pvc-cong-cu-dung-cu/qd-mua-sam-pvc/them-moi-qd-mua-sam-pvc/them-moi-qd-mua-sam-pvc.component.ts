@@ -12,10 +12,8 @@ import {MESSAGE} from "../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 import {DialogMmMuaSamComponent} from "../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
-import {QdMuaSamBhService} from "../../../../../services/qd-mua-sam-bh.service";
-import {
-  DeXuatNhuCauBaoHiemService
-} from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {QdMuaSamPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/qd-mua-sam-pvc.service";
+import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 
 @Component({
   selector: 'app-them-moi-qd-mua-sam-pvc',
@@ -27,20 +25,17 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
   @Input() isView: boolean;
   listTongHop: any[] = [];
   listDxCuc: any[] = [];
-  tableHangDtqg: any[] = [];
   maQd: string
   expandSet = new Set<number>();
   typeQd : string
-  tableGiaTriBh: any[] = [];
-  dataHang : any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatBaoHiemSv: DeXuatNhuCauBaoHiemService,
-    private qdMuaSamService: QdMuaSamBhService
+    private deXuatBaoHiemSv: DxChiCucPvcService,
+    private qdMuaSamService: QdMuaSamPvcService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdMuaSamService)
     super.ngOnInit()
@@ -58,7 +53,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       lyDoTuChoi: [null],
-      listQlDinhMucQdMuaSamDtlReq: [null],
+      listQlDinhMucQdPvcMuaSamDtlReq: [null],
       loai : ['00']
     });
   }
@@ -157,12 +152,11 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       this.spinner.hide();
       return;
     }
+    this.conVertTreToList()
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.listQlDinhMucQdMuaSamBhHdtqg = this.tableHangDtqg;
-    this.formData.value.listQlDinhMucQdMuaSamBhKho = this.dataTable;
-    this.formData.value.tongGiaTri = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    this.formData.value.listQlDinhMucQdPvcMuaSamDtlReq = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd
@@ -173,10 +167,12 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       } else {
         this.goBack()
       }
+    } else {
+      this.convertListData()
     }
   }
 
-  sumSoLuong(column: string, tenCcdc : string) {
+  sumSoLuong(column: string, tenCcdc : string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -186,14 +182,21 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
         })
       }
     })
-
+    arr = arr.filter(item => item.tenCcdc == tenCcdc)
     if (arr && arr.length> 0) {
-      arr = arr.filter(item => item.tenCcdc == tenCcdc)
-      const sum = arr.reduce((prev, cur) => {
-        prev += cur[column]
-        return prev;
-      }, 0)
-      sl = sum
+      if (!type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column]
+          return prev;
+        }, 0)
+        sl = sum
+      } else {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGiaTd
+          return prev;
+        }, 0)
+        sl = sum
+      }
     }
     return sl
   }
@@ -250,6 +253,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
           } else {
             this.typeQd = 'DX'
           }
+          this.dataTable = data.listQlDinhMucPvcQdMuaSamDtl
           this.fileDinhKem = data.listFileDinhKems;
           this.convertListData()
         }
@@ -292,7 +296,17 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       let res = await this.deXuatBaoHiemSv.getDetail(detailTh.id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-
+          this.dataTable = []
+          this.dataTable = res.data.listQlDinhMucPvcDxCcdcDtl
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(item => {
+              item.id = null;
+              item.tieuChuan = item.slTieuChuanTc
+              item.donGiaTd = item.donGia
+            })
+            this.convertListData()
+            this.expandAll();
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg)
@@ -305,7 +319,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       this.formData.controls["maDx"].clearValidators();
       this.formData.controls["maTh"].setValidators([Validators.required])
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU BẢO HIỂM CỦA CÁC CỤC',
+        nzTitle:'DANH SÁCH TỔNG HỢP ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDC CỦA CÁC CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -332,7 +346,7 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
       this.formData.controls["maTh"].clearValidators();
       this.formData.controls["maDx"].setValidators([Validators.required]);
       let modalQD = this.modal.create({
-        nzTitle:'DANH SÁCH ĐỀ XUẤT BẢO HIỂM CỦA CỤC',
+        nzTitle:'DANH SÁCH ĐỀ XUẤT NHU CẦU MÀNG PVC VÀ CCDCCỦA CỤC',
         nzContent: DialogMmMuaSamComponent,
         nzMaskClosable: false,
         nzClosable: false,

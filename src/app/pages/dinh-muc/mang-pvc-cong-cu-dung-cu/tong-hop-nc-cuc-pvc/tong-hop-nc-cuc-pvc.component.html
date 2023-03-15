@@ -11,11 +11,13 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Số tổng hợp</label>
-            <input class="search__input" placeholder="Nhập Số công văn" nz-input formControlName="id"/>
+            <nz-input-number   [nzParser]="globals.parser" [nzSize]="'small'" nz-input
+                              formControlName="maTh" [nzMin]="0">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="14">
             <label class="search__label">Trích yếu</label>
-            <input class="search__input" placeholder="Nhập Trích yếu" nz-input formControlName="trichYeu" />
+            <input class="search__input" placeholder="Nhập trích yếu" nz-input formControlName="trichYeu" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày ký</label>

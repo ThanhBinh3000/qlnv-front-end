@@ -257,7 +257,7 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
     this.dataTable = arr
   }
 
-  sumSoLuong(column: string, tenCcdc : string) {
+  sumSoLuong(column: string, tenCcdc : string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -267,14 +267,21 @@ export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements O
         })
       }
     })
-
+    arr = arr.filter(item => item.tenCcdc == tenCcdc)
     if (arr && arr.length> 0) {
-      arr = arr.filter(item => item.tenCcdc == tenCcdc)
-      const sum = arr.reduce((prev, cur) => {
-        prev += cur[column]
-        return prev;
-      }, 0)
-      sl = sum
+      if (!type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column]
+          return prev;
+        }, 0)
+        sl = sum
+      } else {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGia
+          return prev;
+        }, 0)
+        sl = sum
+      }
     }
     return sl
   }

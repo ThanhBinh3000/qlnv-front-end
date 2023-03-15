@@ -120,13 +120,6 @@
       </div>
     </form>
   </nz-card>
-  <div class="header header-green-background mg-t-10">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span class="text-uppercase font-weight-bold">Tổng hợp giá trị mua bảo hiểm</span>
-      </div>
-    </div>
-  </div>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
@@ -141,18 +134,19 @@
       <tr>
         <th rowSpan="2" nzWidth="2%"></th>
         <th rowSpan="2" nzWidth="2%">STT</th>
-        <th rowSpan="2" nzWidth="20%">Nội dung</th>
+        <th rowSpan="2" nzWidth="15%">Nội dung</th>
         <th rowSpan="2" nzWidth="7%">Đơn vị tính</th>
-        <th rowSpan="2" nzWidth="10%">Số lượng hiện có(1)</th>
-        <th rowSpan="2" nzWidth="10%">Tổng cộng(3=1+2)</th>
-        <th colSpan="4" nzWidth="35%">Số lượng trang bị cho đơn vị</th>
-        <th rowSpan="2" nzWidth="5%">Ghi chú</th>
+        <th rowSpan="2" nzWidth="7%">Số lượng hiện có(1)</th>
+        <th rowSpan="2" nzWidth="7%">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }}(2)</th>
+        <th rowSpan="2" nzWidth="7%">Tổng cộng(3=1+2)</th>
+        <th colSpan="4" >Số lượng trang bị cho đơn vị</th>
+        <th rowSpan="2" nzWidth="15%">Ghi chú</th>
       </tr>
       <tr>
-        <th class="text-center">SL theo tiêu chuẩn đinh mức</th>
+        <th class="text-center" >SL theo tiêu chuẩn đinh mức</th>
         <th class="text-center">Sl trang bị</th>
-        <th class="text-center">Đơn giá</th>
-        <th class="text-center">Thành tiền</th>
+        <th class="text-center" >Đơn giá</th>
+        <th class="text-center" >Thành tiền</th>
       </tr>
       </thead>
       <tbody>
@@ -164,13 +158,11 @@
           <td class="font-weight-bold">{{data.donViTinh}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1' }}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem', data.tenCcdc) | number: '1.0-1'}}</td>
-          <td
-            class="font-weight-bold text-right">{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuanTc', data.tenCcdc) | number: '1.0-1'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem', data.tenCcdc) + sumSoLuong('slHienCo', data.tenCcdc) | number: '1.0-1'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuan', data.tenCcdc) | number: '1.0-1'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong('soLuong', data.tenCcdc) | number: '1.0-1'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong('donGia', data.tenCcdc) | number: '1.0-1'}}</td>
-          <td
-            class="font-weight-bold text-right">{{sumSoLuong('donGia', data.tenCcdc) * sumSoLuong('soLuong', data.tenCcdc) | number: '1.0-1'}}</td>
+          <td class="font-weight-bold text-right"></td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(null,  data.tenCcdc, 'tong') | number: '1.0-1'}}</td>
           <td></td>
         </tr>
         <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -183,7 +175,7 @@
             <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>
             <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
             <td>
-              <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"
+              <nz-input-number [(ngModel)]="item.slTieuChuan" [nzSize]="'small'" [nzDisabled]="isView"
                                [nzFormatter]="globals.formatter" [nzMin]="0"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
@@ -192,12 +184,8 @@
                                [nzFormatter]="globals.formatter" [nzMin]="0"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
-            <td>
-              <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"
-                               [nzFormatter]="globals.formatter" [nzMin]="0"
-                               [nzParser]="globals.parser"></nz-input-number>
-            </td>
-            <td class="text-right">{{item.donGia * item.soLuong | number: '1.0-1' }}</td>
+            <td class="text-right">{{item.donGiaTd | number: '1.0-1' }}</td>
+            <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>
             <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>
           </tr>
         </ng-container>

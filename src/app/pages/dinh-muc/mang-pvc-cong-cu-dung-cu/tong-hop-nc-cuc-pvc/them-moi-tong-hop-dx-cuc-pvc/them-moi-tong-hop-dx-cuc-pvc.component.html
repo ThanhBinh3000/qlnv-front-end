@@ -172,8 +172,8 @@
         <td class="font-weight-bold text-right">{{sumSoLuong('nhuCauTb' , data.tenCcdc) | number: '1.0-1'}}</td>
         <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuanTc' , data.tenCcdc) | number: '1.0-1'}}</td>
         <td class="font-weight-bold text-right">{{sumSoLuong('soLuong' , data.tenCcdc) | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('donGia' , data.tenCcdc) | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('donGia' , data.tenCcdc) * sumSoLuong('soLuong' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right"></td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(null , data.tenCcdc, 'tong' ) | number: '1.0-1'}}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">

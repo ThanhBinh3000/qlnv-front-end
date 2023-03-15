@@ -41,7 +41,7 @@ export class TongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Component imple
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
-      soCv: [''],
+      maTh: [''],
       trichYeu: [''],
       ngayKy: [''],
       ngayKyTu: [''],
