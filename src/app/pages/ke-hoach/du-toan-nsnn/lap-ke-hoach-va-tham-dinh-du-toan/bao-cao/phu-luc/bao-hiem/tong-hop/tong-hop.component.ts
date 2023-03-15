@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, divNumber, exchangeMoney, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -118,12 +118,16 @@ export class TongHopComponent implements OnInit {
             if (category) {
                 this.danhMucs = category.data;
             }
+            await this.getTle();
             this.danhMucs.forEach(e => {
+                const tyLe = this.lstTyLe.find(tl => e.ma == tl.maDmuc);
                 this.lstCtietBcao.push({
                     ...new ItemData(),
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     danhMuc: e.ma,
+                    gtTrenTyLeBh: tyLe?.tyLeKhoTren,
+                    gtDuoiTyLeBh: tyLe?.tyLeKhoDuoi,
                     tenDanhMuc: e.giaTri,
                     dviTinh: e.ghiChu,
                     lstDviCapDuoi: [],
@@ -161,6 +165,8 @@ export class TongHopComponent implements OnInit {
             })
         }
 
+        this.changeModel();
+
         this.getTotal();
         this.getStatusButton();
         this.spinner.hide();
@@ -172,6 +178,18 @@ export class TongHopComponent implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
+    }
+
+    async getTle() {
+        await this.lapThamDinhService.getDsTle(this.dataInfo?.namBcao).toPromise().then(
+            res => {
+                if (res.statusCode == 0) {
+                    this.lstTyLe = res.data.lstCtiets;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            })
     }
 
     // luu
@@ -308,10 +326,14 @@ export class TongHopComponent implements OnInit {
     changeModel(): void {
         this.lstCtietBcao.forEach(item => {
             item.slTong = sumNumber([item.slTren, item.slDuoi]);
-            item.gtTrenGtBh = mulNumber(item.gtTrenGt, item.gtTrenTyLeBh);
-            item.gtDuoiGtBh = mulNumber(item.gtDuoiGt, item.gtDuoiTyLeBh);
+            item.gtTrenGtBh = divNumber(mulNumber(item.gtTrenGt, item.gtTrenTyLeBh), 100);
+            item.gtDuoiGtBh = divNumber(mulNumber(item.gtDuoiGt, item.gtDuoiTyLeBh), 100);
             item.tong = sumNumber([item.gtTrenGtBh, item.gtDuoiGtBh]);
         })
+        this.sum('0.2.1.1');
+        this.sum('0.2.2.1.1');
+        this.sum('0.2.2.2.1');
+
     }
 
     sum(stt: string) {
