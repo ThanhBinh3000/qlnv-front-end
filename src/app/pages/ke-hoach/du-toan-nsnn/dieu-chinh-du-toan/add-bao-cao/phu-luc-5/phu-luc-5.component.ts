@@ -593,7 +593,7 @@ export class PhuLuc5Component implements OnInit {
       })
       stt = this.getHead(stt);
     }
-    // this.getTotal();
+    this.getTotal();
     this.tinhTong();
   }
   // tinh tong tu cap duoi khong chuyen nstt
@@ -629,7 +629,7 @@ export class PhuLuc5Component implements OnInit {
         })
         stt = this.getHead(stt);
       }
-      // this.getTotal();
+      this.getTotal();
       this.tinhTong();
     })
 

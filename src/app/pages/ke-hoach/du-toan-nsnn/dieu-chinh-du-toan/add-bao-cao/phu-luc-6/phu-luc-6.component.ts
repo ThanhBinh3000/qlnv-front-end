@@ -161,6 +161,7 @@ export class PhuLuc6Component implements OnInit {
     this.sortByIndex();
     this.sum1();
     this.tinhTong();
+    this.getTotal()
     this.updateEditCache();
     this.getStatusButton();
 
@@ -453,6 +454,7 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.updateEditCache();
     this.sum(this.lstCtietBcao[index].stt);
+    this.getTotal()
   }
 
   // huy thay doi

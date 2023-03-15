@@ -565,7 +565,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
   back() {
     const obj = {
-      tabSelected: this.data?.preTab,
+      tabSelected: "dsquyetDinh",
     }
     this.dataChange.emit(obj);
   };

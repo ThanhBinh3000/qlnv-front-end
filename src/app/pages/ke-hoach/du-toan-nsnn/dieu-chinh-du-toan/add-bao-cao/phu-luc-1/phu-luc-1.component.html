@@ -68,14 +68,14 @@
           <tr>
             <td class="text-center"></td>
             <td>Tổng cộng</td>
-            <td>{{total.dtoanKphiNamTruoc}}</td>
-            <td>{{total.dtoanKphiNamNay}}</td>
-            <td>{{total.tong}}</td>
-            <!-- <td>{{total.dtoanDaThien}}</td>
-            <td>{{total.dtoanUocThien}}</td> -->
-            <td>{{total.tongDtoanTrongNam}}</td>
-            <td>{{total.dtoanDnghiDchinh}}</td>
-            <td *ngIf="viewRecommendedValue">{{total.dtoanVuTvqtDnghi}}</td>
+            <td>{{displayValue(total.dtoanKphiNamTruoc)}}</td>
+            <td>{{displayValue(total.dtoanKphiNamNay)}}</td>
+            <td>{{displayValue(total.tong)}}</td>
+            <!-- <td>{{displayValue(total.dtoanDaThien)}}</td>
+            <td>{{displayValue(total.dtoanUocThien)}}</td> -->
+            <td>{{displayValue(total.tongDtoanTrongNam)}}</td>
+            <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
+            <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td [hidden]="status && !viewRecommendedValue"></td>
           </tr>
           <tr>
@@ -162,7 +162,12 @@
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanUocThien"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td> -->
-                <td>{{ displayValue(editCache[data.id].data.tongDtoanTrongNam) }}</td>
+                <td>
+                  <!-- {{ displayValue(editCache[data.id].data.tongDtoanTrongNam) }} -->
+
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongDtoanTrongNam"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </td>
                 <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDnghiDchinh"
                     [options]="amount" /> -->
