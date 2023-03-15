@@ -286,15 +286,17 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
   }
 
   async changeNamKh(event) {
-    let res = await this.dxChiCucService.getCtieuKhoach(event);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCtieuKh = []
-        this.listCtieuKh.push(res.data)
+    if (this.userService.isChiCuc()) {
+      let res = await this.dxChiCucService.getCtieuKhoach(event);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCtieuKh = []
+          this.listCtieuKh.push(res.data)
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        return;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      return;
     }
   }
 
@@ -305,6 +307,9 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
 
 export class PvcDxChiCucCtiet {
   id: number;
+  donGia: number = 0;
+  soLuong: number = 0;
+  slTieuChuanTc: number = 0;
   maDvi: string;
   tenDvi: string;
   tenCcdc: string;
