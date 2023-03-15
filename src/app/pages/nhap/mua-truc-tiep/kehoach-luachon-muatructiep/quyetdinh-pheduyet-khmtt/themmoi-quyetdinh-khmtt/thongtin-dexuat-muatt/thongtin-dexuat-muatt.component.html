@@ -202,7 +202,7 @@
                         <td class="text-blue">{{item .soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="text-blue">{{item .soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>{{item .soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td class="text-blue">{{item .thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td class="text-blue">{{item .tongSoLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>
                             <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
                                 <i class="fa fa-pencil"></i>

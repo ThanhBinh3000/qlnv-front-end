@@ -74,6 +74,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
+      soQdCc: [''],
     })
   }
 
@@ -158,7 +159,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.dsDiaDiem = this.danhsachDx;
+    body.children = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
@@ -227,7 +228,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       nzComponentParams: {
         dataTable: this.listDanhSachTongHop,
         dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['id', 'noiDung']
+        dataColumn: ['id', 'noiDungThop']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -254,7 +255,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           idTrHdr: null,
           soTrHdr: null,
         })
-        for (let item of data.hhDxKhMttThopDtls) {
+        for (let item of data.children) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const dataRes = res.data;
@@ -331,7 +332,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           moTaHangHoa: data.moTaHangHoa,
-          soQdCc: data.soQd,
+          soQdCc: data.soQdCc,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           maDvi: data.maDvi,
