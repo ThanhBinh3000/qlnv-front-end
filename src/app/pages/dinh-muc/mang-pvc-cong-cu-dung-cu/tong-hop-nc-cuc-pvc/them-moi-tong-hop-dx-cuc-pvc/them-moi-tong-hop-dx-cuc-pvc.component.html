@@ -7,7 +7,7 @@
         {{ formData.value.tenTrangThai }}
       </span>
         <span *ngIf="!isTongHop"></span>
-        <span>TỔNG HỢP NHU CẦU MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ CỦA CHI CỤC</span>
+        <span>TỔNG HỢP NHU CẦU MÀNG PVC VÀ CÔNG CỤ DỤNG CỤ CỦA CỤC</span>
       </div>
     </div>
     <div class="btn-group">
@@ -15,25 +15,25 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-              *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV)  && userService.isCuc()">
-        <i class="icon htvbdh_trinh"></i>
-        <span>Đã ký</span>
+      <button type="button" class="btn btn-sub xanh ml-2" (click)="pheDuyet()"
+              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) ">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isTongCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc())"
               (click)="reject(id, STATUS.TU_CHOI_CBV)">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.DA_KY && userService.isTongCuc())"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc())"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-              *ngIf=" !isDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc() ">
+              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc() ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -49,7 +49,7 @@
         <div nz-col nzSpan="4">
           <nz-form-label>Năm kế hoạch</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach"
+            <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach"  (ngModelChange)="getCtieuKhTc($event)"
                        nzAllowClear>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
               </nz-option>
@@ -75,7 +75,7 @@
       </div>
     </form>
     <div class="cangiua group-button-search">
-      <button *ngIf="userService.isCuc() && !isTongHop" type="button" class="btn btn-main" (click)="tongHop()">
+      <button *ngIf="userService.isTongCuc() && !isTongHop" type="button" class="btn btn-main" (click)="tongHop()">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Tổng hợp</span>
       </button>
@@ -95,25 +95,33 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label nzRequired>Số công văn</nz-form-label>
+          <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-group [nzAddOnAfter]="maQd">
-              <input nz-input formControlName="soCv" [readonly]="isView"/>
+            <nz-input-group >
+              <input nz-input formControlName="id" [readonly]="true"/>
             </nz-input-group>
           </nz-form-control>
         </div>
-        <div nz-col [nzSpan]="isView ? 12 : 16">
+        <div nz-col [nzSpan]="isView ? 8 : 12">
           <nz-form-label nzRequired>Trích yếu</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <input nz-input formControlName="trichYeu" [readonly]="isView"/>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label nzRequired>Ngày ký</nz-form-label>
+          <nz-form-label nzRequired>Ngày tổng hợp</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày ký"
+            <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd/MM/YYYY" nzPlaceHolder="Ngày tổng hợp"
                             formControlName="ngayKy">
             </nz-date-picker>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label nzRequired>Số QĐ giao chỉ tiêu KH</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group >
+              <input nz-input formControlName="soQdGiaoCtieu" [readonly]="true"/>
+            </nz-input-group>
           </nz-form-control>
         </div>
       </div>
@@ -126,20 +134,28 @@
       </div>
     </div>
   </div>
-  <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+  <nz-table class="nowrap mg-t-10 pd-10" [nzFrontPagination]="false" *ngIf="isTongHop"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th nzWidth="20px"></th>
-      <th nzWidth="40px">STT</th>
-      <th nzWidth="150px">Nội dung</th>
-      <th nzWidth="120px">Đơn vị tính</th>
-      <th nzWidth="100px">Số lượng hiện có(1)</th>
-      <th nzWidth="100px">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }}(2)</th>
-      <th nzWidth="100px">Tổng cộng(3=1+2)</th>
-      <th nzWidth="100px">SL theo tiêu chuẩn <br> định mức(4)</th>
-      <th nzWidth="200px">Nhu cầu trang bị (5)=4-3</th>
-      <th nzWidth="200px">Ghi chú</th>
+      <th rowSpan="2" nzWidth="2%"></th>
+      <th rowSpan="2" nzWidth="2%">STT</th>
+      <th rowSpan="2" nzWidth="20%" >Nội dung</th>
+      <th rowSpan="2" nzWidth="7%">Đơn vị tính</th>
+      <th rowSpan="2" nzWidth="10%">Số lượng hiện có(1)</th>
+      <th rowSpan="2" nzWidth="10%">Số lượng sẽ nhập <br> thêm năm {{formData.value.namKeHoach - 1 }}(2)</th>
+      <th rowSpan="2" nzWidth="10%">Tổng cộng(3=1+2)</th>
+      <th colSpan="2" nzWidth="10%" >Nhu cầu theo đề xuất của Cục</th>
+      <th colSpan="4" nzWidth="35%">Số lượng trang bị cho đơn vị</th>
+      <th rowSpan="2" nzWidth="5%">Ghi chú</th>
+    </tr>
+    <tr>
+      <th class="text-center" >SL ần theo tiêu chuẩn định mức</th>
+      <th class="text-center" >Nhu cầu trang bị</th>
+      <th class="text-center" >SL theo tiêu chuẩn đinh mức</th>
+      <th class="text-center" >Sl trang bị</th>
+      <th class="text-center" >Đơn giá</th>
+      <th class="text-center" >Thành tiền</th>
     </tr>
     </thead>
     <tbody>
@@ -149,11 +165,15 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold">{{data.tenCcdc}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slHienCo', data.tenCcdc ) | number: '1.0-1' }}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc ) | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc ) + sumSoLuong('slHienCo' , data.tenCcdc ) | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuan' , data.tenCcdc ) | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('nhuCauTb', data.tenCcdc ) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slHienCo' , data.tenCcdc) | number: '1.0-1' }}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc) + sumSoLuong('slHienCo' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuan' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('nhuCauTb' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuanTc' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('soLuong' , data.tenCcdc) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right"></td>
+        <td class="font-weight-bold text-right">{{sumSoLuong(null , data.tenCcdc, 'tong' ) | number: '1.0-1'}}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -166,12 +186,24 @@
           <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>
           <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
           <td class="text-right">{{item.slTieuChuan | number: '1.0-1' }}</td>
+          <td class="text-right">{{item.nhuCauTb | number: '1.0-1' }}</td>
           <td>
-            <nz-input-number [(ngModel)]="item.nhuCauTb" [nzSize]="'small'" [nzDisabled]="isView"
-                             [nzFormatter]="globals.formatter"
+            <nz-input-number [(ngModel)]="item.slTieuChuanTc" [nzSize]="'small'" [nzDisabled]="isView"
+                             [nzFormatter]="globals.formatter" [nzMin]="0"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
-          <td><input nz-input [(ngModel)]="item.ghiChu"></td>
+          <td>
+            <nz-input-number [(ngModel)]="item.soLuong" [nzSize]="'small'" [nzDisabled]="isView"
+                             [nzFormatter]="globals.formatter" [nzMin]="0"
+                             [nzParser]="globals.parser"></nz-input-number>
+          </td>
+          <td>
+            <nz-input-number [(ngModel)]="item.donGia" [nzSize]="'small'" [nzDisabled]="isView"
+                             [nzFormatter]="globals.formatter" [nzMin]="0"
+                             [nzParser]="globals.parser"></nz-input-number>
+          </td>
+          <td class="text-right">{{item.donGia * item.soLuong | number: '1.0-1' }}</td>
+          <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>
         </tr>
       </ng-container>
     </ng-container>
