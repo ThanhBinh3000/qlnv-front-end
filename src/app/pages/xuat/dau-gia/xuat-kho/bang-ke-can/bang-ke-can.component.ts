@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+import { BangKeCanService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 
 @Component({
   selector: 'app-bang-ke-can',
@@ -43,9 +44,9 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-    private bangKeCanCtvtService: BangKeCanCtvtService
+    private bangKeCanService: BangKeCanService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
+    super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
     this.formData = this.fb.group({
       id: [],
       nam: dayjs().get('year'),
@@ -145,46 +146,23 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("maLoKho")
-          .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
-            return {
-              id: rowLv2.id,
-              idVirtual: uuidv4(),
-              maLoKho: k,
-              tenLoKho: rowLv2.tenLoKho,
-              maDiemKho: rowLv2.maDiemKho,
-              tenDiemKho: rowLv2.tenDiemKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              soPhieuXuatKho: rowLv2.soPhieuXuatKho,
-              maKho: rowLv2.maKho,
-              tenKho: rowLv2.tenKho,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
-              childData: v
-            }
-          }
-          ).value();
-        // let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
-        // let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
-        let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
+        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
+
+        let nam = quyetDinh.nam;
+        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
         return {
           idVirtual: uuidv4(),
-          soQdGiaoNvXh: key,
-          nam: rowLv1.nam,
-          thoiGianGiaoNhan: rowLv1.thoiGianGiaoNhan,
-          childData: rs
+          soQdGiaoNvXh: key, nam: nam,
+          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          childData: value
         };
       }).value();
     this.dataView = dataView
-    console.log(this.dataView, 'dataView')
     this.expandAll()
+
   }
 
   editRow(lv2: any, isView: boolean) {

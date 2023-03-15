@@ -10,6 +10,6 @@ export class BangKeCanService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'cuu-tro/xuat-kho/bang-ke', '');
+    super(httpClient, 'dau-gia/xuat-kho/bang-ke', '');
   }
 }

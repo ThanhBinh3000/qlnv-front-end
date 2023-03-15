@@ -9,6 +9,6 @@ export class BienBanTinhKhoService extends BaseService {
     GATEWAY = '/qlnv-hang';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'cuu-tro/xuat-kho/bien-ban-tinh-kho', '');
+        super(httpClient, 'xuat-hang/dau-gia/xuat-kho/bien-ban-tinh-kho', '');
     }
 }

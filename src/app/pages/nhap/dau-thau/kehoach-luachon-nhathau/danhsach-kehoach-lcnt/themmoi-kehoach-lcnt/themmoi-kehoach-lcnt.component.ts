@@ -403,6 +403,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat
       },
     });

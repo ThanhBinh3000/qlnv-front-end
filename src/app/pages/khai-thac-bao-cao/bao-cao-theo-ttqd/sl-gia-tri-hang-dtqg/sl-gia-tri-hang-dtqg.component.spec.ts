@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QdMuaSamPvcComponent } from './qd-mua-sam-pvc.component';
+import { SlGiaTriHangDtqgComponent } from './sl-gia-tri-hang-dtqg.component';
 
-describe('QdMuaSamPvcComponent', () => {
-  let component: QdMuaSamPvcComponent;
-  let fixture: ComponentFixture<QdMuaSamPvcComponent>;
+describe('KhGiamHangDtqgComponent', () => {
+  let component: SlGiaTriHangDtqgComponent;
+  let fixture: ComponentFixture<SlGiaTriHangDtqgComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QdMuaSamPvcComponent ]
+      declarations: [ SlGiaTriHangDtqgComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QdMuaSamPvcComponent);
+    fixture = TestBed.createComponent(SlGiaTriHangDtqgComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
