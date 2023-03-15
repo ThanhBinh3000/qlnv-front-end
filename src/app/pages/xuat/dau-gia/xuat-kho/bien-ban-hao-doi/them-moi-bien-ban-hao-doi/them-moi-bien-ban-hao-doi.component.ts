@@ -1,23 +1,30 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
-import { Validators } from '@angular/forms';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {Validators} from '@angular/forms';
+import {
+  QuyetDinhGiaoNvXuatHangService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service";
+import {
+  BienBanHaoDoiService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanHaoDoi.service";
+import {
+  BienBanTinhKhoService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service";
 
 
 @Component({
@@ -41,6 +48,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   checked: boolean = false;
   listFileDinhKem: any = [];
   listTiLe: any = []
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -48,7 +56,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
   ) {
@@ -111,6 +119,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tenNganKho: [],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
+        soHdong: [],
+        ngayKyHd: []
       }
     );
     this.maBb = '-BBHD';
@@ -165,14 +175,16 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     }
 
   }
+
   quayLai() {
     this.showListEvent.emit();
   }
+
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
+    let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
@@ -180,6 +192,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
+
   async loadSoBbTinhKho() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
@@ -216,21 +230,30 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
+      soHd: data.soHd,
+      ngayKyHd: data.ngayKyHd,
 
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    console.log(data)
+    /*let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc
+    }*/
+    let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    if (dataChiCuc) {
+      dataChiCuc.forEach(e => {
+        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children]
+      });
     }
+    this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
     await this.spinner.hide();
   }
-
 
 
   openDialogDdiemNhapHang() {
@@ -273,6 +296,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       this.listBbTinhKho = this.listBbTinhKho.filter(item => (item.maDiemKho == data.maDiemKho));
     }
   }
+
   onSelectSoBbTinhKho(selectedValue: any): void {
     this.listBbTinhKho.forEach(f => {
       this.dataTable = f.listPhieuXuatKho;
@@ -356,6 +380,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     }
     return false;
   }
+
   clearItemRow(id) {
 
     this.formData.patchValue({
@@ -379,4 +404,9 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     return convertTienTobangChu(tien);
   }
 
+  flattenTree(tree) {
+    return tree.flatMap((item) => {
+      return item.childData ? this.flattenTree(item.childData) : item;
+    });
+  }
 }
