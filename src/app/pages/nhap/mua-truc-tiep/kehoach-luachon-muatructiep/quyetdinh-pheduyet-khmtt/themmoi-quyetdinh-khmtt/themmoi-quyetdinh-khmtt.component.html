@@ -114,7 +114,7 @@
                   Căn cứ pháp lý
                 </nz-form-label>
                 <div class="list-file">
-                  <file-list [disabled]="isDisabled()"></file-list>
+                  <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -150,7 +150,7 @@
               <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)">
                 <td class="text-center">{{i + 1}} </td>
                 <td>{{ data.tenDvi }}</td>
-                <td>{{ data.diaChiDvi }}</td>
+                <td>{{ data.diaChi }}</td>
                 <td>{{ data.soDxuat }}</td>
                 <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                 <td>{{ data.trichYeu }}</td>
