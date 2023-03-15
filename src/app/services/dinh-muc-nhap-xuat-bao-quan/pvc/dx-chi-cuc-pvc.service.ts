@@ -23,4 +23,9 @@ export class DxChiCucPvcService extends BaseService{
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
+  tongHopDxCc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tong-hop/tra-cuu-dx`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

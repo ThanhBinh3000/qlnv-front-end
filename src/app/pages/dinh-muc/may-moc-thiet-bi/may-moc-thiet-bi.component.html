@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item   (click)="selectTab('dinhmuctrangbi')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_ĐMTBMTBCD')">
+    <li nz-menu-item [nzSelected]="tabSelected =='dinhmuctrangbi'"    (click)="selectTab('dinhmuctrangbi')" *ngIf="(!userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_ĐMTBMTBCD')">
       Định mức trang bị
     </li>
     <li nz-menu-item [nzSelected]="tabSelected =='dexuatchicuc'"  (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC')">
