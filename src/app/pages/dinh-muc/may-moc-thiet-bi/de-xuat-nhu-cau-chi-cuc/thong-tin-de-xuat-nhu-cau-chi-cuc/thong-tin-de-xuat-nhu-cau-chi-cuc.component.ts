@@ -243,7 +243,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     });
   }
 
-  async save(isKy? : boolean) {
+  async save() {
     if (this.dataTable.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết đề xuất");
       return;
@@ -260,12 +260,8 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-      if (isKy) {
-        this.approve(res.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
-      } else {
         this.goBack()
       }
-    }
   }
 
   async detail(id) {

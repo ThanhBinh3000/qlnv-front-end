@@ -254,7 +254,7 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
     this.formData.value.soCv =this.formData.value.soCv + this.maQd;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-      this.goBack();
+        this.goBack()
     }
   }
 

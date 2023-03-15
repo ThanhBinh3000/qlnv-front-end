@@ -66,9 +66,10 @@ import { MmThongTinHienTrangComponent } from './mm-hien-trang-ccdc/mm-thong-tin-
     DinhMucTrangBiCongCuModule,
     HopDongMuaSamModule,
   ],
-  exports: [
-    MayMocThietBiComponent,
-    DeXuatNhuCauChiCucComponent,
-  ]
+    exports: [
+        MayMocThietBiComponent,
+        DeXuatNhuCauChiCucComponent,
+        ThongTinDeXuatNhuCauChiCucComponent,
+    ]
 })
 export class MayMocThietBiModule { }

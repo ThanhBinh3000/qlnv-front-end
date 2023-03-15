@@ -28,7 +28,7 @@ export class MayMocThietBiComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.tabSelected = this.userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC') ? 'dexuatchicuc' : null
+    this.tabSelected = this.userService.isTongCuc() ? 'dinhmuctrangbi' : (this.userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC' ? 'dexuatchicuc' : null))
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
