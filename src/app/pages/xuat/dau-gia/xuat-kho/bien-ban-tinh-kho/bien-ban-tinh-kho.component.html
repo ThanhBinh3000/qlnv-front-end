@@ -44,12 +44,12 @@
             <h3 class="text-uppercase">Danh sách biên bản tịnh kho</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_XOA')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_THEM')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -71,6 +71,8 @@
                         <th width="">Ngày bắt đầu xuất</th>
                         <th width="">Ngày kết thúc xuất</th>
                         <th width="">Điểm Kho</th>
+                        <th width="">Nhà kho</th>
+                        <th width="">Ngăn kho</th>
                         <th width="">Lô kho</th>
                         <th width="">Số phiếu XK</th>
                         <th width="">Ngày xuất kho</th>
@@ -142,12 +144,25 @@
                         </th>
                         <th>
                             <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
+                                    (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganKho"
+                                    (input)="filterInTable('tenNganKho',filterTable.tenNganKho)" size="small" />
+                            </nz-input-group>
+
+                        </th>
+                        <th>
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
                                     (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small" />
                             </nz-input-group>
 
                         </th>
-
                         <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
@@ -204,6 +219,8 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                             <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -217,23 +234,25 @@
                                     <td>{{lv1.ngayBatDauXuat}}</td>
                                     <td>{{lv1.ngayKetThucXuat}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
+                                    <td>{{lv1.tenNhaKho}}</td>
+                                    <td>{{lv1.tenNganKho}}</td>
                                     <td>{{lv1.tenLoKho}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_KTVBQ || lv1.trangThai==STATUS.TU_CHOI_KT
                                          || lv1.trangThai==STATUS.TU_CHOI_LDCC) && userService.isChiCuc() && isOwner(lv1.maDvi)
-                                        && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_THEM')"
+                                        && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isChiCuc() &&  userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_XOA')"
+                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isChiCuc() &&  userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_XOA')"
                                             (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
@@ -253,9 +272,12 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td>{{lv2.soPhieuXuatKho}}</td>
                                             <td>{{lv2.ngayXuatKho}}</td>
                                             <td>{{lv2.soBkCanHang}}</td>
+                                            <td></td>
                                             <td></td>
                                             <td class="text-left">
 

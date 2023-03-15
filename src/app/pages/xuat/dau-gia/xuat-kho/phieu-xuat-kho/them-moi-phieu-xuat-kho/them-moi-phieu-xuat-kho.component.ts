@@ -216,8 +216,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
       dataChiCuc.forEach(e => {
-        this.listDiaDiemNhap = e.children
+        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
       });
+      this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
     }
     await this.spinner.hide();
   }
