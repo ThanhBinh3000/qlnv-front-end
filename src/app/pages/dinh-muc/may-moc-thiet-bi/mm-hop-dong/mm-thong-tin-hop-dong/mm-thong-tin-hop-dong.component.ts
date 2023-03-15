@@ -171,7 +171,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async save(isKy? : boolean) {
+  async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -190,12 +190,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     let body = this.formData.value;
     let data = await this.createUpdate(body);
     if (data) {
-      if (isKy) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
-      } else {
         this.goBack()
       }
-    }
   }
 
   async detail(id) {

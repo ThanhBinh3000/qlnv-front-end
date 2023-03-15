@@ -20,6 +20,13 @@ export class TongHopDeXuatNhuCauBaoHiemChiCucComponent extends Base2Component im
   isViewDetail: boolean;
   isDetail: boolean = false;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - Cán bộ Vụ' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - Cán bộ Vụ' }
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

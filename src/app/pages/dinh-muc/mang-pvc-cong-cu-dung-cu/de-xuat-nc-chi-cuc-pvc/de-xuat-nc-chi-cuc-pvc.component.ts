@@ -6,7 +6,6 @@ import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 import { saveAs } from 'file-saver';
 import {DxChiCucPvcService} from "../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 
@@ -21,6 +20,13 @@ export class DeXuatNcChiCucPvcComponent extends Base2Component implements OnInit
   isViewDetail: boolean;
   isDetail: boolean = false;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
+    { ma: this.STATUS.DADUYET_CB_CUC, giaTri: 'Đã duyệt - Cán bộ cục' },
+    { ma: this.STATUS.TUCHOI_CB_CUC, giaTri: 'Từ chối - Cán bộ cục' }
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -31,23 +37,6 @@ export class DeXuatNcChiCucPvcComponent extends Base2Component implements OnInit
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
-    this.filterTable = {};
-  }
-
-  ngOnInit() {
-    this.spinner.show();
-    try {
-      this.initFormSearch();
-      this.filter();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  initFormSearch(){
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
@@ -58,7 +47,21 @@ export class DeXuatNcChiCucPvcComponent extends Base2Component implements OnInit
       ngayKyTu: [''],
       ngayKyDen: [''],
     });
+    this.filterTable = {};
   }
+
+  ngOnInit() {
+    this.spinner.show();
+    try {
+      this.filter();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
 
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
@@ -69,7 +72,7 @@ export class DeXuatNcChiCucPvcComponent extends Base2Component implements OnInit
     }
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      capDvi : 3
     })
     await this.search();
   }
@@ -85,7 +88,7 @@ export class DeXuatNcChiCucPvcComponent extends Base2Component implements OnInit
     this.formData.reset();
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
+      capDvi : 3
     })
     await this.search();
   }

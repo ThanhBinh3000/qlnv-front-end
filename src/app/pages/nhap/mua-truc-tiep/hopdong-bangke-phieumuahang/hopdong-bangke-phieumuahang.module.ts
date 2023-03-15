@@ -7,6 +7,8 @@ import { HopDongComponent } from './hop-dong/hop-dong.component';
 import { HopdongPhulucHopdongComponent } from './hopdong-phuluc-hopdong/hopdong-phuluc-hopdong.component';
 import { BangkeThumualeComponent } from './bangke-thumuale/bangke-thumuale.component';
 import { ThemmoiHopdongPhulucComponent } from './hopdong-phuluc-hopdong/themmoi-hopdong-phuluc/themmoi-hopdong-phuluc.component';
+import { QuanLyHopDongMttComponent } from './hopdong-phuluc-hopdong/quan-ly-hop-dong-mtt/quan-ly-hop-dong-mtt.component';
+import { PhuLucMttComponent } from './hopdong-phuluc-hopdong/phu-luc-mtt/phu-luc-mtt.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +17,8 @@ import { ThemmoiHopdongPhulucComponent } from './hopdong-phuluc-hopdong/themmoi-
     HopdongPhulucHopdongComponent,
     BangkeThumualeComponent,
     ThemmoiHopdongPhulucComponent,
+    QuanLyHopDongMttComponent,
+    PhuLucMttComponent,
 
   ],
   imports: [
