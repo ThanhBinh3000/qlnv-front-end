@@ -210,7 +210,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       ngayKyDenNgay: null,
       id: 0,
       donViId: null,
-      namKeHoach: 2023,
+      namKeHoach: this.formData.get('namKeHoach').value,
       tenDvi: null,
       pageNumber: 1,
       pageSize: 1000,
@@ -250,6 +250,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             }
           });
         this.spinner.hide();
+      } else {
+        this.selectedCanCu = null;
+        this.dataGiaoChiTieu = [];
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -492,6 +495,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.loadQdGiaoChiTieuCuaTC();
   }
 
   back() {
