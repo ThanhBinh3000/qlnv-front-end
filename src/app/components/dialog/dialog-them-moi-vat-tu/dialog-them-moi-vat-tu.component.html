@@ -1,6 +1,6 @@
 <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="18">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Tên gói thầu </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -18,33 +18,41 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-  </div>
-  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="5">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> SL theo chỉ tiêu kế hoạch năm </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> SL nhập theo chỉ tiêu KH giao đầu năm </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
-            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
-            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                           [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="5">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> SL theo KH năm đã được duyệt </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL nhập theo KH đã được duyệt </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-number [nzDisabled]="true" formControlName="soLuongDaMua" [nzMin]="1"
-            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
-            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                           [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
+                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="3">
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất (đ) </nz-form-label>
+        <nz-input-number formControlName="donGiaDx" [nzSize]="'small'" (input)="calculatorThanhTienDx()"
+                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL nhập đấu thầu đề xuất (kg) </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
             [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter"
@@ -55,17 +63,27 @@
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
-        <nz-input-number formControlName="donGiaVat" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
-          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+        <nz-form-label [nzNoColon]="true"> Tổng thành tiền đề xuất (đ) </nz-form-label>
+        <nz-input-number formControlName="thanhTienDx" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="5">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng thành tiền theo đơn giá đã duyệt (đ) </nz-form-label>
         <nz-input-number formControlName="thanhTien" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
           [nzParser]="globals.parser">
+        </nz-input-number>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá được duyệt gồm VAT (đ) </nz-form-label>
+        <nz-input-number formControlName="donGiaVat" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
+                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>
     </div>
@@ -78,7 +96,9 @@
     <tr>
       <th width="200px" class="text-center">Điểm kho</th>
       <th class="text-center">Địa điểm kho</th>
-      <th width="120px" class="text-center">Số lượng</th>
+      <th width="120px" class="text-center">Số lượng (Tấn)</th>
+      <th width="120px" class="text-center">Thành tiền đề xuất (đ)</th>
+      <th width="120px" class="text-left">Thành tiền theo đơn giá đã duyệt (đ)</th>
       <th width="80px" class="text-center">Hành động</th>
     </tr>
   </thead>
@@ -91,10 +111,12 @@
       </td>
       <td>{{thongtinDauThau.diaDiemNhap}} </td>
       <td>
-        <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinDauThau.soLuong" [nzMin]="1" [nzStep]="1"
+        <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinDauThau.soLuong" [nzMin]="1" [nzStep]="1" (input)="calculator()"
           [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </td>
+      <td disabled="true">{{thongtinDauThau.thanhTienDx}}</td>
+      <td disabled="true">{{thongtinDauThau.thanhTienQd}}</td>
       <td class="text-center">
         <a (click)="addDiemKho()">
           <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -109,6 +131,8 @@
         <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.diaDiemNhap }}</td>
         <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{ data.thanhTienDx | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{ data.thanhTienQd | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">
           <a (click)="startEdit(i)">
             <i class="fa fa-pencil"></i>
@@ -126,10 +150,12 @@
         </td>
         <td>{{data.diaDiemNhap}} </td>
         <td>
-          <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
+          <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1" (input)="calculatorEdit(i)"
             [nzSize]="'small'">
           </nz-input-number>
         </td>
+        <td>{{ data.thanhTienDx | number : '1.0-1' : 'vi_VN'}}</td>
+        <td>{{ data.thanhTienQd | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">
           <a (click)="saveEdit(i)" class="save">
             <i class="icon htvbdh_tcdt_save"></i>
@@ -142,8 +168,10 @@
     </tr>
     <tr *ngIf="listOfData.length > 0">
       <td colspan="2" class="first-last-row-table background-last-row text-left">Cộng</td>
-      <td colspan="2" class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}
-      </td>
+      <td class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
   </tbody>
 </nz-table>
