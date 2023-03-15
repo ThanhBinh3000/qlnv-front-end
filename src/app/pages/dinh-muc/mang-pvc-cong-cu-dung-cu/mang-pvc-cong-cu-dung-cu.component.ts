@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
@@ -17,7 +17,7 @@ export class MangPvcCongCuDungCuComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
   ) { }
-  tabSelected = this.userService.isCuc() ? 'dexuatnhucau' : 'dexuatchicuc' ;
+  tabSelected = 'dexuatnhucau';
   selectTab(tab) {
     this.tabSelected = tab;
   }

@@ -189,7 +189,7 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     }
   }
 
-  async save(isOther: boolean) {
+  async save() {
     this.formData.patchValue({
       namKeHoach: this.formDataTongHop.value.namKeHoach
     })
@@ -214,12 +214,9 @@ export class MmThemMoiTongHopDxCucComponent extends Base2Component implements On
     let body = this.formData.value;
     let data = await this.createUpdate(body);
     if (data) {
-      if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
-      } else {
         this.goBack()
       }
-    } else {
+    else {
       this.convertListData()
     }
   }
