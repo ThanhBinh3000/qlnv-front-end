@@ -23,12 +23,13 @@ export class BaoHiemComponent implements OnInit {
     this.$routerChange.unsubscribe();
   }
 
-  tabSelected = 'dexuatbaohiemchicuc';
+  tabSelected = null;
   selectTab(tab) {
     this.tabSelected = tab;
   }
 
   ngOnInit(): void {
+    this.tabSelected = this.userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC') ? 'dexuatbaohiemchicuc' : null
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {

@@ -11,11 +11,11 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
 import { Validators } from '@angular/forms';
+import { QuyetDinhGiaoNvXuatHangService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
+import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
 
 @Component({
   selector: 'app-them-moi-phieu-xuat-kho',
@@ -44,8 +44,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private xhPhieuKnghiemCluongService: XhPhieuKnghiemCluongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoService);
@@ -64,6 +64,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         idQdGiaoNvXh: [],
         soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
+        idHdong: [],
+        soHdong: ['', [Validators.required]],
+        ngayKyHd: [],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
@@ -146,7 +149,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      let id = await this.userService.getId('XH_CTVT_PHIEU_XUAT_KHO_SEQ')
+      let id = await this.userService.getId('XH_DG_PHIEU_XUAT_KHO_SEQ')
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
@@ -155,7 +158,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         soPhieuXuatKho: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
-        type: "XUAT_CAP",
       });
     }
 
@@ -167,8 +169,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthhInput,
     }
-    let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
+    let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
@@ -200,16 +203,21 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
+      soHdong: data.soHd,
+      idHdong: data.idHd,
+      ngayKyHd: data.ngayKyHd,
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc;
+      dataChiCuc.forEach(e => {
+        this.listDiaDiemNhap = e.children
+      });
     }
     await this.spinner.hide();
   }
@@ -250,7 +258,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
       }
-      let res = await this.phieuKiemNghiemChatLuongService.search(body)
+      let res = await this.xhPhieuKnghiemCluongService.search(body)
       const list = res.data.content;
       this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
     }
@@ -266,16 +274,17 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listPhieuKtraCl,
-        dataHeader: ['Số phiếu', 'Ngày giám định'],
-        dataColumn: ['soPhieuKnCl', 'ngayLapPhieu']
+        dataHeader: ['Số phiếu', 'Ngày kiểm nghiệm'],
+        dataColumn: ['soPhieu', 'ngayTao']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data, "phiếu");
         this.formData.patchValue({
-          soPhieuKnCl: data.soPhieuKnCl,
+          soPhieuKnCl: data.soPhieu,
           ktvBaoQuan: data.nguoiKn,
-          ngayKn: data.ngayLapPhieu,
+          ngayKn: data.ngayTao,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
@@ -285,6 +294,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         });
       }
     });
+    console.log(this.formData.value, 55555);
   }
 
   async save(isGuiDuyet?) {

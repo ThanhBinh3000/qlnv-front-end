@@ -22,12 +22,13 @@ export class MayMocThietBiComponent implements OnInit {
     this.$routerChange.unsubscribe();
   }
 
-  tabSelected = this.userService.isChiCuc() ? 'dexuatchicuc' : 'dinhmuctrangbi' ;
+  tabSelected = null;
   selectTab(tab) {
     this.tabSelected = tab;
   }
 
   ngOnInit(): void {
+    this.tabSelected = this.userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_DEXUATCC') ? 'dexuatchicuc' : null
     this.currentUrl = window.location.href;
     this.$routerChange = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {

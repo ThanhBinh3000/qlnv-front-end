@@ -70,14 +70,14 @@
           <th nzWidth="120px">Mã CCDC</th>
           <th nzWidth="120px">Tên CCDC</th>
           <th nzWidth="100px">Đơn vị tính</th>
-          <th nzWidth="100px">Năm kế hoạch</th>
-          <th nzWidth="100px">Số dư năm trước(1)</th>
-          <th nzWidth="100px">Số lượng nhập(2)</th>
-          <th nzWidth="140px">Số lượng điều chỉnh tăng(3)</th>
-          <th nzWidth="140px">Số lượng điều chỉnh giảm(4)</th>
-          <th nzWidth="140px">Số lượng cần sửa chữa(5)</th>
-          <th nzWidth="140px">Số lượng phải thanh lý(6)</th>
-          <th nzWidth="140px">Số lượng tồn(7)=1+2+3-4-6</th>
+          <th nzWidth="120px">Năm kế hoạch</th>
+          <th nzWidth="200px">Số dư năm trước(1)</th>
+          <th nzWidth="200px">Số lượng nhập(2)</th>
+          <th nzWidth="200px">Số lượng điều chỉnh tăng(3)</th>
+          <th nzWidth="200px">Số lượng điều chỉnh giảm(4)</th>
+          <th nzWidth="200px">Số lượng cần sửa chữa(5)</th>
+          <th nzWidth="200px">Số lượng phải thanh lý(6)</th>
+          <th nzWidth="200px">Số lượng tồn(7)=1+2+3-4-6</th>
           <th nzWidth="100px" nzRight>Hành động</th>
         </tr>
         </thead>
@@ -90,13 +90,13 @@
           <td>{{ data.tenTaiSan}}</td>
           <td>{{ data.donViTinh }}</td>
           <td>{{ data.namKeHoach }}</td>
-          <td>{{ data.soDuNamTruoc | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.soDuNamTruoc | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slNhap | number : '1.0-1' : 'vi_VN' }}</td>
+          <td  class="text-right">{{ data.dieuChinhTang | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.dieuChinhGiam | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slCanSuaChua | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slCanThanhLy | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ data.slTon | number : '1.0-1' : 'vi_VN' }}</td>
           <td nzRight>
             <a  (click)="openDialog(data, true)"  *ngIf="(data.trangThai == statusMm.DA_CHOT || !userService.isChiCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_XEM')" >
               <i class="fa fa-eye"></i>
