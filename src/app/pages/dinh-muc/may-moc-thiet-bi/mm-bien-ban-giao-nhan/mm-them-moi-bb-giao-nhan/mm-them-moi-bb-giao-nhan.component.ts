@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import {DialogMmBbGiaoNhanComponent} from "./dialog-mm-bb-giao-nhan/dialog-mm-bb-giao-nhan.component";
 import {MmHopDongCt} from "../../mm-hop-dong/mm-thong-tin-hop-dong/mm-thong-tin-hop-dong.component";
 import {MmBbGiaoNhanService} from "../../../../../services/mm-bb-giao-nhan.service";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-mm-them-moi-bb-giao-nhan',
@@ -130,7 +131,7 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     }
   }
 
-  async save(isKy? : boolean) {
+  async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -148,14 +149,24 @@ export class MmThemMoiBbGiaoNhanComponent extends Base2Component implements OnIn
     body.listQlDinhMucBbGnDaiDienBenNhan = this.tableBenNhan
     let data = await this.createUpdate(body);
     if (data) {
-      if (isKy) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
-      } else {
         this.goBack()
       }
-    }
   }
 
+  async pheDuyet() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.DU_THAO :
+      case STATUS.TUCHOI_CB_CUC : {
+        trangThai = STATUS.DA_KY;
+        break;
+      }
+      case STATUS.DA_KY : {
+        trangThai = STATUS.DADUYET_CB_CUC
+      }
+    }
+    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+  }
 
 
   xoaItem(index: number) {

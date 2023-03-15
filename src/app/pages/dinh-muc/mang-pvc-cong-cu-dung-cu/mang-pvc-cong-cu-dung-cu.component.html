@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dexuatnhucau')">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatnhucau'" (click)="selectTab('dexuatnhucau')">
       {{userService.isChiCuc() ? 'Đề xuất nhu cầu' : 'Đề xuất nhu cầu của Chi cục'}}
     </li>
     <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="!userService.isChiCuc()">
