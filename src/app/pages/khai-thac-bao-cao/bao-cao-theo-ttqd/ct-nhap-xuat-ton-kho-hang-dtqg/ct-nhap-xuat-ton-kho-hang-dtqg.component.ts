@@ -16,15 +16,15 @@ import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
 
 @Component({
-  selector: 'app-kh-luan-phien-doi-hang',
-  templateUrl: './kh-luan-phien-doi-hang.component.html',
-  styleUrls: ['./kh-luan-phien-doi-hang.component.scss']
+  selector: 'app-ct-nhap-xuat-ton-kho-hang-dtqg',
+  templateUrl: './ct-nhap-xuat-ton-kho-hang-dtqg.component.html',
+  styleUrls: ['./ct-nhap-xuat-ton-kho-hang-dtqg.component.scss']
 })
-export class KhLuanPhienDoiHangComponent extends Base2Component implements OnInit {
+export class CtNhapXuatTonKhoHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
-  excelSrc: any;
   pdfBlob: any;
-  excelBlob: any;
+
+  dsBoNganh: any[] = [];
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -44,21 +44,20 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
               public userService: UserService,
               private donViService: DonviService,
               private danhMucService: DanhMucService,
+
+              private donviService: DonviService,
               public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
-        maCuc: null,
-        maChiCuc: null,
-        loaiVthh: null,
-        cloaiVthh: null,
-        thoiGianSx: null,
-        thoiGianSxTu: null,
-        thoiGianSxDen: null,
-        thoiGianNhapKho: null,
-        thoiGianNhapKhoTu: null,
-        thoiGianNhapKhoDen: null,
+        quy: [dayjs().get("year"), [Validators.required]],
+        boNganh: null,
+        dviBaoCao: null,
+        maDvqhns: null,
+        loaiHangHoa: null,
+        nuocSanXuat: null,
+        chungLoaiHangHoa: null
       }
     );
   }
@@ -74,7 +73,8 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
       }
       await Promise.all([
         this.loadDsDonVi(),
-        this.loadDsVthh()
+        this.loadDsVthh(),
+        this.getListBoNganh()
       ]);
     } catch (e) {
       console.log("error: ", e);
@@ -85,34 +85,7 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_luan_phien_doi_hang_dtqg.pdf");
-  }
-
-  async downloadExcel() {
-    try {
-      this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
-      let body = this.formData.value;
-      body.typeFile = "xlsx";
-      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
-      body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
-        debugger
-        this.excelBlob = s;
-        this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_kh_luan_phien_doi_hang_dtqg.xlsx");
-      });
-      this.showDlgPreview = true;
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this.spinner.hide();
-    }
-
+    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
   }
 
   closeDlg() {
@@ -126,16 +99,12 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
         this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
       }
-      if (this.formData.value.thoiGianNhapKho) {
-        this.formData.value.thoiGianNhapKhoTu = dayjs(this.formData.value.thoiGianNhapKho[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianNhapKhoDen = dayjs(this.formData.value.thoiGianNhapKho[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
-      body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
+      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
+      body.tenBaoCao = "Báo cáo kế hoạch tăng hàng dự trữ quốc gia";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -158,6 +127,15 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
       this.dsDonVi = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    // let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsBoNganh = res.data;
     }
   }
 
@@ -197,6 +175,10 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   }
 
   changeCloaiVthh(event) {
+
+  }
+
+  changeNuocSX(event) {
 
   }
   addRow () {
