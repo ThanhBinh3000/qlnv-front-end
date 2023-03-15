@@ -335,12 +335,12 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.CHO_DUYET_KT;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.CHO_DUYET_KT: {
+      // case STATUS.CHO_DUYET_KT: {
+      //   trangThai = STATUS.CHO_DUYET_KT;
+      //   msg = MESSAGE.GUI_DUYET_CONFIRM;
+      //   break;
+      // }
+      case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
