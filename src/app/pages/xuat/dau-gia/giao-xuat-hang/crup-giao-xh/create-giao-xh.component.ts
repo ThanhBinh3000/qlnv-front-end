@@ -48,6 +48,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       ngayKy: ['',],
       idHd: [],
       soHd: [''],
+      ngayKyHd: [''],
       maDviTsan: [''],
       tenTtcn: ['',],
       loaiVthh: [''],
@@ -151,6 +152,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
               this.formData.patchValue({
                 soHd: data.soHd,
                 idHd: data.id,
+                ngayKyHd: data.ngayHluc,
                 maDviTsan: data.maDviTsan,
                 loaiVthh: data.loaiVthh,
                 tenLoaiVthh: data.tenLoaiVthh,

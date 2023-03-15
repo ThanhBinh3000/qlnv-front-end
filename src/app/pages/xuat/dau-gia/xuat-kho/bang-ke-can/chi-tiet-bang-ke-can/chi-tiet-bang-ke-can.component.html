@@ -11,7 +11,7 @@
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_DUYET_LDCCUC')"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_DUYET_LDCCUC')"
         type="button" class="btn btn-sub"
         (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -177,8 +177,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày xuất</nz-form-label>
             <nz-form-control nz-col>
-              <nz-date-picker class="search__input" formControlName="ngayXuat" [nzDisabled]="isView"
-                nzFormat="dd/MM/yyyy">
+              <nz-date-picker class="search__input" formControlName="ngayXuat" nzDisabled nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -209,35 +208,34 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Họ và tên người giao hàng</nz-form-label>
-            <input nz-input formControlName="nlqHoTen" [readonly]="isView" />
+            <input nz-input formControlName="nlqHoTen" readonly />
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> CMT/CCCD</nz-form-label>
-            <input nz-input formControlName="nlqCmnd" [readonly]="isView" />
+            <input nz-input formControlName="nlqCmnd" readonly />
           </nz-form-item>
 
         </div>
         <div nz-col [nzSpan]="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị/Cty (người giao hàng)</nz-form-label>
-            <input nz-input formControlName="nlqDonVi" [readonly]="isView" />
+            <input nz-input formControlName="nlqDonVi" readonly />
           </nz-form-item>
 
         </div>
         <div nz-col [nzSpan]="5">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Địa chỉ/Cty (người giao hàng)</nz-form-label>
-            <input nz-input formControlName="nlqDiaChi" [readonly]="isView" />
+            <input nz-input formControlName="nlqDiaChi" readonly />
           </nz-form-item>
 
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thời gian giao, nhận hàng</nz-form-label>
-            <nz-date-picker class="search__input" formControlName="thoiGianGiaoNhan" [nzDisabled]="isView"
-              nzFormat="dd/MM/yyyy">
+            <nz-date-picker class="search__input" formControlName="thoiGianGiaoNhan" nzDisabled nzFormat="dd/MM/yyyy">
             </nz-date-picker>
           </nz-form-item>
 
@@ -245,21 +243,21 @@
         <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
-            <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
+            <input nz-input formControlName="tenLoaiVthh" [readonly]="true" readonly />
           </nz-form-item>
 
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Chủng loại hàng</nz-form-label>
-            <input nz-input formControlName="tenCloaiVthh" [readonly]="true" />
+            <input nz-input formControlName="tenCloaiVthh" [readonly]="true" readonly />
           </nz-form-item>
 
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
-            <input nz-input formControlName="donViTinh" [readonly]="true" />
+            <input nz-input formControlName="donViTinh" [readonly]="true" readonly />
           </nz-form-item>
         </div>
       </div>
@@ -355,9 +353,9 @@
         <tfoot>
           <tr>
             <td></td>
-            <td>Tổng số lượng xuất viện trợ, cứu trợ</td>
-            <td>{{tongSLbangKeDtl|number: '1.0-1'}}</td>
-            <td></td>
+            <td>Mã cân</td>
+            <td>{{formData.value.tongTrongLuong|number:'1.0-0'}}</td>
+            <td>{{formData.value.tongTrongLuongBaoBi|number:'1.0-0'}}</td>
           </tr>
         </tfoot>
       </nz-table>
