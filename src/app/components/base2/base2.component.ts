@@ -193,7 +193,7 @@ export class Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy', 'ngayHieuLuc', 'ngayDeXuat', 'ngayTongHop'].includes(key)) {
+          if (['ngayKy','ngayGiaoNhan','ngayHieuLuc','ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -514,6 +514,14 @@ export class Base2Component implements OnInit {
       return true
     }
     return true;
+  }
+
+  convertDateToString(event: any) : string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return  result;
   }
 
 }

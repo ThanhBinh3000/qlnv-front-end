@@ -350,6 +350,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           .groupBy("tenCuc")
           .map((v, k) => {
             let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
             let rowCuc = v.find(s => s.tenCuc === k);
             console.log(rowCuc, 'rowCuc');
             return {
@@ -357,6 +358,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
               tenCuc: k,
               soLuongXuatCuc: rowCuc.soLuongXuatCuc,
               soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
               tenCloaiVthh: v[0].tenCloaiVthh,
               childData: v
             }
@@ -364,11 +366,13 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        let thanhTienXuatThucTe = rs.reduce((prev, cur) => prev + cur.thanhTienXuatCucThucTe, 0);
         return {
           idVirtual: uuid.v4(),
           noiDung: key,
           soLuongXuat: soLuongXuat,
           soLuongXuatThucTe: soLuongXuatThucTe,
+          thanhTienXuatThucTe: thanhTienXuatThucTe,
           childData: rs
         };
       }).value();
@@ -456,9 +460,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async save() {
-    this.formData.patchValue({
-      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
-    })
+
     let result = await this.createUpdate(this.formData.value);
     if (result) {
       this.quayLai();
@@ -466,14 +468,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async saveAndSend() {
-    this.formData.patchValue({
-      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
-    })
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
     } else {
-      console.log('hhaaa')
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
     }

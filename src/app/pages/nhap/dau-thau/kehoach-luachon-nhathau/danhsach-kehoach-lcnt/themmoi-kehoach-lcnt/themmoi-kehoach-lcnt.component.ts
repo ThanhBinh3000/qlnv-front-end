@@ -130,7 +130,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
-      donGiaVat: ['', [Validators.required]],
+      donGiaVat: [],
       vat: ['5'],
       tongMucDt: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
@@ -403,6 +403,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
         donGiaVat: this.formData.value.donGiaVat
       },
     });
@@ -473,10 +474,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         } else {
           if (this.formData.get('id').value) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.quayLai();
+            // this.quayLai();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.quayLai();
+            // this.quayLai();
           }
         }
       } else {
@@ -496,14 +497,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["moTaHangHoa"].clearValidators();
-      this.formData.controls["donGiaVat"].clearValidators();
+      // this.formData.controls["donGiaVat"].clearValidators();
       this.formData.controls["tgianNhang"].clearValidators();
       this.formData.controls["tgianThien"].setValidators([Validators.required]);
     } else {
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-      this.formData.controls["donGiaVat"].setValidators([Validators.required]);
+      // this.formData.controls["donGiaVat"].setValidators([Validators.required]);
       this.formData.controls["tgianNhang"].setValidators([Validators.required]);
       this.formData.controls["tgianThien"].clearValidators();
     }
@@ -617,7 +618,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
           let res = await this.dauThauService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -669,7 +670,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
-              MESSAGE.THAO_TAC_SUCCESS,
+              MESSAGE.LUU_VA_GUI_DUYET_SUCCESS,
             );
             this.quayLai();
           } else {

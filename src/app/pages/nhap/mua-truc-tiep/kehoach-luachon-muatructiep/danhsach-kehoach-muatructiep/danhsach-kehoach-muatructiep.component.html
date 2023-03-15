@@ -31,11 +31,11 @@
                         <label>Trích yếu</label>
                         <input placeholder="" nz-input formControlName="trichYeu" />
                     </div>
-                    <div nz-col nzSpan="20">
+                    <div nz-col nzSpan="20" *ngIf="userService.isTongCuc()">
                         <label>Nội dung tổng hợp</label>
                         <input placeholder="" nz-input formControlName="noiDungTh" />
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
                         <label>Trạng thái tổng hợp</label>
                         <input placeholder="" nz-input formControlName="trangThaiTh" />
                     </div>
@@ -47,7 +47,7 @@
                         <i class="icon  htvbdh_nhap-lai1"></i>
                         Xóa điều kiện
                     </button>
-                    <button nz-button class="search__button--search" (click)="search()">
+                    <button nz-button class="search__button--search" (click)="timKiem()">
                         <i nz-icon nzType="search"></i>
                         Tìm kiếm
                     </button>
@@ -199,7 +199,7 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td class="text-blue">{{ data.soQd }}</td>
+                        <td class="text-blue">{{ data.soQdCc }}</td>
                         <td *ngIf="userService.isTongCuc()">{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh}}</td>
                         <td>{{ data.tongSoLuong}}</td>

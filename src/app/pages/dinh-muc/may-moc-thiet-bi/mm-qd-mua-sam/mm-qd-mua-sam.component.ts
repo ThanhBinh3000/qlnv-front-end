@@ -21,6 +21,13 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
   isDetail: boolean = false;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối LĐ - Tổng cục' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -65,8 +72,8 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
-        ngayKyTu :  dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
-        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+        ngayKyTu: this.formData.value.ngayKy[0],
+        ngayKyDen: this.formData.value.ngayKy[1]
       })
     }
     this.formData.patchValue({
@@ -81,7 +88,7 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       maDvi : this.userInfo.MA_DVI,
       capDvi : this.userInfo.CAP_DVI,
-      loai : '01',
+      loai : '00',
     })
     await this.search();
   }

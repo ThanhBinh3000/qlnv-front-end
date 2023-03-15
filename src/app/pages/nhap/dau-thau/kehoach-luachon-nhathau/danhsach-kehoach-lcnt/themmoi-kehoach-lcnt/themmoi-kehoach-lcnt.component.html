@@ -405,19 +405,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3" *ngIf="!loaiVthhInput.startsWith('02')">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá bao gồm VAT (đ/kg)
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" formControlName="donGiaVat" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
@@ -494,9 +481,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm
-            nhập hàng'
-            }}</span>
+          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'}}</span>
         </div>
       </div>
       <div class="buttons">
@@ -515,11 +500,13 @@
           <th>Chi cục</th>
           <th>Tên gói thầu</th>
           <th>Địa điểm nhập kho</th>
-          <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
+          <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
           <th>Đã lên kế hoạch mua</th>
-          <th>Số lượng (Tấn)</th>
-          <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
-          <th>Thành tiền (giá gói thầu) (đ)</th>
+          <th>SL nhập (Tấn)</th>
+          <th>Đơn giá đề xuất (đ)</th>
+          <th>Thành tiền tạm tính (đ)</th>
+          <th>Đơn giá được duyệt bao gồm VAT (đ/kg)</th>
+          <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
           <th>Tiền bảo lãnh dự thầu</th>
           <th style="width: 5%;" *ngIf="userService.isCuc()">Hành động</th>
         </tr>
@@ -529,6 +516,8 @@
           <tr>
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -546,6 +535,8 @@
               <td>{{dtGoiThau.soLuongChiTieu}}</td>
               <td>{{dtGoiThau.soLuongDaMua}}</td>
               <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaDx * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
               <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000) + (dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000 *

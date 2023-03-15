@@ -6,8 +6,6 @@ import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
-import dayjs from "dayjs";
 import { saveAs } from 'file-saver';
 import {DeXuatNhuCauBaoHiemService} from "../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
 
@@ -21,6 +19,13 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
+    { ma: this.STATUS.DADUYET_CB_CUC, giaTri: 'Đã duyệt - Cán bộ cục' },
+    { ma: this.STATUS.TUCHOI_CB_CUC, giaTri: 'Từ chối - Cán bộ cục' }
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -69,7 +74,7 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
       })
     }
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
+      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
       capDvi : 3
     })
     await this.search();
@@ -85,7 +90,7 @@ export class DeXuatHopDongChiCucComponent extends Base2Component implements OnIn
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
+      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
       capDvi : 3
     })
     await this.search();

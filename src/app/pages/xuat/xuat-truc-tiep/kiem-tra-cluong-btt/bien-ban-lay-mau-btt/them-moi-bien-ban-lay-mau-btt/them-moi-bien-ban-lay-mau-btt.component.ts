@@ -159,28 +159,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         this.listDiaDiemXh = dataChiCuc[0].children;
       }
     };
-    // const data = dataRes.data;
-    // this.formData.patchValue({
-    //   soQdGiaoNvNh: data.soQd,
-    //   idQdGiaoNvNh: data.id,
-    //   ngayQdGiaoNvNh: data.ngayQdinh,
-    //   loaiVthh: data.loaiVthh,
-    //   cloaiVthh: data.cloaiVthh,
-    //   tenLoaiVthh: data.tenLoaiVthh,
-    //   tenCloaiVthh: data.tenCloaiVthh,
-    //   moTaHangHoa: data.moTaHangHoa,
-    //   soHd: data.soHd,
-    //   ngayHd: data.hopDong.ngayKy,
-    //   donGiaHd: data.hopDong.donGia
-    // });
-    // let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
-    // if (dataChiCuc) {
-    //   if (this.loaiVthh.startsWith('02')) {
-    //     this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanGuiHang));
-    //   } else {
-    //     this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
-    //   }
-    // }
     await this.spinner.hide();
   }
 
@@ -280,20 +258,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     data.loaiDaiDien = type;
     let body = cloneDeep(data);
     this.dataTable.push(body);
-    // if (!this.listDaiDien) {
-    //   this.listDaiDien = [];
-    // }
-    // if (type) {
-    //   let item = {
-    //     bbLayMauId: null,
-    //     daiDien: null,
-    //     id: null,
-    //     idTemp: new Date().getTime(),
-    //     loaiDaiDien: type,
-    //   };
-    //   this.listDaiDien = [item, ...this.listDaiDien];
-    //   this.loadDaiDien();
-    // }
   }
 
   deleteRow(index: any) {
@@ -315,12 +279,11 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     });
   }
 
-
-
   async save(isGuiDuyet?: boolean) {
     let body = this.formData.value;
     body.children = this.dataTable;
     body.ketQuaNiemPhong = body.flagNiemPhong ? 1 : 0;
+    body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -331,7 +294,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       }
     }
   }
-
 
   pheDuyet(isPheDuyet) {
     let trangThai = ''
@@ -365,6 +327,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     this.formData.patchValue({
       flagNiemPhong: this.formData.value.ketQuaNiemPhong == 1,
     })
+    this.fileDinhKem = data.fileDinhKems;
   }
 
   getNameFileQD($event: any) {

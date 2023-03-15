@@ -27,7 +27,7 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhSachMuaTrucTiepService);
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [],
       maDvi: [],
       tenDvi: [],
       soDxuat: [],
@@ -62,7 +62,8 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.search();
+      await this.timKiem();
+      await this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
@@ -71,5 +72,16 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     }
   }
 
+  async timKiem() {
+    if (this.formData.value.ngayTao) {
+      this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayPduyet) {
+      this.formData.value.ngayDuyetTu = dayjs(this.formData.value.ngayPduyet[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayDuyetDen = dayjs(this.formData.value.ngayPduyet[1]).format('YYYY-MM-DD')
+    }
+    await this.search();
+  }
 
 }

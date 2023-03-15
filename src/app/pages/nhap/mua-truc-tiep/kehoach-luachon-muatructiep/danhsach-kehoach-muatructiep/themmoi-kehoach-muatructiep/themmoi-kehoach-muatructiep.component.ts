@@ -74,37 +74,38 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     super(httpClient, storageService, notification, spinner, modal, danhSachMuaTrucTiepService);
     this.formData = this.fb.group({
       id: [],
-      maDvi: [''],
+      maDvi: ['', [Validators.required]],
       tenDvi: ['', [Validators.required]],
       loaiHinhNx: ['', [Validators.required]],
       kieuNx: [''],
-      diaChiDvi: [],
+      diaChi: [],
       namKh: [dayjs().get('year'), [Validators.required]],
       soDxuat: ['', [Validators.required]],
       trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
-      tenDuAn: [''],
-      soQd: [, [Validators.required]],
+      tenDuAn: ['', [Validators.required]],
+      soQdCc: [, [Validators.required]],
       loaiVthh: [,],
       tenLoaiVthh: [, [Validators.required]],
       cloaiVthh: [,],
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
-      ptMua: [''],
+      ptMua: ['', [Validators.required]],
       tchuanCluong: [null],
-      giaMua: [],
+      giaMua: [null, [Validators.required]],
       thueGtgt: [5],
       tgianMkho: [, [Validators.required]],
       tgianKthuc: [, [Validators.required]],
       ghiChu: [null],
       tongMucDt: [null],
       tongSoLuong: [null],
+      tongTienGomThue: [null],
       nguonVon: ['NGV01', [Validators.required]],
+      donGiaVat: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
-      donGiaVat: [],
     });
   }
 
@@ -162,7 +163,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        this.dataTable = data.dsSlddDtlList;
         this.bindingCanCu(data.ccXdgDtlList);
         this.calculatorTable();
       }
@@ -173,7 +173,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
-      diaChiDvi: this.userInfo.DON_VI.diaChi,
+      diaChi: this.userInfo.DON_VI.diaChi,
     })
   }
 
@@ -300,11 +300,27 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongMucDt: tongMucDt,
+      tongTienGomThue: tongSoLuong * 1000 * tongMucDt * this.formData.get('thueGtgt').value / 100,
     });
   }
 
   deleteRow(i: number) {
-    this.dataTable = this.dataTable.filter((item, index) => index != i);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async save(isGuiDuyet?) {
@@ -324,7 +340,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     body.tgianKthuc = pipe.transform(body.tgianKthuc, 'yyyy-MM-dd HH:mm')
     body.tgianMkho = pipe.transform(body.tgianMkho, 'yyyy-MM-dd HH:mm')
     body.fileDinhKemReq = this.fileDinhKem;
-    body.dsSlddReq = this.dataTable;
+    body.children = this.dataTable;
     body.ccXdgReq = [...this.canCuKhacList];
     let res = await this.createUpdate(body);
     if (res) {
@@ -352,11 +368,11 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQd: res2.data.soQuyetDinh
+        soQdCc: res2.data.soQuyetDinh
       });
     } else {
       this.formData.patchValue({
-        soQd: 189
+        soQdCc: 189
       });
     }
   }
@@ -622,13 +638,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     };
     switch (event) {
       case 'tai-lieu-dinh-kem':
-        // body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
-        // body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
-        // if (this.taiLieuDinhKemList.length > 0) {
-        //   this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-        //     saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
-        //   });
-        // }
         break;
       default:
         break;

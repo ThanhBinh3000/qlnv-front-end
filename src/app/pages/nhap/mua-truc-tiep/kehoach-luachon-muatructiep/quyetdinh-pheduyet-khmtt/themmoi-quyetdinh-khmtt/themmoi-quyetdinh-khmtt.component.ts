@@ -12,12 +12,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from "../../../../../../constants/status";
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -79,6 +74,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
+      soQdCc: [''],
     })
   }
 
@@ -163,7 +159,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.dsDiaDiem = this.danhsachDx;
+    body.children = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
@@ -232,7 +228,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       nzComponentParams: {
         dataTable: this.listDanhSachTongHop,
         dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['id', 'noiDung']
+        dataColumn: ['id', 'noiDungThop']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -259,7 +255,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           idTrHdr: null,
           soTrHdr: null,
         })
-        for (let item of data.hhDxKhMttThopDtls) {
+        for (let item of data.children) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const dataRes = res.data;
@@ -336,7 +332,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           moTaHangHoa: data.moTaHangHoa,
-          soQdCc: data.soQd,
+          soQdCc: data.soQdCc,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           maDvi: data.maDvi,

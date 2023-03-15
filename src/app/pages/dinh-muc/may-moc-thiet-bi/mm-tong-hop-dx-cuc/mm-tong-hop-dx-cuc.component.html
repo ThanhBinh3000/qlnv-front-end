@@ -11,11 +11,13 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Số tổng hợp</label>
-            <input class="search__input" placeholder="Nhập Số công văn" nz-input formControlName="soCv"/>
+            <nz-input-number   [nzParser]="globals.parser" [nzSize]="'small'" nz-input
+                              formControlName="maTh" [nzMin]="0">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="14">
             <label class="search__label">Trích yếu</label>
-            <input class="search__input" placeholder="Nhập Trích yếu" nz-input formControlName="trichYeu" />
+            <input class="search__input" placeholder="Nhập trích yếu" nz-input formControlName="trichYeu" />
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày tổng hợp</label>
@@ -83,19 +85,20 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" />
+            <nz-input-group>
+              <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                         (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
+                               [(ngModel)]="filterTable.ngayKy"
+                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
+              ></nz-date-picker>
             </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
           </th>
           <th>
             <nz-input-group >
@@ -116,9 +119,11 @@
             </nz-input-group>
           </th>
           <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+            <nz-input-group>
+              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th></th>

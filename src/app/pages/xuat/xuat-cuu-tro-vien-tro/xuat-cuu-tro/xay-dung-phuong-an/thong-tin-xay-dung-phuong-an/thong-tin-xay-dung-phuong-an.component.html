@@ -40,13 +40,13 @@
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_DUYET_LDC')"
       type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_DUYET_TP')"
       type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
@@ -59,13 +59,13 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
+    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_DUYET_LDC')"
             type="button" class="btn btn-sub"
             (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()"
+    <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_DUYET_TP')"
             type="button" class="btn btn-sub"
             (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -114,6 +114,10 @@
       </div>
     </div>
   </div>
+  <nz-alert class="mg-t-16 mb-2" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC " nzShowIcon
+            nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <ng-template #error let-control>
@@ -174,7 +178,7 @@
             <nz-form-label [nzNoColon]="true"> Số công văn/đề xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="{{maDeXuat}}">
-                <nz-input-number formControlName="soDx" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
+                <nz-input-number formControlName="soDx" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'"
                                  [nzDisabled]="isView">
                 </nz-input-number>
               </nz-input-group>
@@ -444,7 +448,7 @@
             <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
             <td></td>
             <td></td>
-            <td>{{item.thanhTien|number:'1.0-1'}}</td>
+            <td><strong>{{item.thanhTienXuatThucTe|number:'1.0-1'}}</strong></td>
             <td>
               <a>
                 <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
@@ -471,7 +475,7 @@
                 <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td><strong>{{lv1.thanhTienXuatCucThucTe|number:'1.0-1'}}</strong></td>
                 <td>
                   <a>
                     <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
@@ -554,7 +558,7 @@
         <nz-form-item>
           <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
           <nz-form-control>
-            <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-form-control>
@@ -602,7 +606,7 @@
           <nz-form-control>
             <div nz-row [nzGutter]="48">
               <div nz-col [nzSpan]="16">
-                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                                  [nzSize]="'small'">
                 </nz-input-number>
               </div>
@@ -616,7 +620,7 @@
         <nz-form-item>
           <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
           <nz-form-control>
-            <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-form-control>

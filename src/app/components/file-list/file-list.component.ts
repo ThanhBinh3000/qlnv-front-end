@@ -64,6 +64,12 @@ export class FileListComponent implements OnInit {
             if (!this.fileAdd) {
               this.fileAdd = new FileDinhKem();
             }
+            const lastPeriodIndex = resUpload.filename.lastIndexOf(".");
+            if (lastPeriodIndex !== -1) {
+              this.fileAdd.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
+            } else {
+              this.fileAdd.noiDung = resUpload.filename;
+            }
             this.fileAdd.fileName = resUpload.filename;
             this.fileAdd.fileSize = resUpload.size;
             this.fileAdd.fileUrl = resUpload.url;

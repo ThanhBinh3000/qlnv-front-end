@@ -7,7 +7,6 @@ import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
-import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 
 @Component({
@@ -20,7 +19,12 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  listDxChiCuc : any[] = []
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - Cán bộ Vụ' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - Cán bộ Vụ' }
+  ];
 
   constructor(
     httpClient: HttpClient,
