@@ -15,11 +15,11 @@ import {DxChiCucPvcService} from "../../../../../services/dinh-muc-nhap-xuat-bao
 import {PvcDxChiCucCtiet} from "../../de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 
 @Component({
-  selector: 'app-thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc',
-  templateUrl: './thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc.component.html',
-  styleUrls: ['./thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc.component.scss']
+  selector: 'app-them-moi-tong-hop-dx-cuc-pvc',
+  templateUrl: './them-moi-tong-hop-dx-cuc-pvc.component.html',
+  styleUrls: ['./them-moi-tong-hop-dx-cuc-pvc.component.scss']
 })
-export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component implements OnInit {
+export class ThemMoiTongHopDxCucPvcComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() listDxChiCuc: any[] = [];
@@ -27,7 +27,6 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
   rowItem: PvcDxChiCucCtiet = new PvcDxChiCucCtiet();
   dataEdit: { [key: string]: { edit: boolean; data: PvcDxChiCucCtiet } } = {};
   formDataTongHop: FormGroup
-  maQd  :string
   expandSet = new Set<number>();
 
   constructor(
@@ -44,7 +43,6 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       id: [null],
       maDvi: [null],
       namKeHoach: [dayjs().get('year')],
-      soCv: [null, Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
       trangThai: ['00'],
@@ -64,8 +62,8 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.maQd = '/' + this.userInfo.DON_VI.tenVietTat + '-TCKT'
       await this.loadDsDxCc();
+      await this.getCtieuKhTc(this.formData.value.namKeHoach)
       if (this.id > 0) {
         await this.detail(this.id);
       }
@@ -97,7 +95,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     }
     body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
     body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
-    body.trangThai = STATUS.DADUYET_CB_CUC;
+    body.trangThai = STATUS.DA_DUYET_CBV;
     body.trangThaiTh = STATUS.CHUA_TONG_HOP;
     let res = await this.dxChiCucService.tongHopDxCc(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -113,7 +111,6 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
             arr.forEach(dtl => {
               if (dtl.id == item.dxPvcCcdcId) {
                 item.maDvi = dtl.maDvi
-                item.tenDvi = item.tenDvi + ' - Số CV : ' + dtl.soCv
               }
             })
           }
@@ -134,7 +131,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     this.spinner.show();
     try {
       let body = {
-        "capDvi": "3",
+        "capDvi": "2",
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -145,7 +142,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
         let data = res.data;
         this.listDxChiCuc = data.content;
         if (this.listDxChiCuc) {
-          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DADUYET_CB_CUC && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
+          this.listDxChiCuc = this.listDxChiCuc.filter(item => item.trangThai == this.STATUS.DA_DUYET_CBV && item.trangThaiTh == STATUS.CHUA_TONG_HOP)
         }
       } else {
         this.listDxChiCuc = [];
@@ -157,6 +154,17 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async getCtieuKhTc(event) {
+    let res = await this.dxChiCucService.getCtieuKhTc({
+      namKeHoach: event
+    });
+    if (res.data) {
+      this.formData.patchValue({
+        soQdGiaoCt: res.data.soQuyetDinh
+      })
     }
   }
 
@@ -175,11 +183,10 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    this.formData.value.soCv =this.formData.value.soCv + this.maQd;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-        this.goBack()
-      }
+      this.goBack()
+    }
     else {
       this.convertListData()
     }
@@ -218,12 +225,12 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     let trangThai;
     switch (this.formData.value.trangThai) {
       case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_CBV : {
-        trangThai = STATUS.DA_KY;
+      case STATUS.TU_CHOI_LDV : {
+        trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
-      case STATUS.DA_KY : {
-        trangThai = STATUS.DA_DUYET_CBV
+      case STATUS.CHO_DUYET_LDV : {
+        trangThai = STATUS.DA_DUYET_LDV
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
@@ -250,7 +257,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     this.dataTable = arr
   }
 
-  sumSoLuong(column: string, tenCcdc : string) {
+  sumSoLuong(column: string, tenCcdc : string, type?) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -260,14 +267,21 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
         })
       }
     })
-
+    arr = arr.filter(item => item.tenCcdc == tenCcdc)
     if (arr && arr.length> 0) {
-      arr = arr.filter(item => item.tenCcdc == tenCcdc)
-      const sum = arr.reduce((prev, cur) => {
-        prev += cur[column]
-        return prev;
-      }, 0)
-      sl = sum
+      if (!type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column]
+          return prev;
+        }, 0)
+        sl = sum
+      } else {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur.soLuong * cur.donGia
+          return prev;
+        }, 0)
+        sl = sum
+      }
     }
     return sl
   }
