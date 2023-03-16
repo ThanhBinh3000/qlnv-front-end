@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc() ">
         <i class="icon htvbdh_trinh"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -184,7 +184,11 @@
                                [nzFormatter]="globals.formatter" [nzMin]="0"
                                [nzParser]="globals.parser"></nz-input-number>
             </td>
-            <td class="text-right">{{item.donGiaTd | number: '1.0-1' }}</td>
+            <td>
+              <nz-input-number [(ngModel)]="item.donGiaTd" [nzSize]="'small'" [nzDisabled]="isView"
+                               [nzFormatter]="globals.formatter" [nzMin]="0"
+                               [nzParser]="globals.parser"></nz-input-number>
+            </td>
             <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>
             <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>
           </tr>

@@ -152,7 +152,7 @@
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM')">
               <i class="fa fa-eye"></i>
             </a>
-            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM') &&((( data.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc()) || userService.isCuc())">
+            <a (click)="redirectToChiTiet(false, data.id)" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_XEM') &&((( data.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc()))">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_SUA') && ((data.trangThai == STATUS.TU_CHOI_LDTC || data.trangThai == STATUS.DU_THAO) && userService.isTongCuc())"
