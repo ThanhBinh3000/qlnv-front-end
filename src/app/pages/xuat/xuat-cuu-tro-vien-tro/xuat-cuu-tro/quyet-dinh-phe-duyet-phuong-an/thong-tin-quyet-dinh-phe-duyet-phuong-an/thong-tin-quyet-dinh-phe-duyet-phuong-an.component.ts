@@ -89,6 +89,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   listChungLoaiHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   deXuatSelected: any = []
+  firstInit = true;
 
   constructor(
     httpClient: HttpClient,
@@ -144,10 +145,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     try {
       this.maQd = this.userInfo.MA_QD;
       await Promise.all([
-        this.bindingDataTongHop(this.dataTongHop),
+        // this.bindingDataTongHop(this.dataTongHop),
         this.loadDsDonVi(),
       ]);
       await this.loadChiTiet(this.idSelected)
+
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -165,8 +167,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (id) {
       let data = await this.detail(id);
       if (data.type == 'TH') {
+        this.firstInit = false;
         await this.selectMaTongHop(data.idTongHop);
       } else {
+        this.firstInit = false;
         await this.selectMaDeXuat(data.idDx);
       }
       this.formData.patchValue(data);
@@ -209,7 +213,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           }
         }));
         //truong hop tao moi
-        if (!this.idSelected) {
+        this.firstInit = false;
+        if (this.firstInit === false) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -226,12 +231,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             quyetDinhPdDtl: listDeXuat
           });
         }
-        console.log(this.formData.value, 'this.formData.value11')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
-        this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
+        this.deXuatSelected = listDeXuat[0];
         await this.selectRow();
-        // this.dataInput = null;
-        // this.dataInputCache = null;
         this.summaryData();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -247,17 +249,16 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       if (res.msg === MESSAGE.SUCCESS) {
         let data = res.data;
         let listDeXuat = [...[], Object.assign({
-            idDx: event,
-            tenDviDx: data.tenDvi,
-            soDx: data.soDx,
-            ngayPduyetDx: data.ngayPduyet,
-            trichYeuDx: data.trichYeu,
-            tongSoLuongDx: data.tongSoLuong,
-            thanhTienDx: data.thanhTien
-          },
-          {quyetDinhPdDx: data.deXuatPhuongAn})];
+          idDx: event,
+          tenDviDx: data.tenDvi,
+          soDx: data.soDx,
+          ngayPduyetDx: data.ngayPduyet,
+          trichYeuDx: data.trichYeu,
+          tongSoLuongDx: data.tongSoLuong,
+          thanhTienDx: data.thanhTien
+        }, {quyetDinhPdDx: data.deXuatPhuongAn})];
         //truong hop tao moi
-        if (!this.idSelected) {
+        if (this.firstInit === false) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -268,18 +269,15 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
             soLuongXuaCap: data.tongSlXuatCap,
-            idDx: event,
+
             soDx: data.soDx,
             ngayDx: data.ngayDx,
             quyetDinhPdDtl: listDeXuat
           });
         }
-        console.log(this.formData.value, 'this.formData.value22')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
-        this.deXuatSelected = this.formData.value.quyetDinhPdDtl[0];
+        this.deXuatSelected = listDeXuat[0];
         await this.selectRow();
-        // this.dataInput = null;
-        // this.dataInputCache = null;
         this.summaryData();
       } else {
         console.log(MESSAGE.ERROR, res.msg);
@@ -402,6 +400,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       maTongHop: "Chưa tổng hợp",
       nam: this.formData.get('nam').value,
       loaiVthh: this.loaiVthh,
+      idQdPdNull: true,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -521,7 +520,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       i.selected = false
     });
     this.deXuatSelected.selected = true;
-    console.log(this.deXuatSelected);
+
     let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
     let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
     dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
@@ -542,7 +541,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           .map((v, k) => {
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
               let rowCuc = v.find(s => s.tenCuc === k);
-              console.log(rowCuc, 'rowCuc');
               return {
                 idVirtual: uuidv4(),
                 tenCuc: k,
@@ -573,7 +571,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           .map((v, k) => {
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
               let rowCuc = v.find(s => s.tenCuc === k);
-              console.log(rowCuc, 'rowCuc');
               return {
                 idVirtual: uuidv4(),
                 tenCuc: k,
