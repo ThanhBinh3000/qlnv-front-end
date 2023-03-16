@@ -89,6 +89,11 @@ export enum LOAI_DON_VI {
   DV = "DV"
 }
 
+export enum KH_CT_LOAI_CHI_TIEU {
+  NHAP = "01",
+  XUAT = "00",
+}
+
 export enum LOAI_BIEN_BAN {
   BB_KTRA_NGOAI_QUAN = "BBKTNQ",
   BB_KTRA_VAN_HANH = "BBKTVH",

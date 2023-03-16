@@ -24,7 +24,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import {DialogDiaDiemKhoComponent} from 'src/app/components/dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
-import {STATUS} from "../../../../../../../constants/status";
+import {KH_CT_LOAI_CHI_TIEU, STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -130,16 +130,16 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       noiDung: [null, [Validators.required]],
       loaiHangHoa: [this.tabSelected]
     });
-    this.deXuatDieuChinh.trangThai = '00';
-    this.deXuatVatTuNhap.chiTieu = '01';
-    this.deXuatVatTuXuat.chiTieu = '00';
+    this.deXuatDieuChinh.trangThai = STATUS.DU_THAO;
+    this.deXuatVatTuNhap.chiTieu = KH_CT_LOAI_CHI_TIEU.NHAP;
+    this.deXuatVatTuXuat.chiTieu = KH_CT_LOAI_CHI_TIEU.XUAT;
     if (id > 0) {
       let res = await this.deXuatDieuChinhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.deXuatDieuChinh = res.data;
-          this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
-          this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
+          this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == KH_CT_LOAI_CHI_TIEU.NHAP) ?? [];
+          this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == KH_CT_LOAI_CHI_TIEU.XUAT) ?? [];
           this.selectedCanCu.id = this.deXuatDieuChinh?.keHoachNamId;
           this.selectedCanCu.soQuyetDinh = this.deXuatDieuChinh?.soQdKeHoachNam;
           this.dataGiaoChiTieu = [];
@@ -239,8 +239,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             if (res && res.data) {
               // console.log(res.data);
               this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
-              this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
-              this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
+              this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == KH_CT_LOAI_CHI_TIEU.NHAP) ?? [];
+              this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == KH_CT_LOAI_CHI_TIEU.XUAT) ?? [];
               this.deXuatDieuChinh.dxDcltList = res.data.dxDcltList;
               this.deXuatDieuChinh.namKeHoach = res.data.namKeHoach;
               this.updateEditLuongThucCache();
