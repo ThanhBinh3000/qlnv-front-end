@@ -8,7 +8,8 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
-
+import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
 @Component({
   selector: 'app-danhsach-kehoach-muatructiep',
   templateUrl: './danhsach-kehoach-muatructiep.component.html',
@@ -17,12 +18,17 @@ import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-
 export class DanhsachKehoachMuatructiepComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+
+  dsDonvi: any[] = [];
+  userdetail: any = {};
+  listTrangThaiTh: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhSachMuaTrucTiepService);
@@ -34,7 +40,7 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
       ngayTao: [],
       ngayPduyet: [],
       trichYeu: [],
-      noiDungTh: [],
+      noiDungThop: [],
       trangThaiTh: [],
     });
 
@@ -62,7 +68,11 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.timKiem();
+      await Promise.all([
+        this.loadDataComboBox(),
+        this.timKiem(),
+        this.initData()
+      ]);
       await this.spinner.hide();
     }
     catch (e) {
@@ -84,4 +94,30 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     await this.search();
   }
 
+  async loadDsTong() {
+    const dsTong = await this.donviService.layDonViCon();
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong.data;
+    }
+  }
+
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.userdetail.maDvi = this.userInfo.MA_DVI;
+    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
+  }
+
+  async loadDataComboBox() {
+    this.listTrangThaiTh = [
+      {
+        ma: '24',
+        giaTri: 'Chưa Tổng Hợp',
+      },
+      {
+        ma: '28',
+        giaTri: 'Đã Ban Hành QĐ ',
+      },
+    ];
+  }
 }

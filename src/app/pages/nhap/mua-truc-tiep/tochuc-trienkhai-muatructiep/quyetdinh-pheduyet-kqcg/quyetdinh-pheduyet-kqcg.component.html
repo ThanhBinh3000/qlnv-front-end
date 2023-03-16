@@ -35,7 +35,7 @@
   <div class="group-button">
     <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
+      <button type="button" *ngIf="userService.isCuc()" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
         <i class="fa fa-trash-o do"></i>
         <span>Xoá</span>
       </button>
@@ -95,8 +95,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
             </nz-input-group>
           </th>
           <th>
