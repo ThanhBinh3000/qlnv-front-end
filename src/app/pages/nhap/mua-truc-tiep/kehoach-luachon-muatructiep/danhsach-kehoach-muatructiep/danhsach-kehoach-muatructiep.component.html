@@ -10,9 +10,9 @@
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
-                        <label> Đơn vị đề xuất </label>
-                        <nz-select formControlName="tenDvi">
-                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                        <label>Đơn vị đề xuất</label>
+                        <nz-select formControlName="maDvi">
+                            <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="3">
@@ -33,11 +33,14 @@
                     </div>
                     <div nz-col nzSpan="20" *ngIf="userService.isTongCuc()">
                         <label>Nội dung tổng hợp</label>
-                        <input placeholder="" nz-input formControlName="noiDungTh" />
+                        <input placeholder="" nz-input formControlName="noiDungThop" />
                     </div>
                     <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
                         <label>Trạng thái tổng hợp</label>
-                        <input placeholder="" nz-input formControlName="trangThaiTh" />
+                        <nz-select formControlName="trangThaiTh">
+                            <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma"
+                                [nzLabel]="p.giaTri"></nz-option>
+                        </nz-select>
                     </div>
                 </div>
             </form>
@@ -94,7 +97,7 @@
                         <th class="text-center" style="width: 5%;">Số lượng (tấn)</th>
                         <th class="text-center" style="width: 12%;">Số QĐ duyệt KH mua trực tiếp</th>
                         <th class="text-center" style="width: 7%;">Trạng thái đề xuất</th>
-                        <th class="text-center" style="width: 7%;" *ngIf="userService.isTongCuc()">Trạng thái tổng hợp
+                        <th class="text-center" style="width: 7%;" *ngIf="userService.isTongCuc()">Mã tổng hợp
                         </th>
                         <th width="90px">Hành động</th>
                     </tr>
@@ -113,7 +116,6 @@
                                     (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
                             </nz-input-group>
                         </th>
-
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo123">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
