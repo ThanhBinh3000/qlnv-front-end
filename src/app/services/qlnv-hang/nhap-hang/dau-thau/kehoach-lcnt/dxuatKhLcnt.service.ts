@@ -31,4 +31,9 @@ export class DxuatKhLcntService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getGiaBanToiDa(cloaiVthh: string) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/gia-ban-toi-da/${cloaiVthh}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
 }

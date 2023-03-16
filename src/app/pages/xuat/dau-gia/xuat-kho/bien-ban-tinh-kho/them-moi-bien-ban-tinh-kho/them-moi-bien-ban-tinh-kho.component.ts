@@ -12,12 +12,11 @@ import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import { filter } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
+import { BienBanTinhKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service';
+import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service';
+import { QuyetDinhGiaoNvXuatHangService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 
 @Component({
   selector: 'app-them-moi-bien-ban-tinh-kho',
@@ -45,7 +44,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
@@ -63,6 +62,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         idQdGiaoNvXh: [],
         soQdGiaoNvXh: ['', [Validators.required]],
         ngayQdGiaoNvXh: [],
+        idHdong: [],
+        soHdong: ['', [Validators.required]],
+        ngayKyHd: [],
         maDiemKho: ['', [Validators.required]],
         maNhaKho: [],
         maNganKho: [],
@@ -149,7 +151,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        type: "XUAT_CAP",
 
       });
     }
@@ -163,7 +164,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     let body = {
       trangThai: STATUS.BAN_HANH,
     }
-    let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
+    let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
@@ -195,17 +196,23 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
+      soHdong: data.soHd,
+      idHdong: data.idHd,
+      ngayKyHd: data.ngayKyHd,
 
     });
-    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc;
+      dataChiCuc.forEach(e => {
+        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
+      });
+      this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
     }
     await this.spinner.hide();
   }
@@ -233,6 +240,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async bindingDataDdNhap(data) {
     if (data) {
+      console.log(data, 123321);
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
@@ -242,21 +250,27 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soPhieuKnCl: data.soPhieu,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa,
+
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
-        type: "XUAT_CAP"
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
       this.dataTable = this.listPhieuXuatKho;
+      if (this.dataTable && this.dataTable.length > 0) {
+        const lastItem = this.dataTable[this.dataTable.length - 1];
+        this.formData.patchValue({
+          ngayBatDauXuat: lastItem.ngayXuatKho,
+          soPhieuKnCl: lastItem.soPhieu,
+          loaiVthh: lastItem.loaiVthh,
+          cloaiVthh: lastItem.cloaiVthh,
+          tenLoaiVthh: lastItem.tenLoaiVthh,
+          tenCloaiVthh: lastItem.tenCloaiVthh,
+          moTaHangHoa: lastItem.moTaHangHoa,
+        })
+      }
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
         s.soBkCanHang = s.soBangKeCh
@@ -294,7 +308,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KT: {
+      case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;

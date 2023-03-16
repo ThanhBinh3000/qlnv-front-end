@@ -17,7 +17,7 @@
         </button>
         <button class="btn btn-sub xanh-nhat"
             *ngIf="  this.userService.isChiCuc() && isDisabled() 
-        && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KT')  || userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_LDCCUC')"
+        && (userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KT')  || userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_LDCCUC'))"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>

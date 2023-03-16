@@ -11,7 +11,9 @@
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Số tổng hợp</label>
-            <input class="search__input" placeholder="Nhập Số công văn" nz-input formControlName="soCv"/>
+            <nz-input-number   [nzParser]="globals.parser" [nzSize]="'small'" nz-input
+                             formControlName="maTh" [nzMin]="0">
+            </nz-input-number>
           </div>
           <div nz-col nzSpan="14">
             <label class="search__label">Trích yếu</label>

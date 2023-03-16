@@ -40,7 +40,7 @@ export class MmTongHopDxCucComponent extends Base2Component implements OnInit {
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
-      soCv: [''],
+      maTh: [''],
       trichYeu: [''],
       ngayKy: [''],
       ngayKyTu: [''],

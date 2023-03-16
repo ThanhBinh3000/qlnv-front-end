@@ -250,7 +250,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
     this.dataTable = arr
   }
 
-  sumSoLuong(column: string) {
+  sumSoLuong(column: string, tenCcdc : string) {
     let sl = 0;
     let arr = [];
     this.dataTable.forEach(item => {
@@ -260,7 +260,9 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent extends Base2Component i
         })
       }
     })
+
     if (arr && arr.length> 0) {
+      arr = arr.filter(item => item.tenCcdc == tenCcdc)
       const sum = arr.reduce((prev, cur) => {
         prev += cur[column]
         return prev;

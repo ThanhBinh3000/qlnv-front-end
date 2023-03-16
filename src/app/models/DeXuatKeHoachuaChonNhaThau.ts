@@ -118,6 +118,8 @@ export class DanhSachGoiThau {
   level?: number;
   expand?: boolean;
   parent?: DanhSachGoiThau
+  thanhTienDx?: number;
+  thanhTienQd?: number;
 }
 export class CanCuXacDinh {
   id: number;

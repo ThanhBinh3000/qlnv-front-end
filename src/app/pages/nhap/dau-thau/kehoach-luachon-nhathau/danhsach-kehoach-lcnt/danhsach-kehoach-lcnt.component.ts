@@ -38,6 +38,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     soDx: '',
     namKh: '',
     ngayTongHop: '',
+    ngayLap: '',
     loaiVthh: '',
     trichYeu: ''
   };
@@ -132,11 +133,17 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.searchFilter.ngayTongHop
+      tuNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
         ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,
-      denNgayKy: this.searchFilter.ngayTongHop
+      denNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+        : null,
+      tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+        ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
+        : null,
+      denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+        ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
         : null,
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
@@ -237,8 +244,9 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.searchFilter.namKh = null;
     this.searchFilter.soDx = null;
     this.searchFilter.ngayTongHop = null;
+    this.searchFilter.ngayLap = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.loaiVthh = null;
+    // this.searchFilter.loaiVthh = null;
     this.search();
   }
 

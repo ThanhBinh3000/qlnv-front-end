@@ -149,11 +149,11 @@
         <td class="font-weight-bold">{{idx + 1}}</td>
         <td class="font-weight-bold">{{data.tenCcdc}}</td>
         <td class="font-weight-bold">{{data.donViTinh}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slHienCo') | number: '1.0-1' }}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem') + sumSoLuong('slHienCo') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuan') | number: '1.0-1'}}</td>
-        <td class="font-weight-bold text-right">{{sumSoLuong('nhuCauTb') | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slHienCo', data.tenCcdc ) | number: '1.0-1' }}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc ) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slNhapThem' , data.tenCcdc ) + sumSoLuong('slHienCo' , data.tenCcdc ) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('slTieuChuan' , data.tenCcdc ) | number: '1.0-1'}}</td>
+        <td class="font-weight-bold text-right">{{sumSoLuong('nhuCauTb', data.tenCcdc ) | number: '1.0-1'}}</td>
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
