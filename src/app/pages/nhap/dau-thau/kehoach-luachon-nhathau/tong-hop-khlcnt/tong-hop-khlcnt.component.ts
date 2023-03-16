@@ -35,7 +35,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHLCNTService);
     this.formData = this.fb.group({
-      namKh: '',
+      namKhoach: '',
       ngayTongHop: '',
       loaiVthh: '',
       tenVthh: '',
@@ -73,6 +73,53 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async search() {
+    this.spinner.show();
+    debugger
+    this.formData.get('ngayTongHop').value
+    let body = {
+      tuNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
+        ? dayjs(this.formData.get('ngayTongHop').value[0]).format('YYYY-MM-DD')
+        : null,
+      denNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
+        ? dayjs(this.formData.get('ngayTongHop').value[1]).format('YYYY-MM-DD')
+        : null,
+      // tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+      //   ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
+      //   : null,
+      // denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+      //   ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
+      //   : null,
+      loaiVthh: this.loaiVthh,
+      namKhoach: this.formData.get('namKhoach').value,
+      tenVthh: this.formData.get('tenVthh').value,
+      tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+      noiDung: this.formData.get('noiDung').value,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+    };
+
+    let res = await this.tongHopDeXuatKHLCNTService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 
   selectHangHoa() {

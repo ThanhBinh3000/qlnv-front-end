@@ -16,16 +16,18 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
   templateUrl: './quyetdinh-pheduyet-khlcnt.component.html',
   styleUrls: ['./quyetdinh-pheduyet-khlcnt.component.scss']
 })
-export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
+export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
@@ -49,6 +51,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     tenVthh: '',
     soGthau: '',
     tongTien: '',
+    soGthauTrung: '',
+    tenLoaiVthh: '',
+    tenTrangThai: ''
   };
   STATUS = STATUS
   dataTableAll: any[] = [];
@@ -77,14 +82,16 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    spinner: NgxSpinnerService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKeHoachLCNTService);
   }
 
   async ngOnInit() {
@@ -122,10 +129,10 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.selectedId = null;
   }
 
-  detail(data?) {
-    this.isDetail = true;
-    this.selectedId = data.id;
-  }
+  // detail(data?) {
+  //   this.isDetail = true;
+  //   this.selectedId = data.id;
+  // }
 
   delete(data?) {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
@@ -178,12 +185,13 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   async search() {
+    debugger
     this.dataTable = [];
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
+      tuNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      denNgayQd: this.searchFilter.ngayQd
+      denNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
       loaiVthh: this.loaiVthh,
@@ -202,6 +210,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data)
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -261,10 +270,10 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayQd: this.searchFilter.ngayQd
+          tuNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
             ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
             : null,
-          denNgayQd: this.searchFilter.ngayQd
+          denNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
             ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
             : null,
           loaiVthh: this.searchFilter.loaiVthh,
@@ -337,19 +346,19 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
+    debugger
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }

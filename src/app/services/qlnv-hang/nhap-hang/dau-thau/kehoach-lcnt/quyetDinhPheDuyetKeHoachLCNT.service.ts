@@ -3,28 +3,29 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import { BaseService } from '../../../../base.service';
 import { Observable } from 'rxjs';
+import {BaseTestService} from "../../../../base-test.service";
 
 @Injectable({
   providedIn: 'root',
 })
-export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
+export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseTestService {
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/qd-lcnt', '/qlnv-hang');
+    super(httpClient, 'dx-kh/qd-lcnt', '');
   }
 
   getDetailGoiThau(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/goi-thau/${id}`
+    let url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/chi-tiet/goi-thau/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
   getDetailDtlCuc(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-cuc/${id}`
+    let url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/chi-tiet-cuc/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
+    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }
