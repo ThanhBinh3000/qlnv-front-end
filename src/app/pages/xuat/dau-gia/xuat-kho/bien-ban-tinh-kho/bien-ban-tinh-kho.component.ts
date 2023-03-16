@@ -11,7 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+import { BienBanTinhKhoService } from './../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service';
 
 @Component({
   selector: 'app-bien-ban-tinh-kho',
@@ -91,7 +91,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
     await super.search(roles);
     this.buildTableView();
   }
@@ -140,13 +139,15 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
             return {
               idVirtual: uuid.v4(),
               soBbTinhKho: k,
-              tenDiemKho: soBb.tenDiemKho,
-              tenLoKho: soBb.tenLoKho,
               ngayBatDauXuat: soBb.ngayBatDauXuat,
               ngayKetThucXuat: soBb.ngayKetThucXuat,
               trangThai: soBb.trangThai,
               tenTrangThai: soBb.tenTrangThai,
               maDvi: soBb.maDvi,
+              tenDiemKho: soBb.tenDiemKho,
+              tenNhaKho: soBb.tenNhaKho,
+              tenNganKho: soBb.tenNganKho,
+              tenLoKho: soBb.tenLoKho,
               id: soBb.id,
               childData: v
             }

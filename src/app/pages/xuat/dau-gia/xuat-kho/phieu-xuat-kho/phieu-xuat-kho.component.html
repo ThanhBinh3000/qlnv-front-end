@@ -40,12 +40,12 @@
             <h3 class="text-uppercase">Danh sách phiếu nhập kho</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_PXK_EXP')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_PXK_THEM')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -193,17 +193,17 @@
                                     <td>{{lv1.ngayKn}}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO  && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_PXK_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO  && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_LDCC) && userService.isChiCuc() && isOwner(lv1.maDvi)
-                                                                        && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_PXK_THEM')"
+                                                                        && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
                                         <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isChiCuc()
-                                                                        && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_PXK_XOA')"
+                                                                        && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_XOA')"
                                             (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>

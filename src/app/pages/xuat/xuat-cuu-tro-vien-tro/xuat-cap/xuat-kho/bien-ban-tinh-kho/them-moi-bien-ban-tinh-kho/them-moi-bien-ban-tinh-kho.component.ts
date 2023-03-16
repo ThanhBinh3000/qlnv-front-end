@@ -294,7 +294,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KT: {
+      case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_KT;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;

@@ -266,6 +266,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
+        nguoiGduyet: this.userInfo.TEN_DAY_DU,
       })
     }
 
@@ -560,12 +561,13 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           ngayKyHd: dataRes.data.ngayKyHd,
           bangKeDtl: this.formData.value.bangKeDtl
         });
-        let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
+        console.log(dataRes.data.children, 444);
+        let dataChiCuc = dataRes.data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc) {
           dataChiCuc.forEach(e => {
-            this.listDiaDiemNhap = e.children
+            this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
           });
-
+          this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
         }
         await this.spinner.hide();
       }
@@ -581,7 +583,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.dsDiaDiem,
+        dataTable: this.listDiaDiemNhap,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
         dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
       },
@@ -603,7 +605,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         })
         let body = {
           trangThai: STATUS.DA_DUYET_LDCC,
-          type: "XUAT_CAP"
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
@@ -677,3 +678,4 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     return rs.charAt(0).toUpperCase() + rs.slice(1);
   }
 }
+
