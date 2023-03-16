@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -7,16 +7,10 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { DonviService } from "../../../../../../services/donvi.service";
 import { DanhMucService } from "../../../../../../services/danhmuc.service";
 import {
-  DeXuatPhuongAnCuuTroService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {
-  TongHopPhuongAnCuuTroService
-} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
-import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
-import { FormGroup, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
 import { FileDinhKem } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import { MESSAGE } from "../../../../../../constants/message";
@@ -218,7 +212,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, "Bạn có muốn gửi duyệt ?");
     } else {
-      console.log("hhaaa");
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_TP, "Bạn có muốn gửi duyệt ?");
     }
