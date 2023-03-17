@@ -373,7 +373,7 @@ export class BaoCao02Component implements OnInit {
         })
         const ind = this.lstCtietBcao[idAppendix].data.findIndex(e => e.maVtu == maVtu && e.maVtuCha == 0);
         this.lstCtietBcao[idAppendix].data[ind].thSoLuong = sl;
-        this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = Math.round(divNumber(thanhTien, sl));
+        this.lstCtietBcao[idAppendix].data[ind].thGiaMuaTd = divNumber(thanhTien, sl);
         this.lstCtietBcao[idAppendix].data[ind].thTtien = thanhTien;
     }
 

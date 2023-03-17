@@ -131,6 +131,12 @@ export class BieuMau138Component implements OnInit {
 						const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
 						this.lstCtietBcao[index].namKh = item.namKh;
 						this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
+						if (item.namDtoan) {
+							this.lstCtietBcao[index].namDtoan = item.namDtoan;
+						}
+						if (item.namUocThien) {
+							this.lstCtietBcao[index].namUocThien = item.namUocThien;
+						}
 					} else {
 						this.lstCtietBcao.push({
 							...new ItemData(),

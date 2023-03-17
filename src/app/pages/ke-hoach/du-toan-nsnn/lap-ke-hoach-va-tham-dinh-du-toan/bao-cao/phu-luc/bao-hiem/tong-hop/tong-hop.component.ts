@@ -120,7 +120,7 @@ export class TongHopComponent implements OnInit {
             }
             await this.getTle();
             this.danhMucs.forEach(e => {
-                const tyLe = this.lstTyLe.find(tl => e.ma == tl.maDmuc);
+                const tyLe = this.lstTyLe?.find(tl => e.ma == tl.maDmuc);
                 this.lstCtietBcao.push({
                     ...new ItemData(),
                     id: uuid.v4() + 'FE',
@@ -184,7 +184,7 @@ export class TongHopComponent implements OnInit {
         await this.lapThamDinhService.getDsTle(this.dataInfo?.namBcao).toPromise().then(
             res => {
                 if (res.statusCode == 0) {
-                    this.lstTyLe = res.data.lstCtiets;
+                    this.lstTyLe = res.data?.lstCtiets;
                 }
             },
             (err) => {
@@ -355,6 +355,7 @@ export class TongHopComponent implements OnInit {
                     this.lstCtietBcao[index].gtTrenGtBh = sumNumber([this.lstCtietBcao[index].gtTrenGtBh, item.gtTrenGtBh]);
                     this.lstCtietBcao[index].gtDuoiGt = sumNumber([this.lstCtietBcao[index].gtDuoiGt, item.gtDuoiGt]);
                     this.lstCtietBcao[index].gtDuoiGtBh = sumNumber([this.lstCtietBcao[index].gtDuoiGtBh, item.gtDuoiGtBh]);
+                    this.lstCtietBcao[index].tong = sumNumber([this.lstCtietBcao[index].tong, item.tong]);
                 }
             })
             stt = getHead(stt);
@@ -378,11 +379,13 @@ export class TongHopComponent implements OnInit {
                 this.total.gtTrenGtBh = sumNumber([this.total.gtTrenGtBh, item.gtTrenGtBh]);
                 this.total.gtDuoiGt = sumNumber([this.total.gtDuoiGt, item.gtDuoiGt]);
                 this.total.gtDuoiGtBh = sumNumber([this.total.gtDuoiGtBh, item.gtDuoiGtBh]);
+                this.total.tong = sumNumber([this.total.tong, item.tong]);
                 for (let i = 0; i < item.lstDviCapDuoi?.length; i++) {
                     this.total.lstDviCapDuoi[i].gtTrenGt = sumNumber([this.total.lstDviCapDuoi[i].gtTrenGt, item.lstDviCapDuoi[i].gtTrenGt]);
                     this.total.lstDviCapDuoi[i].gtTrenGtBh = sumNumber([this.total.lstDviCapDuoi[i].gtTrenGtBh, item.lstDviCapDuoi[i].gtTrenGtBh]);
                     this.total.lstDviCapDuoi[i].gtDuoiGt = sumNumber([this.total.lstDviCapDuoi[i].gtDuoiGt, item.lstDviCapDuoi[i].gtDuoiGt]);
                     this.total.lstDviCapDuoi[i].gtDuoiGtBh = sumNumber([this.total.lstDviCapDuoi[i].gtDuoiGtBh, item.lstDviCapDuoi[i].gtDuoiGtBh]);
+                    this.total.lstDviCapDuoi[i].tong = sumNumber([this.total.lstDviCapDuoi[i].tong, item.lstDviCapDuoi[i].tong]);
                 }
             }
         })

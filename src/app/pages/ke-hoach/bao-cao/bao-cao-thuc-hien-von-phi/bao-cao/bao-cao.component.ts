@@ -253,7 +253,7 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
             this.baoCao.trangThai = "1";
             this.lstBieuMaus = this.baoCao.maLoaiBcao == BAO_CAO_DOT ? LISTBIEUMAUDOT : LISTBIEUMAUNAM;
-            if (this.data?.isSynthetic || this.isOffice) {
+            if (this.data?.isSynthetic || (this.isOffice && this.baoCao.dotBcao)) {
                 await this.callSynthetic();
             } else {
                 this.lstBieuMaus.forEach(item => {
@@ -275,6 +275,9 @@ export class BaoCaoComponent implements OnInit {
                         denNgay: '',
                     });
                 })
+                if (this.isOffice) {
+                    this.baoCao.lstBcaos = this.baoCao.lstBcaos.filter(e => e.maLoai != '4' && e.maLoai != '5');
+                }
             }
         }
 
