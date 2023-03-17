@@ -31,6 +31,12 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
+  inputNam: string = '';
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+  ];
   searchFilter = {
     soQd: null,
     loaiVthh: null,
@@ -53,7 +59,10 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     tongTien: '',
     soGthauTrung: '',
     tenLoaiVthh: '',
-    tenTrangThai: ''
+    tenTrangThai: '',
+    soTrHdr: '',
+    tgianNhang: '',
+    tgianThien: ''
   };
   STATUS = STATUS
   dataTableAll: any[] = [];
@@ -120,6 +129,9 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
   }
 
+  async selectNam(nam) {
+    this.filterInTable('namKhoach', nam.value);
+  }
 
   insert() {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
@@ -174,7 +186,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.namKhoach = null;
     this.searchFilter.soQd = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.ngayQd = null;

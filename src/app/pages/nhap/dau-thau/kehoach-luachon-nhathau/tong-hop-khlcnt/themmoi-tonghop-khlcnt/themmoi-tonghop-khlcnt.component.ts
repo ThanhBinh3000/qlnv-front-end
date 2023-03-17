@@ -151,6 +151,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         await this.spinner.hide();
         return;
       }
+      debugger
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
       if (res.msg == MESSAGE.SUCCESS) {

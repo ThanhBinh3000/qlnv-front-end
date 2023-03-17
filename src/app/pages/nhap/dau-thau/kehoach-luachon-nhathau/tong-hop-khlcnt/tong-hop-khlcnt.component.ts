@@ -25,6 +25,11 @@ import { StorageService } from 'src/app/services/storage.service';
 export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' }
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -55,6 +60,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       tenLoaiHdong: '',
       tenNguonVon: '',
       trangThai: '',
+      soQdPdKhlcnt: ''
     }
   }
 
@@ -123,7 +129,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -131,11 +137,18 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: data
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataHangHoa(data);
+        this.formData.patchValue({
+          cloaiVthh: data.ma,
+          tenCloaiVthh: data.ten,
+          loaiVthh: data.parent.ma,
+          tenVthh: data.parent.ten,
+        });
       }
     });
   }
