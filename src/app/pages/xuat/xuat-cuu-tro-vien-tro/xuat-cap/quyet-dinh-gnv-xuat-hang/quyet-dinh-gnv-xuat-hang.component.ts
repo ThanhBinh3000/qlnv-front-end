@@ -1,14 +1,14 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "src/app/services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "src/app/services/danhmuc.service";
-import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "src/app/constants/message";
-import {Base2Component} from "src/app/components/base2/base2.component";
+import { MESSAGE } from "src/app/constants/message";
+import { Base2Component } from "src/app/components/base2/base2.component";
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
@@ -29,19 +29,21 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   listLoaiHangHoa: any[] = [];
 
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-              private danhMucService: DanhMucService,
-              private danhMucTieuChuanService: DanhMucTieuChuanService) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+    private danhMucService: DanhMucService,
+    private danhMucTieuChuanService: DanhMucTieuChuanService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
       nam: [dayjs().get('year')],
       soQd: [''],
       maDvi: [''],
       ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
       loaiVthh: [''],
       trichYeu: [''],
     });
@@ -68,7 +70,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       //   loaiVthh: this.loaiVthh
       // })
       await Promise.all([
-        this.search(),
+        this.timKiem(),
         this.loadDsVthh(),
       ])
       this.spinner.hide();
@@ -91,5 +93,18 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       this.listHangHoaAll = res.data;
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
+  }
+  async timKiem() {
+    await this.spinner.show();
+    try {
+      if (this.formData.value.ngayKy) {
+        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
+      }
+      await this.search();
+    } catch (e) {
+      console.log(e)
+    }
+    await this.spinner.hide();
   }
 }
