@@ -21,6 +21,14 @@ import { ThemMoiTongHopDxCucPvcComponent } from './tong-hop-nc-cuc-pvc/them-moi-
 import {ThemMoiQdMuaSamPvcComponent} from "./qd-mua-sam-pvc/them-moi-qd-mua-sam-pvc/them-moi-qd-mua-sam-pvc.component";
 import { ThemMoiTtPhanBoPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc.component';
 import { ThongTinPhanBoCtPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc/thong-tin-phan-bo-ct-pvc/thong-tin-phan-bo-ct-pvc.component';
+import {ThemMoiHopDongPvcComponent} from "./hop-dong-mua-sam-pvc/them-moi-hop-dong-pvc/them-moi-hop-dong-pvc.component";
+import {
+  ThemMoiPhuLucPvcComponent
+} from "./hop-dong-mua-sam-pvc/them-moi-hop-dong-pvc/them-moi-phu-luc-pvc/them-moi-phu-luc-pvc.component";
+import {
+  DialogPvcBbGiaoNhanComponent
+} from "./bien-ban-giao-nhan-pvc/them-moi-bien-ban-pvc/dialog-pvc-bb-giao-nhan/dialog-pvc-bb-giao-nhan.component";
+import { PvcThongTinHienTrangComponent } from './hien-trang-ccdc-pvc/pvc-thong-tin-hien-trang/pvc-thong-tin-hien-trang.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +48,10 @@ import { ThongTinPhanBoCtPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-
     ThemMoiQdMuaSamPvcComponent,
     ThemMoiTtPhanBoPvcComponent,
     ThongTinPhanBoCtPvcComponent,
+    ThemMoiHopDongPvcComponent,
+    ThemMoiPhuLucPvcComponent,
+    DialogPvcBbGiaoNhanComponent,
+    PvcThongTinHienTrangComponent
   ],
   imports: [
     CommonModule,
@@ -52,6 +64,7 @@ import { ThongTinPhanBoCtPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-
   exports: [
     MangPvcCongCuDungCuComponent,
     TongHopDeXuatNhuCauChiCucComponent,
+    ThemMoiBienBanPvcComponent,
   ]
 })
 export class MangPvcCongCuDungCuModule { }

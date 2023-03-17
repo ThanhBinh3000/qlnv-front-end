@@ -1,0 +1,34 @@
+<nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
+  <nz-table nzBordered #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+    <tr>
+      <th [width]="35">STT</th>
+      <th *ngFor="let data of dataHeader">{{data}}</th>
+      <th [width]="35" class=" text-center">Chọn</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of basicTable.data; let i = index">
+      <td class="text-center">{{i+1}}</td>
+      <td *ngFor="let column of dataColumn;">{{ data[column] }}</td>
+      <td class="text-center">
+        <a (click)="handleOk(data)">
+          <i class="icon htvbdh_dau-cong"></i>
+        </a>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onCancel()">
+        <i nz-icon nzType="close" class="icon-close"></i>
+        Đóng
+      </a>
+    </div>
+  </div>
+</div>
