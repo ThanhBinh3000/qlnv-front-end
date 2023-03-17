@@ -115,6 +115,18 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         giaTri: 'Chưa Tổng Hợp',
       },
       {
+        ma: '25',
+        giaTri: 'Đã Tổng Hợp',
+      },
+      {
+        ma: '26',
+        giaTri: 'Chưa Tạo QĐ',
+      },
+      {
+        ma: '27',
+        giaTri: 'Đã Dự Thảo QĐ',
+      },
+      {
         ma: '28',
         giaTri: 'Đã Ban Hành QĐ ',
       },
