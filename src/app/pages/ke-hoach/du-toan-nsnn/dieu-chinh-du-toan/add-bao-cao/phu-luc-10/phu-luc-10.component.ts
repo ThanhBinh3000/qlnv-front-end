@@ -47,7 +47,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-10',
   templateUrl: './phu-luc-10.component.html',
-  styleUrls: ['./phu-luc-10.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc10Component implements OnInit {
   @Input() dataInfo;
@@ -390,15 +390,15 @@ export class PhuLuc10Component implements OnInit {
       const str = item.stt
       if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
         if (item.dtoanDnghiDchinhLnay < 0) {
-          Number(this.tongDieuChinhGiam += item.dtoanDnghiDchinhLnay);
+          Number(this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinhLnay));
         } else {
-          Number(this.tongDieuChinhTang += item.dtoanDnghiDchinhLnay);
+          Number(this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinhLnay));
         }
 
         if (item.dtoanVuTvqtDnghi < 0) {
-          Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
+          Number(this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi));
         } else {
-          Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+          Number(this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi));
         }
       }
     })

@@ -500,15 +500,15 @@ export class PhuLuc8Component implements OnInit {
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.dtoanDchinhDnghi < 0) {
-        this.tongDieuChinhGiam += item.dtoanDchinhDnghi;
+        this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi);
       } else {
-        this.tongDieuChinhTang += item.dtoanDchinhDnghi;
+        this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi);
       }
 
       if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += item.dtoanVuTvqtDnghi;
+        this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
       } else {
-        this.dToanVuTang += item.dtoanVuTvqtDnghi;
+        this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
       }
     })
   };

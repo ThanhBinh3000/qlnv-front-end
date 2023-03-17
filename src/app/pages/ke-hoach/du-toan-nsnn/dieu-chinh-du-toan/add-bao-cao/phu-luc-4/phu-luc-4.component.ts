@@ -397,9 +397,9 @@ export class PhuLuc4Component implements OnInit {
         }
 
         if (item.dtoanVuTvqtDnghi < 0) {
-          Number(this.dToanVuGiam += item.dtoanVuTvqtDnghi);
+          Number(this.dToanVuGiam += Number(item.dtoanVuTvqtDnghi));
         } else {
-          Number(this.dToanVuTang += item.dtoanVuTvqtDnghi);
+          Number(this.dToanVuTang += Number(item.dtoanVuTvqtDnghi));
         }
       }
     })

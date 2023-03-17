@@ -405,15 +405,15 @@ export class PhuLuc2Component implements OnInit {
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.dieuChinhDtoan < 0) {
-        this.tongDieuChinhGiam += item.dieuChinhDtoan;
+        this.tongDieuChinhGiam += Number(item.dieuChinhDtoan);
       } else {
-        this.tongDieuChinhTang += item.dieuChinhDtoan;
+        this.tongDieuChinhTang += Number(item.dieuChinhDtoan);
       }
 
       if (item.vuTvqtDnghiDtoan < 0) {
-        this.dToanVuGiam += item.vuTvqtDnghiDtoan;
+        this.dToanVuGiam += Number(item.vuTvqtDnghiDtoan);
       } else {
-        this.dToanVuTang += item.vuTvqtDnghiDtoan;
+        this.dToanVuTang += Number(item.vuTvqtDnghiDtoan);
       }
     })
   };
