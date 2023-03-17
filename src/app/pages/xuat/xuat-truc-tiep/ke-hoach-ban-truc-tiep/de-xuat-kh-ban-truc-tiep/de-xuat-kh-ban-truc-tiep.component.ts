@@ -18,7 +18,9 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+  listTrangThaiTh: any[] = [];
 
+  listTrangThai: any[] = [];
   dsDonvi: any[] = [];
   userdetail: any = {};
   constructor(
@@ -41,7 +43,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       ngayKyQd: [],
       ngayPduyet: [],
       loaiVthh: [],
-
     });
 
     this.filterTable = {
@@ -54,11 +55,13 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
       soQdCtieu: '',
       tenTrangThai: '',
-      tenTrangThaiTh: ''
+      tenTrangThaiTh: this.listTrangThaiTh
     };
   }
 
@@ -68,8 +71,11 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      this.initData()
-      await this.timKiem();
+      await Promise.all([
+        this.loadDataComboBox(),
+        this.timKiem(),
+        this.initData()
+      ]);
       await this.spinner.hide();
     }
     catch (e) {
@@ -94,6 +100,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+    })
     if (this.formData.value.ngayTao) {
       this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
       this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
@@ -107,5 +117,64 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
     }
     await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+  }
+
+  async loadDataComboBox() {
+    this.listTrangThaiTh = [
+      {
+        ma: 'Chưa Tổng Hợp',
+        giaTri: 'Chưa Tổng Hợp',
+      },
+      {
+        ma: 'Đã Tổng Hợp',
+        giaTri: 'Đã Tổng Hợp',
+      },
+      {
+        ma: 'Chưa Tạo QĐ',
+        giaTri: 'Chưa Tạo QĐ',
+      },
+      {
+        ma: 'Đã Dự Thảo QĐ',
+        giaTri: 'Đã Dự Thảo QĐ',
+      },
+      {
+        ma: 'Đã Ban Hành QĐ',
+        giaTri: 'Đã Ban Hành QĐ ',
+      },
+    ];
+
+    this.listTrangThai = [
+      {
+        ma: 'Dự thảo',
+        giaTri: 'Dự thảo',
+      },
+      {
+        ma: 'Chờ duyệt - TP',
+        giaTri: 'Chờ duyệt - TP',
+      },
+      {
+        ma: 'Từ chối - TP',
+        giaTri: 'Từ chối - TP',
+      },
+      {
+        ma: 'Chờ duyệt - LĐ Cục',
+        giaTri: 'Chờ duyệt - LĐ Cục',
+      },
+      {
+        ma: 'Từ chối - LĐ Cục',
+        giaTri: 'Từ chối - LĐ Cục ',
+      },
+      {
+        ma: 'Đã duyệt - LĐ Cục',
+        giaTri: 'Đã duyệt - LĐ Cục',
+      },
+    ]
+
+
   }
 }

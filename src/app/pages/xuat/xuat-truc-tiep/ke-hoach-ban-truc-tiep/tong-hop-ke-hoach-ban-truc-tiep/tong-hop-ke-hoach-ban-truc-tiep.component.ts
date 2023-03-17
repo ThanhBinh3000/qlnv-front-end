@@ -53,7 +53,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
       })
-      await this.search();
+      await this.timKiem();
       this.spinner.hide();
     }
     catch (e) {
@@ -61,6 +61,14 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async timKiem() {
+    if (this.formData.value.ngayThop) {
+      this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
+    }
+    await this.search();
   }
 
 }

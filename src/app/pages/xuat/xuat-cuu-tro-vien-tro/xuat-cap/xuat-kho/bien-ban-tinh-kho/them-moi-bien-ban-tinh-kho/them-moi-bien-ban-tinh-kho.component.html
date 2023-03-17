@@ -15,10 +15,13 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat"
-            *ngIf="  this.userService.isChiCuc() && isDisabled() 
-        && (userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KT')  || userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_LDCCUC'))"
-            (click)="pheDuyet()">
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()  && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_KT')
+             && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet "></i>
+            <span>Duyệt</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled()  && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BBTK_DUYET_LDCCUC')  
+            && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>

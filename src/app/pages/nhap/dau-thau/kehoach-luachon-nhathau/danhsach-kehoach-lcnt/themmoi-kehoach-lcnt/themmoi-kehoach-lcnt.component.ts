@@ -131,6 +131,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
       donGiaVat: [],
+      // donGiaDx: [],
       vat: ['5'],
       tongMucDt: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
@@ -688,7 +689,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   tuChoi() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Từ chối',
+      nzTitle: 'Từ chối phê duyệt',
       nzContent: DialogTuChoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
