@@ -62,8 +62,10 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.search();
-      await this.initData()
+      await Promise.all([
+        this.timKiem(),
+        this.initData()
+      ]);
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -84,4 +86,34 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
     await this.loadDsTong();
   }
+
+
+  async timKiem() {
+    if (this.formData.value.ngayTao) {
+      this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayPduyet) {
+      this.formData.value.ngayDuyetTu = dayjs(this.formData.value.ngayPduyet[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayDuyetDen = dayjs(this.formData.value.ngayPduyet[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayKyQd) {
+      this.formData.value.ngayKyQdTu = dayjs(this.formData.value.ngayKyQd[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
+    }
+
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      lastest: 1
+    })
+
+    await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+  }
+
 }
