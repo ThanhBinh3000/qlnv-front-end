@@ -1028,21 +1028,24 @@ export class BaoCaoComponent implements OnInit {
                     //phu luc 4
                     const data4 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl04');
                     if (data4?.trangThai != '3') {
-                        let tong4 = 0;
-                        let td4 = 0;
+                        const obj = {
+                            stt: "0.1.2",
+                            maNdung: "0.1.2",
+                            namDtoan: null,
+                            namUocThien: null,
+                            namKh: null,
+                            giaTriThamDinh: null,
+                        }
                         data4?.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
-                                tong4 = sumNumber([tong4, item.duToanKhNamNCbDauTu, item.duToanKhNamNThDauTu]);
-                                td4 = sumNumber([td4, item.duToanKhNamNCbDauTuTd, item.duToanKhNamNThDauTuTd]);
+                                obj.namDtoan = sumNumber([obj.namDtoan, item.duToanNamN1Dmdt]);
+                                obj.namUocThien = sumNumber([obj.namUocThien, item.duToanNamN1UocTh]);
+                                obj.namKh = sumNumber([obj.namKh, item.duToanKhNamNCbDauTu, item.duToanKhNamNThDauTu]);
+                                obj.giaTriThamDinh = sumNumber([obj.giaTriThamDinh, item.duToanKhNamNCbDauTuTd, item.duToanKhNamNThDauTuTd]);
                             }
                         })
-                        dataInfo.extraData.push({
-                            stt: '0.1.2',
-                            maNdung: '0.1.2',
-                            namKh: tong4,
-                            giaTriThamDinh: td4,
-                        })
+                        dataInfo.extraData.push(obj)
                     }
                     //phu luc 5
                     const data5 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl05');
