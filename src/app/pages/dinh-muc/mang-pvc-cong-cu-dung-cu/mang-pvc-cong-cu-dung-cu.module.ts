@@ -19,6 +19,8 @@ import { TtPhanBoPvcComponent } from './tt-phan-bo-pvc/tt-phan-bo-pvc.component'
 import { ThemMoiDxChiCucPvcComponent } from './de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component';
 import { ThemMoiTongHopDxCucPvcComponent } from './tong-hop-nc-cuc-pvc/them-moi-tong-hop-dx-cuc-pvc/them-moi-tong-hop-dx-cuc-pvc.component';
 import {ThemMoiQdMuaSamPvcComponent} from "./qd-mua-sam-pvc/them-moi-qd-mua-sam-pvc/them-moi-qd-mua-sam-pvc.component";
+import { ThemMoiTtPhanBoPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc.component';
+import { ThongTinPhanBoCtPvcComponent } from './tt-phan-bo-pvc/them-moi-tt-phan-bo-pvc/thong-tin-phan-bo-ct-pvc/thong-tin-phan-bo-ct-pvc.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import {ThemMoiQdMuaSamPvcComponent} from "./qd-mua-sam-pvc/them-moi-qd-mua-sam-
     ThemMoiDxChiCucPvcComponent,
     ThemMoiTongHopDxCucPvcComponent,
     ThemMoiQdMuaSamPvcComponent,
+    ThemMoiTtPhanBoPvcComponent,
+    ThongTinPhanBoCtPvcComponent,
   ],
   imports: [
     CommonModule,
