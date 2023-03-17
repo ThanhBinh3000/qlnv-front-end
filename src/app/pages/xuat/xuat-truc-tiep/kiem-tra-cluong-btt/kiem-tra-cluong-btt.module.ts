@@ -8,6 +8,8 @@ import { BienBanLayMauBttComponent } from './bien-ban-lay-mau-btt/bien-ban-lay-m
 import { ThemMoiBienBanLayMauBttComponent } from './bien-ban-lay-mau-btt/them-moi-bien-ban-lay-mau-btt/them-moi-bien-ban-lay-mau-btt.component';
 import { PhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/phieu-ktra-cluong-btt.component';
 import { ThemPhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/them-phieu-ktra-cluong-btt/them-phieu-ktra-cluong-btt.component';
+import { HoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/ho-so-ky-thuat-btt.component';
+import { ThemMoiHoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { ThemPhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/them-ph
     ThemMoiBienBanLayMauBttComponent,
     PhieuKtraCluongBttComponent,
     ThemPhieuKtraCluongBttComponent,
+    HoSoKyThuatBttComponent,
+    ThemMoiHoSoKyThuatBttComponent,
 
   ],
   imports: [
