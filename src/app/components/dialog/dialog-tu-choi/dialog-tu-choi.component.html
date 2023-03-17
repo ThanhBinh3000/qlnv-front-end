@@ -1,21 +1,26 @@
 <div class="modal__content">
-  <nz-form-label [nzNoColon]="true">
-    Lý do từ chối
-  </nz-form-label>
-  <textarea rows="3" class="search__input" nz-input [(ngModel)]="text"></textarea>
+  <div>
+    <nz-form-label nzRequired [nzNoColon]="true">
+      <h3>Nhập lý do từ chối</h3>
+    </nz-form-label>
+    <nz-form-label [nzNoColon]="true">
+      <p class="text-danger">Bạn cần phải nhập lý do từ chối</p>
+    </nz-form-label>
+  </div>
+  <textarea rows="7" class="search__input" nz-input [(ngModel)]="text" placeholder="Lý do từ chối"></textarea>
 </div>
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
     </div>
     <div class="canphai">
+      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Hủy bỏ
+      </button>
       <button nz-button (click)="handleOk()" class="modal__button--save">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         Từ chối
-      </button>
-      <button nz-button (click)="handleCancel()" class="modal__button--cancel">
-        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-        Đóng
       </button>
     </div>
   </div>
