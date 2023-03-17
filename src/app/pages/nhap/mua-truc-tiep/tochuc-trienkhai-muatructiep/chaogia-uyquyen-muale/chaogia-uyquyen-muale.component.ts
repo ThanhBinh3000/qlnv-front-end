@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { isEmpty } from 'lodash';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chaogia-uyquyen-muale',
@@ -35,8 +36,8 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, chaogiaUyquyenMualeService);
     this.formData = this.fb.group({
       namKh: null,
-      ngayChaoGia: null,
-      toChucCaNhan: null,
+      ngayNhanCgia: null,
+      canhanTochuc: null,
       maDvi: null,
       tenDvi: null,
       loaiVthh: null,
@@ -45,12 +46,17 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
 
     this.filterTable = {
       soQd: '',
-      pthucBanTrucTiep: '',
+      maDvi: '',
+      tenDvi: '',
+      namKh: '',
+      pthucMuaTrucTiep: '',
       ngayNhanCgia: '',
       soQdKq: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      tenTrangThai: '',
+      cloaiVthh: '',
+      tenTrangThai: ''
     };
   }
 
@@ -58,9 +64,10 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
+        lastest: 1,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      await this.search();
+      await this.timKiem();
       await this.initData()
     } catch (e) {
       console.log('error: ', e);
@@ -81,5 +88,14 @@ export class ChaogiaUyquyenMualeComponent extends Base2Component implements OnIn
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
     await this.loadDsTong();
+  }
+
+
+  async timKiem() {
+    if (this.formData.value.ngayChaoGia) {
+      this.formData.value.ngayCgiaTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayCgiadDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
+    }
+    await this.search();
   }
 }

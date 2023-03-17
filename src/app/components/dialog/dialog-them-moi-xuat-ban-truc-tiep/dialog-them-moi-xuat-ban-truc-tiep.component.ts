@@ -161,12 +161,12 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   async changeChiCuc(event) {
-    // let body = {
-    //   year: 2022,
-    //   loaiVthh: this.loaiVthh,
-    //   maDvi: event
-    // }
-    // let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.getSoLuongAdded(body);
+    let body = {
+      year: 2022,
+      loaiVthh: this.loaiVthh,
+      maDvi: event
+    }
+    let soLuongDaLenKh = await this.deXuatKhBanTrucTiepService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
@@ -174,26 +174,18 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
+        soLuongKh: soLuongDaLenKh.data,
         soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
-      // for (let i = 0; i < res.data?.child.length; i++) {
-      //   const item = {
-      //     'value': res.data.child[i].maDiemkho,
-      //     'text': res.data.child[i].tenDiemkho,
-      //     'diaDiemKho': res.data.child[i].diaChi,
-      //     listDiemKhoEdit: res.data.child[i],
-      //   };
-      //   this.listDiemKho.push(item);
-      // }
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }
 
-    let body = {
+    let item = {
       maDvi: event,
       loaiVthh: this.loaiVthh
     }
-    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+    this.quanLyHangTrongKhoService.getTrangThaiHt(item).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data.length > 0) {
@@ -352,7 +344,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       return false
 
     } else {
-      return true;
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      return false
     }
 
   }

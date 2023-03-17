@@ -6,7 +6,7 @@
         </li>
         <li nz-menu-item (click)="selectTab(1)"
             *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP') && this.userService.isTongCuc()">
-            Tổng hợp đề xuất mua trực tiếp
+            Tổng hợp đề xuất kế hoạch mua trực tiếp
         </li>
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">
             Quyết định phê duyệt kế hoạch mua trực tiếp
@@ -19,7 +19,7 @@
     </app-danhsach-kehoach-muatructiep>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-tong-hop-khmtt [loaiVthh]="loaiVthh"></app-tong-hop-khmtt>
+    <app-tong-hop-khmtt [loaiVthh]="loaiVthh" [listVthh]="tyVthh"></app-tong-hop-khmtt>
 </ng-container>
 
 <ng-container *ngIf="tabSelected == 2">

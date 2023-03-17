@@ -10,27 +10,27 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Loại hàng hóa</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-              <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
-            </nz-input-group>
+            <label class="search__label">Loại hàng hóa </label>
+            <nz-select formControlName="loaiVthh">
+              <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Chủng loại hàng hóa</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-              <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
-            </nz-input-group>
+            <label class="search__label">Chủng loại hành hóa </label>
+            <nz-select formControlName="cloaiVthh">
+              <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="7">
             <label class="search__label">Nội dung tổng hợp</label>
-            <input class="search__input" placeholder="" nz-input formControlName="noiDung" />
+            <input class="search__input" placeholder="" nz-input formControlName="noiDungThop" />
           </div>
           <div nz-col nzSpan="3">
             <label class="search__label">Ngày tổng hợp</label>
             <nz-range-picker formControlName="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="3">
-            <label class="search__label">Ngày ký QĐ</label>
+            <label class="search__label">Ngày ký quyết định</label>
             <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
         </div>
@@ -40,7 +40,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="timKiem()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
