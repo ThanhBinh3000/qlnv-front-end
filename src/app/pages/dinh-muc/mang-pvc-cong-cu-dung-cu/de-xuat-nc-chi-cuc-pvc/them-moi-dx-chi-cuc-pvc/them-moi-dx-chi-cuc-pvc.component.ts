@@ -309,6 +309,7 @@ export class PvcDxChiCucCtiet {
   id: number;
   donGia: number = 0;
   soLuong: number = 0;
+  soLuongTc: number = 0;
   slTieuChuanTc: number = 0;
   maDvi: string;
   tenDvi: string;
