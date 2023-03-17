@@ -134,7 +134,7 @@
                         <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp đề xuất </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
                             <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
-                                (tấn)</span>
+                                (Kg)</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -167,6 +167,7 @@
                         <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                         <td colspan="6">{{item.tenDvi}}</td>
                         <td>{{item.soLuong}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>

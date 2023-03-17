@@ -29,7 +29,20 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
+  listTrangThaiXh: any[] = [
+    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
+    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
+    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' }
+  ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -70,7 +83,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       //   loaiVthh: this.loaiVthh
       // })
       await Promise.all([
-        this.search(),
+        this.timKiem(),
         this.loadDsVthh(),
       ])
       this.spinner.hide();
@@ -94,5 +107,17 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
-
+  async timKiem() {
+    await this.spinner.show();
+    try {
+      if (this.formData.value.ngayKy) {
+        this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('YYYY-MM-DD')
+        this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('YYYY-MM-DD')
+      }
+      await this.search();
+    } catch (e) {
+      console.log(e)
+    }
+    await this.spinner.hide();
+  }
 }
