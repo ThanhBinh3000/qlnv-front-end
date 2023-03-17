@@ -22,7 +22,7 @@ export class TienDoXayDungSuaChuaComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-  tabSelected = 'dmk';
+  tabSelected = 'dautu-xaydung';
   selectTab(tab) {
     this.tabSelected = tab;
   }
