@@ -152,22 +152,24 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hình xuất cứu trợ</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-select formControlName="kieuNhapXuat" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listKieuNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="loaiNhapXuat" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
+
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Mục đích xuất</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-select formControlName="loaiNhapXuat" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="kieuNhapXuat" [nzDisabled]="true">
+                <nz-option *ngFor="let p of listKieuNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>

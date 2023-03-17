@@ -357,6 +357,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     let bodyTh = {
       trangThai: STATUS.DA_DUYET_LDV,
       nam: this.formData.get('nam').value,
+      idQdPdNull: true,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
