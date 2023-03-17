@@ -10,8 +10,13 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
+import {
+  PhieuXuatKhoService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/PhieuXuatKho.service";
+import {
+  BienBanHaoDoiService
+} from "src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanHaoDoi.service";
+
 
 @Component({
   selector: 'app-bien-ban-hao-doi',
@@ -96,8 +101,6 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
     await super.search(roles);
     this.buildTableView();
   }
