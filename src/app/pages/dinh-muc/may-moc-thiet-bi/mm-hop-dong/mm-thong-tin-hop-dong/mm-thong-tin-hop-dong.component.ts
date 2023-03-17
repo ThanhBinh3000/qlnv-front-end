@@ -28,6 +28,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   isViewPl: boolean
   isViewHd: boolean = false;
   listTongHop: any[] = [];
+  listTongHopCopy: any[] = [];
   listLoaiHd: any[] = [];
   listHangHoa: any[] = [];
   listPhuLuc: any[] = [];
@@ -148,18 +149,19 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
           "limit": 10,
           "page": 0
         },
-        "capDvi" : this.userInfo.CAP_DVI,
-        "maDvi" : this.userInfo.MA_DVI,
+        "capDvi": this.userInfo.CAP_DVI,
+        "maDvi": this.userInfo.MA_DVI,
       }
       let res = await this.qdMuaSamService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        this.listTongHop = data.content;
-        if (this.listTongHop) {
-          this.listTongHop = this.listTongHop.filter(item => item.trangThai == this.STATUS.BAN_HANH)
+        if (data.content && data.content.length > 0) {
+          this.listTongHop = data.content.filter(item => item.trangThai == this.STATUS.BAN_HANH);
+          this.listTongHopCopy = data.content.filter(item => item.trangThai == this.STATUS.BAN_HANH);
         }
       } else {
         this.listTongHop = [];
+        this.listTongHopCopy = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
@@ -186,12 +188,13 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     this.formData.value.giaTri = this.calcTong();
     this.formData.value.maDvi = this.userInfo.MA_DVI
     this.formData.value.capDvi = this.userInfo.CAP_DVI
+    this.formData.value.soHopDong = this.formData.value.soHopDong + this.maQd
     this.formData.value.listQlDinhMucHdDiaDiemNh = this.listDiaDiem
     let body = this.formData.value;
     let data = await this.createUpdate(body);
     if (data) {
-        this.goBack()
-      }
+      this.goBack()
+    }
   }
 
   async detail(id) {
@@ -204,7 +207,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
           this.changeSoQdMs(data.soQdpdKhMuaSam);
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soHopDong : this.formData.value.soHopDong ?  this.formData.value.soHopDong.split('/')[0] : null
+            soHopDong: this.formData.value.soHopDong ? this.formData.value.soHopDong.split('/')[0] : null
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucHdLoaiHh;
@@ -252,11 +255,13 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       this.spinner.hide();
       return;
     }
-    this.dataTable = [...this.dataTable, this.rowItem];
-    this.rowItem = new MmHopDongCt();
-    this.updateEditCache();
-    let arr = this.dataTable.map(value => value.maHangHoa)
-    await this.loadDsHangHoa(this.formData.value.soQdpdKhMuaSam ,arr)
+    let arr = [...this.dataTable, this.rowItem].map(value => value.maHangHoa)
+    let res = await this.loadDsHangHoa(this.formData.value.soQdpdKhMuaSam, arr)
+    if (res) {
+      this.dataTable = [...this.dataTable, this.rowItem];
+      this.rowItem = new MmHopDongCt();
+      this.updateEditCache();
+    }
   }
 
   checkExitsData(item, dataItem): boolean {
@@ -352,7 +357,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          listTh: this.listTongHop,
+          listTh: this.listTongHopCopy,
           type: "01"
         },
       });
@@ -371,7 +376,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
   }
 
   async changeSoQdMs(soQd: string) {
-    let res = this.listTongHop.filter(item => item.soQd = soQd)
+    let res = this.listTongHop.filter(item => item.soQd == soQd)
     if (res && res.length > 0) {
       let detailMs = await this.qdMuaSamService.getDetail(res[0].id)
       if (detailMs.msg == MESSAGE.SUCCESS) {
@@ -384,7 +389,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadDsHangHoa(soQdMs: string, tableHangHoa : any[]) {
+  async loadDsHangHoa(soQdMs: string, tableHangHoa: any[]) : Promise<boolean> {
+    let check = true
     let body = {
       soQdMs: soQdMs,
       paggingReq: {
@@ -392,22 +398,28 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         page: this.page - 1,
       },
       loai: '01',
-      trangThai : STATUS.DA_KY
+      trangThai: STATUS.DA_KY
     }
     let res = await this.qdMuaSamService.listTtPbo(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
+        this.listDiaDiem = res.data
         if (this.userService.isCuc()) {
-          this.listDiaDiem = res.data.filter(item => item.tenDviCha == this.userInfo.TEN_DVI)
+          this.listDiaDiem = this.listDiaDiem.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI))
         }
-        this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item))
+        this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item.maTaiSan))
         this.buildDiaDiemTc()
       } else {
         if (!this.listDiaDiem) {
+          check= false
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
           return;
         }
       }
+    } else {
+      check= false
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng phân bổ hàng hóa trước!!!!')
+      return;
     }
   }
 
@@ -444,7 +456,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
 
   convertListDiaDiem() {
     let arr = [];
-    if (this.listDiaDiem) {
+    if (this.listDiaDiem && this.listDiaDiem.length >  0) {
       this.listDiaDiem.forEach(item => {
         if (item.childData && item.childData.length > 0) {
           item.childData.forEach(data => {

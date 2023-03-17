@@ -251,13 +251,13 @@ export class ChiTietHoSoKyThuatComponent extends Base2Component implements OnIni
 
   async openDialogBbLayMauXuat() {
     let body = {
-      "maDvi": this.userInfo.MA_DVI,
-      "loaiVthh": this.loaiVthh,
+      // "maDvi": this.userInfo.MA_DVI,
+      // "loaiVthh": this.loaiVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
-      "trangThai": STATUS.BAN_HANH,
+      "trangThai": STATUS.DA_DUYET_LDCC,
 
     }
     let res = await this.bienBanLayMauBanGiaoMauService.search(body);
