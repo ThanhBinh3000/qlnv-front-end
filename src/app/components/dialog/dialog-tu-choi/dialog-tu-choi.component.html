@@ -25,3 +25,6 @@
     </div>
   </div>
 </div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">Bạn cần phải nhập lí do từ chối</ng-container>
+</ng-template>
