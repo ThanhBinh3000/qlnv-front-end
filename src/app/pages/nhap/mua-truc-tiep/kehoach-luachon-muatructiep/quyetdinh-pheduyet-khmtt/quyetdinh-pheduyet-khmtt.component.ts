@@ -18,6 +18,10 @@ import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-
 export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

@@ -180,22 +180,20 @@
                         </th>
 
                         <th>
-                            <nz-select nzShowSearch nzAllowClear placeholder="Tìm kiếm"
-                                [(ngModel)]="filterTable.tenTrangThai"
-                                (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
-                                <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma"
-                                    [nzLabel]="item.giaTri">
-                                </nz-option>
-                            </nz-select>
+                            <nz-input-group>
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                                    (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                                    <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
+                                        [nzLabel]="p.giaTri"></nz-option>
+                                </nz-select>
+                            </nz-input-group>
                         </th>
                         <th *ngIf="userService.isTongCuc()">
                             <nz-input-group>
-                                <nz-select nzShowSearch nzAllowClear placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenTrangThaiTh"
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThaiTh"
                                     (ngModelChange)="filterInTable('tenTrangThaiTh',filterTable.tenTrangThaiTh)">
-                                    <nz-option *ngFor="let item of listTrangThaiTh" [nzValue]="item.ma"
-                                        [nzLabel]="item.giaTri">
-                                    </nz-option>
+                                    <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.giaTri"
+                                        [nzLabel]="p.giaTri"></nz-option>
                                 </nz-select>
                             </nz-input-group>
                         </th>
