@@ -803,6 +803,9 @@ export class BaoCao04anComponent implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (res) => {
             if (res) {
+                if (this.listColTemp.findIndex(e => e.maVtu == res.ma) != -1) {
+                    return;
+                }
                 this.lstCtietBcao.forEach(data => {
                     const objTrongD = {
                         id: uuid.v4() + 'FE',
