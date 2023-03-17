@@ -176,7 +176,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         soLuongKh: soLuongDaLenKh.data,
-        soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat,
+        soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat,
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
