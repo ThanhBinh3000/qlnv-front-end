@@ -76,7 +76,7 @@ export const AMOUNT1 = {
 @Component({
   selector: 'app-phu-luc-9',
   templateUrl: './phu-luc-9.component.html',
-  styleUrls: ['./phu-luc-9.component.scss']
+  styleUrls: ['../add-bao-cao.component.scss'],
 })
 export class PhuLuc9Component implements OnInit {
   @Input() dataInfo;
@@ -242,15 +242,15 @@ export class PhuLuc9Component implements OnInit {
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
       if (item.dtoanDnghiDchinh < 0) {
-        this.tongDieuChinhGiam += item.dtoanDnghiDchinh;
+        this.tongDieuChinhGiam += Number(item?.dtoanDnghiDchinh);
       } else {
-        this.tongDieuChinhTang += item.dtoanDnghiDchinh;
+        this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh);
       }
 
       if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += item.dtoanVuTvqtDnghi;
+        this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
       } else {
-        this.dToanVuTang += item.dtoanVuTvqtDnghi;
+        this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
       }
     })
   };
@@ -412,7 +412,6 @@ export class PhuLuc9Component implements OnInit {
 
   changeModel(id: string): void {
     this.editCache[id].data.bcheGiao2021 = sumNumber([this.editCache[id].data.bcheCoMat, this.editCache[id].data.bcheChuaTuyen]);
-    this.editCache[id].data.hslPcapTso = sumNumber([this.editCache[id].data.hslPcapHsl, this.editCache[id].data.hslPcapTong]);
     this.editCache[id].data.hslPcapTong = sumNumber([
       this.editCache[id].data.hslPcapChucVu,
       this.editCache[id].data.hslPcapTnhiem,
@@ -424,7 +423,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.hslPcapKvuc,
       this.editCache[id].data.hslPcapKhac
     ]);
-    this.editCache[id].data.tqtlPcapTluong = sumNumber([this.editCache[id].data.tqtlPcapTong, this.editCache[id].data.tqtlPcapChucVu]);
+    this.editCache[id].data.hslPcapTso = sumNumber([this.editCache[id].data.hslPcapHsl, this.editCache[id].data.hslPcapTong]);
     this.editCache[id].data.tqtlPcapChucVu = sumNumber([
       // this.editCache[id].data.tqtlPcapTluong,
       // this.editCache[id].data.tqtlPcapTong,
@@ -438,6 +437,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.tqtlPcapKvuc,
       this.editCache[id].data.tqtlPcapKhac
     ])
+    this.editCache[id].data.tqtlPcapTluong = sumNumber([this.editCache[id].data.tqtlPcapTong, this.editCache[id].data.tqtlPcapChucVu]);
     this.editCache[id].data.tongNcauTluong = sumNumber([
       this.editCache[id].data.baoGomTluongBche,
       this.editCache[id].data.baoGomKhoanDgop,
@@ -448,7 +448,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.dtoanKphiDtoanNtruoc,
       this.editCache[id].data.dtoanKphiDaGiao
     ])
-    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.dtoanKphiCong - this.editCache[id].data.tongNcauTluong
+    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongNcauTluong -  this.editCache[id].data.dtoanKphiCong
   };
 
   saveEdit(id: string): void {

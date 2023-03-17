@@ -657,15 +657,15 @@ export class PhuLuc5Component implements OnInit {
       const str = item.stt
       if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
         if (item.dtoanDchinh < 0) {
-          this.tongDieuChinhGiam += item.dtoanDchinh;
+          this.tongDieuChinhGiam += Number(item?.dtoanDchinh);
         } else {
-          this.tongDieuChinhTang += item.dtoanDchinh;
+          this.tongDieuChinhTang += Number(item.dtoanDchinh);
         }
 
         if (item.dtoanVuTvqtDnghi < 0) {
-          this.dToanVuGiam += item.dtoanVuTvqtDnghi;
+          this.dToanVuGiam += Number(item.dtoanVuTvqtDnghi);
         } else {
-          this.dToanVuTang += item.dtoanVuTvqtDnghi;
+          this.dToanVuTang += Number(item.dtoanVuTvqtDnghi);
         }
       }
     })
