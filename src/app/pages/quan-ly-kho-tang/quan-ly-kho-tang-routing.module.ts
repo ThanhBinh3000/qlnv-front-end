@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { KeHoachComponent } from './ke-hoach/ke-hoach.component';
 import { MangLuoiKhoComponent } from './mang-luoi-kho/mang-luoi-kho.component';
 import { QuanLyKhoTangComponent } from './quan-ly-kho-tang.component';
+import {TienDoXayDungSuaChuaComponent} from "./tien-do-xay-dung-sua-chua/tien-do-xay-dung-sua-chua.component";
 
 const routes: Routes = [
     {
@@ -22,6 +23,10 @@ const routes: Routes = [
                 path: 'ke-hoach',
                 component: KeHoachComponent,
             },
+          {
+            path: 'tien-do-xay-dung-sua-chua',
+            component: TienDoXayDungSuaChuaComponent,
+          },
         ],
     },
 ];

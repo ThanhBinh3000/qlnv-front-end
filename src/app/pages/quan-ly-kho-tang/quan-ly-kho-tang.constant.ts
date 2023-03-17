@@ -18,6 +18,14 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
         idHover: 'ke-hoach',
         hasTab: false,
     },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Tiến độ xây dựng, sửa chữa kho tàng',
+    url: `/tien-do-xay-dung-va-sua-chua`,
+    dropdown: 'tien-do',
+    idHover: 'tien-do',
+    hasTab: false,
+  },
     {
         icon: 'htvbdh_tcdt_tochucthuchien',
         title: 'Thực hiện',
