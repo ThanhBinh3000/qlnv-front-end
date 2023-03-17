@@ -11,7 +11,7 @@ import {BaseTestService} from "../../../../base-test.service";
 export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dx-kh/qd-lcnt', '');
+    super(httpClient, 'dx-kh/qd-lcnt', '/qlnv-hang');
   }
 
   getDetailGoiThau(id: number): Promise<any> {
