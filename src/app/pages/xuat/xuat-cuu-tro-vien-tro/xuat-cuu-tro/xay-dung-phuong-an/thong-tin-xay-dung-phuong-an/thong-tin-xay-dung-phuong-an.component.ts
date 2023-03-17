@@ -121,9 +121,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         nam: [dayjs().get("year")],
         maDvi: [''],
         loaiNhapXuat: [''],
-        kieuNhapXuat: [''],
-        soDx: ['', [Validators.required]],
-        trichYeu: ['', [Validators.required]],
+        kieuNhapXuat: ['Xuất không thu tiền'],
+        soDx: ['',],
+        trichYeu: ['',],
         loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         tenVthh: [''],
@@ -178,7 +178,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'VIEN_TRO_CUU_TRO');
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
     }
   }
 
@@ -186,7 +186,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
       this.listKieuNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
-      ;
     }
   }
 
@@ -281,6 +280,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   showModal(data?: any): void {
+    this.formData.controls["nam"].setValidators(null);
+    this.formData.controls["soDx"].setValidators(null);
+    this.formData.controls["loaiNhapXuat"].setValidators(null);
+    this.formData.controls["trichYeu"].setValidators(null);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
@@ -460,7 +463,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async save() {
-
+    this.setValidForm();
     let result = await this.createUpdate(this.formData.value);
     if (result) {
       this.quayLai();
@@ -468,6 +471,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async saveAndSend() {
+    this.setValidForm();
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
@@ -543,5 +547,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       return '';
     }
   }
-
+  setValidForm(){
+    this.formData.controls["nam"].setValidators([Validators.required]);
+    this.formData.controls["soDx"].setValidators([Validators.required]);
+    this.formData.controls["loaiNhapXuat"].setValidators([Validators.required]);
+    this.formData.controls["trichYeu"].setValidators([Validators.required]);
+  }
 }

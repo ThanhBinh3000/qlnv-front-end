@@ -21,7 +21,25 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
 
   dsDonvi: any[] = [];
   userdetail: any = {};
-  listTrangThaiTh: any[] = [];
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - CB Vụ' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - CB vụ' },
+  ];
+
+  listTrangThaiTh: any[] = [
+    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa Tổng Hợp' },
+    { ma: this.STATUS.DA_TONG_HOP, giaTri: 'Đã Tổng Hợp' },
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -69,7 +87,6 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await Promise.all([
-        this.loadDataComboBox(),
         this.timKiem(),
         this.initData()
       ]);
@@ -108,28 +125,4 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     await this.loadDsTong();
   }
 
-  async loadDataComboBox() {
-    this.listTrangThaiTh = [
-      {
-        ma: '24',
-        giaTri: 'Chưa Tổng Hợp',
-      },
-      {
-        ma: '25',
-        giaTri: 'Đã Tổng Hợp',
-      },
-      {
-        ma: '26',
-        giaTri: 'Chưa Tạo QĐ',
-      },
-      {
-        ma: '27',
-        giaTri: 'Đã Dự Thảo QĐ',
-      },
-      {
-        ma: '28',
-        giaTri: 'Đã Ban Hành QĐ ',
-      },
-    ];
-  }
 }

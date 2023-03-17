@@ -42,12 +42,7 @@ export class DialogTuChoiComponent implements OnInit {
   }
 
   handleOk() {
-    for (const i in this.formData.controls) {
-      if (this.formData.controls.hasOwnProperty(i)) {
-        this.formData.controls[i].markAsDirty();
-        this.formData.controls[i].updateValueAndValidity();
-      }
-    }
+    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }

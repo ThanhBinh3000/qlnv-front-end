@@ -20,6 +20,12 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
   @Input() listVthh: any[] = [];
   @Input() loaiVthh: string;
   listCloaiVthh: any[] = [];
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

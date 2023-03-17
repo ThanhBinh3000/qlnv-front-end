@@ -90,7 +90,7 @@ export class HelperService {
     }
     if (invalid.length > 0) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      console.log(invalid);
+      console.log(invalid,' invalid');
     }
   }
 
