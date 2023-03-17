@@ -11,11 +11,11 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày nhận chào giá/Ngày ủy quyền</label>
-            <nz-range-picker formControlName="ngayChaoGia" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <nz-range-picker formControlName="ngayNhanCgia" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="4">
             <label> Tên công ty chào giá</label>
-            <input placeholder="" nz-input formControlName="toChucCaNhan" />
+            <input placeholder="" nz-input formControlName="canhanTochuc" />
           </div>
           <div nz-col nzSpan="4">
             <label>Tên chi cục ủy quyền</label>
@@ -31,7 +31,7 @@
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
-          <button nz-button class="search__button--search" (click)="search()">
+          <button nz-button class="search__button--search" (click)="timKiem()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -79,8 +79,8 @@
             <th></th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                  (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -98,7 +98,7 @@
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.pthucMuaTrucTiep"
-                  (input)="filterInTable('pthucMuaTrucTiep',filterTable.pthucBanTrucTiep)" size="small" />
+                  (input)="filterInTable('pthucMuaTrucTiep',filterTable.pthucMuaTrucTiep)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -150,12 +150,12 @@
             <td>{{ data.hhQdPheduyetKhMttHdr.namKh }}</td>
             <td>{{data.pthucMuaTrucTiep }}</td>
             <td>{{data.ngayNhanCgia | date: 'dd/MM/YYYY'}}</td>
-            <td></td>
+            <td>{{data.soQdKq}}</td>
             <td>{{data.tenLoaiVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
+              <a (click)="goDetail(data.id)">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"

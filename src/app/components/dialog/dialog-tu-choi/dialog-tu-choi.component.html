@@ -1,8 +1,12 @@
 <div class="modal__content">
-  <nz-form-label [nzNoColon]="true">
-    Lý do từ chối
-  </nz-form-label>
-  <textarea rows="3" class="search__input" nz-input [(ngModel)]="text"></textarea>
+  <form [formGroup]="formData">
+    <nz-form-label [nzNoColon]="true" nzRequired>
+      Nhập lý do từ chối
+    </nz-form-label>
+    <nz-form-control [nzErrorTip]="error">
+      <textarea rows="3" class="search__input" nz-input formControlName="text"></textarea>
+    </nz-form-control>
+  </form>
 </div>
 <div class="modal-footer">
   <div class="nut">
@@ -20,3 +24,6 @@
     </div>
   </div>
 </div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">Bạn cần phải nhập lí do từ chối</ng-container>
+</ng-template>

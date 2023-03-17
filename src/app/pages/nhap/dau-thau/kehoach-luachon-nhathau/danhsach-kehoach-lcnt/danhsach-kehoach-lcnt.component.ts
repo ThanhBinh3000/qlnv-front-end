@@ -47,7 +47,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   filterTable: any = {
     soDxuat: '',
-    ngayKy: '',
+    ngayPduyet: '',
+    ngayTao: '',
     trichYeu: '',
     soQd: '',
     namKhoach: '',
@@ -69,7 +70,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   indeterminate = false;
 
   async ngOnInit() {
-    console.log(this.spinner);
     try {
       if (this.loaiVthh === "02") {
         if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
@@ -338,16 +338,23 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayKy: this.searchFilter.ngayTongHop
+          tuNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
             ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
             : null,
-          denNgayKy: this.searchFilter.ngayTongHop
+          denNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
             : null,
+          tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+            ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
+            : null,
+          denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+            ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
+            : null,
           soTr: this.searchFilter.soDx,
-          loaiVthh: this.searchFilter.loaiVthh,
+          loaiVthh: this.loaiVthh,
           namKh: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
+          maDvi: null,
         };
         this.danhSachDauThauService
           .export(body)

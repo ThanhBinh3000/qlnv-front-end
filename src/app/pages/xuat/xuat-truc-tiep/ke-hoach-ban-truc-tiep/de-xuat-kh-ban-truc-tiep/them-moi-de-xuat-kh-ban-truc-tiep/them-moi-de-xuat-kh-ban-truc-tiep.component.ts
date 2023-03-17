@@ -72,7 +72,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       tenLoaiVthh: [, [Validators.required]],
       cloaiVthh: [,],
       tenCloaiVthh: [, [Validators.required]],
-      moTaHangHoa: [, [Validators.required]],
+      moTaHangHoa: [''],
       tchuanCluong: [null],
       thoiGianDuKien: [, [Validators.required]],
       tgianDkienTu: [,],
@@ -83,7 +83,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       tgianGnhan: [, [Validators.required]],
       tgianGnhanGhiChu: [null],
       pthucGnhan: [, [Validators.required]],
-      thongBaoKh: [, [Validators.required]],
+      thongBaoKh: [''],
       tongSoLuong: [null],
       ghiChu: [null],
       soQdPd: [''],
@@ -92,6 +92,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
       donGiaVat: [],
+      tongDonGia: [],
     });
   }
 
@@ -242,6 +243,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKh: this.formData.get('namKh').value,
         donGiaVat: this.formData.value.donGiaVat
       },
@@ -273,16 +275,19 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
+    let tongDonGia: number = 0;
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
+        tongSoLuong += child.soLuong;
+        tongDonGia += child.donGiaDeXuat;
       })
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
+      tongDonGia: tongDonGia,
     });
   }
 
@@ -327,6 +332,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
+        this.idInput = res.id;
         this.guiDuyet();
       } else {
         this.quayLai()
@@ -347,7 +353,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
         +this.formData.get('namKh').value,
       );
-    console.log(res2, 99)
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       if (this.dataChiTieu) {
@@ -370,7 +375,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_CBV:
       case STATUS.TU_CHOI_LDC:
       case STATUS.TU_CHOI_TP:
       case STATUS.DU_THAO: {
@@ -385,11 +389,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       }
       case STATUS.CHO_DUYET_LDC: {
         trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_CBV;
         msg = MESSAGE.PHE_DUYET_CONFIRM
         break;
       }
@@ -409,10 +408,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         trangThai = STATUS.TU_CHOI_LDC;
         break;
       }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.TU_CHOI_CBV;
-        break;
-      }
     };
     this.reject(this.idInput, trangThai);
   }
@@ -425,7 +420,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   isDisable(): boolean {
     if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
-      this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV) {
+      this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
       return false
     } else {
       return true
