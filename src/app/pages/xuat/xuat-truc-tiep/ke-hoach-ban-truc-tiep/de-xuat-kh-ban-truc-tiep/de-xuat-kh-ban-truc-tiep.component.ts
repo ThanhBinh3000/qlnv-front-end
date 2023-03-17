@@ -100,6 +100,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+    })
     if (this.formData.value.ngayTao) {
       this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
       this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
@@ -112,12 +116,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       this.formData.value.ngayKyQdTu = dayjs(this.formData.value.ngayKyQd[0]).format('YYYY-MM-DD')
       this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
     }
-
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-    })
-
     await this.search();
   }
 
