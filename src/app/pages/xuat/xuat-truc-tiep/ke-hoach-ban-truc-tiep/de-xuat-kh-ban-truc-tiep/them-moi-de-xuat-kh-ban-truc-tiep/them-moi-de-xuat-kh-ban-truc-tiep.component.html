@@ -18,13 +18,13 @@
                 <span>Duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV ) "
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC  ) "
                 type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -49,8 +49,7 @@
     <div class="header header-green-background" *ngIf="!showFromTH">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span
-                    [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
                 <span>Đề xuất kế hoạch bán trực tiếp</span>
@@ -59,7 +58,7 @@
     </div>
 
     <nz-alert class="mg-t-10"
-        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV"
         nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
     </nz-alert>
     <nz-card class="mt16 flex-card p-lr16">
@@ -200,7 +199,7 @@
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
+                        <nz-form-control>
                             <input nz-input [readonly]="isDisable()" formControlName="moTaHangHoa" />
                         </nz-form-control>
                     </nz-form-item>
@@ -323,7 +322,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán trực tiếp
                                 </nz-form-label>
-                                <nz-form-control nz-col [nzErrorTip]="error">
+                                <nz-form-control nz-col>
                                     <textarea [readonly]="isDisable()" nz-input [rows]="3"
                                         formControlName="thongBaoKh"></textarea>
                                 </nz-form-control>
@@ -357,7 +356,7 @@
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
                                     <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN'
-                                        }} Tấn</span>
+                                        }} Kg</span>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -366,7 +365,7 @@
                 <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                     <thead>
                         <tr>
-                            <th width="60px" class="text-center"></th>
+                            <th></th>
                             <th nzWidth="150px" class="text-center wrap">Chi cục</th>
                             <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
                             <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
@@ -380,7 +379,7 @@
                             <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất(đ)</th>
                             <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
                             <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
-                            <th nzWidth="50px">Hành động</th>
+                            <th *ngIf="!isDisable()">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -394,11 +393,11 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>
-                                    <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
+                                <td *ngIf="!isDisable()">
+                                    <a (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a *ngIf="!isDisable()" (click)="deleteRow(i)">
+                                    <a (click)="deleteRow(i)">
                                         <i class="fa fa-trash-o do"></i>
                                     </a>
                                 </td>
@@ -419,7 +418,7 @@
                                     <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td class="text-right">
+                                    <td class="text-right" *ngIf="!isDisable()">
                                     </td>
                                 </tr>
                             </ng-container>

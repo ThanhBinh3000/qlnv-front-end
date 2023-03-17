@@ -304,19 +304,13 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let msg = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
-      case STATUS.TU_CHOI_KT:
       case STATUS.TU_CHOI_KTVBQ:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_KTVBQ;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.CHO_DUYET_KT;
-        msg = MESSAGE.GUI_DUYET_CONFIRM;
-        break;
-      }
-      case STATUS.CHO_DUYET_KT: {
+      case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
@@ -337,10 +331,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
-      case STATUS.CHO_DUYET_KT: {
-        trangThai = STATUS.TU_CHOI_KT;
-        break;
-      }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.TU_CHOI_KTVBQ;
         break;
@@ -348,6 +338,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     }
     this.reject(this.idInput, trangThai)
   }
+
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;

@@ -117,14 +117,14 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
+        tongSoLuong += child.soLuong;
       })
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
     });
-    this.dataInput.soLuong = tongSoLuong * 1000
+    this.dataInput.soLuong = tongSoLuong
   }
 
   isDisable() {

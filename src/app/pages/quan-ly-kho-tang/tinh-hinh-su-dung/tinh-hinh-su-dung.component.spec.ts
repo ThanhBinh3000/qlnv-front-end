@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TtPhanBoPvcComponent } from './tt-phan-bo-pvc.component';
+import { TinhHinhSuDungComponent } from './tinh-hinh-su-dung.component';
 
-describe('TtPhanBoPvcComponent', () => {
-  let component: TtPhanBoPvcComponent;
-  let fixture: ComponentFixture<TtPhanBoPvcComponent>;
+describe('TinhHinhSuDungComponent', () => {
+  let component: TinhHinhSuDungComponent;
+  let fixture: ComponentFixture<TinhHinhSuDungComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TtPhanBoPvcComponent ]
+      declarations: [ TinhHinhSuDungComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TtPhanBoPvcComponent);
+    fixture = TestBed.createComponent(TinhHinhSuDungComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

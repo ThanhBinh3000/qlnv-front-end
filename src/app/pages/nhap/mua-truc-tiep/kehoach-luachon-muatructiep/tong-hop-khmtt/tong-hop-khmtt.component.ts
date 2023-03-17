@@ -4,11 +4,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import * as dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-tong-hop-khmtt',
@@ -17,8 +17,15 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 
 export class TongHopKhmttComponent extends Base2Component implements OnInit {
-
+  @Input() listVthh: any[] = [];
   @Input() loaiVthh: string;
+  listCloaiVthh: any[] = [];
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -26,18 +33,19 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
+    private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHMTTService);
 
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
-      ngayThop: '',
-      ngayQd: '',
+      namKh: '',
       loaiVthh: '',
       tenLoaiVthh: '',
       cloaiVthh: '',
       tenCloaiVthh: '',
-      noiDung: ''
+      noiDungThop: '',
+      ngayThop: '',
+      ngayQd: ''
     });
 
     this.filterTable = {
@@ -58,7 +66,8 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh
       })
-      await this.search();
+      await this.timKiem();
+      this.getCloaiVthh();
       this.spinner.hide();
     }
     catch (e) {
@@ -68,31 +77,30 @@ export class TongHopKhmttComponent extends Base2Component implements OnInit {
     }
   }
 
-  selectHangHoa() {
-    let data = this.loaiVthh;
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
-      nzContent: DialogDanhSachHangHoaComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        data: data
-      },
-    });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.bindingDataHangHoa(data);
-      }
-    });
+  async getCloaiVthh() {
+    let body = {
+      "str": this.loaiVthh
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    console.log(res, 999)
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listCloaiVthh = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
-  async bindingDataHangHoa(data) {
-    // this.formData.cloaiVthh = data.ma
-    // this.formData.tenCloaiVthh = data.ten
-    // this.formData.loaiVthh = data.parent.ma
-    // this.searchFilter.tenLoaiVthh = data.parent.ten
+
+  async timKiem() {
+    if (this.formData.value.ngayThop) {
+      this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayQd) {
+      this.formData.value.ngayQdTu = dayjs(this.formData.value.ngayQd[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayQdDen = dayjs(this.formData.value.ngayQd[1]).format('YYYY-MM-DD')
+    }
+    await this.search();
   }
 
 }

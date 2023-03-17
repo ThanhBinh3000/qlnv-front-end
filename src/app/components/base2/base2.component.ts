@@ -1,23 +1,23 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {UserLogin} from 'src/app/models/userlogin';
-import {BaseService} from 'src/app/services/base.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
-import {saveAs} from 'file-saver';
-import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
+import { BaseService } from 'src/app/services/base.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { cloneDeep } from 'lodash';
+import { saveAs } from 'file-saver';
+import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-base2',
@@ -142,7 +142,6 @@ export class Base2Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    debugger
     this.idSelected = id;
     this.isDetail = true;
   }
@@ -300,7 +299,7 @@ export class Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.service.deleteMuti({idList: dataDelete});
+            let res = await this.service.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -433,9 +432,16 @@ export class Base2Component implements OnInit {
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-            this.spinner.hide();
-            this.goBack();
+            if (this.formData.value.trangThai == STATUS.DU_THAO) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
+              this.spinner.hide();
+              this.goBack();
+            } else {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+              this.spinner.hide();
+              this.goBack();
+            }
+
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -456,7 +462,7 @@ export class Base2Component implements OnInit {
       return
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Từ chối',
+      nzTitle: 'Từ chối phê duyệt',
       nzContent: DialogTuChoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -517,12 +523,12 @@ export class Base2Component implements OnInit {
     return true;
   }
 
-  convertDateToString(event: any) : string {
+  convertDateToString(event: any): string {
     let result = '';
     if (event) {
       result = dayjs(event).format('DD/MM/YYYY').toString()
     }
-    return  result;
+    return result;
   }
 
 }

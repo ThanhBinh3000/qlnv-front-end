@@ -56,6 +56,10 @@ import { ThemMoiScLonComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-
 import {
   ThemMoiQdScBtcComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-btc/them-moi-qd-sc-btc/them-moi-qd-sc-btc.component";
+import { TienDoXayDungSuaChuaComponent } from './tien-do-xay-dung-sua-chua/tien-do-xay-dung-sua-chua.component';
+import { TinhHinhSuDungComponent } from './tinh-hinh-su-dung/tinh-hinh-su-dung.component';
+import { TienDoDauTuXayDungComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-dau-tu-xay-dung.component';
+import { TienDoSuaChuaComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua/tien-do-sua-chua.component';
 
 
 @NgModule({
@@ -92,6 +96,10 @@ import {
     ThemMoiScLonComponent,
     ThemMoiScLonComponent,
     ThemMoiQdScBtcComponent,
+    TienDoXayDungSuaChuaComponent,
+    TinhHinhSuDungComponent,
+    TienDoDauTuXayDungComponent,
+    TienDoSuaChuaComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

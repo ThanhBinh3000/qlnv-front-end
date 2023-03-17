@@ -18,9 +18,25 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
-
   dsDonvi: any[] = [];
   userdetail: any = {};
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+  ];
+
+  listTrangThaiTh: any[] = [
+    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa Tổng Hợp' },
+    { ma: this.STATUS.DA_TONG_HOP, giaTri: 'Đã Tổng Hợp' },
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,7 +57,6 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       ngayKyQd: [],
       ngayPduyet: [],
       loaiVthh: [],
-
     });
 
     this.filterTable = {
@@ -54,11 +69,13 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       soQdPd: '',
       ngayKyQd: '',
       trichYeu: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
       soQdCtieu: '',
       tenTrangThai: '',
-      tenTrangThaiTh: ''
+      tenTrangThaiTh: this.listTrangThaiTh
     };
   }
 
@@ -68,8 +85,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
-      this.initData()
-      await this.timKiem();
+      await Promise.all([
+        this.timKiem(),
+        this.initData()
+      ]);
       await this.spinner.hide();
     }
     catch (e) {
@@ -94,6 +113,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+    })
     if (this.formData.value.ngayTao) {
       this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
       this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
@@ -107,5 +130,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
     }
     await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
   }
 }
