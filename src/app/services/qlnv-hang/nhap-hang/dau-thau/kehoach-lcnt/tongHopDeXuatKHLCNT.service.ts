@@ -13,7 +13,7 @@ import { BaseService } from '../../../../base.service';
   providedIn: 'root',
 })
 export class TongHopDeXuatKHLCNTService extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-hang';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dx-kh/thop-dlieu', '/qlnv-hang');
   }
