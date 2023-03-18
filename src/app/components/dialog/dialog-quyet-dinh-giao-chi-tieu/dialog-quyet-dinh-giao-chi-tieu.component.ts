@@ -22,6 +22,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  itemSelected: any[] = [];
   text: string = '';
   isDexuat: boolean = false;
   type?: string;
@@ -29,6 +30,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   STATUS = STATUS
   namKeHoach?: number;
   capDonVi: number;
+  allChecked = false;
+  indeterminate = false;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -58,6 +61,18 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     this._modalRef.close(item);
   }
 
+  updateSingleChecked(): void {
+    if (this.dataTable.every((item) => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every((item) => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
   handleCancel() {
     this.isVisible = false;
     this.isVisibleChange.emit(this.isVisible);
@@ -65,6 +80,13 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  onOk() {
+    this.itemSelected = this.dataTable.filter((item) => item.checked);
+    this.isVisible = false;
+    this.isVisibleChange.emit(this.isVisible);
+    this._modalRef.close(this.itemSelected);
   }
 
   async search() {
