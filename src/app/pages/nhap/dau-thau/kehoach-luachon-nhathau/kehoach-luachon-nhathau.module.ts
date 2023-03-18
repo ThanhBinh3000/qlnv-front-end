@@ -20,7 +20,6 @@ import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhath
     DanhsachKehoachLcntComponent,
     ThemmoiKehoachLcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
     ThemmoiQuyetdinhKhlcntComponent,
     TongHopKhlcntComponent,
     ThemmoiTonghopKhlcntComponent,
@@ -35,7 +34,6 @@ import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhath
   exports: [
     KeHoachLuachonNhathauComponent,
     DanhsachKehoachLcntComponent,
-    QuyetdinhPheduyetKhlcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     TongHopKhlcntComponent,
   ]

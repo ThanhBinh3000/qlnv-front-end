@@ -25,6 +25,11 @@ import { StorageService } from 'src/app/services/storage.service';
 export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' }
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -35,7 +40,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKHLCNTService);
     this.formData = this.fb.group({
-      namKh: '',
+      namKhoach: '',
       ngayTongHop: '',
       loaiVthh: '',
       tenVthh: '',
@@ -55,6 +60,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       tenLoaiHdong: '',
       tenNguonVon: '',
       trangThai: '',
+      soQdPdKhlcnt: ''
     }
   }
 
@@ -75,8 +81,55 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     }
   }
 
+  async search() {
+    this.spinner.show();
+    debugger
+    this.formData.get('ngayTongHop').value
+    let body = {
+      tuNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
+        ? dayjs(this.formData.get('ngayTongHop').value[0]).format('YYYY-MM-DD')
+        : null,
+      denNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
+        ? dayjs(this.formData.get('ngayTongHop').value[1]).format('YYYY-MM-DD')
+        : null,
+      // tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+      //   ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
+      //   : null,
+      // denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
+      //   ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
+      //   : null,
+      loaiVthh: this.loaiVthh,
+      namKhoach: this.formData.get('namKhoach').value,
+      tenVthh: this.formData.get('tenVthh').value,
+      tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+      noiDung: this.formData.get('noiDung').value,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+    };
+
+    let res = await this.tongHopDeXuatKHLCNTService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
+
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -84,11 +137,18 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: data
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataHangHoa(data);
+        this.formData.patchValue({
+          cloaiVthh: data.ma,
+          tenCloaiVthh: data.ten,
+          loaiVthh: data.parent.ma,
+          tenVthh: data.parent.ten,
+        });
       }
     });
   }

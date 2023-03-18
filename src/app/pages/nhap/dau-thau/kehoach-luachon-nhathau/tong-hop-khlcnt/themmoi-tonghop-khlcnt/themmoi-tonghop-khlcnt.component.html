@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || !formData.value.trangThai && isTongHop" type="button"
       class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
@@ -101,10 +101,10 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
+        <div nz-col [nzSpan]="24">
           <div class="tong-hop-button group-button-search mt-16">
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
-              *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
+              >
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
               <span>Tổng hợp đề xuất KHLCNT</span>
             </button>

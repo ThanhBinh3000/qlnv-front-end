@@ -8,12 +8,13 @@ import {
   ThongTinDeXuatKeHoachLuaChonNhaThauInput,
 } from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { BaseService } from '../../../../base.service';
+import {BaseTestService} from "../../../../base-test.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class TongHopDeXuatKHLCNTService extends BaseService {
-  GATEWAY = '/qlnv-hang';
+  GATEWAY = '';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dx-kh/thop-dlieu', '/qlnv-hang');
   }
