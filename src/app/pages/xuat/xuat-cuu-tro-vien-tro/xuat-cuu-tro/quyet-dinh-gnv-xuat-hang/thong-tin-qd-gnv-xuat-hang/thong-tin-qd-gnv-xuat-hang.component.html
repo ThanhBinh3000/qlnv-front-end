@@ -11,6 +11,12 @@
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
+      <button (click)="approve(id,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
+        *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
+        class="btn btn-sub" type="button">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
       <!--    end cap ld cuc-->
       <!--    cap truong phong-->
       <button (click)="approve(id,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
@@ -25,12 +31,12 @@
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
-      <button (click)="approve(id,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')"
+      <!-- <button (click)="approve(id,STATUS.BAN_HANH,'Bạn có muốn ban hành quyết định này')"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
         class="btn btn-sub" type="button">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Ban Hành</span>
-      </button>
+      </button> -->
       <!--    end cap truong phong-->
       <button (click)="saveAndSend()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
         || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
