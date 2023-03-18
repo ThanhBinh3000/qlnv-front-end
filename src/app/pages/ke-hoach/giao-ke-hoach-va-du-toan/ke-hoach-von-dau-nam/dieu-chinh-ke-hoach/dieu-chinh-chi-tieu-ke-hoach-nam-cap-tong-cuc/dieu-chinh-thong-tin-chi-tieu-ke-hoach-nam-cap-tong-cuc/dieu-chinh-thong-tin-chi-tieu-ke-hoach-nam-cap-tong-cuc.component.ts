@@ -214,7 +214,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         await this.selectedQdDcCTKHTC();
       }
       await this.selectedQdGiaoCTKHNam();
-      await this.selectedDeXuatDieuChinhCuc();
+      // await this.selectedDeXuatDieuChinhCuc();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -2970,12 +2970,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           });
         }
         this.dieuChinhThongTinChiTieuKHNam.dxDcKhnIds = dxDcKhnIds;
-        // console.log(this.dieuChinhThongTinChiTieuKHNam);
-        // return;
         if (this.dataDieuChinh && this.dataDieuChinh.length > 0) {
           this.dieuChinhThongTinChiTieuKHNam.dcChiTieuId = this.dataDieuChinh[0].id;
         }
-
         this.dieuChinhThongTinChiTieuKHNam.khVatTuNhap = this.dataVatTuNhap.flatMap(s => s.dsVatTu.map(s1 => {
           delete s.dsVatTu;
           return Object.assign(s1, s)
@@ -3357,7 +3354,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        if (data) {
+        if (data && !Array.isArray(data)) {
           let item = {
             id: data.id,
             text: data.soVanBan,
@@ -3371,6 +3368,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             this.dataDeXuat = [];
             this.dataDeXuat.push(item);
           }
+        }
+        if (data && Array.isArray(data)) {
+          this.dataDeXuat = [];
+          data.forEach(it => {
+            let item = {
+              id: it.id,
+              text: it.soVanBan,
+            };
+            this.dataDeXuat.push(item);
+          });
         }
       });
     }
