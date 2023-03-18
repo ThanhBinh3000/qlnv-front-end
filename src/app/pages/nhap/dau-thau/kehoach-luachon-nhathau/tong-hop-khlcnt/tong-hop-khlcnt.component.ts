@@ -83,7 +83,6 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
 
   async search() {
     this.spinner.show();
-    debugger
     this.formData.get('ngayTongHop').value
     let body = {
       tuNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0

@@ -98,7 +98,6 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
       await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
-        debugger
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
@@ -129,7 +128,6 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
       await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
-        debugger
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

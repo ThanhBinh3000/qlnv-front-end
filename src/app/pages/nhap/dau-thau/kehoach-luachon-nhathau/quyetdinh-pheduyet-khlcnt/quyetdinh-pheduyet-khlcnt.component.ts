@@ -141,10 +141,10 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.selectedId = null;
   }
 
-  // detail(data?) {
-  //   this.isDetail = true;
-  //   this.selectedId = data.id;
-  // }
+  async detail(data?) {
+    this.isDetail = true;
+    this.selectedId = data.id;
+  }
 
   delete(data?) {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
@@ -197,7 +197,6 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   }
 
   async search() {
-    debugger
     this.dataTable = [];
     let body = {
       tuNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
@@ -357,23 +356,22 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
   }
 
-  filterInTable(key: string, value: string) {
-    debugger
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
+  // filterInTable(key: string, value: string) {
+  //   if (value && value != '') {
+  //     this.dataTable = [];
+  //     let temp = [];
+  //     if (this.dataTableAll && this.dataTableAll.length > 0) {
+  //       this.dataTableAll.forEach((item) => {
+  //         if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
+  //           temp.push(item)
+  //         }
+  //       });
+  //     }
+  //     this.dataTable = [...this.dataTable, ...temp];
+  //   } else {
+  //     this.dataTable = cloneDeep(this.dataTableAll);
+  //   }
+  // }
 
   clearFilterTable() {
     this.filterTable = {
