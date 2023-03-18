@@ -97,8 +97,10 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+                <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                 [(ngModel)]="filterTable.ngayQd"
+                                 (ngModelChange)="filterInTable('ngayQd', convertDateToString(filterTable.ngayQd))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th>
@@ -151,14 +153,18 @@
             </th>
             <th *ngIf="loaiVthh != '02'">
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
-                  (input)="filterInTable('tgianNhang',filterTable.tgianNhang)" size="small" />
+                <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                 [(ngModel)]="filterTable.tgianNhang"
+                                 (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th *ngIf="userService.isTongCuc()">
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"
-                  (input)="filterInTable('tgianThien',filterTable.tgianThien)" size="small" />
+                <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                 [(ngModel)]="filterTable.tgianThien"
+                                 (ngModelChange)="filterInTable('tgianThien', convertDateToString(filterTable.tgianThien))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th>
@@ -194,12 +200,12 @@
             <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
+              <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')) && userService.isTongCuc()"
-                (click)="goDetail(data.id, 'NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
+                (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO

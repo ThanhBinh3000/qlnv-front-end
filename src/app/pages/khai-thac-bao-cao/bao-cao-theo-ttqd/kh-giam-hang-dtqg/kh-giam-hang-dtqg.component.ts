@@ -107,7 +107,6 @@ export class KhGiamHangDtqgComponent extends Base2Component implements OnInit {
       body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
       body.trangThai = "01";
       await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
-        debugger
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

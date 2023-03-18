@@ -15,7 +15,7 @@
                   <input [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
                 </nz-input-group>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="5">
               <label class="search__label"> Chủng loại hàng hóa</label>
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                   <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
@@ -25,12 +25,8 @@
             <label class="search__label">Nội dung tổng hợp</label>
             <input class="search__input" placeholder="" nz-input formControlName="noiDung" />
           </div>
-          <div nz-col nzSpan="3">
+          <div nz-col nzSpan="5">
             <label class="search__label">Ngày tổng hợp</label>
-            <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </div>
-          <div nz-col nzSpan="3">
-            <label class="search__label">Ngày ký QĐ</label>
             <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
         </div>
