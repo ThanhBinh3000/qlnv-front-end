@@ -31,6 +31,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   @Input()
   loaiVthh: string;
   isDetail: boolean = false;
+  isView: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -68,6 +69,37 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   selectedId: number = 0;
   allChecked = false;
   indeterminate = false;
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
+
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
 
   async ngOnInit() {
     try {
@@ -133,18 +165,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-        ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-        ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
-        : null,
+      tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') : null,
+      denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') : null,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') : null,
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
@@ -225,9 +249,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.search()
   }
 
-  detail(data?) {
+  detail(data?, isView?) {
     this.selectedId = data.id;
     this.isDetail = true;
+    if (isView != null) {
+      this.isView = isView;
+    }
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return;
@@ -243,10 +270,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = null;
     this.searchFilter.soDx = null;
-    this.searchFilter.ngayTongHop = null;
-    this.searchFilter.ngayLap = null;
     this.searchFilter.trichYeu = null;
-    // this.searchFilter.loaiVthh = null;
+    this.tuNgayKy = null;
+    this.denNgayKy  = null;
+    this.tuNgayTao = null;
+    this.denNgayTao = null;
     this.search();
   }
 
@@ -338,18 +366,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayKy: this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
-          tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-            ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-            ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
-            : null,
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') : null,
+          tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') : null,
+          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') : null,
           soTr: this.searchFilter.soDx,
           loaiVthh: this.loaiVthh,
           namKh: this.searchFilter.namKh,
