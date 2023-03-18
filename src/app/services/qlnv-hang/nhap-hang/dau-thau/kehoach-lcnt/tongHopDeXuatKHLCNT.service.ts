@@ -8,7 +8,6 @@ import {
   ThongTinDeXuatKeHoachLuaChonNhaThauInput,
 } from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { BaseService } from '../../../../base.service';
-import {BaseTestService} from "../../../../base-test.service";
 
 @Injectable({
   providedIn: 'root',
