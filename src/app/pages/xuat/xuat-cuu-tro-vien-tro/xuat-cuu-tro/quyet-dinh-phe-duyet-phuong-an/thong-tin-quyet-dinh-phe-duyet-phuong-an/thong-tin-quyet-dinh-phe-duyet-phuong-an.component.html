@@ -62,8 +62,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'"
-                    [nzDisabled]="isDisabled()">
+                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'" [nzDisabled]="isDisabled()">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -145,29 +145,20 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()"></file-list>
+                <file-list [disabled]="isDisabled()" [data]="canCu"></file-list>
               </div>
             </nz-form-item>
           </div>
-        </div>
-
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                File đính kèm QĐ đã ban hành
+              </nz-form-label>
               <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
-                  </div>
-                </ng-template>
+                <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
               </div>
-            </nz-form-control>
-          </nz-form-item>
+            </nz-form-item>
+          </div>
         </div>
       </form>
 
@@ -319,7 +310,7 @@
                           <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
                           <td></td>
                           <td></td>
-                          <td>{{item.thanhTien|number:'1.0-1'}}</td>
+                          <td><strong>{{item.thanhTien|number:'1.0-1'}}</strong></td>
                           <td>
 
                           </td>
@@ -341,7 +332,7 @@
                               <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
                               <td></td>
                               <td></td>
-                              <td></td>
+                              <td><strong>{{lv1.thanhTienCuc|number:'1.0-1'}}</strong></td>
                               <td>
                               </td>
                             </tr>
@@ -417,9 +408,9 @@
                         <nz-form-label [nzNoColon]="true">
                           SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic [nzValueStyle]="{ color: 'red'}"
-                            [nzValue]="slXuatCap|number: '1.0-1'"></nz-statistic>
+                        <nz-form-control [nzErrorTip]="error" *ngIf="formData.value.xuatCap !== false">
+                          <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1'">
+                          </nz-statistic>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -471,7 +462,7 @@
                         <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
                         <td></td>
                         <td></td>
-                        <td>{{item.thanhTien|number:'1.0-1'}}</td>
+                        <td><strong>{{item.thanhTien|number:'1.0-1'}}</strong></td>
                         <td>
 
                         </td>
@@ -493,7 +484,7 @@
                             <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td><strong>{{lv1.thanhTienCuc|number:'1.0-1'}}</strong></td>
                             <td>
                             </td>
                           </tr>
