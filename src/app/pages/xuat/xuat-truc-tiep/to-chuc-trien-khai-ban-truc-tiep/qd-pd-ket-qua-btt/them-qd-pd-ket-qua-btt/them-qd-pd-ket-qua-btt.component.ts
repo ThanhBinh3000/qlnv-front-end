@@ -29,6 +29,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   maTrinh: String;
   listOfData: any[] = [];
   showFromTT: boolean;
+  radioValue: string;
 
   constructor(
     private httpClient: HttpClient,
@@ -62,6 +63,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       tenCloaiVthh: [],
       moTaHangHoa: [],
       ghiChu: [],
+      pthucBanTrucTiep: [],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
@@ -195,8 +197,8 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Phương thức bán trực tiếp', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soQdPd', 'pthucBanTrucTiep', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -220,9 +222,11 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
+        pthucBanTrucTiep: data.pthucBanTrucTiep,
         idPdKhDtl: data.id,
         idPdKhHdr: data.xhQdPdKhBttHdr.id
       })
+      this.radioValue = data.pthucBanTrucTiep;
       this.dataTable = data.children;
       if (this.dataTable) {
         this.dataTable.forEach((item) => {
@@ -287,6 +291,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     $event.target.parentElement.classList.add('selectedRow');
     this.listOfData = item.children;
     this.showFromTT = true;
+    this.radioValue = 'Chào giá'
   }
 
 }

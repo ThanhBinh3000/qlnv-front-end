@@ -60,7 +60,7 @@
         <button type="button" class="btn btn-main" (click)="goDetail(null,'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
           *ngIf="loaiVthh != '02'">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Tổng hợp</span>
+          <span>Tổng hợp Kh mua trực tiếp</span>
         </button>
       </div>
     </div>
@@ -93,13 +93,9 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
+              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayTao"
+                (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao)">
+              </nz-date-picker>
             </th>
             <th>
               <nz-input-group>
