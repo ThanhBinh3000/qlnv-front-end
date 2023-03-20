@@ -424,10 +424,10 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.hslPcapKhac
     ]);
     this.editCache[id].data.hslPcapTso = sumNumber([this.editCache[id].data.hslPcapHsl, this.editCache[id].data.hslPcapTong]);
-    this.editCache[id].data.tqtlPcapChucVu = sumNumber([
+    this.editCache[id].data.tqtlPcapTong  = sumNumber([
       // this.editCache[id].data.tqtlPcapTluong,
       // this.editCache[id].data.tqtlPcapTong,
-      // this.editCache[id].data.tqtlPcapChucVu,
+      this.editCache[id].data.tqtlPcapChucVu,
       this.editCache[id].data.tqtlPcapTniem,
       this.editCache[id].data.tqtlPcapTnienVkhung,
       this.editCache[id].data.tqtlPcapHsbl,
@@ -437,7 +437,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.tqtlPcapKvuc,
       this.editCache[id].data.tqtlPcapKhac
     ])
-    this.editCache[id].data.tqtlPcapTluong = sumNumber([this.editCache[id].data.tqtlPcapTong, this.editCache[id].data.tqtlPcapChucVu]);
+    this.editCache[id].data.tqtlPcapTso = sumNumber([this.editCache[id].data.tqtlPcapTong, this.editCache[id].data.tqtlPcapTluong]);
     this.editCache[id].data.tongNcauTluong = sumNumber([
       this.editCache[id].data.baoGomTluongBche,
       this.editCache[id].data.baoGomKhoanDgop,
