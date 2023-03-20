@@ -1,1 +1,46 @@
-<p>tien-do-dau-tu-xay-dung works!</p>
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('01')" *ngIf="userService.isTongCuc()">
+      Quyết định phê duyệt dự án ĐTXD
+    </li>
+    <li nz-menu-item (click)="selectTab('02')">
+      Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
+    </li>
+    <li nz-menu-item (click)="selectTab('03')">
+      Quyết định phê duyệt KH lựa chọn nhà thầu
+    </li>
+    <li nz-menu-item (click)="selectTab('04')">
+      Tổ chức triển khai KH lựa chọn nhà thầu
+    </li>
+    <li nz-menu-item (click)="selectTab('05')">
+      Hợp đồng và PL hợp đồng
+    </li>
+    <li nz-menu-item (click)="selectTab('06')">
+      Tiến độ công việc
+    </li>
+    <li nz-menu-item (click)="selectTab('07')">
+      Biên bản nghiệm thu
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == '01'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '02'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '03'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '04'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '05'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '06'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
+<ng-container *ngIf="tabSelected == '07'">
+  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+</ng-container>
