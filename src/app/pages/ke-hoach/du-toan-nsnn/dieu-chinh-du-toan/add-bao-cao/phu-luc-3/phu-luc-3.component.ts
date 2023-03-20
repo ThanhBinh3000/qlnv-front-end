@@ -16,22 +16,39 @@ import * as uuid from "uuid";
 export class ItemData {
   level: any;
   checked: boolean;
+  // id: string;
+  // qlnvKhvonphiDchinhCtietId: string;
+  // stt: string;
+  // noiDung: string;
+  // dviTinh: string;
+  // sluongDuocGiao: number;
+  // sluongThucTe: number;
+  // sluongUocThien: number;
+  // tongCong: number;
+  // dinhMuc: number;
+  // thanhTien: number;
+  // dtoanDaGiaoLke: number;
+  // dtoanDchinh: number;
+  // dtoanVuTvqtDnghi: number;
+  // kphiThieu: number;
+  // maNoiDung: string;
+
+  // phu luc 3
+
   id: string;
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
   noiDung: string;
-  dviTinh: string;
-  sluongDuocGiao: number;
-  sluongThucTe: number;
-  sluongUocThien: number;
-  tongCong: number;
-  dinhMuc: number;
-  thanhTien: number;
-  dtoanDaGiaoLke: number;
+  loaiKhoan: string;
+  ncauKphi: number;
+  dtoanKphiNtruoc: number;
+  dtoanKphiDaGiao: number;
+  dtoanKphiCong: number;
+  kphiUocThien: number;
   dtoanDchinh: number;
   dtoanVuTvqtDnghi: number;
-  kphiThieu: number;
   maNoiDung: string;
+
 }
 
 export const AMOUNT1 = {
@@ -121,6 +138,7 @@ export class PhuLuc3Component implements OnInit {
         stt: "0.1",
         maNoiDung: this.userInfo.MA_DVI,
         noiDung: this.userInfo.TEN_DVI,
+        loaiKhoan:"340-341"
       })
       // })
       // this.setLevel();
@@ -140,14 +158,6 @@ export class PhuLuc3Component implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   };
-
-  onChangeTaiSan(event, id) {
-    const taiSan = this.lstTaiSans.filter(item => item.ma == event)
-    console.log(taiSan);
-    this.editCache[id].data.dviTinh = taiSan[0].donViTinh;
-    this.editCache[id].data.noiDung = taiSan[0].giaTri;
-
-  }
 
   async getListTaiSan() {
     const data = await this.danhMucService.danhMucChungGetAll('BC_DC_PL2');
@@ -186,12 +196,14 @@ export class PhuLuc3Component implements OnInit {
   getTotal() {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
-      this.total.dinhMuc = sumNumber([this.total.dinhMuc, item.dinhMuc]);
-      this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
-      this.total.dtoanDaGiaoLke = sumNumber([this.total.dtoanDaGiaoLke, item.dtoanDaGiaoLke]);
+      // this.total.dinhMuc = sumNumber([this.total.dinhMuc, item.dinhMuc]);
+      this.total.ncauKphi = sumNumber([this.total.ncauKphi, item.ncauKphi]);
+      this.total.dtoanKphiNtruoc = sumNumber([this.total.dtoanKphiNtruoc, item.dtoanKphiNtruoc]);
       this.total.dtoanDchinh = sumNumber([this.total.dtoanDchinh, item.dtoanDchinh]);
       this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
-      this.total.kphiThieu = sumNumber([this.total.kphiThieu, item.kphiThieu]);
+      this.total.dtoanKphiDaGiao = sumNumber([this.total.dtoanKphiDaGiao, item.dtoanKphiDaGiao]);
+      this.total.dtoanKphiCong = sumNumber([this.total.dtoanKphiCong, item.dtoanKphiCong]);
+      this.total.kphiUocThien = sumNumber([this.total.kphiUocThien, item.kphiUocThien]);
     })
   };
 
@@ -420,9 +432,8 @@ export class PhuLuc3Component implements OnInit {
   changeModel(id: string): void {
     // this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.dtoanThieuNtruoc;
     // // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
-    this.editCache[id].data.tongCong = this.editCache[id].data.sluongThucTe + this.editCache[id].data.sluongUocThien;
-    this.editCache[id].data.thanhTien = this.editCache[id].data.tongCong * this.editCache[id].data.dinhMuc;
-    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.thanhTien - this.editCache[id].data.dtoanDaGiaoLke;
+    this.editCache[id].data.dtoanKphiCong = this.editCache[id].data.dtoanKphiNtruoc + this.editCache[id].data.dtoanKphiDaGiao;
+    this.editCache[id].data.dtoanDchinh = this.editCache[id].data.ncauKphi - this.editCache[id].data.dtoanKphiCong;
   };
 
   deleteAllChecked() {
@@ -447,21 +458,18 @@ export class PhuLuc3Component implements OnInit {
       id: uuid.v4(),
       stt: "0",
       checked: false,
-      dinhMuc: 0,
-      dtoanDchinh: 0,
-      dtoanDaGiaoLke: 0,
-      dtoanVuTvqtDnghi: 0,
-      dviTinh: "",
-      kphiThieu: 0,
-      maNoiDung: "",
       qlnvKhvonphiDchinhCtietId: "",
-      sluongDuocGiao: 0,
-      sluongThucTe: 0,
-      sluongUocThien: 0,
-      noiDung: "",
-      thanhTien: 0,
-      tongCong: 0,
       level: 0,
+      dtoanDchinh: 0,
+      dtoanKphiCong: 0,
+      dtoanKphiDaGiao: 0,
+      dtoanKphiNtruoc: 0,
+      dtoanVuTvqtDnghi: 0,
+      kphiUocThien: 0,
+      loaiKhoan: "340-341",
+      maNoiDung: "",
+      ncauKphi: 0,
+      noiDung: "",
     };
 
     this.lstCtietBcao.splice(id, 0, item);

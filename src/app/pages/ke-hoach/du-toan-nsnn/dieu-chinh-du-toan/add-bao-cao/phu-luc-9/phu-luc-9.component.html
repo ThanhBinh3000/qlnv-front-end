@@ -113,10 +113,10 @@
             <th>13</th>
             <th>14</th>
             <th>15</th>
-            <th>16</th>
-            <th>17 = 18 + 19</th>
-            <th>18</th>
-            <th>19 = 20 + ... + 27</th>
+            <th>16 = 17 + 18</th>
+            <th>17 </th>
+            <th>18 = 19 + ... + 27</th>
+            <th>19</th>
             <th>20</th>
             <th>21</th>
             <th>22</th>
@@ -451,22 +451,22 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTso"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td>
-                <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTluong"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
-                  {{displayValue(editCache[data.id].data.tqtlPcapTluong)}}
+                  {{displayValue(editCache[data.id].data.tqtlPcapTso)}}
                 </td>
                 <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTong"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTluong "
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
                   <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapChucVu"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
-                  {{displayValue(editCache[data.id].data.tqtlPcapChucVu)}}
+                  {{displayValue(editCache[data.id].data.tqtlPcapTong )}}
+                </td>
+                <td>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapChucVu"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tqtlPcapTniem"
