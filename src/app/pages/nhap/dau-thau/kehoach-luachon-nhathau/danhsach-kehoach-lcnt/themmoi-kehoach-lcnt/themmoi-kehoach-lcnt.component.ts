@@ -46,6 +46,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   idInput: number;
   @Input()
   showFromTH: boolean;
+  @Input()
+  isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -147,6 +149,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
+    console.log(this.isView);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
@@ -185,8 +188,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
-      console.log(this.listLoaiHinhNx);
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'NHAP_DT');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -689,7 +691,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
 
   tuChoi() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Từ chối phê duyệt',
+      nzTitle: 'TỪ CHỐI PHÊ DUYỆT',
       nzContent: DialogTuChoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -818,6 +820,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   openFile(event, id, type) {
+    debugger
     let item = {
       id: new Date().getTime(),
       text: event.name,
