@@ -604,7 +604,7 @@
                                         'vi_VN'}}</td>
                                     <td>
                                         <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
-                                            [(ngModel)]="dviTsan.toChucCaNhan">
+                                            [(ngModel)]="dviTsan.toChucCaNhan" (ngModelChange)="changeNTG(i,y)">
                                             <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
                                                 [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
                                         </nz-select>

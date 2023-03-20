@@ -69,6 +69,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   listNoiDung: any;
   listChungLoaiHangHoa: any[] = [];
   statusForm: any = [];
+  soLuong: any;
+  thanhTien: any;
+  donViTinh: any;
 
   constructor(httpClient: HttpClient,
     storageService: StorageService,
@@ -103,7 +106,8 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenTrangThaiXh: [],
       lyDoTuChoi: [],
       noiDungCuuTro: [new Array()],
-      donViTinh: ['kg'],
+      donViTinh: [],
+      thanhTien: [],
       tenDvi: [],
       soLuong: [0],
       canCu: [new Array<FileDinhKem>()],
@@ -176,16 +180,22 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
             idVirtual: uuid.v4(),
             tenChiCuc: k,
             soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
+            thanhTien: v[0].thanhTien,
             tenCloaiVthh: v[0].tenCloaiVthh,
             tonKhoChiCuc: v[0].tonKhoChiCuc,
             childData: v
           })
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+        let thanhTien = rs.reduce((prev, cur) => prev + cur.thanhTien, 0);
         let donViTinh = value[0].donViTinh;
-        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh };
+        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh, thanhTien: thanhTien };
       }).value();
-    this.noiDungCuuTroView = dataView
+    this.noiDungCuuTroView = dataView;
+    this.soLuong = this.noiDungCuuTroView[0].soLuongXuat;
+    this.thanhTien = this.noiDungCuuTroView[0].thanhTien;
+    this.donViTinh = this.noiDungCuuTroView[0].donViTinh;
+    console.log(this.noiDungCuuTroView, 55);
     console.log(JSON.stringify(this.noiDungCuuTroView), 'noiDungCuuTroView')
     this.expandAll()
 
@@ -214,10 +224,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
               } else if (this.userInfo.CAP_DVI === "3") {
                 noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
               }
-
               this.formData.patchValue({
                 loaiVthh: res.data.loaiVthh,
-                noiDungCuuTro: noiDungCuuTro[0].quyetDinhPdDx
+                noiDungCuuTro: noiDungCuuTro[0].quyetDinhPdDx,
               });
               this.selectHangHoa(res.data.loaiVthh);
               this.buildTableView()
@@ -262,23 +271,37 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     });
   }
   async saveSoQdPa() {
+    console.log(this.soLuong, 555);
+    console.log(this.thanhTien, 444);
     let item = this.dsQdPd.find(item => item.id == this.formData.value.idQdPd)
-    console.log(item.soQd, 5555);
     this.formData.patchValue({
       soQdPd: item.soQd,
       ngayKyQdPa: item.ngayKy,
-      tongSoLuong: item.tongSoLuong,
       soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD,
+      tongSoLuong: this.soLuong,
+      thanhTien: this.thanhTien,
+      donViTinh: this.donViTinh,
     })
   }
   async saveAndSend() {
-    let data = await this.createUpdate(this.formData.value);
-    this.saveSoQdPa();
-    if (data) {
-      await this.approve(data.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+    if (this.formData.value.id > 0) {
+      let data = this.formData.value;
+      this.saveSoQdPa();
+      if (data) {
+        await this.approve(data.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      let data = await this.createUpdate(this.formData.value);
+      this.saveSoQdPa();
+      if (data) {
+        await this.approve(data.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
     }
+
   }
 
   async save() {
