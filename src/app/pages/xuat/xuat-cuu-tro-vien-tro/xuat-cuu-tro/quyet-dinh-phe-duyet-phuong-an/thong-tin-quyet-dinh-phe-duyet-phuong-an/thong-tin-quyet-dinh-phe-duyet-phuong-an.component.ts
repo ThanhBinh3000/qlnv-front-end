@@ -215,7 +215,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           }
         }));
         //truong hop tao moi
-        this.firstInit = false;
         if (this.firstInit === false) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
@@ -234,8 +233,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           });
         }
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
-        this.deXuatSelected = listDeXuat[0];
-        await this.selectRow();
+        await this.selectRow(listDeXuat[0]);
         this.summaryData();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -279,8 +277,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         }
         console.log(this.formData.value, 'this.formData.value')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
-        this.deXuatSelected = listDeXuat[0];
-        await this.selectRow();
+        await this.selectRow(listDeXuat[0]);
         this.summaryData();
       } else {
         console.log(MESSAGE.ERROR, res.msg);
@@ -499,6 +496,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
     // this.deXuatPhuongAn = table
     let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
+    console.log(!quyetDinhPdDtlFormData,'quyetDinhPdDtlFormData11')
+    if (!quyetDinhPdDtlFormData) {
+      quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+    }
+
     quyetDinhPdDtlFormData.quyetDinhPdDx = table;
     this.buildTableView();
     this.tinhXuatCap();
