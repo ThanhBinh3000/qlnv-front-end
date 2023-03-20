@@ -184,6 +184,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.fileDinhKem = data.fileDinhKem;
       this.canCu = data.canCu;
       await this.buildTableView();
+    } else {
+      this.firstInit = false;
     }
     await this.spinner.hide();
   }
@@ -285,6 +287,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             quyetDinhPdDtl: listDeXuat
           });
         }
+        console.log(this.formData.value, 'this.formData.value')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.deXuatSelected = listDeXuat[0];
         await this.selectRow();
@@ -535,6 +538,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     });
     this.deXuatSelected.selected = true;
 
+    console.log(this.formData.value.quyetDinhPdDtl, 'this.formData.value.quyetDinhPdDtl');
     let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
     let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
     dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
