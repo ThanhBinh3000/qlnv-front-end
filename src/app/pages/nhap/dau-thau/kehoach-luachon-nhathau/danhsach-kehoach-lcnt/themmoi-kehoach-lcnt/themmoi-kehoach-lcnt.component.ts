@@ -136,6 +136,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       // donGiaDx: [],
       vat: ['5'],
       tongMucDt: [null, [Validators.required]],
+      tongMucDtDx: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
       dienGiai: [''],
       tgianNhang: [null, [Validators.required]],
@@ -379,11 +380,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           this.listOfData.push(res);
         }
         let tongMucDt: number = 0;
+        let tongMucDtDx: number = 0;
         this.listOfData.forEach((item) => {
           tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
+          tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
+          tongMucDtDx: tongMucDtDx,
         });
         console.log(this.listOfData);
       }
@@ -420,11 +424,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         this.listOfData = [...this.listOfData, res.value];
       }
       let tongMucDt: number = 0;
+      let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + item.soLuong * item.donGiaVat * 1000;
+        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx * 1000;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
+        tongMucDtDx: tongMucDtDx,
       });
       this.convertListData();
     });
