@@ -1,16 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { chain, cloneDeep } from 'lodash'
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { MESSAGE } from 'src/app/constants/message';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {
+  ThongTinDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {chain, cloneDeep} from 'lodash'
+import {
+  QuyetDinhPdKhBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import {MESSAGE} from 'src/app/constants/message';
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -41,7 +45,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     modal: NzModalService,
     private thongTinDauGiaService: ThongTinDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group({
@@ -173,7 +176,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       })
       this.dataTable = data.children;
       this.dataNguoiTgia = data.listNguoiTgia
-      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
+      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+        loai: key,
+        dataChild: value
+      })).value();
       this.convertDataTable();
     }
   }
@@ -190,7 +196,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   convertDataTable() {
     this.dataTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+        maDviTsan: key,
+        children: value
+      })).value();
       item.dataDviTsan = dataGroup;
       item.dataDviTsan.forEach(x => {
         x.soLanTraGia = x.children[0].soLanTraGia
@@ -256,11 +265,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     data.idVirtual = new Date().getTime();
 
     this.dataNguoiTgia.push(data)
-    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
+    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
   }
 
   findTableName(name) {
-    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({ loai }) => loai == name) : [];
+    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({loai}) => loai == name) : [];
     return data
   }
 
@@ -292,7 +304,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   deleteRow(idVirtual) {
     this.dataNguoiTgia = this.dataNguoiTgia.filter(item => item.idVirtual != idVirtual);
-    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
+    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
   }
 
   editRow(idVirtual) {
@@ -303,4 +318,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   }
 
+  changeNTG(index, indexLv2) {
+    let currentRow = this.dataTable[index].dataDviTsan[indexLv2];
+    if (currentRow.toChucCaNhan && (currentRow.soLanTraGia == null || currentRow.soLanTraGia == 0)) {
+      this.dataTable[index].dataDviTsan[indexLv2].soLanTraGia = 1
+    }
+  }
 }
