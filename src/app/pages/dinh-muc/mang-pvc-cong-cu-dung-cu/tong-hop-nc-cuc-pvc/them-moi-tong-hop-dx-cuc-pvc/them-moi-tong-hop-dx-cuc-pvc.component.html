@@ -16,18 +16,18 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="pheDuyet()"
-              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) ">
+              *ngIf=" !isView && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_THEM') ">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
               (click)="reject(id, STATUS.TU_CHOI_CBV)">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc())"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_THDEXUATCUC_DUYET')"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
