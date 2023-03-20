@@ -28,4 +28,19 @@ export class DxChiCucPvcService extends BaseService{
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getSlHienCo(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/so-luong-hien-co`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getSlNhapThem(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/so-luong-nhap-them`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getDinhMuc(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dinhmuc-mmtbcd-dtl-theo-ma`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
