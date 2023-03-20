@@ -15,7 +15,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
 import {KtKhXdHangNamService} from "../../../../../../services/kt-kh-xd-hang-nam.service";
 import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
+import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
 import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";

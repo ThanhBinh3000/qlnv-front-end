@@ -8,7 +8,7 @@ import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
+import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {UserLogin} from "../../../../../../models/userlogin";

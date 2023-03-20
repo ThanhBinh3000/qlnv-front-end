@@ -57,7 +57,7 @@
 
       <button
         *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDC && formData.value.trangThaiXh !== STATUS.HOAN_THANH_CAP_NHAT"
-        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
+        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
@@ -68,7 +68,7 @@
        </button>-->
       <button type="button" class="btn btn-main"
         *ngIf="(formData.value.trangThai === STATUS.DA_DUYET_LDC && formData.value.trangThaiXh !== STATUS.HOAN_THANH_CAP_NHAT)"
-        (click)="saveDdiemNhap(STATUS.DANG_CAP_NHAT)">
+        (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -104,8 +104,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm xuất
             </nz-form-label>
-            <nz-select formControlName="nam" [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO"
-              (ngModelChange)="loadDsQdPd()">
+            <nz-select formControlName="nam" [nzDisabled]="isView" (ngModelChange)="loadDsQdPd()">
               <nz-option *ngFor="let p of listNam" [nzLabel]="p.text" [nzValue]="p.value"></nz-option>
             </nz-select>
           </nz-form-item>
@@ -115,8 +114,8 @@
             <nz-form-label [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{userInfo.MA_QD}}">
-                <nz-input-number [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO" [nzMax]="999999999999"
-                  [nzMin]="1" [nzSize]="'small'" [nzStep]="1" formControlName="soQd">
+                <nz-input-number [nzDisabled]="isView" [nzMax]="999999999999" [nzMin]="1" [nzSize]="'small'"
+                  [nzStep]="1" formControlName="soQd">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -126,8 +125,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <nz-date-picker [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO" class="search__input"
-                formControlName="ngayKy" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="isView" class="search__input" formControlName="ngayKy"
+                nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -136,8 +135,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Căn cứ trên QĐ PD phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
-              <nz-select (ngModelChange)="changeQdPd($event)" [nzDisabled]="formData.value.trangThai !== STATUS.DU_THAO"
-                formControlName="idQdPd" nzAllowClear nzShowSearch>
+              <nz-select (ngModelChange)="changeQdPd($event)" [nzDisabled]="isView" formControlName="idQdPd"
+                nzAllowClear nzShowSearch>
                 <nz-option *ngFor="let p of dsQdPd" [nzLabel]="p.soQd" [nzValue]="p.id"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -184,8 +183,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <nz-date-picker [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO" class="search__input"
-                formControlName="thoiGianGiaoNhan" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="isView" class="search__input" formControlName="thoiGianGiaoNhan"
+                nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -194,7 +193,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <input [readOnly]="formData.value.trangThai!==STATUS.DU_THAO" formControlName="trichYeu" nz-input />
+              <input [readOnly]="isView" formControlName="trichYeu" nz-input />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -207,7 +206,7 @@
         </nz-form-item>
         <nz-form-item>
           <div class="list-file" nz-col nzSpan="24">
-            <file-list [data]="formData.value.canCu" [isViewDetail]="formData.value.trangThai!==STATUS.DU_THAO">
+            <file-list [data]="formData.value.canCu" [isViewDetail]="isView">
             </file-list>
           </div>
         </nz-form-item>
@@ -220,7 +219,7 @@
         </nz-form-item>
         <nz-form-item>
           <div class="list-file" nz-col nzSpan="24">
-            <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="formData.value.trangThai!==STATUS.DU_THAO">
+            <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
             </file-list>
           </div>
         </nz-form-item>
@@ -230,7 +229,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL viện trợ, cứu trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{formData.value.tongSoLuong}}</span>
+              <span>{{soLuong}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -238,7 +237,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thành Tiền</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{formData.value.tongSoLuong}}</span>
+              <span>{{thanhTien}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
