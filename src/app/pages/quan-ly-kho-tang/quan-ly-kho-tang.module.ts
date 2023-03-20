@@ -65,6 +65,7 @@ import {DanhMucScLonComponent} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-
 import {
   DanhMucScThuongXuyenComponent
 } from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-thuong-xuyen/danh-muc-sc-thuong-xuyen.component";
+import { ThongTinDmScLonComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component';
 
 
 @NgModule({
@@ -108,6 +109,7 @@ import {
     DmDuAnCongTrinhComponent,
     DanhMucScLonComponent,
     DanhMucScThuongXuyenComponent,
+    ThongTinDmScLonComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
