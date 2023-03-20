@@ -4,12 +4,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-quyetdinh-pheduyet-khmtt',
   templateUrl: './quyetdinh-pheduyet-khmtt.component.html',
@@ -65,5 +64,26 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.quyetDinhPheDuyetKeHoachMTTService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Danh-sach-quyet-dinh-phe-duyet-ke-hoach-mua-truc-tiep.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
 
 }

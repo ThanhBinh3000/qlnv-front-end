@@ -255,10 +255,10 @@
                 </nz-table>
 
                 <nz-table class="nowrap pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
-                    [nzShowPagination]="false" *ngIf="showFromTT">
+                    [nzShowPagination]="false" *ngIf="showFromTT && radioValue == formData.value.pthucBanTrucTiep">
                     <thead>
                         <tr>
-                            <th style="width: 2%;">STT</th>
+                            <th style=" width: 2%;">STT</th>
                             <th width="150px">Tên cá nhân/tổ chức</th>
                             <th width="100px">MST</th>
                             <th width="200px">Địa chỉ</th>

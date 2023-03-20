@@ -25,16 +25,17 @@
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <div class="header">
+  <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Biên bản lấy mẫu/bàn giao mẫu</span>
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThai }}
+        </span>
+        <span> BIÊN BẢN LẤY MÃU/BÀN GIAO MẪU </span>
       </div>
     </div>
   </div>
-
   <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
     nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
