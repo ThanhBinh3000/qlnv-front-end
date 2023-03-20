@@ -431,6 +431,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
+          console.log(data, "tấn");
           if (data.length > 0) {
             this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
             this.phuongAnRow.tenDonViTinh = data[0].tenDonViTinh;
@@ -460,6 +461,13 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         }
       }
     });
+    let res = await this.danhMucService.getDetail(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res, 555);
+      this.formData.patchValue({
+        donViTinh: res.data?.maDviTinh,
+      })
+    }
   }
 
   async save() {
@@ -547,7 +555,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       return '';
     }
   }
-  setValidForm(){
+  setValidForm() {
     this.formData.controls["nam"].setValidators([Validators.required]);
     this.formData.controls["soDx"].setValidators([Validators.required]);
     this.formData.controls["loaiNhapXuat"].setValidators([Validators.required]);
