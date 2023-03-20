@@ -511,7 +511,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       table = [...table, this.phuongAnRow]
     }
     // this.deXuatPhuongAn = table
-    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
+    if (!quyetDinhPdDtlFormData) {
+      quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+    }
     quyetDinhPdDtlFormData.quyetDinhPdDx = table;
     this.buildTableView();
     this.tinhXuatCap();
