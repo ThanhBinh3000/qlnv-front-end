@@ -1,14 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
+import { Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service';
@@ -18,14 +18,14 @@ import {
 import {
   TongHopPhuongAnCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service';
-import {STATUS} from 'src/app/constants/status';
+import { STATUS } from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {chain, cloneDeep} from 'lodash';
-import {v4 as uuidv4} from 'uuid';
-import {DonviService} from 'src/app/services/donvi.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { chain, cloneDeep } from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
+import { DonviService } from 'src/app/services/donvi.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -80,6 +80,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   expandSetString = new Set<string>();
   expandSetStringCache = new Set<string>();
   tongSoLuongDxuat = 0;
+  tongSlDx = 0;
+  soLuongXuatKho = 0;
   tongThanhTienDxuat = 0;
   phuongAnRow: any = {};
   dsDonVi: any;
@@ -90,6 +92,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   quyetDinhPdDtlCache: any[] = [];
   deXuatSelected: any = []
   firstInit = true;
+  canCu: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -105,38 +108,38 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
-        id: [0],
-        maDvi: [],
-        nam: [dayjs().get("year"), [Validators.required]],
-        soQd: [, [Validators.required]],
-        ngayKy: [, [Validators.required]],
-        ngayHluc: [, [Validators.required]],
-        idTongHop: [, [Validators.required]],
-        maTongHop: [, [Validators.required]],
-        ngayThop: [, [Validators.required]],
-        idDx: [, [Validators.required]],
-        soDx: [, [Validators.required]],
-        ngayDx: [, [Validators.required]],
-        tongSoLuongDx: [],
-        tongSoLuong: [],
-        soLuongXuaCap: [],
-        loaiVthh: [],
-        cloaiVthh: [],
-        loaiNhapXuat: [],
-        trichYeu: [],
-        trangThai: [STATUS.DU_THAO],
-        lyDoTuChoi: [],
-        type: ['TH', [Validators.required]],
-        xuatCap: [false],
-        ngayPduyet: [],
-        fileDinhKem: [FileDinhKem],
-        canCu: [new Array<FileDinhKem>()],
-        tenDvi: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
-        tenTrangThai: ['Dự thảo'],
-        quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      }
+      id: [0],
+      maDvi: [],
+      nam: [dayjs().get("year"), [Validators.required]],
+      soQd: [, [Validators.required]],
+      ngayKy: [, [Validators.required]],
+      ngayHluc: [, [Validators.required]],
+      idTongHop: [, [Validators.required]],
+      maTongHop: [, [Validators.required]],
+      ngayThop: [, [Validators.required]],
+      idDx: [, [Validators.required]],
+      soDx: [, [Validators.required]],
+      ngayDx: [, [Validators.required]],
+      tongSoLuongDx: [],
+      tongSoLuong: [],
+      soLuongXuaCap: [],
+      loaiVthh: [],
+      cloaiVthh: [],
+      loaiNhapXuat: [],
+      trichYeu: [],
+      trangThai: [STATUS.DU_THAO],
+      lyDoTuChoi: [],
+      type: ['TH', [Validators.required]],
+      xuatCap: [false],
+      ngayPduyet: [],
+      fileDinhKem: [FileDinhKem],
+      canCu: [new Array<FileDinhKem>()],
+      tenDvi: [],
+      tenLoaiVthh: [],
+      tenCloaiVthh: [],
+      tenTrangThai: ['Dự thảo'],
+      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+    }
     );
   }
 
@@ -179,6 +182,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         quyetDinhPdDtl: this.formData.value.quyetDinhPdDtl
       })
       this.fileDinhKem = data.fileDinhKem;
+      this.canCu = data.canCu;
       await this.buildTableView();
     }
     await this.spinner.hide();
@@ -207,7 +211,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         let listDeXuat = await Promise.all(data.deXuatCuuTro.map(async item => {
           let res1 = await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx);
           if (res1.msg === MESSAGE.SUCCESS) {
-            return Object.assign(item, {quyetDinhPdDx: res1.data.deXuatPhuongAn});
+            return Object.assign(item, { quyetDinhPdDx: res1.data.deXuatPhuongAn });
           } else {
             console.log(MESSAGE.ERROR, res1.msg);
           }
@@ -232,6 +236,12 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           });
         }
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
+        this.quyetDinhPdDtlCache.forEach(f => {
+          let tong = f.quyetDinhPdDx.reduce((tong, s) => {
+            return tong + s.soLuongXuat;
+          }, 0);
+          this.tongSlDx = tong;
+        })
         this.deXuatSelected = listDeXuat[0];
         await this.selectRow();
         this.summaryData();
@@ -256,7 +266,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           trichYeuDx: data.trichYeu,
           tongSoLuongDx: data.tongSoLuong,
           thanhTienDx: data.thanhTien
-        }, {quyetDinhPdDx: data.deXuatPhuongAn})];
+        }, { quyetDinhPdDx: data.deXuatPhuongAn })];
         //truong hop tao moi
         if (this.firstInit === false) {
           this.formData.patchValue({
@@ -295,6 +305,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
+    body.tongSoLuongDx = this.tongSlDx;
+    body.tongSoLuong = this.tongSoLuongDxuat;
+    body.canCu = this.canCu;
     body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
@@ -474,7 +487,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
 
   async selectHangHoa(event: any) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
@@ -495,7 +508,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       table = [...table, this.phuongAnRow]
     }
     // this.deXuatPhuongAn = table
-    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.id === this.deXuatSelected.id);
+    let quyetDinhPdDtlFormData = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
     quyetDinhPdDtlFormData.quyetDinhPdDx = table;
     this.buildTableView();
     this.tinhXuatCap();
@@ -540,59 +553,67 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              return {
-                idVirtual: uuidv4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            return {
+              idVirtual: uuidv4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              thanhTienCuc: thanhTienCuc,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        let thanhTien = rs.reduce((prev, cur) => prev + cur.thanhTienCuc, 0);
         return {
           idVirtual: uuidv4(),
           noiDung: key,
           soLuongXuat: soLuongXuat,
           soLuongXuatThucTe: soLuongXuatThucTe,
-          childData: rs
+          childData: rs,
+          thanhTien: thanhTien,
         };
       }).value();
     this.phuongAnViewCache = dataViewCache;
-    //
     let dataView = chain(this.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let rowCuc = v.find(s => s.tenCuc === k);
-              return {
-                idVirtual: uuidv4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
-                childData: v
-              }
+            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+            let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+            let rowCuc = v.find(s => s.tenCuc === k);
+            return {
+              idVirtual: uuidv4(),
+              tenCuc: k,
+              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              thanhTienCuc: thanhTienCuc,
+              childData: v
             }
+          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        let thanhTien = rs.reduce((prev, cur) => prev + cur.thanhTienCuc, 0);
         return {
           idVirtual: uuidv4(),
           noiDung: key,
           soLuongXuat: soLuongXuat,
           soLuongXuatThucTe: soLuongXuatThucTe,
-          childData: rs
+          childData: rs,
+          thanhTien: thanhTien,
         };
       }).value();
     this.phuongAnView = dataView;
+
     this.expandAll()
     if (this.deXuatPhuongAnCache.length !== 0) {
       this.listThanhTienCache = this.deXuatPhuongAnCache.map(s => s.thanhTien);

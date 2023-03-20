@@ -31,7 +31,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   listLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
     { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
     { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
@@ -39,9 +39,9 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   listTrangThaiXh: any[] = [
-    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
-    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
-    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' }
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
   ];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
