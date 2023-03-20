@@ -41,7 +41,7 @@ import {
   ThemMoiTongHopDxNhuCauComponent
 } from "./ke-hoach/ke-hoach-xay-dung-hang-nam/tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau.component";
 import { ThemMoiKhoComponent } from './mang-luoi-kho/them-moi-kho/them-moi-kho.component';
-import {DanhMucDuAnComponent} from "./ke-hoach/danh-muc-du-an/danh-muc-du-an.component";
+import {DanhMucDuAnComponent} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import {
     DeXuatKhScLonComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/de-xuat-kh-sc-lon.component";
@@ -60,8 +60,15 @@ import { TienDoXayDungSuaChuaComponent } from './tien-do-xay-dung-sua-chua/tien-
 import { TinhHinhSuDungComponent } from './tinh-hinh-su-dung/tinh-hinh-su-dung.component';
 import { TienDoDauTuXayDungComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-dau-tu-xay-dung.component';
 import { TienDoSuaChuaComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua/tien-do-sua-chua.component';
+import {DmDuAnCongTrinhComponent} from "./ke-hoach/dm-du-an-cong-trinh/dm-du-an-cong-trinh.component";
+import {DanhMucScLonComponent} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/danh-muc-sc-lon.component";
+import {
+  DanhMucScThuongXuyenComponent
+} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-thuong-xuyen/danh-muc-sc-thuong-xuyen.component";
+import { ThongTinDmScLonComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component';
 import { QuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/quyet-dinh-phe-duyet-du-an-dtxd.component';
 import { ThongTinQuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd.component';
+import { ThongTinDanhMucScThuongXuyenComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen.component';
 
 
 @NgModule({
@@ -102,8 +109,13 @@ import { ThongTinQuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-s
     TinhHinhSuDungComponent,
     TienDoDauTuXayDungComponent,
     TienDoSuaChuaComponent,
+    DmDuAnCongTrinhComponent,
+    DanhMucScLonComponent,
+    DanhMucScThuongXuyenComponent,
+    ThongTinDmScLonComponent,
     QuyetDinhPheDuyetDuAnDtxdComponent,
     ThongTinQuyetDinhPheDuyetDuAnDtxdComponent,
+    ThongTinDanhMucScThuongXuyenComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

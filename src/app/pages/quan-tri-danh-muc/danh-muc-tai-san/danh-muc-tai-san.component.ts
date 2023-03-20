@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {saveAs} from 'file-saver';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import { FormBuilder} from '@angular/forms';
 import {Router} from '@angular/router';
-import {DonviService} from 'src/app/services/donvi.service';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {HelperService} from 'src/app/services/helper.service';
@@ -12,11 +11,8 @@ import {DanhMucService} from "../../../services/danhmuc.service";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {UserLogin} from "../../../models/userlogin";
 import {cloneDeep} from 'lodash';
-import {Globals} from "../../../shared/globals";
 import {DanhMucTaiSanService} from "../../../services/danh-muc-tai-san.service";
 import {UserService} from "../../../services/user.service";
-import dayjs from "dayjs";
-import {DanhMucKho} from "../../quan-ly-kho-tang/ke-hoach/danh-muc-du-an/danh-muc-du-an.component";
 
 
 @Component({

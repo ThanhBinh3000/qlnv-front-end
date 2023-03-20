@@ -63,7 +63,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
   phanLoTaiSanList: Array<PhanLoTaiSan> = [];
   listChungLoaiHangHoa: any[] = [];
-  maDeXuat: string;
+  maHauTo: string;
   listLoaiHopDong: any[] = [];
   STATUS = STATUS;
   listLoaiHinhNhapXuat: any[] = [];
@@ -149,7 +149,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       }
     );
     this.userInfo = this.userService.getUserLogin();
-    this.maDeXuat = '/' + this.userInfo.MA_TCKT;
+    this.maHauTo = '/' + this.userInfo.MA_TCKT;
 
     // this.setTitle();
   }
@@ -216,6 +216,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       await this.deXuatPhuongAnCuuTroService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
+            this.maHauTo = res.data.soDx.split("/")[1];
+            res.data.soDx = res.data.soDx.split("/")[0];
             this.formData.patchValue(res.data);
             this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
             this.buildTableView();
@@ -472,6 +474,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async save() {
     this.setValidForm();
+    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     let result = await this.createUpdate(this.formData.value);
     if (result) {
       this.quayLai();
@@ -480,6 +483,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async saveAndSend() {
     this.setValidForm();
+    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
@@ -555,6 +559,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       return '';
     }
   }
+
   setValidForm() {
     this.formData.controls["nam"].setValidators([Validators.required]);
     this.formData.controls["soDx"].setValidators([Validators.required]);

@@ -267,7 +267,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   validateAddDiaDiem(dataAdd): boolean {
     let data = this.dataTable.filter(item => item.maDvi == dataAdd.maDvi);
     if (data.length > 0) {
-      this.notification.error(MESSAGE.ERROR, "Chi cục " + data[0].tenDvi + " đã tồn tại. Vui lòng thêm chi cục khác");
+      this.notification.error(MESSAGE.ERROR, data[0].tenDvi + " đã tồn tại. Vui lòng thêm chi cục khác");
       return false;
     }
     return true;

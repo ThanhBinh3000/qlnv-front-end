@@ -10,6 +10,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-danhsach-kehoach-muatructiep',
   templateUrl: './danhsach-kehoach-muatructiep.component.html',
@@ -123,6 +125,27 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
     await this.loadDsTong();
+  }
+
+
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.danhSachMuaTrucTiepService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Danh-sach-de-xuat-ke-hoach-mua-truc-tiep.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
 }

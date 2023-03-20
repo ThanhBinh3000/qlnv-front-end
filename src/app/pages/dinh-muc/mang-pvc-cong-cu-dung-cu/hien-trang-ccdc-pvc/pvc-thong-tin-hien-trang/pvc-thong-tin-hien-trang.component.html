@@ -206,7 +206,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2" *ngIf="userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_HTMMTBCD_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

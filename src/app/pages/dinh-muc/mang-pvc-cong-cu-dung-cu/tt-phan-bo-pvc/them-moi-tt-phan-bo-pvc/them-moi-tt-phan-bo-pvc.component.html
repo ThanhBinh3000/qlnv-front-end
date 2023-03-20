@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 ) && userService.isCuc()">
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 ) && userService.isCuc() && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_PHANBO_THEM')">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
       </button>

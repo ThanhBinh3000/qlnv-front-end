@@ -20,6 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class QuanLyHopDongBttComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
+  @Input() idQdPdKh: number;
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();

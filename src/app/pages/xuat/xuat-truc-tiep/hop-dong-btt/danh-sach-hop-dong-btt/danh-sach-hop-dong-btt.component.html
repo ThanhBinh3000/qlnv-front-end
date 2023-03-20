@@ -32,11 +32,11 @@
             </form>
 
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
-                <button nz-button class="search__button--search" (click)="search()">
+                <button nz-button class="search__button--search" (click)="timKiem()">
                     <i nz-icon nzType="search"></i>
                     Tìm kiếm
                 </button>
@@ -50,7 +50,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)"
+                <button type="button" class="btn btn-main" (click)="goDetail(null,null,null,false)"
                     *ngIf="!userService.isTongCuc()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm mới</span>
@@ -175,10 +175,10 @@
                         <td>{{ data.tenTrangThaiHd }}</td>
                         <td>{{ data.tenTrangThaiXh }}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
+                            <a (click)="goDetail(data.id,data.idPdKhHdr,null,true)" *ngIf="data.trangThai=='00'">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a (click)="goDetail(data.id,null,true)">
+                            <a (click)="goDetail(data.id,data.idPdKhHdr,null,true)">
                                 <i class="fa fa-eye"></i>
                             </a>
                         </td>
@@ -205,8 +205,10 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+    <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [id]="idSelected" [idQdPdKh]="idQdPdKh" (showListEvent)="showList()"
+        [loaiVthh]="loaiVthh">
     </app-thong-tin-hop-dong-btt>
-    <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+    <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [id]="idSelected" [idQdPdKh]="idQdPdKh" (showListEvent)="showList()"
+        [loaiVthh]="loaiVthh">
     </app-quan-ly-hop-dong-btt>
 </ng-container>

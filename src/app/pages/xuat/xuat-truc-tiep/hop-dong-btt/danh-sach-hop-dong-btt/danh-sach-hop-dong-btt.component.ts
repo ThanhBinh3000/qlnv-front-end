@@ -17,6 +17,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
+  idQdPdKh: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -35,6 +36,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       trangThai: '',
       loaiVthh: '',
       maDvi: '',
+      maChiCuc: '',
     });
     this.filterTable = {
       namKh: '',
@@ -53,11 +55,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      })
-      await this.search();
+      this.timKiem();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -66,11 +64,32 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
+  goDetail(id: number, idPdKhHdr: number, roles?: any, isQuanLy?: boolean) {
     this.idSelected = id;
+    this.idQdPdKh = idPdKhHdr;
     this.isDetail = true;
     this.isQuanLy = isQuanLy;
     this.isAddNew = !isQuanLy;
   }
 
+
+  async timKiem() {
+    if (this.userService.isCuc() || this.userService.isTongCuc()) {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      })
+    } else {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      })
+    }
+    await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+  }
 }
