@@ -5,12 +5,9 @@ import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {MmHienTrangMmService} from "../../../../../../services/mm-hien-trang-mm.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {DonviService} from "../../../../../../services/donvi.service";
-import {saveAs} from "file-saver";
 import {Validators} from "@angular/forms";
 import {
   DanhMucSuaChuaService
@@ -18,11 +15,11 @@ import {
 import dayjs from "dayjs";
 
 @Component({
-  selector: 'app-thong-tin-dm-sc-lon',
-  templateUrl: './thong-tin-dm-sc-lon.component.html',
-  styleUrls: ['./thong-tin-dm-sc-lon.component.scss']
+  selector: 'app-thong-tin-danh-muc-sc-thuong-xuyen',
+  templateUrl: './thong-tin-danh-muc-sc-thuong-xuyen.component.html',
+  styleUrls: ['./thong-tin-danh-muc-sc-thuong-xuyen.component.scss']
 })
-export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
+export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
   dataDetail: any
   dsKho: any[] = [];
@@ -52,16 +49,13 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       tenCongTrinh: [null, Validators.required],
       maDiemKho: [null, Validators.required],
       tgThucHien: [null, Validators.required],
-      tgHoanThanh: [null, Validators.required],
-      tieuChuan: [null],
       lyDo: [null],
-      tgSuaChua: [null],
       duToan: [null, Validators.required],
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
       trangThai: [null],
-      type: ["00"],
+      type: ["01"],
     });
   }
 
@@ -88,7 +82,6 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.listFileDinhKems;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -116,7 +109,6 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
     let body = this.formData.value
     body.maDvi = this.userInfo.MA_DVI
     body.tgThucHien = body.tgThucHien ? dayjs(body.tgThucHien).get('year') : null
-    body.tgHoanThanh = body.tgHoanThanh ? dayjs(body.tgHoanThanh).get('year') : null
     let res = await this.createUpdate(body);
     if (res) {
       this._modalRef.close(data);

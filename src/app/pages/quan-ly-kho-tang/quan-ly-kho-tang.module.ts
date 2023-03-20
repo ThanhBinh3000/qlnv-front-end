@@ -68,6 +68,7 @@ import {
 import { ThongTinDmScLonComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component';
 import { QuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/quyet-dinh-phe-duyet-du-an-dtxd.component';
 import { ThongTinQuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd.component';
+import { ThongTinDanhMucScThuongXuyenComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen.component';
 
 
 @NgModule({
@@ -114,6 +115,7 @@ import { ThongTinQuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-s
     ThongTinDmScLonComponent,
     QuyetDinhPheDuyetDuAnDtxdComponent,
     ThongTinQuyetDinhPheDuyetDuAnDtxdComponent,
+    ThongTinDanhMucScThuongXuyenComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
