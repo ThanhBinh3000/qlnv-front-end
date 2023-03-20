@@ -187,13 +187,17 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a *ngIf="(userService.isTongCuc() || data.trangThai != STATUS.DU_THAO) && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XEM')"
+              <a *ngIf="(userService.isTongCuc() || data.trangThai == STATUS.BAN_HANH) && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XEM')"
                 (click)="redirectToChiTiet(data.id,false)">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO  ||data.trangThai == STATUS.TU_CHOI_TP ||data.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc()
               && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM')" (click)="redirectToChiTiet(data.id,true)">
                 <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_TP ||data.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc()
+              && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM')" (click)="redirectToChiTiet(data.id,true)">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()
               && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XOA')" (click)="delete(data)">
