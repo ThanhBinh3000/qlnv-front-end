@@ -13,14 +13,14 @@ import {UserLogin} from 'src/app/models/userlogin';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {DanhMucKhoService} from "../../../../services/danh-muc-kho.service";
-import {STATUS} from "../../../../constants/status";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {DanhMucKhoService} from "../../../../../services/danh-muc-kho.service";
+import {STATUS} from "../../../../../constants/status";
 import {
   DialogDanhMucKhoComponent
-} from "../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
-import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
-import {DonviService} from "../../../../services/donvi.service";
+} from "../../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-danh-muc-du-an',
