@@ -462,25 +462,29 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   validateItemSave(dataSave, index?): boolean {
     if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
-      if (dataSave.trangThai == STATUS.TRUNG_THAU) {
-        let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
-        if (filter.length > 0) {
-          if (index) {
-            let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
-            if (index != indexFilter) {
+      if (dataSave.donGia <= this.formData.get('donGiaVat').value) {
+        if (dataSave.trangThai == STATUS.TRUNG_THAU) {
+          let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
+          if (filter.length > 0) {
+            if (index) {
+              let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
+              if (index != indexFilter) {
+                this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
+                return false
+              }
+              return true
+            } else {
               this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
               return false
             }
-            return true
-          } else {
-            this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
-            return false
-          }
 
+          }
         }
         return true;
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Đơn giá nhà thầu không được lớn hơn đơn giá VAT")
+        return false
       }
-      return true;
     } else {
       this.notification.error(MESSAGE.ERROR, "Xin vui lòng điền đủ thông tin");
       return false;

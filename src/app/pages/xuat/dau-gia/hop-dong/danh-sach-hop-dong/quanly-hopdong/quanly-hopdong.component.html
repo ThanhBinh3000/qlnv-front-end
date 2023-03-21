@@ -46,7 +46,7 @@
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH BDG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="soQdPd" readonly />
                                     </nz-form-control>
@@ -54,7 +54,7 @@
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ BDG </nz-form-label>
                                     <nz-form-control>
                                         <input nz-input formControlName="soQdKq" readonly />
                                     </nz-form-control>
@@ -72,6 +72,15 @@
                     </div>
                     <div nz-col nzSpan="8">
                         <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Loại hợp đồng
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="loaiHd" readonly />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng số DVT tài sản
@@ -161,7 +170,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span></span>
-                        <span>Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
+                        <span>Danh sách hợp đồng</span>
                     </div>
                 </div>
                 <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH">
@@ -179,9 +188,9 @@
                             <th>Số hợp đồng</th>
                             <th>Tên hợp đồng</th>
                             <th>Ngày ký hợp đồng</th>
-                            <th>Số lượng</th>
-                            <th>Thành tiền</th>
-                            <th>Số QĐ giao NV NH</th>
+                            <th>Số lượng(kg)</th>
+                            <th>Thành tiền(đ)</th>
+                            <th>Số QĐ giao NV XH</th>
                             <th>Trạng thái HĐ</th>
                             <th>Hành động</th>
                         </tr>

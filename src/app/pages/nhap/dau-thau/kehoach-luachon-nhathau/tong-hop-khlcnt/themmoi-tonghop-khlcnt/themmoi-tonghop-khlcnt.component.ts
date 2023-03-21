@@ -27,6 +27,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -91,6 +93,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.loadDataComboBox(),
         this.loadChiTiet(),
       ]);
+      console.log(this.isViewOnModal)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

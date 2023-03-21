@@ -43,7 +43,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   options = {
     allowZero: true,
     allowNegative: true,
-    precision: 0,
+    precision: 1,
     prefix: '',
     thousands: '.',
     decimal: ',',
