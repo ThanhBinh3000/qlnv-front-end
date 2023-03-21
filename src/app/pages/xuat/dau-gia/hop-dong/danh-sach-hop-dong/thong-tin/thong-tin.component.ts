@@ -238,14 +238,14 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     }
     this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin Kết quả lựa chọn nhà thầu',
+      nzTitle: 'Thông tin Quyết định phê duyệt kết quả bán đấu giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số QĐ kết quả', 'Số biên bản', 'Mã thông báo'],
+        dataHeader: ['Số QĐ PDKQ BĐG', 'Số biên bản', 'Mã thông báo'],
         dataColumn: ['soQdKq', 'soBienBan', 'maThongBao'],
         dataTable: listQdKq
       },
