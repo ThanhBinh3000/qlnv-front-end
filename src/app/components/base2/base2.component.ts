@@ -1,23 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { UserLogin } from 'src/app/models/userlogin';
-import { BaseService } from 'src/app/services/base.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {UserLogin} from 'src/app/models/userlogin';
+import {BaseService} from 'src/app/services/base.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-base2',
@@ -92,7 +92,7 @@ export class Base2Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    this.spinner.show();
+    await this.spinner.show();
     try {
       let body = this.formData.value
       body.paggingReq = {
@@ -115,12 +115,10 @@ export class Base2Component implements OnInit {
         this.totalRecord = 0;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.spinner.hide();
     } catch (e) {
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -193,7 +191,7 @@ export class Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy','ngayGiaoNhan','ngayHieuLuc','ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -299,7 +297,7 @@ export class Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.service.deleteMuti({ idList: dataDelete });
+            let res = await this.service.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -321,14 +319,14 @@ export class Base2Component implements OnInit {
   }
 
   // Export data
-  exportData() {
+  exportData(fileName?: string) {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         this.service
           .export(this.formData.value)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
