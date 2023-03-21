@@ -148,17 +148,17 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired> Đơn vị kiểm nghiệm</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="dviKnghiem" />
+                <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị kiểm nghiệm </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <input placeholder="" nz-input formControlName="dviKnghiem" [readonly]="isDisabled()" />
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>Địa điểm lấy mẫu</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="ddiemLayMau" />
+                <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm lấy mẫu </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <input placeholder="" nz-input formControlName="ddiemLayMau" [readonly]="isDisabled()" />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -338,7 +338,7 @@
                   Phương pháp lấy mẫu
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="ppLayMau">
+                  <nz-select formControlName="ppLayMau" [nzDisabled]="isDisabled()">
                     <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                     </nz-option>
                   </nz-select>
@@ -347,11 +347,9 @@
             </div>
             <div nz-col [nzSpan]="8">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzRequired>
-                  Các chỉ tiêu cần kiểm tra
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <input nz-input formControlName="chiTieuKiemTra" />
+                <nz-form-label nzRequired [nzNoColon]="true"> Các chỉ tiêu cần kiểm tra </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                  <input placeholder="" nz-input formControlName="chiTieuKiemTra" [readonly]="isDisabled()" />
                 </nz-form-control>
               </nz-form-item>
             </div>

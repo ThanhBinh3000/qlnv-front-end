@@ -276,7 +276,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               pthucBanTrucTiep: dataKq.pthucBanTrucTiep,
               trichYeu: dataKq.trichYeu,
               dviTinh: "kg",
-              tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
+              tongSoLuongQdKh: dataThongTin.tongSoLuong
             });
           }
         })
