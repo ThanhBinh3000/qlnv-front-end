@@ -32,6 +32,7 @@ export enum PATH {
   KQUA_BTT = "kq-btt",
   BK_BAN_LE = "bk-ban-le",
   HO_SO_KY_THUAT = "ho-so-ky-thuat",
+  PHIEU_XUAT_KHO = "phieu-xuat-kho",
 
 
   NHAP_HANG = "nhap-hang",
