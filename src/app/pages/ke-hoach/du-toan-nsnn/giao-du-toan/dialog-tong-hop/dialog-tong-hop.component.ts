@@ -76,7 +76,7 @@ export class DialogTongHopComponent implements OnInit {
       namPa: this.response.namHienTai
     }
     this.spinner.show();
-    await this.giaoDuToanChiService.tongHopGiaoDuToan1(request).toPromise().then(
+    await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           console.log(data);
