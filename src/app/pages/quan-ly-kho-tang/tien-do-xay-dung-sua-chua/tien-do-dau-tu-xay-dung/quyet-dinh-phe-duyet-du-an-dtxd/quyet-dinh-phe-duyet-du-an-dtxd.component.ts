@@ -19,7 +19,10 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

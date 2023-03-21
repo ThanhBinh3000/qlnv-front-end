@@ -131,7 +131,7 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Mã DVTS </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="maDviTsan" [readonly]="true" />
+                                    <input nz-input formControlName="listMaDviTsan" [readonly]="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -198,13 +198,24 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'QDDX'">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Thời gian giao nhận </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-date-picker formControlName="tgianGnhan" nzFormat="dd/MM/yyyy"
                                         [nzDisabled]="true">
                                     </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'HD'">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian giao nhận
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy"
+                                        [nzDisabled]="true">
+                                    </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -264,7 +275,6 @@
                             <th>Ngăn kho</th>
                             <th>Lô kho</th>
                             <th>Số lượng xuất</th>
-                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,7 +288,6 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{ data.soLuong }}</td>
-                                <td>{{ data.tenTrangThai }}</td>
                             </tr>
                             <ng-container *ngIf="expandSet.has(i)">
                                 <tr *ngFor="let children of data.children">
@@ -289,7 +298,6 @@
                                     <td>{{ children.tenNganKho }}</td>
                                     <td>{{ children.tenLoKho }}</td>
                                     <td>{{ children.soLuong }}</td>
-                                    <td></td>
                                 </tr>
                             </ng-container>
                         </ng-container>

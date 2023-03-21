@@ -407,10 +407,10 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
+                <nz-input-number class="text-right" nz-input formControlName="tongMucDtDx" [nzSize]="'small'"
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
@@ -419,7 +419,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"

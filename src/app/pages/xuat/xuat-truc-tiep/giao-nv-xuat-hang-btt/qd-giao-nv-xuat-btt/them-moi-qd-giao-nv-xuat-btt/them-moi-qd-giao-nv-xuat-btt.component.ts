@@ -31,7 +31,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   dataInput: any;
   dataInputCache: any;
   radioValue: string = 'HD';
-
+  listDviTsan: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -67,13 +67,18 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       soLuong: [],
       donViTinh: [''],
       tgianGnhan: [''],
+      thoiGianDuKien: [''],
+      tgianGnhanTu: [],
+      tgianGnhanDen: [],
       trichYeu: [''],
       trangThaiXh: [''],
       tenTrangThaiXh: [''],
       phanLoai: [''],
+      idQdKqCg: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       fileName: [],
+      listMaDviTsan: [],
       lyDoTuChoi: []
     })
   }
@@ -126,7 +131,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     await this.hopDongBttService.search({
       trangThai: STATUS.DA_KY,
       maDvi: this.formData.value.maDvi,
-      namKH: this.formData.value.namKH
+      namKH: this.formData.value.namKh
     }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -168,7 +173,9 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
                 moTaHangHoa: data.moTaHangHoa,
                 soLuong: data.soLuong,
                 donViTinh: data.dviTinh,
-                tgianGnhan: data.tgianGnhan,
+                tgianGnhanTu: data.tgianGnhanTu,
+                tgianGnhanDen: data.tgianGnhanDen,
+                thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null,
                 trichYeu: data.trichYeu,
                 tenTtcn: data.tenDviMua
               })
@@ -215,36 +222,51 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
+
+
       if (data) {
-        await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(data.idPdKhDtl).then(res => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            if (res.data) {
-              const data = res.data;
-              this.formData.patchValue({
-                soQdPd: data.xhQdPdKhBttHdr.soQdPd,
-                idQdPdKh: data.xhQdPdKhBttHdr.id,
-                maDviTsan: data.maDviTsan,
-                loaiVthh: data.loaiVthh,
-                tenLoaiVthh: data.tenLoaiVthh,
-                cloaiVthh: data.cloaiVthh,
-                tenCloaiVthh: data.tenCloaiVthh,
-                moTaHangHoa: data.xhQdPdKhBttHdr.moTaHangHoa,
-                soLuong: data.tongSoLuong * 1000,
-                donViTinh: 'Kg',
-                tgianGnhan: data.tgianGnhan,
-                trichYeu: data.xhQdPdKhBttHdr.trichYeu,
-              })
-              this.dataTable = data.children;
+        await this.qdPdKetQuaBttService.getDetail(data.id).then(async (resKq) => {
+          const dataKq = resKq.data;
+          await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataKq.idPdKhDtl).then(res => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              if (res.data) {
+                const data = res.data;
+                this.formData.patchValue({
+                  idQdKqCg: dataKq.id,
+                  soQdPd: data.xhQdPdKhBttHdr.soQdPd,
+                  idQdPdKh: data.xhQdPdKhBttHdr.id,
+                  maDviTsan: data.maDviTsan,
+                  loaiVthh: data.loaiVthh,
+                  tenLoaiVthh: data.tenLoaiVthh,
+                  cloaiVthh: data.cloaiVthh,
+                  tenCloaiVthh: data.tenCloaiVthh,
+                  moTaHangHoa: data.xhQdPdKhBttHdr.moTaHangHoa,
+                  soLuong: data.tongSoLuong,
+                  donViTinh: 'Kg',
+                  tgianGnhan: data.tgianGnhan,
+                  trichYeu: data.xhQdPdKhBttHdr.trichYeu,
+                })
+                this.dataTable = data.children;
+                this.setListDviTsan(data.children);
+              }
             }
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
+          })
         })
       }
     });
   }
 
+  setListDviTsan(inputTable) {
+    this.listDviTsan = [];
+    inputTable.forEach((item) => {
+      item.children.forEach(s => {
+        this.listDviTsan.push(s.maDviTsan)
+        this.formData.patchValue({
+          listMaDviTsan: this.listDviTsan,
+        })
+      })
+    })
+  }
 
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet);
@@ -310,7 +332,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     if (id > 0) {
       let data = await this.detail(id);
       this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0]
+        soQd: data.soQd?.split('/')[0],
+        thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
       })
       this.dataTable = data.children;
       this.fileDinhKem = data.fileDinhKems;

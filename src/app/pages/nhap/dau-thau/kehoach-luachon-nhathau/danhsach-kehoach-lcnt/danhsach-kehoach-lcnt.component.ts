@@ -59,6 +59,22 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     tenTrangThai: '',
   };
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' }
+  ];
+
+  listTrangThaiVt: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+  ];
+
   dataTableAll: any[] = [];
   listVthh: any[] = [];
   dataTable: any[] = [];
@@ -69,6 +85,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   selectedId: number = 0;
   allChecked = false;
   indeterminate = false;
+  openQdPdKhlcnt = false;
+  qdPdKhlcntId: number = 0;
+  openTh = false;
+  thId: number = 0;
   tuNgayKy: Date | null = null;
   denNgayKy: Date | null = null;
   tuNgayTao: Date | null = null;
@@ -445,7 +465,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value != '') {
+    if (value !=null && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
@@ -475,4 +495,22 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       tenTrangThai: '',
     }
   }
+  openQdPdKhlcntModal(id:number) {
+    this.qdPdKhlcntId = id;
+    this.openQdPdKhlcnt = true;
+  }
+  closeQdPdKhlcntModal() {
+    this.qdPdKhlcntId = null;
+    this.openQdPdKhlcnt = false;
+  }
+
+  openModalTh (id: number) {
+    this.thId = id;
+    this.openTh = true;
+  }
+  closeModalTh () {
+    this.thId = null;
+    this.openTh = false;
+  }
+
 }

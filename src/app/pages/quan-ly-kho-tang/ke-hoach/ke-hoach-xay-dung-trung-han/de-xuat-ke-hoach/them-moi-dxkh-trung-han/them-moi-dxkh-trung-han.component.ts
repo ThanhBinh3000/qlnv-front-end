@@ -17,7 +17,7 @@ import {DxXdTrungHanService} from "../../../../../../services/dx-xd-trung-han.se
 import {STATUS} from "../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
-import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
+import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 
 @Component({
   selector: 'app-them-moi-dxkh-trung-han',

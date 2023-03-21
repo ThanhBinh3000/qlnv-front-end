@@ -5,3 +5,7 @@
 .cus-end-date.ant-col {
   padding-left: 0 !important;
 }
+
+::ng-deep .ant-modal-body {
+  overflow: scroll;
+}

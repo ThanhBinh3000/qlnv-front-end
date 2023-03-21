@@ -15,18 +15,18 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-              *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc()">
+              *ngIf="(id && id > 0) && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC)  && userService.isChiCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_THEM')">
         <i class="icon htvbdh_trinh"></i>
         <span>Đã ký</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
               (click)="reject(id, STATUS.TUCHOI_CB_CUC)">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.DA_KY && userService.isCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.DA_KY && userService.isCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_DEXUATCC_DUYETCBCUC')"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>

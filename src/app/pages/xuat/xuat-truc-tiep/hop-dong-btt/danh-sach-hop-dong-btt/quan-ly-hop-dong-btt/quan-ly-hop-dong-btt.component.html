@@ -5,8 +5,8 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && userService.isCuc() " type="button"
-                class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && !userService.isTongCuc() "
+                type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
             </button>
@@ -213,8 +213,13 @@
                             <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{data.tenDviMua }}</td>
                             <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{data.soLuong * data.donGiaGomThue | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td *ngIf="!userService.isChiCuc()">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td *ngIf="userService.isChiCuc()">{{data.donGiaKhongVat | number : '1.0-1' : 'vi_VN' }}
+                            </td>
+                            <td *ngIf="!userService.isChiCuc()">{{data.soLuong * data.donGiaGomThue | number : '1.0-1' :
+                                'vi_VN' }}</td>
+                            <td *ngIf="userService.isChiCuc()">{{data.soLuong * data.donGiaKhongVat | number : '1.0-1' :
+                                'vi_VN' }}</td>
                             <td>{{data.tenTrangThai}}</td>
                             <td>{{data.soQd}}</td>
                             <td>{{data.tenTrangThaiXh}}</td>
@@ -222,11 +227,11 @@
                                 <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
                                     (click)="redirectHopDong(true,data.id) ">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                <a *ngIf="data.trangThai == STATUS.DU_THAO && !userService.isTongCuc()"
                                     (click)="deleteHd(data)">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
@@ -235,14 +240,14 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <app-thong-tin-hop-dong-btt [idKqBtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
-                [isQuanLy]="true">
+            <app-thong-tin-hop-dong-btt [idKqBtt]="id" [idQdPdKh]="idQdPdKh" [loaiVthh]="loaiVthh" *ngIf="idHopDong"
+                [id]="idHopDong" [isQuanLy]="true">
             </app-thong-tin-hop-dong-btt>
         </nz-card>
     </div>
 </ng-container>
 <ng-template #tempHopDong>
-    <app-thong-tin-hop-dong-btt [idKqBtt]="id" [id]="idHopDong" [loaiVthh]="loaiVthh"
+    <app-thong-tin-hop-dong-btt [idKqBtt]="id" [idQdPdKh]="idQdPdKh" [id]="idHopDong" [loaiVthh]="loaiVthh"
         (showListEvent)="redirectHopDong(false,null)">
     </app-thong-tin-hop-dong-btt>
 </ng-template>
