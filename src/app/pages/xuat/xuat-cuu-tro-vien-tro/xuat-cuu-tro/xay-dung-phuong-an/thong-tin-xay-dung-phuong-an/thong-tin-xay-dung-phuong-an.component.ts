@@ -473,7 +473,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async save() {
-    this.setValidForm();
     this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     let result = await this.createUpdate(this.formData.value);
     if (result) {
