@@ -98,6 +98,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       //   ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
       //   : null,
       loaiVthh: this.loaiVthh,
+      cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value,
       tenVthh: this.formData.get('tenVthh').value,
       tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
