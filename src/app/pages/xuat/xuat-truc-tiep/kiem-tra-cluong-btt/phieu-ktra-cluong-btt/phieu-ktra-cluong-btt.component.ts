@@ -34,7 +34,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
       loaiVthh: null,
       trichYeu: null,
       ngayTao: null,
-      maChiCuc: null,
+      maDvi: null,
       trangThai: this.STATUS.BAN_HANH
     })
 
@@ -58,7 +58,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
     } catch (e) {

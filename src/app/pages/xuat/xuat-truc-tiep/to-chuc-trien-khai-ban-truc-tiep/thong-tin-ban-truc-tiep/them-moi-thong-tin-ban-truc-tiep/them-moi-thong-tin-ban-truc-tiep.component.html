@@ -251,7 +251,7 @@
                                 <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="rowItem.thueGtgt"
                                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                             </th>
-                            <th>{{ rowItem.soLuong * rowItem.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
+                            <th>{{ rowItem.soLuong * rowItem.donGia| number : '1.0-1' : 'vi_VN' }}</th>
                             <th>
                                 <nz-form-control>
                                     <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
@@ -290,7 +290,7 @@
                                 <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.thueGtgt }}</td>
-                                <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.fileDinhKems?.fileName }}</td>
                                 <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
                                 <td>
@@ -345,7 +345,7 @@
                                         [(ngModel)]="dataEdit[idx].data.thueGtgt" [nzFormatter]="globals.formatter"
                                         [nzParser]="globals.parser"></nz-input-number>
                                 </td>
-                                <td>{{ dataEdit[idx].data.soLuong * dataEdit[idx].data.donGia * 1000 | number : '1.0-1'
+                                <td>{{ dataEdit[idx].data.soLuong * dataEdit[idx].data.donGia | number : '1.0-1'
                                     :
                                     'vi_VN'
                                     }}</td>

@@ -16,10 +16,14 @@
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="3">
-                        <label>Số kế hoạch/tờ trình</label>
+                        <label>Số kế hoạch/đề xuất</label>
                         <input placeholder="" nz-input formControlName="soDxuat" />
                     </div>
-                    <div nz-col nzSpan="4">
+                    <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
+                        <label>Ngày Tạo kế hoạch</label>
+                        <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    </div>
+                    <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
                         <label>Ngày lập kế hoạch</label>
                         <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
@@ -65,7 +69,7 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>

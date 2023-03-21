@@ -29,6 +29,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() idKqBtt: number;
+  @Input() idQdPdKh: number;
   @Input() isQuanLy: boolean;
 
   @Output()
@@ -62,12 +63,13 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         id: [],
         idQdKq: [],
         namHd: [dayjs().get('year')],
-        soQdKq: ['', [Validators.required]],
+        soQdKq: [''],
         ngayKyQdKq: [''],
+        ngayKyQdPd: [''],
         ngayMkho: [''],
         soQdPd: [''],
         maDviTsan: [''],
-        idDviMua: [null, [Validators.required]],
+        idDviMua: [],
 
 
         soHd: ['', [Validators.required]],
@@ -121,10 +123,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         tongSoLuongQdKhChuaky: [],
         donGia: [],
         donGiaGomThue: [],
+        donGiaKhongVat: [],
+        slUyQuyenChiCucKh: [],
+        pthucBanTrucTiep: [''],
         trangThai: STATUS.DU_THAO,
         tenTrangThai: ['Dự thảo'],
         fileName: [],
-        listMaDviTsan: []
+        listMaDviTsan: [],
+        trichYeu: [],
       }
     );
   }
@@ -135,8 +141,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     await Promise.all([
       this.loadDataComboBox()
     ]);
-    if (this.idKqBtt) {
-      this.onChangeKqBTT(this.idKqBtt);
+    if (this.userService.isChiCuc()) {
+      if (this.idKqBtt) {
+        this.onChangeQdPdBtt(this.idKqBtt);
+      }
+    } else {
+      if (this.idKqBtt) {
+        this.onChangeKqBTT(this.idKqBtt);
+      }
     }
     if (this.id) {
       await this.loadChiTiet(this.id);
@@ -211,6 +223,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       let body = {
         loaiVthh: this.loaiVthh,
         namKh: this.formData.value.namHd,
+        pthucBanTrucTiep: "Chào giá",
         maDvi: this.userInfo.MA_DVI
       };
 
@@ -227,38 +240,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-          dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
-          dataTable: listQdKq
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.onChangeKqBTT(data.id);
-        }
-      });
-    } else {
-      let body = {
-        loaiVthh: this.loaiVthh,
-        namKh: this.formData.value.namHd,
-        maChiCuc: this.userInfo.MA_DVI
-      };
-
-      let res = await this.qdPdKetQuaBttService.search(body)
-      if (res.data) {
-        listQdKq = res.data?.content;
-      }
-      this.spinner.hide();
-      const modalQD = this.modal.create({
-        nzTitle: 'Thông tin Kết quả chào giá',
-        nzContent: DialogTableSelectionComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataHeader: ['Số QĐ kết quả chào giá', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-          dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
+          dataHeader: ['Số QĐ kết quả chào giá', 'Phương thức bán trực tiếp', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+          dataColumn: ['soQdKq', 'pthucBanTrucTiep', 'tenLoaiVthh', 'tenCloaiVthh'],
           dataTable: listQdKq
         },
       });
@@ -290,6 +273,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
+              pthucBanTrucTiep: dataKq.pthucBanTrucTiep,
+              trichYeu: dataKq.trichYeu,
               dviTinh: "kg",
               tongSoLuongQdKh: dataThongTin.tongSoLuong * 1000
             });
@@ -298,7 +283,69 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
+  async openDialogQdPdKhBtt() {
+    if (this.userService.isChiCuc()) {
+      this.spinner.show()
+      let listQdKh: any[] = [];
+      let body = {
+        loaiVthh: this.loaiVthh,
+        namKh: this.formData.value.namHd,
+        maChiCuc: this.userInfo.MA_DVI,
+      };
+      let res = await this.qdPdKetQuaBttService.search(body)
+      if (res.data) {
+        listQdKh = res.data?.content;
+      }
+      this.spinner.hide();
+      const modalQD = this.modal.create({
+        nzTitle: 'Thông tin Kết quả chào giá',
+        nzContent: DialogTableSelectionComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataHeader: ['Số QĐ phê duyệt Kh bán trục tiếp', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+          dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh'],
+          dataTable: listQdKh
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.onChangeQdPdBtt(data.id);
+        }
+      });
+    }
+  }
 
+  async onChangeQdPdBtt(id) {
+    if (id > 0) {
+      await this.qdPdKetQuaBttService.getDetail(id)
+        .then(async (resKq) => {
+          const dataKq = resKq.data;
+          let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataKq.idPdKhHdr);
+          if (resKq.data) {
+            const dataQdKh = resTtin.data;
+            this.setListDviTsan(dataQdKh.children);
+            this.formData.patchValue({
+              idQdKq: dataKq.id,
+              soQdKq: dataKq.soQdKq,
+              soQdPd: dataQdKh.soQdPd,
+              ngayKyQdPd: dataQdKh.ngayPduyet,
+              ngayMkho: dataQdKh.ngayHluc,
+              loaiVthh: dataQdKh.loaiVthh,
+              tenLoaiVthh: dataQdKh.tenLoaiVthh,
+              cloaiVthh: dataQdKh.cloaiVthh,
+              tenCloaiVthh: dataQdKh.tenCloaiVthh,
+              moTaHangHoa: dataQdKh.moTaHangHoa,
+              pthucBanTrucTiep: dataQdKh.pthucBanTrucTiep,
+              trichYeu: dataQdKh.trichYeu,
+              dviTinh: "kg",
+            });
+          }
+        })
+    }
+  }
 
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
@@ -411,21 +458,55 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
 
   setListDviTsan(inputTable) {
-    this.listDviTsan = [];
-    inputTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
-      item.dataDviTsan = dataGroup;
-      item.dataDviTsan.forEach(x => {
-        if (x.maDviTsan) {
-          x.tenDvi = item.tenDvi
-          x.maDvi = item.maDvi
-          x.soLuong = item.soLuong
-          x.diaChi = item.diaChi
-          x.donGiaVat = item.donGiaVat
-          this.listDviTsan = [...this.listDviTsan, x];
-        }
+    let soLuongBtt = 0
+    let donGiaBtt = 0
+    if (this.userService.isChiCuc()) {
+      this.listDviTsan = [];
+      inputTable.forEach((s) => {
+        soLuongBtt += s.tongSoLuong
+        donGiaBtt += s.tongDonGia
+        this.formData.patchValue({
+          soLuong: soLuongBtt,
+          donGiaKhongVat: donGiaBtt,
+          thanhTien: soLuongBtt * donGiaBtt
+        });
+        s.children.forEach((item) => {
+          if (item.maDvi == this.userInfo.MA_DVI) {
+            let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+            item.dataDviTsan = dataGroup;
+            item.dataDviTsan.forEach(x => {
+              if (x.maDviTsan) {
+                x.tenDvi = item.tenDvi
+                x.maDvi = item.maDvi
+                x.soLuong = item.soLuong
+                x.diaChi = item.diaChi
+                x.donGiaVat = item.donGiaVat
+                this.formData.patchValue({
+                  slUyQuyenChiCucKh: item.soLuong,
+                });
+                this.listDviTsan = [...this.listDviTsan, x];
+              }
+            })
+          }
+        })
       })
-    })
+    } else {
+      this.listDviTsan = [];
+      inputTable.forEach((item) => {
+        let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+        item.dataDviTsan = dataGroup;
+        item.dataDviTsan.forEach(x => {
+          if (x.maDviTsan) {
+            x.tenDvi = item.tenDvi
+            x.maDvi = item.maDvi
+            x.soLuong = item.soLuong
+            x.diaChi = item.diaChi
+            x.donGiaVat = item.donGiaVat
+            this.listDviTsan = [...this.listDviTsan, x];
+          }
+        })
+      })
+    }
   }
 
   selectMaDviTsan() {
@@ -437,7 +518,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       listAll.forEach(s => {
         if (this.dataTable && this.dataTable.length > 0) {
           this.dataTable.forEach(y => {
-            /// Check nếu cùng 1 mã đơn vị thì sẽ push chung vào 1 children của mã đơn vị ý
+            /// Check nếu cùng 1 mã đơn vị thì sẽ push chung vào 1 children của mã đơn vị ấy
             if (y.maDvi == s.maDvi) {
               y.children = [...y.children, ...s.children]
             } else {

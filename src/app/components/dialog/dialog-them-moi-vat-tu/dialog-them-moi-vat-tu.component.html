@@ -52,7 +52,7 @@
     </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL nhập đấu thầu đề xuất (kg) </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL nhập đấu thầu đề xuất (Tấn) </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
             [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter"
