@@ -17,6 +17,7 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { chain } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-thong-tin',
@@ -38,7 +39,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   dataTablePhuLuc: any[] = [];
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
-
+  objHopDongHdr: any = {};
   maHopDongSuffix: string = '';
 
   constructor(
@@ -406,6 +407,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         })
       }
     }
+  }
+  convertTienTobangChu(tien: number): string {
+    return convertTienTobangChu(tien);
   }
 
 }

@@ -7,7 +7,7 @@
     <button class="btn btn-sub btn-sm waves-effect xanh-nhat" (click)="save(true)"
       *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isCuc()">
       <i class="icon htvbdh_trinh"></i>
-      <span>Ký</span>
+      <span>Đã ký</span>
     </button>
     <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
       *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isCuc() ">
@@ -66,7 +66,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label nzTooltipTitle="Ngày ký QĐ phê duyệt kế hoạch bán đấu giá" nzRequired
-                  [nzNoColon]="true">Căn cứ QĐ phê duyệt</nz-form-label>
+                  [nzNoColon]="true">Căn cứ QĐ Phê duyệt KH BDG</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <input nz-input [readonly]="true" formControlName="soQdPd" />
@@ -89,7 +89,7 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Thời hạn nhập kho</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Thời hạn xuất kho</nz-form-label>
                 <nz-date-picker [nzDisabled]="isDisabled()" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
                   formControlName="tgianNkho">
                 </nz-date-picker>
@@ -177,6 +177,19 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" nzSpan="24">
+                  File đính kèm HĐ đã ký
+                </nz-form-label>
+              </nz-form-item>
+              <nz-form-item>
+                <div class="list-file" nz-col nzSpan="24">
+                  <file-list [data]="formData.value.fileDinhKem">
+                  </file-list>
+                </div>
+              </nz-form-item>
+            </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">
@@ -193,7 +206,7 @@
     </nz-collapse>
 
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chủ đầu tư'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'Thông tin bên bán'" [nzActive]="true">
         <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="6">
@@ -234,8 +247,20 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
+                <input nz-input placeholder="Số điện thoại" formControlName="sdt" />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
-                <input nz-input placeholder="Số tài khoản" formControlName="stk" />
+                <input nz-input placeholder="Số tài khoản" formControlName="fax" />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
+                <input nz-input placeholder="Số tài khoản" formControlName="moTai" />
               </nz-form-item>
             </div>
           </div>
@@ -246,7 +271,7 @@
     </nz-collapse>
 
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin đơn vị cung cấp'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'Thông tin bên mua'" [nzActive]="true">
         <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="6">
@@ -297,7 +322,7 @@
     </nz-collapse>
 
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Giá hợp đồng và phương thức thanh toán'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'Giá trị hợp đồng và phương thức thanh toán'" [nzActive]="true">
         <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="3">
@@ -318,18 +343,47 @@
                 <input [readonly]="true" nz-input formControlName="moTaHangHoa" readonly="true" />
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">Đơn vị tính</nz-form-label>
+                <input [readonly]="true" nz-input formControlName="moTaHangHoa" readonly="true" />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Số lượng (kg)</nz-form-label>
                 <nz-input-number nz-input [nzDisabled]="true" placeholder="Số lượng (tấn)" formControlName="soLuong"
                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="9"></div>
+            <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Giá trị hợp đồng sau thuế</nz-form-label>
-                <nz-input-number nz-input [nzDisabled]="true" placeholder="Số lượng (tấn)" formControlName="tongTien"
-                  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
+                <input [readonly]="true" nz-input formControlName="thanhTien" readonly="true" />
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="1">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"></nz-form-label>
+                <nz-form-control class="text-center">
+                  <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket"></i>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="21">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
+                <input [ngModel]=" convertTienTobangChu(formData.value.thanhTien)" nz-input readonly
+                  [ngModelOptions]="{standalone: true}" />
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
+              <nz-form-item>
+                <nz-form-label>Ghi chú</nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <textarea rows="3" formControlName="ghiChu" nz-input></textarea>
+                </nz-form-control>
               </nz-form-item>
             </div>
           </div>
@@ -385,8 +439,15 @@
       </nz-collapse-panel>
     </nz-collapse>
 
+    <ng-template #extraTpl>
+      <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(null)"
+        *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY">
+        <i class="icon htvbdh_dau-cong"></i>
+        <span>Thêm</span>
+      </button>
+    </ng-template>
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Phụ lục hợp đồng'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'Phụ lục hợp đồng'" [nzActive]="true" [nzExtra]="extraTpl">
         <nz-table class="pd-10" nzBordered [nzData]="dataTablePhuLuc" [nzFrontPagination]="false"
           [nzShowPagination]="false">
           <thead>
@@ -403,19 +464,24 @@
           <tbody>
             <tr *ngFor="let data of dataTablePhuLuc; let i = index">
               <td>{{ i + 1 }}</td>
-              <td>{{data.soPluc}}</td>
-              <td>{{data.ngayKy | date: 'dd/MM/YYYY'}}</td>
-              <td>{{data.ngayHluc | date: 'dd/MM/YYYY'}}</td>
-              <td>{{data.veViec}}</td>
-              <td>{{data.trangThai}}</td>
+              <td>{{data.soPhuLuc}}</td>
+              <td>{{data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
+              <td>{{data.ngayHlucPhuLuc | date: 'dd/MM/YYYY'}}</td>
+              <td>{{data.noiDungPhuLuc}}</td>
+              <td>{{data.tenTrangThaiPhuLuc}}</td>
               <td>
-                <a (click)="redirectPhuLuc(data.id)">
+                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DA_KY)" (click)="redirectPhuLuc(data.id)">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DU_THAO && !userService.isTongCuc())"
+                  (click)="redirectPhuLuc(data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a>
+                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DU_THAO && !userService.isTongCuc())" (click)="delete(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
+
             </tr>
           </tbody>
         </nz-table>
@@ -427,3 +493,7 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+<ng-container *ngIf="isViewPhuLuc">
+  <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [loaiVthh]="loaiVthh" (showListEvent)="showChiTiet()"
+    [objHopDongHdr]="objHopDongHdr"></app-phu-luc>
+</ng-container>

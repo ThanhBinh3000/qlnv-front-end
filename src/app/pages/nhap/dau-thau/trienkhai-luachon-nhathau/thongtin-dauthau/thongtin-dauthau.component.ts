@@ -9,45 +9,50 @@ import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFA
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import {
   ThongTinDauThauService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../services/storage.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-thongtin-dauthau',
   templateUrl: './thongtin-dauthau.component.html',
   styleUrls: ['./thongtin-dauthau.component.scss']
 })
-export class ThongtinDauthauComponent implements OnInit {
+export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: String;
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    notification: NzNotificationService,
+    httpClient: HttpClient,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
-    private dauThauService: ThongTinDauThauService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private helperService: HelperService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    storageService: StorageService,
+    modal: NzModalService,
+    userService: UserService,
     private thongTinDauThauService: ThongTinDauThauService,
 
   ) {
-
+    super(httpClient, storageService, notification, spinner, modal, thongTinDauThauService);
   }
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   STATUS = STATUS
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
+    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' }
+  ];
   searchFilter = {
     namKhoach: '',
     soQd: '',
@@ -58,6 +63,7 @@ export class ThongtinDauthauComponent implements OnInit {
   };
 
   filterTable: any = {
+    namKhoach: '',
     tenGthau: '',
     tenDvi: '',
     soQdPdKhlcnt: '',
@@ -67,6 +73,7 @@ export class ThongtinDauthauComponent implements OnInit {
     tenCloaiVthh: '',
     thanhGiaGoiThau: '',
     tenTrangThai: '',
+    trangThai: ''
   };
 
   dataTableAll: any[] = [];
@@ -136,6 +143,7 @@ export class ThongtinDauthauComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable);
       this.totalRecord = data.totalElements;
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {
@@ -264,7 +272,7 @@ export class ThongtinDauthauComponent implements OnInit {
           maDvi: this.userInfo.MA_DVI,
           soQd: this.searchFilter.soQd,
         }
-        this.dauThauService
+        this.thongTinDauThauService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
@@ -280,9 +288,6 @@ export class ThongtinDauthauComponent implements OnInit {
     }
   }
 
-  dateChange() {
-    this.helperService.formatDate()
-  }
 
   updateAllChecked(): void {
     this.indeterminate = false;
@@ -315,26 +320,11 @@ export class ThongtinDauthauComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
 
   clearFilterTable() {
     this.filterTable = {
+      namKhoach: '',
+      trangThai: '',
       tenGthau: '',
       tenDvi: '',
       soQdPdKhlcnt: '',
