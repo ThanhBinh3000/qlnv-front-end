@@ -22,7 +22,8 @@ export class PhuLucComponent implements OnInit {
   @Input() idPhuLuc: number;
   @Input() detailHopDong: any = {};
   @Input() isViewPhuLuc: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: String;
+  @Input() objHopDongHdr: any = {}
   @Output()
   showChiTietEvent = new EventEmitter<any>();
   fileDinhKem: Array<FileDinhKem> = [];
@@ -111,7 +112,7 @@ export class PhuLucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {},
     });
-    modal.afterClose.subscribe((res) => {});
+    modal.afterClose.subscribe((res) => { });
   }
 
   back() {
