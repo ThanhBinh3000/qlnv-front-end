@@ -51,7 +51,7 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
 
   STATUS = STATUS;
   filterTable: any = {
-    soHd: '',
+    namKhoach: '',
     tenHd: '',
     ngayKy: '',
     loaiVthh: '',
@@ -60,6 +60,12 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
     nhaCungCap: '',
     gtriHdSauVat: '',
   };
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
+  ];
 
   constructor(
     private httpClient: HttpClient,
@@ -360,13 +366,13 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value) {
+    if (value !=null && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !== -1) {
-            temp.push(item);
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
+            temp.push(item)
           }
         });
       }

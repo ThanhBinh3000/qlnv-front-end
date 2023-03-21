@@ -185,10 +185,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') : null,
-      denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') : null,
-      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') : null,
-      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') : null,
+      tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
@@ -399,7 +399,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
         this.danhSachDauThauService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-lcnt.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
