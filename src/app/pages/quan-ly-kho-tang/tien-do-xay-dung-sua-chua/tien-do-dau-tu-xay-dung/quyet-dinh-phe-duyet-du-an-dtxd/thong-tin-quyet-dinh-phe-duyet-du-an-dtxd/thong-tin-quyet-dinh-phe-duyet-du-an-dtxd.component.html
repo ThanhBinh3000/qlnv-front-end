@@ -250,8 +250,6 @@
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
-      <th class="text-center" nzWidth="20px"></th>
-      <th class="text-center" nzWidth="20px"></th>
       <th nzWidth="150px" class="text-center">Chỉ mục <br/> (1)</th>
       <th nzWidth="40px" class="text-center"></th>
       <th class="text-center">Nội dung chi phí <br/> (2)</th>
@@ -260,41 +258,41 @@
       <th class="text-center" nzWidth="120px">Chi phí sau thuế <br/>(5) =(3) + (4)</th>
       <th class="text-center" nzWidth="140px" *ngIf="!isViewDetail">Hành động</th>
     </tr>
-    <!--    <tr *ngIf="!isViewDetail">-->
-    <!--      <th>-->
-    <!--        <input type="text" [(ngModel)]="rowItemParent.chiMuc" nz-input/>-->
-    <!--      </th>-->
-    <!--      <th></th>-->
-    <!--      <th>-->
-    <!--        <input type="text" [(ngModel)]="rowItemParent.noiDung" nz-input/>-->
-    <!--      </th>-->
-    <!--      <th>-->
-    <!--        <nz-input-number [(ngModel)]="rowItemParent.giaTri" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-    <!--                         nzDisabled-->
-    <!--                         [nzMin]="0"-->
-    <!--                         [nzParser]="globals.parser"></nz-input-number>-->
-    <!--      </th>-->
-    <!--      <th>-->
-    <!--        <nz-input-number [(ngModel)]="rowItemParent.thueVat" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-    <!--                         nzDisabled-->
-    <!--                         [nzMin]="0"-->
-    <!--                         [nzParser]="globals.parser"></nz-input-number>-->
-    <!--      </th>-->
-    <!--      <th>-->
-    <!--        <nz-input-number [(ngModel)]="rowItemParent.chiPhiSauThue" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
-    <!--                         nzDisabled-->
-    <!--                         [nzMin]="0"-->
-    <!--                         [nzParser]="globals.parser"></nz-input-number>-->
-    <!--      </th>-->
-    <!--      <th class="text-center" *ngIf="!isViewDetail">-->
-    <!--        <a (click)="themMoiCtiet()">-->
-    <!--          <i class="icon htvbdh_dau-cong"></i>-->
-    <!--        </a>-->
-    <!--        <a (click)="refresh()">-->
-    <!--          <i class="fa fa-refresh"></i>-->
-    <!--        </a>-->
-    <!--      </th>-->
-    <!--    </tr>-->
+    <tr *ngIf="!isViewDetail">
+      <th>
+        <input type="text" [(ngModel)]="rowItemParent.chiMuc" nz-input/>
+      </th>
+      <th></th>
+      <th>
+        <input type="text" [(ngModel)]="rowItemParent.noiDung" nz-input/>
+      </th>
+      <th>
+        <nz-input-number [(ngModel)]="rowItemParent.giaTri" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         nzDisabled
+                         [nzMin]="0"
+                         [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <nz-input-number [(ngModel)]="rowItemParent.thueVat" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         nzDisabled
+                         [nzMin]="0"
+                         [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <nz-input-number [(ngModel)]="rowItemParent.chiPhiSauThue" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         nzDisabled
+                         [nzMin]="0"
+                         [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th class="text-center" *ngIf="!isViewDetail">
+        <a (click)="themMoiCtiet()">
+          <i class="icon htvbdh_dau-cong"></i>
+        </a>
+        <a (click)="refresh()">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </th>
+    </tr>
     </thead>
     <tbody>
     <!--    <ng-container *ngFor="let data of expandTable.data">-->
@@ -318,9 +316,8 @@
     <ng-container *ngFor="let data of dataTable , let idx = index">
       <tr>
         <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-        <td></td>
-        <td class="font-weight-bold">{{data.chiMuc}}</td>
-        <td></td>
+        <td class="font-weight-bold" *ngIf="data.capChiMuc == 1">{{data.chiMuc}}</td>
+        <td class="font-weight-bold" *ngIf="data.capChiMuc > 1">{{data.chiMuc}}</td>
         <td class="font-weight-bold">{{data.noiDung}}</td>
         <td class="font-weight-bold text-right"></td>
         <td class="font-weight-bold text-right"></td>
@@ -329,34 +326,26 @@
         <td></td>
       </tr>
       <ng-container *ngIf="expandSet.has(data.idVirtual)">
-        <ng-container *ngFor="let item of data.childData, let y = index">
-          <tr>
-            <td></td>
-            <td [nzExpand]="expandSet.has(item.idVirtual)" (nzExpandChange)="onExpandChange(item.idVirtual, $event)"></td>
-            <td>{{item.capChiMuc}}</td>
-            <td></td>
-            <td>{{item.noiDung}}</td>
-            <td class="font-weight-bold text-right"></td>
-            <td class="font-weight-bold text-right"></td>
-            <td class="font-weight-bold text-right"></td>
-            <td class="font-weight-bold text-right"></td>
-          </tr>
-          <ng-container *ngIf="expandSet.has(item.idVirtual)">
-            <ng-container *ngFor="let item1 of item.childData, let y = index">
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{y+1}}</td>
-                <td>{{item1.noiDung}}</td>
-                <td class="font-weight-bold text-right"></td>
-                <td class="font-weight-bold text-right"></td>
-                <td class="font-weight-bold text-right"></td>
-                <td class="font-weight-bold text-right"></td>
-              </tr>
-            </ng-container>
-          </ng-container>
-        </ng-container>
+        <tr *ngFor="let item of data.dataChild, let y = index">
+          <td></td>
+          <td>{{idx + 1}}.{{y + 1}}</td>
+          <td>{{item.tenDvi}}</td>
+          <td>{{item.donViTinh}}</td>
+          <td class="text-right">{{item.slHienCo | number: '1.0-1' }}</td>
+          <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>
+          <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
+          <td>
+
+          </td>
+          <td>
+
+          </td>
+          <td>
+
+          </td>
+          <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>
+          <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>
+        </tr>
       </ng-container>
     </ng-container>
     </tbody>

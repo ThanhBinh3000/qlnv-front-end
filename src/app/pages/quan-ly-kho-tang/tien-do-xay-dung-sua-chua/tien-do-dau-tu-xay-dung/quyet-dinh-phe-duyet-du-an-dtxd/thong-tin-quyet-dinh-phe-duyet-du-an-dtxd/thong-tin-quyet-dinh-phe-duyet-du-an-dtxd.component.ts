@@ -6,7 +6,7 @@ import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {chain} from 'lodash';
-import * as uuid from "uuid";
+import {v4 as uuidv4} from 'uuid';
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DxChiCucPvcService} from "../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
 import {DanhMucCongCuDungCuService} from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
@@ -96,9 +96,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.dataTable = [{
         id: 1,
         chiMuc: "A",
-        noiDungCha: "Chi phí xây dựng",
-        noiDung: "Phần thân",
-        tenKho: "Kho lương thực 1",
+        noiDung: "Chi phí xây dựng",
         chiMucCha: null,
         capChiMuc: 1,
         giaTri: 0,
@@ -106,10 +104,8 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         chiPhiSauThue: 0
       }, {
         id: 2,
-        chiMuc: "A",
-        noiDungCha: "Chi phí nội thất",
-        noiDung: "Phần điện",
-        tenKho: "Kho lương thực 2",
+        chiMuc: "B",
+        noiDung: "Chi phí nội thất",
         chiMucCha: null,
         capChiMuc: 1,
         giaTri: 0,
@@ -117,43 +113,15 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         chiPhiSauThue: 0
       }, {
         id: 3,
-        chiMuc: "A",
-        noiDungCha: "CCCCC",
-        noiDung: "Phần aaaaa",
-        tenKho: "Kho lương thực 1",
+        chiMuc: "1",
+        noiDung: "CCCCC",
         chiMucCha: "A",
         capChiMuc: 2,
         giaTri: 0,
         thueVat: 0,
         chiPhiSauThue: 0
-      },
-        {
-          id: 4,
-          chiMuc: "B",
-          noiDungCha: "CCCCC",
-          noiDung: "Phần cc",
-          tenKho: "Kho lương thực 234121",
-          chiMucCha: "A",
-          capChiMuc: 2,
-          giaTri: 0,
-          thueVat: 0,
-          chiPhiSauThue: 0
-        },
-        {
-          id: 5,
-          chiMuc: "C",
-          noiDungCha: "a",
-          noiDung: "ádds cc",
-          tenKho: "Kho lương thực 234121",
-          chiMucCha: "A",
-          capChiMuc: 2,
-          giaTri: 0,
-          thueVat: 0,
-          chiPhiSauThue: 0
-        }
-      ];
-      // this.convertListData();
-      this.buildViewTree()
+      }];
+      this.convertListData();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -183,35 +151,6 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     if (res) {
       this.goBack()
     }
-  }
-
-  buildViewTree() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable)
-        .groupBy("chiMuc")
-        .map((value, key) => {
-          let rs = chain(value)
-            .groupBy("capChiMuc")
-            .map((v, k) => {
-                return {
-                  idVirtual: uuid.v4(),
-                  capChiMuc: k,
-                  childData: v,
-                  noiDung  : v && v[0] ? v[0].tenKho : null,
-                  noiDungCha : v && v[0] ? v[0].noiDungCha : null
-                }
-              }
-            ).value();
-          return {
-            idVirtual: uuid.v4(),
-            chiMuc: key,
-            childData: rs,
-            noiDung :  rs && rs[0] ? rs[0].noiDungCha : null
-          };
-        }).value();
-      console.log(this.dataTable)
-    }
-    // this.expandAll()
   }
 
   changeSoQdKhDtxd(event) {
