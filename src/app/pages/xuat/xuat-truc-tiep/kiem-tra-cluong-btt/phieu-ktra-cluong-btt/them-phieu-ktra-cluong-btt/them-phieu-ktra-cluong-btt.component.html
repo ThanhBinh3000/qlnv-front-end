@@ -211,7 +211,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Hình thức bảo quản</nz-form-label>
                                 <nz-form-control>
-                                    <nz-select formControlName="hthucBquan">
+                                    <nz-select formControlName="hthucBquan" [nzDisabled]="isDisabled()">
                                         <nz-option *ngFor="let p of listHinhThucBaoQuan" [nzValue]="p.ma"
                                             [nzLabel]="p.giaTri">
                                         </nz-option>
@@ -233,7 +233,8 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Ngày kiểm nghiệm mẫu
                                 </nz-form-label>
-                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem">
+                                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem"
+                                    [nzDisabled]="isDisabled()">
                                 </nz-date-picker>
                             </nz-form-item>
                         </div>

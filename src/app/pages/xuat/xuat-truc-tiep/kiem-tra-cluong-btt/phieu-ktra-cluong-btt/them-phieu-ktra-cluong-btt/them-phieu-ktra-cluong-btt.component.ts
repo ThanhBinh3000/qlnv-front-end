@@ -185,7 +185,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         idQd: data.idQd,
         idKtv: data.idKtv,
         tenKtv: data.tenKtv,
-        idDdiemXh: data.id,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         maNhaKho: data.maNhaKho,

@@ -65,6 +65,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
       soLuong: [],
+      donGia: [],
       donViTinh: [''],
       tgianGnhan: [''],
       thoiGianDuKien: [''],
@@ -130,8 +131,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     let dsHd = []
     await this.hopDongBttService.search({
       trangThai: STATUS.DA_KY,
-      maDvi: this.formData.value.maDvi,
-      namKH: this.formData.value.namKh
+      maChiCuc: this.formData.value.maDvi,
+      namKh: this.formData.value.namKh
     }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -172,6 +173,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
                 tenCloaiVthh: data.tenCloaiVthh,
                 moTaHangHoa: data.moTaHangHoa,
                 soLuong: data.soLuong,
+                donGia: data.donGia == null ? data.donGiaKhongVat : data.donGia,
                 donViTinh: data.dviTinh,
                 tgianGnhanTu: data.tgianGnhanTu,
                 tgianGnhanDen: data.tgianGnhanDen,
@@ -242,9 +244,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
                   tenCloaiVthh: data.tenCloaiVthh,
                   moTaHangHoa: data.xhQdPdKhBttHdr.moTaHangHoa,
                   soLuong: data.tongSoLuong,
+                  donGia: data.tongDonGia,
                   donViTinh: 'Kg',
                   tgianGnhan: data.tgianGnhan,
-                  trichYeu: data.xhQdPdKhBttHdr.trichYeu,
+                  trichYeu: dataKq.trichYeu,
                 })
                 this.dataTable = data.children;
                 this.setListDviTsan(data.children);

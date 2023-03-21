@@ -39,7 +39,7 @@
           <div class="header-text">
             <div class="title-chi-tieu">
               <span></span>
-              <span>Thông tin tổng hợp</span>
+              <span>Thông tin chung</span>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
                 </nz-form-control>
               </nz-form-item>
               <nz-form-item>
-                <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
+                <label nz-radio nzValue="TTr">Chọn Số công văn/đề xuất</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
                     <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
@@ -274,16 +274,15 @@
                         <th [colspan]="2">Chi cục DTNN</th>
                         <th [colspan]="2">Chủng loại hàng hóa</th>
                         <th [colspan]="4">SL thực tế xuất CT, VT của từng chi cục</th>
-                        <th [rowspan]="2" style="width: 10%">Hành động</th>
                       </tr>
                       <tr>
                         <th>Tên cục</th>
-                        <th>Tồn kho</th>
+                        <th>Tồn kho(kg)</th>
                         <th>SL xuất CT, VT giao cục (kg)</th>
                         <th>Tên chi cục</th>
-                        <th>Tồn kho</th>
+                        <th>Tồn kho(kg)</th>
                         <th>Tên chủng loại hàng hóa</th>
-                        <th>Tồn kho</th>
+                        <th>Tồn kho(kg)</th>
                         <th>Số lượng (kg)</th>
                         <th>ĐVT</th>
                         <th>Đơn giá không VAT đ/kg</th>
@@ -311,9 +310,6 @@
                           <td></td>
                           <td></td>
                           <td><strong>{{item.thanhTien|number:'1.0-1'}}</strong></td>
-                          <td>
-
-                          </td>
                         </tr>
                         <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -333,8 +329,6 @@
                               <td></td>
                               <td></td>
                               <td><strong>{{lv1.thanhTienCuc|number:'1.0-1'}}</strong></td>
-                              <td>
-                              </td>
                             </tr>
                             <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                               <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -354,8 +348,6 @@
                                   <td>{{lv2.donViTinh}}</td>
                                   <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
                                   <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
-                                  <td>
-                                  </td>
                                 </tr>
                               </ng-container>
                             </ng-container>
@@ -408,9 +400,10 @@
                         <nz-form-label [nzNoColon]="true">
                           SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error" *ngIf="formData.value.xuatCap !== false">
-                          <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1'">
-                          </nz-statistic>
+                        <nz-form-control [nzErrorTip]="error" *ngIf="formData.value.xuatCap == true">
+                          <!-- <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1'">
+                          </nz-statistic> -->
+                          <span>{{this.formData.value.soLuongXuaCap| number: '1.0-1'}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -431,12 +424,12 @@
                     </tr>
                     <tr>
                       <th>Tên cục</th>
-                      <th>Tồn kho</th>
+                      <th>Tồn kho(kg)</th>
                       <th>SL xuất CT, VT giao cục (kg)</th>
                       <th>Tên chi cục</th>
-                      <th>Tồn kho</th>
+                      <th>Tồn kho(kg)</th>
                       <th>Tên chủng loại hàng hóa</th>
-                      <th>Tồn kho</th>
+                      <th>Tồn kho(kg)</th>
                       <th>Số lượng (kg)</th>
                       <th>ĐVT</th>
                       <th>Đơn giá không VAT đ/kg</th>
@@ -522,7 +515,8 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox (ngModelChange)="tinhXuatCap()" [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt
+                <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" (ngModelChange)="tinhXuatCap()"
+                  [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt
                   xuất cấp</label>
               </nz-card>
             </div>
