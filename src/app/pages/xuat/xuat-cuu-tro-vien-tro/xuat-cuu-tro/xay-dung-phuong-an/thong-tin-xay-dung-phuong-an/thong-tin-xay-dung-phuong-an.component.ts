@@ -387,7 +387,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
                 soLuongXuatCuc: rowCuc.soLuongXuatCuc,
                 soLuongXuatCucThucTe: soLuongXuatCucThucTe,
                 thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
-                tenCloaiVthh: v[0].tenCloaiVthh,
+                tenCloaiVthh: rowCuc.tenCloaiVthh,
                 childData: v
               }
             }
@@ -522,12 +522,16 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     });
   }
 
-  xoaPhuongAn(data: any) {
+  xoaPhuongAn(data: any, dataParent?: any) {
     let deXuatPhuongAn;
-    if (data.id) {
-      deXuatPhuongAn = this.formData.value.deXuatPhuongAn.filter(s => s.id != data.id);
+    if (data.noiDung) {
+      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => s.noiDung != data.noiDung));
+    } else if (data.tenCuc && dataParent) {
+      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => !(s.tenCuc !== data.tenCuc) && (s.noiDung !== dataParent.noiDung)));
+    } else if (data.id) {
+      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => s.id != data.id));
     } else if (data.idVirtual) {
-      deXuatPhuongAn = this.formData.value.deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual)
+      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => s.idVirtual != data.idVirtual));
     }
     this.formData.patchValue({
       deXuatPhuongAn: deXuatPhuongAn
