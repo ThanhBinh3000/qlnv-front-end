@@ -12,7 +12,7 @@ export class GiaoDuToanChiService extends BaseService {
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'quanLyVonPhi', '');
   }
-
+  urlTest = 'http://localhost:9159';
   urlDefault = environment.SERVICE_API;
 
 
