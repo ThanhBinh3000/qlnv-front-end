@@ -15,8 +15,7 @@ export class QuyetdinhpheduyetduandtxdService extends BaseService {
     }
 
   search(body) {
-    // const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
-    const url = `http://localhost:3333/${this.table}/tra-cuu`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

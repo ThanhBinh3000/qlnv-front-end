@@ -20,7 +20,7 @@
         <span>Ban hành</span>
       </button>
       <button (click)="save()"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TUCHOI_CB_CUC) && userService.isChiCuc() "
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
               class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -246,12 +246,11 @@
       </div>
     </div>
   </div>
-  <nz-table class="nowrap mt-2" #expandTable [nzData]="dataTable" [nzFrontPagination]="false"
+  <nz-table class="nowrap mt-2" #expandTable [nzData]="dataTreeTable" [nzFrontPagination]="false"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
       <th nzWidth="150px" class="text-center">Chỉ mục <br/> (1)</th>
-      <th nzWidth="40px" class="text-center"></th>
       <th class="text-center">Nội dung chi phí <br/> (2)</th>
       <th class="text-center" nzWidth="120px">Giá trị trước thuế <br/>(3)</th>
       <th class="text-center" nzWidth="100px">Thuế VAT <br/>(4)</th>
@@ -262,13 +261,11 @@
       <th>
         <input type="text" [(ngModel)]="rowItemParent.chiMuc" nz-input/>
       </th>
-      <th></th>
       <th>
         <input type="text" [(ngModel)]="rowItemParent.noiDung" nz-input/>
       </th>
       <th>
         <nz-input-number [(ngModel)]="rowItemParent.giaTri" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         nzDisabled
                          [nzMin]="0"
                          [nzParser]="globals.parser"></nz-input-number>
       </th>
@@ -295,59 +292,66 @@
     </tr>
     </thead>
     <tbody>
-    <!--    <ng-container *ngFor="let data of expandTable.data">-->
-    <!--      <ng-container *ngFor="let item of mapOfExpandedData[data.chiMuc]">-->
-    <!--        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">-->
-    <!--          <td class="align-content-md-center"-->
-    <!--            [nzIndentSize]="item.capChiMuc! * 20"-->
-    <!--            [nzShowExpand]="!!item.children"-->
-    <!--            [(nzExpand)]="item.expand"-->
-    <!--            (nzExpandChange)="collapse(mapOfExpandedData[data.chiMuc], item, $event)">-->
-    <!--            {{ item.chiMuc }}-->
-    <!--          </td>-->
-    <!--          <td>{{ item.noiDung }}</td>-->
-    <!--          <td>{{ item.noiDung }}</td>-->
-    <!--          <td>{{ item.noiDung }}</td>-->
-    <!--          <td>{{ item.noiDung }}</td>-->
-    <!--          <td>{{ item.noiDung }}</td>-->
-    <!--        </tr>-->
-    <!--      </ng-container>-->
-    <!--    </ng-container>-->
-    <ng-container *ngFor="let data of dataTable , let idx = index">
-      <tr>
-        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-        <td class="font-weight-bold" *ngIf="data.capChiMuc == 1">{{data.chiMuc}}</td>
-        <td class="font-weight-bold" *ngIf="data.capChiMuc > 1">{{data.chiMuc}}</td>
-        <td class="font-weight-bold">{{data.noiDung}}</td>
-        <td class="font-weight-bold text-right"></td>
-        <td class="font-weight-bold text-right"></td>
-        <td class="font-weight-bold text-right"></td>
-        <td class="font-weight-bold text-right"></td>
-        <td></td>
-      </tr>
-      <ng-container *ngIf="expandSet.has(data.idVirtual)">
-        <tr *ngFor="let item of data.dataChild, let y = index">
-          <td></td>
-          <td>{{idx + 1}}.{{y + 1}}</td>
-          <td>{{item.tenDvi}}</td>
-          <td>{{item.donViTinh}}</td>
-          <td class="text-right">{{item.slHienCo | number: '1.0-1' }}</td>
-          <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>
-          <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>
-          <td>
-
+    <ng-container *ngFor="let data of expandTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.idVirtual]">
+        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent" class="text-bold">
+          <td class="align-content-md-center  "
+              [nzIndentSize]="item.capChiMuc! * 20"
+              [nzShowExpand]="!!item.children"
+              [(nzExpand)]="item.expand"
+              (nzExpandChange)="collapse(mapOfExpandedData[data.idVirtual], item, $event)">
+            {{ item.chiMuc }}
           </td>
-          <td>
-
+          <td>{{ item.noiDung }}</td>
+          <td>{{ item.giaTri |  number: '1.0-1'  }}</td>
+          <td>{{ item.thueVat | number: '1.0-1' }}</td>
+          <td>{{ item.chiPhiSauThue | number: '1.0-1'  }}</td>
+          <td class="text-center" *ngIf="!isViewDetail">
+            <a (click)="themMoiCtiet(item)" *ngIf="item.capChiMuc < 3">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a *ngIf="!isViewDetail" (click)="deleteItem(item)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
           </td>
-          <td>
-
-          </td>
-          <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>
-          <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>
         </tr>
       </ng-container>
     </ng-container>
+    <!--    <ng-container *ngFor="let data of dataTable , let idx = index">-->
+    <!--      <tr>-->
+    <!--        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>-->
+    <!--        <td class="font-weight-bold" *ngIf="data.capChiMuc == 1">{{data.chiMuc}}</td>-->
+    <!--        <td class="font-weight-bold" *ngIf="data.capChiMuc > 1">{{data.chiMuc}}</td>-->
+    <!--        <td class="font-weight-bold">{{data.noiDung}}</td>-->
+    <!--        <td class="font-weight-bold text-right"></td>-->
+    <!--        <td class="font-weight-bold text-right"></td>-->
+    <!--        <td class="font-weight-bold text-right"></td>-->
+    <!--        <td class="font-weight-bold text-right"></td>-->
+    <!--        <td></td>-->
+    <!--      </tr>-->
+    <!--      <ng-container *ngIf="expandSet.has(data.idVirtual)">-->
+    <!--        <tr *ngFor="let item of data.dataChild, let y = index">-->
+    <!--          <td></td>-->
+    <!--          <td>{{idx + 1}}.{{y + 1}}</td>-->
+    <!--          <td>{{item.tenDvi}}</td>-->
+    <!--          <td>{{item.donViTinh}}</td>-->
+    <!--          <td class="text-right">{{item.slHienCo | number: '1.0-1' }}</td>-->
+    <!--          <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>-->
+    <!--          <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>-->
+    <!--          <td>-->
+
+    <!--          </td>-->
+    <!--          <td>-->
+
+    <!--          </td>-->
+    <!--          <td>-->
+
+    <!--          </td>-->
+    <!--          <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>-->
+    <!--          <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>-->
+    <!--        </tr>-->
+    <!--      </ng-container>-->
+    <!--    </ng-container>-->
     </tbody>
   </nz-table>
 </div>
@@ -355,3 +359,43 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisiblePopTongMucDauTu" nzTitle="The first Modal"
+          (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" nzTitle="Thêm chi tiết tổng mức đầu tư.">
+  <ng-container *nzModalContent>
+    <form nz-form nzLayout="vertical" [formGroup]="formDataDetail">
+      <nz-card class="pd-2">
+        <div nz-row [nzGutter]="[24]">
+          <div nz-col nzSpan="3">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Chỉ mục</nz-form-label>
+                <input nz-input formControlName="chiMuc"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="17">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Nội dung</nz-form-label>
+                <input nz-input formControlName="noiDung"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Giá trị</nz-form-label>
+                <input nz-input type="number" formControlName="giaTri"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+        <ng-template #error let-control>
+          <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+          </ng-container>
+        </ng-template>
+      </nz-card>
+    </form>
+  </ng-container>
+</nz-modal>
