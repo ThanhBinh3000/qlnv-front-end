@@ -25,7 +25,7 @@ export class PhuLucComponent implements OnInit {
   @Input() loaiVthh: String;
   @Input() objHopDongHdr: any = {}
   @Output()
-  showChiTietEvent = new EventEmitter<any>();
+  showListEvent = new EventEmitter<any>();
   fileDinhKem: Array<FileDinhKem> = [];
   formPhuLuc: FormGroup;
   errorGhiChu: boolean = false;
@@ -116,7 +116,7 @@ export class PhuLucComponent implements OnInit {
   }
 
   back() {
-    this.showChiTietEvent.emit();
+    this.showListEvent.emit();
   }
 
   taiLieuDinhKem(type?: string) {
