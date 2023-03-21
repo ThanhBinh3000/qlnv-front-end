@@ -114,52 +114,10 @@ export class ThemMoiDxChiCucPvcComponent extends Base2Component implements OnIni
         type.moTaCcdc = result[0].moTa;
       }
     }
-    await this.getSLHienCo(event)
-    await this.getSlNhapThem(event)
-    await this.getDinhMuc(event)
-  }
-
-  async getSLHienCo(maHH) {
-    let body = {
-      maDvi : this.userInfo.MA_DVI,
-      namKeHoach : this.formData.value.namKeHoach,
-      maHangHoa : maHH
-    }
-    let res = await this.dxChiCucService.getSlHienCo(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data != 0) {
-        this.rowItem.slHienCo = res.data
-      } else {
-        this.rowItem.slHienCo = 0
-      }
-    }
-  }
-
-  async getSlNhapThem(maHH) {
-    let body = {
-      maDvi : this.userInfo.MA_DVI,
-      namKeHoach : Number(this.formData.value.namKeHoach) - 1,
-      maHangHoa : maHH
-    }
-    let res = await this.dxChiCucService.getSlNhapThem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data != 0) {
-        this.rowItem.slNhapThem = res.data
-      } else {
-        this.rowItem.slNhapThem = 0
-      }
-    }
   }
 
   async getDinhMuc(maHH) {
-    let body = {
-      maHangHoa: maHH
-    }
-    let res = await this.dxChiCucService.getDinhMuc(body);
-    if (res.data) {
-      let detail = res.data;
-      console.log(detail)
-    }
+
   }
 
 
