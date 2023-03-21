@@ -177,6 +177,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         this.loadDsKieuNhapXuat(),
         this.loadDsVthh(),
         this.loadDsDonVi(),
+        this.phuongAnRow.tonKhoChiCuc = 0,
+        this.phuongAnRow.tonKhoCloaiVthh = 0,
       ])
       await this.loadDetail(this.idInput)
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
@@ -230,7 +232,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       await this.deXuatPhuongAnCuuTroService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.maHauTo = res.data.soDx.split("/")[1];
+            this.maHauTo = '/' + res.data.soDx.split("/")[1];
             res.data.soDx = res.data.soDx.split("/")[0];
             this.formData.patchValue(res.data);
             this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
@@ -494,8 +496,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async save() {
-    this.setValidForm();
-    this.formData.value.soDx = this.formData.value.soDx + '/' + this.maHauTo;
+    //this.setValidForm();
+    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     let result = await this.createUpdate(this.formData.value);
     if (result) {
       this.quayLai();
@@ -504,7 +506,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async saveAndSend() {
     this.setValidForm();
-    this.formData.value.soDx = this.formData.value.soDx + '/' + this.maHauTo;
+    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
       await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
@@ -547,8 +549,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.phuongAnRow = cloneDeep(currentRow);
     console.log(this.phuongAnRow, 'current')
     await this.changeCuc(this.phuongAnRow.maDviCuc);
-    // await this.changeChiCuc(this.phuongAnRow.maDviChiCuc);
-    // await this.changeCloaiVthh(this.phuongAnRow.cloaiVthh);
+    await this.changeChiCuc(this.phuongAnRow.maDviChiCuc);
+    await this.changeCloaiVthh(this.phuongAnRow.cloaiVthh);
     this.showModal();
   }
 
