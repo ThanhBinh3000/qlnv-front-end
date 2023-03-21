@@ -114,7 +114,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       soQd: [, [Validators.required]],
       ngayKy: [, [Validators.required]],
       ngayHluc: [, [Validators.required]],
-      idTongHop: [, [Validators.required]],
+      idTongHop: [],
       maTongHop: [, [Validators.required]],
       ngayThop: [, [Validators.required]],
       idDx: [, [Validators.required]],
@@ -255,6 +255,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   async selectMaDeXuat(event) {
+    console.log(event, 5555);
     await this.spinner.show()
     if (event) {
       let res = await this.deXuatPhuongAnCuuTroService.getDetail(event);
@@ -271,6 +272,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         }, { quyetDinhPdDx: data.deXuatPhuongAn })];
         //truong hop tao moi
         if (this.firstInit === false) {
+          console.log(data.idDx, 4444);
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -281,7 +283,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
             soLuongXuaCap: data.tongSlXuatCap,
-
+            idDx: event,
             soDx: data.soDx,
             ngayDx: data.ngayDx,
             quyetDinhPdDtl: listDeXuat
@@ -289,6 +291,12 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         }
         console.log(this.formData.value, 'this.formData.value')
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
+        this.quyetDinhPdDtlCache.forEach(f => {
+          let tong = f.quyetDinhPdDx.reduce((tong, s) => {
+            return tong + s.soLuongXuat;
+          }, 0);
+          this.tongSlDx = tong;
+        })
         this.deXuatSelected = listDeXuat[0];
         await this.selectRow();
         this.summaryData();
@@ -310,6 +318,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
     body.tongSoLuongDx = this.tongSlDx;
     body.tongSoLuong = this.tongSoLuongDxuat;
+
     body.canCu = this.canCu;
     body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
@@ -760,6 +769,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     let tongSoLuongXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTe = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     this.slXuatCap = tongSoLuongXuat - tongSoLuongXuatThucTe;
+    this.formData.patchValue({
+      soLuongXuaCap: this.slXuatCap,
+    })
 
     let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
