@@ -313,10 +313,10 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     }
 
     if (this.status) {
-			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
-		} else {
-			this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
-		}
+      this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+    } else {
+      this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+    }
     this.sum1()
     this.getStatusButton();
     this.spinner.hide();
@@ -551,7 +551,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
   // đóng
   back() {
-    
+
     const obj = {
       id: this.data?.idPaBTC,
       tabSelected: this.data?.preTab,
@@ -1833,10 +1833,12 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           if (this.getHead(item.stt) == stt) {
             item.lstCtietDvis.forEach(e => {
               const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
+              if (e.soTranChi) {
+                this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
+              }
             })
           }
-        });
+        })
         this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
           this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
         })

@@ -1792,10 +1792,12 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
           if (this.getHead(item.stt) == stt) {
             item.lstCtietDvis.forEach(e => {
               const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-              this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
+              if (e.soTranChi) {
+                this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
+              }
             })
           }
-        });
+        })
         this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
           this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
         })
