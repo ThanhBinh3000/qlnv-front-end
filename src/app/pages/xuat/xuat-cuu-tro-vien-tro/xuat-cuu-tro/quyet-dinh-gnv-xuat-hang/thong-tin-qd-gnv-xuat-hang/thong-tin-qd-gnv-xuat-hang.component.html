@@ -229,7 +229,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL viện trợ, cứu trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{soLuong}}</span>
+              <span>{{soLuong | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -237,7 +237,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thành Tiền</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{thanhTien}}</span>
+              <span>{{thanhTien| number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
