@@ -409,7 +409,7 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async approve(id: number, trangThai: string, msg: string, roles?: any) {
+  async approve(id: number, trangThai: string, msg: string, roles?: any,msgSuccess?: string) {
     if (!this.checkPermission(roles)) {
       return
     }
@@ -430,7 +430,7 @@ export class Base2Component implements OnInit {
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, STATUS_LABEL[trangThai] + " " + MESSAGE.SUCCESS.toLowerCase());
+            this.notification.success(MESSAGE.SUCCESS, msgSuccess?msgSuccess:STATUS_LABEL[trangThai] + " " + MESSAGE.SUCCESS.toLowerCase());
             this.spinner.hide();
             this.goBack();
           } else {
