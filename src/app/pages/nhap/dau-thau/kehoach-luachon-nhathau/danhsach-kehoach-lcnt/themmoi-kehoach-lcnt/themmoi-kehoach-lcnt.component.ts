@@ -400,7 +400,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: '',
       nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,

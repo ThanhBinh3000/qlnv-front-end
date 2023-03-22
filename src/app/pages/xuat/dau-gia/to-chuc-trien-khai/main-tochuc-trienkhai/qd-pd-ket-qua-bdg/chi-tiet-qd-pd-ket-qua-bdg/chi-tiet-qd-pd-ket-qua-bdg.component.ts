@@ -41,10 +41,10 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year'), [Validators.required]],
-      soQdKq: [, [Validators.required]],
+      soQdKq: [],
       trichYeu: [, [Validators.required]],
-      ngayHluc: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
+      ngayHluc: [],
+      ngayKy: [],
       maThongBao: [, [Validators.required]],
       soBienBan: [, [Validators.required]],
       pthucGnhan: [''],

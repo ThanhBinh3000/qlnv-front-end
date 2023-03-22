@@ -108,7 +108,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     await this.spinner.show()
     if (this.validateData()) {
-      this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoành thành thực hiện hợp đồng ?")
+      this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
     }
     await this.spinner.hide()
   }

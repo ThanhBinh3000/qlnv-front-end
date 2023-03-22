@@ -61,7 +61,7 @@
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()"
+        <button type="button" class="btn btn-sub" (click)="exportData('xay-dung-phuong-an-ctvt.xlsx')"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -92,7 +92,7 @@
             <th>Ngày đề xuất</th>
             <th>Ngày duyệt đề xuất</th>
             <th>Loại hàng hoá</th>
-            <th>Tổng SL xuất CT,VT (kg)</th>
+            <th>Tổng SL đề xuất CT, VT (kg)</th>
             <th>Trích yếu</th>
             <th>Trạng thái ĐX</th>
             <th>Trạng thái TH</th>
