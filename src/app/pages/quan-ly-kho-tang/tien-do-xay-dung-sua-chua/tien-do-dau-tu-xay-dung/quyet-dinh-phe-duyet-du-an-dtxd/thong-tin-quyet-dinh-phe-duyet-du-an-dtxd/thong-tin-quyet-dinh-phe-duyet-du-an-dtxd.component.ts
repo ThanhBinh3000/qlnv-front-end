@@ -19,6 +19,7 @@ import {
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-du-an-dtxd',
@@ -50,7 +51,8 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService
+    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
+    private ktQdXdHangNamService: KtQdXdHangNamService
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetduandtxdService)
     super.ngOnInit()
@@ -59,11 +61,11 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       maDvi: [null],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      soQdKhDtxd: [null],
-      idQdKhDtxd: [null],
+      soQdKhDtxd: [null, Validators.required],
+      idQdKhDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
-      tenDuAn: [null],
-      chuDauTu: [null, Validators.required],
+      tenDuAn: [null, Validators.required],
+      chuDauTu: [this.userInfo.TEN_DVI, Validators.required],
       toChucTvtk: [null],
       chuNhiemDuAn: [null],
       mucTieuDt: [null],
@@ -73,7 +75,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       tongMucDt: [0],
       nguonVonDt: [null],
       hinhThucQlDa: [null],
-      thoiGianTh: [null],
+      thoiGianTh: [null, Validators.required],
       thoiGianThTu: [null],
       thoiGianThDen: [null],
       noiDung: [null],
@@ -93,7 +95,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     this.spinner.show();
     try {
       await Promise.all([
-        // this.getAllDmCcdc(),
+        this.loadQdKhĐtxd(),
         // this.changeNamKh(this.formData.value.namKeHoach)
       ]);
       if (this.idInput) {
@@ -105,6 +107,33 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadQdKhĐtxd() {
+    this.spinner.show();
+    try {
+      let body = {
+        "maDvi": this.userInfo.MA_DVI,
+        "paggingReq": {
+          "limit": 10,
+          "page": this.page - 1
+        },
+      };
+      let res = await this.ktQdXdHangNamService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listQdKhDtxd = res.data.content;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
     }
   }
 
@@ -165,18 +194,41 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   }
 
   changeSoQdKhDtxd(event) {
-
+    if (event) {
+      this.formData.patchValue({
+        idQdKhDtxd: event
+      });
+    }
+  }
+  async banHanh(id) {
+    let trangThai = STATUS.BAN_HANH;
+    let mesg = 'Ban hành quyết định'
+    this.approve(id, trangThai, mesg);
+  }
+  initFormDataDetail() {
+    this.formDataDetail = this.fb.group({
+      id: [null],
+      idVirtual: uuid.v4(),
+      chiMuc: [null, Validators.required],
+      noiDung: [null, Validators.required],
+      chiMucCha: [null],
+      capChiMuc: [null, Validators.required],
+      giaTri: [null, Validators.required],
+      expand: true,
+      thueVat: 0,
+      chiPhiSauThue: 0,
+    });
   }
 
   async themMoiCtiet(item?) {
     if (item) {
       this.formDataDetail = this.fb.group({
         idVirtual: uuid.v4(),
-        chiMuc: null,
-        noiDung: null,
+        chiMuc: [null, Validators.required],
+        noiDung: [null, Validators.required],
         chiMucCha: item.chiMuc,
         capChiMuc: item.capChiMuc + 1,
-        giaTri: 0,
+        giaTri: [null, Validators.required],
         expand: true,
         thueVat: 0,
         chiPhiSauThue: 0,
@@ -200,11 +252,30 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     }
   }
 
+  editRow(item) {
+    if (item) {
+      this.initFormDataDetail();
+      this.formDataDetail.patchValue({
+        id: item.id,
+        idVirtual: item.idVirtual,
+        chiMuc: item.chiMuc,
+        noiDung: item.noiDung,
+        chiMucCha: item.chiMucCha,
+        capChiMuc: item.capChiMuc,
+        giaTri: item.giaTri,
+        expand: true,
+        thueVat: item.thueVat,
+        chiPhiSauThue: item.chiPhiSauThue,
+      });
+      this.isVisiblePopTongMucDauTu = true;
+    }
+  }
+
   required(item: TongMucDauTu) {
     let msgRequired = '';
     //validator
-    if (!item.noiDung) {
-      msgRequired = "Loại Ccdc không được để trống";
+    if (!item.noiDung || !item.chiMuc || !item.giaTri) {
+      msgRequired = "Chỉ mục, nội dung, và giá trị không được để trống";
     }
     return msgRequired;
   }
@@ -297,27 +368,41 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     });
   }
 
-  // expandAll() {
-  //   this.dataTable.forEach(s => {
-  //     this.expandSet.add(s.idVirtual);
-  //   })
-  // }
-
   handleCancel(): void {
     this.isVisiblePopTongMucDauTu = false;
   }
 
   handleOk(): void {
+    this.helperService.markFormGroupTouched(this.formDataDetail)
+    if (this.formDataDetail.invalid) {
+      return;
+    }
     let itemChild = this.formDataDetail.value;
     if (itemChild) {
-      itemChild.thueVat = itemChild.giaTri ? (itemChild.giaTri * 10) / 100 : itemChild.giaTri;
-      itemChild.chiPhiSauThue = itemChild.thueVat + itemChild.giaTri;
-      itemChild.expand = true;
-      this.dataTable = [...this.dataTable, itemChild];
+      console.log(itemChild, 'dayyyyyyyyyyyyyyyyy');
+      if (itemChild.id && itemChild.id > 0) {
+        this.dataTable = this.dataTable.map(obj => {
+          if (obj.id == itemChild.id) {
+            itemChild.thueVat = itemChild.giaTri ? (itemChild.giaTri * 10) / 100 : itemChild.giaTri;
+            itemChild.chiPhiSauThue = itemChild.thueVat + itemChild.giaTri;
+            itemChild.expand = true;
+            return itemChild;
+          }
+          return obj;
+        });
+        console.log(this.dataTable, 'cccccccccccccccc');
+      } else {
+        itemChild.thueVat = itemChild.giaTri ? (itemChild.giaTri * 10) / 100 : itemChild.giaTri;
+        itemChild.chiPhiSauThue = itemChild.thueVat + itemChild.giaTri;
+        itemChild.expand = true;
+        this.dataTable = [...this.dataTable, itemChild];
+      }
       this.dataTreeTable = this.dataTable;
       this.formDataDetail.reset();
       this.convertListData();
+
     }
+
     this.isVisiblePopTongMucDauTu = false;
   }
 }

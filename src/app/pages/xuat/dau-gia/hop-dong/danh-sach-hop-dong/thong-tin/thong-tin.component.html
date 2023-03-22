@@ -248,13 +248,13 @@
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
-                <input nz-input placeholder="Số điện thoại" formControlName="sdt" />
+                <input nz-input placeholder="Số điện thoại" formControlName="fax" />
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
-                <input nz-input placeholder="Số tài khoản" formControlName="fax" />
+                <input nz-input placeholder="Số tài khoản" formControlName="stk" />
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="6">
@@ -360,7 +360,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
-                <input [readonly]="true" nz-input formControlName="thanhTien" readonly="true" />
+                <input [readonly]="true" nz-input formControlName="tongTien" readonly="true" />
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="1">
@@ -371,10 +371,10 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="21">
+            <div nz-col [nzSpan]="20">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
-                <input [ngModel]=" convertTienTobangChu(formData.value.thanhTien)" nz-input readonly
+                <input [ngModel]=" convertTienTobangChu(formData.value.tongTien)" nz-input readonly
                   [ngModelOptions]="{standalone: true}" />
               </nz-form-item>
             </div>

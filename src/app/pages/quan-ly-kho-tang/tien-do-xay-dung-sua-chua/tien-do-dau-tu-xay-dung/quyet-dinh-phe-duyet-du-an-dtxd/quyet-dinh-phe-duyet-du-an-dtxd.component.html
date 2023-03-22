@@ -170,7 +170,7 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a *ngIf="data.trangThai != STATUS.DU_THAO "
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH "
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
