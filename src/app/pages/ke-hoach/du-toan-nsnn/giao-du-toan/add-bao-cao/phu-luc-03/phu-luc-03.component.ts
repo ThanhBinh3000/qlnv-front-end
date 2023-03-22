@@ -161,7 +161,7 @@ export class PhuLuc03Component implements OnInit {
         // }
       })
     }
-    
+
     this.sum1()
     this.sortByIndex();
     this.getTotal();
@@ -405,41 +405,41 @@ export class PhuLuc03Component implements OnInit {
   }
 
   sortByIndex() {
-		this.setLevel();
-		this.lstCtietBcao.sort((item1, item2) => {
-			if (item1.level > item2.level) {
-				return 1;
-			}
-			if (item1.level < item2.level) {
-				return -1;
-			}
-			if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-				return -1;
-			}
-			if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-				return 1;
-			}
-			return 0;
-		});
-		const lstTemp: ItemData[] = [];
-		this.lstCtietBcao.forEach(item => {
-			const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-			if (index == -1) {
-				lstTemp.splice(0, 0, item);
-			} else {
-				lstTemp.splice(index + 1, 0, item);
-			}
-		})
+    this.setLevel();
+    this.lstCtietBcao.sort((item1, item2) => {
+      if (item1.level > item2.level) {
+        return 1;
+      }
+      if (item1.level < item2.level) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+        return 1;
+      }
+      return 0;
+    });
+    const lstTemp: ItemData[] = [];
+    this.lstCtietBcao.forEach(item => {
+      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+      if (index == -1) {
+        lstTemp.splice(0, 0, item);
+      } else {
+        lstTemp.splice(index + 1, 0, item);
+      }
+    })
 
-		this.lstCtietBcao = lstTemp;
-	}
+    this.lstCtietBcao = lstTemp;
+  }
 
   setLevel() {
-		this.lstCtietBcao.forEach(item => {
-			const str: string[] = item.stt.split('.');
-			item.level = str.length - 2;
-		})
-	}
+    this.lstCtietBcao.forEach(item => {
+      const str: string[] = item.stt.split('.');
+      item.level = str.length - 2;
+    })
+  }
   changeModel(id: string): void {
     this.editCache[id].data.namDtCphiTaiCkhoTt = mulNumber(this.editCache[id].data.namDtCphiTaiCkhoSl, this.editCache[id].data.namDtCphiTaiCkhoDm);
     this.editCache[id].data.namDtCphiNgoaiCkhoBq = divNumber(this.editCache[id].data.namDtCphiNgoaiCkhoTt, this.editCache[id].data.namDtCphiTaiCkhoSl);
@@ -458,6 +458,8 @@ export class PhuLuc03Component implements OnInit {
         danhMuc: data.danhMuc,
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
+        namDtCphiTaiCkhoSl: data.namDtCphiTaiCkhoSl,
+        namDtCphiTaiCkhoDm: data.namDtCphiTaiCkhoDm,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -488,6 +490,8 @@ export class PhuLuc03Component implements OnInit {
           danhMuc: data.danhMuc,
           tenDanhMuc: data.tenDanhMuc,
           level: data.level,
+          namDtCphiTaiCkhoSl: data.namDtCphiTaiCkhoSl,
+          namDtCphiTaiCkhoDm: data.namDtCphiTaiCkhoDm,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {
