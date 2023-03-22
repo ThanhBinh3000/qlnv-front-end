@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {PAGE_SIZE_DEFAULT, STATUS_DA_DUYET} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
+import {STATUS, STATUS_LABEL} from 'src/app/constants/status';
 import {UserLogin} from 'src/app/models/userlogin';
 import {BaseService} from 'src/app/services/base.service';
 import {HelperService} from 'src/app/services/helper.service';
@@ -430,16 +430,9 @@ export class Base2Component implements OnInit {
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            if (this.formData.value.trangThai == STATUS.DU_THAO) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
-              this.spinner.hide();
-              this.goBack();
-            } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-              this.spinner.hide();
-              this.goBack();
-            }
-
+            this.notification.success(MESSAGE.SUCCESS, STATUS_LABEL[trangThai] + " " + MESSAGE.SUCCESS.toLowerCase());
+            this.spinner.hide();
+            this.goBack();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
