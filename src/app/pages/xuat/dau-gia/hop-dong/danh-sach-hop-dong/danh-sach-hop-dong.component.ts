@@ -19,7 +19,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
-  listTrangThai: any[] = [
+  listTrangThaiHd: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
@@ -46,16 +46,23 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       trangThai: this.STATUS.BAN_HANH,
       loaiVthh: '',
       nam: '',
+      tenDviThucHien: '',
+      tenDviMua: ''
     });
     this.filterTable = {
-      soHd: '',
-      tenHd: '',
-      ngayKy: '',
-      loaiVthh: '',
-      chungLoaiVthh: '',
-      chuDauTu: '',
-      nhaCungCap: '',
-      gtriHdSauVat: '',
+      nam: '',
+      soQdPd: '',
+      soQdKq: '',
+      tongDvts: '',
+      tongDvtsDg: '',
+      slHdDaKy: '',
+      thoiHanTt: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      tenDviThucHien: '',
+      tenDviMua: '',
+      soLuong: '',
+      thanhTien: '',
     }
   }
 
