@@ -516,8 +516,9 @@
                   </tbody>
                 </nz-table>
                 <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" (ngModelChange)="tinhXuatCap()"
-                  [(ngModel)]="formData.value.xuatCap">Đồng ý duyệt
-                  xuất cấp</label>
+                  [nzDisabled]="slXuatCap == null" [(ngModel)]="formData.value.xuatCap">
+                  Đồng ý duyệt xuất cấp
+                </label>
               </nz-card>
             </div>
           </nz-card>
