@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DonviService} from 'src/app/services/donvi.service';
-import {chain, isEmpty} from 'lodash';
-import {STATUS} from "src/app/constants/status";
-import {DatePipe} from "@angular/common";
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DonviService } from 'src/app/services/donvi.service';
+import { chain, isEmpty } from 'lodash';
+import { STATUS } from "src/app/constants/status";
+import { DatePipe } from "@angular/common";
 import * as uuid from "uuid";
 
 @Component({
@@ -28,6 +28,15 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+  ];
 
   constructor(
     httpClient: HttpClient,
