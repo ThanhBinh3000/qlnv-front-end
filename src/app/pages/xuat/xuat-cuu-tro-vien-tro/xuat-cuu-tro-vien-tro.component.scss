@@ -1,4 +1,5 @@
 @import '../../../../assets/scss/tab-content.scss';
+
 .text-green {
   color: #8BC34C;
   font-weight: 500;
@@ -27,17 +28,32 @@
   }
 }
 
+:host ::ng-deep .ant-statistic-title {
+  font-weight: bolder;
+}
+
 :host ::ng-deep .ant-statistic-content {
   color: #001CFF;
   font-size: 18px;
 }
 
+:host ::ng-deep .ant-statistic-content {
+  color: #001CFF;
+  font-size: 18px;
+}
+
+:host ::ng-deep .red-value .ant-statistic-content {
+  color: #ff7a7b !important;
+}
+
 ::ng-deep .ant-modal-header, ::ng-deep .ant-modal-footer {
   background-color: #f3f3f3;
 }
-::ng-deep .ant-modal-body{
+
+::ng-deep .ant-modal-body {
   padding-top: 10px;
 }
+
 .modal-card ::ng-deep .ant-card {
   border: none;
 

@@ -104,6 +104,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   listNoiDung = []
   listThanhTien: any;
   listSoLuong: any;
+  listSoLuongDeXuat: any;
   errorInputComponent: any[] = [];
   disableInputComponent: ModalInput = new ModalInput();
 
@@ -251,6 +252,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       });
       this.listThanhTien = [0];
       this.listSoLuong = [0];
+      this.listSoLuongDeXuat = [0];
     }
 
   }
@@ -281,7 +283,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async selectHangHoa(event: any) {
-    console.log(event)
     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
@@ -342,7 +343,16 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
     } else {
-      table = [...table, this.phuongAnRow]
+      //check ton tai thi cong them
+      let exists = this.formData.value.deXuatPhuongAn.find(s => s.noiDung === this.phuongAnRow.noiDung &&
+        s.tenChiCuc === this.phuongAnRow.tenChiCuc &&
+        s.tenCloaiVthh === this.phuongAnRow.tenCloaiVthh)
+      if (exists) {
+        this.phuongAnRow.soLuongXuatChiCuc += exists.soLuongXuatChiCuc;
+        table.splice(exists, 1, this.phuongAnRow);
+      } else {
+        table = [...table, this.phuongAnRow]
+      }
     }
     this.formData.patchValue({
       deXuatPhuongAn: table
@@ -412,9 +422,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     if (this.formData.value.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
+      this.listSoLuongDeXuat = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatCuc);
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
+      this.listSoLuongDeXuat = [0];
     }
   }
 
@@ -504,15 +516,25 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     }
   }
 
-  async saveAndSend() {
+  async saveAndSend(message: string) {
     this.setValidForm();
     this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     if (this.userService.isTongCuc()) {
-      await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
+      await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, message);
     } else {
-      await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+      let result = await this.createUpdate(this.formData.value);
+      if (result) {
+        await this.approve(this.idInput, STATUS.CHO_DUYET_TP, message);
+      }
+    }
+  }
+
+  async saveAndChangeStatus(status: string, message: string, sucessMessage: string) {
+    this.setValidForm();
+    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
+    let result = await this.createUpdate(this.formData.value);
+    if (result) {
+      await this.approve(this.idInput, status, message, null, sucessMessage);
     }
   }
 
@@ -527,7 +549,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     if (data.noiDung) {
       deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => s.noiDung != data.noiDung));
     } else if (data.tenCuc && dataParent) {
-      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => !(s.tenCuc !== data.tenCuc) && (s.noiDung !== dataParent.noiDung)));
+      deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => !(s.tenCuc === data.tenCuc && s.noiDung === dataParent.noiDung)));
     } else if (data.id) {
       deXuatPhuongAn = cloneDeep(this.formData.value.deXuatPhuongAn.filter(s => s.id != data.id));
     } else if (data.idVirtual) {
