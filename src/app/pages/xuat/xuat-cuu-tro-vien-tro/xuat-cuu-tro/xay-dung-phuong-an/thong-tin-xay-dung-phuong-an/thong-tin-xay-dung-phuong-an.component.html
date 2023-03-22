@@ -477,7 +477,7 @@
                       <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
                     </a>
                     <a>
-                      <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(item)"></i>
+                      <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv1,item)"></i>
                     </a>
                   </td>
                 </tr>
@@ -532,7 +532,7 @@
         <nz-form-item>
           <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
           <nz-form-control>
-            <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto">
+            <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto" [disabled]="disableInputComponent.noiDung">
             <nz-autocomplete #auto>
               <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
               </nz-auto-option>
@@ -543,7 +543,7 @@
           <nz-form-label [nzXs]="7">Cục DTNN</nz-form-label>
           <nz-form-control>
             <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
-              [nzDisabled]="userService.isCuc()" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
+              [nzDisabled]="disableInputComponent.maDviCuc" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
               <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
             </nz-select>
           </nz-form-control>
@@ -552,7 +552,7 @@
           <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
           <nz-form-control>
             <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="0.1"
-              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="disableInputComponent.soLuongXuatCuc">
             </nz-input-number>
           </nz-form-control>
         </nz-form-item>
@@ -597,7 +597,7 @@
           <nz-form-control>
             <div nz-row [nzGutter]="48">
               <div nz-col [nzSpan]="16">
-                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="999999999999"
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="phuongAnRow.tonKhoCloaiVthh"
                   [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
               </div>

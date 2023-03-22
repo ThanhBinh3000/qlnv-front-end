@@ -213,12 +213,10 @@
                             <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{data.tenDviMua }}</td>
                             <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td *ngIf="!userService.isChiCuc()">{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td *ngIf="userService.isChiCuc()">{{data.donGiaKhongVat | number : '1.0-1' : 'vi_VN' }}
+                            <td>{{data.donGia == null ? data.donGiaKhongVat : data.donGia| number : '1.0-1' : 'vi_VN' }}
                             </td>
-                            <td *ngIf="!userService.isChiCuc()">{{data.soLuong * data.donGiaGomThue | number : '1.0-1' :
-                                'vi_VN' }}</td>
-                            <td *ngIf="userService.isChiCuc()">{{data.soLuong * data.donGiaKhongVat | number : '1.0-1' :
+                            <td>{{data.soLuong * data.donGiaGomThue == 0 ? data.soLuong * data.donGiaKhongVat :
+                                data.soLuong * data.donGiaGomThue | number : '1.0-1' :
                                 'vi_VN' }}</td>
                             <td>{{data.tenTrangThai}}</td>
                             <td>{{data.soQd}}</td>

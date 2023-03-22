@@ -67,7 +67,7 @@
             </th>
             <th nzWidth="2%">STT</th>
             <th>Năm kế hoạch</th>
-            <th>Số QĐ PD KHLCNT</th>
+            <th>QĐ PD KHLCNT</th>
             <th nzWidth="10%">QĐ PD KQLCNT</th>
             <th nzWidth="5%">Tổng số gói thầu</th>
             <th nzWidth="5%">Số gói thầu đã trúng</th>
@@ -77,8 +77,9 @@
             <th nzWidth="10%">Chủng loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
             <th nzWidth="5%">Chủ đầu tư</th>
+            <th nzWidth="10%" *ngIf="userService.isTongCuc()">Nhà thầu trúng thầu</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
-            <th nzWidth="5%">Trạng thái nhập hàng</th>
+            <th nzWidth="5%">Trạng thái NH</th>
             <th nzWidth="3%">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -86,26 +87,52 @@
             <th></th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHd"
-                  (input)="filterInTable('soHd',filterTable.soHd)" />
+                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+                           (ngModelChange)="filterInTable('namKhoach',filterTable.namKhoach)">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHd"
-                  (input)="filterInTable('tenHd',filterTable.tenHd)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKhlcnt"
+                  (input)="filterInTable('soQdPdKhlcnt',filterTable.soQdPdKhlcnt)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                  (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                  (input)="filterInTable('soQd',filterTable.soQd)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
-                  (input)="filterInTable('tenVthh',filterTable.tenVthh)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthau"
+                  (input)="filterInTable('soGthau',filterTable.soGthau)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthauTrung"
+                  (input)="filterInTable('soGthauTrung',filterTable.soGthauTrung)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.listHopDong"
+                  (input)="filterInTable('listHopDong',filterTable.listHopDong)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
+                  (input)="filterInTable('tgianNhang',filterTable.tgianNhang)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                  (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" />
               </nz-input-group>
             </th>
             <th>
@@ -116,50 +143,36 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNthau"
-                  (input)="filterInTable('tenNthau',filterTable.tenNthau)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.gtriHdSauVat"
-                  (input)="filterInTable('gtriHdSauVat',filterTable.gtriHdSauVat)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                  (input)="filterInTable('tenDvi',filterTable.tenDvi)" />
+              </nz-input-group>
+            </th>
+            <th *ngIf="userService.isTongCuc()">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviTrungThau"
+                       (input)="filterInTable('tenDviTrungThau',filterTable.tenDviTrungThau)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiHd"
+                           (ngModelChange)="filterInTable('trangThaiHd',filterTable.trangThaiHd)">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThaiNh"
+                           (ngModelChange)="filterInTable('tenTrangThaiNh',filterTable.tenTrangThaiNh)">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th></th>
@@ -183,8 +196,9 @@
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td>{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenDvi}}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.tenDviTrungThau}}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
-            <td></td>
+            <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
               <div nz-row>
                 <div nz-col nzSpan="8">
