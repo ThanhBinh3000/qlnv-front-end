@@ -6,6 +6,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { PhieuXuatKhoBttComponent } from './phieu-xuat-kho-btt/phieu-xuat-kho-btt.component';
 import { ThemMoiPhieuXuatKhoBttComponent } from './phieu-xuat-kho-btt/them-moi-phieu-xuat-kho-btt/them-moi-phieu-xuat-kho-btt.component';
+import { BangCanKeHangBttComponent } from './bang-can-ke-hang-btt/bang-can-ke-hang-btt.component';
+import { ThemMoiBangKeCanHangBttComponent } from './bang-can-ke-hang-btt/them-moi-bang-ke-can-hang-btt/them-moi-bang-ke-can-hang-btt.component';
 
 
 
@@ -15,6 +17,8 @@ import { ThemMoiPhieuXuatKhoBttComponent } from './phieu-xuat-kho-btt/them-moi-p
     MainXuatKhoBttComponent,
     PhieuXuatKhoBttComponent,
     ThemMoiPhieuXuatKhoBttComponent,
+    BangCanKeHangBttComponent,
+    ThemMoiBangKeCanHangBttComponent,
   ],
   imports: [
     CommonModule,
