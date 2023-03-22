@@ -409,7 +409,7 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async approve(id: number, trangThai: string, msg: string, roles?: any) {
+  async approve(id: number, trangThai: string, msg: string, roles?: any, msgSucess?: string) {
     if (!this.checkPermission(roles)) {
       return
     }
@@ -431,11 +431,11 @@ export class Base2Component implements OnInit {
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             if (this.formData.value.trangThai == STATUS.DU_THAO) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
+              this.notification.success(MESSAGE.SUCCESS, msgSucess ? msgSucess : MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
               this.spinner.hide();
               this.goBack();
             } else {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+              this.notification.success(MESSAGE.SUCCESS, msgSucess ? msgSucess : MESSAGE.THAO_TAC_SUCCESS);
               this.spinner.hide();
               this.goBack();
             }
