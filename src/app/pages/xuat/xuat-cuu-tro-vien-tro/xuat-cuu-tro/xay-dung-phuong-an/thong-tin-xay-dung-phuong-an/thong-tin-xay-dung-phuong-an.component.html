@@ -107,7 +107,7 @@
             [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span>Đề xuất phương án xuất viện trợ, cứu trợ</span>
+          <span>Đề xuất phương án xuất cứu trợ, viện trợ</span>
         </div>
       </div>
     </div>
@@ -245,7 +245,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Nội dung xuất viện trợ, cứu trợ</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Nội dung xuất cứu trợ, viện trợ</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <textarea rows="3" class="search__input" nz-input formControlName="noiDungDx"
                 [readOnly]="isView"></textarea>
@@ -356,12 +356,12 @@
       <div class="title-card">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Phương án xuất viện trợ, cứu trợ</span>
+          <span>Chi tiết phương án xuất cứu trợ, viện trợ</span>
         </div>
         <div>
           <button type="button" class="btn btn-main" (click)="showModal()" *ngIf="!isView">
             <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm mới</span>
+            <span>Thêm</span>
           </button>
         </div>
       </div>
@@ -374,11 +374,11 @@
         <!--            <span class="text-green">{{formData.value.tongSoLuong|number: '1.0-1'}} kg</span>-->
         <!--          </nz-form-control>-->
         <!--        </nz-form-item>-->
-        <nz-statistic [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"
+        <nz-statistic [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"
           [nzTitle]="'Tổng số lượng viện trợ, cứu trợ'"></nz-statistic>
       </div>
       <div nz-col [nzSpan]="4">
-        <nz-statistic nzSuffix="đ" [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'"
+        <nz-statistic nzSuffix="đ" [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"
           [nzTitle]="'Thành tiền'"></nz-statistic>
         <!--<nz-form-item>
           <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
@@ -433,7 +433,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td>{{i + 1}}</td>
               <td>{{ item.noiDung }}</td>
-              <td><strong>{{ item.soLuongXuat |number:'1.0-1'}}</strong></td>
+              <td><strong>{{ item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</strong></td>
               <td></td>
               <td></td>
               <td></td>
@@ -441,10 +441,10 @@
               <td></td>
               <td></td>
               <td></td>
-              <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
+              <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
               <td></td>
               <td></td>
-              <td><strong>{{item.thanhTienXuatThucTe|number:'1.0-1'}}</strong></td>
+              <td><strong>{{item.thanhTienXuatThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
               <td>
                 <a>
                   <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
@@ -463,15 +463,15 @@
                   <td></td>
                   <td>{{lv1.tenCuc}}</td>
                   <td></td>
-                  <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1'}}</strong></td>
+                  <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                   <td></td>
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
+                  <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                   <td></td>
                   <td></td>
-                  <td><strong>{{lv1.thanhTienXuatCucThucTe|number:'1.0-1'}}</strong></td>
+                  <td><strong>{{lv1.thanhTienXuatCucThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                   <td>
                     <a>
                       <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
@@ -492,13 +492,13 @@
                       <td></td>
                       <td></td>
                       <td>{{lv2.tenChiCuc}}</td>
-                      <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
+                      <td>{{lv2.tonKhoChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                       <td>{{lv2.tenCloaiVthh}}</td>
-                      <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
-                      <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
+                      <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1' : 'vi_VN'}}</td>
+                      <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                       <td>{{lv2.tenDonViTinh}}</td>
-                      <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
-                      <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
+                      <td>{{lv2.donGiaKhongVat|number:'1.0-1' : 'vi_VN'}}</td>
+                      <td>{{lv2.thanhTien|number:'1.0-1' : 'vi_VN'}}</td>
                       <td> <!--<a (click)="addChiCuc(i,item.label)">
                 <i class="fa fa-plus"></i>
               </a>-->
@@ -532,7 +532,8 @@
         <nz-form-item>
           <nz-form-label [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
           <nz-form-control>
-            <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto" [disabled]="disableInputComponent.noiDung">
+            <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto"
+              [disabled]="disableInputComponent.noiDung">
             <nz-autocomplete #auto>
               <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
               </nz-auto-option>
@@ -552,7 +553,8 @@
           <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
           <nz-form-control>
             <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="0.1"
-              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="disableInputComponent.soLuongXuatCuc">
+              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+              [nzDisabled]="disableInputComponent.soLuongXuatCuc">
             </nz-input-number>
           </nz-form-control>
         </nz-form-item>
@@ -597,8 +599,9 @@
           <nz-form-control>
             <div nz-row [nzGutter]="48">
               <div nz-col [nzSpan]="16">
-                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzMax]="phuongAnRow.tonKhoCloaiVthh"
-                  [nzStep]="0.1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1"
+                  [nzMax]="phuongAnRow.tonKhoCloaiVthh" [nzStep]="0.1" [nzSize]="'small'"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
               </div>
               <div nz-col [nzSpan]="8">
