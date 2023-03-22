@@ -1,5 +1,5 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
+  <div class="btn-group" *ngIf="!isViewOnModal">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
@@ -112,7 +112,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -127,7 +127,7 @@
                 <ng-template #suffixTemplateInfo>
                   <div class="icon-file-dinh-kem">
                     <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
+                    <input class="input-file" (change)="getNameFile($event)" type="file" [readOnly]="isViewDetail"/>
                   </div>
                 </ng-template>
               </div>

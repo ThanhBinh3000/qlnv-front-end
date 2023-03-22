@@ -153,14 +153,18 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                [(ngModel)]="filterTable.ngayTao"
+                                (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
-                  (input)="filterInTable('ngayPduyet',filterTable.ngayPduyet)" size="small" />
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                [(ngModel)]="filterTable.ngayPduyet"
+                                (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th>
@@ -207,8 +211,10 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
-                  (input)="filterInTable('tgianNhang',filterTable.tgianNhang)" size="small" />
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                [(ngModel)]="filterTable.tgianNhang"
+                                (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th *ngIf="loaiVthh != '02'">

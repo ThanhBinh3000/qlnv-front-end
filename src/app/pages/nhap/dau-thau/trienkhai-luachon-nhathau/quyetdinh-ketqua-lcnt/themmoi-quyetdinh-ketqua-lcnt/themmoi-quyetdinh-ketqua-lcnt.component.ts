@@ -33,6 +33,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   @Input() loaiVthh: String;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() isViewOnModal:boolean;
 
   formData: FormGroup;
   taiLieuDinhKemList: any[] = [];

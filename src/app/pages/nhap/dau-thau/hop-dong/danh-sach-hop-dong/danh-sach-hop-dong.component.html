@@ -22,7 +22,24 @@
         </div> -->
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký QĐ phê duyệt KQ LCNT</label>
-          <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker
+                [nzDisabledDate]="disabledTuNgayKy"
+                nzFormat="dd/MM/yyyy"
+                [(ngModel)]="tuNgayKy"
+                nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker
+                [nzDisabledDate]="disabledDenNgayKy"
+                nzFormat="dd/MM/yyyy"
+                [(ngModel)]="denNgayKy"
+                nzPlaceHolder="Ngày kết thúc"
+              ></nz-date-picker>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -52,7 +69,7 @@
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')" type="button"
           class="btn btn-main" (click)="themMoi(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm mới</span>
+          <span>Thêm hợp đồng</span>
         </button>
       </div>
     </div>
@@ -119,14 +136,16 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.listHopDong"
-                  (input)="filterInTable('listHopDong',filterTable.listHopDong)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.slHdDaKy"
+                  (input)="filterInTable('slHdDaKy',filterTable.slHdDaKy)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
-                  (input)="filterInTable('tgianNhang',filterTable.tgianNhang)" />
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                                [(ngModel)]="filterTable.tgianNhang"
+                                (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"
+                ></nz-date-picker>
               </nz-input-group>
             </th>
             <th>
@@ -143,8 +162,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongMucDt"
+                  (input)="filterInTable('tongMucDt',filterTable.tongMucDt)" />
               </nz-input-group>
             </th>
             <th>
@@ -186,8 +205,8 @@
             </td>
             <td>{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.namKhoach}}</td>
-            <td>{{ data.soQdPdKhlcnt}}</td>
-            <td>{{ data.soQd}}</td>
+            <td><a style="color: #001CFF;" (click)="openQdPdKhlcntModal(data.idQdPdKhlcnt)">{{ data.soQdPdKhlcnt}}</a></td>
+            <td><a style="color: #001CFF;" (click)="openQdPdKqlcntModal(data.id)">{{ data.soQd}}</a></td>
             <td>{{ data.soGthau}}</td>
             <td>{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
             <td>{{ data.listHopDong?.length }}</td>
@@ -209,7 +228,8 @@
                 </div>
                 <div nz-col nzSpan="8">
                   <a (click)="redirectToChiTiet(false, data)"
-                    *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')">
+                     *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
+                     && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
                     <i class="fa fa-pencil"></i>
                   </a>
                 </div>
@@ -245,3 +265,27 @@
   <app-quanly-hopdong *ngIf="isQuanLy" [id]="selectedId" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
   </app-quanly-hopdong>
 </ng-container>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcnt" (nzOnCancel)="closeQdPdKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-khlcnt [idInput]="qdPdKhlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-khlcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKqlcnt" (nzOnCancel)="closeQdPdKqlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-ketqua-lcnt [idInput]="qdPdKqlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true" [isViewDetail]="true">
+    </app-themmoi-quyetdinh-ketqua-lcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdKqlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
