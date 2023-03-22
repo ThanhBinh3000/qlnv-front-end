@@ -25,6 +25,9 @@ import { StorageService } from 'src/app/services/storage.service';
 export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  qdPdKhlcntId: number = 0;
+  openQdPdKhlcnt = false;
+
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
     { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
@@ -113,6 +116,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable)
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
@@ -126,6 +130,16 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+  openQdPdKhlcntModal(id:number) {
+    this.qdPdKhlcntId = id;
+    this.openQdPdKhlcnt = true;
+  }
+
+  closeQdPdKhlcntModal() {
+    this.qdPdKhlcntId = null;
+    this.openQdPdKhlcnt = false;
   }
 
   selectHangHoa() {

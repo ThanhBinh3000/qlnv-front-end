@@ -18,6 +18,7 @@ export class FileListComponent implements OnInit {
   @Input() trangThai: string;
   @Input() isViewDetail: boolean;
   @Input() disabled: boolean = false;
+  @Input() isQdkqlcnt: boolean = false;
 
   fileAdd: FileDinhKem = new FileDinhKem();
 
@@ -80,7 +81,8 @@ export class FileListComponent implements OnInit {
   }
 
   addFile() {
-    if (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '') {
+    debugger
+    if (this.isQdkqlcnt == false && (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '')) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng nhập file");
       return;
     }
