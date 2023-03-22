@@ -7,7 +7,7 @@ export const MESSAGE = {
   WARNING: 'Chú ý!!',
   NOTIFICATION: 'Thông báo',
   SUCCESS: 'Thành công',
-  ADD_SUCCESS: 'Bạn đã Lưu thành công!',
+  ADD_SUCCESS: 'Bạn đã lưu thành công!',
   UPDATE_SUCCESS: 'Cập nhật thành công',
   DELETE_SUCCESS: 'Xóa thành công',
   DELETE_CONFIRM: 'Bạn có chắc chắn muốn xóa',
