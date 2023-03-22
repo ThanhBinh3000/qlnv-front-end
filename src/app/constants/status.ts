@@ -99,3 +99,11 @@ export enum LOAI_BIEN_BAN {
   BB_KTRA_VAN_HANH = "BBKTVH",
   BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
 }
+
+export const STATUS_LABEL = {
+  [STATUS.DU_THAO]: 'Dự thảo',
+  [STATUS.BAN_HANH]: 'Ban hành',
+  [STATUS.CHO_DUYET_LDV]: 'Chờ duyệt lãnh đạo vụ',
+} as const;
+
+
