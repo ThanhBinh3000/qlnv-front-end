@@ -255,7 +255,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   clearDiemKho() {
-
+    this.thongtinDauThau.maDiemKho = null;
+    this.thongtinDauThau.diaDiemNhap = null;
+    this.thongtinDauThau.soLuong = null;
+    this.thongtinDauThau.thanhTienDx = null;
+    this.thongtinDauThau.thanhTienQd = null;
   }
 
   calculatorThanhTien() {

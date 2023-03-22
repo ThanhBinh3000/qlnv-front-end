@@ -11,6 +11,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DonviService } from 'src/app/services/donvi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DxuatKhLcntService } from "../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -40,6 +41,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   listHinhThucDauThau: any[] = [];
 
+  giaToiDa: any;
+
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -48,7 +51,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private helperService: HelperService,
     private notification: NzNotificationService,
     private donviService: DonviService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private dxuatKhLcntService: DxuatKhLcntService,
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -59,11 +63,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       dviTinh: [this.dviTinh],
       soLuong: [null],
       donGiaVat: [320000, [Validators.required]],
-      donGiaTamTinh: [null, [Validators.required]],
+      donGiaTamTinh: [null],
       maDvi: ['']
-    });
-    this.formGoiThau.controls['donGiaTamTinh'].valueChanges.subscribe(value => {
-      this.validateRangPrice();
     });
   }
 
@@ -90,6 +91,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   onChangeCloaiVthh($event) {
     let cloaiSelected = this.listChungLoai.filter(item => item.ma == $event);
+    this.getGiaToiDa($event);
     this.formGoiThau.patchValue({
       tenCloaiVthh: cloaiSelected[0].ten
     })
@@ -125,12 +127,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   validateRangPrice() {
     let value = +this.formGoiThau.get('donGiaTamTinh').value
-    let priceMin = 200000;
-    let priceMax = 500000;
-    console.log(value);
-    if (value > priceMax || value < priceMin) {
-      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải nằm trong khoảng giá tối thiểu - tối đa : " + priceMin + "đ - " + priceMax + "đ");
-    }
+    let priceMax = this.giaToiDa;
+    return value <= priceMax;
   }
 
   async initForm(dataDetail) {
@@ -165,6 +163,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     if (this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
+      return;
+    }
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
+      return;
+    }
+    if (this.validateRangPrice()) {
+      this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
       return;
     }
     const body = this.formGoiThau.value;
@@ -297,6 +303,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.expandSet2.add(id);
     } else {
       this.expandSet2.delete(id);
+    }
+  }
+
+  async getGiaToiDa(ma: string) {
+    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.giaToiDa = res.data;
     }
   }
 }
