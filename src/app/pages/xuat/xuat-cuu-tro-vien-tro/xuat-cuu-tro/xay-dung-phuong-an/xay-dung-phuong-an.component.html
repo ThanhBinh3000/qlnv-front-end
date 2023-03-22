@@ -175,6 +175,34 @@
             </th>
             <th>
               <nz-input-group>
+                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiTh"
+                  (ngModelChange)="filterInTable('trangThaiTh',filterTable.trangThaiTh)">
+                  <nz-option *ngFor="let p of listTrangThaiTh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
+                  (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select nzAllowClear [(ngModel)]="filterTable.trangThaiTQd"
+                  (ngModelChange)="filterInTable('trangThaiTQd',filterTable.trangThaiTQd)">
+                  <nz-option *ngFor="let p of listTrangThaiQd" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
                   (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small" />
               </nz-input-group>
@@ -201,8 +229,8 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiTh }}</td>
             <td>{{ data.maTongHop }}</td>
-            <td>{{ data.soQdPd }}</td>
             <td>{{ data.tenTrangThaiQd }}</td>
+            <td>{{ data.soQdPd }}</td>
             <td class="text-left">
               <a (click)="redirectDetail(data.id, true)"
                 *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XEM')">

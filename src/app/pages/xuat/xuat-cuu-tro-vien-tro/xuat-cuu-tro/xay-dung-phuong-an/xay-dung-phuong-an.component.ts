@@ -37,6 +37,18 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
     { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
   ];
+  listTrangThaiTh: any[] = [
+    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp' },
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã tạo - CĐ Vụ' },
+  ];
+
+  listTrangThaiQd: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -70,7 +82,8 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
       tongSoLuong: '',
       trichYeu: '',
       tenTrangThai: '',
-      maTongHop: ''
+      maTongHop: '',
+      soQd: '',
     };
   }
 

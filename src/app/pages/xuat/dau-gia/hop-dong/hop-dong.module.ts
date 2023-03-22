@@ -26,7 +26,7 @@ import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quan
   ],
   exports: [
     HopDongComponent,
-    DanhSachHopDongComponent,
+
   ]
 })
 export class HopDongModule { }

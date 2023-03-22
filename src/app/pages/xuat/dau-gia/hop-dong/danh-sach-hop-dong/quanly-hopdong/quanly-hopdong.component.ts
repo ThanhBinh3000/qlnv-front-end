@@ -48,6 +48,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       soLuongDviTsanTruot: [],
       vat: ['5'],
       tenLoaiVthh: [],
+      loaiHdong: [],
       tenCloaiVthh: [],
       soLuongXuatBan: [],
       donGiaTrungThau: [],
