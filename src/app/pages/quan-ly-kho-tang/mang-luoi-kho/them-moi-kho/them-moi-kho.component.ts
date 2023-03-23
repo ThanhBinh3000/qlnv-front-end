@@ -438,7 +438,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['soNganKho'].setValidators([Validators.required])
         this.formKho.controls['dienTichDat'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 3 : {
@@ -453,7 +453,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
         this.formKho.controls['nhiemVu'].setValidators([Validators.required])
         this.formKho.controls['ghiChu'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 4 : {
@@ -465,7 +465,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
     }
