@@ -142,7 +142,7 @@ export class MangLuoiKhoComponent implements OnInit {
     }
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
-      // this.layTatCaDonViTheoTree(),
+      this.layTatCaDonViTheoTree(),
       this.getAllLoaiVthh(),
       this.getListLoaiKho(),
       this.getListClKho(),
