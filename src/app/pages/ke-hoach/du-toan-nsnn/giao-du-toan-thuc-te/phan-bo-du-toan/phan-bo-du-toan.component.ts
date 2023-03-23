@@ -84,6 +84,7 @@ export class PhanBoDuToanComponent implements OnInit {
 
   filterTable: any = {
     maPa: "",
+    maPaCha: "",
     ngayTao: "",
     namPa: "",
     maLoaiDan: "",
