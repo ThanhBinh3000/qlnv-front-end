@@ -10,11 +10,11 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub ml-2" (click)="goBack()">
+      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="banHanh(idInput)"
+      <button class="btn btn-sub xanh-nhat ml-2" (click)="banHanh(idInput)"
               *ngIf="(idInput && idInput > 0) && (formData.value.trangThai == STATUS.DU_THAO) ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Ban hành</span>
@@ -70,7 +70,7 @@
               </nz-form-label>
               <nz-select nzAllowClear (ngModelChange)="changeSoQdKhDtxd($event)" formControlName="soQdKhDtxd"
                          [nzDisabled]="isViewDetail">
-                <nz-option *ngFor="let p of listQdKhDtxd" [nzValue]="p.id"
+                <nz-option *ngFor="let p of listQdKhDtxd" [nzValue]="p.soQd"
                            [nzLabel]="p.soQd"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -81,10 +81,10 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên dự án
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdKhDtxd($event)" formControlName="tenDuAn"
+              <nz-select nzAllowClear (ngModelChange)="changeDuAn($event)" formControlName="tenDuAn"
                          [nzDisabled]="isViewDetail">
-                <nz-option *ngFor="let p of listDuAnDtxd" [nzValue]="p.soQuyetDinh"
-                           [nzLabel]="p.soQuyetDinh"></nz-option>
+                <nz-option *ngFor="let p of listDuAnDtxd" [nzValue]="p.tenDuAn"
+                           [nzLabel]="p.tenDuAn"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -181,11 +181,27 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="2">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian thực hiện</nz-form-label>
-              <nz-range-picker nzFormat="yyyy" formControlName="thoiGianTh"></nz-range-picker>
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian TH từ</nz-form-label>
+              <nz-select nzAllowClear formControlName="thoiGianThTu"
+                         [nzDisabled]="isViewDetail">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                           [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="2">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Thời gian TH đến</nz-form-label>
+              <nz-select nzAllowClear formControlName="thoiGianThDen"
+                         [nzDisabled]="isViewDetail">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                           [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -295,7 +311,7 @@
     <ng-container *ngFor="let data of expandTable.data">
       <ng-container *ngFor="let item of mapOfExpandedData[data.idVirtual]">
         <tr *ngIf="(item.parent && item.parent.expand) || !item.parent"
-            [ngClass]="{'text-bold': item.capChiMuc < 3 }">
+            [ngClass]="{'text-bold': (item.capChiMuc < 3)}">
           <td class="align-content-md-center  "
               [nzIndentSize]="item.capChiMuc! * 20"
               [nzShowExpand]="!!item.children"
@@ -321,41 +337,6 @@
         </tr>
       </ng-container>
     </ng-container>
-    <!--    <ng-container *ngFor="let data of dataTable , let idx = index">-->
-    <!--      <tr>-->
-    <!--        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>-->
-    <!--        <td class="font-weight-bold" *ngIf="data.capChiMuc == 1">{{data.chiMuc}}</td>-->
-    <!--        <td class="font-weight-bold" *ngIf="data.capChiMuc > 1">{{data.chiMuc}}</td>-->
-    <!--        <td class="font-weight-bold">{{data.noiDung}}</td>-->
-    <!--        <td class="font-weight-bold text-right"></td>-->
-    <!--        <td class="font-weight-bold text-right"></td>-->
-    <!--        <td class="font-weight-bold text-right"></td>-->
-    <!--        <td class="font-weight-bold text-right"></td>-->
-    <!--        <td></td>-->
-    <!--      </tr>-->
-    <!--      <ng-container *ngIf="expandSet.has(data.idVirtual)">-->
-    <!--        <tr *ngFor="let item of data.dataChild, let y = index">-->
-    <!--          <td></td>-->
-    <!--          <td>{{idx + 1}}.{{y + 1}}</td>-->
-    <!--          <td>{{item.tenDvi}}</td>-->
-    <!--          <td>{{item.donViTinh}}</td>-->
-    <!--          <td class="text-right">{{item.slHienCo | number: '1.0-1' }}</td>-->
-    <!--          <td class="text-right">{{item.slNhapThem | number: '1.0-1' }}</td>-->
-    <!--          <td class="text-right">{{item.slHienCo + item.slNhapThem | number: '1.0-1' }}</td>-->
-    <!--          <td>-->
-
-    <!--          </td>-->
-    <!--          <td>-->
-
-    <!--          </td>-->
-    <!--          <td>-->
-
-    <!--          </td>-->
-    <!--          <td class="text-right">{{item.donGiaTd * item.soLuong | number: '1.0-1' }}</td>-->
-    <!--          <td><input type="text" nz-input [(ngModel)]="item.ghiChu"></td>-->
-    <!--        </tr>-->
-    <!--      </ng-container>-->
-    <!--    </ng-container>-->
     </tbody>
   </nz-table>
 </div>

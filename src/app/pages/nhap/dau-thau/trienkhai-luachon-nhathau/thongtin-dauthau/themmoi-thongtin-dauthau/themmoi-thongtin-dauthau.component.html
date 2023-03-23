@@ -80,7 +80,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-number [nzSize]="'small'"
+                                  <nz-input-number style="color: #001CFF !important;font-weight: bold;" [nzSize]="'small'"
                                         [ngModel]="formData.value.soLuong * formData.value.donGiaVat * 1000"
                                         [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
                                         [nzParser]="globals.parser" nzDisabled>
@@ -93,7 +93,7 @@
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư các gói thầu đã trúng
                                 </nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-number [nzSize]="'small'" formControlName="tongMucDtGoiTrung"
+                                    <nz-input-number style="color: #001CFF !important;font-weight: bold;" [nzSize]="'small'" formControlName="tongMucDtGoiTrung"
                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                     </nz-input-number>
                                 </nz-form-control>
@@ -140,9 +140,7 @@
                                 <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT</nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
-                                            nzDisabled>
-                                        </nz-date-picker>
+                                      <input nz-input formControlName="tgianBdauTchuc" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -152,9 +150,10 @@
                                 <nz-form-label [nzNoColon]="true"> Thời điểm mở thầu </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }"
-                                            formControlName="tgianMthau" nzFormat="HH:mm dd/MM/yyyy" nzDisabled>
-                                        </nz-date-picker>
+<!--                                        <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }"-->
+<!--                                            formControlName="tgianMthau" nzFormat="HH:mm dd/MM/yyyy" nzDisabled>-->
+<!--                                        </nz-date-picker>-->
+                                      <input nz-input formControlName="tgianMthau" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -164,9 +163,10 @@
                                 <nz-form-label [nzNoColon]="true"> Thời điểm đóng thầu </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }"
-                                            formControlName="tgianDthau" nzFormat="HH:mm dd/MM/yyyy" nzDisabled>
-                                        </nz-date-picker>
+<!--                                        <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }"-->
+<!--                                            formControlName="tgianDthau" nzFormat="HH:mm dd/MM/yyyy" nzDisabled>-->
+<!--                                        </nz-date-picker>-->
+                                      <input nz-input formControlName="tgianDthau" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -186,7 +186,7 @@
                                 <nz-form-label [nzNoColon]="true"> Tiền bảo đảm thực hiện hợp đồng (đ) </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <input nz-input formControlName="gtriHdong" readonly />
+                                        <input class="text-blue" nz-input formControlName="gtriHdong" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -199,7 +199,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="tenLoaiVthh" readonly="true" />
+                                    <input class="text-blue" nz-input formControlName="tenLoaiVthh" readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -207,7 +207,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="tenCloaiVthh" readonly="true" />
+                                    <input class="text-blue" nz-input formControlName="tenCloaiVthh" readonly="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -216,7 +216,7 @@
                                 <nz-form-label [nzNoColon]="true"> Đơn giá VAT (đ/kg) </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <nz-input-number [nzSize]="'small'" formControlName="donGiaVat"
+                                        <nz-input-number class="text-blue" [nzSize]="'small'" formControlName="donGiaVat"
                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                         </nz-input-number>
                                     </nz-input-group>
@@ -293,7 +293,7 @@
             <div class="buttons">
                 <button
                     *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
-                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
+                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
                 </button>
@@ -310,8 +310,7 @@
                         <th rowspan="2">Địa điểm nhập kho</th>
                         <th colspan="3">Kế hoạch đấu thầu</th>
                         <th colspan="4">Kết quả đấu thầu</th>
-                        <th rowspan="2">Trạng thái gói thầu</th>
-                        <th rowspan="2">Hành động</th>
+                        <th rowspan="4">Trạng thái gói thầu</th>
                     </tr>
                     <tr>
                         <th>Số lượng</th>
@@ -326,7 +325,7 @@
                 <tbody>
                     <ng-container *ngFor="let item of listDataGroup , let i = index">
                         <tr>
-                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                             <td colspan="3">{{item.tenDvi}}</td>
                             <td></td>
                             <td></td>
@@ -336,9 +335,8 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                         </tr>
-                        <ng-container *ngIf="expandSet.has(i)">
+                        <ng-container>
                             <tr *ngFor="let dtGoiThau of item.dataChild, let y = index"
                                 (click)="showDetail($event,dtGoiThau)">
                                 <td></td>
@@ -352,15 +350,8 @@
                                 <td>{{dtGoiThau.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}
                                 </td>
-                                <td>{{(dtGoiThau.donGiaNhaThau - dtGoiThau.donGiaVat) * dtGoiThau.soLuong * 1000 |
-                                    number:
-                                    '1.0-1' : 'vi_VN' }} </td>
+                                <td>{{dtGoiThau.trangThai != 41 ? (dtGoiThau.donGiaNhaThau - dtGoiThau.donGiaVat) * dtGoiThau.soLuong * 1000 : null | number: '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
-                                <td>
-                                    <a (click)="showDetail($event,dtGoiThau)">
-                                        <i class=" fa fa-eye"></i>
-                                    </a>
-                                </td>
                             </tr>
                         </ng-container>
                     </ng-container>
@@ -379,7 +370,6 @@
                             <th colspan="3">Kế hoạch đấu thầu</th>
                             <th colspan="4">Kết quả đấu thầu</th>
                             <th rowspan="2" style="width: 5%;">Trạng thái đấu thầu</th>
-                            <th rowspan="2" style="width: 5%;">Hành động</th>
                         </tr>
                         <tr>
                             <th>Số lượng</th>
@@ -394,7 +384,7 @@
                     <tbody>
                         <ng-container *ngFor="let item of danhsachDx , let i = index">
                             <tr>
-                                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td>{{item.goiThau}}</td>
                                 <td>{{item.cloaiVthh}}</td>
                                 <td></td>
@@ -410,13 +400,8 @@
                                 <td>{{(item.donGiaNhaThau - item.donGiaVat) * item.soLuong | number:
                                     '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{item.tenTrangThai}}</td>
-                                <td>
-                                    <a (click)="showDetail($event,item)">
-                                        <i class=" fa fa-eye"></i>
-                                    </a>
-                                </td>
                             </tr>
-                            <ng-container *ngIf="expandSet.has(i)">
+                            <ng-container>
                                 <ng-container *ngFor="let cuc of item.children, let y = index">
                                     <tr>
                                         <td></td>
@@ -430,20 +415,14 @@
                                         <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                         <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                         <td>{{cuc.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-right"> </td>
                                     </tr>
-                                    <ng-container *ngIf="expandSet2.has(y)">
+                                    <ng-container>
                                         <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
                                             <tr>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td class="text-right" [nzExpand]="expandSet3.has(z)"
+                                                <td class="text-right" [nzExpand]="true"
                                                     (nzExpandChange)="onExpandChange3(z, $event)">
                                                 </td>
                                                 <td>{{chiCuc.tenDvi}}</td>
@@ -452,14 +431,8 @@
                                                 <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                                 <td>{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}
                                                 </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
                                             </tr>
-                                            <ng-container *ngIf="expandSet3.has(z)">
+                                            <ng-container>
                                                 <tr *ngFor="let diemKho of chiCuc.children">
                                                     <td></td>
                                                     <td></td>
@@ -471,12 +444,6 @@
                                                     <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                                     <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' :
                                                         'vi_VN'}}</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
                                                 </tr>
                                             </ng-container>
                                         </ng-container>
@@ -541,9 +508,9 @@
                                 <a (click)="addRow()" [class.disabled]="!itemRow">
                                     <i class="fa fa-plus"></i>
                                 </a>
-                                <a (click)="clearItemRow()">
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
+<!--                                <a (click)="clearItemRow()">-->
+<!--                                    <i class="fa fa-trash-o do"></i>-->
+<!--                                </a>-->
                             </th>
                         </tr>
                     </thead>
@@ -565,9 +532,9 @@
                                     <a (click)="startEdit(i)">
                                         <i class=" fa fa-pencil"></i>
                                     </a>
-                                    <a (click)="deleteRow(i)">
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
+<!--                                    <a (click)="deleteRow(i)">-->
+<!--                                        <i class="fa fa-trash-o do"></i>-->
+<!--                                    </a>-->
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>

@@ -316,10 +316,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai()
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai()
         }
       }
     } else {

@@ -20,9 +20,10 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
   isViewDetail: boolean;
   isDetail: boolean = false;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,12 +52,8 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
 
   filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
-    }
-    if (this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
+      this.formData.value.ngayKyTu = this.formData.value.ngayKy[0];
+      this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
     }
     this.search();
   }

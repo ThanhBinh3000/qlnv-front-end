@@ -100,8 +100,8 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
-            <nz-form-control>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="trichYeu" [readonly]="disableForm()" />
             </nz-form-control>
           </nz-form-item>
@@ -112,26 +112,36 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [data]="fileDinhKem" [isQdkqlcnt]="isQdkqlcnt"></file-list>
             </div>
           </nz-form-item>
         </div>
+<!--        <div nz-col [nzSpan]="24">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>-->
+<!--            <nz-form-control [nzErrorTip]="error">-->
+<!--              <div class="list-file">-->
+<!--                <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
+<!--                  <input type="text" nz-input />-->
+<!--                </nz-input-group>-->
+<!--                <ng-template #suffixTemplateInfo>-->
+<!--                  <div class="icon-file-dinh-kem">-->
+<!--                    <i class="icon htvbdh_tcdt_tep"></i>-->
+<!--                    <input class="input-file" (change)="getNameFile($event)" type="file" />-->
+<!--                  </div>-->
+<!--                </ng-template>-->
+<!--              </div>-->
+<!--            </nz-form-control>-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
-                  </div>
-                </ng-template>
-              </div>
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm quyết định đã ký
+            </nz-form-label>
+            <div class="list-file">
+              <file-list></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>

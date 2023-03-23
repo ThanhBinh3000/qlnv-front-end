@@ -51,6 +51,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
+    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
     { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' }
   ];
   searchFilter = {
@@ -334,6 +335,62 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
       tenCloaiVthh: '',
       thanhGiaGoiThau: '',
       tenTrangThai: '',
+    }
+  }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          debugger
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else if (['soQd', 'soQdPdKqLcnt', 'namKhoach', 'tenPthucLcnt', 'soQdPdKqLcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'ngayKyQdPduyetKqlcntHdr', 'tgianNhangDxuatKhLcntHdr'].includes(key)) {
+            if (item['hhQdKhlcntHdr'] != null) {
+
+              if (item['hhQdKhlcntHdr'][key] && item['hhQdKhlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
+
+            if (item['hhQdPduyetKqlcntHdr'] != null) {
+
+              if (key != 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'][key] && item['hhQdPduyetKqlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+              if (key == 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'].ngayKy && dayjs(item['hhQdPduyetKqlcntHdr'].ngayKy).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+                temp.push(item)
+              }
+            }
+
+            if (item['dxuatKhLcntHdr'] != null) {
+              if (item['dxuatKhLcntHdr']['tgianNhang'] && dayjs(item['dxuatKhLcntHdr']['tgianNhang']).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+                temp.push(item)
+              }
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+            if (key == 'soTrHdr' && item['soTrHdr'] && item['soTrHdr'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            } else if (key == 'soTrHdr' && item['soDxuat'] && item['soDxuat'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 }

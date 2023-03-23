@@ -17,6 +17,7 @@ import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-
 })
 export class TableGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  isView = false;
 
   constructor(
     httpClient: HttpClient,

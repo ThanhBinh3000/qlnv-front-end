@@ -1,20 +1,26 @@
-import { Component, Input, OnInit, } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Component, Input, OnInit,} from '@angular/core';
+import {FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { STATUS } from 'src/app/constants/status';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {STATUS} from 'src/app/constants/status';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  QuyetDinhGiaoNvXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import {
+  HopDongXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {DANH_MUC_LEVEL} from "src/app/pages/luu-kho/luu-kho.constant";
+import {DonviService} from "src/app/services/donvi.service";
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -24,10 +30,17 @@ import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban
 export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
+  @Input() isDetail;
 
   maQd: string = null;
   dataInput: any;
   dataInputCache: any;
+  formDataRow: FormGroup;
+  listDiaDiem: any = [];
+  listDiemKho: any[] = [];
+  listNhaKho: any[] = [];
+  listNganKho: any[] = [];
+  listLoKho: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -37,6 +50,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     modal: NzModalService,
     private hopDongXuatHangService: HopDongXuatHangService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
@@ -67,6 +81,18 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       tenTrangThai: ['Dự thảo'],
       fileName: [],
       lyDoTuChoi: []
+    });
+
+    this.formDataRow = this.fb.group({
+      maDiemKho: [],
+      maNhaKho: [],
+      maNganKho: [],
+      maLoKho: [],
+      tenDiemKho: [],
+      tenNhaKho: [],
+      tenNganKho: [],
+      tenLoKho: [],
+      soLuong: [],
     })
   }
 
@@ -90,6 +116,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     try {
       this.maQd = this.userInfo.MA_QD;
       await Promise.all([
+        this.loadDiemKho()
       ]);
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
@@ -116,10 +143,10 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.spinner.show();
     let dsQdPd = []
     let re = await this.hopDongXuatHangService.search({
-      trangThai: STATUS.DA_KY,
-      maDvi: this.formData.value.maDvi,
-      nam: this.formData.value.nam
-    }
+        trangThai: STATUS.DA_KY,
+        maDvi: this.formData.value.maDvi,
+        nam: this.formData.value.nam
+      }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -242,7 +269,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         soQd: data.soQd?.split('/')[0]
       })
       this.dataTable = data.children;
-    };
+    }
+    ;
   }
 
   isDisabled() {
@@ -267,10 +295,57 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
           fileDinhKemQd.fileSize = resUpload.size;
           fileDinhKemQd.fileUrl = resUpload.url;
           fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
+          this.formData.patchValue({fileDinhKem: fileDinhKemQd, fileName: itemFile.name})
         });
     }
   }
 
+  async loadDiemKho() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+    this.listDiaDiem = await this.donviService.layDonViTheoCapDo(body);
+    let res = this.listDiaDiem[DANH_MUC_LEVEL.DIEM_KHO];
+    this.listDiemKho = res.filter(item => item.type == "MLK")
+  }
 
+  async changeDiemKho(maDiemKho: any) {
+    this.formDataRow.patchValue({
+      maNhaKho: null,
+      maNganKho: null,
+      maLoKho: null,
+      tenNhaKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+    })
+    let res = this.listDiaDiem[DANH_MUC_LEVEL.NHA_KHO];
+    this.listNhaKho = res.filter(item => item.type == "MLK" && item.maDviCha == maDiemKho)
+  }
+  async changeNhaKho(maNhaKho: any) {
+    this.formDataRow.patchValue({
+      maNganKho: null,
+      maLoKho: null,
+      tenNganKho: null,
+      tenLoKho: null,
+    })
+    let res = this.listDiaDiem[DANH_MUC_LEVEL.NGAN_KHO];
+    this.listNganKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNhaKho)
+  }
+  async changeNganKho(maNganKho: any) {
+    this.formDataRow.patchValue({
+      maLoKho: null,
+      tenLoKho: null,
+    })
+    let res = this.listDiaDiem[DANH_MUC_LEVEL.LO_KHO];
+    this.listLoKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNganKho)
+  }
+
+  clearRow() {
+
+  }
+
+  addRow() {
+
+  }
 }
