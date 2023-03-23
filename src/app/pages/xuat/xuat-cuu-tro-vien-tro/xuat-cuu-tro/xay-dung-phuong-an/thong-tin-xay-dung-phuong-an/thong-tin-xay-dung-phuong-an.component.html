@@ -407,7 +407,7 @@
       </div>
       <div nz-col [nzSpan]="8" *ngIf="formData.value.loaiVthh =='0102'">
         <nz-statistic class="red-value" nzSuffix="{{formData.value.donViTinh}}"
-                      [nzValue]="listSoLuongXuatCap| nzAggregate: 'sum'|number :'1.0-1'"
+                      [nzValue]="+formData.value.soLuongXuatCap|number :'1.0-1'"
                       [nzTitle]="'Số lượng đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp'"></nz-statistic>
       </div>
     </div>
@@ -485,7 +485,7 @@
                 <td></td>
                 <td></td>
                 <td>{{lv1.tenCuc}}</td>
-                <td></td>
+                <td>{{lv1.tonKhoCuc | number:'1.0-1' : 'vi_VN'}}</td>
                 <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                 <td></td>
                 <td></td>
@@ -519,7 +519,7 @@
                     <td>{{lv2.tenCloaiVthh}}</td>
                     <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1' : 'vi_VN'}}</td>
                     <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
-                    <td>{{lv2.donViTinh}}</td>
+                    <td>{{formData.value.donViTinh}}</td>
                     <td>{{lv2.donGiaKhongVat|number:'1.0-1' : 'vi_VN'}}</td>
                     <td>{{lv2.thanhTien|number:'1.0-1' : 'vi_VN'}}</td>
                     <td> <!--<a (click)="addChiCuc(i,item.label)">
@@ -556,7 +556,8 @@
         <nz-form-item>
           <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nội dung xuất cứu trợ, viện trợ
           </nz-form-label>
-          <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'" [nzValidateStatus]="checkVld('inputNoiDung')">
+          <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'"
+                           [nzValidateStatus]="checkVld('inputNoiDung')">
             <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto"
                    [disabled]="disableInputComponent.noiDung">
             <nz-autocomplete #auto>
@@ -576,7 +577,8 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
-          <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'" [nzValidateStatus]="checkVld('inputSoLuongXuatCuc')">
+          <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'"
+                           [nzValidateStatus]="checkVld('inputSoLuongXuatCuc')">
             <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="0.1"
                              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                              [nzDisabled]="disableInputComponent.soLuongXuatCuc">
