@@ -190,12 +190,13 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
+      await this.spinner.hide();
     } else {
+      await this.spinner.hide();
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    this.spinner.hide();
   }
 
   xoaItem(item: any) {
@@ -282,33 +283,19 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let maDonVi = null;
-        let tenDvi = null;
-        let donviId = null;
-        if (this.inputDonVi && this.inputDonVi.length > 0) {
-          let getDonVi = this.optionsDonVi.filter(
-            (x) => x.labelDonVi == this.inputDonVi,
-          );
-          if (getDonVi && getDonVi.length > 0) {
-            maDonVi = getDonVi[0].maDvi;
-            tenDvi = getDonVi[0].tenDvi;
-            donviId = getDonVi[0].id;
-          }
-        }
         let body = {
-          loaiVthh: '',
-          maDvi: maDonVi,
-          nhaCcap: this.nhaCungCap ?? '',
-          tenHd: this.tenHd ?? '',
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
           soHd: this.soHd,
-          denNgayKy:
-            this.ngayKy && this.ngayKy.length > 1
-              ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
-              : null,
-          tuNgayKy:
-            this.ngayKy && this.ngayKy.length > 0
-              ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
-              : null,
+          tenHd: this.tenHd,
+          namKhoach: this.nam,
+          maDvi: this.userService.isTongCuc() ? null : this.userInfo.MA_DVI,
+          trangThai: STATUS.BAN_HANH,
+          loaiVthh: this.loaiVthh
         };
         this.thongTinHopDong
           .export(body)

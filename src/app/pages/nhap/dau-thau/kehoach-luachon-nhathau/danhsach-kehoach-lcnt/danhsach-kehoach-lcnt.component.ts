@@ -262,6 +262,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
   showList() {
