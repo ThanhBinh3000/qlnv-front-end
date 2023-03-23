@@ -145,6 +145,7 @@
         </th>
         <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
           <br> {{formData.value.namKeHoach - 1}}</th>
+        <th class="text-center" nzWidth="150px" rowSpan="2" nzRight>Ghi chú</th>
         <th class="text-center" nzWidth="69px" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
@@ -232,6 +233,11 @@
                            [nzMin]="0"
                            [nzParser]="globals.parser"></nz-input-number>
         </td>
+        <td class="text-center">
+          <nz-input-group>
+            <input nz-input [(ngModel)]="rowItem.ghiChu" readonly/>
+          </nz-input-group>
+        </td>
         <td class="text-center" nzRight *ngIf="!isViewDetail">
           <a (click)="themMoiItem()">
             <i class="fa fa-plus"></i>
@@ -257,6 +263,7 @@
           <td>{{ data.tinhHinh }}</td>
           <td>{{ data.ncKhVon }}</td>
           <td>{{ data.ncKhVon }}</td>
+          <td>{{ data.ghiChu }}</td>
           <td></td>
           <td style="text-align: center;" nzRight>
             <a (click)="editItem(idx)">
@@ -353,6 +360,11 @@
                              [nzMin]="0"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
+          <td class="text-center">
+            <nz-input-group>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu" readonly/>
+            </nz-input-group>
+          </td>
           <td class="text-center" nzRight *ngIf="!isViewDetail">
             <a (click)="luuEdit(idx)" class="save">
               <i class="fa fa-save"></i>
@@ -378,6 +390,7 @@
       <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
       <td nzRight></td>
       </tfoot>
 

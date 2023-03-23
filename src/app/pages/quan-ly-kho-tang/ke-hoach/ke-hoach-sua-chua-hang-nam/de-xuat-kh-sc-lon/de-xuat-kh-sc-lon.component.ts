@@ -86,6 +86,14 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
     await this.search();
   }
 
+  async clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : "2"
+    })
+    await this.search();
+  }
 
   redirectToChiTiet(id: number, isView?: boolean) {
     this.idSelected = id;

@@ -353,6 +353,7 @@ export class KtKhDxScLonCtiet {
   ngayBhTmdt: string;
   tenCongTrinh: string;
   tgThucHien: string;
+  ghiChu: string;
   tinhHinh: number = 0
 }
 

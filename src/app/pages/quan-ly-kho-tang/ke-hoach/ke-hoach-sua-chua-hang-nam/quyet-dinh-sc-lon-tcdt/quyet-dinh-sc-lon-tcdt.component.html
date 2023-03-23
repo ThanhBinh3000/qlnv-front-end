@@ -10,18 +10,25 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="3">
-            <label class="search__label">Số tổng hợp</label>
+            <label class="search__label">Mã tổng hợp</label>
             <nz-input-number   [nzParser]="globals.parser" [nzSize]="'small'" nz-input
                                formControlName="maTh" [nzMin]="0">
             </nz-input-number>
           </div>
-          <div nz-col nzSpan="14">
-            <label class="search__label">Trích yếu</label>
-            <input class="search__input" placeholder="Nhập Trích yếu" nz-input formControlName="trichYeu"/>
+          <div nz-col nzSpan="10">
+            <label class="search__label">Nội dung tổng hợp</label>
+            <input class="search__input" placeholder="Nhập nội dung" nz-input formControlName="noiDung"/>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày tổng hợp</label>
             <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Trạng thái</label>
+            <nz-select nzShowSearch nzAllowClear formControlName="trangThai">
+              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
           </div>
         </div>
       </form>
@@ -66,11 +73,12 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th width="45px">STT</th>
-          <th width="130px">Số tổng hợp</th>
+          <th width="130px">Mã tổng hợp</th>
           <th width="130px">Năm kế hoạch</th>
           <th width="130px">Ngày tổng hợp</th>
-          <th>Trích yếu</th>
-          <th width="130px">Giá trị bảo hiểm đề xuất</th>
+          <th>Nội dung tổng hợp</th>
+          <th width="130px">Số quyết định BTC</th>
+          <th width="130px">Số quyết định TCDT</th>
           <th width="130px">Trạng thái</th>
           <th width="120px">Hành động</th>
         </tr>
@@ -101,14 +109,20 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDung"
+                     (input)="filterInTable('noiDung',filterTable.noiDung)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaTriDx"
-                     (input)="filterInTable('giaTriDx',filterTable.giaTriDx)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdBtc"
+                     (input)="filterInTable('soQdBtc',filterTable.soQdBtc)"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdTcdt"
+                     (input)="filterInTable('soQdTcdt',filterTable.soQdTcdt)"/>
             </nz-input-group>
           </th>
           <th>
@@ -133,8 +147,9 @@
           <td>{{ data.id }}</td>
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>{{ data.giaTriDx | number : '1.0-1' : 'vi-VN' }}</td>
+          <td>{{ data.noiDung }}</td>
+          <td>{{ data.soQdBtc }}</td>
+          <td>{{ data.soQdTcdt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectToChiTiet(true, data.id)" *ngIf="(data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_XEM')">

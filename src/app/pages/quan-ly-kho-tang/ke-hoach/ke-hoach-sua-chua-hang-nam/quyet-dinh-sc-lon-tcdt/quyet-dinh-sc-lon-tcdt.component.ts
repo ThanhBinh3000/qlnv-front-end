@@ -8,6 +8,9 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import {DeXuatNhuCauBaoHiemService} from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
+import {
+  DeXuatScLonService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-tcdt',
@@ -22,9 +25,11 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt LĐ-Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt LĐ-Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
     { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
   ];
 
   constructor(
@@ -33,19 +38,20 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatBaoHiemSv : DeXuatNhuCauBaoHiemService
+    private dexuatService : DeXuatScLonService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, deXuatBaoHiemSv)
+    super(httpClient, storageService, notification, spinner, modal, dexuatService)
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
       maTh: [''],
-      trichYeu: [''],
+      noiDung: [''],
       ngayKy: [''],
       ngayKyTu: [''],
       ngayKyDen: [''],
+      trangThai: [''],
     });
     this.filterTable = {};
   }
@@ -105,10 +111,10 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
           limit: this.pageSize,
           page: this.page - 1
         }
-        this.deXuatBaoHiemSv
+        this.dexuatService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'tong-hop-nhu-cau-bao-hiem-chi-cuc.xlsx'),
+            saveAs(blob, 'tong-hop-phuong-an-sua-chua-cuc.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
