@@ -131,7 +131,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     let dsHd = []
     await this.hopDongBttService.search({
       trangThai: STATUS.DA_KY,
-      maChiCuc: this.formData.value.maDvi,
+      maDvi: this.formData.value.maDvi,
       namKh: this.formData.value.namKh
     }
     ).then(res => {
