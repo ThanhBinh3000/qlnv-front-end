@@ -156,25 +156,26 @@
               </div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true" nzTooltipTitle="Số ngày" [nzNoColon]="true"> Thời gian
-                    thực
-                    hiện HĐ
+                  <nz-form-label nzRequired [nzNoColon]="true" nzTooltipTitle="Số ngày" [nzNoColon]="true">
+                    Thời gian thực hiện HĐ
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <nz-input-number nz nz-input formControlName="tgianThienHd" [nzSize]="'small'"></nz-input-number>
+                      <nz-input-number nz nz-input [nzMin]="0" formControlName="tgianThienHd"
+                        [nzSize]="'small'"></nz-input-number>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="9">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true" [nzNoColon]="true"> Thời gian bảo hành (tháng), kể từ ngày
-                    ký biên bản giao nhận
+                  <nz-form-label [nzNoColon]="true" [nzNoColon]="true">
+                    Thời gian bảo hành (tháng), kể từ ngày ký biên bản giao nhận
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <nz-input-number nz nz-input formControlName="tgianBhanh" [nzSize]="'small'"></nz-input-number>
+                      <nz-input-number nz nz-input [nzMin]="0" formControlName="tgianBhanh"
+                        [nzSize]="'small'"></nz-input-number>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
