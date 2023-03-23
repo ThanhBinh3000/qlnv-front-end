@@ -437,6 +437,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
               let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
               let rowCuc = v.find(s => s.tenCuc === k);
+              if (this.userService.isCuc()) {
+                rowCuc.tonKhoCuc = this.formData.value.tonKho;
+              }
               console.log(rowCuc, 'rowCuc');
               return {
                 idVirtual: uuid.v4(),
@@ -476,6 +479,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         let tongTonKhoCuc = s.childData.reduce((prev, cur) => prev + cur.tonKhoCuc, 0);
         let tongDeXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let tongThucXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        console.log(tongTonKhoCuc,tongDeXuat,tongThucXuat)
         if (tongDeXuat > tongThucXuat && tongThucXuat >= tongTonKhoCuc) {
           return tongDeXuat - tongTonKhoCuc;
         } else {
