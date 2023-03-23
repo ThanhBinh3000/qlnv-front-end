@@ -105,7 +105,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   listThanhTien: any;
   listSoLuong: any;
   listSoLuongDeXuat: any;
-  listSoLuongXuatCap: any;
   errorInputComponent: any[] = [];
   disableInputComponent: ModalInput = new ModalInput();
 
@@ -257,7 +256,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.listThanhTien = [0];
       this.listSoLuong = [0];
       this.listSoLuongDeXuat = [0];
-      this.listSoLuongXuatCap = [0];
     }
 
   }
@@ -474,15 +472,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
       this.listSoLuongDeXuat = this.phuongAnView.map(s => s.soLuongXuat);
-      this.listSoLuongXuatCap = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatCap);
       let xuatCap = this.phuongAnView.map(s => {
         let tongTonKhoCuc = s.childData.reduce((prev, cur) => prev + cur.tonKhoCuc, 0);
         let tongDeXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let tongThucXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
-        console.log(tongTonKhoCuc,'tongTonKhoCuc')
-        console.log(tongDeXuat,'tongDeXuat')
-        console.log(tongThucXuat,'tongThucXuat')
-        if (tongDeXuat > tongThucXuat && tongThucXuat > tongTonKhoCuc) {
+        if (tongDeXuat > tongThucXuat && tongThucXuat >= tongTonKhoCuc) {
           return tongDeXuat - tongTonKhoCuc;
         } else {
           return 0
@@ -493,7 +487,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.listThanhTien = [0];
       this.listSoLuong = [0];
       this.listSoLuongDeXuat = [0];
-      this.listSoLuongXuatCap = [0];
     }
   }
 
