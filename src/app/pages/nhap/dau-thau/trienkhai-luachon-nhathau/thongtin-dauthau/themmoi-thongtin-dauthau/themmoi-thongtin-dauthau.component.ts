@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import {DatePipe, formatDate} from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -20,6 +20,9 @@ import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { NzModalService } from "ng-zorro-antd/modal";
+import {
+  DialogThongBaoThongTinDauThauComponent
+} from "../../../../../../components/dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
 
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
@@ -251,10 +254,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
         cloaiVthh: data.hhQdKhlcntHdr.cloaiVthh,
         tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
-        tgianBdauTchuc: data.dxuatKhLcntHdr.tgianBdauTchuc,
-        tgianDthau: data.dxuatKhLcntHdr.tgianDthau,
-        tgianMthau: data.dxuatKhLcntHdr.tgianMthau,
-        tgianNhang: data.dxuatKhLcntHdr.tgianNhang,
+        tgianBdauTchuc: formatDate( data.dxuatKhLcntHdr.tgianBdauTchuc,"dd/MM/yyyy", 'en-US'),
+        tgianDthau: formatDate( data.dxuatKhLcntHdr.tgianDthau,"HH:mm dd/MM/yyyy", 'en-US'),
+        tgianMthau: formatDate( data.dxuatKhLcntHdr.tgianMthau,"HH:mm dd/MM/yyyy", 'en-US'),
+        tgianNhang: formatDate( data.dxuatKhLcntHdr.tgianNhang,"HH:mm dd/MM/yyyy", 'en-US'),
       });
       this.formData.patchValue({
         trangThai: data.trangThai,
@@ -365,6 +368,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     await this.spinner.hide()
   }
 
+  async saveGoiThauPopup() {
+    if (this.listNthauNopHs.length > 0) {
+      this.saveGoiThau();
+    }else{
+      const modalThongBao = this.modal.create({
+        nzTitle: 'Thông báo',
+        nzContent: DialogThongBaoThongTinDauThauComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalThongBao.afterClose.toPromise().then((data) => {
+        if(data){
+          this.saveGoiThau();
+        }
+      });
+    }
+  }
 
 
   async saveGoiThau() {

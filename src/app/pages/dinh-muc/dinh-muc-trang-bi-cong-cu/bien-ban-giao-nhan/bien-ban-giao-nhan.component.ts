@@ -133,10 +133,10 @@ export class BienBanGiaoNhanComponent implements OnInit {
     let body = {
       "capDvis": '3',
       "ngayBienBanTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
-        ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
+        ? this.searchFilter.ngayBienBan[0]
         : null,
       "ngayBienBanDen": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0
-        ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
+        ? this.searchFilter.ngayBienBan[1]
         : null,
       "pageSize": this.pageSize,
       "pageNumber": this.page,

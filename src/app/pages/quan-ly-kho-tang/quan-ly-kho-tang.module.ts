@@ -69,6 +69,8 @@ import { ThongTinDmScLonComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-mu
 import { QuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/quyet-dinh-phe-duyet-du-an-dtxd.component';
 import { ThongTinQuyetDinhPheDuyetDuAnDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd/thong-tin-quyet-dinh-phe-duyet-du-an-dtxd.component';
 import { ThongTinDanhMucScThuongXuyenComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen.component';
+import { QuyetDinhPheDuyetTktcTdtComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-tktc-tdt/quyet-dinh-phe-duyet-tktc-tdt.component';
+import { ThongTinQuyetDinhPheDuyetTktcTdtComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-tktc-tdt/thong-tin-quyet-dinh-phe-duyet-tktc-tdt/thong-tin-quyet-dinh-phe-duyet-tktc-tdt.component';
 
 
 @NgModule({
@@ -116,6 +118,8 @@ import { ThongTinDanhMucScThuongXuyenComponent } from './ke-hoach/dm-du-an-cong-
     QuyetDinhPheDuyetDuAnDtxdComponent,
     ThongTinQuyetDinhPheDuyetDuAnDtxdComponent,
     ThongTinDanhMucScThuongXuyenComponent,
+    QuyetDinhPheDuyetTktcTdtComponent,
+    ThongTinQuyetDinhPheDuyetTktcTdtComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

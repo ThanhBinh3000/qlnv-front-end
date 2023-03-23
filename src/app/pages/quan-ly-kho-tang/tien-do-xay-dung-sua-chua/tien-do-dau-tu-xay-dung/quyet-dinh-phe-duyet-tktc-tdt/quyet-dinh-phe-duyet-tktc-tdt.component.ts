@@ -1,21 +1,25 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+import dayjs from "dayjs";
+import {
+  QuyetdinhpheduyetTktcTdtService
+} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 
 @Component({
-  selector: 'app-quyet-dinh-phe-duyet-du-an-dtxd',
-  templateUrl: './quyet-dinh-phe-duyet-du-an-dtxd.component.html',
-  styleUrls: ['./quyet-dinh-phe-duyet-du-an-dtxd.component.scss']
+  selector: 'app-quyet-dinh-phe-duyet-tktc-tdt',
+  templateUrl: './quyet-dinh-phe-duyet-tktc-tdt.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-tktc-tdt.component.scss']
 })
-export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implements OnInit {
+export class QuyetDinhPheDuyetTktcTdtComponent extends Base2Component implements OnInit {
+
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -30,9 +34,9 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService
+    quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetduandtxdService)
+    super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetTktcTdtService)
     super.ngOnInit()
     this.filterTable = {};
   }
@@ -42,7 +46,7 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
       soQd: [''],
       tenDuAn: [''],
       chuDauTu: [''],
-      soQdKhDtxd: [''],
+      soQdPdDtxd: [''],
       trangThai: [''],
       ngayKy: [''],
       trichYeu: [''],

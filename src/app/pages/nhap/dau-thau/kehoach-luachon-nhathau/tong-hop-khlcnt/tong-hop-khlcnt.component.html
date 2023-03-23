@@ -185,7 +185,8 @@
             <td>{{ data.tenPthucLcnt }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td>{{ data.tenNguonVon }}</td>
-            <td>{{ data.soQdPdKhlcnt }}</td>
+            <td>
+              <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKqLcnt)">{{ data.soQdPdKqLcnt}}</a></td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id)"
@@ -227,3 +228,15 @@
   <app-themmoi-tonghop-khlcnt [id]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-tonghop-khlcnt>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcnt" (nzOnCancel)="closeQdPdKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-khlcnt [idInput]="qdPdKhlcntId" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-khlcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

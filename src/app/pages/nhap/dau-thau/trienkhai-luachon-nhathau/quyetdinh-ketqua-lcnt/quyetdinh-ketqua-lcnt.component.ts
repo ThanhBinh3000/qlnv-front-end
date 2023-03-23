@@ -51,17 +51,18 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   };
 
   filterTable: any = {
+    namKhoach: '',
     soQd: '',
-    ngayTongHop: '',
+    ngayTao: '',
     trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    soQdPdKhlcnt: '',
+    idQdPdKhlcnt: '',
+    tenLoaiVthh: '',
+    tenCloaiVthh: '',
+    soGthau: '',
+    soGthauTrung: '',
+    tgianNhang: '',
+    trangThai: '',
   };
 
   dataTableAll: any[] = [];
@@ -78,7 +79,13 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-  STATUS = STATUS;
+
+  STATUS = STATUS
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+  ];
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -113,6 +120,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     }
   }
 
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
   async search() {
     let body = {
       tuNgayTao: this.searchFilter.ngayTongHop
@@ -136,6 +151,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable)
       this.totalRecord = data.totalElements;
       // if (this.dataTable && this.dataTable.length > 0) {
       //   this.dataTable.forEach((item) => {
@@ -361,14 +377,27 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          debugger
+          if (['ngayKy','ngayGiaoNhan','ngayHieuLuc','ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          }else if(['tenLoaiVthh', 'tenCloaiVthh'].includes(key)){
+            if (item['qdKhlcntDtl'].hhQdKhlcntHdr.tenLoaiVthh && item['qdKhlcntDtl'].hhQdKhlcntHdr.tenLoaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+            if (item['qdKhlcntDtl'].hhQdKhlcntHdr.tenCloaiVthh && item['qdKhlcntDtl'].hhQdKhlcntHdr.tenCloaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          }else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
