@@ -1,9 +1,10 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('01')" *ngIf="userService.isTongCuc() && !userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
+    <li nz-menu-item nzSelected (click)="selectTab('01')"
+        *ngIf="!userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
       Quyết định phê duyệt dự án ĐTXD
     </li>
-    <li nz-menu-item (click)="selectTab('02')">
+    <li nz-menu-item (click)="selectTab('02')" *ngIf="!userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
       Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
     </li>
     <li nz-menu-item (click)="selectTab('03')">
@@ -27,7 +28,7 @@
   <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
 </ng-container>
 <ng-container *ngIf="tabSelected == '02'">
-  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+  <app-quyet-dinh-phe-duyet-tktc-tdt></app-quyet-dinh-phe-duyet-tktc-tdt>
 </ng-container>
 <ng-container *ngIf="tabSelected == '03'">
   <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>

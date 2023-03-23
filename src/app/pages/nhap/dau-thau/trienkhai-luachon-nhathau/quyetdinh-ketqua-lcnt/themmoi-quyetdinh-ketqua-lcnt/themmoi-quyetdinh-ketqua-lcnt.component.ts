@@ -21,13 +21,16 @@ import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { isEmpty } from 'lodash'
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {StorageService} from "../../../../../../services/storage.service";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
   styleUrls: ['./themmoi-quyetdinh-ketqua-lcnt.component.scss']
 })
-export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
+export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() loaiVthh: String;
@@ -36,28 +39,32 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   @Input() isViewOnModal:boolean;
 
   formData: FormGroup;
-  taiLieuDinhKemList: any[] = [];
 
   listQdPdKhlcnt: any[] = []
   maQd: String;
   listNam: any[] = [];
 
+  isQdkqlcnt: boolean = true;
+
   userInfo: UserLogin;
   STATUS = STATUS
   constructor(
-    private modal: NzModalService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
-    private spinner: NgxSpinnerService,
-    private uploadFileService: UploadFileService,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
+    spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    uploadFileService: UploadFileService,
+    fb: FormBuilder,
     public globals: Globals,
     public userService: UserService,
-    private helperService: HelperService,
+    helperService: HelperService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
     private thongTinDauThauService: ThongTinDauThauService
 
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaLCNTService)
     this.formData = this.fb.group(
       {
         id: [],
@@ -65,7 +72,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
         ngayHluc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
         namKhoach: [dayjs().get('year'), [Validators.required]],
-        trichYeu: [null,],
+        trichYeu: [null, [Validators.required]],
         soQdPdKhlcnt: ['', [Validators.required]],
         idQdPdKhlcnt: ['', [Validators.required]],
         idQdPdKhlcntDtl: [''],
@@ -73,7 +80,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
         loaiVthh: [''],
-        cloaiVthh: ['']
+        cloaiVthh: [''],
+        fileDinhKems: [null],
       }
     );
   }
@@ -104,18 +112,20 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   async getDetail(id: number) {
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
+      debugger
       const dataDetail = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.formData.patchValue({
         soQd: dataDetail.soQd?.split('/')[0],
       })
-      this.taiLieuDinhKemList = dataDetail.fileDinhKems;
+      this.fileDinhKem = dataDetail.qdKhlcntDtl.dxuatKhLcntHdr.fileDinhKems;
     }
   }
 
   async save(isBanHanh?) {
     this.setValidator(isBanHanh);
     this.helperService.markFormGroupTouched(this.formData);
+    debugger
     if (this.formData.invalid) {
       return;
     }
@@ -123,7 +133,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    body.fileDinhKems = this.fileDinhKem;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -281,27 +291,27 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     });
   }
 
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
-      const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-            // nameFilePhuongAn: resUpload.filename
-          })
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-          // this.filePhuongAn = fileDinhKem;
-        });
-    }
-  }
+  // getNameFile(event?: any, item?: FileDinhKem) {
+  //   const element = event.currentTarget as HTMLInputElement;
+  //   const fileList: FileList | null = element.files;
+  //   if (fileList) {
+  //     const itemFile = {
+  //       name: fileList[0].name,
+  //       file: event.target.files[0] as File,
+  //     };
+  //     this.uploadFileService
+  //       .uploadFile(itemFile.file, itemFile.name)
+  //       .then((resUpload) => {
+  //         const fileDinhKem = new FileDinhKem();
+  //         fileDinhKem.fileName = resUpload.filename;
+  //         this.formData.patchValue({
+  //           // nameFilePhuongAn: resUpload.filename
+  //         })
+  //         fileDinhKem.fileSize = resUpload.size;
+  //         fileDinhKem.fileUrl = resUpload.url;
+  //         // this.filePhuongAn = fileDinhKem;
+  //       });
+  //   }
+  // }
 
 }
