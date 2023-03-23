@@ -27,7 +27,7 @@ export class ThemMoiKhoComponent implements OnInit {
 
   data: any;
 
-  idReq : number = 0;
+  idReq: number = 0;
   nodesTree: any = [];
   options = {
     useCheckbox: true
@@ -204,6 +204,13 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
+          this.formKho.patchValue({
+            tenDiemkho: dataNodeRes.tenDiemkho,
+            tenNhakho: dataNodeRes.tenNhakho,
+            tenNgankho: dataNodeRes.tenNgankho,
+            tenChiCuc: dataNodeRes.tenTongkho,
+            diaChi: dataNodeRes.diaChi,
+          });
           this.idReq = dataNodeRes.id
         }
       })
@@ -224,15 +231,16 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   listType = ["MLK", "DV"]
+
   async loadDsDvi() {
     let body = {
-      maDvi : this.userInfo.MA_DVI,
-      type : this.listType
+      maDvi: this.userInfo.MA_DVI,
+      type: this.listType
     }
     await this.donviService.layTatCaDviDmKho(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length >0)
-        this.nodesTree = res.data;
+        if (res.data && res.data.length > 0)
+          this.nodesTree = res.data;
         this.nodesTree[0].expanded = false;
       }
 
@@ -250,7 +258,7 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
-    if (this.idReq != 0 )  {
+    if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenNganlo;
