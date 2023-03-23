@@ -11,7 +11,7 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02'))  && userService.isTongCuc()"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02')) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
@@ -28,7 +28,7 @@
       <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Ban hành'}} </span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )  && isDetailPermission()"
+      *ngIf="(this.isCheckCreate && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ))  && isDetailPermission()"
       type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -101,7 +101,7 @@
           <nz-radio-group
             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
             nzSize="small" class="rdo-input" formControlName="phanLoai">
-            <nz-form-item *ngIf="loaiVthh != '02'">
+            <nz-form-item *ngIf="loaiVthh != '02' && this.idInput == 0">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
@@ -109,7 +109,27 @@
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="this.idInput == 0">
+              <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
+                  <input [readonly]="true" nz-input formControlName="soTrHdr" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </nz-radio-group>
+          <nz-radio-group
+            [nzDisabled]="true"
+            nzSize="small" class="rdo-input" formControlName="phanLoai">
+            <nz-form-item *ngIf="loaiVthh != '02' && this.idInput != 0">
+              <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item *ngIf="this.idInput != 0">
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">

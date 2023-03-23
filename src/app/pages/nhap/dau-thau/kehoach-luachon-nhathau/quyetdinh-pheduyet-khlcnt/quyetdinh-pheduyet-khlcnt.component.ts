@@ -287,13 +287,14 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
           denNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
             ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
             : null,
-          loaiVthh: this.searchFilter.loaiVthh,
+          loaiVthh: this.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
           tongTien: this.searchFilter.tongTien,
           soGthau: this.searchFilter.soGthau,
           lastest: 0,
+          maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
         };
         this.quyetDinhPheDuyetKeHoachLCNTService
           .exportList(body)
@@ -356,22 +357,23 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
   }
 
-  // filterInTable(key: string, value: string) {
-  //   if (value && value != '') {
-  //     this.dataTable = [];
-  //     let temp = [];
-  //     if (this.dataTableAll && this.dataTableAll.length > 0) {
-  //       this.dataTableAll.forEach((item) => {
-  //         if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
-  //           temp.push(item)
-  //         }
-  //       });
-  //     }
-  //     this.dataTable = [...this.dataTable, ...temp];
-  //   } else {
-  //     this.dataTable = cloneDeep(this.dataTableAll);
-  //   }
-  // }
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
+    }
+    console.log(key, value);
+
+    if (value && value != '') {
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
 
   clearFilterTable() {
     this.filterTable = {
