@@ -36,6 +36,7 @@ import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhath
     DanhsachKehoachLcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
     TongHopKhlcntComponent,
+    ThemmoiQuyetdinhKhlcntComponent
   ]
 })
 export class KehoachLuachonNhathauModule { }
