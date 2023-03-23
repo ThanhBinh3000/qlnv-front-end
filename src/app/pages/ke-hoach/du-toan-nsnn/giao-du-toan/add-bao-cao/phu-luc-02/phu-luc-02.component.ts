@@ -104,7 +104,7 @@ export class PhuLuc02Component implements OnInit {
     this.lstCtietBcao.forEach(item => {
       if (!item.tenDanhMuc) {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-        item.tenDanhMuc = dinhMuc?.tenDinhMuc ;
+        item.tenDanhMuc = dinhMuc?.tenDinhMuc;
         item.namDtDmuc = dinhMuc?.tongDmuc;
         item.maDviTinh = dinhMuc?.donViTinh;
         item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
@@ -112,7 +112,7 @@ export class PhuLuc02Component implements OnInit {
       }
     })
     console.log(this.lstCtietBcao);
-    
+
 
     this.sortByIndex();
     this.getTotal();
@@ -478,10 +478,13 @@ export class PhuLuc02Component implements OnInit {
         maDmuc: data.maDmuc,
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
+        namDtSluong: data.namDtSluong,
+        maDviTinh: data.maDviTinh,
+        namDtDmuc: data.namDtDmuc,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].namDtSluong = sumNumber([this.lstCtietBcao[index].namDtSluong, item.namDtSluong]);
+          // this.lstCtietBcao[index].namDtSluong = sumNumber([this.lstCtietBcao[index].namDtSluong, item.namDtSluong]);
           this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
 
         }
@@ -489,6 +492,44 @@ export class PhuLuc02Component implements OnInit {
       stt = this.getHead(stt);
     }
     this.getTotal();
+  }
+
+  sum1() {
+    this.lstCtietBcao.forEach(itm => {
+      let stt = this.getHead(itm.stt);
+      while (stt != '0') {
+        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        const data = this.lstCtietBcao[index];
+        this.lstCtietBcao[index] = {
+          ...new ItemData(),
+          id: data.id,
+          stt: data.stt,
+          danhMuc: data.danhMuc,
+          maDmuc: data.maDmuc,
+          tenDanhMuc: data.tenDanhMuc,
+          level: data.level,
+          namDtSluong: data.namDtSluong,
+          maDviTinh: data.maDviTinh,
+          namDtDmuc: data.namDtDmuc,
+          // sluongNamDtoan: data.sluongNamDtoan,
+          // ttienNamDtoan: data.ttienNamDtoan,
+          // thienNamTruoc: data.thienNamTruoc,
+          // dtoanNamHtai: data.dtoanNamHtai,
+          // uocNamHtai: data.uocNamHtai,
+          // dmucNamDtoan: data.dmucNamDtoan,
+          // ttienTd: data.ttienTd,
+        }
+        this.lstCtietBcao.forEach(item => {
+          if (this.getHead(item.stt) == stt) {
+            this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
+          }
+        })
+        stt = this.getHead(stt);
+      }
+      // this.getTotal();
+      this.getTotal();
+    })
+
   }
 
   getTotal() {

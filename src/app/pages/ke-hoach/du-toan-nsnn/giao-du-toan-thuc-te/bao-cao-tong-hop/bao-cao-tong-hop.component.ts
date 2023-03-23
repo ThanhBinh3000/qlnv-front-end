@@ -20,7 +20,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './bao-cao-tong-hop.constant';
@@ -312,7 +312,7 @@ export class BaoCaoTongHopComponent implements OnInit {
         this.location.back();
       }
     }
-
+    this.sum1();
     this.getStatusButton();
     this.spinner.hide();
   };
@@ -1380,17 +1380,52 @@ export class BaoCaoTongHopComponent implements OnInit {
     };
   };
 
-  // tính tổng
-  tinhTong() {
-    this.lstCtietBcao.forEach(item => {
-      const sttItem = item.stt
-      const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
-      this.lstCtietBcao.forEach(item => {
-        this.lstCtietBcao[index].tongCong = 0
-        this.lstCtietBcao[index].tongCong += Number(item.tongCong);
-      })
+  sum1() {
+    this.lstCtietBcao.forEach(itm => {
+      let stt = this.getHead(itm.stt);
+      while (stt != '0') {
+        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        const data = this.lstCtietBcao[index];
+        this.lstCtietBcao[index] = {
+          ...new ItemData(),
+          id: data.id,
+          stt: data.stt,
+          maNdung: data.maNdung,
+          level: data.level,
+          // namDtSluong: data.namDtSluong,
+          // namDtTtien: data.namDtTtien,
+          // thienNamTruoc: data.thienNamTruoc,
+          // dtoanNamHtai: data.dtoanNamHtai,
+          // uocNamHtai: data.uocNamHtai,
+          // namDtDmuc: data.namDtDmuc,
+          // ttienTd: data.ttienTd,
+        }
+        this.lstCtietBcao.forEach(item => {
+          if (this.getHead(item.stt) == stt) {
+            this.lstCtietBcao[index].chenhLech = sumNumber([this.lstCtietBcao[index].chenhLech, item.chenhLech]);
+            this.lstCtietBcao[index].dviCapDuoiTh = sumNumber([this.lstCtietBcao[index].dviCapDuoiTh, item.dviCapDuoiTh]);
+            this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]);
+          }
+        })
+        stt = this.getHead(stt);
+      }
+      // this.getTotal();
+      // this.tinhTong();
     })
-  };
+
+  }
+
+  // tính tổng
+  // tinhTong() {
+  //   this.lstCtietBcao.forEach(item => {
+  //     const sttItem = item.stt
+  //     const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
+  //     this.lstCtietBcao[index].tongCong = 0
+  //     this.lstCtietBcao.forEach(item => {
+  //       this.lstCtietBcao[index].tongCong += Number(item.tongCong);
+  //     })
+  //   })
+  // };
 
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);

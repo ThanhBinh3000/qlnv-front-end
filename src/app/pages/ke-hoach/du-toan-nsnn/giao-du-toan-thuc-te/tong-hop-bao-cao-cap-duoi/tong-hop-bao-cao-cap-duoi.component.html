@@ -69,6 +69,7 @@
         <tr>
           <th nzWidth="50px">STT</th>
           <th nzWidth="100px">Đơn vị tạo</th>
+          <th nzWidth="150px">Mã phương án của Tổng Cục</th>
           <th nzWidth="150px">Mã phương án</th>
           <th nzWidth="150px">Ngày tạo</th>
           <th nzWidth="150px">Năm dự toán</th>
@@ -78,6 +79,15 @@
         <tr>
           <th></th>
           <th></th>
+          <th>
+            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPaCha"
+                (input)="filterInTable('maPaCha',filterTable.maPaCha, false)" size="small" />
+            </nz-input-group>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
@@ -117,6 +127,7 @@
           <td>
             {{getUnitName(item.maDvi)}}
           </td>
+          <td>{{item.maPaCha}}</td>
           <td>{{item.maPa}}</td>
           <td>{{item.ngayTao}}</td>
           <td>
