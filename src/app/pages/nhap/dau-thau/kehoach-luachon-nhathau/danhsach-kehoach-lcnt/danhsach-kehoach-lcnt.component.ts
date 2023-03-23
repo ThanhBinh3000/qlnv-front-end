@@ -262,6 +262,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
   showList() {
@@ -470,7 +471,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
+          if (['tgianNhang', 'ngayTao', 'ngayPduyet'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
@@ -511,6 +516,14 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   closeModalTh () {
     this.thId = null;
     this.openTh = false;
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
 }

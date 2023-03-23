@@ -36,6 +36,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() loaiVthh: String;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() isViewOnModal:boolean;
 
   @Input() isView: boolean;
 
