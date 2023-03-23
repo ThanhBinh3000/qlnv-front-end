@@ -212,6 +212,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       const res = await this.tongHopPhuongAnCuuTroService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
+        console.log(data, "data");
         let listDeXuat = await Promise.all(data.deXuatCuuTro.map(async item => {
           let res1 = await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx);
           if (res1.msg === MESSAGE.SUCCESS) {
