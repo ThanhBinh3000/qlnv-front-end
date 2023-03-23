@@ -37,6 +37,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
 
+  @Input() isView: boolean;
+
   formData: FormGroup;
 
   listQdPdKhlcnt: any[] = []
@@ -86,6 +88,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
+    console.log(this.isView);
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;

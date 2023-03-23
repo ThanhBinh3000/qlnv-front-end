@@ -93,7 +93,7 @@
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open"
                 (click)="formData.value.trangThai == STATUS.BAN_HANH ? '' : openDialogSoQdKhlcnt()">
-                <input nz-input [readonly]="true" formControlName="soQdPdKhlcnt" />
+                <input nz-input [readonly]="formData.value.trangThai !== globals.prop.DU_THAO || isView" formControlName="soQdPdKhlcnt" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -102,7 +102,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" [readonly]="disableForm()" />
+              <input nz-input formControlName="trichYeu" [readonly]="formData.value.trangThai !== globals.prop.DU_THAO || isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
