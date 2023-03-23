@@ -66,6 +66,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       soHd: [''],
       ngayKyHd: [null,],
 
+      idDdiemXh: [],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -74,6 +75,7 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
+      soLuong: [],
 
       idPhieuXuat: [],
       soPhieuXuat: ['', [Validators.required]],
@@ -178,10 +180,10 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       soHd: data.soHd,
       ngayKyHd: data.ngayHd,
     });
-    let dataChiCuc = data.xhPhieuXkhoBttList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+    let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
       dataChiCuc.forEach(e => {
-        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e];
+        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
       });
       this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
     }
@@ -198,14 +200,13 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho']
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          idPhieuXuat: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,
@@ -214,32 +215,44 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          soPhieuXuat: data.soPhieuXuat,
-          ngayXuatKho: data.ngayXuatKho,
-          nguoiGiao: data.nguoiGiao,
-          cmtNguoiGiao: data.cmtNguoiGiao,
-          ctyNguoiGiao: data.ctyNguoiGiao,
-          diaChiNguoiGiao: data.diaChiNguoiGiao,
-          tgianGiaoNhan: data.tgianGiaoNhan,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
-          dviTinh: data.dviTinh,
         });
+        let listPhieuXuatKho = data.xkhoBttList.filter(s => s.maDiemKho == data.maDiemKho)
+        if (listPhieuXuatKho) {
+          listPhieuXuatKho.forEach(a => {
+            this.formData.patchValue({
+              idPhieuXuat: a.id,
+              soPhieuXuat: a.soPhieuXuat,
+              ngayXuatKho: a.ngayXuatKho,
+              nguoiGiao: a.nguoiGiao,
+              cmtNguoiGiao: a.cmtNguoiGiao,
+              ctyNguoiGiao: a.ctyNguoiGiao,
+              diaChiNguoiGiao: a.diaChiNguoiGiao,
+              tgianGiaoNhan: a.tgianGiaoNhan,
+              loaiVthh: a.loaiVthh,
+              tenLoaiVthh: a.tenLoaiVthh,
+              cloaiVthh: a.cloaiVthh,
+              tenCloaiVthh: a.tenCloaiVthh,
+              moTaHangHoa: a.moTaHangHoa,
+              dviTinh: a.dviTinh,
+              idDdiemXh: a.idDdiemXh,
+              soLuong: a.soLuongThucXuat
+            });
+          })
+        }
         let body = {
           trangThai: "01",
           maDviCha: this.userInfo.MA_DVI
         };
         const res = await this.donViService.getAll(body)
         const dataDk = res.data;
-        this.listDiaDiemKho = dataDk.filter(item => item.maDvi == data.maDiemKho);
-        this.listDiaDiemKho.forEach(s => {
-          this.formData.patchValue({
-            diaDiemKho: s.diaChi,
+        if (dataDk) {
+          this.listDiaDiemKho = dataDk.filter(item => item.maDvi == data.maDiemKho);
+          this.listDiaDiemKho.forEach(s => {
+            this.formData.patchValue({
+              diaDiemKho: s.diaChi,
+            })
           })
-        })
+        }
       }
     });
   }
@@ -386,8 +399,13 @@ export class ThemMoiBangKeCanHangBttComponent extends Base2Component implements 
     if (this.rowItem.maCan && this.rowItem.trongLuongBaoBi && this.rowItem.trongLuongCaBaoBi) {
       // let tongTrongLuongCaBaoBi = this.calcTong('trongLuongCaBaoBi');
       // let tongTrongLuongBi = this.calcTong('trongLuongBaoBi');
-      if (this.rowItem.trongLuongBaoBi > this.rowItem.trongLuongCaBaoBi) {
-        this.notification.error(MESSAGE.ERROR, "Trọng lượng bao bì đang vượt quá trọng lượng cả bì vui lòng nhập lại.");
+      let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+      if (this.rowItem.trongLuongBaoBi >= this.rowItem.trongLuongCaBaoBi) {
+        this.notification.error(MESSAGE.ERROR, "Số lượng bì phải lớn lơn trọng lượng bao bì.");
+        return false
+      }
+      if (tongTrongLuong + this.rowItem.trongLuongCaBaoBi > this.formData.value.soLuong) {
+        this.notification.error(MESSAGE.ERROR, "Trọng lượng bao bì không được vượt quá số lượng xuất kho.");
         return false
       }
       return true;

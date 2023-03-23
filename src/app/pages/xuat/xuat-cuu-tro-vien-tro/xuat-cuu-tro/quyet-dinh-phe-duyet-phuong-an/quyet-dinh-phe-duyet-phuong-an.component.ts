@@ -26,7 +26,10 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,10 +44,13 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
       soDx: null,
       tenDvi: null,
       maDvi: null,
+      maDviDx: null,
       ngayDx: null,
       ngayDxTu: null,
       ngayDxDen: null,
       ngayKetThuc: null,
+      ngayKetThucTu: null,
+      ngayKetThucDen: null,
       type: null
     })
     this.filterTable = {
@@ -69,7 +75,32 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
+  disabledStartNgayDX = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+  };
 
+  disabledEndNgayDx = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
+  };
+  disabledStartNgayKt = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKetThucTu) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKetThucDen.getTime();
+  };
+
+  disabledEndNgayKt = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKetThucTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKetThucDen.getTime();
+  };
   async ngOnInit() {
     try {
       this.initData()

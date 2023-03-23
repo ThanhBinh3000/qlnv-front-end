@@ -50,7 +50,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       maDvi: ['', [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maQhns: [''],
-
+      idBienBan: [],
       soBienBan: ['', [Validators.required]],
       soQd: ['', [Validators.required]],
       idQd: ['', [Validators.required]],
@@ -81,6 +81,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
+      soLuong: [],
 
       hthucBquan: ['', [Validators.required]],
       ngayLayMau: ['', [Validators.required]],
@@ -137,54 +138,19 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     });
   }
 
-  async openDialogSoQd() {
-    let dataQd = [];
-    let body = {
-      nam: dayjs().get('year'),
-      loaiVthh: this.loaiVthh,
-      trangThai: this.STATUS.BAN_HANH,
-      maChiCuc: this.userInfo.MA_DVI
-    }
-    let res = await this.quyetDinhNvXuatBttService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      dataQd = res.data?.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: dataQd,
-        dataHeader: ['Số quyết định', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
-      },
-    })
-    modalQD.afterClose.subscribe(async (dataChose) => {
-      if (dataChose) {
-        await this.bindingDataQd(dataChose.id);
-      }
-    });
-  }
-
   async bindingDataQd(id) {
     await this.spinner.show();
     let res = await this.bienBanLayMauBttService.getDetail(id);
-    console.log(res);
     if (res.data) {
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
+        idBienBan: data.id,
         soBienBan: data.soBienBan,
         soQd: data.soQd,
         idQd: data.idQd,
         idKtv: data.idKtv,
         tenKtv: data.tenKtv,
+        idDdiemXh: data.idDdiemXh,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         maNhaKho: data.maNhaKho,
@@ -193,6 +159,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        soLuong: data.soLuong,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -200,7 +167,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         moTaHangHoa: data.moTaHangHoa,
         ngayLayMau: data.ngayLayMau
       });
-
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
       if (dmTieuChuan.data) {
         this.dataTable = dmTieuChuan.data.children;
@@ -208,45 +174,9 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
           element.edit = false
         });
       }
-      let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
-      if (dataChiCuc && dataChiCuc.length > 0) {
-        this.listDiaDiemXh = dataChiCuc[0].children;
-      }
     };
 
     await this.spinner.hide();
-  }
-
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm nhập hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemXh,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.formData.patchValue({
-          idDdiemXh: data.id,
-          maDiemKho: data.maDiemKho,
-          tenDiemKho: data.tenDiemKho,
-          maNhaKho: data.maNhaKho,
-          tenNhaKho: data.tenNhaKho,
-          maNganKho: data.maNganKho,
-          tenNganKho: data.tenNganKho,
-          maLoKho: data.maLoKho,
-          tenLoKho: data.tenLoKho,
-          soLuong: data.soLuong
-        });
-      }
-    });
   }
 
   isDisabled() {

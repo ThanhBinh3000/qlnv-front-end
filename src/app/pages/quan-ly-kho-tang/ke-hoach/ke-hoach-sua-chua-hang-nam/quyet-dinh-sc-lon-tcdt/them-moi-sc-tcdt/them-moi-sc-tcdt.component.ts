@@ -1,19 +1,19 @@
-
-import {Component, Input, OnInit, } from '@angular/core';
-import {Validators} from "@angular/forms";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
-import {KtKhXdHangNamService} from "../../../../../../services/kt-kh-xd-hang-nam.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {FormGroup, Validators} from "@angular/forms";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
+import * as uuid from "uuid";
 import {MESSAGE} from "../../../../../../constants/message";
-import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
-import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";
+import dayjs from "dayjs";
+import {STATUS} from "../../../../../../constants/status";
+import {
+  DeXuatScLonService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 
 @Component({
   selector: 'app-them-moi-sc-tcdt',
@@ -21,209 +21,165 @@ import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-
   styleUrls: ['./them-moi-sc-tcdt.component.scss']
 })
 export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
-
-  @Input() isViewDetail: boolean;
-  @Input() typeHangHoa: string;
-  @Input() idInput: number;
-  maQd: string;
-  dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
-  rowItem: DanhMucKho = new DanhMucKho();
-  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
-  listQdKhTh: any[] = [];
-  listDmKho: any[] = [];
-
-  listLoaiDuAn: any[] = [];
+  @Input() id: number;
+  @Input() isView: boolean;
+  listDxChiCuc: any[] = [];
+  isTongHop: boolean = false;
+  formDataTongHop: FormGroup
+  expandSet = new Set<number>();
+  maCv: string;
+  tableHangDtqg: any[] = [];
+  dataHang: any[] = [];
+  tableGiaTriBh: any[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : KtKhXdHangNamService,
-    private dviService : DonviService,
-    private dmKhoService : DanhMucKhoService,
-    private danhMucService : DanhMucService,
-    private qdTrungHanSv : QuyetDinhKhTrungHanService
+    private dexuatService : DeXuatScLonService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super(httpClient, storageService, notification, spinner, modal, dexuatService)
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      maDvi : [null],
-      tenDvi : [null],
-      soCongVan : [null, Validators.required],
-      namBatDau : [null, Validators.required],
-      namKetThuc : [null, Validators.required],
-      trichYeu : [null, Validators.required],
-      ngayKy : [null, Validators.required],
-      trangThai : ['00'],
-      tenTrangThai : ['Dự thảo'],
+      maDvi: [null],
+      capDvi: [null],
+      namKeHoach: [dayjs().get('year')],
+      noiDung: [null, Validators.required],
+      ngayKy: [null, Validators.required],
+      maToTrinh: [null, Validators.required],
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKems: [null],
+      lyDoTuChoi: [null],
+    });
+    this.formDataTongHop = this.fb.group({
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      ngayDx: [null],
     });
   }
 
   async ngOnInit() {
-    await this.spinner.show();
+    this.spinner.show();
     try {
-      this.maQd = '/' + this.userInfo.MA_QD;
-      await Promise.all([
-        this.getAllDmKho(),
-        this.getAllLoaiDuAn(),
-        this.getAllQdTrungHan()
-      ]);
-      if (this.idInput) {
-        // await this.getDataDetail(this.idInput)
-      } else {
-        this.formData.patchValue({
-          tenDvi : this.userInfo.TEN_DVI
-        })
+      if (this.id > 0) {
+        await this.detail(this.id);
       }
+      this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
-      await this.spinner.hide();
+      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    await this.spinner.hide();
-  }
-
-  async getAllDmKho() {
-    let res = await this.dmKhoService.getAllDmKho('DMK');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmKho = res.data
-    }
-  }
-
-  async getAllLoaiDuAn() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiDuAn = res.data;
-    }
-  }
-
-  async getAllQdTrungHan() {
-    let res = await this.qdTrungHanSv.getListQd();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listQdKhTh = res.data
-    }
   }
 
 
-  // async getDataDetail(id) {
-  //   if (id > 0) {
-  //     let res = await this.dexuatService.getDetail(id);
-  //     const data = res.data;
-  //     this.formData.patchValue({
-  //       id: data.id,
-  //       maDvi : data.maDvi,
-  //       tenDvi : data.tenDvi,
-  //       soCongVan: data.soCongVan ? data.soCongVan.split('/')[0] : '',
-  //       namBatDau : data.namBatDau,
-  //       namKetThuc : data.namBatDau,
-  //       trichYeu : data.trichYeu,
-  //       ngayKy : data.ngayKy,
-  //       trangThai : data.trangThai,
-  //       tenTrangThai : data.tenTrangThai,
-  //     });
-  //     this.fileDinhKem = data.fileDinhKems
-  //     this.dataTable = data.ctiets;
-  //     this.updateEditCache()
-  //   }
-  // }
-
-
-
-
-  async save(isOther: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.spinner.hide();
+  async tongHop() {
+    this.spinner.show()
+    this.helperService.markFormGroupTouched(this.formDataTongHop);
+    if (this.formDataTongHop.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      this.spinner.hide()
       return;
     }
-    let body = this.formData.value;
-    body.maDvi = this.userInfo.MA_DVI
-    body.soCongVan = body.soCongVan + this.maQd
-    body.fileDinhKems = this.fileDinhKem
-    body.ctiets = this.dataTable
-    body.tmdt = this.calcTong('1') ? this.calcTong('1') : 0 ;
-    let data = await this.createUpdate(body);
+    let body = this.formDataTongHop.value
+    body.ngayDxTu = body.ngayDx ? body.ngayDx[0] : null
+    body.ngayDxDen = body.ngayDx ? body.ngayDx[1] : null
+    let res = await this.dexuatService.tongHop(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.isTongHop = true;
+      let detail = res.data;
+      console.log(detail,123)
+      this.spinner.hide()
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg)
+      this.spinner.hide()
+      return;
+    }
+    console.log(this.dataHang)
+    this.spinner.hide()
+  }
+  async save(isOther: boolean) {
+    this.formData.patchValue({
+      namKeHoach: this.formDataTongHop.value.namKeHoach,
+    })
+    this.helperService.markFormGroupTouched(this.formData)
+    if (this.formData.invalid) {
+      return;
+    }
+    if (this.fileDinhKem && this.fileDinhKem.length > 0) {
+      this.formData.value.fileDinhKems = this.fileDinhKem;
+    }
+    this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
+    this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
+    this.formData.value.maDvi = this.userInfo.MA_DVI;
+    this.formData.value.capDvi = this.userInfo.CAP_DVI;
+    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
+    let data = await this.createUpdate(this.formData.value)
     if (data) {
       if (isOther) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
+        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
       }
     }
   }
 
-  xoaItem(index: number) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-          this.updateEditCache()
-        } catch (e) {
-          console.log('error', e);
+
+  async detail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.dexuatService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.isTongHop = true;
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.fileDinhKem = data.listFileDinhKems;
         }
-      },
-    });
-  }
-
-  themMoiItem() {
-    if (!this.dataTable) {
-      this.dataTable = [];
-    }
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new DanhMucKho();
-    this.updateEditCache()
-  }
-
-  clearData() {
-    this.rowItem = new DanhMucKho();
-  }
-
-  huyEdit(idx: number): void {
-    this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
-      edit: false,
-    };
-  }
-
-  luuEdit(index: number): void {
-    Object.assign(this.dataTable[index], this.dataEdit[index].data);
-    this.dataEdit[index].edit = false;
-  }
-
-  updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: { ...item },
-        }
-      });
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
     }
   }
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
-  }
 
-  changeDmucDuAn(event: any) {
-    if (event) {
-      let result = this.listDmKho.filter(item => item.maDuAn == event)
-      if (result && result.length > 0) {
-        this.rowItem = result[0];
-        this.rowItem.tgKcHt = this.rowItem.tgKhoiCong + ' - ' + this.rowItem.tgHoanThanh
+  async pheDuyet() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.DU_THAO :
+      case STATUS.TU_CHOI_LDV : {
+        trangThai = STATUS.CHO_DUYET_LDV;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDV : {
+        trangThai = STATUS.DA_DUYET_LDV
       }
     }
+    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
+
+  disableForm() {
+    let check = false;
+    if (this.isView) {
+      check = true
+    } else {
+      if (this.id > 0) {
+        check = true
+      } else {
+        check = false;
+      }
+    }
+    return check;
+  }
+
   calcTong(type) {
     let sum;
     if (this.dataTable && this.dataTable.length > 0) {
@@ -260,12 +216,12 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     return sum;
   }
 
-  async updateDx(event) {
-    let arr = this.listQdKhTh.filter(item => item.soCongVan == event);
-    if (arr && arr.length >0) {
-      let result = arr[0];
-      this.dataTable = result.ctiets
-      this.updateEditCache()
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
     }
   }
 }

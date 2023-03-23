@@ -69,7 +69,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-
       idDdiemXh: [''],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
@@ -162,7 +161,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     await this.spinner.hide();
   }
 
-
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm nhập hàng',
@@ -204,8 +202,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     }
   }
 
-
-
   async initForm() {
     let id = await this.userService.getId('XH_BB_LAY_MAU_BTT_HDR_SEQ')
     this.formData.patchValue({
@@ -244,11 +240,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     }).catch(err => {
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
-  }
-
-
-  async changeLoaiHangHoa(id: any) {
-
   }
 
   itemRow: ItemDaiDien = new ItemDaiDien();

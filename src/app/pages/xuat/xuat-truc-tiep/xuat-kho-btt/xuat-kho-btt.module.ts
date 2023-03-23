@@ -8,6 +8,8 @@ import { PhieuXuatKhoBttComponent } from './phieu-xuat-kho-btt/phieu-xuat-kho-bt
 import { ThemMoiPhieuXuatKhoBttComponent } from './phieu-xuat-kho-btt/them-moi-phieu-xuat-kho-btt/them-moi-phieu-xuat-kho-btt.component';
 import { BangCanKeHangBttComponent } from './bang-can-ke-hang-btt/bang-can-ke-hang-btt.component';
 import { ThemMoiBangKeCanHangBttComponent } from './bang-can-ke-hang-btt/them-moi-bang-ke-can-hang-btt/them-moi-bang-ke-can-hang-btt.component';
+import { BienBanTinhKhoBttComponent } from './bien-ban-tinh-kho-btt/bien-ban-tinh-kho-btt.component';
+import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho-btt/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 
 
 
@@ -19,6 +21,8 @@ import { ThemMoiBangKeCanHangBttComponent } from './bang-can-ke-hang-btt/them-mo
     ThemMoiPhieuXuatKhoBttComponent,
     BangCanKeHangBttComponent,
     ThemMoiBangKeCanHangBttComponent,
+    BienBanTinhKhoBttComponent,
+    ThemMoiBienBanTinhKhoComponent,
   ],
   imports: [
     CommonModule,
