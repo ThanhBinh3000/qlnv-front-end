@@ -35,6 +35,7 @@ export enum PATH {
   PHIEU_XUAT_KHO = "phieu-xuat-kho",
   BANG_KE = "bang-ke",
   BIEN_BAN_TINH_KHO = "bien-ban-tinh-kho",
+  BIEN_BAN_HAO_DOI = "bien-ban-hao-doi",
 
 
   NHAP_HANG = "nhap-hang",
