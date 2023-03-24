@@ -150,7 +150,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
-    console.log(this.isView);
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
@@ -389,7 +388,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           tongMucDt: tongMucDt,
           tongMucDtDx: tongMucDtDx,
         });
-        console.log(this.listOfData);
       }
     });
   }
@@ -540,7 +538,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async getDataChiTieu() {
-    console.log(this.userInfo.MA_DVI);
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
         +this.formData.get('namKhoach').value,
@@ -827,7 +824,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   openFile(event, id, type) {
-    debugger
     let item = {
       id: new Date().getTime(),
       text: event.name,

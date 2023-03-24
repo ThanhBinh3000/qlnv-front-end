@@ -105,7 +105,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   listThanhTien: any;
   listSoLuong: any;
   listSoLuongDeXuat: any;
-  listSoLuongXuatCap: any;
   errorInputComponent: any[] = [];
   disableInputComponent: ModalInput = new ModalInput();
 
@@ -160,6 +159,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         tenLoaiVthh: [''],
         tenCloaiVthh: [''],
         donViTinh: [''],
+        soLuongXuatCap: [''],
         tenTrangThai: ['Dự Thảo'],
         canCu: [new Array<FileDinhKem>()],
         deXuatPhuongAn: [new Array()]
@@ -256,7 +256,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.listThanhTien = [0];
       this.listSoLuong = [0];
       this.listSoLuongDeXuat = [0];
-      this.listSoLuongXuatCap = [0];
     }
 
   }
@@ -287,33 +286,34 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async selectHangHoa(event: any) {
-    this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh})
+    if (event) {
+      this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh})
 
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listChungLoaiHangHoa = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    //lay ton kho
-    if(this.userService.isCuc()){
-      let body = {
-        'maDvi': this.userInfo.MA_DVI,
-        'loaiVthh': this.formData.value.loaiVthh
-      }
-      this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            this.formData.patchValue({tonKho:data[0].slHienThoi});
-          } else {
-            this.phuongAnRow.tonKhoChiCuc = 0;
-            // this.phuongAnRow.tenDonViTinh = '';
-          }
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiHangHoa = res.data;
         }
-      });
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      //lay ton kho
+      if (this.userService.isCuc()) {
+        let body = {
+          'maDvi': this.userInfo.MA_DVI,
+          'loaiVthh': this.formData.value.loaiVthh
+        }
+        this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data;
+            if (data.length > 0) {
+              this.formData.patchValue({tonKho: data.reduce((prev, cur) => prev + cur.slHienThoi, 0)});
+            } else {
+              this.formData.patchValue({tonKho: 0});
+            }
+          }
+        });
+      }
     }
   }
 
@@ -437,6 +437,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
               let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
               let rowCuc = v.find(s => s.tenCuc === k);
+              if (this.userService.isCuc()) {
+                rowCuc.tonKhoCuc = this.formData.value.tonKho;
+              }
               console.log(rowCuc, 'rowCuc');
               return {
                 idVirtual: uuid.v4(),
@@ -445,6 +448,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
                 soLuongXuatCucThucTe: soLuongXuatCucThucTe,
                 thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
                 tenCloaiVthh: rowCuc.tenCloaiVthh,
+                tonKhoCuc: rowCuc.tonKhoCuc,
                 childData: v
               }
             }
@@ -471,12 +475,22 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
       this.listSoLuongDeXuat = this.phuongAnView.map(s => s.soLuongXuat);
-      this.listSoLuongXuatCap = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatCap);
+      let xuatCap = this.phuongAnView.map(s => {
+        let tongTonKhoCuc = s.childData.reduce((prev, cur) => prev + cur.tonKhoCuc, 0);
+        let tongDeXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+        let tongThucXuat = s.childData.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+        console.log(tongTonKhoCuc,tongDeXuat,tongThucXuat)
+        if (tongDeXuat > tongThucXuat && tongThucXuat >= tongTonKhoCuc) {
+          return tongDeXuat - tongTonKhoCuc;
+        } else {
+          return 0
+        }
+      });
+      this.formData.patchValue({soLuongXuatCap: xuatCap})
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
       this.listSoLuongDeXuat = [0];
-      this.listSoLuongXuatCap = [0];
     }
   }
 
@@ -503,8 +517,30 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
 
+      //lay ton kho
+      if (this.userService.isTongCuc()) {
+        let body = {
+          'maDvi': event,
+          'loaiVthh': this.formData.value.loaiVthh
+        }
+        this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            let data = res.data;
+            if (data.length > 0) {
+              this.phuongAnRow.tonKhoCuc = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            } else {
+              this.phuongAnRow.tonKhoCuc = 0;
+            }
+          }
+        });
+      }
+    } else {
+      this.phuongAnRow.maDviChiCuc = null;
+      this.phuongAnRow.cloaiVthh = null;
+      this.phuongAnRow.tonKhoChiCuc = 0;
+      this.phuongAnRow.tonKhoCloaiVthh = 0;
+    }
   }
 
   async changeChiCuc(event: any) {
@@ -519,34 +555,38 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
-            this.phuongAnRow.tonKhoChiCuc = data[0].slHienThoi;
-            // this.phuongAnRow.tenDonViTinh = data[0].tenDonViTinh;
+            this.phuongAnRow.tonKhoChiCuc = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
           } else {
             this.phuongAnRow.tonKhoChiCuc = 0;
-            // this.phuongAnRow.tenDonViTinh = '';
           }
         }
       });
+    } else {
+      this.phuongAnRow.tonKhoChiCuc = 0;
     }
   }
 
 
   async changeCloaiVthh(event: any) {
-    let body = {
-      maDvi: this.phuongAnRow.maDviChiCuc,
-      loaiVthh: this.formData.value.loaiVthh,
-      cloaiVthh: event
-    }
-    this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        if (data.length > 0) {
-          this.phuongAnRow.tonKhoCloaiVthh = data[0].slHienThoi;
-        } else {
-          this.phuongAnRow.tonKhoCloaiVthh = 0;
-        }
+    if (event) {
+      let body = {
+        maDvi: this.phuongAnRow.maDviChiCuc,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: event
       }
-    });
+      this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let data = res.data;
+          if (data.length > 0) {
+            this.phuongAnRow.tonKhoCloaiVthh = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+          } else {
+            this.phuongAnRow.tonKhoCloaiVthh = 0;
+          }
+        }
+      });
+    } else {
+      this.phuongAnRow.tonKhoCloaiVthh = 0;
+    }
   }
 
   async save() {
@@ -608,14 +648,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.disableInputComponent.maDviCuc = true;
     this.disableInputComponent.soLuongXuatCuc = true;
 
-    let currentRow;
     if (data.id) {
-      currentRow = this.formData.value.deXuatPhuongAn.find(s => s.id == data.id);
+      this.phuongAnRow = cloneDeep(this.formData.value.deXuatPhuongAn.find(s => s.id == data.id));
     } else if (data.idVirtual) {
-      currentRow = this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual)
+      this.phuongAnRow = cloneDeep(this.formData.value.deXuatPhuongAn.find(s => s.idVirtual == data.idVirtual));
     }
-    this.phuongAnRow = cloneDeep(currentRow);
-    console.log(this.phuongAnRow, 'current')
     await this.changeCuc(this.phuongAnRow.maDviCuc);
     await this.changeChiCuc(this.phuongAnRow.maDviChiCuc);
     await this.changeCloaiVthh(this.phuongAnRow.cloaiVthh);

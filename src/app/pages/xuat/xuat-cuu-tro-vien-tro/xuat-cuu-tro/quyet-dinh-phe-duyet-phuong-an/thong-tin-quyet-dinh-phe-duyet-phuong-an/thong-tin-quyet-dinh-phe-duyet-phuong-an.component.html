@@ -195,8 +195,8 @@
               <td>{{item.soDx}}</td>
               <td>{{item.ngayPduyetDx}}</td>
               <td>{{item.trichYeuDx}}</td>
-              <td>{{item.tongSoLuongDx|number: '1.0-1'}}</td>
-              <td>{{item.thanhTienDx|number: '1.0-1'}}</td>
+              <td>{{item.tongSoLuongDx|number: '1.0-1' : 'vi_VN'}}</td>
+              <td>{{item.thanhTienDx|number: '1.0-1' : 'vi_VN'}}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -207,8 +207,8 @@
             <th></th>
             <th></th>
             <th class="text-blue">Tổng</th>
-            <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
-            <th class="text-blue">{{tongThanhTienDxuat|number: '1.0-1'}}</th>
+            <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1' : 'vi_VN'}}</th>
+            <th class="text-blue">{{tongThanhTienDxuat|number: '1.0-1' : 'vi_VN'}}</th>
           </tr>
         </tfoot>
       </nz-table>
@@ -235,7 +235,7 @@
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-statistic
-                              [nzValue]="listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                              [nzValue]="listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -246,7 +246,7 @@
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-statistic
-                              [nzValue]="listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                              [nzValue]="listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -257,7 +257,7 @@
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-statistic [nzValueStyle]="{ color: 'red'}"
-                              [nzValue]="slXuatCapCache|number: '1.0-1'"></nz-statistic>
+                              [nzValue]="slXuatCapCache|number: '1.0-1' : 'vi_VN'"></nz-statistic>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -298,7 +298,7 @@
                             style="width: 35px"></td>
                           <td>{{i + 1}}</td>
                           <td>{{ item.noiDung }}</td>
-                          <td><strong>{{ item.soLuongXuat |number:'1.0-1'}}</strong></td>
+                          <td><strong>{{ item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</strong></td>
                           <td></td>
                           <td></td>
                           <td></td>
@@ -306,10 +306,10 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
+                          <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                           <td></td>
                           <td></td>
-                          <td><strong>{{item.thanhTien|number:'1.0-1'}}</strong></td>
+                          <td><strong>{{item.thanhTien|number:'1.0-1' : 'vi_VN'}}</strong></td>
                         </tr>
                         <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                           <ng-container *ngFor="let lv1 of item.childData,let i1=index">
@@ -320,15 +320,15 @@
                               <td></td>
                               <td>{{lv1.tenCuc}}</td>
                               <td></td>
-                              <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1'}}</strong></td>
+                              <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                               <td></td>
                               <td></td>
                               <td></td>
                               <td></td>
-                              <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
+                              <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                               <td></td>
                               <td></td>
-                              <td><strong>{{lv1.thanhTienCuc|number:'1.0-1'}}</strong></td>
+                              <td><strong>{{lv1.thanhTienCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                             </tr>
                             <ng-container *ngIf="expandSetStringCache.has(item.idVirtual)">
                               <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -341,13 +341,13 @@
                                   <td></td>
                                   <td></td>
                                   <td>{{lv2.tenChiCuc}}</td>
-                                  <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
+                                  <td>{{lv2.tonKhoChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                                   <td>{{lv2.tenCloaiVthh}}</td>
-                                  <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
-                                  <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
+                                  <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1' : 'vi_VN'}}</td>
+                                  <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                                   <td>{{lv2.donViTinh}}</td>
-                                  <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
-                                  <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
+                                  <td>{{lv2.donGiaKhongVat|number:'1.0-1' : 'vi_VN'}}</td>
+                                  <td>{{lv2.thanhTien|number:'1.0-1' : 'vi_VN'}}</td>
                                 </tr>
                               </ng-container>
                             </ng-container>
@@ -381,7 +381,8 @@
                           Tổng số lượng viện trợ, cứu trợ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                          <nz-statistic
+                            [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -391,7 +392,8 @@
                           Thành Tiền
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                          <nz-statistic
+                            [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -401,9 +403,9 @@
                           SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error" *ngIf="formData.value.xuatCap == true">
-                          <!-- <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1'">
+                          <!-- <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1' : 'vi_VN'">
                           </nz-statistic> -->
-                          <span>{{this.formData.value.soLuongXuaCap| number: '1.0-1'}}</span>
+                          <span>{{this.formData.value.soLuongXuaCap| number: '1.0-1' : 'vi_VN'}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -444,7 +446,7 @@
                           [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                         <td>{{i + 1}}</td>
                         <td>{{ item.noiDung }}</td>
-                        <td><strong>{{ item.soLuongXuat |number:'1.0-1'}}</strong></td>
+                        <td><strong>{{ item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</strong></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -452,10 +454,10 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1'}}</strong></td>
+                        <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                         <td></td>
                         <td></td>
-                        <td><strong>{{item.thanhTien|number:'1.0-1'}}</strong></td>
+                        <td><strong>{{item.thanhTien|number:'1.0-1' : 'vi_VN'}}</strong></td>
                         <td>
 
                         </td>
@@ -469,15 +471,15 @@
                             <td></td>
                             <td>{{lv1.tenCuc}}</td>
                             <td></td>
-                            <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1'}}</strong></td>
+                            <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1'}}</strong></td>
+                            <td><strong>{{lv1.soLuongXuatCucThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
                             <td></td>
                             <td></td>
-                            <td><strong>{{lv1.thanhTienCuc|number:'1.0-1'}}</strong></td>
+                            <td><strong>{{lv1.thanhTienCuc|number:'1.0-1' : 'vi_VN'}}</strong></td>
                             <td>
                             </td>
                           </tr>
@@ -492,13 +494,13 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{lv2.tenChiCuc}}</td>
-                                <td>{{lv2.tonKhoChiCuc|number:'1.0-1'}}</td>
+                                <td>{{lv2.tonKhoChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                                 <td>{{lv2.tenCloaiVthh}}</td>
-                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1'}}</td>
-                                <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1'}}</td>
+                                <td>{{lv2.tonKhoCloaiVthh|number:'1.0-1' : 'vi_VN'}}</td>
+                                <td>{{lv2.soLuongXuatChiCuc|number:'1.0-1' : 'vi_VN'}}</td>
                                 <td>{{lv2.donViTinh}}</td>
-                                <td>{{lv2.donGiaKhongVat|number:'1.0-1'}}</td>
-                                <td>{{lv2.thanhTien|number:'1.0-1'}}</td>
+                                <td>{{lv2.donGiaKhongVat|number:'1.0-1' : 'vi_VN'}}</td>
+                                <td>{{lv2.thanhTien|number:'1.0-1' : 'vi_VN'}}</td>
                                 <td>
                                   <a>
                                     <i class="fa fa-edit" *ngIf="!isView" (click)="suaPhuongAn(lv2)"></i>

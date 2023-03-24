@@ -124,10 +124,10 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     this.dataTable = [];
     let body = {
       tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD 00:00:00')
         : null,
       denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD 24:59:59')
         : null,
       loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
@@ -349,30 +349,29 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
-          } else if (['soQd', 'soQdPdKqLcnt', 'namKhoach', 'tenPthucLcnt', 'soQdPdKqLcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'ngayKyQdPduyetKqlcntHdr', 'tgianNhangDxuatKhLcntHdr'].includes(key)) {
+          } else if (['soQd', 'soQdPdKqLcnt', 'tenPthucLcnt', 'soQdPdKqLcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'ngayKyQdPduyetKqlcntHdr', 'tgianNhangDxuatKhLcntHdr'].includes(key)) {
             if (item['hhQdKhlcntHdr'] != null) {
 
               if (item['hhQdKhlcntHdr'][key] && item['hhQdKhlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                temp.push(item)
-              } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
                 temp.push(item)
               }
             }
 
             if (item['hhQdPduyetKqlcntHdr'] != null) {
 
-              if (key != 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'][key] && item['hhQdPduyetKqlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                temp.push(item)
-              } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              if (key != 'soQd' && key != 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'][key] && item['hhQdPduyetKqlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
                 temp.push(item)
               }
-              if (key == 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'].ngayKy && dayjs(item['hhQdPduyetKqlcntHdr'].ngayKy).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              if (key != 'soQd' && key != 'ngayKyQdPduyetKqlcntHdr' && key == 'soQdPdKqLcnt' && item['hhQdPduyetKqlcntHdr'].soQd && item['hhQdPduyetKqlcntHdr'].soQd.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+              if (key != 'soQd' && key == 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'].ngayKy && dayjs(item['hhQdPduyetKqlcntHdr'].ngayKy).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
                 temp.push(item)
               }
             }
 
             if (item['dxuatKhLcntHdr'] != null) {
-              if (item['dxuatKhLcntHdr']['tgianNhang'] && dayjs(item['dxuatKhLcntHdr']['tgianNhang']).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              if (key == 'tgianNhangDxuatKhLcntHdr' && item['dxuatKhLcntHdr']['tgianNhang'] && dayjs(item['dxuatKhLcntHdr']['tgianNhang']).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
                 temp.push(item)
               }
             }
