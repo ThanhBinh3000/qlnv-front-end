@@ -18,11 +18,11 @@ import { BienBanTinhKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/b
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
-  selector: 'app-them-moi-bien-ban-tinh-kho',
-  templateUrl: './them-moi-bien-ban-tinh-kho.component.html',
-  styleUrls: ['./them-moi-bien-ban-tinh-kho.component.scss']
+  selector: 'app-them-moi-bien-ban-hao-doi-btt',
+  templateUrl: './them-moi-bien-ban-hao-doi-btt.component.html',
+  styleUrls: ['./them-moi-bien-ban-hao-doi-btt.component.scss']
 })
-export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements OnInit {
+export class ThemMoiBienBanHaoDoiBttComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() isView: boolean;
@@ -31,7 +31,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
+  listPhieuKtraCl: any[] = [];
+  listDiemNhap: any[] = [];
+  listTiLe: any = []
+  taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
   constructor(
     httpClient: HttpClient,
