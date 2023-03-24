@@ -31,6 +31,7 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
     QuyetdinhKetquaLcntComponent,
     TheoPhuongThucDauThauComponent,
     ThongtinDauthauComponent,
+    ThemmoiQuyetdinhKetquaLcntComponent
   ]
 })
 export class TrienkhaiLuachonNhathauModule { }

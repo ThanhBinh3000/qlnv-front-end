@@ -89,17 +89,11 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     this.formData.get('ngayTongHop').value
     let body = {
       tuNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
-        ? dayjs(this.formData.get('ngayTongHop').value[0]).format('YYYY-MM-DD')
+        ? dayjs(this.formData.get('ngayTongHop').value[0]).format('YYYY-MM-DD 00:00:00')
         : null,
       denNgayThop: this.formData.get('ngayTongHop').value && this.formData.get('ngayTongHop').value.length > 0
-        ? dayjs(this.formData.get('ngayTongHop').value[1]).format('YYYY-MM-DD')
+        ? dayjs(this.formData.get('ngayTongHop').value[1]).format('YYYY-MM-DD 24:59:59')
         : null,
-      // tuNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-      //   ? dayjs(this.searchFilter.ngayLap[0]).format('YYYY-MM-DD')
-      //   : null,
-      // denNgayTao: this.searchFilter.ngayLap && this.searchFilter.ngayLap.length > 0
-      //   ? dayjs(this.searchFilter.ngayLap[1]).format('YYYY-MM-DD')
-      //   : null,
       loaiVthh: this.loaiVthh,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value,
