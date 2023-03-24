@@ -52,38 +52,6 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, 'Chưa tồn tại bản ghi nộp tiền vốn thừa năm ' + this.response.namDnghi);
             // this.response.loaiDnghi = null;
             return;
-            this.response.ttGui = new sendInfo();
-            this.response.ttGui.lstCtietBcaos = [];
-            this.response.ttNhan = new receivedInfo();
-            this.response.ttNhan.lstCtietBcaos = [];
-            this.response.maDvi = this.userInfo?.MA_DVI;
-            this.response.ngayTao = new Date();
-            this.response.dot = 1;
-            this.response.ttGui.trangThai = Utils.TT_BC_1;
-            this.response.ttNhan.trangThai = Utils.TT_BC_1;
-            this.response.ttGui.lstFiles = [];
-            this.response.ttNhan.lstFiles = [];
-            this.response.ttGui.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: Utils.MUA_THOC,
-                hangDtqg: 'Thóc',
-            })
-            if (!this.userService.isChiCuc) {
-                this.response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: uuid.v4() + 'FE',
-                    maHang: Utils.MUA_GAO,
-                    hangDtqg: 'Gạo',
-                })
-                this.response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: uuid.v4() + 'FE',
-                    maHang: Utils.MUA_MUOI,
-                    hangDtqg: 'Muối',
-                })
-            }
-            await this.getMaDnghi();
         } else {
             this.spinner.show();
             //them lan moi cho de nghi
