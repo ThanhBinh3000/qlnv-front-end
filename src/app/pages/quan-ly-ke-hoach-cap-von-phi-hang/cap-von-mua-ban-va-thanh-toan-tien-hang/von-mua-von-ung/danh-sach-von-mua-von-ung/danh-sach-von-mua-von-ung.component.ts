@@ -62,6 +62,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     allChecked = false;
     statusNewReport = false;
     statusDelete = false;
+    isExistTienThua: boolean;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -121,7 +122,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.searchFilter.maLoai = 6;
                 this.createPermission = CVMB.ADD_REPORT_NTVT;
                 this.editPermission = CVMB.EDIT_REPORT_NTVT;
-                this.deletePermission = CVMB.DELETE_REPORT_NTVT;
+                this.deletePermission = "NO";
                 this.passPermission = CVMB.DUYET_REPORT_NTVT;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_NTVT;
                 this.isSend = true;
@@ -249,7 +250,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
 
     addNewReport() {
         let nzContent: ComponentType<any>;
-        if (this.searchFilter.maLoai == 1 || this.searchFilter.maLoai == 2 || this.searchFilter.maLoai == 3) {
+        if (this.searchFilter.maLoai == 2 || this.searchFilter.maLoai == 3) {
             nzContent = DialogTaoMoiCapVonComponent;
         } else if (this.searchFilter.maLoai == 6) {
             nzContent = DialogTaoMoiTienThuaComponent;
@@ -302,7 +303,10 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                         break;
                 }
                 if (obj.baoCao.maLoai != 6) {
-                    await this.addVonBanGuiDvct(obj.baoCao.namDnghi);
+                    await this.checkExistTienThua(obj.baoCao.namDnghi);
+                    if (!this.isExistTienThua) {
+                        await this.addVonBanGuiDvct(obj.baoCao.namDnghi);
+                    }
                 }
                 this.dataChange.emit(obj);
             }
@@ -316,9 +320,6 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             tabSelected: '',
         }
         switch (this.searchFilter.maLoai) {
-            // case 1:
-            //     obj.tabSelected = 'gnv-btc';
-            //     break;
             case 2:
                 obj.tabSelected = 'gnv-cv';
                 break;
@@ -343,7 +344,10 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 break;
         }
         if (data.maLoai == 2 && data.ttNhan.trangThai == Utils.TT_BC_1) {
-            await this.addVonBanGuiDvct(data.namDnghi);
+            await this.checkExistTienThua(data.namDnghi);
+            if (!this.isExistTienThua) {
+                await this.addVonBanGuiDvct(data.namDnghi);
+            }
         }
         this.dataChange.emit(obj);
     }
@@ -433,10 +437,8 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         this.spinner.hide();
     }
 
-    //kiem tra ban ghi nop tien von ban hang len don vi cap tren da ton tai chua, neu chua thi thuc hien them moi
-    async addVonBanGuiDvct(nam: number) {
-        let check = false // ban ghi chua ton tai
-        //kiem tra ban ghi da ton tai chua
+    async checkExistTienThua(nam: number) {
+        this.isExistTienThua = false;
         const request = {
             loaiTimKiem: '0',
             maLoai: 6,
@@ -451,7 +453,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {
-                        check = true;
+                        this.isExistTienThua = true;
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
@@ -461,75 +463,75 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
         );
-        //neu chua ton tai thi thuc hien them moi
-        if (!check) {
-            const response: Report = new Report();
-            response.namDnghi = nam;
-            response.ttGui = new sendInfo();
-            response.ttGui.lstCtietBcaos = [];
-            response.ttNhan = new receivedInfo();
-            response.ttNhan.lstCtietBcaos = [];
-            response.maDvi = this.userInfo?.MA_DVI;
-            response.ngayTao = new Date();
-            response.dot = 1;
-            response.maLoai = 6;
-            response.ttGui.trangThai = Utils.TT_BC_1;
-            response.ttNhan.trangThai = Utils.TT_BC_1;
-            response.ttGui.lstFiles = [];
-            response.ttNhan.lstFiles = [];
+    }
+
+    //kiem tra ban ghi nop tien von ban hang len don vi cap tren da ton tai chua, neu chua thi thuc hien them moi
+    async addVonBanGuiDvct(nam: number) {
+        const response: Report = new Report();
+        response.namDnghi = nam;
+        response.ttGui = new sendInfo();
+        response.ttGui.lstCtietBcaos = [];
+        response.ttNhan = new receivedInfo();
+        response.ttNhan.lstCtietBcaos = [];
+        response.maDvi = this.userInfo?.MA_DVI;
+        response.ngayTao = new Date();
+        response.dot = 1;
+        response.maLoai = 6;
+        response.ttGui.trangThai = Utils.TT_BC_1;
+        response.ttNhan.trangThai = Utils.TT_BC_1;
+        response.ttGui.lstFiles = [];
+        response.ttNhan.lstFiles = [];
+        response.ttGui.lstCtietBcaos.push({
+            ...new TienThua(),
+            id: null,
+            maHang: Utils.MUA_THOC,
+            hangDtqg: 'Thóc',
+        })
+        if (!this.userService.isChiCuc()) {
             response.ttGui.lstCtietBcaos.push({
                 ...new TienThua(),
                 id: null,
-                maHang: Utils.MUA_THOC,
-                hangDtqg: 'Thóc',
+                maHang: Utils.MUA_GAO,
+                hangDtqg: 'Gạo',
             })
-            if (!this.userService.isChiCuc()) {
-                response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: null,
-                    maHang: Utils.MUA_GAO,
-                    hangDtqg: 'Gạo',
-                })
-                response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: null,
-                    maHang: Utils.MUA_MUOI,
-                    hangDtqg: 'Muối',
-                })
-            }
-            if (this.userService.isTongCuc()) {
-                response.ttGui.lstCtietBcaos.push({
-                    ...new TienThua(),
-                    id: null,
-                    maHang: Utils.MUA_VTU,
-                    hangDtqg: 'Vật tư',
-                })
-            }
-            await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        response.maCapUng = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-            this.capVonMuaBanTtthService.themMoiVonMuaBan(response).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        // this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
+            response.ttGui.lstCtietBcaos.push({
+                ...new TienThua(),
+                id: null,
+                maHang: Utils.MUA_MUOI,
+                hangDtqg: 'Muối',
+            })
         }
+        if (this.userService.isTongCuc()) {
+            response.ttGui.lstCtietBcaos.push({
+                ...new TienThua(),
+                id: null,
+                maHang: Utils.MUA_VTU,
+                hangDtqg: 'Vật tư',
+            })
+        }
+        await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    response.maCapUng = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.capVonMuaBanTtthService.themMoiVonMuaBan(response).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
 }

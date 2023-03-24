@@ -120,13 +120,13 @@ export class BaoCao05Component implements OnInit {
                     item.listCtiet.forEach(e => {
                         lstCtiet.push({
                             ...e,
-                            sl: (e.loaiMatHang == 1 || !this.data?.dotBcao) ? e.sl : 0,
+                            sl: e.loaiMatHang == 1 ? e.sl : 0,
                         })
                     })
                     this.lstCtietBcao.push({
                         ...item,
                         listCtiet: lstCtiet,
-                        trongDotTcong: !this.data?.dotBcao ? item.trongDotTcong : 0,
+                        trongDotTcong: 0,
                         tenNdung: this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri,
                         id: uuid.v4() + 'FE',
                     })
@@ -690,6 +690,7 @@ export class BaoCao05Component implements OnInit {
         });
         modalIn.afterClose.subscribe(async (res) => {
             if (res) {
+                // debugger
                 const index: number = this.lstCtietBcao.findIndex(e => e.maNdungChi == res.ma);
                 if (index == -1) {
                     const data: ItemData = {
@@ -721,7 +722,7 @@ export class BaoCao05Component implements OnInit {
                 }
                 id = this.lstCtietBcao.find(e => e.maNdungChi == res.ma)?.id;
 
-                res.lstKhoanMuc.forEach(item => {
+                res.lstDanhMuc.forEach(item => {
                     const data: ItemData = {
                         ...new ItemData(),
                         maNdungChi: item.ma,
