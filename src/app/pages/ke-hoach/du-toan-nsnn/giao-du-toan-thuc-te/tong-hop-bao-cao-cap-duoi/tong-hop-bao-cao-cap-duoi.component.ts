@@ -69,7 +69,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   };
 
   filterTable: any = {
-    maBcao: "",
+    maPaCha: "",
+    maPa: "",
     ngayTao: "",
     namPa: "",
     trangThai: "",

@@ -186,7 +186,7 @@ export class PhuLucPhanBoComponent implements OnInit {
 
 
     // console.log(lstCtietTemp);
-
+    this.sum1()
     this.tinhTong()
     this.getStatusButton();
     this.updateEditCache();
@@ -291,6 +291,47 @@ export class PhuLucPhanBoComponent implements OnInit {
       })
       stt = this.getHead(stt);
     };
+  };
+
+  sum1() {
+    this.lstCtietBcao.forEach(itm => {
+      let stt = this.getHead(itm.stt);
+      while (stt != '0') {
+        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        const data = this.lstCtietBcao[index];
+        const mm: any[] = [];
+        data.lstCtietDvis.forEach(item => {
+          mm.push({
+            ...item,
+            soTranChi: 0,
+          })
+        });
+        this.lstCtietBcao[index] = {
+          id: data.id,
+          stt: data.stt,
+          level: data.level,
+          maNdung: data.maNdung,
+          tongCong: 0,
+          lstCtietDvis: mm,
+          checked: false,
+          dtoanGiao: data.dtoanGiao,
+        };
+        this.lstCtietBcao.forEach(item => {
+          if (this.getHead(item.stt) == stt) {
+            item.lstCtietDvis.forEach(e => {
+              const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
+              if (e.soTranChi) {
+                this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
+              }
+            })
+          }
+        })
+        this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+          this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
+        })
+        stt = this.getHead(stt);
+      };
+    })
   };
 
   getHead(str: string): string {
@@ -502,8 +543,8 @@ export class PhuLucPhanBoComponent implements OnInit {
     this.lstCtietBcao.forEach(item => {
       const sttItem = item.stt
       const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
+      this.lstCtietBcao[index].dtoanGiao = 0
       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        this.lstCtietBcao[index].dtoanGiao = 0
         this.lstCtietBcao[index].dtoanGiao += Number(item.soTranChi);
       })
     })

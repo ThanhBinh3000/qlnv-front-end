@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { exchangeMoney, displayNumber, getTail, sumNumber, mulNumber } from 'src/app/Utility/func';
+import { exchangeMoney, displayNumber, getTail, sumNumber, mulNumber, getHead } from 'src/app/Utility/func';
 import { DON_VI_TIEN, AMOUNT, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-8.constant';
@@ -468,13 +468,14 @@ export class PhuLuc8Component implements OnInit {
         matHang: data.matHang,
         level: data.level,
         // ttienTd: data.ttienTd,
+        maDviTinh: data.maDviTinh,
+        slBquanKh: data.slBquanKh,
+        luongSlBquanTte: data.luongSlBquanTte,
+        luongSlBquanUocThien: data.luongSlBquanUocThien,
+        luongSlBquanTcong: data.luongSlBquanTcong,
+        dinhMuc: data.dinhMuc,
+        maDmuc: data.maDmuc,
         maMatHang: data.maMatHang,
-        // sluongNamDtoan:data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // dmucNamDtoan: data.dmucNamDtoan,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -499,17 +500,21 @@ export class PhuLuc8Component implements OnInit {
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     this.lstCtietBcao.forEach(item => {
-      if (item.dtoanDchinhDnghi < 0) {
-        this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi);
-      } else {
-        this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi);
+      const str = item.stt
+      if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
+        if (item.dtoanDchinhDnghi < 0) {
+          this.tongDieuChinhGiam += Number(item?.dtoanDchinhDnghi);
+        } else {
+          this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi);
+        }
+  
+        if (item.dtoanVuTvqtDnghi < 0) {
+          this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
+        } else {
+          this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
+        }
       }
-
-      if (item.dtoanVuTvqtDnghi < 0) {
-        this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
-      } else {
-        this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
-      }
+      
     })
   };
 
@@ -597,13 +602,13 @@ export class PhuLuc8Component implements OnInit {
           matHang: data.matHang,
           level: data.level,
           maMatHang: data.maMatHang,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
+          maDviTinh: data.maDviTinh,
+          slBquanKh: data.slBquanKh,
+          luongSlBquanTte: data.luongSlBquanTte,
+          luongSlBquanUocThien: data.luongSlBquanUocThien,
+          luongSlBquanTcong: data.luongSlBquanTcong,
+          dinhMuc: data.dinhMuc,
+          maDmuc: data.maDmuc,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {

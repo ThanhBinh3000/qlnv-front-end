@@ -269,7 +269,8 @@ export class AddBaoCaoComponent implements OnInit {
           });
         });
       } else {
-        if (this.userInfo.CAP_DVI == "2") {
+        const isPL = this.baoCao?.lstDchinh.find(item => item.maLoai == "pl01")
+        if (this.userInfo.CAP_DVI == "2" || isPL ) {
           this.listAppendix = PHU_LUC
         } else {
           this.listAppendix = PHU_LUC_TH
@@ -395,7 +396,8 @@ export class AddBaoCaoComponent implements OnInit {
           if (this.baoCao.lstDviTrucThuoc.length == 0) {
             this.listAppendix = PHU_LUC
           } else {
-            if (this.userInfo.CAP_DVI == "2") {
+            const isPL = this.baoCao?.lstDchinh.find(item => item.maLoai == "pl01")
+            if (this.userInfo.CAP_DVI == "2" || isPL) {
               this.listAppendix = PHU_LUC
             } else {
               this.listAppendix = PHU_LUC_TH

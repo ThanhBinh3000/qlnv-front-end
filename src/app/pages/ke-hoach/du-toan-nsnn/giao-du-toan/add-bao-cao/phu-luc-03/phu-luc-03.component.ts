@@ -160,9 +160,9 @@ export class PhuLuc03Component implements OnInit {
         item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
         // }
       })
-      // this.sum1()
     }
 
+    this.sum1()
     this.sortByIndex();
     this.getTotal();
     this.updateEditCache();
@@ -458,6 +458,8 @@ export class PhuLuc03Component implements OnInit {
         danhMuc: data.danhMuc,
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
+        namDtCphiTaiCkhoSl: data.namDtCphiTaiCkhoSl,
+        namDtCphiTaiCkhoDm: data.namDtCphiTaiCkhoDm,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -488,6 +490,8 @@ export class PhuLuc03Component implements OnInit {
           danhMuc: data.danhMuc,
           tenDanhMuc: data.tenDanhMuc,
           level: data.level,
+          namDtCphiTaiCkhoSl: data.namDtCphiTaiCkhoSl,
+          namDtCphiTaiCkhoDm: data.namDtCphiTaiCkhoDm,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {
