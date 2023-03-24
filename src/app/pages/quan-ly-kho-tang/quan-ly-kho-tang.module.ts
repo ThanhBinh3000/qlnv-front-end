@@ -111,6 +111,8 @@ import {
 import {
   ThemMoiScTcdtComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/them-moi-sc-tcdt/them-moi-sc-tcdt.component";
+import { QuyetDinhPheDuyetKhlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component';
+import { ThongTinQuyetDinhPheDuyetKhlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component';
 
 
 @NgModule({
@@ -162,6 +164,8 @@ import {
     QuyetDinhPheDuyetTktcTdtComponent,
     ThongTinQuyetDinhPheDuyetTktcTdtComponent,
     QdThongBaoSuaChuaLonComponent,
+    QuyetDinhPheDuyetKhlcntComponent,
+    ThongTinQuyetDinhPheDuyetKhlcntComponent,
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
