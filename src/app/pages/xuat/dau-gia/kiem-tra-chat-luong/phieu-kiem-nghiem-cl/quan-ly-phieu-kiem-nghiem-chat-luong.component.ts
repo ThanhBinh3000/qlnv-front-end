@@ -18,6 +18,7 @@ import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-han
 })
 export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  isView = false;
 
   constructor(
     httpClient: HttpClient,
@@ -36,7 +37,15 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
       trichYeu: null,
       ngayTao: null,
       maChiCuc: null,
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: this.STATUS.BAN_HANH,
+      soPhieu: null,
+      ngayKnghiem: null,
+      ngayKnghiemTu: null,
+      ngayKnghiemDen: null,
+      soBbLayMau: null,
+      soBbXuatDocKho: null,
+
+
     })
 
     this.filterTable = {
@@ -54,7 +63,19 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
       tenTrangThaiXh: '',
     };
   }
+  disabledStartngayKnghiem = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKnghiemTu) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKnghiemDen.getTime();
+  };
 
+  disabledEndngayKnghiem = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnghiemTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKnghiemDen.getTime();
+  };
   async ngOnInit() {
     await this.spinner.show();
     try {

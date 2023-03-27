@@ -25,12 +25,12 @@ import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-han
 export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
-
+  @Input() isView: boolean;
   listBienBan: any[] = [];
   listDiaDiemXh: any[] = [];
   phuongPhapLayMaus: any[] = [];
   listHinhThucBaoQuan: any[] = [];
-
+  listFileDinhKem: any = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -122,7 +122,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách số BB lấy mẫu/bàn giao mẫu',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -347,6 +347,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async save(isGuiDuyet?: boolean) {
     let body = this.formData.value;
     body.children = this.dataTable;
+    body.children.forEach(e => {
+      e.chiSoNhap = e.chiSoXuat
+    });
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -396,6 +399,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadChitiet() {
     let data = await this.detail(this.id);
     this.dataTable = data.children
+    this.dataTable.forEach(e => {
+      e.chiSoXuat = e.chiSoNhap
+    });
     this.formData.patchValue({
       flagNiemPhong: this.formData.value.ketQuaNiemPhong == 1,
     })

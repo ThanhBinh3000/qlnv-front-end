@@ -78,7 +78,7 @@
                             Số BB hao dôi
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-number formControlName="soBbTinhKho" nzDisabled [nzMin]="1"
+                            <nz-input-number formControlName="soBbHaoDoi" nzDisabled [nzMin]="1"
                                 [nzMax]="globals.prop.MAX_INPUT" nzPlaceHolder="Nhập số biên bản" [nzStep]="1"
                                 [nzSize]="'small'">
                             </nz-input-number>
@@ -222,7 +222,7 @@
                         <nz-form-label [nzNoColon]="true"> Thời gian kết thúc nhập
                         </nz-form-label>
                         <nz-form-control nz-col>
-                            <span>{{formData.value.tongSlXuat |date: 'dd/MM/YYYY'
+                            <span>{{formData.value.ngayKthucNhap |date: 'dd/MM/YYYY'
                                 }}</span>
                         </nz-form-control>
                     </nz-form-item>
@@ -232,7 +232,7 @@
                         <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất
                         </nz-form-label>
                         <nz-form-control nz-col>
-                            <span class="text-green">{{formData.value.slConLai | number :
+                            <span class="text-green">{{formData.value.tongSlXuat | number :
                                 '1.0-1'
                                 :
                                 'vi_VN'
@@ -245,7 +245,7 @@
                         <nz-form-label [nzNoColon]="true"> Thời gian kết thúc xuất
                         </nz-form-label>
                         <nz-form-control nz-col>
-                            <span>{{formData.value.tongSlXuat |date: 'dd/MM/YYYY'
+                            <span>{{formData.value.ngayKthucXuat |date: 'dd/MM/YYYY'
                                 }}</span>
                         </nz-form-control>
                     </nz-form-item>
@@ -257,7 +257,7 @@
                     <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
                         <nz-form-item>
                             <nz-form-control nz-col>
-                                <span class="text-green">{{formData.value.slConLai | number :
+                                <span class="text-green">{{formData.value.slHaoThucTe | number :
                                     '1.0-1'
                                     :
                                     'vi_VN'
@@ -286,7 +286,7 @@
                     <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
                         <nz-form-item>
                             <nz-form-control nz-col>
-                                <span class="text-green">{{formData.value.slConLai | number :
+                                <span class="text-green">{{formData.value.slHaoVuotMuc | number :
                                     '1.0-1'
                                     :
                                     'vi_VN'
@@ -315,7 +315,7 @@
                     <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
                         <nz-form-item>
                             <nz-form-control nz-col>
-                                <span class="text-green">{{formData.value.slConLai | number :
+                                <span class="text-green">{{formData.value.slHaoThanhLy | number :
                                     '1.0-1'
                                     :
                                     'vi_VN'
@@ -344,7 +344,7 @@
                     <div nz-col [nzSpan]="24" class="text-grey">Số Lượng
                         <nz-form-item>
                             <nz-form-control nz-col>
-                                <span class="text-green">{{formData.value.slConLai | number :
+                                <span class="text-green">{{formData.value.slHaoDuoiDinhMuc | number :
                                     '1.0-1'
                                     :
                                     'vi_VN'
@@ -369,25 +369,26 @@
             </div>
         </form>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <nz-table nzBordered class="pd-10" [nzData]="dataTable" class="nowrap" [nzFrontPagination]="false"
-                [nzShowPagination]="false">
+            <nz-table nzBordered class="pd-10" class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                     <tr>
                         <th rowSpan="2" width="30px">STT</th>
-                        <th rowSpan="2">Thời gian bảo quản </th>
+                        <th rowSpan="2">Thời gian bảo quản</th>
                         <th rowSpan="2">Số lượng bảo quảng (kg)</th>
                         <th rowSpan="2">Định mức hao hụt</th>
                         <th colSpan="2">Số lượng hao theo định mức</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of dataTable; let i = index">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{item.ngayXuatKho | date: 'dd/MM/YYYY'}}</td>
-                        <td>{{item.soPhieu}}</td>
-                        <td>{{item.soPhieuXuat}}</td>
-                        <td>{{item.soBangKe }}</td>
-                    </tr>
+                    <ng-container>
+                        <tr>
+                            <td>1</td>
+                            <td>{{formData.value.ngayXuat}} </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </nz-table>
         </nz-card>
