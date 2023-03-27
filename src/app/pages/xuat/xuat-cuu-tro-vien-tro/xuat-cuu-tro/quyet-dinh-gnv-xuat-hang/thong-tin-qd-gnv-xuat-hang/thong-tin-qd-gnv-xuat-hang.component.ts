@@ -271,8 +271,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     });
   }
   async saveSoQdPa() {
-    console.log(this.soLuong, 555);
-    console.log(this.thanhTien, 444);
     let item = this.dsQdPd.find(item => item.id == this.formData.value.idQdPd)
     this.formData.patchValue({
       soQdPd: item.soQd,
@@ -283,12 +281,12 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       donViTinh: this.donViTinh,
     })
   }
-  async saveAndSend() {
+  async saveAndSend(status: string, message: string, sucessMessage: string) {
     if (this.formData.value.id > 0) {
       let data = this.formData.value;
       this.saveSoQdPa();
       if (data) {
-        await this.approve(data.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+        await this.approve(data.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
@@ -296,7 +294,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       let data = await this.createUpdate(this.formData.value);
       this.saveSoQdPa();
       if (data) {
-        await this.approve(data.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
+        await this.approve(data.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
