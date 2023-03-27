@@ -200,7 +200,8 @@
             <nz-form-control nz-col [nzSpan]="24">
               <nz-select nzAllowClear formControlName="loaiVthh"
                          [nzDisabled]="isView || formData.value.deXuatPhuongAn.length>0"
-                         (ngModelChange)="changeHangHoa($event)" nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
+                         (ngModelChange)="changeHangHoa($event)"
+                         nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
                 <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -208,11 +209,10 @@
         </div>
         <div nz-col [nzSpan]="3" *ngIf="userService.isCuc()">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true"> Tồn kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Tồn kho ({{formData.value.donViTinh}})</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-input-number nz-input formControlName="tonKho"
-                               [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [nzSize]="'small'" [nzDisabled]="true">
+              <nz-input-number nz-input formControlName="tonKho" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser" [nzSize]="'small'" [nzDisabled]="true">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -392,7 +392,7 @@
 
         <nz-statistic nzSuffix="{{formData.value.donViTinh}}"
                       [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"
-                      [nzTitle]="'Tổng SL thực tế xuất CT, VT'"></nz-statistic>
+                      [nzTitle]="'Tổng SL thực tế xuất CT, VT của từng chi cục'"></nz-statistic>
       </div>
       <div nz-col [nzSpan]="4">
         <nz-statistic nzSuffix="đ" [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"
@@ -420,6 +420,7 @@
         </button>-->
       </span>
     </div>
+
     <!--    CHI TIET PA TONG CUC #1-->
     <ng-container *ngIf="userService.isTongCuc()">
       <div class="mt-16">
@@ -437,12 +438,12 @@
             <th [rowspan]="2" style="width: 10%">Hành động</th>
           </tr>
           <tr>
-            <th>Tên cục</th>
+            <th>Cục DTNN KV</th>
             <th>Tồn kho</th>
             <th>SL xuất CT, VT giao cục ({{formData.value.donViTinh}})</th>
-            <th>Tên chi cục</th>
+            <th>Chi cục DTNN</th>
             <th>Tồn kho</th>
-            <th>Tên chủng loại hàng hóa</th>
+            <th>Tên chủng loại HH</th>
             <th>Tồn kho</th>
             <th>Số lượng ({{formData.value.donViTinh}})</th>
             <th>ĐVT</th>
@@ -475,7 +476,9 @@
                   <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
                 </a>
                 <a>
-                  <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(item)"></i>
+                  <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                     (nzOnConfirm)="xoaPhuongAn(item)"></i>
                 </a>
               </td>
             </tr>
@@ -502,7 +505,9 @@
                       <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
                     </a>
                     <a>
-                      <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv1,item)"></i>
+                      <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm
+                         nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                         (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
                     </a>
                   </td>
                 </tr>
@@ -533,7 +538,10 @@
                           <i class="fa fa-edit" *ngIf="!isView" (click)="suaPhuongAn(lv2)"></i>
                         </a>
                         <a>
-                          <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv2)"></i>
+                          <i class="fa fa-trash-o do" *ngIf="!isView"
+                             nz-popconfirm nz-button
+                             nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                             (nzOnConfirm)="xoaPhuongAn(lv2)"></i>
                         </a>
                       </td>
                     </tr>
@@ -562,9 +570,9 @@
             <th [rowspan]="2" style="width: 10%">Hành động</th>
           </tr>
           <tr>
-            <th>Tên chi cục</th>
+            <th>Chi cục DTNN</th>
             <th>Tồn kho</th>
-            <th>Tên chủng loại hàng hóa</th>
+            <th>Tên chủng loại HH</th>
             <th>Tồn kho</th>
             <th>Số lượng ({{formData.value.donViTinh}})</th>
             <th>ĐVT</th>
@@ -594,7 +602,10 @@
                   <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
                 </a>
                 <a>
-                  <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(item)"></i>
+                  <i class="fa fa-trash-o do" *ngIf="!isView"
+                     nz-popconfirm nz-button
+                     nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                     (nzOnConfirm)="xoaPhuongAn(item)"></i>
                 </a>
               </td>
             </tr>
@@ -618,7 +629,10 @@
                       <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(lv1)"></i>
                     </a>
                     <a>
-                      <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv1,item)"></i>
+                      <i class="fa fa-trash-o do" *ngIf="!isView"
+                         nz-popconfirm nz-button
+                         nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                         (nzOnConfirm)="xoaPhuongAn(lv1,item)"></i>
                     </a>
                   </td>
                 </tr>
@@ -646,7 +660,10 @@
                           <i class="fa fa-edit" *ngIf="!isView" (click)="suaPhuongAn(lv2)"></i>
                         </a>
                         <a>
-                          <i class="fa fa-trash-o do" *ngIf="!isView" (click)="xoaPhuongAn(lv2)"></i>
+                          <i class="fa fa-trash-o do" *ngIf="!isView"
+                             nz-popconfirm nz-button
+                             nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
+                             (nzOnConfirm)="xoaPhuongAn(lv2)"></i>
                         </a>
                       </td>
                     </tr>
@@ -742,9 +759,9 @@
           <nz-form-control>
             <div nz-row [nzGutter]="48">
               <div nz-col [nzSpan]="16">
-                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1"
-                                 [nzStep]="0.1" [nzSize]="'small'"
-                                 [nzMax]="phuongAnRow.soLuongXuatCuc < phuongAnRow.tonKhoCloaiVthh?phuongAnRow.soLuongXuatCuc:phuongAnRow.tonKhoCloaiVthh"
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatChiCuc" [nzMin]="1" [nzStep]="0.1"
+                                 [nzSize]="'small'"
+                                 [nzMax]="phuongAnRow.soLuongXuatCuc  < phuongAnRow.tonKhoCloaiVthh?phuongAnRow.soLuongXuatCuc:phuongAnRow.tonKhoCloaiVthh"
                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
 
                 </nz-input-number>

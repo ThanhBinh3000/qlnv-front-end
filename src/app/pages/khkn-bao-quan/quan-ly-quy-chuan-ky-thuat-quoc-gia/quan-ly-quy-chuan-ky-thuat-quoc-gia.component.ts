@@ -473,4 +473,11 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       this.expandSet.delete(id);
     }
   }
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
 }
