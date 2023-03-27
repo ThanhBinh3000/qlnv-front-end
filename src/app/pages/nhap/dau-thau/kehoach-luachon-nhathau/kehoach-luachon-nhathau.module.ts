@@ -12,6 +12,7 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-hop-khlcnt/themmoi-tonghop
 import { TongHopKhlcntComponent } from './tong-hop-khlcnt/tong-hop-khlcnt.component';
 import { ThongtinDexuatComponent } from './quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/thongtin-dexuat/thongtin-dexuat.component';
 import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhathau/main-kehoach-luachon-nhathau.component';
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhath
     CommonModule,
     ComponentsModule,
     MainModule,
+    FormsModule,
   ],
   exports: [
     KeHoachLuachonNhathauComponent,

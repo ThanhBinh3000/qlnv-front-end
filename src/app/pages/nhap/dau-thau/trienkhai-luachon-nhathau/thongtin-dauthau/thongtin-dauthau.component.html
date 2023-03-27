@@ -24,15 +24,36 @@
         </div>
         <div nz-col nzSpan="5">
           <label class="search__label">Số QĐ PD KHLCNT</label>
-          <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
         <div nz-col nzSpan="5">
           <label class="search__label">Số QĐ PD KQLCNT</label>
-          <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.soQdPdKqlcnt" />
         </div>
+<!--        <div nz-col nzSpan="5">-->
+<!--          <label class="search__label">Ngày QĐ PD KQLCNT</label>-->
+<!--          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>-->
+<!--        </div>-->
         <div nz-col nzSpan="5">
           <label class="search__label">Ngày QĐ PD KQLCNT</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker
+                [nzDisabledDate]="disabledTuNgayKy"
+                nzFormat="dd/MM/yyyy"
+                [(ngModel)]="tuNgayQd"
+                nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker
+                [nzDisabledDate]="disabledDenNgayKy"
+                nzFormat="dd/MM/yyyy"
+                [(ngModel)]="denNgayQd"
+                nzPlaceHolder="Ngày kết thúc"
+              ></nz-date-picker>
+            </div>
+          </div>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -180,26 +201,34 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.namKhoach : data.namKhoach}}</td>
-            <td>{{ data.soDxuat ? data.soDxuat : data.soTrHdr }}</td>
-            <td>{{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : data.soQd }}</td>
-            <td>{{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : data.soQdPdKqLcnt }}</td>
-            <td>{{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.ngayKy : data.tgianDthau | date: 'dd/MM/YYYY' }}
+            <td>{{ data.soDxuat }}</td>
+            <td>{{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : null }}</td>
+            <td>{{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : null }}</td>
+            <td>{{ (data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.ngayKy : null) | date: 'dd/MM/YYYY' }}
             </td>
             <td>{{ data.soGthau }}</td>
             <td>{{ data.soGthauTrung ? data.soGthauTrung : null }}</td>
             <td>{{ data.soGthauTruot ? data.soGthauTruot : null }}</td>
-            <td>{{ data.dxuatKhLcntHdr ? data.dxuatKhLcntHdr.tgianNhang : data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ (data.dxuatKhLcntHdr ? data.dxuatKhLcntHdr.tgianNhang : data.tgianNhang) | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.hhQdKhlcntHdr?.tenPthucLcnt }}</td>
             <td>{{ data.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
             <td>{{ data.hhQdKhlcntHdr?.tenCloaiVthh}}</td>
             <td>{{ loaiVthh.startsWith('02') ? data.tenTrangThaiDt : data.tenTrangThai }}</td>
             <td class="text-left">
+<!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT ) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"-->
+<!--                (click)="redirectToChiTiet(data)">-->
+<!--                <i class="fa fa-eye"></i>-->
+<!--              </a>-->
+<!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')"-->
+<!--                (click)="redirectToChiTiet(data)">-->
+<!--                <i class="icon htvbdh_soanthao"></i>-->
+<!--              </a>-->
               <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT ) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT )"
-                (click)="redirectToChiTiet(data)">
+                 (click)="redirectToChiTiet(data)">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT ) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT)"
-                (click)="redirectToChiTiet(data)">
+                 (click)="redirectToChiTiet(data)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
