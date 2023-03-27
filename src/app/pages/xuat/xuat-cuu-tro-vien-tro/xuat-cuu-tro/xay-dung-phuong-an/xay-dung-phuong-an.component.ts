@@ -69,6 +69,8 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
       ngayDxTu: null,
       ngayDxDen: null,
       ngayKetThuc: null,
+      ngayKetThucTu: null,
+      ngayKetThucDen: null,
       type: null
     })
     this.filterTable = {
