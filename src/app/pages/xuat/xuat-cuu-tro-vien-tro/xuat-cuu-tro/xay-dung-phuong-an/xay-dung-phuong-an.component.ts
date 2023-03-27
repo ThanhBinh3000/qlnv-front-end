@@ -95,6 +95,32 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   isVatTu: boolean = false;
   isView = false;
 
+  disabledStartNgayDX = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+  };
+
+  disabledEndNgayDx = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
+  };
+  disabledStartNgayKt = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKetThucTu) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKetThucDen.getTime();
+  };
+
+  disabledEndNgayKt = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKetThucTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKetThucDen.getTime();
+  };
 
   async ngOnInit() {
     try {
