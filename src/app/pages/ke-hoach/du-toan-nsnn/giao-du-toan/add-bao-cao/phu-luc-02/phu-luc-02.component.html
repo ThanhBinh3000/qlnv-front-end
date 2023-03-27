@@ -43,8 +43,8 @@
             <th nzWidth="5%" rowspan="2" colspan="2" [hidden]="status "></th>
           </tr>
           <tr>
-            <th>Định mức</th>
             <th>Số lượng bảo quản</th>
+            <th>Định mức</th>
             <th>Thành tiền </th>
           </tr>
           <tr>
@@ -84,8 +84,8 @@
                 {{data.tenDanhMuc}}
               </td>
               <td>{{data.maDviTinh}}</td>
-              <td>{{displayValue(data.namDtDmuc)}}</td>
               <td>{{displayValue(data.namDtSluong)}}</td>
+              <td>{{displayValue(data.namDtDmuc)}}</td>
               <td>{{displayValue(data.namDtTtien)}}</td>
               <td [hidden]="status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -109,11 +109,11 @@
                 {{editCache[data.id].data.maDviTinh}}
               </td>
               <td>
-                {{editCache[data.id].data.namDtDmuc}}
-              </td>
-              <td>
                 <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.namDtSluong"
                   (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+              </td>
+              <td>
+                {{editCache[data.id].data.namDtDmuc}}
               </td>
               <td>
                 {{displayValue(editCache[data.id].data.namDtTtien)}}
