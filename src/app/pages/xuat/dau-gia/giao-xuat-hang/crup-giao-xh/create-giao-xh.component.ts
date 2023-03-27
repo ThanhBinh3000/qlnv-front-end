@@ -321,7 +321,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     })
     let res = this.listDiaDiem[DANH_MUC_LEVEL.NHA_KHO];
     this.listNhaKho = res.filter(item => item.type == "MLK" && item.maDviCha == maDiemKho)
+      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
   }
+
   async changeNhaKho(maNhaKho: any) {
     this.formDataRow.patchValue({
       maNganKho: null,
@@ -331,7 +333,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     })
     let res = this.listDiaDiem[DANH_MUC_LEVEL.NGAN_KHO];
     this.listNganKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNhaKho)
+      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
   }
+
   async changeNganKho(maNganKho: any) {
     this.formDataRow.patchValue({
       maLoKho: null,
@@ -339,13 +343,54 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     })
     let res = this.listDiaDiem[DANH_MUC_LEVEL.LO_KHO];
     this.listLoKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNganKho)
+      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
   }
 
   clearRow() {
 
   }
 
-  addRow() {
+  addRow(data) {
+    // data.children = [...data.children,this.formDataRow];
+    // this.formDataRow.patchValue({
+    //
+    //   "idDtl": data.id,
+    //   "maDiemKho": "0101020102",
+    //   "maNhaKho": "010102010201",
+    //   "maNganKho": "01010201020101",
+    //   "maLoKho": null,
+    //   "soLuong": 20000,
+    //   "donGiaVat": 7700,
+    //   "maDviTsan": "02",
+    //   "tenDiemKho": "Điểm kho Ninh Dân",
+    //   "tenNhaKho": "Kho M6",
+    //   "tenNganKho": "Ngăn kho số 1",
+    //   "tenLoKho": null
+    // })
+    // this.formDataRow.reset();
+  }
 
+  async editRow(children) {
+    this.dataTable.forEach(s => {
+      s.children?.forEach(s1 => s1.isEdit = false)
+    });
+    await Promise.all([
+      this.changeDiemKho(children.maDiemKho),
+      this.changeNhaKho(children.maNhaKho),
+      this.changeNganKho(children.maNganKho)
+    ])
+    await this.formDataRow.patchValue(children)
+    children.isEdit = true;
+  }
+
+  async cancelRow(children) {
+    this.dataTable.forEach(s => {
+      s.children?.forEach(s1 => s1.isEdit = false)
+    });
+  }
+
+  async saveRow(index, index1) {
+    let currentData = this.dataTable[index].children[index1];
+    Object.assign(currentData, this.formDataRow.value, {isEdit: false})
   }
 }

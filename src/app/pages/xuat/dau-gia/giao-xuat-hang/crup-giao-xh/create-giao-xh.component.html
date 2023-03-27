@@ -234,82 +234,157 @@
               <td></td>
               <td></td>
               <td>{{ data.tenTrangThai }}</td>
-              <td>{{ data.tenTrangThai }}</td>
+              <td></td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)" [formGroup]="formDataRow">
-              <tr class="create-row">
-                <td></td>
-                <td></td>
-                <td>
-                  <nz-form-item>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select formControlName="maDiemKho"
-                                 (ngModelChange)="changeDiemKho(formDataRow.value.maDiemKho)" nzAllowClear>
-                        <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key"
-                                   [nzLabel]="item.title"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </td>
-                <td>
-                  <nz-form-item>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(formDataRow.value.maNhaKho)"
-                                 nzAllowClear>
-                        <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key"
-                                   [nzLabel]="item.title"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </td>
-                <td>
-                  <nz-form-item>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select formControlName="maNganKho"
-                                 (ngModelChange)="changeNganKho(formDataRow.value.maNganKho)" nzAllowClear>
-                        <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key"
-                                   [nzLabel]="item.title"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </td>
-                <td>
-                  <nz-form-item>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-select formControlName="maLoKho" nzAllowClear>
-                        <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key"
-                                   [nzLabel]="item.title"></nz-option>
-                      </nz-select>
-                    </nz-form-control>
-                  </nz-form-item>
-                </td>
-                <td>
-                  <nz-form-item>
-                    <nz-form-control nz-col [nzErrorTip]="error">
-                      <nz-input-number [nzFormatter]="globals.formatter" formControlName="soLuong"
-                                       [nzSize]="'small'"></nz-input-number>
-                    </nz-form-control>
-                  </nz-form-item>
-                </td>
-                <td></td>
-              </tr>
-              <tr *ngFor="let children of data.children">
-                <td></td>
-                <td></td>
-                <td>{{ children.tenDiemKho }}</td>
-                <td>{{ children.tenNhaKho }}</td>
-                <td>{{ children.tenNganKho }}</td>
-                <td>{{ children.tenLoKho }}</td>
-                <td>{{ children.soLuong }}</td>
-                <td></td>
-                <td>
-                  <a>
-                    <i class="fa fa-edit" *ngIf="isDetail" (click)="addRow()"></i>
-                  </a>
-                  <a>
-                    <i class="fa fa fa-refresh" *ngIf="isDetail" (click)="clearRow()"></i>
-                  </a>
-                </td>
+<!--              <tr class="create-row">-->
+<!--                <td></td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-control nz-col [nzErrorTip]="error">-->
+<!--                      <nz-select formControlName="maDiemKho"-->
+<!--                                 (ngModelChange)="changeDiemKho(formDataRow.value.maDiemKho)" nzAllowClear>-->
+<!--                        <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key"-->
+<!--                                   [nzLabel]="item.title"></nz-option>-->
+<!--                      </nz-select>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-control nz-col [nzErrorTip]="error">-->
+<!--                      <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(formDataRow.value.maNhaKho)"-->
+<!--                                 nzAllowClear>-->
+<!--                        <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key"-->
+<!--                                   [nzLabel]="item.title"></nz-option>-->
+<!--                      </nz-select>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-control nz-col [nzErrorTip]="error">-->
+<!--                      <nz-select formControlName="maNganKho"-->
+<!--                                 (ngModelChange)="changeNganKho(formDataRow.value.maNganKho)" nzAllowClear>-->
+<!--                        <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key"-->
+<!--                                   [nzLabel]="item.title"></nz-option>-->
+<!--                      </nz-select>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-control nz-col [nzErrorTip]="error">-->
+<!--                      <nz-select formControlName="maLoKho" nzAllowClear>-->
+<!--                        <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key"-->
+<!--                                   [nzLabel]="item.title"></nz-option>-->
+<!--                      </nz-select>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </td>-->
+<!--                <td>-->
+<!--                  <nz-form-item>-->
+<!--                    <nz-form-control nz-col [nzErrorTip]="error">-->
+<!--                      <nz-input-number [nzFormatter]="globals.formatter" formControlName="soLuong"-->
+<!--                                       [nzSize]="'small'"></nz-input-number>-->
+<!--                    </nz-form-control>-->
+<!--                  </nz-form-item>-->
+<!--                </td>-->
+<!--                <td></td>-->
+<!--                <td>-->
+<!--                  <a>-->
+<!--                    <i class="fa fa-plus" *ngIf="isDetail" (click)="addRow(data)"></i>-->
+<!--                  </a>-->
+<!--                  <a>-->
+<!--                    <i class="fa fa fa-refresh" *ngIf="isDetail" (click)="clearRow()"></i>-->
+<!--                  </a>-->
+<!--                </td>-->
+<!--              </tr>-->
+              <tr *ngFor="let children of data.children;let i1 = index">
+                <ng-container *ngIf="children.isEdit">
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-select formControlName="maDiemKho"
+                                   (ngModelChange)="changeDiemKho(formDataRow.value.maDiemKho)" nzAllowClear>
+                          <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key"
+                                     [nzLabel]="item.title"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(formDataRow.value.maNhaKho)"
+                                   nzAllowClear>
+                          <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key"
+                                     [nzLabel]="item.title"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-select formControlName="maNganKho"
+                                   (ngModelChange)="changeNganKho(formDataRow.value.maNganKho)" nzAllowClear>
+                          <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key"
+                                     [nzLabel]="item.title"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-select formControlName="maLoKho" nzAllowClear>
+                          <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key"
+                                     [nzLabel]="item.title"></nz-option>
+                        </nz-select>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td>
+                    <nz-form-item>
+                      <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-input-number [nzFormatter]="globals.formatter" formControlName="soLuong"
+                                         [nzSize]="'small'"></nz-input-number>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </td>
+                  <td></td>
+                  <td>
+                    <a>
+                      <i class="fa fa-save" *ngIf="isDetail" (click)="saveRow(i,i1)"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa fa-close" *ngIf="isDetail" (click)="cancelRow(data)"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="!children.isEdit">
+                  <td></td>
+                  <td></td>
+                  <td>{{ children.tenDiemKho }}</td>
+                  <td>{{ children.tenNhaKho }}</td>
+                  <td>{{ children.tenNganKho }}</td>
+                  <td>{{ children.tenLoKho }}</td>
+                  <td>{{ children.soLuong }}</td>
+                  <td></td>
+                  <td>
+                    <a>
+                      <i class="fa fa-edit" *ngIf="isDetail" (click)="editRow(children)"></i>
+                    </a>
+                    <a>
+                      <i class="fa fa fa-refresh" *ngIf="isDetail" (click)="cancelRow(children)"></i>
+                    </a>
+                  </td>
+                </ng-container>
+
               </tr>
             </ng-container>
           </ng-container>
