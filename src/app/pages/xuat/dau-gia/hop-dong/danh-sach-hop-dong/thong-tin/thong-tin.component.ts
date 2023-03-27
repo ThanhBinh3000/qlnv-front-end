@@ -150,51 +150,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     })
     console.log(data);
     this.dataTable = data.children;
-
-    // if (id > 0) {
-    //   if (res.msg == MESSAGE.SUCCESS) {
-    //     if (res.data) {
-    //       this.detail = res.data;
-    //       this.formData.patchValue({
-    //         canCu: this.detail.canCu ?? null,
-    //         idGoiThau: this.detail.idGoiThau ?? null,
-    //         maHdong: this.detail.soHd ? this.detail.soHd.split('/')[0] : null,
-    //         tenHd: this.detail.tenHd ?? null,
-    //         ngayKy: this.detail.ngayKy ?? null,
-    //         namKh: this.detail.namKh ?? null,
-    //         ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
-    //         soNgayThien: this.detail.soNgayThien ?? null,
-    //         tenVthh: this.detail.tenVthh ?? null,
-    //         loaiVthh: this.detail.loaiVthh ?? null,
-    //         cloaiVthh: this.detail.cloaiVthh ?? null,
-    //         tenCloaiVthh: this.detail.tenCloaiVthh ?? null,
-    //         tgianNkho: this.detail.tgianNkho ?? null,
-    //         soLuong: this.detail.soLuong ?? null,
-    //         donGiaVat: this.detail.donGiaVat ?? null,
-    //         gtriHdSauVat: this.detail.gtriHdSauVat ?? null,
-    //         maDvi: this.detail.maDvi ?? null,
-    //         tenDvi: this.detail.tenDvi ?? null,
-    //         diaChi: this.detail.diaChi ?? null,
-    //         mst: this.detail.mst ?? null,
-    //         sdt: this.detail.sdt ?? null,
-    //         stk: this.detail.stk ?? null,
-    //         tenNguoiDdien: this.detail.stk ?? null,
-    //         chucVu: this.detail.stk ?? null,
-    //         ghiChu: this.detail.ghiChu ?? null,
-    //         trangThai: this.detail.trangThai ?? null,
-    //         tenTrangThai: this.detail.tenTrangThai ?? null
-    //       })
-    //       if (this.userService.isTongCuc) {
-    //         this.formData.patchValue({
-    //           dviTinh: this.detail.dviTinh ?? null
-    //         })
-    //       }
-    //       this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
-    //       this.fileDinhKem = this.detail.fileDinhKems;
-    //       await this.getListGoiThau(this.detail.id);
-    //     }
-    //   }
-    // }
+    this.dataTablePhuLuc = data.phuLuc;
+    this.objHopDongHdr = data;
+    this.fileDinhKem = data.fileDinhKems;
   }
 
   async save(isOther: boolean) {
