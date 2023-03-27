@@ -22,6 +22,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -310,22 +311,24 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
       return;
     }
-    let body = this.formData.value;
-    if (this.formData.get('soDxuat').value) {
-      body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
-    }
-    if (this.formData.get('thoiGianDuKien').value) {
-      body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
-      body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
-    }
-    body.fileDinhKemReq = this.fileDinhKem;
-    body.children = this.dataTable;
-    let res = await this.createUpdate(body);
-    if (res) {
-      if (isGuiDuyet) {
-        this.guiDuyet();
-      } else {
-        this.quayLai()
+    if (this.validateNgay()) {
+      let body = this.formData.value;
+      if (this.formData.get('soDxuat').value) {
+        body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+      }
+      if (this.formData.get('thoiGianDuKien').value) {
+        body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
+        body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
+      }
+      body.fileDinhKemReq = this.fileDinhKem;
+      body.children = this.dataTable;
+      let res = await this.createUpdate(body);
+      if (res) {
+        if (isGuiDuyet) {
+          this.guiDuyet();
+        } else {
+          this.quayLai()
+        }
       }
     }
   }
@@ -433,5 +436,17 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       }, 0);
       return sum;
     }
+  }
+
+  validateNgay() {
+    let pipe = new DatePipe('en-US');
+    let ngayTao = new Date(pipe.transform(this.formData.value.ngayTao, 'yyyy-MM-dd'));
+    let ngayPduyet = new Date(pipe.transform(this.formData.value.ngayPduyet, 'yyyy-MM-dd'));
+    if (ngayTao >= ngayPduyet) {
+      this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
+      return false
+    }
+
+    return true;
   }
 }

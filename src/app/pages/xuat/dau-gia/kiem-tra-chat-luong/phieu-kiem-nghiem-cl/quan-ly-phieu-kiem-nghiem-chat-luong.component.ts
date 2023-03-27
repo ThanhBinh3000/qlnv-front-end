@@ -30,7 +30,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
-      nam: dayjs().get('year'),
+      nam: null,
       soQd: null,
       loaiVthh: null,
       trichYeu: null,
