@@ -9,9 +9,9 @@
         <li nz-menu-item (click)="selectTab(2)">
             Biên bản tịnh kho
         </li>
-        <!-- <li nz-menu-item (click)="selectTab(3)">
+        <li nz-menu-item (click)="selectTab(3)">
             Biên bản hao dôi
-        </li> -->
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -23,6 +23,6 @@
 <ng-container *ngIf="tabSelected == 2">
     <app-bien-ban-tinh-kho-btt [loaiVthh]="loaiVthh"></app-bien-ban-tinh-kho-btt>
 </ng-container>
-<!-- <ng-container *ngIf="tabSelected == 3">
-    <app-bien-ban-hao-doi [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi>
-</ng-container> -->
+<ng-container *ngIf="tabSelected == 3">
+    <app-bien-ban-hao-doi-btt [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi-btt>
+</ng-container>

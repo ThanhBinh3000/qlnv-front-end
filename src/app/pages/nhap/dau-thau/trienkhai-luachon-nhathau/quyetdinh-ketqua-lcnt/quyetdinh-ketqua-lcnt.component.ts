@@ -39,6 +39,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
   listNam: any[] = [];
   yearNow: number = 0;
+  isView: boolean = false;
 
   searchFilter = {
     soQdPdKhlcnt: '',

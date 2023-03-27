@@ -100,8 +100,8 @@
         </div>
         <div nz-col [nzSpan]="8">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
+            <nz-form-control>
               <input nz-input formControlName="trichYeu" [readonly]="disableForm()" />
             </nz-form-control>
           </nz-form-item>
@@ -112,7 +112,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem" [isQdkqlcnt]="isQdkqlcnt"></file-list>
+              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem" [isQdkqlcnt]="isQdkqlcnt"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -140,7 +140,7 @@
               File đính kèm quyết định đã ký
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>

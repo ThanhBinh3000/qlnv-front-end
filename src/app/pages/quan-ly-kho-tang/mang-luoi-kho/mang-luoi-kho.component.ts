@@ -12,7 +12,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MangLuoiKhoService} from 'src/app/services/quan-ly-kho-tang/mangLuoiKho.service';
 import {Globals} from 'src/app/shared/globals';
-import dayjs  from 'dayjs';
+import dayjs from 'dayjs';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
 import {UserLogin} from "../../../models/userlogin";
@@ -37,7 +37,7 @@ export class MangLuoiKhoComponent implements OnInit {
     maDonVi: ''
   };
 
-  detailTcdtnn :  Tcdtnn = new Tcdtnn();
+  detailTcdtnn: Tcdtnn = new Tcdtnn();
   userInfo: UserLogin
   keySelected: any;
   res: any
@@ -195,10 +195,11 @@ export class MangLuoiKhoComponent implements OnInit {
    */
 
   listType = ["MLK", "DV"]
+
   async layTatCaDonViTheoTree(id?) {
     let body = {
-      maDvi : this.userInfo.MA_DVI,
-      type : this.listType
+      maDvi: this.userInfo.MA_DVI,
+      type: this.listType
     }
     await this.donviService.layTatCaByMaDvi(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -212,12 +213,11 @@ export class MangLuoiKhoComponent implements OnInit {
     })
   }
 
-
   // parentNodeSelected: any = [];
   theTich: string = 'm³';
   listTinhTrang: any[] = [];
+
   nzClickNodeTree(event: any): void {
-    console.log(event)
     this.detailDonVi.reset();
     if (event.keys.length > 0) {
       this.isEditData = true;
@@ -252,11 +252,13 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   async onChangCloaiVthh(event) {
-    let res = await this.danhMucService.getDetail(event);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.detailDonVi.patchValue({
-        dviTinh: res.data ? res.data.maDviTinh : null
-      })
+    if (event) {
+      let res = await this.danhMucService.getDetail(event);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.detailDonVi.patchValue({
+          dviTinh: res.data ? res.data.maDviTinh : null
+        })
+      }
     }
   }
 
@@ -291,32 +293,33 @@ export class MangLuoiKhoComponent implements OnInit {
       this.convertDataChild(dataNode);
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
-        tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt  :null,
+        // maCha:dataNode && dataNode.id ? dataNode.id : null,
+        tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt : null,
         tichLuongTkVt: dataNode.tichLuongTkVt ? dataNode.tichLuongTkVt : null,
-        theTichTkLt: dataNode.theTichTkLt ?  dataNode.theTichTkLt  :null,
+        theTichTkLt: dataNode.theTichTkLt ? dataNode.theTichTkLt : null,
         theTichTkVt: dataNode.theTichTkVt ? dataNode.theTichTkVt : null,
-        tichLuongKdLt : dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt  :0,
-        tichLuongKdVt : dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt : 0,
-        tichLuongSdLt  : (dataNode.tichLuongTkLt) - (dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt  :0),
-        tichLuongSdVt  : dataNode.tichLuongTkVt - (dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt  :0),
-        theTichSdLt : dataNode.theTichTkLt - (dataNode.theTichSdLt ? dataNode.theTichSdLt : 0),
-        theTichSdVt : dataNode.theTichTkVt - (dataNode.theTichSdLt ? dataNode.theTichSdLt : 0),
-        theTichKdLt  : dataNode.theTichKdLt ? dataNode.theTichKdLt : 0,
-        theTichKdVt  : dataNode.theTichKdVt ? dataNode.theTichKdVt : 0,
-        ghiChu: dataNode.ghiChu? dataNode.ghiChu : null,
-        nhiemVu : dataNode.nhiemVu ? dataNode.nhiemVu : null,
-        namSudung : dataNode.namSudung ? dataNode.namSudung :  null,
-        tinhtrangId : dataNode.tinhtrangId ? dataNode.tinhtrangId : null,
-        dienTichDat : dataNode.dienTichDat ? dataNode.dienTichDat : null,
-        loaiVthh : dataNode.loaiVthh ? dataNode.loaiVthh  :null,
-        cloaiVthh : dataNode.cloaiVthh ? dataNode.cloaiVthh  :null,
-        slTon : dataNode.slTon ? dataNode.slTon  :null,
-        dviTinh : dataNode.dviTinh ? dataNode.dviTinh  :null,
-        ngayNhapDay : dataNode.ngayNhapDay ? dataNode.ngayNhapDay  :null,
-        loaikhoId : dataNode.loaikhoId ? dataNode.loaikhoId  : null,
-        coLoKho : dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false
+        tichLuongKdLt: dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt : 0,
+        tichLuongKdVt: dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt : 0,
+        tichLuongSdLt: (dataNode.tichLuongTkLt) - (dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt : 0),
+        tichLuongSdVt: dataNode.tichLuongTkVt - (dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt : 0),
+        theTichSdLt: dataNode.theTichTkLt - (dataNode.theTichSdLt ? dataNode.theTichSdLt : 0),
+        theTichSdVt: dataNode.theTichTkVt - (dataNode.theTichSdLt ? dataNode.theTichSdLt : 0),
+        theTichKdLt: dataNode.theTichKdLt ? dataNode.theTichKdLt : 0,
+        theTichKdVt: dataNode.theTichKdVt ? dataNode.theTichKdVt : 0,
+        ghiChu: dataNode.ghiChu ? dataNode.ghiChu : null,
+        nhiemVu: dataNode.nhiemVu ? dataNode.nhiemVu : null,
+        namSudung: dataNode.namSudung ? dataNode.namSudung : null,
+        tinhtrangId: dataNode.tinhtrangId ? dataNode.tinhtrangId : null,
+        dienTichDat: dataNode.dienTichDat ? dataNode.dienTichDat : null,
+        loaiVthh: dataNode.loaiVthh ? dataNode.loaiVthh : null,
+        cloaiVthh: dataNode.cloaiVthh ? dataNode.cloaiVthh : null,
+        slTon: dataNode.slTon ? dataNode.slTon : null,
+        dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
+        ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
+        loaikhoId: dataNode.loaikhoId ? dataNode.loaikhoId : null,
+        coLoKho: dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false
       });
-      this.checkLoKho = dataNode.coLoKho == '01'  ? true : false;
+      this.checkLoKho = dataNode.coLoKho == '01' ? true : false;
       this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhkems : null
       this.detailTcdtnn.soCuc = dataNode.soCuc ? dataNode.soCuc : 0;
       this.detailTcdtnn.soChiCuc = dataNode.soChiCuc ? dataNode.soChiCuc : 0;
@@ -426,7 +429,6 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   create() {
-
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
       nzTitle: 'Thêm mới tổ chức kho',
@@ -465,7 +467,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzStyle: {top: '50px'},
       nzComponentParams: {
         detail: this.detailDonVi.value,
-        levelNode: this.levelNode
+        levelNode: this.levelNode,
       },
     });
     modalQD.afterClose.subscribe((data) => {
@@ -486,8 +488,8 @@ export class MangLuoiKhoComponent implements OnInit {
   patchValueFormData(level) {
     switch (level) {
       case "1" : {
-        this.detailTcdtnn.sdt = this.nodeDetail.sdt ? this.nodeDetail.sdt  :null
-        this.detailTcdtnn.diaChi = this.nodeDetail.diaChi ? this.nodeDetail.diaChi  :null
+        this.detailTcdtnn.sdt = this.nodeDetail.sdt ? this.nodeDetail.sdt : null
+        this.detailTcdtnn.diaChi = this.nodeDetail.diaChi ? this.nodeDetail.diaChi : null
         break;
       }
       case "2" : {

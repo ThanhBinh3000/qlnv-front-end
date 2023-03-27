@@ -48,7 +48,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-
+  isView: boolean;
   formData: FormGroup;
   formThongTinChung: FormGroup;
 
@@ -93,6 +93,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   dataInput: any;
   dataInputCache: any;
   isTongHop: boolean
+  isCheckCreate: boolean = true
 
   constructor(
     private router: Router,
@@ -213,6 +214,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   initForm() {
+    this.idInput = 0;
     this.formData.patchValue({
       namKhoach: dayjs().get('year'),
       phanLoai: this.loaiVthh == '02' ? 'TTr' : 'TH'
@@ -287,6 +289,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -317,6 +320,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.isCheckCreate = false
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -436,6 +440,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listToTrinh = [];
       this.listDanhSachTongHop = [];
       const data = res.data;
+      console.log(data)
+      console.log(this.idInput)
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],

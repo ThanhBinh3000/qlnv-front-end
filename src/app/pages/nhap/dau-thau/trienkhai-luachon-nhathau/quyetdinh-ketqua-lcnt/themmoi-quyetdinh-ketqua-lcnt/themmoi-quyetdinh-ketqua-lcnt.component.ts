@@ -36,6 +36,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() loaiVthh: String;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() isViewOnModal:boolean;
+
+  @Input() isView: boolean;
 
   formData: FormGroup;
 
@@ -86,6 +89,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
+    console.log(this.isView);
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;
