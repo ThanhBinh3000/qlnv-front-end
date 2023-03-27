@@ -4,26 +4,40 @@
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="2">
-            <label> Năm xuất </label>
+            <label> Năm kế hoạch </label>
             <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label>Số quyết định</label>
+            <label>Số QĐ giao NV XH</label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQd" />
           </div>
           <div nz-col nzSpan="4">
-            <label>Loại hành hóa</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="loaiVthh" />
-          </div>
-          <div nz-col nzSpan="10">
-            <label>Trích yếu</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
+            <label>Số phiếu kiểm nghiệm chất lượng</label>
+            <input placeholder="Nhập nội dung" nz-input formControlName="soPhieu" />
           </div>
           <div nz-col nzSpan="4">
-            <label>Ngày quyết định</label>
-            <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <label>Ngày kiểm nghiệm chất lượng</label>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartngayKnghiem" nzFormat="dd/MM/yyyy"
+                  formControlName="ngayKnghiemTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndngayKnghiem" nzFormat="dd/MM/yyyy"
+                  formControlName="ngayKnghiemDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
+          </div>
+          <div nz-col nzSpan="4">
+            <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
+            <input placeholder="" nz-input formControlName="soBbLayMau" />
+          </div>
+          <div nz-col nzSpan="4">
+            <label>Số biên bản xuất dốc kho</label>
+            <input placeholder="" nz-input formControlName="soBbXuatDocKho" />
           </div>
         </div>
       </form>
@@ -155,6 +169,7 @@
   </div>
 </div>
 <div *ngIf="isDetail">
-  <app-them-moi-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh" [id]="idSelected" (showListEvent)="showList()">
+  <app-them-moi-phieu-kiem-nghiem-chat-luong [loaiVthh]="loaiVthh" [id]="idSelected" [isView]="isView"
+    (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </div>
