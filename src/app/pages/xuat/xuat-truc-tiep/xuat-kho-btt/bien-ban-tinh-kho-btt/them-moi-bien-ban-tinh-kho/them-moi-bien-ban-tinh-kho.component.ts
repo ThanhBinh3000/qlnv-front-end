@@ -59,6 +59,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       soHd: [''],
 
       ngayKyHd: ['', [Validators.required]],
+      idDdiemXh: [],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -110,7 +111,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async initForm() {
     let id = await this.userService.getId('XH_BB_TINHK_BTT_HDR_SEQ')
     this.formData.patchValue({
-      soBbTinhKho: `${id}/${this.formData.get('namKh').value}/PNK-CCDTVP`,
+      soBbTinhKho: `${id}/${this.formData.get('namKh').value}-BBTK`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -194,10 +195,9 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      console.log(data, 999);
-
       if (data) {
         this.formData.patchValue({
+          idDdiemXh: data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,
