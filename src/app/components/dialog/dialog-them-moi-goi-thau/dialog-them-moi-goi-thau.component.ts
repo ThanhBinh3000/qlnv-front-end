@@ -12,6 +12,8 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DonviService } from 'src/app/services/donvi.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DxuatKhLcntService } from "../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
+import { UserLogin } from "../../../models/userlogin";
+import { UserService } from "../../../services/user.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -42,6 +44,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listHinhThucDauThau: any[] = [];
 
   giaToiDa: any;
+  userInfo: UserLogin;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -53,6 +56,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private donviService: DonviService,
     private spinner: NgxSpinnerService,
     private dxuatKhLcntService: DxuatKhLcntService,
+    private userService: UserService,
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -71,6 +75,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   async ngOnInit() {
     // this.spinner.show();
+    this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.loadListDonVi(),
     ]);
@@ -307,7 +312,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   async getGiaToiDa(ma: string) {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma);
+    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI);
     if (res.msg === MESSAGE.SUCCESS) {
       this.giaToiDa = res.data;
     }
