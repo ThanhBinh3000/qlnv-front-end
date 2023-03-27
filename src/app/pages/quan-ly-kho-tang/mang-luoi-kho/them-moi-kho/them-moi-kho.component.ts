@@ -27,7 +27,7 @@ export class ThemMoiKhoComponent implements OnInit {
 
   data: any;
 
-  idReq : number = 0;
+  idReq: number = 0;
   nodesTree: any = [];
   options = {
     useCheckbox: true
@@ -204,6 +204,13 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
+          this.formKho.patchValue({
+            tenDiemkho: dataNodeRes.tenDiemkho,
+            tenNhakho: dataNodeRes.tenNhakho,
+            tenNgankho: dataNodeRes.tenNgankho,
+            tenChiCuc: dataNodeRes.tenTongkho,
+            diaChi: dataNodeRes.diaChi,
+          });
           this.idReq = dataNodeRes.id
         }
       })
@@ -224,15 +231,16 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   listType = ["MLK", "DV"]
+
   async loadDsDvi() {
     let body = {
-      maDvi : this.userInfo.MA_DVI,
-      type : this.listType
+      maDvi: this.userInfo.MA_DVI,
+      type: this.listType
     }
     await this.donviService.layTatCaDviDmKho(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length >0)
-        this.nodesTree = res.data;
+        if (res.data && res.data.length > 0)
+          this.nodesTree = res.data;
         this.nodesTree[0].expanded = false;
       }
 
@@ -250,7 +258,7 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
-    if (this.idReq != 0 )  {
+    if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenNganlo;
@@ -430,7 +438,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['soNganKho'].setValidators([Validators.required])
         this.formKho.controls['dienTichDat'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 3 : {
@@ -445,7 +453,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
         this.formKho.controls['nhiemVu'].setValidators([Validators.required])
         this.formKho.controls['ghiChu'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 4 : {
@@ -457,7 +465,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
-        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        // this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
     }

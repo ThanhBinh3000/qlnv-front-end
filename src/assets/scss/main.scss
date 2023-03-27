@@ -6899,5 +6899,17 @@ td.action.ant-table-cell {
   }
 }
 
-
+.ant-collapse-header,.ant-collapse>.ant-collapse-item>.ant-collapse-header {
+  color: #353a64;
+  padding-left: 30px!important;
+  padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+  display: block;
+  text-transform: none;
+  font-weight: 500;
+  background: #fff;
+  border: none!important;
+  font-size: 13px
+}
 // end lấy từ default qua....................................................
