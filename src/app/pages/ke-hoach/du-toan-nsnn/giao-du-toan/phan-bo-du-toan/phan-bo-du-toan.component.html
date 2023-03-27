@@ -82,7 +82,7 @@
           <!-- <th width="150px">Số QĐ</th> -->
           <th width="150px">Ngày tạo</th>
           <th width="150px">Năm phương án</th>
-          <th width="150px">Loại phương án</th>
+          <!-- <th width="150px">Loại phương án</th> -->
           <th width="150px">Trạng thái giao</th>
           <th width="150px" style="text-align: center">Trạng thái</th>
           <th width="150px">Hành động</th>
@@ -113,13 +113,13 @@
               <i nz-icon nzType="search"></i>
             </ng-template>
           </th>
-          <th>
+          <!-- <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.maLoaiDan"
               (ngModelChange)="filterInTable('maLoaiDan',filterTable.maLoaiDan, false)">
               <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
-          </th>
+          </th> -->
           <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiGiao"
               (ngModelChange)="filterInTable('trangThaiGiao',filterTable.trangThaiGiao, false)">
@@ -155,14 +155,14 @@
           <td>
             {{data.namPa}}
           </td>
-          <td>
+          <!-- <td>
             <ng-template [ngIf]="data.maLoaiDan == '1'">
               Giao dự toán
             </ng-template>
             <ng-template [ngIf]="data.maLoaiDan == '2'">
               Giao điều chỉnh dự toán
             </ng-template>
-          </td>
+          </td> -->
           <td>
             <ng-template [ngIf]="data.trangThaiGiao == '0'"><br>Chưa giao</ng-template>
             <ng-template [ngIf]="data.trangThaiGiao == '2'"><br>Đang giao</ng-template>

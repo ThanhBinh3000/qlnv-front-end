@@ -26,7 +26,7 @@ export const PHU_LUC = [
     },
     {
         id: 'pl04',
-        tenDm: 'Phụ lục tổng hợp đề nghị giao dự toán chi ngân sách nhà nước',
+        tenDm: 'Phụ lục tổng hợp đề nghị giao dự toán',
         tenPl: 'Phụ lục phân bổ dự toán',
         status: false,
     },
