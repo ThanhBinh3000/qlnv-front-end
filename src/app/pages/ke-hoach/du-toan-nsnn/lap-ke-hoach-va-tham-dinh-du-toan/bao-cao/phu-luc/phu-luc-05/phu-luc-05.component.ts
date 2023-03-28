@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, getName, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -107,7 +107,12 @@ export class PhuLuc05Component implements OnInit {
 		if (this.status) {
 			const category = await this.danhMucService.danhMucChungGetAll('LTD_PL5');
 			if (category) {
-				this.duAns = category.data;
+				category.data.forEach(item => {
+					this.duAns.push({
+						...item,
+						giaTri: getName(this.namBcao, item.giaTri),
+					})
+				})
 			}
 			this.scrollX = (710 + this.BOX_SIZE * 15).toString() + 'px';
 		} else {
@@ -137,9 +142,6 @@ export class PhuLuc05Component implements OnInit {
 				})
 			})
 			this.setLevel();
-			this.lstCtietBcao.forEach(item => {
-				item.tenCongTrinh += this.getName(item.level, item.maCongTrinh);
-			})
 		} else if (!this.lstCtietBcao[0]?.stt) {
 			this.lstCtietBcao.forEach(item => {
 				item.stt = item.maCongTrinh;
@@ -150,45 +152,6 @@ export class PhuLuc05Component implements OnInit {
 		this.updateEditCache();
 		this.getStatusButton();
 		this.spinner.hide();
-	}
-
-	getName(level: number, ma: string) {
-		const type = this.getTail(ma);
-		let str = '';
-		if (level == 1) {
-			switch (type) {
-				case 1:
-					str = (this.namBcao - 1).toString();
-					break;
-				case 2:
-					str = (this.namBcao - 1).toString();
-					break;
-				case 3:
-					str = this.namBcao.toString();
-					break;
-				case 4:
-					str = (this.namBcao + 1).toString();
-					break;
-				case 5:
-					str = (this.namBcao + 2).toString();
-					break;
-				default:
-					break;
-			}
-		}
-		if (level == 2) {
-			switch (type) {
-				case 1:
-					str = ('31/12/' + (this.namBcao - 2).toString());
-					break;
-				case 2:
-					str = (this.namBcao - 1).toString();
-					break;
-				default:
-					break;
-			}
-		}
-		return str;
 	}
 
 	getStatusButton() {
@@ -515,7 +478,7 @@ export class PhuLuc05Component implements OnInit {
 	}
 
 	checkAdd(data: ItemData) {
-		if (data.stt == '0.1.2' || data.stt == '0.1.3' || data.stt == '0.1.4' || data.stt == '0.1.5' || (data.level == 2 && data.maCongTrinh)) {
+		if (data.stt == "0.2" || data.stt == '0.1.2' || data.stt == '0.1.3' || data.stt == '0.1.4' || data.stt == '0.1.5' || (data.level == 2 && data.maCongTrinh)) {
 			return true;
 		}
 		return false;

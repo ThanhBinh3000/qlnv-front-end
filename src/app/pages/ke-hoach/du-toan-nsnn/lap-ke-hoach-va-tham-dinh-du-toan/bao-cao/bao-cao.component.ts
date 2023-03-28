@@ -838,7 +838,7 @@ export class BaoCaoComponent implements OnInit {
                 nzContent = PhuLuc01Component;
                 break;
             case 'pl01X':
-                nzContent = PhuLuc01XuatComponent;
+                nzContent = PhuLuc01Component;
                 break;
             case 'pl02':
                 nzContent = PhuLuc02Component;
