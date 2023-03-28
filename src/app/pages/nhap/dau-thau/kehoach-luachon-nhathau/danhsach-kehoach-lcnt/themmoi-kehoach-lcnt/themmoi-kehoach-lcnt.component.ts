@@ -370,6 +370,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         data: data,
         loaiVthh: this.formData.get('loaiVthh').value,
         dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
+        namKeHoach: this.formData.value.namKhoach,
       },
     });
     modal.afterClose.subscribe((res) => {

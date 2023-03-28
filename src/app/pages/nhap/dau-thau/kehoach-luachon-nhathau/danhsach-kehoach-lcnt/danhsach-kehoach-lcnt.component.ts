@@ -89,6 +89,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   qdPdKhlcntId: number = 0;
   openTh = false;
   thId: number = 0;
+  openQdGiao = false;
+  qdGiaoId: number = 0;
   tuNgayKy: Date | null = null;
   denNgayKy: Date | null = null;
   tuNgayTao: Date | null = null;
@@ -516,6 +518,14 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   closeModalTh () {
     this.thId = null;
     this.openTh = false;
+  }
+  openQdGiaoModal(id:number) {
+    this.qdGiaoId = id;
+    this.openQdGiao = true;
+  }
+  closeQdGiaoModal () {
+    this.qdGiaoId = null;
+    this.openQdGiao = false;
   }
 
   convertDateToString(event: any): string {

@@ -93,7 +93,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   deXuatSelected: any = []
   firstInit = true;
   canCu: any[] = [];
-
+  dxPaId: number = 0;
+  openDxPa = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -763,4 +764,14 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.slXuatCapCache = null;
     }
   }
+
+  openDxPaModal(id: number) {
+    this.dxPaId = id;
+    this.openDxPa = true;
+  }
+  closeDxPaModal() {
+    this.dxPaId = null;
+    this.openDxPa = false;
+  }
+
 }
