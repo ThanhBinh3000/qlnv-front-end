@@ -118,9 +118,12 @@
                                 <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.ttienNamDtoan)}}</td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.sluongTd" [options]="amount"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)" />
+                                    <!-- <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongTd"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                                 </td>
                             </ng-container>
                             <ng-template #editAppraisal>
@@ -143,9 +146,12 @@
                                         [(ngModel)]="editCache[data.id].data.uocNamHtai" [options]="amount" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.sluongNamDtoan" [options]="amount"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)" />
+                                    <!-- <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                                 </td>
                                 <td>
                                     {{displayValue(editCache[data.id].data.dmucNamDtoan)}}
@@ -154,9 +160,12 @@
                                     {{displayValue(editCache[data.id].data.ttienNamDtoan)}}
                                 </td>
                                 <td *ngIf="viewAppraisalValue">
-                                    <fm-input-number nz-input class="search__input"
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.sluongTd" [options]="amount"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)" />
+                                    <!-- <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongTd"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                                 </td>
                             </ng-template>
                             <td *ngIf="viewAppraisalValue">
@@ -179,14 +188,14 @@
                         <td nzLeft></td>
                         <td nzLeft>Tổng Cộng</td>
                         <td></td>
-                        <td>{{displayValue(tongThienNamTruoc)}}</td>
-                        <td>{{displayValue(tongDuToan)}}</td>
-                        <td>{{displayValue(tongUoc)}}</td>
+                        <td>{{displayValue(total.thienNamTruoc)}}</td>
+                        <td>{{displayValue(total.dtoanNamHtai)}}</td>
+                        <td>{{displayValue(total.uocNamHtai)}}</td>
                         <td></td>
-                        <td>{{displayValue(tongDmuc)}}</td>
-                        <td>{{displayValue(tongSo)}}</td>
+                        <td></td>
+                        <td>{{displayValue(total.ttienNamDtoan)}}</td>
                         <td *ngIf="viewAppraisalValue"></td>
-                        <td *ngIf="viewAppraisalValue">{{displayValue(tongSoTd)}}</td>
+                        <td *ngIf="viewAppraisalValue">{{displayValue(total.ttienTd)}}</td>
                         <td *ngIf="status" nzRight></td>
                         <td *ngIf="status || editAppraisalValue" nzRight></td>
                     </tr>
