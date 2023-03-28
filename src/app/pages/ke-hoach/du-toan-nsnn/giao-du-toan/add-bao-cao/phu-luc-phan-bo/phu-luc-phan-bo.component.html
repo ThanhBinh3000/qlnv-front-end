@@ -40,28 +40,6 @@
           </th>
         </tr>
       </thead>
-      <!-- <tbody>
-        <tr *ngFor="let data of lstCtietBcao; let i = index">
-          <td [nzIndentSize]="data.level! * 8">
-            {{getChiMuc(data.stt)}}
-          </td>
-          <td>
-            <div *ngFor="let item of noiDungs">
-              <div *ngIf="item.ma ==data.maNdung">
-                {{item.tenDm}}
-              </div>
-            </div>
-          </td>
-          <td>{{displayValue(data.tongCong)}}</td>
-          <td *ngFor="let item of lstDvi">
-            <div *ngFor="let e of data.lstCtietDvis;">
-              <div *ngIf="e.maDviNhan == item.maDvi">
-                {{displayValue(e.soTranChi)}}
-              </div>
-            </div>
-          </td>
-        </tr>
-      </tbody> -->
       <tbody>
         <tr *ngFor="let data of lstCtietBcao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">

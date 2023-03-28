@@ -186,8 +186,8 @@ export class PhuLucPhanBoComponent implements OnInit {
 
 
     // console.log(lstCtietTemp);
-    this.sum1()
-    this.tinhTong()
+    // this.sum1()
+    // this.tinhTong()
     this.getStatusButton();
     this.updateEditCache();
     this.spinner.hide();
