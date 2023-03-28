@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_BANHANH')"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_BANHANH')"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
@@ -192,7 +192,7 @@
             <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
               <td>{{i + 1}}</td>
               <td>{{item.tenDviDx}}</td>
-              <td>{{item.soDx}}</td>
+              <td><a class="text-blue" (click)="openDxPaModal(item.idDx)"> {{item.soDx}}</a></td>
               <td>{{item.ngayPduyetDx}}</td>
               <td>{{item.trichYeuDx}}</td>
               <td>{{item.tongSoLuongDx|number: '1.0-1' : 'vi_VN'}}</td>
@@ -597,3 +597,15 @@
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-xay-dung-phuong-an [idInput]="dxPaId" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+    </app-thong-tin-xay-dung-phuong-an>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

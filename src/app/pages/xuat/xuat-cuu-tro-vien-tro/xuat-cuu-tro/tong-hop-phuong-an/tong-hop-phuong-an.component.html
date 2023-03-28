@@ -46,17 +46,17 @@
       <h3 class="text-uppercase">Danh sách phương án xuất viện trợ cứu trợ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XOA')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA_EXP')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA_THEM')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tổng hợp</span>
         </button>
@@ -179,15 +179,15 @@
             <td>{{ data.noiDungThop }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XEM')"
+              <a *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XEM')"
                 (click)="redirectDetail(data.id, true) ">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_THEM')"
+              <a *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_THEM')"
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc()  && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XOA')"
+              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>

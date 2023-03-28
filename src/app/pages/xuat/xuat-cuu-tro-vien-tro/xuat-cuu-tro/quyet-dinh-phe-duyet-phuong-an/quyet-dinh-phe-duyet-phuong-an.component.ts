@@ -75,6 +75,11 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
+  dxPaId: number = 0;
+  openDxPa = false;
+  idTh: number = 0;
+  openTh = false;
+
   disabledStartNgayDX = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayDxTu) {
       return false;
@@ -148,5 +153,21 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
+  }
+  openDxPaModal(id: number) {
+    this.dxPaId = id;
+    this.openDxPa = true;
+  }
+  closeDxPaModal() {
+    this.dxPaId = null;
+    this.openDxPa = false;
+  }
+  openThModal(id: number) {
+    this.idTh = id;
+    this.openTh = true;
+  }
+  closeThModal() {
+    this.idTh = null;
+    this.openTh = false;
   }
 }

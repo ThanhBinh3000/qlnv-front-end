@@ -45,18 +45,18 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG CỨU TRỢ, VIỆN TRỢ</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XOA')" type="button"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" type="button"
           class="btn btn-sub btn-xoa" (click)="deleteMulti()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_EXP')" type="button" class="btn btn-sub"
-          (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button"
+          class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(null, false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && userService.isCuc()">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && userService.isCuc()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -187,31 +187,32 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a *ngIf=" (userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XEM') && (data.trangThai == STATUS.BAN_HANH))
-              ||(!userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-              ||(!userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_TP)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_TP)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_LDC)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_LDC)"
-                (click)="redirectToChiTiet(data.id,false)">
+              <a *ngIf=" (userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM') && (data.trangThai == STATUS.BAN_HANH))
+              ||(!userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(!userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_LDC)"
+                (click)="redirectToChiTiet(data.id,true)">
+
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && data.trangThai == STATUS.DU_THAO)"
+              <a *ngIf="(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && data.trangThai == STATUS.DU_THAO)"
                 (click)="redirectToChiTiet(data.id,false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
+              <a *ngIf="(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
                 (click)="redirectToChiTiet(data.id,true)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()
-              && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XOA')" (click)="delete(data)">
+              && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -240,7 +241,7 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
-    <app-thong-tin-qd-gnv-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+    <app-thong-tin-qd-gnv-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
       [loaiVthh]="loaiVthh">
     </app-thong-tin-qd-gnv-xuat-hang>
   </div>

@@ -115,7 +115,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   async getDetail(id: number) {
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
-      debugger
       const dataDetail = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.formData.patchValue({
@@ -128,7 +127,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   async save(isBanHanh?) {
     this.setValidator(isBanHanh);
     this.helperService.markFormGroupTouched(this.formData);
-    debugger
     if (this.formData.invalid) {
       return;
     }

@@ -38,17 +38,17 @@
             <h3 class="text-uppercase">Danh sách biên bản lấy mẫu/bàn giao mẫu</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_EXP')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_THEM')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -205,16 +205,16 @@
                                     <td>{{lv1.soBbHaoDoi}}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_LDCC)  && userService.isChiCuc()
-                                          && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_THEM')"
+                                          && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XOA')"
+                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')"
                                             (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
