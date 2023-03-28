@@ -252,11 +252,8 @@
   <app-themmoi-tonghop-khlcnt [isView]="isView" [id]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-tonghop-khlcnt>
 </div>
-<ng-template #error let-control>
-  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-</ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khlcnt [id]="idSelected" [loaiVthh]="loaiVthh" [dataTongHop]="formData.value"
+  <app-themmoi-quyetdinh-khlcnt [id]="idSelected" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
                                 (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khlcnt>
 </div>

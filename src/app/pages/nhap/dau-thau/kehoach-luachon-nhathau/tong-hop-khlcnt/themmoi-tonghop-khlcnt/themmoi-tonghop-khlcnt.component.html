@@ -103,7 +103,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <div class="tong-hop-button group-button-search mt-16">
-            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
+            <button [disabled]="isView" class="btn btn-main btn-sm waves-effect waves-light" (click)="isView ? '' : tongHopDeXuatTuCuc()"
               >
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
               <span>Tổng hợp đề xuất KHLCNT</span>

@@ -186,9 +186,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger
-    console.log(this.idInput)
-    console.log(this.loaiVthh)
     await this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -292,7 +289,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
-    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -439,7 +435,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      debugger
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       this.listToTrinh = [];
       this.listDanhSachTongHop = [];
