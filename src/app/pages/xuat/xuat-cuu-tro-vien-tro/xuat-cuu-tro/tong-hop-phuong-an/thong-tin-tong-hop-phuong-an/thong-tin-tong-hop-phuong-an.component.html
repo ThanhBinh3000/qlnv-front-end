@@ -10,8 +10,8 @@
       <span>Tạo quyết định</span>
     </button>-->
     <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()
-    && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_DUYET')" type="button"
-      class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDV)">
+    && userService.isAccessPermisson('XHDTQG_XCTVT_THPA_DUYET')" type="button" class="btn btn-sub"
+      (click)="reject(idInput,STATUS.TU_CHOI_LDV)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>

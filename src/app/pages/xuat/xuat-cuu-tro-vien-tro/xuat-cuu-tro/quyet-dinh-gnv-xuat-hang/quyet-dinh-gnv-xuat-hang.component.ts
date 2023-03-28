@@ -25,7 +25,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   @Input() loaiVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
-  isViewDetail: boolean;
+  isView = false;
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
@@ -94,10 +94,10 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number, isView: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isView = isView;
   }
 
   async loadDsVthh() {

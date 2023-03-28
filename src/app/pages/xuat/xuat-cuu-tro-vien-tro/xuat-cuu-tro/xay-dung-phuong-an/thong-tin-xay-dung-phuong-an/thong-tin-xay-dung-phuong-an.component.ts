@@ -51,6 +51,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
