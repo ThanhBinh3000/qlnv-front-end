@@ -404,4 +404,12 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       return true;
     }
   }
+
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
 }

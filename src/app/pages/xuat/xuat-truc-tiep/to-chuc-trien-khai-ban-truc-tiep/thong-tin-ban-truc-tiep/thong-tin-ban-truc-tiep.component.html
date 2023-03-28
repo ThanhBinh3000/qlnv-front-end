@@ -11,7 +11,7 @@
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Ngày nhận chào giá/Ngày ủy quyền</label>
-                        <nz-range-picker formControlName="ngayChaoGia" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <nz-range-picker formControlName="ngayNhanCgia" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
                     <div nz-col nzSpan="4">
                         <label> Tên công ty chào giá</label>
@@ -19,7 +19,7 @@
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Tên chi cục ủy quyền</label>
-                        <nz-select formControlName="maDvi">
+                        <nz-select formControlName="maDviChiCuc">
                             <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
                     </div>

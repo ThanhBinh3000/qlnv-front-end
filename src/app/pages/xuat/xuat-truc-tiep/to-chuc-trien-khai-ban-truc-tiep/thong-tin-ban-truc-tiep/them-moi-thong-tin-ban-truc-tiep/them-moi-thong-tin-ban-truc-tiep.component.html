@@ -292,7 +292,8 @@
                                 <td>{{ data.thueGtgt }}</td>
                                 <td>{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.fileDinhKems?.fileName }}</td>
-                                <td> <label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
+                                <td> <label nz-checkbox [(ngModel)]="data.luaChon" [nzDisabled]="isDisable()"></label>
+                                </td>
                                 <td>
                                     <a (click)="downloadFile(data.fileDinhKems)">
                                         <i class="icon htvbdh_tcdt_import "></i>
