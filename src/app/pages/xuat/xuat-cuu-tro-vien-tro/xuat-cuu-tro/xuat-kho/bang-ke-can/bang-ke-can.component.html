@@ -44,17 +44,17 @@
       <h3 class="text-uppercase">{{loaiVthh == '02' ? 'Danh sách bảng kê cân hàng' : 'Bảng kê vật tư'}}</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XOA')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_IN')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_IN')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="editRow(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_THEM')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -146,16 +146,16 @@
                       <td>
                         <a>
                           <i class="fa fa-eye"
-                            *ngIf="lv2.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XEM')"
+                            *ngIf="lv2.trangThai != STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_XEM')"
                             (click)="editRow(lv2,true)"></i>
                         </a>
                         <a>
                           <i class="fa fa-edit" *ngIf="(lv2.trangThai === STATUS.DU_THAO || lv2.trangThai === STATUS.TU_CHOI_LDCC )
-                           && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_THEM')"
+                           && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_THEM')"
                             (click)="editRow(lv2,false)"></i>
                         </a>
                         <a (click)="deleteRow(lv2)"
-                          *ngIf="lv2.trangThai === STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XOA')">
+                          *ngIf="lv2.trangThai === STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_XOA')">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
