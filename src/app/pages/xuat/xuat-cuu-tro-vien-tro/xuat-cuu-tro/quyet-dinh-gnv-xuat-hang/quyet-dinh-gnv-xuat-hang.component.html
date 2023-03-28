@@ -50,8 +50,8 @@
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button" class="btn btn-sub"
-          (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_EXP')" type="button"
+          class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -191,12 +191,13 @@
               ||(!userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
               ||(!userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
               ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
               ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_TP)
-              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_TP)
               ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP') &&  data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_TP)
               ||(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC') &&  data.trangThai == STATUS.TU_CHOI_LDC)"
-                (click)="redirectToChiTiet(data.id,false)">
+                (click)="redirectToChiTiet(data.id,true)">
+
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
@@ -240,7 +241,7 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
-    <app-thong-tin-qd-gnv-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+    <app-thong-tin-qd-gnv-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
       [loaiVthh]="loaiVthh">
     </app-thong-tin-qd-gnv-xuat-hang>
   </div>

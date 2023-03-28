@@ -47,7 +47,6 @@ import { FileDinhKem } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
   styleUrls: ['./thong-tin-qd-gnv-xuat-hang.component.scss']
 })
 export class ThongTinQdGnvXuatHangComponent extends Base2Component implements OnInit {
-  @Input() isViewDetail: boolean;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() id: number;
