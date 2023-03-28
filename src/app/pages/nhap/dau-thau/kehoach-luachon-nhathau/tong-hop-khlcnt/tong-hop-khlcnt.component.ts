@@ -31,6 +31,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   isView: boolean = true
   isQuyetDinh: boolean = false;
   qdPdKhlcntId: number = 0;
+  isQdPdKhlcntId: number = 0;
   dataTableDanhSachDX: any[] = [];
   formTraCuu: FormGroup;
   formDataQd: FormGroup;
@@ -256,6 +257,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   async taoQdinh(data: any){
     this.id = data.id
     this.idSelected = data.id;
+    this.isQdPdKhlcntId = data.qdPdKhlcntId
     await this.loadChiTiet()
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
@@ -273,6 +275,7 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[1];
     setActive.classList.add('ant-menu-item-selected');
+    this.isQdPdKhlcntId = 0;
     this.isQuyetDinh = false;
   }
   //

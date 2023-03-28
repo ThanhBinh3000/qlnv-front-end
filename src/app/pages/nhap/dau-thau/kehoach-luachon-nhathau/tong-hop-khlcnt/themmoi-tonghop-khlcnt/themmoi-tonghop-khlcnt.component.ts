@@ -17,6 +17,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
+import {convertTrangThai} from "../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -246,6 +247,18 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     $event.target.parentElement.classList.add('selectedRow')
     this.idRowSelect = id;
     await this.spinner.hide();
+  }
+
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (trangThai === '27') {
+      return 'da-du-thao';
+    } else if (trangThai === '28') {
+      return 'da-ban-hanh';
+    }
   }
 }
 

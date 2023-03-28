@@ -19,7 +19,9 @@
   <div class="header header-green-background ">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span></span>
+                <span [ngClass]="(formData.value.trangThai == STATUS.CHUA_TAO_QD ? 'chua-tao-qd' : '') || formData.value.trangThai == STATUS.DA_DU_THAO_QD  ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+          {{  convertTrangThai(formData.value.trangThai) }}
+        </span>
         <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
       </div>
     </div>

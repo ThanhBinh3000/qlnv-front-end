@@ -27,6 +27,12 @@ export function convertTrangThai(status: string): string {
     return 'Lãnh đạo duyệt';
   } else if (status == '11') {
     return 'Ban hành';
+  }else if (status == '26') {
+    return 'Chưa tạo QĐ';
+  }else if (status == '27') {
+    return 'Đã Dự Thảo QĐ';
+  }else if (status == '28') {
+    return 'Đã Ban Hành QĐ';
   }
 }
 

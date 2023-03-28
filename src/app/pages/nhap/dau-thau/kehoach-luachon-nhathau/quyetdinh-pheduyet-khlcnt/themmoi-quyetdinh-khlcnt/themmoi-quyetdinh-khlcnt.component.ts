@@ -196,6 +196,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
+      debugger
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -434,6 +435,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    debugger
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       this.listToTrinh = [];
