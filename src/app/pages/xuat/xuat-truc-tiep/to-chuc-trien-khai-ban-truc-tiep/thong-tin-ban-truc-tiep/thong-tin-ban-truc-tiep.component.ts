@@ -20,10 +20,11 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   @Input()
   loaiVthh: string;
-
+  isView: boolean = false;
   dsDonvi: any[] = [];
   userdetail: any = {};
-
+  pthucBanTrucTiep: string;
+  selectedId: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -116,4 +117,10 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.timKiem();
   }
 
+  redirectToChiTiet(isView: boolean, id: number, pthucBanTrucTiep: string) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = isView;
+    this.pthucBanTrucTiep = pthucBanTrucTiep;
+  }
 }

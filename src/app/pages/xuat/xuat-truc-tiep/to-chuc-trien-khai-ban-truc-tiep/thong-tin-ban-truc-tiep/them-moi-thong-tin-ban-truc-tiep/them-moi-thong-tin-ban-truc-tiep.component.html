@@ -43,7 +43,7 @@
                                         [ngModelOptions]="{standalone: true}">
                                         <label nz-radio nzValue="Chào giá"> Chào giá </label>
                                         <label nz-radio nzValue="Ủy quyền"> Ủy quyền </label>
-                                        <label nz-radio nzValue="Mua lẻ"> Bán lẻ </label>
+                                        <label nz-radio nzValue="Bán lẻ"> Bán lẻ </label>
                                     </nz-radio-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -137,7 +137,7 @@
                                 </div>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Mua lẻ'">
+                        <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Bán lẻ'">
                             <nz-form-item nz-col class="form-item">
                                 <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm QĐ giao chi cục
                                     bán lẻ

@@ -412,4 +412,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       return true;
     }
   }
+
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
 }

@@ -152,11 +152,12 @@
                         <td>{{data.xhQdPdKhBttHdr.tenCloaiVthh}}</td>
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
-                            <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT " (click)="goDetail(data.id)">
+                            <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT "
+                                (click)="redirectToChiTiet(true,data.id, data.pthucBanTrucTiep)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
-                                (click)="goDetail(data.id)">
+                                (click)="redirectToChiTiet(false,data.id, data.pthucBanTrucTiep)">
                                 <i class="icon htvbdh_soanthao"></i>
                             </a>
                             <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
@@ -187,6 +188,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-them-moi-thong-tin-ban-truc-tiep [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
+    <app-them-moi-thong-tin-ban-truc-tiep [loaiVthh]="loaiVthh" [idInput]="selectedId" (showListEvent)="showList()"
+        [pthucBanTrucTiep]="pthucBanTrucTiep">
     </app-them-moi-thong-tin-ban-truc-tiep>
 </div>
