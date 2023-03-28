@@ -505,7 +505,7 @@
               <td>{{dtGoiThau.diaDiemNhap}}</td>
               <td>{{dtGoiThau.soLuongChiTieu}}</td>
               <td>{{dtGoiThau.soLuongDaMua}}</td>
-              <td>{{dtGoiThau.soLuong | multipleThousandPipe}}</td>
+              <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaDx * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
