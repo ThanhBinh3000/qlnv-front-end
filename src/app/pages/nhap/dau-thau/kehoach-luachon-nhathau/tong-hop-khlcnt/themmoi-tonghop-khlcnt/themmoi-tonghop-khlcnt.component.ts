@@ -87,6 +87,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    console.log("isView: ", this.isView)
     await this.spinner.show();
     try {
       await Promise.all([

@@ -326,9 +326,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             this.formData.patchValue({
               donGiaVat: data.giaQdVat
             })
-            if (!data.giaQdVat) {
-              this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
-            }
+            // if (!data.giaQdVat) {
+            //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+            // }
           }
           if (res.statusCode == API_STATUS_CODE.SUCCESS) {
             this.formData.patchValue({
@@ -402,7 +402,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
@@ -447,52 +447,66 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       return;
     }
     this.setValidator(isGuiDuyet);
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      return;
-    }
-    if (this.listOfData.length == 0) {
-      this.notification.error(
-        MESSAGE.ERROR,
-        'Danh sách kế hoạch không được để trống',
-      );
-      return;
-    }
-    if (this.validateSave()) {
-      let pipe = new DatePipe('en-US');
-      let body = this.formData.value;
-      if (this.formData.get('soDxuat').value) {
-        body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+    if (!isGuiDuyet && this.formData.get('trangThai').value == this.STATUS.DU_THAO) {
+      this.clearValidatorLuuDuThao();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
       }
-      body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
-      body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
-      body.fileDinhKemReq = this.fileDinhKem;
-      body.dsGtReq = this.listOfData;
-      body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
-      let res = null;
-      if (this.formData.get('id').value) {
-        res = await this.dauThauService.update(body);
-      } else {
-        res = await this.dauThauService.create(body);
+      this.formData.get('loaiVthh').setValue(this.loaiVthhInput)
+      await this.luuVaGuiDuyet(isGuiDuyet);
+    } else {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
       }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (isGuiDuyet) {
-          this.idInput = res.data.id;
-          await this.guiDuyet();
-        } else {
-          if (this.formData.get('id').value) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            // this.quayLai();
-          } else {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            // this.quayLai();
-          }
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+      if (this.listOfData.length == 0) {
+        this.notification.error(
+          MESSAGE.ERROR,
+          'Danh sách kế hoạch không được để trống',
+        );
+        return;
+      }
+      if (this.validateSave()) {
+        await this.luuVaGuiDuyet(isGuiDuyet)
       }
     }
+  }
 
+  async luuVaGuiDuyet (isGuiDuyet) {
+    debugger
+    let pipe = new DatePipe('en-US');
+    let body = this.formData.value;
+    if (this.formData.get('soDxuat').value) {
+      body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+    }
+    body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+    body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.dsGtReq = this.listOfData;
+    body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
+    let res = null;
+    if (this.formData.get('id').value) {
+      res = await this.dauThauService.update(body);
+    } else {
+      res = await this.dauThauService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isGuiDuyet) {
+        this.idInput = res.data.id;
+        await this.guiDuyet();
+      } else {
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          // this.quayLai();
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          // this.quayLai();
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   setValidator(isGuiDuyet) {
@@ -516,6 +530,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.formData.controls["tgianNhang"].setValidators([Validators.required]);
       this.formData.controls["tgianThien"].clearValidators();
     }
+  }
+
+  clearValidatorLuuDuThao () {
+    Object.keys(this.formData.controls).forEach(key => {
+      const control = this.formData.controls[key];
+      control.clearValidators();
+      control.updateValueAndValidity();
+    });
+    this.formData.updateValueAndValidity();
   }
 
   validateSave() {
@@ -1092,6 +1115,34 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       return false
     } else {
       return true
+    }
+  }
+
+  calcTongSl () {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
+    }
+  }
+
+  calcTongThanhTien () {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * item.donGiaDx;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * 1000;
     }
   }
 
