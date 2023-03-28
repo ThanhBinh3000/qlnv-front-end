@@ -1,4 +1,4 @@
-<nz-affix class="menu-lv2 dieu-chinh-button" [nzOffsetTop]="43">
+<nz-affix class="menu-lv2 dieu-chinh-button" [nzOffsetTop]="43" *ngIf="!isViewOnModal">
   <div class="tab-content tab-menu" id="myTabContent">
     <div class="d-flex justify-content-between header-tab" id="banhanh">
       <div class="trai">
@@ -166,7 +166,7 @@
           <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
           <nz-form-control>
             <div class="list-file">
-              <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList"></file-list>
+              <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-control>
         </div>

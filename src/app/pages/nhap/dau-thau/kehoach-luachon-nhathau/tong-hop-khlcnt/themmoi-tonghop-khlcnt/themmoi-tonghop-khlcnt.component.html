@@ -103,7 +103,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24" *ngIf="!isViewOnModal">
           <div class="tong-hop-button group-button-search mt-16">
             <button [disabled]="isView" class="btn btn-main btn-sm waves-effect waves-light" (click)="isView ? '' : tongHopDeXuatTuCuc()"
               >
