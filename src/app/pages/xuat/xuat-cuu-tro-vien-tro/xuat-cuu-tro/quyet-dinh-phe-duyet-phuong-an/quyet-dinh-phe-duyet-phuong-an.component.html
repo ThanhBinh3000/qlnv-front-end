@@ -261,13 +261,13 @@
   </div>
 </nz-modal>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTh" (nzOnCancel)="closeDxPaModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTh" (nzOnCancel)="closeThModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <!-- <app-thong-tin-tong-hop-phuong-an [idInput]="idTh" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
-    </app-thong-tin-tong-hop-phuong-an> -->
+    <app-thong-tin-tong-hop-phuong-an [idInput]="idTh" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+    </app-thong-tin-tong-hop-phuong-an>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+    <button nz-button (click)="closeThModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
