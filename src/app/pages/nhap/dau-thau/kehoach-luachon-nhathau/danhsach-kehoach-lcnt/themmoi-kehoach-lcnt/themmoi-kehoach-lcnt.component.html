@@ -438,7 +438,7 @@
         <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Địa điểm quy mô dự án </nz-form-label>
-            <textarea rows="3" nz-input formControlName="dienGiai"></textarea>
+            <textarea [readonly]="isView" rows="3" nz-input formControlName="dienGiai"></textarea>
           </nz-form-item>
         </div>
       </div>

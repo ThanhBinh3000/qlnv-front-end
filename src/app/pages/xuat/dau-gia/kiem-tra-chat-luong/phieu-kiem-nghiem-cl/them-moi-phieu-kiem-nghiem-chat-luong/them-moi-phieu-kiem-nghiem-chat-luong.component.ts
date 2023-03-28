@@ -117,6 +117,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let res = await this.bienBanLayMauXhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       data = res.data?.content;
+      console.log(data, 555);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -130,8 +131,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzFooter: null,
       nzComponentParams: {
         dataTable: data,
-        dataHeader: ['Số quyết định', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuong'],
+        dataHeader: ['Số QĐ giao NV Xh', 'Số BB lấy mẫu/bàn giao mẫu', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng'],
+        dataColumn: ['soQd', 'soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuong'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {

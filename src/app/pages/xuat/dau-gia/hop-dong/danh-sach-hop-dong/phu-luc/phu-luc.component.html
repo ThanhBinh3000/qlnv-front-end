@@ -94,7 +94,7 @@
             </div>
         </form>
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Điều chỉnh thời gian thực hiện'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'ĐIỀU CHỈNH THỜI GIAN THỰC HIỆN'" [nzActive]="true">
                 <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
                     <div nz-row [nzGutter]="24">
                         <div nz-col [nzSpan]="9">
@@ -153,20 +153,18 @@
             </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Điều chỉnh địa điểm giao, nhận hàng'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'ĐIỀU CHỈNH ĐỊA ĐIỂM GIAO, NHẬN HÀNG'" [nzActive]="true">
                 <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
                     <thead>
                         <tr>
                             <th style="width: 2%;">STT</th>
-                            <th width="300px">Địa điểm trước khi điều chỉnh</th>
-                            <th width="300px">Địa chỉ trước khi điều chỉnh</th>
-                            <th width="300px">Địa điểm sau khi điều chỉnh</th>
-                            <th width="300px">Địa chỉ sau điều chỉnh</th>
-                            <th width="300px">Số lượng mua</th>
-                            <th width="300px">Đơn giá đã bao gồm VAT(đ/kg)</th>
-                            <th width="300px">Thành tiền (đồng)</th>
-                            <th width="300px">Bằng chữ</th>
+                            <th>Chi cục</th>
+                            <th nzWidth="40%">Địa chỉ</th>
+                            <th>Số lượng mua</th>
+                            <th>Đơn giá đã bao gồm VAT(đ/kg)</th>
+                            <th>Thành tiền (đồng)</th>
+                            <th>Bằng chữ</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -174,11 +172,6 @@
                             <tr>
                                 <td class="text-center">{{i + 1}}</td>
                                 <td>{{data.tenDviHd}}</td>
-                                <td>{{data.diaChiHd}}</td>
-                                <td> <nz-select [(ngModel)]=data.maDvi (ngModelChange)="onChangeDiaChi($event, i)">
-                                        <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi"
-                                            [nzLabel]="p.tenDvi"></nz-option>
-                                    </nz-select> </td>
                                 <td>{{data.diaChi}}</td>
                                 <td>{{data.soLuong * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
@@ -192,7 +185,7 @@
             </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Điều chỉnh khác'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'ĐIỀU CHỈNH KHÁC'" [nzActive]="true">
                 <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
                     <div nz-row [nzGutter]="24">
                         <div nz-col [nzSpan]="24">

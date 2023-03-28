@@ -78,7 +78,7 @@
                         <div nz-col [nzSpan]="24">
                             <div class="tong-hop-button group-button-search mt-16">
                                 <button class="btn btn-main btn-sm waves-effect waves-light"
-                                    (click)="tongHopDeXuatTuCuc()" *ngIf="!formData.value.id">
+                                    (click)="tongHopDeXuatTuCuc($event)" *ngIf="!formData.value.id">
                                     <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
                                     <span>Tổng hợp KH bán đấu giá</span>
                                 </button>
@@ -149,7 +149,6 @@
                             <th>Trích yếu</th>
                             <th>SL đơn vị tài sản</th>
                             <th>Trạng thái</th>
-                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -161,11 +160,6 @@
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.soDviTsan}}</td>
                             <td>{{ data.tenTrangThai}}</td>
-                            <td>
-                                <a (click)="showDetail($event,data.idDxHdr)">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                            </td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -182,6 +176,6 @@
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-    <app-them-quyet-dinh-ban-dau-gia [id]="idSelected" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
+    <app-them-quyet-dinh-ban-dau-gia [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
     </app-them-quyet-dinh-ban-dau-gia>
 </div>

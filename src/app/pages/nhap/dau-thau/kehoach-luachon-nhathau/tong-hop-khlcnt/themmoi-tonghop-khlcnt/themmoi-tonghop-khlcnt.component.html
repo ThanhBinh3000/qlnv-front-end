@@ -32,7 +32,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="namKhoach">
+              <nz-select [nzDisabled]="isView" formControlName="namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -42,7 +42,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
               </nz-input-group>
             </nz-form-control>
@@ -52,7 +52,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : selectHangHoa()">
                 <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
               </nz-input-group>
             </nz-form-control>
@@ -62,7 +62,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà thầu </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="pthucLcnt" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="pthucLcnt" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -73,7 +73,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Hình thức lựa chọn nhà thầu </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="hthucLcnt" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="hthucLcnt" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -84,7 +84,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiHdong" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="loaiHdong" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -95,7 +95,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Nguồn vốn </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isView" formControlName="nguonVon" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -156,7 +156,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <textarea formControlName="noiDung" nz-input [rows]="3"
-                [readonly]="formData.value.trangThai == '00'"></textarea>
+                [readonly]="isView || formData.value.trangThai == '00'"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -297,7 +297,7 @@
         </tr>
       </tbody>
     </nz-table>
-    <app-themmoi-kehoach-lcnt *ngIf="idRowSelect" [loaiVthhInput]="loaiVthh" [idInput]="idRowSelect"
+    <app-themmoi-kehoach-lcnt *ngIf="idRowSelect" [isView]="isView" [loaiVthhInput]="loaiVthh" [idInput]="idRowSelect"
       [showFromTH]="true">
     </app-themmoi-kehoach-lcnt>
   </nz-card>

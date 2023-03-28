@@ -12,12 +12,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { DatePipe } from '@angular/common';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -70,7 +70,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       tenLoaiVthh: ['', [Validators.required]],
       tenCloaiVthh: ['', [Validators.required]],
       trangThai: [''],
-      tenTrangThai: ['Chưa Tạo QĐ']
+      tenTrangThai: ['Chưa Tạo QĐ'],
+      typeLoaiVthh: []
     })
   }
 
@@ -108,7 +109,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-  async tongHopDeXuatTuCuc() {
+  async tongHopDeXuatTuCuc($event) {
     await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
@@ -132,6 +133,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTable = dataDetail.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showDetail($event, this.dataTable[0].idDxHdr)
+        }
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -148,6 +152,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   async save() {
     let body = this.formData.value;
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      body.typeLoaiVthh = LOAI_HANG_DTQG.VAT_TU;
+    }
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
       this.quayLai();

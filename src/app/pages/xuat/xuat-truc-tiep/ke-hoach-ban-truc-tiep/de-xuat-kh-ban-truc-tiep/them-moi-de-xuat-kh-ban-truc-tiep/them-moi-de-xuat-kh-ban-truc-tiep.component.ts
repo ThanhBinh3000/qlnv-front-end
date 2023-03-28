@@ -484,7 +484,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["soDxuat"].clearValidators();
       this.formData.controls["trichYeu"].clearValidators();
       this.formData.controls["ngayTao"].clearValidators();
-      this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
+      this.formData.controls["soQdCtieu"].clearValidators();
       this.formData.controls["thoiGianDuKien"].clearValidators();
       this.formData.controls["tgianDkienTu"].clearValidators();
       this.formData.controls["tgianDkienDen"].clearValidators();

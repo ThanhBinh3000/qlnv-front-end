@@ -85,6 +85,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         stk: [],
         fax: [],
         moTai: [],
+        uyQuyen: [],
 
         tenNhaThau: [''],
         diaChiNhaThau: [],
@@ -93,6 +94,8 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         chucVuNhaThau: [''],
         sdtNhaThau: [''],
         stkNhaThau: [''],
+        faxNhaThau: [''],
+        moTaiNhaThau: [''],
 
         loaiVthh: [''],
         cloaiVthh: [''],
