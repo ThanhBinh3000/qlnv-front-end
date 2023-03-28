@@ -11,13 +11,33 @@ import { XayDungPhuongAnModule } from "./xay-dung-phuong-an/xay-dung-phuong-an.m
 import { QuyetDinhGnvXuatHangModule } from "./quyet-dinh-gnv-xuat-hang/quyet-dinh-gnv-xuat-hang.module";
 import { KiemTraChatLuongModule } from "./kiem-tra-chat-luong/kiem-tra-chat-luong.module";
 import { XuatKhoModule } from "./xuat-kho/xuat-kho.module";
+import {TongHopPhuongAnComponent} from "./tong-hop-phuong-an/tong-hop-phuong-an.component";
+import {
+  ThongTinTongHopPhuongAnComponent
+} from "./tong-hop-phuong-an/thong-tin-tong-hop-phuong-an/thong-tin-tong-hop-phuong-an.component";
+import {
+  QuyetDinhPheDuyetPhuongAnComponent
+} from "./quyet-dinh-phe-duyet-phuong-an/quyet-dinh-phe-duyet-phuong-an.component";
+import {
+  ThongTinQuyetDinhPheDuyetPhuongAnComponent
+} from "./quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an.component";
+import {NzStatisticModule} from "ng-zorro-antd/statistic";
+import {NzPipesModule} from "ng-zorro-antd/pipes";
 
 @NgModule({
   declarations: [
     CuuTroVienTroComponent,
+    TongHopPhuongAnComponent,
+    ThongTinTongHopPhuongAnComponent,
+    QuyetDinhPheDuyetPhuongAnComponent,
+    ThongTinQuyetDinhPheDuyetPhuongAnComponent
   ],
   imports: [
     CommonModule,
+    ComponentsModule,
+    DirectivesModule,
+    NzStatisticModule,
+    NzPipesModule,
     CuuTroVienTroRoutingModule,
     ComponentsModule,
     DirectivesModule,
@@ -30,6 +50,10 @@ import { XuatKhoModule } from "./xuat-kho/xuat-kho.module";
   ],
   exports: [
     CuuTroVienTroComponent,
+    TongHopPhuongAnComponent,
+    ThongTinTongHopPhuongAnComponent,
+    QuyetDinhPheDuyetPhuongAnComponent,
+    ThongTinQuyetDinhPheDuyetPhuongAnComponent
   ]
 })
 export class CuuTroVienTroModule {

@@ -60,16 +60,16 @@
       <h3 class="text-uppercase">Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_EXP')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM')
           && userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
@@ -206,16 +206,16 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XEM'))
-              || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XEM') && (data.trangThai == STATUS.BAN_HANH))"
+              <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM'))
+              || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM') && (data.trangThai == STATUS.BAN_HANH))"
                 (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM') && (data.trangThai == STATUS.DU_THAO))"
+              <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && (data.trangThai == STATUS.DU_THAO))"
                 (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA') && (data.trangThai == STATUS.DU_THAO))"
+              <a *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XOA') && (data.trangThai == STATUS.DU_THAO))"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
