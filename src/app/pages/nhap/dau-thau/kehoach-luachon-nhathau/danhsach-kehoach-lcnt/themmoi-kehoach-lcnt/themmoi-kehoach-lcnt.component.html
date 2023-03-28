@@ -191,7 +191,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="userService.isCuc() || showFromTH">
+        <div nz-col [nzSpan]="6" *ngIf="(userService.isCuc() || userService.isTongCuc || showFromTH) && !this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -201,7 +201,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
+        <div nz-col [nzSpan]="6" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -392,10 +392,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="%">
-                <nz-input-number nz-input [nzSize]="'small'" formControlName="vat" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
+              <span class="blue-text">{{formData.value.vat ? formData.value.vat + '%' : ''}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -415,11 +412,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongMucDtDx" [nzSize]="'small'"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
+              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -427,11 +420,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
-                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                </nz-input-number>
-              </nz-input-group>
+              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -449,7 +438,7 @@
         <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Địa điểm quy mô dự án </nz-form-label>
-            <textarea rows="3" nz-input formControlName="dienGiai"></textarea>
+            <textarea [readonly]="isView" rows="3" nz-input formControlName="dienGiai"></textarea>
           </nz-form-item>
         </div>
       </div>
@@ -484,7 +473,7 @@
           <th>Địa điểm nhập kho</th>
           <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
           <th>Đã lên kế hoạch mua</th>
-          <th>SL nhập (Tấn)</th>
+          <th>SL nhập (kg)</th>
           <th>Đơn giá đề xuất (đ)</th>
           <th>Thành tiền tạm tính (đ)</th>
           <th>Đơn giá được duyệt bao gồm VAT (đ/kg)</th>
@@ -535,6 +524,15 @@
           </ng-container>
         </ng-container>
       </tbody>
+      <tr *ngIf="listDataGroup.length > 0">
+        <td></td>
+        <td></td>
+        <td colspan="4" class="first-last-row-table background-last-row text-left blue-text">Tổng</td>
+        <td class="background-last-row text-left blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+        <td class="background-last-row text-left blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+      </tr>
     </nz-table>
     <!-- END TABLE LƯƠNG THỰC  -->
 

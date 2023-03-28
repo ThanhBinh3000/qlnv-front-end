@@ -17,7 +17,6 @@ import { STATUS } from "../../../../../../constants/status";
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -32,6 +31,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
+  @Input() idTh: number = 0;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -124,6 +124,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       await Promise.all([
         this.bindingDataTongHop(this.dataTongHop),
       ]);
+      if (this.idTh) {
+        await this.selectMaTongHop(this.idTh)
+      }
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -246,28 +249,32 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.formData.patchValue({
-          cloaiVthh: data.cloaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tchuanCluong: data.tchuanCluong,
-          soQdCc: data.soQdPd,
-          idThHdr: event,
-          idTrHdr: null,
-          soTrHdr: null,
-        })
-        for (let item of data.children) {
-          await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              const dataRes = res.data;
-              dataRes.idDxHdr = dataRes.id;
-              this.danhsachDx.push(dataRes);
-            }
+        if (data.idQdPd) {
+          this.loadChiTiet(data.idQdPd)
+        } else {
+          this.formData.patchValue({
+            cloaiVthh: data.cloaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            loaiVthh: data.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            tchuanCluong: data.tchuanCluong,
+            soQdCc: data.soQdPd,
+            idThHdr: event,
+            idTrHdr: null,
+            soTrHdr: null,
           })
-        };
-        this.dataInput = null;
-        this.dataInputCache = null;
+          for (let item of data.children) {
+            await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                const dataRes = res.data;
+                dataRes.idDxHdr = dataRes.id;
+                this.danhsachDx.push(dataRes);
+              }
+            })
+          };
+          this.dataInput = null;
+          this.dataInputCache = null;
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

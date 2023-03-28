@@ -43,7 +43,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
   styleUrls: ['./chi-tiet-bang-ke-can.component.scss']
 })
 export class ChiTietBangKeCanComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -78,6 +78,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listKieuNhapXuat: any[] = [];
   datePipe = new DatePipe('en-US');
   tongSLbangKeDtl = 0;
+  tongSl = 0;
   tongSLCuuTro = 0;
   tongTien = 0;
   tongSLCuuTroDtl = 0;
@@ -518,7 +519,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.formData.value.bangKeDtl = [...this.formData.value.bangKeDtl, this.bangKeDtlCreate];
       this.clearRow();
       this.tinhTong();
-      console.log(this.formData.value, '91991919')
     }
   }
 
@@ -670,6 +670,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     let dtl = cloneDeep(this.formData.value.bangKeDtl);
     let tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
     let tongTrongLuongBaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongBaoBi, 0);
+    let tongSl = dtl.reduce((prev, cur) => prev + cur.soLuong, 0);
     let tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
 
     this.formData.patchValue({

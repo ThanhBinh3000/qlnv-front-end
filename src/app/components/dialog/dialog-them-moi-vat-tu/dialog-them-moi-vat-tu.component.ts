@@ -13,6 +13,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { formatNumber } from "@angular/common";
 
 @Component({
   selector: 'dialog-them-moi-vat-tu',
@@ -33,6 +34,10 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   userInfo: UserLogin;
   donGiaVat: number = 0;
   giaToiDa: any;
+  formattedThanhTienDx: string = '0';
+  formattedThanhTien: string = '0';
+  formattedSoLuong: string = '0';
+  formattedDonGiaVat: string = '0';
 
   constructor(
     private _modalRef: NzModalRef,
@@ -112,16 +117,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         donGiaDx: this.dataEdit.donGiaDx,
         thanhTien: this.dataEdit.thanhTien,
       })
+      this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1' ) : '0';
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
       this.listOfData.forEach((item) => {
-        item.thanhTienDx = item.soLuong * this.formData.get('donGiaDx').value * 1000
-        item.thanhTienQd = item.soLuong * this.formData.get('donGiaVat').value * 1000
+        item.thanhTienDx = item.soLuong * this.formData.get('donGiaDx').value
+        item.thanhTienQd = item.soLuong * this.formData.get('donGiaVat').value
       })
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
       })
+      this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1' ) : '0';
     }
     this.checkDisabledSave();
   }
@@ -158,9 +165,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   async getGiaToiDa() {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh);
+    let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, this.userInfo.MA_DVI);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
+      this.giaToiDa = res.data ? formatNumber(res.data, 'vi_VN', '1.0-1' ) : '0';
     }
   }
 
@@ -218,6 +225,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
       this.thongtinDauThau.idVirtual = new Date().getTime();
       this.thongtinDauThau.maDvi = this.formData.get('maDvi').value;
+      this.calculatorTongThanhTien()
       this.listOfData = [...this.listOfData, this.thongtinDauThau];
       this.updateEditCache();
       this.thongtinDauThau = new DanhSachGoiThau();
@@ -266,19 +274,21 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaVat').value * 1000,
+        +this.formData.get('donGiaVat').value,
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
     });
+    this.formattedThanhTien = this.formData.get('thanhTien') ? formatNumber(this.formData.get('thanhTien').value, 'vi_VN', '1.0-1' ) : '0';
   }
 
   calculatorThanhTienDx() {
     this.formData.patchValue({
       thanhTienDx:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaDx').value * 1000,
+        +this.formData.get('donGiaDx').value,
     });
+    this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1' ) : '0';
   }
 
   calculator() {
@@ -288,6 +298,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   calculatorEdit(i: number) {
     this.listOfData[i].thanhTienDx = this.listOfData[i].soLuong * this.formData.get('donGiaDx').value
     this.listOfData[i].thanhTienQd = this.listOfData[i].soLuong * this.formData.get('donGiaDx').value
+  }
+
+  calculatorTongThanhTien () {
+    this.calculatorThanhTien();
+    this.calculatorThanhTienDx();
   }
 
 
@@ -339,6 +354,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('soLuong').setValue(sum);
+      this.formattedSoLuong = this.formData.get('soLuong') ? formatNumber(this.formData.get('soLuong').value, 'vi_VN', '1.0-1' ) : '0';
       this.calculatorThanhTien();
       this.calculatorThanhTienDx();
       return sum;

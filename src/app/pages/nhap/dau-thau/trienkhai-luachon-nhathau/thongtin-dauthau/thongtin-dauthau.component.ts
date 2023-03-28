@@ -60,7 +60,9 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     ngayQd: '',
     loaiVthh: '',
     maDvi: '',
-    trichYeu: ''
+    trichYeu: '',
+    soQdPdKhlcnt: '',
+    soQdPdKqlcnt: ''
   };
 
   filterTable: any = {
@@ -80,6 +82,8 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   dataTableAll: any[] = [];
   listVthh: any[] = [];
   allChecked = false;
+  tuNgayQd: Date | null = null;
+  denNgayQd: Date | null = null;
   indeterminate = false;
   dataTable: any[] = [];
   page: number = 1;
@@ -120,16 +124,28 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
   }
 
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayQd) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayQd.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayQd) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayQd.getTime();
+  };
+
   async search() {
     this.dataTable = [];
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD 00:00:00')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD 24:59:59')
-        : null,
+      tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
       loaiVthh: this.loaiVthh,
+      soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+      soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
@@ -261,17 +277,15 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayQd: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayQd: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
+          tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
           loaiVthh: this.searchFilter.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
-          maDvi: this.userInfo.MA_DVI,
+          soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+          soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
           soQd: this.searchFilter.soQd,
+          maDvi: this.userInfo.MA_DVI,
         }
         this.thongTinDauThauService
           .export(body)
