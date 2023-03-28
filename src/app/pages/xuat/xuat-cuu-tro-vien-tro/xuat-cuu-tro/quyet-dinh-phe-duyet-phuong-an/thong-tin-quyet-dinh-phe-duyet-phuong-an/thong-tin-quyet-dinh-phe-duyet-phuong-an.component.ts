@@ -321,8 +321,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   async save(isGuiDuyet?) {
     await this.spinner.show();
     this.setValidator(isGuiDuyet)
-    console.log(this.formData.value, 'this.formData.value')
-    console.log(this.tongSoLuongDxuat, 'listSoLuong')
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
@@ -331,7 +329,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     body.tongSoLuong = this.tongSoLuongDxuat;
 
     body.canCu = this.canCu;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKem = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
