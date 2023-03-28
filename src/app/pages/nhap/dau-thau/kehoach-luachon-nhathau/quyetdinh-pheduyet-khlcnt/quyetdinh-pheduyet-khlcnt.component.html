@@ -69,7 +69,7 @@
             <th>Số KH/tờ trình</th>
             <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
-            <th *ngIf="userService.isCuc()" class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
+            <th *ngIf="userService.isCuc() || userService.isTongCuc()" class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
@@ -180,10 +180,14 @@
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.soTrHdr }}</td>
-            <td *ngIf="userService.isTongCuc()">{{ data.idThHdr }}</td>
+            <td>
+              <a style="color: blue; font-weight: bold;" (click)="openDxKhlcntModal(data.idTrHdr)">{{ data.soTrHdr}}</a>
+            </td>
+            <td *ngIf="userService.isTongCuc()">
+              <a style="color: blue; font-weight: bold;" (click)="openTHopKhlcntModal(data.idThHdr)">{{ data.idThHdr}}</a>
+            </td>
             <td>{{data.tenLoaiVthh}}</td>
-            <td *ngIf="userService.isCuc()">{{data.tenCloaiVthh}}</td>
+            <td *ngIf="userService.isCuc() || userService.isTongCuc()">{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
             <td></td>
@@ -191,7 +195,7 @@
             <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
+              <a (click)="detail(data)" *ngIf="data.trangThai == STATUS.BAN_HANH || (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.BAN_HANH))">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
@@ -232,3 +236,29 @@
   <app-themmoi-quyetdinh-khlcnt [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-quyetdinh-khlcnt>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openTHopKhlcnt"
+          (nzOnCancel)="closeTHopKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-tonghop-khlcnt [isView]="true" [id]="idThHdr" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-tonghop-khlcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeTHopKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxKhlcnt"
+          (nzOnCancel)="closeDxKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-kehoach-lcnt [isView]="true" [idInput]="idDx" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+    </app-themmoi-kehoach-lcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
