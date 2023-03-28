@@ -273,28 +273,19 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.tenDvi = this.formKho.value.tenNganlo;
       bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNganlo;
       bodyDvi.diaChi = this.formKho.value.diaChi;
-      this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+      let body = this.formKho.value;
+      body.ngankhoId = this.idReq
+      body.maNganlo = this.formKho.value.maCha +  this.formKho.value.maNganlo;
+      body.fileDinhkems = this.listFileDinhKem;
+      body.dviReq = bodyDvi
+      this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          let body = this.formKho.value;
-          body.ngankhoId = this.idReq
-          body.maNganlo = this.formKho.value.maCha +  this.formKho.value.maNganlo;
-          body.fileDinhkems = this.listFileDinhKem;
-          this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          })
-          this.modal.close(true);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.modal.close(true)
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
-      }).catch((e) => {
-        console.error('error: ', e);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        ;
-      });
+      })
     }
     this.spinner.hide()
   }
@@ -461,7 +452,7 @@ export class ThemMoiKhoComponent implements OnInit {
       case 4 : {
         this.formKho.controls['maNganlo'].setValidators([Validators.required])
         this.formKho.controls['tenNganlo'].setValidators([Validators.required])
-        this.formKho.controls['tinhTrangId'].setValidators([Validators.required])
+        this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         break;
       }
     }

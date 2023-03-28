@@ -26,8 +26,7 @@ export class MangLuoiKhoService extends BaseService {
   }
 
   updateKho(type, body): Promise<OldResponseData> {
-    // const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/cap-nhat`;
-    const url = `http://localhost:3333/${this.table}/${type}/cap-nhat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
