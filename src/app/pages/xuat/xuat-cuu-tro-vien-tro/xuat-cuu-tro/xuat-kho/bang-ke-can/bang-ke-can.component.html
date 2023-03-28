@@ -41,7 +41,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách bảng kê cân hàng</h3>
+      <h3 class="text-uppercase">{{loaiVthh == '02' ? 'Danh sách bảng kê cân hàng' : 'Bảng kê vật tư'}}</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XK_LT_BKCH_XOA')">
@@ -188,6 +188,6 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-chi-tiet-bang-ke-can [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+  <app-chi-tiet-bang-ke-can [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView" (showListEvent)="showList()">
   </app-chi-tiet-bang-ke-can>
 </div>
