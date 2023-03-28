@@ -2,11 +2,11 @@
 <!-- menu xuat cap -->
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPACHUYENXC')">
       Quyết định PA cứu trợ, viện trợ được chuyển xuất cấp
     </li>
     <li nz-menu-item (click)="selectTab(1)"
-      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC') && userService.isTongCuc()">
       Quyết định xuất cấp
     </li>
     <!--    <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA')">-->
@@ -15,10 +15,10 @@
     <!--    <li nz-menu-item (click)="selectTab(4)">-->
     <!--      Quyết định giao nhiệm vụ xuất hàng-->
     <!-- </li> -->
-    <li nz-menu-item (click)="selectTab(3)">
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL')">
       Kiểm tra chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(4)">
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK')">
       Xuất kho
     </li>
   </ul>
