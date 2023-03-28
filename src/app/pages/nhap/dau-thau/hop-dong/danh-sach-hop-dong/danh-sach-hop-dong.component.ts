@@ -10,9 +10,12 @@ import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
 import { STATUS } from "../../../../../constants/status";
-import { BaseComponent } from 'src/app/components/base/base.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -20,7 +23,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./danh-sach-hop-dong.component.scss'],
 })
 
-export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
+export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   ngayKy: string;
@@ -74,6 +77,9 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
   ];
 
   constructor(
+    spinner: NgxSpinnerService,
+    notification: NzNotificationService,
+    modal: NzModalService,
     private httpClient: HttpClient,
     private storageService: StorageService,
     public userService: UserService,
@@ -81,7 +87,7 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
     private thongTinHopDong: ThongTinHopDongService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
-    super(httpClient, storageService, thongTinHopDong);
+    super(httpClient, storageService, notification, spinner, modal, thongTinHopDong);
   }
 
   async ngOnInit() {

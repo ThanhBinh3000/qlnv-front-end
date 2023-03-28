@@ -5,7 +5,7 @@
             Đề xuất KH bán trực tiếp
         </li>
         <li nz-menu-item (click)="selectTab(1)"
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP') && this.userService.isTongCuc() && this.inputLoaiVthh != '02'">
+            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP') && this.userService.isTongCuc()">
             Tổng hợp đề xuất KH bán trực tiếp
         </li>
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT')">

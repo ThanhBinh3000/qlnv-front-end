@@ -15,14 +15,11 @@ import { NzPipesModule } from "ng-zorro-antd/pipes";
     DirectivesModule,
     NzStatisticModule,
     NzPipesModule,
-    QuyetDinhPheDuyetPhuongAnModule,
   ],
   declarations: [
-    TongHopPhuongAnComponent,
-    ThongTinTongHopPhuongAnComponent,
+
   ],
   exports: [
-    TongHopPhuongAnComponent,
   ]
 })
 export class TongHopPhuongAnModule {

@@ -8,6 +8,7 @@ import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-tong-hop',
@@ -16,6 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  isQuyetDinh: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -33,7 +35,8 @@ export class TongHopComponent extends Base2Component implements OnInit {
       tenLoaiVthh: '',
       cloaiVthh: '',
       tenCloaiVthh: '',
-      noiDungThop: ''
+      noiDungThop: '',
+      typeLoaiVthh: ''
     })
   }
 
@@ -50,6 +53,15 @@ export class TongHopComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        this.formData.patchValue({
+          typeLoaiVthh: LOAI_HANG_DTQG.VAT_TU
+        })
+      } else {
+        this.formData.patchValue({
+          loaiVthh: this.loaiVthh,
+        })
+      }
       await this.search();
       this.spinner.hide();
     }
@@ -60,4 +72,23 @@ export class TongHopComponent extends Base2Component implements OnInit {
     }
   }
 
+  taoQdinh(id: number) {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+    this.idSelected = id;
+  }
+
+  showTongHop() {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = false;
+    this.search;
+  }
 }

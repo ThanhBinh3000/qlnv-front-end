@@ -346,8 +346,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
 
         this.phuongAnRow.loaiVthh = cloneDeep(this.formData.value.loaiVthh);
-        this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc)?.maDvi;
         if (data) {
+          this.phuongAnRow.maDviCuc = this.dsDonVi.find(s => s.tenDvi === data.tenCuc)?.maDvi;
           this.changeCuc(this.phuongAnRow.maDviCuc);
           this.phuongAnRow.noiDung = data.childData[0].noiDung;
           this.phuongAnRow.soLuongXuatCuc = data.soLuongXuatCuc;
