@@ -19,7 +19,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 
 export class ItemData {
   id!: any;
@@ -648,8 +648,8 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
     // if (loaiPa) {
     //   if (loaiPa == 1) {
-        this.dataChange.emit(request1);
-      // }
+    this.dataChange.emit(request1);
+    // }
 
     //   if (loaiPa == 2) {
     //     this.dataChange.emit(request2);
@@ -894,7 +894,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
       const data = this.lstCtietBcao[index];
       this.lstCtietBcao[index] = {
-        ...this.initItem,
+        ...new ItemData(),
         id: data.id,
         stt: data.stt,
         maNdung: data.maNdung,
@@ -903,9 +903,11 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].nguonKhac += item.nguonKhac;
-          this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
-          this.lstCtietBcao[index].tongCong += item.tongCong;
+          this.lstCtietBcao[index].nguonKhac = sumNumber([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]) ;
+          this.lstCtietBcao[index].nguonNsnn = sumNumber([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]) ;
+          this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]) ;
+          // this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
+          // this.lstCtietBcao[index].tongCong += item.tongCong;
         }
       })
       stt = this.getHead(stt);
@@ -918,19 +920,12 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     this.total.nguonNsnn = 0;
     this.total.tongCong = 0;
     this.lstCtietBcao.forEach(item => {
-      this.total.nguonKhac += item.nguonKhac;
-      this.total.nguonNsnn += item.nguonNsnn;
-      this.total.nguonKhac += item.nguonKhac;
+      if (item.level == 0) {
+        this.total.nguonKhac += item.nguonKhac;
+        this.total.nguonNsnn += item.nguonNsnn;
+        this.total.nguonKhac += item.nguonKhac;
+      }
     })
-    if (
-      this.total.nguonKhac == 0,
-      this.total.nguonNsnn == 0,
-      this.total.tongCong == 0
-    ) {
-      this.total.nguonKhac = null,
-        this.total.nguonNsnn = null,
-        this.total.tongCong = null
-    }
   };
 
   updateEditCache(): void {
@@ -1183,8 +1178,8 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    this.sum(this.lstCtietBcao[index].stt);
     this.updateEditCache();
+    this.sum(this.lstCtietBcao[index].stt);
   };
 
   deleteFile(id: string): void {

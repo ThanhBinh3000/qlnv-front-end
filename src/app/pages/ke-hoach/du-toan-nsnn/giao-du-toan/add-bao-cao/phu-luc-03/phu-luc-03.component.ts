@@ -156,7 +156,7 @@ export class PhuLuc03Component implements OnInit {
         item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
         // item.maDviTinh = dinhMuc?.donViTinh;
         item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
-        item.namDtCphiNgoaiCkhoBq = divNumber(item.namDtCphiNgoaiCkhoTt, item.namDtCphiTaiCkhoSl);
+        item.namDtCphiNgoaiCkhoTt = mulNumber(item.namDtCphiNgoaiCkhoBq, item.namDtCphiTaiCkhoSl);
         item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
         // }
       })
@@ -442,7 +442,7 @@ export class PhuLuc03Component implements OnInit {
   }
   changeModel(id: string): void {
     this.editCache[id].data.namDtCphiTaiCkhoTt = mulNumber(this.editCache[id].data.namDtCphiTaiCkhoSl, this.editCache[id].data.namDtCphiTaiCkhoDm);
-    this.editCache[id].data.namDtCphiNgoaiCkhoBq = divNumber(this.editCache[id].data.namDtCphiNgoaiCkhoTt, this.editCache[id].data.namDtCphiTaiCkhoSl);
+    this.editCache[id].data.namDtCphiNgoaiCkhoTt  = mulNumber(this.editCache[id].data.namDtCphiNgoaiCkhoBq, this.editCache[id].data.namDtCphiTaiCkhoSl);
     this.editCache[id].data.namDtTcong = sumNumber([this.editCache[id].data.namDtCphiNgoaiCkhoTt, this.editCache[id].data.namDtCphiTaiCkhoTt]);
   }
 
@@ -467,8 +467,8 @@ export class PhuLuc03Component implements OnInit {
           // this.lstCtietBcao[index].namDtCphiTaiCkhoDm = sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoDm])
           this.lstCtietBcao[index].namDtCphiTaiCkhoTt = sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoSl, item.namDtCphiTaiCkhoSl]) * sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoDm])
           this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt = sumNumber([this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
-          this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq = this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt / sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoSl, item.namDtCphiTaiCkhoSl])
-          // this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq = sumNumber([this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq, item.namDtCphiNgoaiCkhoBq])
+          // this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq = this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt / sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoSl, item.namDtCphiTaiCkhoSl])
+          this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq = sumNumber([this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq, item.namDtCphiNgoaiCkhoBq])
           this.lstCtietBcao[index].namDtTcong = this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt + this.lstCtietBcao[index].namDtCphiTaiCkhoTt
         }
       })

@@ -82,8 +82,8 @@
                 <th width="175px">Mã phương án</th>
                 <th width="175px">Năm phương án</th>
                 <th width="175px">Ngày tạo</th>
-                <th width="175px">Nơi tạo</th>
-                <th width="175px">Trạng thái</th>
+                <!-- <th width="175px">Nơi tạo</th>
+                <th width="175px">Trạng thái</th> -->
               </tr>
             </thead>
             <tbody>
@@ -102,8 +102,8 @@
                 <td>{{maPa}}</td>
                 <td>{{namPa}}</td>
                 <td>{{ngayTao}}</td>
-                <td>{{getUnitName()}}</td>
-                <td>{{getStatusName()}}</td>
+                <!-- <td>{{getUnitName()}}</td>
+                <td>{{getStatusName()}}</td> -->
               </tr>
             </tbody>
           </nz-table>
@@ -146,17 +146,17 @@
                 </th>
               </tr> -->
               <tr>
-                <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
+                <!-- <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
                   <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
                     (nzOnConfirm)="deleteCol(item.maDvi)">
                     {{item.tenDvi}}
                   </th>
                 </ng-container>
-                <ng-template #nonDeleteCol>
+                <ng-template #nonDeleteCol> -->
                   <th *ngFor="let item of lstDvi">
-                    {{item.tenDvi}}
+                    {{getUnitName(item.maDvi)}}
                   </th>
-                </ng-template>
+                <!-- </ng-template> -->
               </tr>
             </thead>
             <tbody>

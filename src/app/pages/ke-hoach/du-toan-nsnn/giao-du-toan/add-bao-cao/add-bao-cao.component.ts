@@ -563,9 +563,14 @@ export class AddBaoCaoComponent implements OnInit {
               })
             }
           }
+
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
           const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04").lstCtietBcaos
           let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3").tongCong
+          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.1").tongCong
+          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.2").tongCong
+          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.3").tongCong
+          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.4").tongCong
           dataInfo.extraData.push({
             dtoanGiao: tongCong,
             id: uuid.v4() + "FE",
@@ -583,6 +588,82 @@ export class AddBaoCaoComponent implements OnInit {
             ],
             maNdung: "0.1.2.3",
             tongCong: soTranChi
+          })
+
+          dataInfo.extraData.push({
+            dtoanGiao: tongCong1N,
+            id: uuid.v4() + "FE",
+            stt: "0.1.2.3.2",
+            loaiPa: null,
+            nguonKhac: null,
+            nguonNsnn: null,
+            panDtCtietId: null,
+            lstCtietDvis: [
+              {
+                id: uuid.v4() + "FE",
+                maDviNhan: this.userInfo.MA_DVI,
+                soTranChi: tongPl1N
+              }
+            ],
+            maNdung: "0.1.2.3.2",
+            tongCong: tongPl1N
+          })
+
+          dataInfo.extraData.push({
+            dtoanGiao: tongCong1X,
+            id: uuid.v4() + "FE",
+            stt: "0.1.2.3.3",
+            loaiPa: null,
+            nguonKhac: null,
+            nguonNsnn: null,
+            panDtCtietId: null,
+            lstCtietDvis: [
+              {
+                id: uuid.v4() + "FE",
+                maDviNhan: this.userInfo.MA_DVI,
+                soTranChi: tongPl1X
+              }
+            ],
+            maNdung: "0.1.2.3.3",
+            tongCong: tongPl1X
+          })
+          
+          dataInfo.extraData.push({
+            dtoanGiao: tongCong2,
+            id: uuid.v4() + "FE",
+            stt: "0.1.2.3.4",
+            loaiPa: null,
+            nguonKhac: null,
+            nguonNsnn: null,
+            panDtCtietId: null,
+            lstCtietDvis: [
+              {
+                id: uuid.v4() + "FE",
+                maDviNhan: this.userInfo.MA_DVI,
+                soTranChi: tongPl2
+              }
+            ],
+            maNdung: "0.1.2.3.4",
+            tongCong: tongPl2
+          })
+
+          dataInfo.extraData.push({
+            dtoanGiao: tongCong3,
+            id: uuid.v4() + "FE",
+            stt: "0.1.2.3.1",
+            loaiPa: null,
+            nguonKhac: null,
+            nguonNsnn: null,
+            panDtCtietId: null,
+            lstCtietDvis: [
+              {
+                id: uuid.v4() + "FE",
+                maDviNhan: this.userInfo.MA_DVI,
+                soTranChi: tongPl3
+              }
+            ],
+            maNdung: "0.1.2.3.1",
+            tongCong: tongPl3
           })
         }
         break;

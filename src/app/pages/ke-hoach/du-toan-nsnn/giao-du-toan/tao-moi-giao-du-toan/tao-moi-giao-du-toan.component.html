@@ -61,7 +61,7 @@
         <div class="header-text">
           <div class="title-chi-tieu">
             <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-            <span>Phương án giao số kiểm tra trần chi (từ đơn vị cấp trên)</span>
+            <span>Phương án giao số kiểm tra trần chi cho các đơn vị</span>
           </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -82,8 +82,6 @@
                 <th width="175px">Mã phương án</th>
                 <th width="175px">Năm phương án</th>
                 <th width="175px">Ngày tạo</th>
-                <th width="175px">Nơi tạo</th>
-                <th width="175px">Trạng thái</th>
               </tr>
             </thead>
             <tbody>
@@ -102,8 +100,6 @@
                 <td>{{maPa}}</td>
                 <td>{{namPa}}</td>
                 <td>{{ngayTao}}</td>
-                <td>{{getUnitName()}}</td>
-                <td>{{getStatusName()}}</td>
               </tr>
             </tbody>
           </nz-table>
@@ -133,30 +129,16 @@
           <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
             <thead>
               <tr>
-                <th rowspan="2" nzWidth="50px">STT</th>
-                <th rowspan="2" nzWidth="350px">Nhóm</th>
+                <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                <th rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
                 <th rowspan="2">Tổng số</th>
                 <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
                 <th rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
               </tr>
-              <!-- <tr>
-                <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(item.maDvi)">
-                  {{item.tenDvi}}
-                </th>
-              </tr> -->
               <tr>
-                <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
-                  <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                    (nzOnConfirm)="deleteCol(item.maDvi)">
-                    {{item.tenDvi}}
-                  </th>
-                </ng-container>
-                <ng-template #nonDeleteCol>
-                  <th *ngFor="let item of lstDvi">
-                    {{item.tenDvi}}
-                  </th>
-                </ng-template>
+                <th *ngFor="let item of lstDvi">
+                  {{getUnitName(item.maDvi)}}
+                </th>
               </tr>
             </thead>
             <tbody>

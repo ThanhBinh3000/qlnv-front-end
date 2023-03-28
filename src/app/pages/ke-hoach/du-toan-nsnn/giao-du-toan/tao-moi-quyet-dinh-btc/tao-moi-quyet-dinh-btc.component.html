@@ -9,14 +9,6 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <!-- <ng-template #contentTemplate>
-                <div class="contentTemplate_chonpa">
-                    <a (click)="taoMoiPhuongAn(1)" class="contentTemplate_chonpa__con">1. Phương
-                        án phân bổ giao dự toán chi</a>
-                    <a (click)="taoMoiPhuongAn(2)" class="contentTemplate_chonpa__con">2. Phương
-                        án giao, điều chỉnh dự toán chi</a>
-                </div>
-            </ng-template> -->
             <button class="btn btn-main" nz-button (click)="taoMoiPhuongAn()" [hidden]="statusBtnNew">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Tạo phương án</span>
@@ -63,13 +55,9 @@
                                     {{maPa}}
                                 </td>
                                 <td>
-                                    <!-- <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [(ngModel)]="namPa"
-                                  [hidden]="status" [class]="namPa && namPa < 3000 && namPa > 999 ?'' : 'input-error-validate' ">
-                                </nz-input-number> -->
                                     {{namPa}}
                                 </td>
                                 <td>
-                                    <!-- <nz-date-picker class="search__input" [(ngModel)]="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker> -->
                                     {{ngayTao}}
                                 </td>
                             </tr>
@@ -182,9 +170,6 @@
                                             [class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) &&  editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'"
                                             [options]="amount" />
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td> -->
                                     <td [hidden]="status">
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -192,12 +177,6 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                    </td> -->
-                                    <!-- <td [hidden]="status">
-                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                            (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>

@@ -20,7 +20,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { NOI_DUNG } from './tao-moi-giao-dieu-chinh-du-toan.constant';
@@ -317,7 +317,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     } else {
       this.scrollX = (400 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
     }
-    this.sum1()
     this.getStatusButton();
     this.spinner.hide();
   };
@@ -1056,9 +1055,9 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   };
 
   // lấy tên đơn vị
-  getUnitName() {
-    return this.donVis.find((item) => item.maDvi == this.maDonViTao)?.tenDvi;
-  };
+  getUnitName(maDvi: string) {
+    return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+  }
 
   // lấy thông tin trạng thái PA
   getStatusName() {
@@ -1648,14 +1647,13 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   };
 
   // xóa cột
-  deleteCol(maDvi: string) {
-    this.lstCtietBcao.forEach(data => {
-      data.lstCtietDvis = data.lstCtietDvis.filter(e => e.maDviNhan != maDvi);
-    })
-    this.lstDviChon.push(this.lstDvi.find(e => e.maDvi == maDvi));
-    this.lstDvi = this.lstDvi.filter(e => e.maDvi != maDvi);
-    this.tinhTong()
-  };
+  // deleteCol(maDvi: string) {
+  //   this.lstCtietBcao.forEach(data => {
+  //     data.lstCtietDvis = data.lstCtietDvis.filter(e => e.maDviNhan != maDvi);
+  //   })
+  //   this.lstDviChon.push(this.lstDvi.find(e => e.maDvi == maDvi));
+  //   this.lstDvi = this.lstDvi.filter(e => e.maDvi != maDvi);
+  // };
 
   // thêm cột
   addCol(maDvi: string) {
@@ -1757,66 +1755,64 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
             this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e.soTranChi);
           })
+          this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong])
         }
       });
-      this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
-      })
       stt = this.getHead(stt);
     };
   };
 
-  sum1() {
-    this.lstCtietBcao.forEach(itm => {
-      let stt = this.getHead(itm.stt);
-      while (stt != '0') {
-        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-        const data = this.lstCtietBcao[index];
-        const mm: any[] = [];
-        data.lstCtietDvis.forEach(item => {
-          mm.push({
-            ...item,
-            soTranChi: 0,
-          })
-        });
-        this.lstCtietBcao[index] = {
-          id: data.id,
-          stt: data.stt,
-          level: data.level,
-          maNdung: data.maNdung,
-          tongCong: 0,
-          lstCtietDvis: mm,
-          checked: false,
-        };
-        this.lstCtietBcao.forEach(item => {
-          if (this.getHead(item.stt) == stt) {
-            item.lstCtietDvis.forEach(e => {
-              const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
-              if (e.soTranChi) {
-                this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
-              }
-            })
-          }
-        })
-        this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-          this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
-        })
-        stt = this.getHead(stt);
-      };
-    })
-  };
+  // sum1() {
+  //   this.lstCtietBcao.forEach(itm => {
+  //     let stt = this.getHead(itm.stt);
+  //     while (stt != '0') {
+  //       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+  //       const data = this.lstCtietBcao[index];
+  //       const mm: any[] = [];
+  //       data.lstCtietDvis.forEach(item => {
+  //         mm.push({
+  //           ...item,
+  //           soTranChi: 0,
+  //         })
+  //       });
+  //       this.lstCtietBcao[index] = {
+  //         id: data.id,
+  //         stt: data.stt,
+  //         level: data.level,
+  //         maNdung: data.maNdung,
+  //         tongCong: 0,
+  //         lstCtietDvis: mm,
+  //         checked: false,
+  //       };
+  //       this.lstCtietBcao.forEach(item => {
+  //         if (this.getHead(item.stt) == stt) {
+  //           item.lstCtietDvis.forEach(e => {
+  //             const ind = this.lstCtietBcao[index].lstCtietDvis.findIndex(i => i.maDviNhan == e.maDviNhan);
+  //             if (e.soTranChi) {
+  //               this.lstCtietBcao[index].lstCtietDvis[ind].soTranChi += Number(e?.soTranChi);
+  //             }
+  //           })
+  //         }
+  //       })
+  //       this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+  //         this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
+  //       })
+  //       stt = this.getHead(stt);
+  //     };
+  //   })
+  // };
 
   // tính tổng
-  tinhTong() {
-    this.lstCtietBcao.forEach(item => {
-      const sttItem = item.stt
-      const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
-      this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        this.lstCtietBcao[index].tongCong = 0
-        this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
-      })
-    })
-  };
+  // tinhTong() {
+  //   this.lstCtietBcao.forEach(item => {
+  //     const sttItem = item.stt
+  //     const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
+  //     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+  //       this.lstCtietBcao[index].tongCong = 0
+  //       this.lstCtietBcao[index].tongCong += Number(item.soTranChi);
+  //     })
+  //   })
+  // };
 
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
