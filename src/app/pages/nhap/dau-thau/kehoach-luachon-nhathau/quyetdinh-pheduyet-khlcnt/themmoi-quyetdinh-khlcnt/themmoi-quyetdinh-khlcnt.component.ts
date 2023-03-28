@@ -47,8 +47,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
-  isView: boolean;
+  @Input() isView: boolean;
   formData: FormGroup;
   formThongTinChung: FormGroup;
 
