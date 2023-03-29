@@ -31,8 +31,10 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   isView: boolean = true
   isQuyetDinh: boolean = false;
   qdPdKhlcntId: number = 0;
+  isQdPdKhlcntId: number = 0;
   dataTableDanhSachDX: any[] = [];
   formTraCuu: FormGroup;
+  formDataQd: FormGroup;
   isTongHop: boolean = false;
   tuNgayKy: Date | null = null;
   denNgayKy: Date | null = null;
@@ -62,6 +64,35 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       cloaiVthh: '',
       tenCloaiVthh: '',
       noiDung: ''
+    });
+    this.formTraCuu = this.fb.group({
+      loaiVthh: [null, [Validators.required]],
+      tenLoaiVthh: [null, [Validators.required]],
+      cloaiVthh: [null, [Validators.required]],
+      tenCloaiVthh: [null, [Validators.required]],
+      namKhoach: [dayjs().get('year'), [Validators.required]],
+      hthucLcnt: ['', [Validators.required]],
+      pthucLcnt: ['', [Validators.required]],
+      loaiHdong: ['', [Validators.required]],
+      nguonVon: ['', [Validators.required]],
+    });
+    this.formDataQd = this.fb.group({
+      id: [],
+      loaiVthh: [, [Validators.required]],
+      cloaiVthh: [, [Validators.required]],
+      namKhoach: [, [Validators.required]],
+      ngayTao: [, [Validators.required]],
+      noiDung: ['', [Validators.required]],
+      hthucLcnt: ['', [Validators.required]],
+      pthucLcnt: ['', [Validators.required]],
+      loaiHdong: ['', [Validators.required]],
+      nguonVon: ['', [Validators.required]],
+      ghiChu: ['',],
+      trangThai: [''],
+      tenLoaiVthh: [''],
+      tenCloaiVthh: [''],
+      tchuanCluong: [''],
+      soQdCc: [''],
     });
     this.filterTable = {
       id: '',
@@ -223,10 +254,11 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
   //   return endValue.getTime() <= this.tuNgayQd.getTime();
   // };
 
-  taoQdinh(data: any){
-    debugger
+  async taoQdinh(data: any){
     this.id = data.id
     this.idSelected = data.id;
+    this.isQdPdKhlcntId = data.qdPdKhlcntId
+    await this.loadChiTiet()
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
@@ -237,13 +269,13 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
 
 
   showTongHop() {
-    debugger
-    this.loadChiTiet()
+    this.search();
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[1];
     setActive.classList.add('ant-menu-item-selected');
+    this.isQdPdKhlcntId = 0;
     this.isQuyetDinh = false;
   }
   //
@@ -253,8 +285,8 @@ export class TongHopKhlcntComponent extends Base2Component implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
-        // this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
-        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
+        this.helperService.bidingDataInFormGroup(this.formDataQd, dataDetail);
         this.isTongHop = true;
       }
       else {

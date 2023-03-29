@@ -60,6 +60,7 @@ import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTr
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
   @Input() isViewDetail: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   maQd: string

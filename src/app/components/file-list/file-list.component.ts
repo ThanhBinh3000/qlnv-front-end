@@ -81,7 +81,6 @@ export class FileListComponent implements OnInit {
   }
 
   addFile() {
-    debugger
     if (this.isQdkqlcnt == false && (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '')) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng nhập file");
       return;
