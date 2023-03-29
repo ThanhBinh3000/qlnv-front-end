@@ -121,14 +121,19 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayTao"
-                                (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao)">
-                            </nz-date-picker>
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayTao"
+                                    (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))">
+                                </nz-date-picker>
+                            </nz-input-group>
                         </th>
                         <th *ngIf="userService.isCuc()">
-                            <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayPduyet"
-                                (ngModelChange)="filterInTable('ngayPduyet',filterTable.ngayPduyet)">
-                            </nz-date-picker>
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder=""
+                                    [(ngModel)]="filterTable.ngayPduyet"
+                                    (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))">
+                                </nz-date-picker>
+                            </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group>
@@ -137,9 +142,12 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayKyQd"
-                                (ngModelChange)="filterInTable('ngayKyQd',filterTable.ngayKyQd)">
-                            </nz-date-picker>
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder=""
+                                    [(ngModel)]="filterTable.ngayKyQd"
+                                    (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
+                                </nz-date-picker>
+                            </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group>
@@ -218,8 +226,8 @@
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
-                        <td>5</td>
-                        <td>3</td>
+                        <td>{{ data.slDviTsan }}</td>
+                        <td></td>
                         <td class="text-blue">{{ data.soQdCtieu}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThaiTh}}

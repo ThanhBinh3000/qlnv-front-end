@@ -97,11 +97,16 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       donGiaVat: [],
       tongDonGia: [],
       slDviTsan: [],
+      typeVthh: [''],
+      dviTinh: [''],
     });
   }
 
   async ngOnInit() {
     this.spinner.show();
+    this.formData.patchValue({
+      typeVthh: this.loaiVthhInput,
+    })
     this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
@@ -213,6 +218,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       if (data) {
         if (data.ma.startsWith('04')) {
           this.formData.patchValue({
+            // dviTinh: data.maDviTinh,
             cloaiVthh: data.ma,
             tenCloaiVthh: data.ten,
             loaiVthh: data.parent.ma,
@@ -224,6 +230,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
             tenCloaiVthh: data.cap == 3 ? data.ten : null,
             loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
             tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
+          });
+        }
+        if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.THOC)) {
+          this.formData.patchValue({
+            dviTinh: 'Kg',
+          });
+        } else {
+          this.formData.patchValue({
+            dviTinh: data.maDviTinh,
           });
         }
         let res = await this.dmTieuChuanService.getDetailByMaHh(
@@ -257,8 +272,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachXuatBanTrucTiep, index?: number) {
     $event.stopPropagation();
-    if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+    if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
       return;
     }
     const modalGT = this.modal.create({
@@ -274,7 +289,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKh: this.formData.get('namKh').value,
-        donGiaVat: this.formData.value.donGiaVat
+        donGiaVat: this.formData.value.donGiaVat,
+        dviTinh: this.formData.get('dviTinh').value,
       },
     });
     modalGT.afterClose.subscribe((data) => {
