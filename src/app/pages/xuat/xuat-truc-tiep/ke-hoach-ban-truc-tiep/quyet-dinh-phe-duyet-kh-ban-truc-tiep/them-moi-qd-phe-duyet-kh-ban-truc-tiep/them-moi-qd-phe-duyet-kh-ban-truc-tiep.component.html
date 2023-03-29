@@ -83,23 +83,23 @@
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="8">
-                            <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input"
+                            <nz-radio-group [nzDisabled]="isDisabledQD()" nzSize="small" class="rdo-input"
                                 formControlName="phanLoai">
                                 <nz-form-item>
                                     <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                                     <nz-form-control [nzErrorTip]="error">
-                                        <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                                            <input [readonly]="true" nz-input formControlName="idThHdr"
-                                                readonly="true" />
+                                        <nz-input-group nzAddOnAfterIcon="folder-open"
+                                            (click)="isDisabledQD() ? null : openDialogTh()">
+                                            <input [readonly]="true" nz-input formControlName="idThHdr" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                                 <nz-form-item>
                                     <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
                                     <nz-form-control [nzErrorTip]="error">
-                                        <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                                            <input [readonly]="true" nz-input formControlName="soTrHdr"
-                                                readonly="true" />
+                                        <nz-input-group nzAddOnAfterIcon="folder-open"
+                                            (click)="isDisabledQD() ? null : openDialogTr()">
+                                            <input [readonly]="true" nz-input formControlName="soTrHdr" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -237,7 +237,7 @@
                                 <th>Trích yếu</th>
                                 <th>Số ĐV tài sản</th>
                                 <th>Tổng SL xuất bán (kg)</th>
-                                <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
+                                <!-- <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt (đ)</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -251,7 +251,7 @@
                                 <td>{{ data.trichYeu }}</td>
                                 <td>{{ data.soDviTsan }}</td>
                                 <td>{{ data.tongSoLuong * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number : '1.0-1' : 'vi_VN'}}</td>
+                                <!-- <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number : '1.0-1' : 'vi_VN'}}</td> -->
                             </tr>
                         </tbody>
                     </nz-table>

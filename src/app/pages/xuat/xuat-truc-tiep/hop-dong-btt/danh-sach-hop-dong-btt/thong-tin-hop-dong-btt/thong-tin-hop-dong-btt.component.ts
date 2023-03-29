@@ -233,14 +233,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       }
       this.spinner.hide();
       const modalQD = this.modal.create({
-        nzTitle: 'Thông tin Kết quả chào giá',
+        nzTitle: 'Thông tin quyết định phê duyệt kết quả chào giá',
         nzContent: DialogTableSelectionComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: '900px',
         nzFooter: null,
         nzComponentParams: {
-          dataHeader: ['Số QĐ kết quả chào giá', 'Phương thức bán trực tiếp', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+          dataHeader: ['Số QĐ PD KQ chào giá', 'Phương thức bán trực tiếp', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
           dataColumn: ['soQdKq', 'pthucBanTrucTiep', 'tenLoaiVthh', 'tenCloaiVthh'],
           dataTable: listQdKq
         },

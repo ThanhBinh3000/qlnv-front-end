@@ -172,6 +172,14 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     }
   }
 
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
   async openThongtinChaoGia() {
     let body = {
       namKh: this.formData.value.namKh,

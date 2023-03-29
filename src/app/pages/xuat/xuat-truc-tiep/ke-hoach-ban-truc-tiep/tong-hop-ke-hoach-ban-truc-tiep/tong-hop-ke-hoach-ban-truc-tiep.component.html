@@ -9,19 +9,24 @@
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
+                    <div nz-col nzSpan="4">
+                        <label class="search__label"> Loại hành hóa </label>
+                        <nz-select formControlName="loaiVthh">
+                            <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                        </nz-select>
+                    </div>
                     <div nz-col nzSpan="14">
                         <label class="search__label">Nội dung tổng hợp</label>
                         <input class="search__input" placeholder="" nz-input formControlName="noiDungThop" />
                     </div>
-
-                    <div nz-col nzSpan="5">
-                        <label class="search__label">Ngày tổng hợp</label>
+                    <div nz-col nzSpan="4">
+                        <label>Ngày duyệt kế hoạch</label>
                         <nz-range-picker formControlName="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
                 </div>
             </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -33,7 +38,7 @@
         </nz-card>
 
         <div class="group-button">
-            <h3> THÔNG TIN TỔNG HƠP KẾ HOẠCH BÁN TRỰC TIẾP </h3>
+            <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XOA')">
@@ -97,8 +102,11 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                                    (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.namKh"
+                                    (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                                        [nzLabel]="p.text"></nz-option>
+                                </nz-select>
                             </nz-input-group>
                         </th>
                         <th>
@@ -115,9 +123,11 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenTrangThai"
-                                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                                    (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                                    <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
+                                        [nzLabel]="p.giaTri"></nz-option>
+                                </nz-select>
                             </nz-input-group>
                         </th>
                         <th></th>

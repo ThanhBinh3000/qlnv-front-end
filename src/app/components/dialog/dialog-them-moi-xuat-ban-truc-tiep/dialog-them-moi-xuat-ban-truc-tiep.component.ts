@@ -205,7 +205,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.listNhaKho = diemKho.children;
       this.thongTinXuatBanTrucTiep.tenDiemKho = diemKho.tenDvi;
       this.thongTinXuatBanTrucTiep.diaDiemKho = diemKho.diaChi;
-
+      this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
+      this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
       let body = {
         maDvi: diemKho.maDviCha,
         loaiVthh: this.loaiVthh
@@ -215,8 +216,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           let data = res.data;
           if (data.length > 0) {
             this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
-            this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
-            this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
             if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
               this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
             } else {
