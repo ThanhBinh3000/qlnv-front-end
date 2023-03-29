@@ -190,10 +190,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     //   this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
     //   return;
     // }
-    if (this.validateRangPrice()) {
-      this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
-      return;
-    }
+    // if (this.validateRangPrice()) {
+    //   this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
+    //   return;
+    // }
     const body = this.formGoiThau.value;
     body.children = this.dataTable
     body.children.forEach(item => item.donGia = body.donGia);
