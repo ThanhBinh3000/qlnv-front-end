@@ -1,21 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { DonviService } from 'src/app/services/donvi.service';
-import { chain, isEmpty } from 'lodash';
-import { STATUS } from "src/app/constants/status";
-import { DatePipe } from "@angular/common";
-import * as uuid from "uuid";
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {DonviService} from 'src/app/services/donvi.service';
+import {isEmpty} from 'lodash';
+import {CHUC_NANG, STATUS} from 'src/app/constants/status';
+import {CuuTroVienTroComponent} from "../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-xay-dung-phuong-an',
@@ -28,27 +27,29 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  CHUC_NANG = CHUC_NANG;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    {ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ'},
   ];
   listTrangThaiTh: any[] = [
-    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp' },
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã tạo - CĐ Vụ' },
+    {ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp'},
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã tạo - CĐ Vụ'},
   ];
 
   listTrangThaiQd: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+  public vldTrangThai: CuuTroVienTroComponent;
 
   constructor(
     httpClient: HttpClient,
@@ -57,9 +58,11 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService
+    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: null,
       soDx: null,

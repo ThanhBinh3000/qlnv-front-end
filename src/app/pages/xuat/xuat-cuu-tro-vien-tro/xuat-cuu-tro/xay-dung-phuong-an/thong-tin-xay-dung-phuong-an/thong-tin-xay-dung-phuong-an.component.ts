@@ -471,75 +471,6 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         .groupBy("noiDung")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenChiCuc")
-            .map((v, k) => {
-              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-              let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
-              let rowCuc = v.find(s => s.tenChiCuc === k);
-              if (this.userService.isCuc()) {
-                rowCuc.tonKhoCuc = cloneDeep(this.formData.value.tonKho);
-              }
-              return {
-                idVirtual: uuid.v4(),
-                tenCuc: k,
-                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
-                tenCloaiVthh: rowCuc.tenCloaiVthh,
-                tonKhoCuc: rowCuc.tonKhoChiCuc,
-                childData: v
-              }
-            }
-            ).value();
-          let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
-          let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
-          let thanhTienXuatThucTe = rs.reduce((prev, cur) => prev + cur.thanhTienXuatCucThucTe, 0);
-          let rowNoiDung = value.find(s => s.noiDung === key);
-
-          return {
-            idVirtual: uuid.v4(),
-            noiDung: key,
-            soLuongXuat: rowNoiDung.soLuongXuatCuc,
-            soLuongXuatThucTe: soLuongXuatThucTe,
-            thanhTienXuatThucTe: thanhTienXuatThucTe,
-            childData: rs
-          };
-        }).value();
-      this.phuongAnView = dataView
-      console.log(this.phuongAnView, "phuongAnView")
-      this.expandAll()
-
-
-      //
-      if (this.formData.value.deXuatPhuongAn.length !== 0) {
-        this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
-        this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
-        this.listSoLuongDeXuat = this.phuongAnView.map(s => s.soLuongXuat);
-
-        let tongTonKhoCuc = this.formData.value.tonKho;
-        let tongDeXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0);
-        let tongThucXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0);
-        console.log(tongTonKhoCuc, tongDeXuat, tongThucXuat)
-        if (tongThucXuat == tongTonKhoCuc && tongDeXuat > tongTonKhoCuc) {
-          this.listSoLuongXuatCap = [tongDeXuat - tongTonKhoCuc];
-        } else {
-          this.listSoLuongXuatCap = [0]
-        }
-
-
-      } else {
-        this.listThanhTien = [0];
-        this.listSoLuong = [0];
-        this.listSoLuongDeXuat = [0];
-        this.listSoLuongXuatCap = [0];
-      }
-    }
-    // #2
-    else if (this.userService.isCuc()) {
-      let dataView = chain(this.formData.value.deXuatPhuongAn)
-        .groupBy("noiDung")
-        .map((value, key) => {
-          let rs = chain(value)
             .groupBy("tenCuc")
             .map((v, k) => {
               let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
@@ -593,6 +524,74 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
             return 0
           }
         });
+      } else {
+        this.listThanhTien = [0];
+        this.listSoLuong = [0];
+        this.listSoLuongDeXuat = [0];
+        this.listSoLuongXuatCap = [0];
+      }
+    }
+    else if (this.userService.isCuc()) {
+      let dataView = chain(this.formData.value.deXuatPhuongAn)
+        .groupBy("noiDung")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenChiCuc")
+            .map((v, k) => {
+                let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+                let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+                let rowCuc = v.find(s => s.tenChiCuc === k);
+                if (this.userService.isCuc()) {
+                  rowCuc.tonKhoCuc = cloneDeep(this.formData.value.tonKho);
+                }
+                return {
+                  idVirtual: uuid.v4(),
+                  tenCuc: k,
+                  soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                  soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                  thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
+                  tenCloaiVthh: rowCuc.tenCloaiVthh,
+                  tonKhoCuc: rowCuc.tonKhoChiCuc,
+                  childData: v
+                }
+              }
+            ).value();
+          let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+          let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+          let thanhTienXuatThucTe = rs.reduce((prev, cur) => prev + cur.thanhTienXuatCucThucTe, 0);
+          let rowNoiDung = value.find(s => s.noiDung === key);
+
+          return {
+            idVirtual: uuid.v4(),
+            noiDung: key,
+            soLuongXuat: rowNoiDung.soLuongXuatCuc,
+            soLuongXuatThucTe: soLuongXuatThucTe,
+            thanhTienXuatThucTe: thanhTienXuatThucTe,
+            childData: rs
+          };
+        }).value();
+      this.phuongAnView = dataView
+      console.log(this.phuongAnView, "phuongAnView")
+      this.expandAll()
+
+
+      //
+      if (this.formData.value.deXuatPhuongAn.length !== 0) {
+        this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
+        this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
+        this.listSoLuongDeXuat = this.phuongAnView.map(s => s.soLuongXuat);
+
+        let tongTonKhoCuc = this.formData.value.tonKho;
+        let tongDeXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0);
+        let tongThucXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0);
+        console.log(tongTonKhoCuc, tongDeXuat, tongThucXuat)
+        if (tongThucXuat == tongTonKhoCuc && tongDeXuat > tongTonKhoCuc) {
+          this.listSoLuongXuatCap = [tongDeXuat - tongTonKhoCuc];
+        } else {
+          this.listSoLuongXuatCap = [0]
+        }
+
+
       } else {
         this.listThanhTien = [0];
         this.listSoLuong = [0];
