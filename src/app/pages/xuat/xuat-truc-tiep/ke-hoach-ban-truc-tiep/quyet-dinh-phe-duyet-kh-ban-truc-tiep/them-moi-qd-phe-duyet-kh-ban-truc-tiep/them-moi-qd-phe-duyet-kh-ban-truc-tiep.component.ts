@@ -20,6 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
+import { chain } from 'lodash'
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
@@ -77,6 +78,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       fileName: [],
+      slDviTsan: [],
     })
   }
 
@@ -243,6 +245,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async selectMaTongHop(event) {
     await this.spinner.show()
+    let soLuongDviTsan: number = 0;
     if (event) {
       const res = await this.tongHopKhBanTrucTiepService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
@@ -262,6 +265,17 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const dataRes = res.data;
+              dataRes.children.forEach((item) => {
+                let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+                  maDviTsan: key,
+                  children: value
+                })).value();
+                item.dataDviTsan = dataGroup;
+                soLuongDviTsan += item.dataDviTsan.length;
+              });
+              this.formData.patchValue({
+                slDviTsan: soLuongDviTsan,
+              });
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
             }
@@ -320,6 +334,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async onChangeIdTrHdr(data) {
     await this.spinner.show();
+    let soLuongDviTsan: number = 0;
     this.danhsachDx = [];
     if (data) {
       const res = await this.deXuatKhBanTrucTiepService.getDetail(data.id)
@@ -327,6 +342,17 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         const dataRes = res.data;
         dataRes.idDxHdr = dataRes.id;
         this.danhsachDx.push(dataRes);
+        dataRes.children.forEach((item) => {
+          let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+            maDviTsan: key,
+            children: value
+          })).value();
+          item.dataDviTsan = dataGroup;
+          soLuongDviTsan += item.dataDviTsan.length;
+        })
+        this.formData.patchValue({
+          slDviTsan: soLuongDviTsan,
+        });
         let tongMucDt = 0
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
