@@ -18,6 +18,7 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
 import { chain } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-thong-tin',
@@ -61,18 +62,18 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         soQdKq: [null, [Validators.required]],
         ngayKyQdKq: [null,],
         soQdPd: [null, [Validators.required]],
-        maDviTsan: [],
+        maDviTsan: [null, [Validators.required]],
         tgianNkho: [],
 
         soHd: [null, [Validators.required]],
         tenHd: [null, [Validators.required]],
         ngayHluc: [null, [Validators.required]],
-        ghiChuNgayHluc: [null],
+        ghiChuNgayHluc: [],
 
-        loaiHdong: [],
+        loaiHdong: [null, [Validators.required]],
         ghiChuLoaiHdong: [],
 
-        tgianThienHd: [],
+        tgianThienHd: [null, [Validators.required]],
         tgianBhanh: [],
 
         maDvi: [],
@@ -109,7 +110,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         tenLoaiVthh: [''],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
-        listMaDviTsan: []
+        listMaDviTsan: [null, [Validators.required]],
       }
     );
   }
@@ -159,6 +160,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   }
 
   async save(isOther: boolean) {
+    this.setValidator(isOther);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -170,6 +172,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
+        if (this.formData.invalid) {
+          return;
+        }
         this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
       } else {
         this.goBack()
@@ -177,6 +182,24 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     }
   }
 
+  async setValidator(isOther) {
+    if (isOther) {
+      this.formData.controls["diaChi"].setValidators([Validators.required]);
+      this.formData.controls["mst"].setValidators([Validators.required]);
+      this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+      this.formData.controls["chucVu"].setValidators([Validators.required]);
+      this.formData.controls["sdt"].setValidators([Validators.required]);
+      this.formData.controls["stk"].setValidators([Validators.required]);
+      this.formData.controls["fax"].setValidators([Validators.required]);
+      this.formData.controls["moTai"].setValidators([Validators.required]);
+      this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["faxNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["ghiChu"].setValidators([Validators.required]);
+      console.log(10);
+    }
+
+
+  }
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
     this.idPhuLuc = id;
