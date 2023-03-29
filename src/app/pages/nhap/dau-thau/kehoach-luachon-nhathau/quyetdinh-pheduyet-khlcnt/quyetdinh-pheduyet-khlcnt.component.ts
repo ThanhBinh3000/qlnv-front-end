@@ -32,6 +32,11 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
   inputNam: string = '';
+  idThHdr: number = 0;
+  openTHopKhlcnt = false;
+
+  idDx: number = 0;
+  openDxKhlcnt = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -419,5 +424,25 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     } else {
       this.indeterminate = true;
     }
+  }
+
+  openTHopKhlcntModal(id:number) {
+    this.idThHdr = id;
+    this.openTHopKhlcnt = true;
+  }
+
+  closeTHopKhlcntModal() {
+    this.idThHdr = null;
+    this.openTHopKhlcnt = false;
+  }
+
+  openDxKhlcntModal(id:number) {
+    this.idDx = id;
+    this.openDxKhlcnt = true;
+  }
+
+  closeDxKhlcntModal() {
+    this.idDx = null;
+    this.openDxKhlcnt = false;
   }
 }
