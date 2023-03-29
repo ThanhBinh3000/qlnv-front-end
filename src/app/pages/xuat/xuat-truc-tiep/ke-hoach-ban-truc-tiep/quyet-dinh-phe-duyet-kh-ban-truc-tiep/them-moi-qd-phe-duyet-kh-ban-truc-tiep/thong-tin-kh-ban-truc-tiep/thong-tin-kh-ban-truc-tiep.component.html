@@ -129,9 +129,18 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="7">
+                <div nz-col [nzSpan]="7" *ngIf="isView">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp đề xuất </nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                            <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+                                (Kg)</span>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="7" *ngIf="!isView">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
                             <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
                                 (Kg)</span>
@@ -150,46 +159,45 @@
                     <th width="60px" class="text-center"></th>
                     <th nzWidth="150px" class="text-center wrap">Chi cục</th>
                     <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-                    <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-                    <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
                     <th class="text-center wrap">Lô kho</th>
                     <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
-                    <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
+                    <th nzWidth="100px" class="text-center wrap" *ngIf="isView">SL xuất bán TT đề xuất</th>
+                    <th nzWidth="100px" class="text-center wrap" *ngIf="!isView">SL xuất bán TT </th>
                     <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-                    <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
+                    <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
                     <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
-                    <th nzWidth="50px">Hành động</th>
+                    <th nzWidth="50px" *ngIf="!isView">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let item of dataTable , let i = index">
                     <tr>
                         <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                        <td colspan="6">{{item.tenDvi}}</td>
-                        <td>{{item.soLuong}}</td>
+                        <td colspan="4">{{item.tenDvi}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>
-                            <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                        </td>
+                        <td></td>
+                        <td *ngIf="!isView"> </td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(i)">
                         <tr *ngFor="let children of item.children, let y = index">
                             <td></td>
                             <td></td>
                             <td>{{children.tenDiemKho}}</td>
-                            <td>{{children.tenNhaKho}}</td>
-                            <td>{{children.tenNganKho}}</td>
                             <td>{{children.tenLoKho}}</td>
                             <td>{{children.maDviTsan}}</td>
-                            <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td *ngIf="isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td *ngIf="!isView"><nz-input-number [nzFormatter]="globals.formatter"
+                                    [nzParser]="globals.parser" nz-input
+                                    [(ngModel)]="children.soLuong"></nz-input-number></td>
                             <td>{{children.dviTinh}}</td>
                             <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">
+                            <td class="text-right" *ngIf="!isView">
+                                <a (click)="deleteRow(y)" class="text-center">
+                                    <i class="fa fa-trash-o do"></i>
+                                </a>
                             </td>
                         </tr>
                     </ng-container>

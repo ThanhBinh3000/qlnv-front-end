@@ -14,6 +14,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DxuatKhLcntService } from "../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 import { UserLogin } from "../../../models/userlogin";
 import { UserService } from "../../../services/user.service";
+import { STATUS } from "../../../constants/status";
+import { QuyetDinhGiaTCDTNNService } from "../../../services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service";
 
 @Component({
   selector: 'dialog-them-moi-goi-thau',
@@ -42,9 +44,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listPhuongThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listHinhThucDauThau: any[] = [];
-
+  donGiaVat: number = 0;
   giaToiDa: any;
   userInfo: UserLogin;
+  namKeHoach: any;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -57,6 +60,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private dxuatKhLcntService: DxuatKhLcntService,
     private userService: UserService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
@@ -94,9 +98,21 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     // this.spinner.hide();
   }
 
-  onChangeCloaiVthh($event) {
+  async onChangeCloaiVthh($event) {
+    debugger
     let cloaiSelected = this.listChungLoai.filter(item => item.ma == $event);
     this.getGiaToiDa($event);
+    let bodyPag = {
+      namKeHoach: this.namKeHoach,
+      loaiVthh: this.formGoiThau.value.loaiVthh,
+      cloaiVthh: $event,
+      trangThai: STATUS.BAN_HANH,
+      maDvi: this.userInfo.MA_DVI
+    }
+    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+    if (pag.msg == MESSAGE.SUCCESS) {
+      this.donGiaVat = pag.data.giaQdVat
+    }
     this.formGoiThau.patchValue({
       tenCloaiVthh: cloaiSelected[0].ten
     })
@@ -170,10 +186,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
       return;
     }
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
-      return;
-    }
+    // if (this.giaToiDa == null) {
+    //   this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
+    //   return;
+    // }
     if (this.validateRangPrice()) {
       this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
       return;

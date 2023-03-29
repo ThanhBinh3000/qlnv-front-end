@@ -47,7 +47,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   @Input()
   showFromTH: boolean;
   @Input()
-  isView: boolean;
+  @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -369,6 +370,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         data: data,
         loaiVthh: this.formData.get('loaiVthh').value,
         dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
+        namKeHoach: this.formData.value.namKhoach,
       },
     });
     modal.afterClose.subscribe((res) => {
@@ -424,8 +426,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGiaVat * 1000;
-        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx * 1000;
+        tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
+        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -500,6 +502,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           // this.quayLai();
         } else {
+          this.formData.get('id').setValue(res.data.id);
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           // this.quayLai();
         }
@@ -1128,7 +1131,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }, 0);
         sum += sumChild;
       })
-      return sum * 1000;
+      return sum;
     }
   }
 
@@ -1142,7 +1145,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }, 0);
         sum += sumChild;
       })
-      return sum * 1000;
+      return sum;
     }
   }
 

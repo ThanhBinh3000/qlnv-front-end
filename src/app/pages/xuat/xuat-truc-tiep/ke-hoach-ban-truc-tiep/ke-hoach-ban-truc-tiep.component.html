@@ -6,6 +6,6 @@
     </ul>
 </nz-affix>
 <ng-container *ngFor="let tab of tabs, let i = index">
-    <app-main-ke-hoach-ban-truc-tiep *ngIf="tab.ma == loaiVthhSelected" [inputLoaiVthh]="tab.ma">
+    <app-main-ke-hoach-ban-truc-tiep *ngIf="tab.ma == loaiVthhSelected" [inputLoaiVthh]="tab.ma" [listVthh]="tabs">
     </app-main-ke-hoach-ban-truc-tiep>
 </ng-container>

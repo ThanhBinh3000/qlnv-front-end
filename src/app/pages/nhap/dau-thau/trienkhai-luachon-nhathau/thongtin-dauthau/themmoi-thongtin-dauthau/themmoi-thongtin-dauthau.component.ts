@@ -484,7 +484,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   validateItemSave(dataSave, index?): boolean {
-    debugger
     if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
       if (dataSave.trangThai == STATUS.TRUNG_THAU) {
         if (dataSave.donGia >= this.formData.get('donGiaVat').value) {

@@ -25,6 +25,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() loaiVthh: String;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() pthucBanTrucTiep: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   dataDetail: any[] = [];
@@ -118,6 +119,9 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
           })
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
+          if (this.pthucBanTrucTiep) {
+            this.radioValue = this.pthucBanTrucTiep
+          }
         })
         .catch((e) => {
           console.log('error: ', e);

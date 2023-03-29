@@ -47,8 +47,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
-  isView: boolean;
+  @Input() isView: boolean;
   formData: FormGroup;
   formThongTinChung: FormGroup;
 
@@ -186,9 +185,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async ngOnInit() {
-    debugger
-    console.log(this.idInput)
-    console.log(this.loaiVthh)
     await this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -199,6 +195,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
+      debugger
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -292,7 +289,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
-    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -315,6 +311,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
     }
+    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
@@ -323,7 +320,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          this.isCheckCreate = false
+          this.formData.get('id').setValue(res.data.id);
+          this.idInput = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -438,8 +436,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    debugger
     if (id > 0) {
-      debugger
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       this.listToTrinh = [];
       this.listDanhSachTongHop = [];

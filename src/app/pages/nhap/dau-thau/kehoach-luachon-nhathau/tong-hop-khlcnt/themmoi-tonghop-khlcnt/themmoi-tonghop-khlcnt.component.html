@@ -19,7 +19,9 @@
   <div class="header header-green-background ">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span></span>
+                <span [ngClass]="(formData.value.trangThai == STATUS.CHUA_TAO_QD ? 'chua-tao-qd' : '') || formData.value.trangThai == STATUS.DA_DU_THAO_QD  ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+          {{  convertTrangThai(formData.value.trangThai) }}
+        </span>
         <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
       </div>
     </div>
@@ -101,9 +103,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="24" *ngIf="!isViewOnModal">
           <div class="tong-hop-button group-button-search mt-16">
-            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
+            <button [disabled]="isView" class="btn btn-main btn-sm waves-effect waves-light" (click)="isView ? '' : tongHopDeXuatTuCuc()"
               >
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
               <span>Tổng hợp đề xuất KHLCNT</span>
