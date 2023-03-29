@@ -411,7 +411,7 @@
                       <nz-form-label>Địa chỉ</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input formControlName="diaChi" nz-input [readonly]="true"/>
+                          <input formControlName="diaChi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -540,7 +540,7 @@
                     <nz-form-item>
                       <nz-form-label>Trạng thái</nz-form-label>
                       <nz-form-item>
-                        <label [nzDisabled]="true" nz-checkbox formControlName="trangThai">Hoạt động</label>
+                        <label [nzDisabled]="isEditData" nz-checkbox formControlName="trangThai">Hoạt động</label>
                       </nz-form-item>
                     </nz-form-item>
                   </div>
@@ -679,7 +679,9 @@
                       <nz-form-label>Diện tích</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input formControlName="dienTichDat" [readonly]="isEditData" nz-input/>
+                          <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
+                                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                           formControlName="dienTichDat"></nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1558,30 +1560,88 @@
               <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
                 <tr>
-                  <th>STT</th>
+                  <th nzWidth="40px">STT</th>
                   <th>Tên hàng hóa</th>
-                  <th>Số lượng</th>
-                  <th>ĐVT</th>
+                  <th nzWidth="150px">Số lượng</th>
+                  <th nzWidth="150px">ĐVT</th>
                 </tr>
                 </thead>
                 <tbody>
-
+                <tr *ngFor="let data of dataTableHh; let idx = index">
+                  <td class="text-center">{{ idx + 1 }}</td>
+                  <td>{{ data.tenCloaiVthh }}</td>
+                  <td>{{ data.slHienThoi | number : '1.0-1' : 'vi-VN' }}</td>
+                  <td>{{ data.tenDonViTinh }}</td>
+                </tr>
                 </tbody>
               </nz-table>
               <div class="group-button">
                 <h2>Thông tin chi tiết hàng hóa</h2>
               </div>
               <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
-                <thead>
+              <thead>
                 <tr>
-                  <th></th>
+                  <th nzWidth="40px"></th>
                   <th>Tên hàng hóa</th>
-                  <th>Số lượng</th>
-                  <th>ĐVT</th>
+                  <th nzWidth="100px">Số lượng</th>
+                  <th nzWidth="90px">ĐVT</th>
                 </tr>
                 </thead>
                 <tbody>
-
+                <ng-container *ngFor="let item of dataTableHhCtiet">
+                  <tr>
+                    <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
+                        [nzExpand]="expandSet.has(item.idVirtual)" nzShowExpand="true"></td>
+                    <td>{{item.tenDviCha}}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <ng-container *ngIf="expandSet.has(item.idVirtual)">
+                    <ng-container *ngFor="let item1 of item.childData">
+                      <tr>
+                        <td></td>
+                        <td (nzExpandChange)="onExpandChange(item1.idVirtual, $event)"
+                            [nzExpand]="expandSet.has(item1.idVirtual)" nzShowExpand="true"
+                        > {{item1.tenDviCha}}</td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                      <ng-container *ngIf="expandSet.has(item1.idVirtual)">
+                        <ng-container *ngFor="let item2 of item1.childData">
+                          <tr>
+                            <td></td>
+                            <td (nzExpandChange)="onExpandChange(item2.idVirtual, $event)"
+                                [nzExpand]="expandSet.has(item2.idVirtual)" nzShowExpand="true"
+                                >   {{item2.tenDviCha}}</td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                          <ng-container *ngIf="expandSet.has(item2.idVirtual)">
+                            <ng-container *ngFor="let item3 of item2.childData">
+                              <tr>
+                                <td></td>
+                                <td (nzExpandChange)="onExpandChange(item3.idVirtual, $event)"
+                                    [nzExpand]="expandSet.has(item3.idVirtual)" nzShowExpand="true">  {{item3.tenDviCha}}</td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <ng-container *ngIf="expandSet.has(item3.idVirtual)">
+                                <ng-container *ngFor="let item4 of item3.childData">
+                                  <tr>
+                                    <td></td>
+                                    <td>{{item4.tenCloaiVthh}}</td>
+                                    <td class="text-right">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
+                                    <td>{{item4.tenDonViTinh}}</td>
+                                  </tr>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
                 </tbody>
               </nz-table>
             </ng-container>

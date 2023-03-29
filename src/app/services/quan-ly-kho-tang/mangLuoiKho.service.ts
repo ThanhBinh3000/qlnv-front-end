@@ -29,5 +29,4 @@ export class MangLuoiKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
-
 }

@@ -303,27 +303,18 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.tenDvi = this.formKho.value.tenNgankho;
       bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNgankho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
-      this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+      let body = this.formKho.value;
+      body.dviReq = bodyDvi
+      body.maNgankho = this.formKho.value.maCha +  this.formKho.value.maNgankho;
+      body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
+      body.nhakhoId = this.idReq;
+      body.fileDinhkems = this.listFileDinhKem;
+      this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          let body = this.formKho.value;
-          body.maNgankho = this.formKho.value.maCha +  this.formKho.value.maNgankho;
-          body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-          body.nhakhoId = this.idReq;
-          body.fileDinhkems = this.listFileDinhKem;
-          this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            }
-          })
-          this.modal.close(true);
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-      }).catch((e) => {
-        console.error('error: ', e);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        ;
-      });
+      })
+      this.modal.close(true);
     }
     this.spinner.hide()
   }
@@ -341,26 +332,17 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.tenDvi = this.formKho.value.tenNhakho;
       bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNhakho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
-      this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+      let body = this.formKho.value;
+      body.dviReq = bodyDvi
+      body.maNhakho = this.formKho.value.maCha +  this.formKho.value.maNhakho;
+      body.diemkhoId = this.idReq;
+      body.fileDinhkems = this.listFileDinhKem;
+      this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          let body = this.formKho.value;
-          body.maNhakho = this.formKho.value.maCha +  this.formKho.value.maNhakho;
-          body.diemkhoId = this.idReq;
-          body.fileDinhkems = this.listFileDinhKem;
-          this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            }
-          })
-          this.modal.close(true);
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-      }).catch((e) => {
-        console.error('error: ', e);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        ;
-      });
+      })
+      this.modal.close(true);
     }
     this.spinner.hide()
   }
@@ -378,26 +360,17 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.tenDvi = this.formKho.value.tenDiemkho;
       bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
-      this.donviService.create(bodyDvi).then((resp: OldResponseData) => {
-        if (resp.msg == MESSAGE.SUCCESS) {
-          let body = this.formKho.value;
-          body.tongkhoId = this.idReq;
-          body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
-          body.fileDinhkems = this.listFileDinhKem;
-          this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            }
-          })
-          this.modal.close(true);
-        } else {
-          this.notification.error(MESSAGE.ERROR, resp.msg);
+      let body = this.formKho.value;
+      body.dviReq = bodyDvi
+      body.tongkhoId = this.idReq;
+      body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
+      body.fileDinhkems = this.listFileDinhKem;
+      this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-      }).catch((e) => {
-        console.error('error: ', e);
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        ;
-      });
+      })
+      this.modal.close(true);
     } else {
 
     }

@@ -9,6 +9,8 @@ import {HelperService} from 'src/app/services/helper.service';
 import {NzTreeSelectComponent} from 'ng-zorro-antd/tree-select';
 import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {chain} from 'lodash';
+import * as uuid from "uuid";
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MangLuoiKhoService} from 'src/app/services/quan-ly-kho-tang/mangLuoiKho.service';
 import {Globals} from 'src/app/shared/globals';
@@ -29,7 +31,7 @@ import {Tcdtnn} from "../../../models/Tcdtnn";
   styleUrls: ['./mang-luoi-kho.component.scss']
 })
 export class MangLuoiKhoComponent implements OnInit {
-
+  expandSet = new Set<number>();
   @ViewChild('nzTreeSelectComponent', {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
   searchValue = '';
   searchFilter = {
@@ -52,6 +54,8 @@ export class MangLuoiKhoComponent implements OnInit {
   levelNode: number = 0;
   isEditData: boolean = true;
   dataTable: any[] = []
+  dataTableHh: any[] = []
+  dataTableHhCtiet: any[] = []
   fileDinhKems: any[] = []
   listNam: any[] = [];
   dvi: string = 'Tấn kho'
@@ -154,6 +158,15 @@ export class MangLuoiKhoComponent implements OnInit {
     this.spinner.hide();
   }
 
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
   async loadTinhTrangLoKho() {
     this.listTinhTrang = [];
     let res = await this.danhMucService.danhMucChungGetAll('TT_KHO');
@@ -215,9 +228,49 @@ export class MangLuoiKhoComponent implements OnInit {
     })
   }
 
+  convertDataToTree() {
+    this.dataTableHhCtiet = chain(this.dataTableHhCtiet)
+      .groupBy("tenDiemKho")
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy("tenNhaKho")
+          .map((v, k) => {
+            let rs1 = chain(v)
+              .groupBy("tenNganKho")
+              .map((v1,k1) => {
+                let rs2 = chain(v1)
+                  .groupBy("tenNganLo")
+                  .map((v2,k2) => {
+                    return {
+                      idVirtual: uuid.v4(),
+                      tenDviCha: k2,
+                      childData: v2
+                    }
+                  }).value()
+                    return {
+                  idVirtual: uuid.v4(),
+                  tenDviCha: k1,
+                  childData: rs2
+                }
+              }).value()
+              return {
+                idVirtual: uuid.v4(),
+                tenDviCha: k,
+                childData: rs1
+              }
+            }
+          ).value();
+        return {
+          idVirtual: uuid.v4(),
+          tenDviCha: key,
+          childData: rs
+        };
+      }).value();
+  }
+
 
   // parentNodeSelected: any = [];
-  theTich: string = 'm³';
+  theTich: string = 'm3';
   listTinhTrang: any[] = [];
 
   nzClickNodeTree(event: any): void {
@@ -346,6 +399,9 @@ export class MangLuoiKhoComponent implements OnInit {
         })
       }
       if (this.levelNode == 5) {
+        this.dataTableHh = dataNode.hangHoaTrongKho
+        this.dataTableHhCtiet = dataNode.ctietHhTrongKho
+        this.convertDataToTree()
         this.detailDonVi.patchValue({
           diemkhoId : dataNode.idParent,
           tenDiemkho : dataNode.tenDiemkho,
@@ -355,6 +411,9 @@ export class MangLuoiKhoComponent implements OnInit {
         })
       }
       if (this.levelNode == 4) {
+        this.dataTableHh = dataNode.hangHoaTrongKho
+        this.dataTableHhCtiet = dataNode.ctietHhTrongKho
+        this.convertDataToTree()
         this.detailDonVi.patchValue({
           tongkhoId : dataNode.idParent,
           tenTongKho : dataNode.tenTongKho,
@@ -364,6 +423,9 @@ export class MangLuoiKhoComponent implements OnInit {
         })
       }
       if (this.levelNode == 3) {
+        this.dataTableHh = dataNode.hangHoaTrongKho
+        this.dataTableHhCtiet = dataNode.ctietHhTrongKho
+        this.convertDataToTree()
         this.detailDonVi.patchValue({
           tongkhoId : dataNode.idParent,
           tenTongKho : dataNode.tenTongKho,
@@ -373,6 +435,9 @@ export class MangLuoiKhoComponent implements OnInit {
         })
       }
       if (this.levelNode == 2) {
+        this.dataTableHh = dataNode.hangHoaTrongKho
+        this.dataTableHhCtiet = dataNode.ctietHhTrongKho
+        this.convertDataToTree()
         this.detailDonVi.patchValue({
           soChiCuc : dataNode.soChiCuc,
           soDiemkho : dataNode.soDiemkho,
@@ -406,8 +471,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDvi: null,
           tichLuongTkLt: element.tichLuongTkLt ? element.tichLuongTkLt : 0,
           tichLuongTkVt: element.tichLuongTkVt ? element.tichLuongTkVt : 0,
-          tichLuongSdLt: element.tichLuongTkLt - element.tichLuongKdLt,
-          tichLuongSdVt: element.tichLuongTkVt - element.tichLuongKdVt,
+          tichLuongSdLt: (element.tichLuongTkLt - element.tichLuongKdLt) > 0 ? (element.tichLuongTkLt - element.tichLuongKdLt) : 0,
+          tichLuongSdVt: (element.tichLuongTkVt - element.tichLuongKdVt) > 0 ? element.tichLuongTkVt - element.tichLuongKdVt : 0,
           tichLuongKdLt: element.tichLuongKdLt ? element.tichLuongKdLt : 0,
           tichLuongKdVt: element.tichLuongKdVt ? element.tichLuongKdVt : 0
         }
@@ -443,11 +508,7 @@ export class MangLuoiKhoComponent implements OnInit {
     if (this.detailDonVi.invalid) {
       return;
     }
-    let body = {
-      ...this.detailDonVi.value,
-      trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
-    };
+
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -457,11 +518,28 @@ export class MangLuoiKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.update(body).then((res: OldResponseData) => {
+        let body = {
+          ...this.detailDonVi.value,
+          trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
+          type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
+        };
+        let type;
+        if (this.levelNode == 4) {
+            type = 'diem-kho';
+        }
+        if (this.levelNode == 5) {
+          type = 'nha-kho';
+        }
+        if (this.levelNode == 6) {
+          type = 'ngan-kho';
+        }
+        if (this.levelNode == 7) {
+          type = 'ngan-lo';
+        }
+        this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.isEditData = false;
-            this.ngOnInit();
+            this.getDetailMlkByKey(this.keySelected)
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -469,6 +547,9 @@ export class MangLuoiKhoComponent implements OnInit {
       }
     });
   }
+
+
+
 
   delete() {
     this._modalService.confirm({
