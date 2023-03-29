@@ -311,6 +311,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
     }
+    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
@@ -319,7 +320,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          this.isCheckCreate = false
+          this.formData.get('id').setValue(res.data.id);
+          this.idInput = res.data.id;
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }

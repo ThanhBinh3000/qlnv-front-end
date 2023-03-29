@@ -105,7 +105,7 @@
                 <th>
                     <input nz-input [(ngModel)]="thongTinXuatBanTrucTiep.maDviTsan" class="w-150" />
                 </th>
-                <th>{{thongTinXuatBanTrucTiep.duDau}}</th>
+                <th>{{thongTinXuatBanTrucTiep.duDau | number : '1.0-1' : 'vi_VN'}}</th>
                 <th>
                     <nz-input-number placeholder="(1)" class="text-right" nz-input
                         [(ngModel)]="thongTinXuatBanTrucTiep.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
@@ -187,11 +187,8 @@
                     <td>
                         <input nz-input [(ngModel)]="data.maDviTsan" class="w-150" />
                     </td>
-                    <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.duDau" [nzMin]="1" [nzStep]="1"
-                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                        </nz-input-number>
-                    </td>
+
+                    <td>{{thongTinXuatBanTrucTiep.duDau | number : '1.0-1' : 'vi_VN'}}</td>
 
                     <td>
                         <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"

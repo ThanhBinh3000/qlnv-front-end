@@ -270,7 +270,7 @@
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="Kết quả phân tích chỉ tiêu chất lượng">
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-          <nz-table class="pd-10" class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+          <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
             [nzData]="dataTable">
             <thead>
               <tr>
@@ -279,20 +279,37 @@
                 <th width="60px">Chỉ số chất lượng theo QCVN 14:2020/BTC</th>
                 <th width="400px">Kết quả phân tích</th>
                 <th>Phương pháp</th>
-                <th>Hành động</th>
+                <th width="60px" *ngIf="!isDisabled()">
+                  Hành động
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of dataTable; let i = index">
-                <ng-container>
+              <tr *ngFor="let data of basicTable.data; let i = index">
+                <ng-container *ngIf="!data.edit; else editTemplate">
                   <td class="text-center">{{i + 1}}</td>
                   <td>{{data.tenTchuan}}</td>
-                  <td>{{data.chiSoXuat}}</td>
+                  <td>{{data.chiSoNhap}}</td>
+                  <td>{{data.ketQuaKiemTra}}</td>
+                  <td>{{data.phuongPhap}}</td>
+                  <td *ngIf="!isDisabled() ">
+                    <a (click)="editRow(i)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a (click)="deleteRow(i)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplate>
+                  <td></td>
+                  <td>{{data.tenTchuan}}</td>
+                  <td>{{data.chiSoNhap}}</td>
                   <td>
                     <input type="text" nz-input class="w-400" [(ngModel)]="data.ketQuaKiemTra" />
                   </td>
                   <td>{{data.phuongPhap}}</td>
-                  <td>
+                  <td *ngIf="!isDisabled() ">
                     <a (click)="saveEdit(i)" class="save">
                       <i class="fa fa-save"></i>
                     </a>
@@ -300,7 +317,7 @@
                       <i class="fa fa-times do"></i>
                     </a>
                   </td>
-                </ng-container>
+                </ng-template>
               </tr>
             </tbody>
           </nz-table>

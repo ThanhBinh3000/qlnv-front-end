@@ -17,7 +17,8 @@
     <app-de-xuat-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-de-xuat-kh-ban-truc-tiep>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-tong-hop-ke-hoach-ban-truc-tiep>
+    <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh"
+        [listVthh]="listVthh"></app-tong-hop-ke-hoach-ban-truc-tiep>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
     <app-quyet-dinh-phe-duyet-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-quyet-dinh-phe-duyet-kh-ban-truc-tiep>

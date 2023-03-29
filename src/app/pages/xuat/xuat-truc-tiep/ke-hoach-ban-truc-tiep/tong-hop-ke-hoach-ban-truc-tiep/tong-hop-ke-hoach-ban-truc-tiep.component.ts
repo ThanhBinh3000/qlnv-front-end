@@ -16,7 +16,14 @@ import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-han
 })
 export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  @Input()
+  listVthh: any[] = [];
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -53,7 +60,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
       })
-      await this.timKiem();
+      this.timKiem();
       this.spinner.hide();
     }
     catch (e) {
@@ -68,7 +75,15 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
       this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
     }
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    })
     await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
   }
 
 }
