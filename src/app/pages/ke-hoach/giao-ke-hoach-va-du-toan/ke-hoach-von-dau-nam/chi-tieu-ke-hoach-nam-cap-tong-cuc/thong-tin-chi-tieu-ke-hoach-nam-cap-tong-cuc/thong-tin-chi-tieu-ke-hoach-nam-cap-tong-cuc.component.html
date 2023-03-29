@@ -4,7 +4,8 @@
       <div class="trai">
       </div>
       <div class="canphai phai">
-        <button type="button" class="btn btn-sub" (click)="redirectChiTieuKeHoachNam()">
+        <button type="button" class="btn btn-sub" *ngIf="showListEvent.observers.length>0"
+                (click)="redirectChiTieuKeHoachNam()">
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
@@ -19,30 +20,30 @@
           <span>Ban hành</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP')"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP')"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-<!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
-<!--                *ngIf="() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP')"-->
-<!--                (click)="pheDuyet()">-->
-<!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
-<!--          <span>Duyệt</span>-->
-<!--        </button>-->
+        <!--        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"-->
+        <!--                *ngIf="() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP')"-->
+        <!--                (click)="pheDuyet()">-->
+        <!--          <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+        <!--          <span>Duyệt</span>-->
+        <!--        </button>-->
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU')"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU')"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP'))">
+           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP'))">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU') )">
+           *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -166,7 +167,8 @@
           <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
           <nz-form-control>
             <div class="list-file">
-              <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList" [isViewDetail]="isViewDetail"></file-list>
+              <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList"
+                         [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-control>
         </div>

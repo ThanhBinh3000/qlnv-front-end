@@ -9,6 +9,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-tong-hop',
@@ -91,4 +92,25 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.isQuyetDinh = false;
     this.search;
   }
+
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.tongHopDeXuatKeHoachBanDauGiaService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
 }

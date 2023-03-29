@@ -83,16 +83,16 @@
                 <nz-form-item>
                   <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                      <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null : openDialogTh()">
+                      <input [readonly]="true" nz-input formControlName="idThHdr" readonly />
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
                 <nz-form-item>
                   <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                      <input [readonly]="true" nz-input formControlName="soTrHdr" readonly="true" />
+                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null : openDialogTr()">
+                      <input [readonly]="true" nz-input formControlName="soTrHdr" readonly />
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>

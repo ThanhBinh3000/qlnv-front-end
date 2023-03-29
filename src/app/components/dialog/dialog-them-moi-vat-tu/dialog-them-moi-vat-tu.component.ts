@@ -167,7 +167,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   async getGiaToiDa() {
     let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, this.userInfo.MA_DVI);
     if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data ? formatNumber(res.data, 'vi_VN', '1.0-1' ) : '0';
+      this.giaToiDa = res.data ? res.data : '0';
     }
   }
 
