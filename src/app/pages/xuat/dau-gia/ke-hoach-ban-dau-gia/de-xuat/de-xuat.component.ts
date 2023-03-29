@@ -17,6 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class DeXuatComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+  idQdChiTieu: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -70,4 +71,11 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     }
   }
 
+  openViewChiTieu(idQdChiTieu: number) {
+    this.idQdChiTieu = idQdChiTieu;
+  }
+
+  closeViewChiTieu() {
+    this.idQdChiTieu = null;
+  }
 }
