@@ -70,6 +70,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
+      idSoQdCtieu: [],
       soQdCtieu: [, [Validators.required]],
       loaiVthh: [,],
       tenLoaiVthh: [, [Validators.required]],
@@ -349,8 +350,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
+
+
       this.formData.patchValue({
-        soQdCtieu: res2.data.soQuyetDinh
+        soQdCtieu: res2.data.soQuyetDinh,
+        idSoQdCtieu: res2.data.id
       });
     } else {
       this.formData.patchValue({

@@ -356,12 +356,19 @@
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
                                     <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN'
-                                        }} Kg</span>
+                                        }} {{formData.value.dviTinh}}</span>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                     </div>
                 </form>
+                <ng-template #extraTpl>
+                    <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
+                        (click)="themMoiBangPhanLoTaiSan($event)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                </ng-template>
                 <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                     <thead>
                         <tr>
@@ -371,13 +378,22 @@
                             <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
                             <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
                             <th class="text-center wrap">Lô kho</th>
-                            <th nzWidth="100px" class="text-center wrap">MĐVTS</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="!formData.value.typeVthh?.startsWith('02')">MĐVTS</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="formData.value.typeVthh?.startsWith('02')">Mã ĐVTS</th>
                             <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
                             <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
                             <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-                            <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá đề xuất (đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá đề xuất (đ)</th>
                             <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất(đ)</th>
-                            <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá được duyệt (đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap"
+                                *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá được duyệt (đ)</th>
                             <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
                             <th *ngIf="!isDisable()">Hành động</th>
                         </tr>
@@ -427,13 +443,6 @@
                 </nz-table>
             </nz-collapse-panel>
         </nz-collapse>
-        <ng-template #extraTpl>
-            <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
-                (click)="themMoiBangPhanLoTaiSan($event)">
-                <i class="icon htvbdh_dau-cong"></i>
-                <span>Thêm</span>
-            </button>
-        </ng-template>
 
         <!-- // Địa điểm giao nhận hàng -->
         <nz-collapse nzAccordion>
@@ -445,7 +454,8 @@
                             <th style="width: 2%">STT</th>
                             <th style="width: 40%">Tên chi cục</th>
                             <th style="width: 40%">Địa chỉ</th>
-                            <th style="width: 10%">Số lượng (Kg)</th>
+                            <th style="width: 10%" *ngIf="formData.value.typeVthh?.startsWith('02')">Số lượng</th>
+                            <th style="width: 10%" *ngIf="!formData.value.typeVthh?.startsWith('02')">Số lượng (Kg)</th>
                         </tr>
                     </thead>
                     <tbody>
