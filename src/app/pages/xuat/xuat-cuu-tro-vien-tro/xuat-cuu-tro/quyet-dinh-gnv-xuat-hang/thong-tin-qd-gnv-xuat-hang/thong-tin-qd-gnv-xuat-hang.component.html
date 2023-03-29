@@ -55,20 +55,14 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-
       <button
-        *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDC && formData.value.trangThaiXh !== STATUS.HOAN_THANH_CAP_NHAT"
+        *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT"
         type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DA_HOAN_THANH)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
-      <!-- <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-main"
-               (click)="saveDdiemNhap(STATUS.DANG_CAP_NHAT)">
-         <i class="icon htvbdh_tcdt_save"></i>
-         <span>Lưu</span>
-       </button>-->
       <button type="button" class="btn btn-main"
-        *ngIf="(formData.value.trangThai === STATUS.DA_DUYET_LDC && formData.value.trangThaiXh !== STATUS.HOAN_THANH_CAP_NHAT)"
+        *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT)"
         (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -162,16 +156,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="3" nz-col>
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
-            <nz-form-control>
-              <nz-input-number [nzFormatter]="globals.formatter" [nzMin]="1" [nzParser]="globals.parser"
-                [nzSize]="'small'" [nzStep]="1" class="text-right" formControlName="tongSoLuong" nz-input nzDisabled>
-              </nz-input-number>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <div [nzSpan]="2" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
@@ -228,7 +212,7 @@
       <div [nzGutter]="24" nz-row>
         <div [nzSpan]="6" nz-col>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tổng SL viện trợ, cứu trợ</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Tổng SL cứu trợ, viện trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
               <span>{{soLuong | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
@@ -287,15 +271,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{item.soLuongXuat}}</td>
+                <td>{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{item.donViTinh}}</td>
                 <td></td>
                 <td>
-                  <ng-container *ngIf="userService.isChiCuc() && !isView">
-                    <a (click)="showModal(item)">
-                      <i class="fa fa-plus"></i>
-                    </a>
-                  </ng-container>
                 </td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -306,17 +285,23 @@
                     <td></td>
                     <td>{{lv1.tenChiCuc}}</td>
                     <td></td>
-                    <td>{{lv1.tonKhoChiCuc}}</td>
+                    <td>{{lv1.tonKhoChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv1.soLuongXuatChiCuc}}</td>
+                    <td>{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td>{{lv1.tenTrangThaiXh}}</td>
-                    <td></td>
+                    <td>
+                      <ng-container *ngIf="userService.isChiCuc()">
+                        <a (click)="showModal(lv1)">
+                          <i class="fa fa-plus"></i>
+                        </a>
+                      </ng-container>
+                    </td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                     <tr *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -337,9 +322,9 @@
                         <td></td>
                         <td></td>
                         <td>
-                          <ng-container *ngIf="userService.isChiCuc() && !isView">
+                          <ng-container *ngIf="userService.isChiCuc() ">
                             <a>
-                              <i class="fa fa-edit" *ngIf="!isView" (click)="suaPhuongAn(lv2)"></i>
+                              <i class="fa fa-edit" (click)="suaPhuongAn(lv2)"></i>
                             </a>
                             <a>
                               <i class="fa fa-trash-o do" (click)="xoaItem(lv2)"></i>
@@ -374,32 +359,6 @@
         </nz-autocomplete>
       </nz-form-control>
     </nz-form-item>
-    <!--<nz-form-item>
-      <nz-form-label [nzXs]="7">Cục DTNN</nz-form-label>
-      <nz-form-control>
-        <nz-select nzAllowClear [(ngModel)]="noiDungRow.maDviCuc"
-                   nzPlaceHolder="Chọn đơn vị" nzShowSearch>
-          <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
-      <nz-form-control>
-        <nz-input-number [(ngModel)]="noiDungRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                         [nzSize]="'small'">
-        </nz-input-number>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzXs]="7">Chi Cục DTNN</nz-form-label>
-      <nz-form-control>
-        <nz-select nzAllowClear [(ngModel)]="noiDungRow.maDviChiCuc"
-                   nzPlaceHolder="Chọn đơn vị" nzShowSearch>
-          <nz-option *ngFor="let p of listChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-        </nz-select>
-      </nz-form-control>
-    </nz-form-item>-->
     <nz-form-item>
       <nz-form-label [nzXs]="7">Chủng loại hàng hóa</nz-form-label>
       <nz-form-control>
