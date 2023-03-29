@@ -20,7 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-
+import { chain } from 'lodash'
 @Component({
   selector: 'app-them-moi-de-xuat-kh-ban-truc-tiep',
   templateUrl: './them-moi-de-xuat-kh-ban-truc-tiep.component.html',
@@ -96,6 +96,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       lyDoTuChoi: [''],
       donGiaVat: [],
       tongDonGia: [],
+      slDviTsan: [],
     });
   }
 
@@ -304,7 +305,14 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   calculatorTable() {
     let tongSoLuong: number = 0;
     let tongDonGia: number = 0;
+    let soLuongDviTsan: number = 0;
     this.dataTable.forEach((item) => {
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+        maDviTsan: key,
+        children: value
+      })).value();
+      item.dataDviTsan = dataGroup;
+      soLuongDviTsan += item.dataDviTsan.length;
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
@@ -316,6 +324,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongDonGia: tongDonGia,
+      slDviTsan: soLuongDviTsan,
     });
   }
 
