@@ -114,7 +114,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="namKhoach" [nzDisabled]="true">
+              <nz-select formControlName="namKhoach">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -507,10 +507,10 @@
               <td>{{dtGoiThau.soLuongDaMua}}</td>
               <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaDx * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
-              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000) + (dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000 *
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
+              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaVat) + (dtGoiThau.soLuong * dtGoiThau.donGiaVat *
                 formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right" *ngIf="userService.isCuc() && !isView">
                 <a *ngIf="!isDisbleForm()" (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
