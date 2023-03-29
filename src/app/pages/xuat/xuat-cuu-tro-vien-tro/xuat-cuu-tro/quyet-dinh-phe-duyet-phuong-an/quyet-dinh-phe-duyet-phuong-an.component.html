@@ -17,13 +17,13 @@
             <label>Thời hạn xuất viện trợ, cứu trợ</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" nzFormat="dd/MM/yyyy" formControlName="ngayDxTu"
-                  nzPlaceHolder="Ngày bắt đầu">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" nzFormat="dd/MM/yyyy"
+                  formControlName="ngayKetThucTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" nzFormat="dd/MM/yyyy" formControlName="ngayDxDen"
-                  nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" nzFormat="dd/MM/yyyy"
+                  formControlName="ngayKetThucTu" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
@@ -31,13 +31,13 @@
             <label>Ngày đề xuất</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayDX" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayKetThucTu" nzPlaceHolder="Ngày bắt đầu">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayDX" nzFormat="dd/MM/yyyy" formControlName="ngayDxTu"
+                  nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayDx" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayKetThucDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayDx" nzFormat="dd/MM/yyyy" formControlName="ngayDxDen"
+                  nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
@@ -127,7 +127,7 @@
             </th>
             <th>
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.ngayThop"
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayThop"
                   (ngModelChange)="filterInTable('ngayThop', convertDateToString(filterTable.ngayThop))">
                 </nz-date-picker>
               </nz-input-group>
@@ -135,7 +135,7 @@
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDx"
-                  (input)="filterInTable('tenLoaiVthh',filterTable.soDx)" size="small" />
+                  (input)="filterInTable('soDx',filterTable.soDx)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -153,8 +153,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
-                  (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongSoLuongDx"
+                  (input)="filterInTable('tongSoLuongDx',filterTable.tongSoLuongDx)" size="small" />
               </nz-input-group>
             </th>
             <th>

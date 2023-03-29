@@ -272,7 +272,7 @@
                         <th [rowspan]="2"></th>
                         <th [rowspan]="2" style="width: 35px">STT</th>
                         <th [rowspan]="2">Nội dung xuất cứu trợ, viện trợ</th>
-                        <th [rowspan]="2">Tổng SL đề xuất CT, VT (kg)</th>
+                        <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
                         <th [colspan]="3">Cục DTNN KV</th>
                         <th [colspan]="2">Chi cục DTNN</th>
                         <th [colspan]="2">Chủng loại hàng hóa</th>
@@ -280,13 +280,13 @@
                       </tr>
                       <tr>
                         <th>Tên cục</th>
-                        <th>Tồn kho(kg)</th>
-                        <th>SL xuất CT, VT giao cục (kg)</th>
+                        <th>Tồn kho ({{formData.value.donViTinh}})</th>
+                        <th>SL xuất CT, VT giao cục ({{formData.value.donViTinh}})</th>
                         <th>Tên chi cục</th>
-                        <th>Tồn kho(kg)</th>
+                        <th>Tồn kho ({{formData.value.donViTinh}})</th>
                         <th>Tên chủng loại hàng hóa</th>
-                        <th>Tồn kho(kg)</th>
-                        <th>Số lượng (kg)</th>
+                        <th>Tồn kho ({{formData.value.donViTinh}})</th>
+                        <th>Số lượng ({{formData.value.donViTinh}})</th>
                         <th>ĐVT</th>
                         <th>Đơn giá không VAT đ/kg</th>
                         <th>Thành tiền (đ)</th>
@@ -420,7 +420,7 @@
                       <th [rowspan]="2"></th>
                       <th [rowspan]="2" style="width: 35px">STT</th>
                       <th [rowspan]="2">Nội dung xuất cứu trợ, viện trợ</th>
-                      <th [rowspan]="2">Tổng SL đề xuất CT, VT (kg)</th>
+                      <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
                       <th [colspan]="3">Cục DTNN KV</th>
                       <th [colspan]="2">Chi cục DTNN</th>
                       <th [colspan]="2">Chủng loại hàng hóa</th>
@@ -429,15 +429,15 @@
                     </tr>
                     <tr>
                       <th>Tên cục</th>
-                      <th>Tồn kho(kg)</th>
-                      <th>SL xuất CT, VT giao cục (kg)</th>
+                      <th>Tồn kho </th>
+                      <th>SL xuất CT, VT giao cục ({{formData.value.donViTinh}})</th>
                       <th>Tên chi cục</th>
-                      <th>Tồn kho(kg)</th>
+                      <th>Tồn kho ({{formData.value.donViTinh}})</th>
                       <th>Tên chủng loại hàng hóa</th>
-                      <th>Tồn kho(kg)</th>
-                      <th>Số lượng (kg)</th>
+                      <th>Tồn kho ({{formData.value.donViTinh}})</th>
+                      <th>Số lượng ({{formData.value.donViTinh}})</th>
                       <th>ĐVT</th>
-                      <th>Đơn giá không VAT đ/kg</th>
+                      <th>Đơn giá không VAT đ/({{formData.value.donViTinh}})</th>
                       <th>Thành tiền (đ)</th>
                     </tr>
                   </thead>

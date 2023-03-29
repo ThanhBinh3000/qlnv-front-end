@@ -69,7 +69,9 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Mục đích xuất</nz-form-label>
+            <nz-form-label [nzNoColon]="true">
+              Loại hình nhập xuất
+            </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-select formControlName="loaiNhapXuat" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
