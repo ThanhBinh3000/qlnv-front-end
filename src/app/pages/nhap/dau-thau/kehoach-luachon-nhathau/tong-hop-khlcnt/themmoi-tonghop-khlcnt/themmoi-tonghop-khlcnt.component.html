@@ -158,7 +158,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <textarea formControlName="noiDung" nz-input [rows]="3"
-                [readonly]="formData.value.trangThai == '00'"></textarea>
+                [readonly]="isView || formData.value.trangThai == '00'"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
