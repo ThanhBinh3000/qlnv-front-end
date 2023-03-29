@@ -62,7 +62,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         soQdKq: [null, [Validators.required]],
         ngayKyQdKq: [null,],
         soQdPd: [null, [Validators.required]],
-        maDviTsan: [null, [Validators.required]],
+        maDviTsan: [],
         tgianNkho: [],
 
         soHd: [null, [Validators.required]],
