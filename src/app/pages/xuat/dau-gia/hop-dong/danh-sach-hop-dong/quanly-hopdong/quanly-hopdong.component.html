@@ -68,6 +68,11 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"></nz-form-label>
+                                </nz-form-item>
+                            </div>
                         </div>
                     </div>
                     <div nz-col nzSpan="8">
@@ -100,13 +105,18 @@
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành công
+                                    <nz-form-label [nzNoColon]="true"> Số DV tài sản đấu giá không thành
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
                                             <input nz-input formControlName="soLuongDviTsanTruot" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"></nz-form-label>
                                 </nz-form-item>
                             </div>
                         </div>
@@ -173,7 +183,7 @@
                         <span>Danh sách hợp đồng</span>
                     </div>
                 </div>
-                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH">
+                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH && userService.isCuc()">
                     <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
@@ -206,13 +216,16 @@
                             <td></td>
                             <td>{{data.tenTrangThai}}</td>
                             <td>
-                                <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">
+                                <a *ngIf="data.trangThai == STATUS.DA_KY"
+                                    (click)="getDetailHopDong($event,data.id,true)">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectHopDong(true,data.id)">
+                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                    (click)="redirectHopDong(true,data.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="deleteHd(data)">
+                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                    (click)="deleteHd(data)">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
                             </td>
@@ -220,7 +233,8 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [idKqBdg]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
+            <app-thong-tin [idKqBdg]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true"
+                [isView]="isView">
             </app-thong-tin>
         </nz-card>
     </div>
