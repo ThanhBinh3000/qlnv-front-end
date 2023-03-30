@@ -68,6 +68,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       soLuongKh: [null],
       duDau: [null],
       dviTinh: [null],
+      loaiVthh: [null],
     });
   }
 
@@ -109,6 +110,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
         dviTinh: this.dviTinh,
+        loaiVthh: this.loaiVthh,
       })
     }
     this.checkDisabledSave();

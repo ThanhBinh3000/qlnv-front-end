@@ -101,6 +101,7 @@ export class DanhSachPhanLo {
     maDviTsan: string;
     duDau: number;
     soLuong: number;
+    khoanTienDatTruoc: number;
     giaKhongVat: number;
     giaKhoiDiem: number;
     donGiaDeXuat: number;
