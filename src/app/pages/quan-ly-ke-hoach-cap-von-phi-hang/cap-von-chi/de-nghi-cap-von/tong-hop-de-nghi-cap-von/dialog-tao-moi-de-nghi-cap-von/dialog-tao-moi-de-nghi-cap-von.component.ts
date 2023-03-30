@@ -189,6 +189,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 					item.uyNhchiMaNguonNs = null;
 					item.uyNhchiNienDoNs = null;
 					item.uyNhchiNienSoTien = null;
+					item.vonDnghiCapLanNay = sumNumber([item.gtTheoKeHoach, -item.luyKeCong]);
 				}
 			})
 			if (this.response.loaiDnghi != Utils.MUA_VTU) {

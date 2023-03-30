@@ -388,7 +388,7 @@ export class BaoCao02Component implements OnInit {
         } else {
             let check = true;
             this.lstCtietBcao[idAppendix].data.forEach(item => {
-                if (item.maVtu == data.maVtu && item.maVtuCha != 0 && item.checked == false) {
+                if (item.maVtu == data.maVtu && item.maVtuCha != 0 && !item.checked) {
                     check = false;
                 }
             })
