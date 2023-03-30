@@ -63,11 +63,12 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       diaChi: [null],
       tenDvi: [null],
       donGiaVat: [null],
-      soLuong: [null],
+      soLuongChiCuc: [null],
       soLuongChiTieu: [null],
       soLuongKh: [null],
       duDau: [null],
       dviTinh: [null],
+      loaiVthh: [null],
     });
   }
 
@@ -109,6 +110,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
         dviTinh: this.dviTinh,
+        loaiVthh: this.loaiVthh,
       })
     }
     this.checkDisabledSave();
@@ -170,7 +172,8 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     let body = {
       year: this.namKh,
       loaiVthh: this.loaiVthh,
-      maDvi: event
+      maDvi: event,
+      lastest: 1,
     }
     let soLuongDaLenKh = await this.deXuatKhBanTrucTiepService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
@@ -181,7 +184,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         soLuongKh: soLuongDaLenKh.data,
-        soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat,
+        soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
@@ -295,7 +298,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.listOfData = [...this.listOfData, this.thongTinXuatBanTrucTiep];
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
       this.formData.patchValue({
-        soLuong: this.calcTong('soLuong')
+        soLuongChiCuc: this.calcTong('soLuong')
       })
       this.updateEditCache();
       this.disableChiCuc();
@@ -370,7 +373,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (this.validateSoLuong()) {
       this.listOfData[index].edit = false
       this.formData.patchValue({
-        soLuong: this.calcTong('soLuong')
+        soLuongChiCuc: this.calcTong('soLuong')
       })
     }
   }
@@ -379,7 +382,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (this.validateSoLuong()) {
       this.listOfData[index].edit = false
       this.formData.patchValue({
-        soLuong: this.calcTong('soLuong')
+        soLuongChiCuc: this.calcTong('soLuong')
       })
     }
 
@@ -427,7 +430,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
         if (column == 'tienDatTruocDduyet') {
-          prev += (cur.soLuong * cur.donGiaVat * 1000)
+          prev += (cur.soLuong * cur.donGiaVat)
         } else {
           prev += cur[column];
         }

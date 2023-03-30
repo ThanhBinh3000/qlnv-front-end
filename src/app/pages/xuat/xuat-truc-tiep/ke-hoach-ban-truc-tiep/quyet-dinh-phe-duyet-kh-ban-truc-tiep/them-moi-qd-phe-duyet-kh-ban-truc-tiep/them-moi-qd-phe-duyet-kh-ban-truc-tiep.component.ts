@@ -149,7 +149,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         namKh: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
-        tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
       })
       await this.selectMaTongHop(dataTongHop.id);
@@ -255,8 +254,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           tenCloaiVthh: data.tenCloaiVthh,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
-          tchuanCluong: data.tchuanCluong,
-          soQdCc: data.soQdCc,
           idThHdr: event,
           idTrHdr: null,
           soTrHdr: null,
@@ -265,6 +262,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const dataRes = res.data;
+              this.formData.patchValue({
+                tchuanCluong: dataRes.tchuanCluong,
+                soQdCc: dataRes.soQdCtieu,
+              })
               dataRes.children.forEach((item) => {
                 let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
                   maDviTsan: key,
@@ -371,7 +372,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           pthucGnhan: data.pthucGnhan,
           thongBaoKh: data.thongBaoKh,
           soQdCc: data.soQdCtieu,
-          trichYeu: dataRes.trichYeu,
+          // trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
           maDvi: data.maDvi,

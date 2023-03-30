@@ -421,8 +421,10 @@
             <ng-container *ngFor="let item of dataTable , let i = index">
               <tr>
                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                <td colspan="7">{{item.tenDvi}}</td>
-                <td>{{item.tongSoLuong}}</td>
+                <td colspan="5">{{item.tenDvi}}</td>
+                <td>{{item.soLuong}}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

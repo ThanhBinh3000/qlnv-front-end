@@ -47,9 +47,9 @@
           <div nz-col [nzSpan]="4">
             <nz-form-item>
               <nz-form-label nzRequired>Mã điểm kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
+              <nz-form-control nzErrorTip="Mã sai định dạng">
                 <nz-input-group [nzAddOnBefore]="formKho.value.maCha">
-                  <nz-input-number  formControlName="maDiemkho" [nzMin]="1" [nzMax]="99"  [nzStep]="1" [nzSize]="'small'"></nz-input-number>
+                  <input nz-input formControlName="maDiemKho" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -219,9 +219,9 @@
           <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label nzRequired>Mã nhà kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
+              <nz-form-control nzErrorTip="Mã sai định dạng">
                 <nz-input-group [nzAddOnBefore]="formKho.value.maCha">
-                  <nz-input-number  formControlName="maNhakho" [nzMin]="1" [nzMax]="99"  [nzStep]="1" [nzSize]="'small'"></nz-input-number>
+                  <input nz-input formControlName="maNhakho" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -460,9 +460,9 @@
           <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label nzRequired>Mã ngăn kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
+              <nz-form-control nzErrorTip="Mã sai định dạng">
                 <nz-input-group [nzAddOnBefore]="formKho.value.maCha">
-                  <nz-input-number  formControlName="maNgankho" [nzMin]="1" [nzMax]="99"  [nzStep]="1" [nzSize]="'small'"></nz-input-number>
+                  <input nz-input formControlName="maNgankho" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -760,9 +760,9 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label nzRequired>Mã lô kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
+              <nz-form-control nzErrorTip="Mã sai định dạng">
                 <nz-input-group [nzAddOnBefore]="formKho.value.maCha">
-                  <nz-input-number  formControlName="maNganlo" [nzMin]="1" [nzMax]="99"  [nzStep]="1" [nzSize]="'small'"></nz-input-number>
+                  <input nz-input formControlName="maNganlo" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
