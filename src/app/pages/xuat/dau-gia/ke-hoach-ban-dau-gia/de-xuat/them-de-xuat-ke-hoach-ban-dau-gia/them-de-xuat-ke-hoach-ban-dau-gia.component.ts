@@ -162,6 +162,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           thoiGianDuKien: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null
         })
         this.dataTable = data.children;
+        this.fileDinhKem = data.fileDinhKems;
         this.calculatorTable();
       }
     }
@@ -326,7 +327,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
         body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
       }
-      body.fileDinhKemReq = this.fileDinhKem;
+      body.fileDinhKems = this.fileDinhKem;
       body.children = this.dataTable;
       let res = await this.createUpdate(body);
       if (res) {
