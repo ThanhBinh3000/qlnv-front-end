@@ -5,7 +5,6 @@ import {Base2Component} from "../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
-import {KtKhXdHangNamService} from "../../../services/kt-kh-xd-hang-nam.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {MESSAGE} from "../../../constants/message";
@@ -66,7 +65,7 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
     }
   }
 
-  async themMoi() {
+  async themMoi(id) {
     let modalTuChoi = this.modal.create({
       nzContent: ThemMoiDmDviLqComponent,
       nzMaskClosable: false,
@@ -76,11 +75,13 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzClassName: 'themdmdungchung',
       nzComponentParams: {
-
+        idInput : id
       },
     });
     modalTuChoi.afterClose.subscribe((data) => {
-      this.search();
+      if (data) {
+        this.search();
+      }
     })
   }
 }
