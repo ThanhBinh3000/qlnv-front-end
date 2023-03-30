@@ -38,6 +38,7 @@ export class ThemMoiKhoComponent implements OnInit {
   isVisible = false;
   levelNode: number = 0;
   userInfo: UserLogin
+  regexMa = '^[0-9]$'
 
   dataDetail: any;
   nodeSelected: any;
@@ -81,7 +82,7 @@ export class ThemMoiKhoComponent implements OnInit {
       ngankhoId: [''],
       tongkhoId: [''],
       diaChi: [''],
-      tenChiCuc: [''],
+      tenTongKho: [''],
       tenNganlo: [''],
       maNganlo: [''],
       tenDiemkho: [''],
@@ -217,7 +218,7 @@ export class ThemMoiKhoComponent implements OnInit {
             tenDiemkho: dataNodeRes.tenDiemkho,
             tenNhakho: dataNodeRes.tenNhakho,
             tenNgankho: dataNodeRes.tenNgankho,
-            tenChiCuc: dataNodeRes.tenTongkho,
+            tenTongKho: dataNodeRes.tenTongKho,
             diaChi: dataNodeRes.diaChi,
           });
           this.idReq = dataNodeRes.id
