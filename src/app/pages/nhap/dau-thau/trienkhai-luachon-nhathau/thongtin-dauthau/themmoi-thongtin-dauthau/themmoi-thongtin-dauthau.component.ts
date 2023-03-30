@@ -257,7 +257,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tgianBdauTchuc: formatDate( data.dxuatKhLcntHdr.tgianBdauTchuc,"dd/MM/yyyy", 'en-US'),
         tgianDthau: formatDate( data.dxuatKhLcntHdr.tgianDthau,"HH:mm dd/MM/yyyy", 'en-US'),
         tgianMthau: formatDate( data.dxuatKhLcntHdr.tgianMthau,"HH:mm dd/MM/yyyy", 'en-US'),
-        tgianNhang: formatDate( data.dxuatKhLcntHdr.tgianNhang,"HH:mm dd/MM/yyyy", 'en-US'),
+        tgianNhang: formatDate( data.dxuatKhLcntHdr.tgianNhang,"dd/MM/yyyy", 'en-US'),
       });
       this.formData.patchValue({
         trangThai: data.trangThai,
@@ -265,9 +265,20 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
       this.listOfData = data.children;
       this.convertListData()
+      debugger
+      this.showFirstRow(event, this.listDataGroup)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async showFirstRow($event, dataGoiThau: any){
+    // for (let j = 0; dataGoiThau.length > 0 ; j++) {
+    //   for (let k = 0; dataGoiThau[0].dataChild.length > 0; k++) {
+        await this.showDetail($event, dataGoiThau[0].dataChild[0]);
+      // }
+    // }
+
   }
 
   convertListData() {
@@ -408,10 +419,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async showDetail($event, dataGoiThau: any) {
+    debugger
+    console.log($event)
     await this.spinner.show();
     this.listNthauNopHs = [];
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if($event.type == 'click'){
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    }
 
     this.idGoiThau = dataGoiThau.id;
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
@@ -539,6 +554,62 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     } else {
       this.expandSet3.delete(id);
     }
+  }
+
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    this.listDataGroup.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data)
+        })
+      }
+    })
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column];
+          return prev;
+        }, 0);
+        result = sum
+      } else {
+        let list = arr.filter(item => item.tenDonVi == tenDvi)
+        if (list && list.length > 0) {
+          const sum = list.reduce((prev, cur) => {
+            prev += cur[column];
+            return prev;
+          }, 0);
+          result = sum
+        }
+      }
+    }
+    return result;
+  }
+
+  sumThanhTien(column?: string){
+    let result = 0;
+    let arr = [];
+    this.listDataGroup.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data)
+        })
+      }
+      if (arr && arr.length > 0) {
+          const sum = arr.reduce((prev, cur) => {
+            if(cur['trangThai'] != 41 && column == 'chenhLech'){
+              prev += (cur['donGiaNhaThau'] - cur['donGiaVat']) * cur['soLuong'] * 1000;
+            }else{
+              prev += cur[column] * 1000 * cur['soLuong'];
+            }
+            return prev;
+          }, 0);
+          result = sum
+      }
+    })
+
+    return result;
   }
 
 }

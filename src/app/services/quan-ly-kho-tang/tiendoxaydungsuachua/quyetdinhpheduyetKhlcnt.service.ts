@@ -7,11 +7,11 @@ import {OldResponseData} from "../../../interfaces/response";
 @Injectable({
   providedIn: 'root',
 })
-export class QuyetdinhpheduyetTktcTdtService extends BaseService {
+export class QuyetdinhpheduyetKhlcntService extends BaseService {
   GATEWAY = '/qlnv-kho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tien-do-xdsc/xay-dung/quyetdinh-pd-tktc-tdt', '');
+    super(httpClient, 'tien-do-xdsc/xay-dung/quyetdinh-pd-khlcnt', '');
   }
 
   search(body) {

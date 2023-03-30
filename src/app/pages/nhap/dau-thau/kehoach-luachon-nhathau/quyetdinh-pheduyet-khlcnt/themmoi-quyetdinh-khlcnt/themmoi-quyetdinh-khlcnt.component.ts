@@ -60,6 +60,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   errorGhiChu: boolean = false;
   maQd: string = null;
   fileDinhKem: Array<FileDinhKem> = [];
+  listFileDinhKem: any[] = [];
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -185,6 +186,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.isView)
     await this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -304,7 +306,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.children = this.danhsachDx;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.listFileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
@@ -442,6 +444,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listToTrinh = [];
       this.listDanhSachTongHop = [];
       const data = res.data;
+      this.listFileDinhKem = data.fileDinhKems;
       console.log(data)
       console.log(this.idInput)
       this.helperService.bidingDataInFormGroup(this.formData, data);
