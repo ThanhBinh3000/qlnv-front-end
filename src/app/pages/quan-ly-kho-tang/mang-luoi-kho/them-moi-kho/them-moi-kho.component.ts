@@ -214,7 +214,13 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
+          if (dataNodeRes && dataNodeRes.maNgankho && dataNodeRes.coLoKho != '01') {
+            this.notification.error(MESSAGE.ERROR, "Không thể thăm lô kho vào ngăn kho này!!");
+            this.levelNode = 0;
+            return;
+          }
           this.formKho.patchValue({
+            tenC: dataNodeRes.tenDiemkho,
             tenDiemkho: dataNodeRes.tenDiemkho,
             tenNhakho: dataNodeRes.tenNhakho,
             tenNgankho: dataNodeRes.tenNgankho,
@@ -233,11 +239,6 @@ export class ThemMoiKhoComponent implements OnInit {
     if (loaiVthh.length > 0) {
       this.dsChungLoaiHangHoa = loaiVthh[0].child;
     }
-  }
-
-
-  enumToSelectList() {
-
   }
 
   listType = ["MLK", "DV"]
