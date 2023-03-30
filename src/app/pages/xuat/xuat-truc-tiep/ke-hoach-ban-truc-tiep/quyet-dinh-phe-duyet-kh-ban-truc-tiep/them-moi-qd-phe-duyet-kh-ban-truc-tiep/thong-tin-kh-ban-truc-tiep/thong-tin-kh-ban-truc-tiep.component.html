@@ -73,11 +73,24 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <input nz-input readonly formControlName="pthucTtoan" />
-                            </nz-input-group>
+                            <nz-select formControlName="pthucTtoan" nzDisabled>
+                                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma"
+                                    [nzLabel]="p.giaTri">
+                                </nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
+                    <!-- <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group>
+                                <input nz-input readonly formControlName="pthucTtoan" />
+                                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma"
+                                    [nzLabel]="p.giaTri">
+                                </nz-option>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item> -->
                 </div>
                 <div nz-col [nzSpan]="6" *ngIf="isCache">
                     <nz-form-item>
