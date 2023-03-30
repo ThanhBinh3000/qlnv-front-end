@@ -148,7 +148,8 @@
                                 <tr *ngFor="let item of baoCao?.lstBcaos; let i = index">
                                     <td>{{ i + 1 }}</td>
                                     <td>{{item.tenPhuLuc}}</td>
-                                    <td>{{item.tieuDe}} <ng-template [ngIf]="baoCao.thangBcao">{{baoCao.thangBcao}}/
+                                    <td>{{item.tieuDe}} <ng-template
+                                            [ngIf]="baoCao.maLoaiBcao == '526'">{{baoCao.thangBcao}}/
                                         </ng-template>
                                         {{baoCao.namBcao}}</td>
                                     <td>{{getStatusAppendixName(item.trangThai)}}
