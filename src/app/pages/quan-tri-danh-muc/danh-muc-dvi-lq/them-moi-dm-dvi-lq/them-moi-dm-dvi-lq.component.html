@@ -180,6 +180,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" >Ghi chú</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input nz-row="3" formControlName="ghiChu"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -188,12 +196,12 @@
   <div class="nut">
     <div class="cantrai">
     </div>
-    <div class="canphai ml-2">
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light ml-2" (click)="handleCancel()">
         <i class="icon htvbdh_tcdt_delete"></i>
         Hủy
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save() ">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active ml-2" (click)="save() ">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>
