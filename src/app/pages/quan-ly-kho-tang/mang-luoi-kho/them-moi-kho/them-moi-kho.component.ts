@@ -403,13 +403,13 @@ export class ThemMoiKhoComponent implements OnInit {
     this.helperService.removeValidators(this.formKho);
     switch (this.levelNode) {
       case 1 : {
-        this.formKho.controls['maDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['maDiemkho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenDiemkho'].setValidators([Validators.required])
         this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 2 : {
-        this.formKho.controls['maNhakho'].setValidators([Validators.required])
+        this.formKho.controls['maNhakho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNhakho'].setValidators([Validators.required])
         this.formKho.controls['loaikhoId'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
@@ -417,14 +417,14 @@ export class ThemMoiKhoComponent implements OnInit {
         break;
       }
       case 3 : {
-        this.formKho.controls['maNgankho'].setValidators([Validators.required])
+        this.formKho.controls['maNgankho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNgankho'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         this.formKho.controls['coLoKho'].setValidators([Validators.required])
         break;
       }
       case 4 : {
-        this.formKho.controls['maNganlo'].setValidators([Validators.required])
+        this.formKho.controls['maNganlo'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNganlo'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         break;
