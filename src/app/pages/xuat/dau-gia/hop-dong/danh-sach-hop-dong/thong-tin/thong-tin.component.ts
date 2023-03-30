@@ -35,7 +35,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   @Input() isQuanLy: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  @Input() isView: boolean;
   listLoaiHopDong: any[] = [];
   listDviTsan: any[] = [];
   listDviLquan: any[] = [];
@@ -113,6 +113,8 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         tenLoaiVthh: [''],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
+        fileDinhKems: [new Array<FileDinhKem>()],
+        canCu: [new Array<FileDinhKem>()],
         listMaDviTsan: [null, [Validators.required]],
       }
     );
@@ -134,9 +136,11 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   }
 
   initForm() {
+    console.log(this.userInfo, 5);
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
-      tenDvi: this.userInfo.TEN_DVI ?? null
+      tenDvi: this.userInfo.TEN_DVI ?? null,
+      diaChi: this.userInfo.DON_VI.diaChi ?? null,
     })
   }
 
@@ -157,9 +161,11 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     })
     console.log(data);
     this.dataTable = data.children;
+    this.dataTable.forEach(e =>
+      e.tenChiCuc = e.tenDvi,
+    )
     this.dataTablePhuLuc = data.phuLuc;
     this.objHopDongHdr = data;
-    this.fileDinhKem = data.fileDinhKems;
   }
 
   async save(isOther: boolean) {
@@ -196,7 +202,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
       this.formData.controls["fax"].setValidators([Validators.required]);
       this.formData.controls["moTai"].setValidators([Validators.required]);
       this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
-      this.formData.controls["faxNhaThau"].setValidators([Validators.required]);
+      this.formData.controls["stkNhaThau"].setValidators([Validators.required]);
       this.formData.controls["ghiChu"].setValidators([Validators.required]);
     }
 
@@ -379,9 +385,10 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         return {
           idVirtual: uuid.v4(),
           tenChiCuc: key,
+          maDvi: tenChiCuc.maChiCuc,
           children: value
-
         };
+
       }).value();
     this.dataTable = dataView
     this.expandAll()
