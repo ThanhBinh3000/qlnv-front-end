@@ -392,7 +392,7 @@
                     <div nz-col nzSpan="10">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          Thành Tiền
+                          Thành Tiền {{formData.value.soLuongXuaCap}}
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                           <nz-statistic
@@ -400,15 +400,13 @@
                         </nz-form-control>
                       </nz-form-item>
                     </div>
-                    <div nz-col nzSpan="8" *ngIf="formData.value.xuatCap == true">
+                    <div nz-col nzSpan="8" *ngIf="this.formData.value.loaiVthh=='0102'">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                           SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <!-- <nz-statistic [nzValueStyle]="{ color: 'red'}" [nzValue]="slXuatCap | number: '1.0-1' : 'vi_VN'">
-                          </nz-statistic> -->
-                          <span>{{this.formData.value.soLuongXuaCap| number: '1.0-1' : 'vi_VN'}}</span>
+                          <span>{{formData.value.soLuongXuaCap| number: '1.0-1' : 'vi_VN'}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -520,8 +518,8 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" (ngModelChange)="tinhXuatCap()"
-                  [nzDisabled]="slXuatCap == null" [(ngModel)]="formData.value.xuatCap">
+                <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" [nzDisabled]="slXuatCap == null"
+                  [(ngModel)]="this.formData.value.xuatCap" (ngModelChange)="tinhXuatCap()">
                   Đồng ý duyệt xuất cấp
                 </label>
               </nz-card>
