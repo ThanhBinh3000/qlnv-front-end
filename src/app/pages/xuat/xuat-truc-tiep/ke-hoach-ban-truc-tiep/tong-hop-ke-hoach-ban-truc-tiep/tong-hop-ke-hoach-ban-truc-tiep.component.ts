@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { saveAs } from 'file-saver';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 
 @Component({
@@ -75,16 +76,36 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
       this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
     }
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-    })
     await this.search();
   }
 
   clearFilter() {
     this.formData.reset();
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    })
     this.timKiem();
   }
 
+
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.tongHopKhBanTrucTiepService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Thong-tin-tong-hop-ke-hoach-ban-truc-tiep.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
 

@@ -100,6 +100,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
+      donGiaVat: [],
     });
   }
 
@@ -216,6 +217,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
+          this.formData.patchValue({
+            donGiaVat: data.giaQdVat
+          })
         }
         if (res.statusCode == API_STATUS_CODE.SUCCESS) {
           this.formData.patchValue({
@@ -249,6 +253,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
+        donGiaVat: this.formData.value.donGiaVat,
       },
     });
     modalGT.afterClose.subscribe((data) => {
