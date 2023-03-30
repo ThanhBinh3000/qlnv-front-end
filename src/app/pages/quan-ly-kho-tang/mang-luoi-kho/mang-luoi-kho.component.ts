@@ -323,7 +323,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   checkStatusSurplus() {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.loaiVthh && this.detailDonVi.value.tichLuongKdLt == 0)) {
+    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '00' && !this.detailDonVi.value.loaiVthh)) {
       check = true
     }
     return check;
@@ -405,6 +405,7 @@ export class MangLuoiKhoComponent implements OnInit {
         this.convertDataToTree()
         this.detailDonVi.patchValue({
           diemkhoId : dataNode.idParent,
+          tenThuKho : dataNode.tenThuKho,
           tenDiemkho : dataNode.tenDiemkho,
           tenTongKho : dataNode.tenTongKho,
           soNgankho : dataNode.soNgankho,
@@ -542,7 +543,7 @@ export class MangLuoiKhoComponent implements OnInit {
         this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.getDetailMlkByKey(this.keySelected)
-            this.isEditData = false;
+            this.isEditData = true;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.spinner.hide()
           } else {
@@ -550,6 +551,7 @@ export class MangLuoiKhoComponent implements OnInit {
             this.spinner.hide()
           }
         })
+        this.spinner.hide()
       }
     });
   }
