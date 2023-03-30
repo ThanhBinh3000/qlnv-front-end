@@ -19,4 +19,10 @@ export class QuyetdinhpheduyetKhlcntService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+
+  getLastRecordBySoQdPdDaDtxd(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-cv-da-th-by-qdpddadtxd`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
