@@ -81,7 +81,6 @@
           <th width="60px">STT</th>
           <th width="130px">Số quyết định</th>
           <th width="230px">Dự án</th>
-          <th width="230px">Chủ đầu tư</th>
           <th width="">Trích yếu</th>
           <th width="150px">Tổng mức đầu tư</th>
           <th width="150px">Số QĐ PD DA ĐTXD</th>
@@ -120,8 +119,8 @@
           </td>
           <td>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongMucDt"
-                     (input)="filterInTable('tongMucDt',filterTable.tongMucDt)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
+                     (input)="filterInTable('tongTien',filterTable.tongTien)"/>
             </nz-input-group>
           </td>
           <td>
@@ -157,9 +156,8 @@
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQd }}</td>
           <td>{{ data.tenDuAn }}</td>
-          <td>{{ data.chuDauTu }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tongMucDt | number: '1.0-1': 'vi_VN' }}</td>
+          <td>{{ data.tongTien | number: '1.0-1': 'vi_VN' }}</td>
           <td>{{ data.soQdPdDaDtxd }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
