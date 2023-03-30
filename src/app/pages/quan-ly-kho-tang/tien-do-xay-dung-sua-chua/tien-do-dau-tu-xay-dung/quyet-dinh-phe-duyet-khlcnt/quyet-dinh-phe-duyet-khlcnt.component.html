@@ -9,10 +9,16 @@
               <input nz-input formControlName="soQd"/>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <label class="search__label">Dự án</label>
             <nz-input-group>
               <input nz-input formControlName="tenDuAn"/>
+            </nz-input-group>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Chủ đầu tư</label>
+            <nz-input-group>
+              <input nz-input formControlName="chuDauTu"/>
             </nz-input-group>
           </div>
           <div nz-col nzSpan="4">
@@ -27,7 +33,7 @@
               <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <label class="search__label">Ngày ký</label>
             <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayKy"></nz-range-picker>
           </div>
@@ -81,6 +87,7 @@
           <th width="60px">STT</th>
           <th width="130px">Số quyết định</th>
           <th width="230px">Dự án</th>
+          <th width="230px">Chủ đầu tư</th>
           <th width="">Trích yếu</th>
           <th width="150px">Tổng mức đầu tư</th>
           <th width="150px">Số QĐ PD DA ĐTXD</th>
@@ -156,6 +163,7 @@
           <td>{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQd }}</td>
           <td>{{ data.tenDuAn }}</td>
+          <td>{{ data.chuDauTu }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tongTien | number: '1.0-1': 'vi_VN' }}</td>
           <td>{{ data.soQdPdDaDtxd }}</td>

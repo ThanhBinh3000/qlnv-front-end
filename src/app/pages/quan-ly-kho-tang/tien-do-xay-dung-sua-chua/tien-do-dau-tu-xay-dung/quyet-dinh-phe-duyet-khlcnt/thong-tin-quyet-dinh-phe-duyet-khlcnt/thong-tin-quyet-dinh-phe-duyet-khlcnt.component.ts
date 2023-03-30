@@ -71,6 +71,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       idQdPdDaDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
+      chuDauTu: [null, Validators.required],
       idDuAn: [null, Validators.required],
       tienCvDaTh: [0],
       tienCvKad: [0],
@@ -233,6 +234,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
         this.formData.patchValue({
           idQdPdDaDtxd: item.id,
           tenDuAn: item.tenDuAn,
+          chuDauTu: item.chuDauTu,
           idDuAn: item.idDuAn,
           tongTien: item.tongMucDt
         });
