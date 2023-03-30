@@ -80,7 +80,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                 <nz-form-control>
-                                  <nz-input-number style="color: #001CFF !important;font-weight: bold;" [nzSize]="'small'"
+                                  <nz-input-number [nzSize]="'small'"
                                         [ngModel]="formData.value.soLuong * formData.value.donGiaVat * 1000"
                                         [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
                                         [nzParser]="globals.parser" nzDisabled>
@@ -93,7 +93,7 @@
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư các gói thầu đã trúng
                                 </nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-number style="color: #001CFF !important;font-weight: bold;" [nzSize]="'small'" formControlName="tongMucDtGoiTrung"
+                                    <nz-input-number [nzSize]="'small'" formControlName="tongMucDtGoiTrung"
                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                     </nz-input-number>
                                 </nz-form-control>
@@ -216,7 +216,7 @@
                                 <nz-form-label [nzNoColon]="true"> Đơn giá VAT (đ/kg) </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
-                                        <nz-input-number class="text-blue" [nzSize]="'small'" formControlName="donGiaVat"
+                                        <nz-input-number [nzSize]="'small'" formControlName="donGiaVat"
                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                         </nz-input-number>
                                     </nz-input-group>
@@ -269,8 +269,9 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Thời gian nhập hàng trước ngày </nz-form-label>
                                 <nz-form-control>
-                                    <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy" nzDisabled>
-                                    </nz-date-picker>
+                                  <nz-input-group>
+                                    <input nz-input formControlName="tgianNhang" nzFormat="dd/MM/yyyy" readonly />
+                                  </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -356,6 +357,27 @@
                         </ng-container>
                     </ng-container>
                 </tbody>
+                <tfoot>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td class="text-blue">Tổng</td>
+                  <td></td>
+                  <td></td>
+                  <td
+                    class="text-blue">{{sumslKho('donGiaVat', null, 'tong') | number: '1.0-3'}}</td>
+                  <td
+                    class="text-blue">{{sumThanhTien('donGiaVat') | number: '1.0-3'}}</td>
+                  <td></td>
+                  <td
+                    class="text-blue">{{sumslKho('donGiaNhaThau', null, 'tong') | number: '1.0-3'}}</td>
+                  <td
+                    class="text-blue">{{sumThanhTien('donGiaNhaThau') | number: '1.0-3'}}</td>
+                  <td
+                    class="text-blue">{{sumThanhTien('chenhLech') | number: '1.0-3'}}</td>
+                </tr>
+
+                </tfoot>
             </nz-table>
             <ng-template #templateTableVt>
                 <nz-table [nzData]="danhsachDx" class="nowrap" nzBordered>
