@@ -191,9 +191,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       await this.selectRow(this.formData.value.quyetDinhPdDtl[0])
       this.fileDinhKem = data.fileDinhKem;
       this.canCu = data.canCu;
-      await this.changeHangHoa(data.loaiVthh)
       await this.buildTableView();
-      await this.tinhXuatCap()
     } else {
 
     }
@@ -528,7 +526,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
     quyetDinhPdDtlFormData.quyetDinhPdDx = table;
     this.buildTableView();
-    this.tinhXuatCap();
+
     this.isVisible = false;
 
     //clean
@@ -642,12 +640,12 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
     if (this.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.deXuatPhuongAn.map(s => s.thanhTien);
-      console.log(this.listThanhTien, "http://192.168.1.70:3000/issues/8637");
       this.listSoLuong = this.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
     }
+    this.tinhXuatCap();
   }
 
   expandAll() {
@@ -768,7 +766,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   tinhXuatCap() {
-    console.log(this.formData.value.xuatCap, 555);
+    console.log(this.formData.value.xuatCap, "11");
+
     let tongSoLuongXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTe = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     if (tongSoLuongXuat > tongSoLuongXuatThucTe) {
@@ -777,17 +776,17 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.slXuatCap = null;
     }
     this.tongSoLuongDxuat = tongSoLuongXuatThucTe;
-    if (this.formData.value.xuatCap == false) {
+    if (this.formData.value.xuatCap == true) {
       this.formData.patchValue({
         soLuongXuaCap: this.slXuatCap,
+        xuatCap: true
       })
     } else {
       this.formData.patchValue({
         soLuongXuaCap: null,
+        xuatCap: false
       })
     }
-
-
     let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     if (tongSoLuongXuatCache > tongSoLuongXuatThucTeCache) {
@@ -795,6 +794,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       this.slXuatCapCache = null;
     }
+
   }
 
   openDxPaModal(id: number) {
