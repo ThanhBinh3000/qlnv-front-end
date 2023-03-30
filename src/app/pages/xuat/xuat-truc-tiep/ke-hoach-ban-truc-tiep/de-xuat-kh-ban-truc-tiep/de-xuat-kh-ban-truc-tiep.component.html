@@ -228,7 +228,9 @@
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td>{{ data.slDviTsan }}</td>
                         <td></td>
-                        <td class="text-blue">{{ data.soQdCtieu}}</td>
+                        <td><a nz-button nzType="link" nzBlock (click)="openViewChiTieu(data.idSoQdCtieu)">{{
+                                data.soQdCtieu}}</a>
+                        </td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThaiTh}}
                         <td class="text-left">
@@ -273,3 +275,17 @@
         (showListEvent)="showList()">
     </app-them-moi-de-xuat-kh-ban-truc-tiep>
 </div>
+<!--xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="idQdChiTieu" [nzFooter]="modalFooterViewChiTieu"
+    [nzClosable]="true" (nzOnCancel)="closeViewChiTieu()" nzTitle="QUYẾT ĐỊNH GIAO CHỈ TIÊU">
+    <ng-container class="modal__content custom-scroll-modal" *nzModalContent>
+        <!--    <form nz-form>-->
+        <!-- <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idQdChiTieu" (showListEvent)="showList()"
+            [isViewDetail]="false">
+        </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc> -->
+    </ng-container>
+    <ng-template #modalFooterViewChiTieu>
+        <button nz-button class="btn btn-main" (click)="closeViewChiTieu()">Đóng</button>
+        <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
+    </ng-template>
+</nz-modal>

@@ -40,7 +40,7 @@
                 <nz-form-item>
                     <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>

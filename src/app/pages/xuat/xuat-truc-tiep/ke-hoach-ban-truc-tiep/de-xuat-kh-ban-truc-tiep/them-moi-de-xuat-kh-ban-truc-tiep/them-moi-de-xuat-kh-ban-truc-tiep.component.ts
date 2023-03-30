@@ -99,6 +99,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       slDviTsan: [],
       typeVthh: [''],
       dviTinh: [''],
+      idSoQdCtieu: [''],
     });
   }
 
@@ -289,7 +290,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKh: this.formData.get('namKh').value,
-        donGiaVat: this.formData.value.donGiaVat,
+        donGiaVat: this.formData.get('donGiaVat').value,
         dviTinh: this.formData.get('dviTinh').value,
       },
     });
@@ -329,13 +330,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       })).value();
       item.dataDviTsan = dataGroup;
       soLuongDviTsan += item.dataDviTsan.length;
-      let soLuongChiCuc = 0;
+      tongSoLuong += item.soLuongChiCuc;
       item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
         tongDonGia += child.donGiaDeXuat;
       })
-      item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
@@ -395,7 +393,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.dataChiTieu = res2.data;
       if (this.dataChiTieu) {
         this.formData.patchValue({
-          soQdCtieu: res2.data.soQuyetDinh
+          soQdCtieu: res2.data.soQuyetDinh,
+          idSoQdCtieu: res2.data.id
         });
       }
     } else {
