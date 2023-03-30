@@ -18,7 +18,9 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
 import { chain } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import * as uuid from "uuid";
 import { async } from '@angular/core/testing';
+import { E } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-thong-tin',
@@ -42,7 +44,8 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   idPhuLuc: number = 0;
   objHopDongHdr: any = {};
   maHopDongSuffix: string = '';
-
+  expandSetString = new Set<string>();
+  listMaDvts = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -195,7 +198,6 @@ export class ThongTinComponent extends Base2Component implements OnInit {
       this.formData.controls["moTaiNhaThau"].setValidators([Validators.required]);
       this.formData.controls["faxNhaThau"].setValidators([Validators.required]);
       this.formData.controls["ghiChu"].setValidators([Validators.required]);
-      console.log(10);
     }
 
 
@@ -353,46 +355,42 @@ export class ThongTinComponent extends Base2Component implements OnInit {
 
   selectMaDviTsan() {
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-      this.dataTable = [];
-      let ttDauThau
-      let soLuong = 0;
-      let tongTien = 0;
-      this.formData.value.listMaDviTsan.forEach(x => {
-        console.log(x);
-        let item = this.listDviTsan.filter(item => item.maDviTsan == x)[0];
-        console.log(item);
-        item.children.forEach(element => {
-          soLuong = soLuong + element.soLuong
-          tongTien = tongTien + (element.soLuong * element.donGiaVat)
+      let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+      listAll.forEach(s => {
+        s.children.forEach(e => {
+          if (!this.objectArrayIncludes(this.listMaDvts, e)) {
+            this.listMaDvts = [...this.listMaDvts, e];
+          }
         });
-        let tenNhaThau = item.toChucCaNhan;
-        ttDauThau = this.listDviLquan.filter(item => item.hoVaTen == tenNhaThau);
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach(y => {
-            /// Check nếu cùng 1 mã đơn vị thì sẽ push chung vào 1 children của mã đơn vị ý
-            if (y.maDvi == item.maDvi) {
-              y.children = [...y.children, ...item.children]
-            } else {
-              this.dataTable = [...this.dataTable, item]
-            }
-          })
-        } else {
-          this.dataTable = [...this.dataTable, item]
-        }
-      })
-      this.formData.patchValue({
-        soLuong: soLuong,
-        tongTien: tongTien
-      })
-      if (ttDauThau && ttDauThau.length > 0) {
-        this.formData.patchValue({
-          tenNhaThau: ttDauThau[0].hoVaTen,
-          diaChiNhaThau: ttDauThau[0].diaChi,
-          mstNhaThau: ttDauThau[0].soCccd,
-
-        })
-      }
+      });
+      this.buildTableView();
     }
+  }
+  objectArrayIncludes(array, obj) {
+    return array.some(function (element) {
+      return element.id === obj.id;
+    });
+  }
+  buildTableView() {
+    let dataView = chain(this.listMaDvts)
+      .groupBy("tenChiCuc")
+      .map((value, key) => {
+        let tenChiCuc = value.find(f => f.tenChiCuc === key)
+        return {
+          idVirtual: uuid.v4(),
+          tenChiCuc: key,
+          children: value
+
+        };
+      }).value();
+    this.dataTable = dataView
+    this.expandAll()
+
+  }
+  expandAll() {
+    this.dataTable.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
   }
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
