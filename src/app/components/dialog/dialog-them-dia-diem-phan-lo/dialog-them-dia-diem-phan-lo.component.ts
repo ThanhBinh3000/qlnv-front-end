@@ -62,6 +62,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       soLuong: [null],
       soLuongChiTieu: [null],
       soLuongKh: [null],
+      khoanTienDatTruoc: [null],
     });
   }
 
@@ -102,6 +103,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
+        khoanTienDatTruoc: this.khoanTienDatTruoc,
       })
     }
     this.checkDisabledSave();
@@ -211,7 +213,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.listNhaKho = diemKho.children;
       this.thongtinPhanLo.tenDiemKho = diemKho.tenDvi;
       this.thongtinPhanLo.diaDiemKho = diemKho.diaChi;
-
+      this.thongtinPhanLo.donGiaVat = this.donGiaVat;
+      this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
     }
   }
 
@@ -277,6 +280,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   addDiemKho() {
     if (this.validateDiemKho()) {
+      this.thongtinPhanLo.donGiaVat = this.donGiaVat;
+      this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
       this.listOfData = [...this.listOfData, this.thongtinPhanLo];
       this.thongtinPhanLo = new DanhSachPhanLo();
       this.formData.patchValue({
@@ -343,6 +348,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   startEdit(index: number): void {
+    this.thongtinPhanLo.donGiaVat = this.donGiaVat;
+    this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
     this.listOfData[index].edit = true
 
   }
