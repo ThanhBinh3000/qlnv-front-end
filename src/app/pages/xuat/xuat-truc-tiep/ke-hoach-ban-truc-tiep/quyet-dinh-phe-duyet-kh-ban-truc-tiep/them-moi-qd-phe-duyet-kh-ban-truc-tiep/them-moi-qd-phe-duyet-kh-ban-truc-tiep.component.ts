@@ -372,7 +372,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           pthucGnhan: data.pthucGnhan,
           thongBaoKh: data.thongBaoKh,
           soQdCc: data.soQdCtieu,
-          trichYeu: dataRes.trichYeu,
+          // trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
           maDvi: data.maDvi,
