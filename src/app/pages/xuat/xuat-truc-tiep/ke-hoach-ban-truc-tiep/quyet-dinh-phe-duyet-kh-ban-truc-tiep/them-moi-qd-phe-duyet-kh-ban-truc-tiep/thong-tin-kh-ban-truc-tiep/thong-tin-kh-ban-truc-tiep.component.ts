@@ -70,7 +70,6 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
-        this.calculatorTable();
       } else {
         this.formData.reset();
       }
@@ -87,44 +86,25 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
     }
   }
 
-  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
-      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
-      nzMaskClosable: false,
+  deleteRow(index: any) {
+    console.log(index, 888);
+
+    this.modal.confirm({
       nzClosable: false,
-      nzWidth: '2000px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+
+        } catch (e) {
+          console.log('error', e);
+        }
       },
     });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
-        return;
-      }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      }
-      this.calculatorTable();
-    });
-  }
-
-  calculatorTable() {
-    let tongSoLuong: number = 0;
-
-    this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
-      })
-      item.soLuong = soLuongChiCuc;
-    });
-    this.formData.patchValue({
-      tongSoLuong: tongSoLuong,
-    });
-    this.dataInput.soLuong = tongSoLuong
   }
 
   isDisable() {

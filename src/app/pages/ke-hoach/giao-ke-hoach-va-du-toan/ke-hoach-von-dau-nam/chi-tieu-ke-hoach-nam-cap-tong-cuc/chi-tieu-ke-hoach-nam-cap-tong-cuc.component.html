@@ -108,17 +108,17 @@
                 <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a
-                    *ngIf="data.trangThai !=  STATUS.DU_THAO && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
+                    *ngIf="data.trangThai !=  STATUS.DU_THAO && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XEM')"
                     (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                     <i class=" icon htvbdh_eye"></i>
                   </a>
                   <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
                      *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC   || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai === STATUS.TU_CHOI_LDV)
-                      && !userService.isCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
+                      && !userService.isCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="xoaItem(data)"
-                     *ngIf="(data.trangThai === STATUS.DU_THAO && !userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')">
+                     *ngIf="(data.trangThai === STATUS.DU_THAO && !userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -214,17 +214,17 @@
                 <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a
-                    *ngIf="(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
+                    *ngIf="(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XEM')"
                     (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                     <i class="icon htvbdh_eye"></i>
                   </a>
                   <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)
-                        && !userService.isTongCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
+                        && !userService.isTongCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="xoaItem(data)"
-                     *ngIf="(data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')">
+                     *ngIf="(data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -251,17 +251,17 @@
         </nz-tabset>
         <ng-template #extraTemplate>
           <div *ngIf=" (capDvi == 2 && userService.isCuc()) || (capDvi ==1 && userService.isTongCuc())">
-            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')" type="button"
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XOA')" type="button"
                     class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
-            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_EXP')" type="button"
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_EXP')" type="button"
                     class="btn btn-sub" (click)="exportData()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')" type="button"
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_THEM')" type="button"
                     class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>

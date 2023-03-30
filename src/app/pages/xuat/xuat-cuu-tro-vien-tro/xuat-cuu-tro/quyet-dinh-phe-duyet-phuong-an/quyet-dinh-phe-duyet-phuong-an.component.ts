@@ -81,10 +81,11 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   openTh = false;
 
   disabledStartNgayDX = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayDxTu) {
+    if (startValue && this.formData.value.ngayDxDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+    } else {
       return false;
     }
-    return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
   };
 
   disabledEndNgayDx = (endValue: Date): boolean => {
@@ -93,11 +94,12 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
     }
     return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
   };
+
   disabledStartNgayKt = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKetThucTu) {
-      return false;
+    if (startValue && this.formData.value.ngayKetThucDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
     }
-    return startValue.getTime() > this.formData.value.ngayKetThucDen.getTime();
+    return false;
   };
 
   disabledEndNgayKt = (endValue: Date): boolean => {

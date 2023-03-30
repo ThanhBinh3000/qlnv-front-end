@@ -42,12 +42,12 @@
       <h3 class="text-uppercase">Danh sách quyết định xuất cấp thóc cứu trợ, viện trợ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()" >
-          <!--                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')"-->
+          <!--                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XDPA_EXP')"-->
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="goDetail(null)"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPDPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo QĐ xuất cấp</span>
         </button>
@@ -152,7 +152,7 @@
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() &&
-            (userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA'))" (click)="delete(data)">
+            (userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPDPA_XOA'))" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

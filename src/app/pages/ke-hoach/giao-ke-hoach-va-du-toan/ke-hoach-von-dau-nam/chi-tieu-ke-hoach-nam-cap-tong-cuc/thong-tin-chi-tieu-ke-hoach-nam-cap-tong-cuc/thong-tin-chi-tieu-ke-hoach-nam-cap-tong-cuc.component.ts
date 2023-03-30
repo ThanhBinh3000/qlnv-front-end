@@ -169,6 +169,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.showListEvent,'showListEvent');
     this.yearNow = dayjs().get('year');
     for (let i = 0; i < 5; i++) {
       this.listNam.push({

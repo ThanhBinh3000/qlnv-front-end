@@ -23,14 +23,11 @@ import {
 export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
+  dataTableTc: any[] = [];
   listDxChiCuc: any[] = [];
   isTongHop: boolean = false;
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
-  maCv: string;
-  tableHangDtqg: any[] = [];
-  dataHang: any[] = [];
-  tableGiaTriBh: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -49,7 +46,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       namKeHoach: [dayjs().get('year')],
       noiDung: [null, Validators.required],
       ngayKy: [null, Validators.required],
-      maToTrinh: [null, Validators.required],
+      maToTrinh: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
@@ -91,14 +88,13 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
       let detail = res.data;
-      console.log(detail,123)
+      this.dataTable = detail.ktKhDxSuaChuaLonCtiets
       this.spinner.hide()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
       this.spinner.hide()
       return;
     }
-    console.log(this.dataHang)
     this.spinner.hide()
   }
   async save(isOther: boolean) {
@@ -112,14 +108,27 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.listQlDinhMucDxBhKhoChua = this.dataTable;
-    this.formData.value.listQlDinhMucDxBhHdtqg = this.tableHangDtqg;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    this.formData.value.giaTriDx = (this.tableGiaTriBh[0].gtThamGiaBh  * this.tableGiaTriBh[0].tiLePhiCoBan + this.tableGiaTriBh[2].tiLePhiCoBan * this.tableGiaTriBh[2].gtThamGiaBh + this.tableGiaTriBh[4].tiLePhiCoBan * this.tableGiaTriBh[4].gtThamGiaBh + this.tableGiaTriBh[5].tiLePhiCoBan * this.tableGiaTriBh[5].gtThamGiaBh) * 11/10
-    let data = await this.createUpdate(this.formData.value)
+    let body = this.formData.value;
+    body.chiTiets = this.dataTable
+    body.chiTietDms = []
+    let data = await this.createUpdate(body)
     if (data) {
       if (isOther) {
+        let trangThai;
+        switch (this.formData.value.trangThai) {
+          case STATUS.DU_THAO :
+          case STATUS.TU_CHOI_TP :
+          case STATUS.TU_CHOI_CBV : {
+            trangThai = STATUS.CHO_DUYET_TP;
+            break;
+          }
+          case STATUS.TU_CHOI_LDC : {
+            trangThai = STATUS.CHO_DUYET_LDC;
+            break;
+          }
+        }
         this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
@@ -138,6 +147,9 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
+          this.fileDinhKem = data.listFileDinhKems;
+          this.dataTableTc = data.chiTietThs
+          this.dataTable = data.chiTiets
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -149,6 +161,18 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+
+  convertListToTree(table : any[]) : any[] {
+    if (table && table.length > 0) {
+      table = chain(table).groupBy('tenTmdt').map((value, key) => ({
+        tenTmdt: key,
+          dataChild: value,
+          idVirtual: uuid.v4(),
+        })
+      ).value()
+    }
+    return  table;
   }
 
   async pheDuyet() {

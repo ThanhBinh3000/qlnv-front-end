@@ -26,6 +26,7 @@ import { chain, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { DonviService } from 'src/app/services/donvi.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -95,6 +96,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   canCu: any[] = [];
   dxPaId: number = 0;
   openDxPa = false;
+  listHangHoaAll: any[] = [];
+  listLoaiHangHoa: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -106,6 +109,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
@@ -141,6 +145,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       tenCloaiVthh: [],
       tenTrangThai: ['Dự thảo'],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+      donViTinh: []
     }
     );
   }
@@ -152,6 +157,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       await Promise.all([
         // this.bindingDataTongHop(this.dataTongHop),
         this.loadDsDonVi(),
+        this.loadDsVthh(),
 
       ]);
       await this.loadChiTiet(this.idSelected)
@@ -185,6 +191,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       await this.selectRow(this.formData.value.quyetDinhPdDtl[0])
       this.fileDinhKem = data.fileDinhKem;
       this.canCu = data.canCu;
+      await this.changeHangHoa(data.loaiVthh)
       await this.buildTableView();
       await this.tinhXuatCap()
     } else {
@@ -241,6 +248,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             quyetDinhPdDtl: listDeXuat
           });
         }
+        await this.changeHangHoa(data.loaiVthh)
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.quyetDinhPdDtlCache.forEach(f => {
           let tong = f.quyetDinhPdDx.reduce((tong, s) => {
@@ -301,6 +309,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           });
 
         }
+        await this.changeHangHoa(data.loaiVthh)
         this.quyetDinhPdDtlCache = Object.assign(this.quyetDinhPdDtlCache, listDeXuat);
         this.quyetDinhPdDtlCache.forEach(f => {
           let tong = f.quyetDinhPdDx.reduce((tong, s) => {
@@ -384,6 +393,28 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
   }
 
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHangHoaAll = res.data;
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    }
+  }
+
+  async changeHangHoa(event: any) {
+    if (event) {
+      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiHangHoa = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
   async openDialogTh() {
     if (this.formData.get('type').value != 'TH') {
       return;
@@ -611,6 +642,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
     if (this.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.deXuatPhuongAn.map(s => s.thanhTien);
+      console.log(this.listThanhTien, "http://192.168.1.70:3000/issues/8637");
       this.listSoLuong = this.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
     } else {
       this.listThanhTien = [0];

@@ -8,7 +8,7 @@ import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/b
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-de-xuat',
   templateUrl: './de-xuat.component.html',
@@ -17,6 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class DeXuatComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
+  idQdChiTieu: any;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -70,4 +71,31 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     }
   }
 
+  openViewChiTieu(idQdChiTieu: number) {
+    this.idQdChiTieu = idQdChiTieu;
+  }
+
+  closeViewChiTieu() {
+    this.idQdChiTieu = null;
+  }
+
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.deXuatKhBanDauGiaService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }

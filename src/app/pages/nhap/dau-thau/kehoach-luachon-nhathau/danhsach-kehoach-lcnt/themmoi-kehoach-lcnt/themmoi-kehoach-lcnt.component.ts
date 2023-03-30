@@ -47,7 +47,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   @Input()
   showFromTH: boolean;
   @Input()
-  isView: boolean;
+  @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

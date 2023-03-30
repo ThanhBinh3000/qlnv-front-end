@@ -1,20 +1,20 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Validators} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Base2Component} from 'src/app/components/base2/base2.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {chain, cloneDeep} from 'lodash'
+import { StorageService } from 'src/app/services/storage.service';
+import { chain, cloneDeep } from 'lodash'
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import {MESSAGE} from 'src/app/constants/message';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -176,6 +176,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       })
       this.dataTable = data.children;
       this.dataNguoiTgia = data.listNguoiTgia
+      this.fileDinhKem = data.fileDinhKems;
       this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
         loai: key,
         dataChild: value
@@ -237,17 +238,12 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       body.tgianDauGiaTu = body.tgianDauGia[0];
       body.tgianDauGiaDen = body.tgianDauGia[1];
     }
+    body.fileDinhKems = this.fileDinhKem;
     body.listNguoiTgia = this.dataNguoiTgia;
     body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
     let soLuongDviTsan = 0
     let soLuongTrung = 0
     this.dataTable.forEach(item => {
-      item.children.forEach(children => {
-        let dataDviTsan = item.dataDviTsan.filter(x => x.maDviTsan == children.maDviTsan)[0];
-        children.soLanTraGia = dataDviTsan?.soLanTraGia
-        children.donGiaTraGia = dataDviTsan?.donGiaTraGia
-        children.toChucCaNhan = dataDviTsan?.toChucCaNhan
-      });
       soLuongTrung += item.dataDviTsan.filter(item => item.soLanTraGia > 0).length;
       soLuongDviTsan += item.dataDviTsan.length;
     });
@@ -272,7 +268,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   findTableName(name) {
-    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({loai}) => loai == name) : [];
+    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({ loai }) => loai == name) : [];
     return data
   }
 
