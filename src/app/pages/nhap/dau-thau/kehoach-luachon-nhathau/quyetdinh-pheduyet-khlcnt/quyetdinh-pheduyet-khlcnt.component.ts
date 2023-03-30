@@ -37,6 +37,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
 
   idDx: number = 0;
   openDxKhlcnt = false;
+  isView: boolean;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -144,11 +145,28 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
   async detail(data?) {
     this.isDetail = true;
     this.selectedId = data.id;
+  }
+
+  async goDetail(id: number, roles?: any) {
+    if(roles != 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM'){
+      if (!this.checkPermission(roles)) {
+        return
+      }
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = false
+    }else{
+      // await this.detail(id, roles);
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = true
+    }
   }
 
   delete(data?) {

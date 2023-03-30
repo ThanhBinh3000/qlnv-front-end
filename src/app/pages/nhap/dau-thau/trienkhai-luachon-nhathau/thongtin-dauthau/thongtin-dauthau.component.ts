@@ -228,6 +228,8 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     this.searchFilter.maDvi = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
+    this.searchFilter.soQdPdKhlcnt = null;
+    this.searchFilter.soQdPdKqlcnt = null;
     this.search();
   }
 
