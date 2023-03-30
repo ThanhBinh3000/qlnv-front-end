@@ -13,7 +13,8 @@ export class MainKeHoachBanTrucTiepComponent implements OnInit {
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  @Input()
+  listVthh: any[] = [];
   constructor(
     public userService: UserService
   ) {

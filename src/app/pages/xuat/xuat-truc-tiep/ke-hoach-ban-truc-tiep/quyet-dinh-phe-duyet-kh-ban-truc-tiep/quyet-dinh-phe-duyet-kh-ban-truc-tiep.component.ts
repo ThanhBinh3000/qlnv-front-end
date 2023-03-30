@@ -17,6 +17,11 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -44,7 +49,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
+      slDviTsan: '',
       soHopDong: '',
       tenTrangThai: '',
     };
@@ -56,7 +61,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.formData.patchValue({
         loaiVthh: this.loaiVthh
       })
-      await this.search();
+      await this.timKiem();
       await this.spinner.hide();
     }
     catch (e) {
@@ -64,6 +69,24 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  async timKiem() {
+    if (this.formData.value.ngayKyQd) {
+      this.formData.value.ngayKyQdTu = dayjs(this.formData.value.ngayKyQd[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
+    }
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      lastest: 0
+    })
+
+    await this.search();
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
   }
 
 }

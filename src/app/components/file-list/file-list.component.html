@@ -1,7 +1,6 @@
 <div class="list-file">
     <div class="header-file">
-        <input type="text" [(ngModel)]="fileAdd.noiDung" placeholder="Nhập tên file" nz-input
-            [disabled]="isViewDetail || disabled" />
+        <input type="text" [(ngModel)]="fileAdd.noiDung" nz-input [disabled]="isViewDetail || disabled" />
         <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
             <input placeholder="Chọn file" [(ngModel)]="fileAdd.fileName" nz-input disabled />
         </nz-input-group>

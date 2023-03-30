@@ -21,9 +21,9 @@ import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { isEmpty } from 'lodash'
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../../services/storage.service";
-import {HttpClient} from "@angular/common/http";
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../services/storage.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -36,7 +36,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() loaiVthh: String;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
-  @Input() isViewOnModal:boolean;
+  @Input() isViewOnModal: boolean;
 
   @Input() isView: boolean;
 

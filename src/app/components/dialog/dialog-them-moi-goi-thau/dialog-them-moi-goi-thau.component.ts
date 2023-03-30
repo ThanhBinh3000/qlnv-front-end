@@ -186,10 +186,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
       return;
     }
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
-      return;
-    }
+    // if (this.giaToiDa == null) {
+    //   this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
+    //   return;
+    // }
     if (this.validateRangPrice()) {
       this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
       return;

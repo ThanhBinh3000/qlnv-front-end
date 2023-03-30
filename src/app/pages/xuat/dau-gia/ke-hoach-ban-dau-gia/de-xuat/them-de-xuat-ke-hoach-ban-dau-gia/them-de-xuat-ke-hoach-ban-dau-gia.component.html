@@ -142,8 +142,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ngày lập kế hoạch
-                  tiếp</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Ngày lập kế hoạch</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy" formControlName="ngayTao">
                   </nz-date-picker>
@@ -152,8 +151,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Ngày duyệt kế hoạch
-                  tiếp</nz-form-label>
+                <nz-form-label [nzNoColon]="true">Ngày duyệt kế hoạch</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy" formControlName="ngayPduyet">
                   </nz-date-picker>
@@ -183,7 +181,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
                     <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -203,7 +201,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input [readonly]="isDisable()" formControlName="moTaHangHoa" />
                 </nz-form-control>
@@ -319,16 +317,6 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="24">
-              <nz-form-item class="form-item display-block">
-                <nz-form-label [nzNoColon]="true">
-                  Ghi chú
-                </nz-form-label>
-                <nz-form-control>
-                  <textarea [readonly]="isDisable()" nz-input [rows]="3" formControlName="ghiChu"></textarea>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
           </div>
         </form>
       </nz-collapse-panel>
@@ -403,8 +391,6 @@
               <th width="60px" class="text-center"></th>
               <th nzWidth="150px" class="text-center wrap">Chi cục</th>
               <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-              <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-              <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
               <th class="text-center wrap">Lô kho</th>
               <th nzWidth="100px" class="text-center wrap">Mã đơn vị tài sản</th>
               <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
@@ -412,7 +398,7 @@
               <th nzWidth="100px" class="text-center wrap">ĐVT</th>
               <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
@@ -442,8 +428,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
                 <td>
                   <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                     <i class="fa fa-pencil"></i>
@@ -458,8 +442,6 @@
                   <td></td>
                   <td></td>
                   <td>{{children.tenDiemKho}}</td>
-                  <td>{{children.tenNhakho}}</td>
-                  <td>{{children.tenNganKho}}</td>
                   <td>{{children.tenLoKho}}</td>
                   <td>{{children.maDviTsan}}</td>
                   <td>{{children.duDau | number : '1.0-1' : 'vi_VN'}}</td>
@@ -499,7 +481,7 @@
               <th style="width: 2%">STT</th>
               <th style="width: 40%">Tên chi cục</th>
               <th style="width: 40%">Địa chỉ</th>
-              <th style="width: 10%">Số lượng (Kg)</th>
+              <th style="width: 10%">Số lượng</th>
             </tr>
           </thead>
           <tbody>
@@ -521,7 +503,18 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-col nzSpan="24">
+        <nz-form-item class="form-item display-block">
+          <nz-form-label [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <nz-form-control>
+            <textarea [readonly]="isDisable()" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
   </nz-card>
 </div>
 

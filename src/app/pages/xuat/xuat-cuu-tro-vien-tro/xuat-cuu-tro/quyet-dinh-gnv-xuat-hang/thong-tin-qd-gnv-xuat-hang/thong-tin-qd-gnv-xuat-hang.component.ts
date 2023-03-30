@@ -182,6 +182,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
             thanhTien: v[0].thanhTien,
             tenCloaiVthh: v[0].tenCloaiVthh,
             tonKhoChiCuc: v[0].tonKhoChiCuc,
+            noiDung: v[0].noiDung,
             childData: v
           })
           ).value();
@@ -564,6 +565,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   showModal(item: any): void {
+    console.log(item);
     this.isVisible = true;
     this.noiDungRow.noiDung = item.noiDung;
     this.noiDungRow.maDviChiCuc = this.userInfo.MA_DVI;

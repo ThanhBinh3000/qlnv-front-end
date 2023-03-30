@@ -70,6 +70,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
+      idSoQdCtieu: [],
       soQdCtieu: [, [Validators.required]],
       loaiVthh: [,],
       tenLoaiVthh: [, [Validators.required]],
@@ -325,6 +326,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       let res = await this.createUpdate(body);
       if (res) {
         if (isGuiDuyet) {
+          this.idInput = res.id;
           this.guiDuyet();
         } else {
           this.quayLai()
@@ -348,8 +350,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
+
+
       this.formData.patchValue({
-        soQdCtieu: res2.data.soQuyetDinh
+        soQdCtieu: res2.data.soQuyetDinh,
+        idSoQdCtieu: res2.data.id
       });
     } else {
       this.formData.patchValue({
@@ -439,14 +444,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   validateNgay() {
+
     let pipe = new DatePipe('en-US');
     let ngayTao = new Date(pipe.transform(this.formData.value.ngayTao, 'yyyy-MM-dd'));
     let ngayPduyet = new Date(pipe.transform(this.formData.value.ngayPduyet, 'yyyy-MM-dd'));
-    if (ngayTao >= ngayPduyet) {
-      this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
-      return false
+    if (this.formData.value.ngayPduyet) {
+      if (ngayTao >= ngayPduyet) {
+        this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
+        return false
+      }
     }
-
     return true;
   }
 }

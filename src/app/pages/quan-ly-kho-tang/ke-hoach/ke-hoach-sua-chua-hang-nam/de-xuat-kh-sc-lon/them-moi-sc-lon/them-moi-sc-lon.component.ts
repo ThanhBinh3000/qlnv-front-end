@@ -121,6 +121,9 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       let res = await this.dexuatService.getDetail(id);
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
+      this.formData.patchValue({
+        soCongVan : this.formData.value.soCongVan ?  this.formData.value.soCongVan.split('/')[0] : null
+      })
       this.fileDinhKem = data.fileDinhKems
       this.dataTable = data.chiTiets;
       this.dataTableDm = data.chiTietDms;

@@ -249,16 +249,22 @@
           <td>{{ data.soQdPd }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"
-               *ngIf="data.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XEM')">
+               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XEM')">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())||
-              (data.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isOwner(data.maDvi)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"
-               (click)="redirectDetail(data.id, false)">
+            <a
+              *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_VU'))||
+                     (vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_CUC'))"
+              (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
+            <a *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))||
+                      (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC'))"
+               (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
             <a
-              *ngIf="data.trangThai==STATUS.DU_THAO && isOwner(data.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XEM')"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"
               (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>

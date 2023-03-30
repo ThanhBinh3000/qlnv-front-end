@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -26,6 +26,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   loaiVthh: any;
   tenCloaiVthh: any;
   dataChiTieu: any;
+  dviTinh: any;
   dataEdit: any;
   listOfData: any[] = [];
   tableExist: boolean = false;
@@ -48,6 +49,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     public globals: Globals,
     private userService: UserService,
     private donViService: DonviService,
+    private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private helperService: HelperService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
@@ -65,6 +67,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       soLuongChiTieu: [null],
       soLuongKh: [null],
       duDau: [null],
+      dviTinh: [null],
     });
   }
 
@@ -105,6 +108,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
+        dviTinh: this.dviTinh,
       })
     }
     this.checkDisabledSave();
@@ -120,6 +124,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
             tenDvi: item.tenDonvi,
             soLuongXuat: this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.xtnTongGao : item.xtnTongThoc
           }
+
           this.listChiCuc.push(body)
         });
       }
@@ -163,7 +168,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   async changeChiCuc(event) {
     let body = {
-      year: 2022,
+      year: this.namKh,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
@@ -205,7 +210,9 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.listNhaKho = diemKho.children;
       this.thongTinXuatBanTrucTiep.tenDiemKho = diemKho.tenDvi;
       this.thongTinXuatBanTrucTiep.diaDiemKho = diemKho.diaChi;
-
+      this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
+      this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
+      this.thongTinXuatBanTrucTiep.dviTinh = this.dviTinh
       let body = {
         maDvi: diemKho.maDviCha,
         loaiVthh: this.loaiVthh
@@ -215,14 +222,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           let data = res.data;
           if (data.length > 0) {
             this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
-            this.thongTinXuatBanTrucTiep.tenCloaiVthh = this.tenCloaiVthh;
-            this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
-            if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-              this.thongTinXuatBanTrucTiep.dviTinh = data[0].tenDonViTinh;
-            } else {
-              this.thongTinXuatBanTrucTiep.dviTinh = 'Kg';
-            }
-
           }
         }
       });
@@ -387,9 +386,24 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   deleteRow(i: number): void {
-    this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    this.disableChiCuc();
-    this.checkDisabledSave();
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.listOfData = this.listOfData.filter((d, index) => index !== i);
+          this.disableChiCuc();
+          this.checkDisabledSave();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   updateEditCache(): void {
