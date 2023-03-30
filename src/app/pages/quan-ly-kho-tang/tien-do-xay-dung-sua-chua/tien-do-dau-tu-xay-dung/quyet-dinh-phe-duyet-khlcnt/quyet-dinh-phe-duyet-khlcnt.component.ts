@@ -43,6 +43,7 @@ export class QuyetDinhPheDuyetKhlcntComponent extends Base2Component implements 
     this.formData = this.fb.group({
       soQd: [''],
       tenDuAn: [''],
+      chuDauTu:[''],
       soQdPdDaDtxd: [''],
       trangThai: [''],
       ngayKy: [''],
