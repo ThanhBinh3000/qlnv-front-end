@@ -89,7 +89,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       }
     }
   }
+  async selectRow(item?: any) {
 
+
+  }
   async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');

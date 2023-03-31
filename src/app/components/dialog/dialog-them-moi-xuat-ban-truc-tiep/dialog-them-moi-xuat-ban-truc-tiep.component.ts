@@ -429,11 +429,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   calcTong(column) {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
-        if (column == 'tienDatTruocDduyet') {
-          prev += (cur.soLuong * cur.donGiaVat)
-        } else {
-          prev += cur[column];
-        }
+        prev += cur[column];
         return prev;
       }, 0);
       return sum;
