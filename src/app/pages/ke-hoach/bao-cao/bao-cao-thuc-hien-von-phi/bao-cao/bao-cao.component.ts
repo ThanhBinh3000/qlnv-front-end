@@ -680,6 +680,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.baoCao?.lstBcaos?.forEach(item => {
+            item.id = uuid.v4() + "FE";
             item.maDviTien = '1';
             item.checked = false;
             item.trangThai = '3';
@@ -691,8 +692,8 @@ export class BaoCaoComponent implements OnInit {
             }
             if (item.maLoai == '4') {
                 item.lstCtietBcaos.forEach(e => {
-                    e.khGiaMuaTd = Math.round(divNumber(e.khTtien, e.khSoLuong));
-                    e.thGiaMuaTd = Math.round(divNumber(e.thTtien, e.thSoLuong));
+                    e.khGiaMuaTd = divNumber(e.khTtien, e.khSoLuong);
+                    e.thGiaMuaTd = divNumber(e.thTtien, e.thSoLuong);
                 })
             }
             if (item.maLoai == '5') {

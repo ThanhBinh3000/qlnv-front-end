@@ -616,6 +616,7 @@ export class BaoCaoComponent implements OnInit {
                             const data = PHULUCLIST.find(e => e.maPhuLuc == item.maLoai);
                             this.baoCao.lstBcaos.push({
                                 ...item,
+                                id: uuid.v4() + "FE",
                                 maDviTien: '1',
                                 tieuDe: data.tieuDe,
                                 tenPhuLuc: data.tenPhuLuc,
