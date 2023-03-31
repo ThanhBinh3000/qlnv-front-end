@@ -573,7 +573,7 @@
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
                         <nz-date-picker formControlName="namSudung" [nzDisabled]="isEditData"
-                                        nzFormat="dd/MM/yyyy"></nz-date-picker>
+                                        nzFormat="dd/MM/YYYY"></nz-date-picker>
                       </nz-input-group>
                     </nz-form-control>
                   </div>
@@ -776,7 +776,17 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="6"></div>
+                  <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                      <nz-form-label></nz-form-label>
+                      <nz-form-control>
+                          <button type="button" class="btn btn-main" (click)="openDialogGiaoKho()">
+                            <i class="icon htvbdh_dau-cong"></i>
+                            <span>Giao kho</span>
+                          </button>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
                   <div nz-col [nzSpan]="24">
                     <nz-form-item>
                       <nz-form-label>Nhiệm vụ</nz-form-label>
@@ -907,7 +917,7 @@
                       <nz-form-label></nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <label nz-checkbox formControlName="coLoKho" [nzDisabled]="true"
+                          <label nz-checkbox formControlName="coLoKho" [nzDisabled]="isEditData"
                                  (ngModelChange)="changeLoKho()">Có lô kho</label>
                         </nz-input-group>
                       </nz-form-control>
@@ -1587,7 +1597,7 @@
                   <th nzWidth="90px">ĐVT</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="haha">
                 <ng-container *ngFor="let item of dataTableHhCtiet">
                   <tr>
                     <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
@@ -1600,7 +1610,7 @@
                     <ng-container *ngFor="let item1 of item.childData">
                       <tr>
                         <td></td>
-                        <td (nzExpandChange)="onExpandChange(item1.idVirtual, $event)"
+                        <td  style="padding-left: 25px"  (nzExpandChange)="onExpandChange(item1.idVirtual, $event)"
                             [nzExpand]="expandSet.has(item1.idVirtual)" nzShowExpand="true"
                         > {{item1.tenDviCha}}</td>
                         <td></td>
@@ -1610,7 +1620,7 @@
                         <ng-container *ngFor="let item2 of item1.childData">
                           <tr>
                             <td></td>
-                            <td (nzExpandChange)="onExpandChange(item2.idVirtual, $event)"
+                            <td style="padding-left: 50px"  (nzExpandChange)="onExpandChange(item2.idVirtual, $event)"
                                 [nzExpand]="expandSet.has(item2.idVirtual)" nzShowExpand="true"
                                 >   {{item2.tenDviCha}}</td>
                             <td></td>
@@ -1620,7 +1630,7 @@
                             <ng-container *ngFor="let item3 of item2.childData">
                               <tr>
                                 <td></td>
-                                <td (nzExpandChange)="onExpandChange(item3.idVirtual, $event)"
+                                <td style="padding-left: 75px"  (nzExpandChange)="onExpandChange(item3.idVirtual, $event)"
                                     [nzExpand]="expandSet.has(item3.idVirtual)" nzShowExpand="true">  {{item3.tenDviCha}}</td>
                                 <td></td>
                                 <td></td>
@@ -1629,7 +1639,7 @@
                                 <ng-container *ngFor="let item4 of item3.childData">
                                   <tr>
                                     <td></td>
-                                    <td>{{item4.tenCloaiVthh}}</td>
+                                    <td style="padding-left: 100px" >{{item4.tenCloaiVthh}}</td>
                                     <td class="text-right">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
                                     <td>{{item4.tenDonViTinh}}</td>
                                   </tr>

@@ -40,7 +40,7 @@
                 <nz-form-item>
                     <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
@@ -73,9 +73,18 @@
                 <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
                 <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất (1)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg) (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ/kg) (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ) (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Giá khởi
+                    điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Giá khởi
+                    điểm đề xuất (kg) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ/kg) (4)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>

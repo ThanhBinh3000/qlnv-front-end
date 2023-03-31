@@ -23,6 +23,7 @@ import {
   DialogThemMoiSoDuDauKyComponent
 } from "../../../components/dialog/dialog-them-moi-so-du-dau-ky/dialog-them-moi-so-du-dau-ky.component";
 import {Tcdtnn} from "../../../models/Tcdtnn";
+import {DialogKtGiaoKhoComponent} from "../../../components/dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component";
 
 
 @Component({
@@ -322,7 +323,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   checkStatusSurplus() {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.loaiVthh && this.detailDonVi.value.tichLuongKdLt == 0)) {
+    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '00' && !this.detailDonVi.value.loaiVthh)) {
       check = true
     }
     return check;
@@ -404,6 +405,7 @@ export class MangLuoiKhoComponent implements OnInit {
         this.convertDataToTree()
         this.detailDonVi.patchValue({
           diemkhoId : dataNode.idParent,
+          tenThuKho : dataNode.tenThuKho,
           tenDiemkho : dataNode.tenDiemkho,
           tenTongKho : dataNode.tenTongKho,
           soNgankho : dataNode.soNgankho,
@@ -420,6 +422,7 @@ export class MangLuoiKhoComponent implements OnInit {
           soNhakho : dataNode.soNhakho,
           soNgankho : dataNode.soNgankho,
           soLokho : dataNode.soLokho,
+          tenThuKho : dataNode.tenThuKho
         })
       }
       if (this.levelNode == 3) {
@@ -428,7 +431,7 @@ export class MangLuoiKhoComponent implements OnInit {
         this.convertDataToTree()
         this.detailDonVi.patchValue({
           tongkhoId : dataNode.idParent,
-          tenTongKho : dataNode.tenTongKho,
+          soDiemkho: dataNode.soDiemkho,
           soNhakho : dataNode.soNhakho,
           soNgankho : dataNode.soNgankho,
           soLokho : dataNode.soLokho,
@@ -503,7 +506,7 @@ export class MangLuoiKhoComponent implements OnInit {
     this.isEditData = editData
   }
 
-  update() {
+   update() {
     this.helperService.markFormGroupTouched(this.detailDonVi);
     if (this.detailDonVi.invalid) {
       return;
@@ -517,7 +520,8 @@ export class MangLuoiKhoComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
+      nzOnOk:async () => {
+        this.spinner.show()
         let body = {
           ...this.detailDonVi.value,
           trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
@@ -539,11 +543,15 @@ export class MangLuoiKhoComponent implements OnInit {
         this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.getDetailMlkByKey(this.keySelected)
+            this.isEditData = true;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.spinner.hide()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide()
           }
         })
+        this.spinner.hide()
       }
     });
   }
@@ -692,4 +700,22 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
+  openDialogGiaoKho() {
+    const modalQD = this.modals.create({
+      nzTitle: '' ,
+      nzContent: DialogKtGiaoKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzStyle: {top: '100px'},
+      nzComponentParams: {
+
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+      }
+    });
+  }
 }

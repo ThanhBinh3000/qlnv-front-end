@@ -345,9 +345,19 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   async loadLoaiHangHoa() {
     try {
-      let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-        "maDvi": this.userInfo.MA_DVI.substring(0, 2)
-      }).toPromise();
+      console.log(this.userInfo.MA_DVI.substring(0, 2), 1);
+      let hangHoa: any;
+      if (this.userInfo.MA_DVI == "0101") {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          "maDvi": this.userInfo.MA_DVI
+        }).toPromise();
+      } else {
+        hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+          "maDvi": this.userInfo.MA_DVI.substring(0, 2)
+        }).toPromise();
+      }
+
+      console.log(hangHoa, 5);
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           let ds = hangHoa.data.filter(element => {
