@@ -7,12 +7,10 @@
           <nz-form-item>
             <nz-form-label>Chọn ĐV cấp trên(Chi cục/Điểm kho/Nhà kho/Ngăn kho)</nz-form-label>
             <nz-form-control>
-              <nz-input-group>
                 <nz-tree-select #treeSelect [nzNodes]="nodesTree" (nzTreeClick)="getDetailMlkByKey($event.node)"
                                 nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                                 formControlName="maCha">
                 </nz-tree-select>
-              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -20,9 +18,7 @@
           <nz-form-item>
             <nz-form-label>Mã đơn vị cấp trên</nz-form-label>
             <nz-form-control>
-              <nz-input-group>
                 <input nz-input readonly [(ngModel)]="formKho.value.maCha" [ngModelOptions]="{standalone: true}"/>
-              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
