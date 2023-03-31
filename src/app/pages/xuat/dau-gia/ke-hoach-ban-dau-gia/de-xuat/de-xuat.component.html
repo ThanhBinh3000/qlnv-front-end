@@ -123,22 +123,18 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayTao"
+                  (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
-                  (input)="filterInTable('ngayPduyet',filterTable.ngayPduyet)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayPduyet"
+                  (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group>
@@ -147,13 +143,11 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKyQd"
-                  (input)="filterInTable('ngayKyQd',filterTable.ngayKyQd)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyQd"
+                  (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group>
