@@ -168,6 +168,26 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     this.objHopDongHdr = data;
   }
 
+  async saveAndSend(status: string, message: string, sucessMessage: string) {
+    if (this.formData.value.id > 0) {
+      let data = this.formData.value;
+      if (data) {
+        await this.approve(data.id, status, message, null, sucessMessage);
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      let data = await this.createUpdate(this.formData.value);
+      if (data) {
+        await this.approve(data.id, status, message, null, sucessMessage);
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
+
+  }
+
+
   async save(isOther: boolean) {
     this.setValidator(isOther);
     this.helperService.markFormGroupTouched(this.formData);
@@ -186,7 +206,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         }
         this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
       } else {
-        this.goBack()
+        // this.goBack()
       }
     }
   }

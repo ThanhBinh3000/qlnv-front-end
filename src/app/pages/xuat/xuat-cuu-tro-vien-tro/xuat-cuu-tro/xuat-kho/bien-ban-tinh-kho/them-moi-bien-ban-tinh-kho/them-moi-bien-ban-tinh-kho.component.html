@@ -4,8 +4,9 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" type="button" *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC
-            && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KTVBQ') " (click)="save(true)">
+        <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC "
+            (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
 
