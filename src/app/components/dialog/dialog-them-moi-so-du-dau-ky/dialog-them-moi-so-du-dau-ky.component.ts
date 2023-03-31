@@ -86,10 +86,10 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       return;
     }
     let body = this.detail
-    body.tichLuongSdLt = this.formData.value.tichLuongSdLt
-    body.tichLuongSdVt = this.formData.value.tichLuongSdVt
-    body.theTichSdLt = this.formData.value.theTichSdLt
-    body.theTichSdVt = this.formData.value.theTichSdVt
+    body.tichLuongKdLt = (body.tichLuongTkLt - this.formData.value.tichLuongSdLt) >= 0 ? body.tichLuongTkLt - this.formData.value.tichLuongSdLt : 0
+    body.tichLuongKdVt = (body.tichLuongKdVt - this.formData.value.tichLuongSdVt) >= 0 ? body.tichLuongKdVt - this.formData.value.tichLuongSdVt : 0
+    body.theTichKdLt = (body.theTichTkLt - this.formData.value.theTichSdLt) >=0 ? body.theTichKdLt - this.formData.value.theTichSdLt : 0
+    body.theTichKdVt = (body.theTichTkVt - this.formData.value.theTichSdVt) >= 0 ? body.theTichTkVt - this.formData.value.theTichSdVt : 0
     body.loaiVthh = this.formData.value.loaiVthh
     body.cloaiVthh = this.formData.value.cloaiVthh
     body.slTon = this.formData.value.slTon

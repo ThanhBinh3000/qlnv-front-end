@@ -40,6 +40,13 @@ export class MangLuoiKhoComponent implements OnInit {
     maDonVi: ''
   };
 
+  loaiHangHoa : any = {
+    "thoc" : false,
+    "gao" : false,
+    "muoi" : false,
+    "vattu" : false,
+  }
+
   detailTcdtnn: Tcdtnn = new Tcdtnn();
   userInfo: UserLogin
   keySelected: any;
@@ -322,6 +329,25 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
+  updateCheckboxHh(listHh : any[]) {
+    if(listHh && listHh.length > 0 ) {
+      listHh.forEach(item => {
+        if (item == "0101") {
+          this.loaiHangHoa.thoc = true;
+        }
+        if (item == "0102") {
+          this.loaiHangHoa.gao = true;
+        }
+        if (item == "02") {
+          this.loaiHangHoa.vattu = true;
+        }
+        if (item == "04") {
+          this.loaiHangHoa.muoi = true;
+        }
+      })
+    }
+  }
+
   checkStatusSurplus() {
     let check = false;
     if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '00' && !this.detailDonVi.value.loaiVthh)) {
@@ -353,6 +379,7 @@ export class MangLuoiKhoComponent implements OnInit {
   bindingDataDetail(dataNode) {
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
+      this.updateCheckboxHh(dataNode.listMaHh ? dataNode.listMaHh : []);
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
         // maCha:dataNode && dataNode.id ? dataNode.id : null,

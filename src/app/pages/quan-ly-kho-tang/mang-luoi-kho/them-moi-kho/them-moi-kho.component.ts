@@ -127,6 +127,7 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
+      isKhoiTao : [false]
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -428,6 +429,10 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['maNganlo'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNganlo'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
+        this.formKho.controls['theTichTkVt'].setValidators([Validators.required])
         break;
       }
     }

@@ -850,7 +850,7 @@
               <nz-form-label >Tích lượng thiết kế -LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <nz-input-number nzDisabled formControlName="tichLuongTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number  formControlName="tichLuongTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -861,7 +861,7 @@
               <nz-form-label >Tích lượng thiết kế - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <nz-input-number nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  <nz-input-number  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    formControlName="tichLuongTkVt"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -916,7 +916,7 @@
               <nz-form-label >Thể tích thiết kế - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <nz-input-number  nzDisabled formControlName="theTichTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number   formControlName="theTichTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -927,7 +927,7 @@
               <nz-form-label >Thể tích thiết kế - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <nz-input-number nzDisabled formControlName="theTichTkVt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number  formControlName="theTichTkVt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
