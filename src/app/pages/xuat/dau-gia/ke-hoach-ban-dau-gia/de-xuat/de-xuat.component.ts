@@ -33,12 +33,14 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       namKh: [dayjs().get('year')],
       soDxuat: [],
-      ngayTao: [],
-      ngayPduyet: [],
       loaiVthh: [],
       trichYeu: [],
       maDvi: [],
-      trangThaiList: []
+      trangThaiList: [],
+      ngayTaoTu: [],
+      ngayTaoDen: [],
+      ngayDuyetTu: [],
+      ngayDuyetDen: [],
     });
 
     this.filterTable = {
@@ -114,4 +116,31 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     this.isViewChiTieu = false;
   }
 
+  disabledNgayTaoTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayTaoDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
+  };
+
+  disabledNgayTaoDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayTaoTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
+  };
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
+  };
 }
