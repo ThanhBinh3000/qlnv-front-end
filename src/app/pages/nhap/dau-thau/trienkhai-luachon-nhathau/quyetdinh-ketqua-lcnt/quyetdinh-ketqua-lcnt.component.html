@@ -109,13 +109,10 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-form-item>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
-                  [(ngModel)]="filterTable.ngayTao"></nz-date-picker>
-                <input type="text" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))" class="form-control"
-                  placeholder="Nhập ngày tháng năm">
-              </nz-form-item>
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
+                  (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"></nz-date-picker>
+              </nz-input-group>
             </th>
             <th>
               <nz-input-group>
