@@ -127,7 +127,7 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
-      isKhoiTao : [false]
+      isKhoiTao : [true]
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -281,6 +281,7 @@ export class ThemMoiKhoComponent implements OnInit {
       body.maNganlo = this.formKho.value.maCha +  this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
       body.dviReq = bodyDvi
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -311,6 +312,8 @@ export class ThemMoiKhoComponent implements OnInit {
       body.maNgankho = this.formKho.value.maCha +  this.formKho.value.maNgankho;
       body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.isKhoiTao = this.formKho.get('coLoKho').value ? false : true;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -339,6 +342,7 @@ export class ThemMoiKhoComponent implements OnInit {
       body.dviReq = bodyDvi
       body.maNhakho = this.formKho.value.maCha +  this.formKho.value.maNhakho;
       body.diemkhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -366,6 +370,7 @@ export class ThemMoiKhoComponent implements OnInit {
       let body = this.formKho.value;
       body.dviReq = bodyDvi
       body.tongkhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {

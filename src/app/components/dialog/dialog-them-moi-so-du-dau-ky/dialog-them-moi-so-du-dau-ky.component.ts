@@ -51,6 +51,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       cloaiVthh: ['', Validators.required],
       slTon: ['', Validators.required],
       dviTinh: [''],
+      thanhTien: [0],
       isKhoiTao : [true]
     })
   }

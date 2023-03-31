@@ -120,6 +120,30 @@
           </nz-form-control>
         </nz-form-item>
       </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired>Thành tiền (đ)</nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="thanhTien" [nzMin]="1"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label >Giá bình quân</nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="formData.value.thanhTien / formData.value.slTon" [nzMin]="1"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
     <ng-template #error let-control>
       <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
       </ng-container>
