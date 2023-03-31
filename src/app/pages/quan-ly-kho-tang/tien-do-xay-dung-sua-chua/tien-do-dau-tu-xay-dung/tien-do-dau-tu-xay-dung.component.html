@@ -7,7 +7,7 @@
     <li nz-menu-item (click)="selectTab('02')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
       Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
     </li>
-    <li nz-menu-item (click)="selectTab('03')">
+    <li nz-menu-item (click)="selectTab('03')"  *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
       Quyết định phê duyệt KH lựa chọn nhà thầu
     </li>
     <li nz-menu-item (click)="selectTab('04')">
