@@ -18,9 +18,9 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
@@ -37,6 +37,9 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
 
   idDx: number = 0;
   openDxKhlcnt = false;
+  isView: boolean;
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -144,11 +147,28 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
   async detail(data?) {
     this.isDetail = true;
     this.selectedId = data.id;
+  }
+
+  async goDetail(id: number, roles?: any) {
+    if (roles != 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') {
+      if (!this.checkPermission(roles)) {
+        return
+      }
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = false
+    } else {
+      // await this.detail(id, roles);
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = true
+    }
   }
 
   delete(data?) {
@@ -197,6 +217,8 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.searchFilter.ngayQd = null;
     this.searchFilter.soGthau = null;
     this.searchFilter.tongTien = null;
+    this.tuNgayKy = null;
+    this.denNgayKy = null;
     this.search();
 
   }
@@ -204,12 +226,8 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   async search() {
     this.dataTable = [];
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
+      tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
       loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
@@ -286,12 +304,8 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
       this.spinner.show();
       try {
         let body = {
-          tuNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayQd: this.searchFilter.ngayQd && this.searchFilter.ngayQd.length > 0
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
+          tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
           loaiVthh: this.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
@@ -426,7 +440,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     }
   }
 
-  openTHopKhlcntModal(id:number) {
+  openTHopKhlcntModal(id: number) {
     this.idThHdr = id;
     this.openTHopKhlcnt = true;
   }
@@ -436,7 +450,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.openTHopKhlcnt = false;
   }
 
-  openDxKhlcntModal(id:number) {
+  openDxKhlcntModal(id: number) {
     this.idDx = id;
     this.openDxKhlcnt = true;
   }
@@ -445,4 +459,18 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.idDx = null;
     this.openDxKhlcnt = false;
   }
+
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
 }

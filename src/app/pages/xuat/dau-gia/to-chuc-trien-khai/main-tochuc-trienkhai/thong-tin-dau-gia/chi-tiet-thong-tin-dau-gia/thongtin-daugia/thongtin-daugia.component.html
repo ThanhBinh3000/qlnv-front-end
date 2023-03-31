@@ -320,11 +320,11 @@
                     </div>
                     <div nz-col [nzSpan]="24">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true" [nzSpan]="24">
+                            <nz-form-label [nzNoColon]="true">
                                 Tài liệu đính kèm
                             </nz-form-label>
-                            <div class="list-file" nz-col nzSpan="24">
-                                <file-list [disabled]="isDisabled()"></file-list>
+                            <div class="list-file">
+                                <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
                             </div>
                         </nz-form-item>
                     </div>

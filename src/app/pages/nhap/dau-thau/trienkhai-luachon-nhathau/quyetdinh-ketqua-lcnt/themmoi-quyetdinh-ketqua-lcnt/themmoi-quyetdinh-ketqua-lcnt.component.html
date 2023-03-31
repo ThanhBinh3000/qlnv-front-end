@@ -33,7 +33,7 @@
         <div class="title-chi-tieu">
           <span>
           </span>
-          <span>Thông tin chung</span>
+          <span>Kết quả lựa chọn nhà thầu</span>
         </div>
       </div>
     </div>
@@ -112,35 +112,17 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem" [isQdkqlcnt]="isQdkqlcnt"></file-list>
+              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
-<!--        <div nz-col [nzSpan]="24">-->
-<!--          <nz-form-item>-->
-<!--            <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>-->
-<!--            <nz-form-control [nzErrorTip]="error">-->
-<!--              <div class="list-file">-->
-<!--                <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
-<!--                  <input type="text" nz-input />-->
-<!--                </nz-input-group>-->
-<!--                <ng-template #suffixTemplateInfo>-->
-<!--                  <div class="icon-file-dinh-kem">-->
-<!--                    <i class="icon htvbdh_tcdt_tep"></i>-->
-<!--                    <input class="input-file" (change)="getNameFile($event)" type="file" />-->
-<!--                  </div>-->
-<!--                </ng-template>-->
-<!--              </div>-->
-<!--            </nz-form-control>-->
-<!--          </nz-form-item>-->
-<!--        </div>-->
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               File đính kèm quyết định đã ký
             </nz-form-label>
             <div class="list-file">
-              <file-list [isViewDetail]="isViewDetail"></file-list>
+              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>

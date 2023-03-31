@@ -20,7 +20,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-
+import { chain } from 'lodash'
 @Component({
   selector: 'app-them-moi-de-xuat-kh-ban-truc-tiep',
   templateUrl: './them-moi-de-xuat-kh-ban-truc-tiep.component.html',
@@ -96,11 +96,18 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       lyDoTuChoi: [''],
       donGiaVat: [],
       tongDonGia: [],
+      slDviTsan: [],
+      typeVthh: [''],
+      dviTinh: [''],
+      idSoQdCtieu: [''],
     });
   }
 
   async ngOnInit() {
     this.spinner.show();
+    this.formData.patchValue({
+      typeVthh: this.loaiVthhInput,
+    })
     this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
@@ -212,6 +219,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       if (data) {
         if (data.ma.startsWith('04')) {
           this.formData.patchValue({
+            // dviTinh: data.maDviTinh,
             cloaiVthh: data.ma,
             tenCloaiVthh: data.ten,
             loaiVthh: data.parent.ma,
@@ -223,6 +231,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
             tenCloaiVthh: data.cap == 3 ? data.ten : null,
             loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
             tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
+          });
+        }
+        if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.THOC)) {
+          this.formData.patchValue({
+            dviTinh: 'Kg',
+          });
+        } else {
+          this.formData.patchValue({
+            dviTinh: data.maDviTinh,
           });
         }
         let res = await this.dmTieuChuanService.getDetailByMaHh(
@@ -256,8 +273,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachXuatBanTrucTiep, index?: number) {
     $event.stopPropagation();
-    if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+    if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
       return;
     }
     const modalGT = this.modal.create({
@@ -273,7 +290,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKh: this.formData.get('namKh').value,
-        donGiaVat: this.formData.value.donGiaVat
+        donGiaVat: this.formData.get('donGiaVat').value,
+        dviTinh: this.formData.get('dviTinh').value,
       },
     });
     modalGT.afterClose.subscribe((data) => {
@@ -304,18 +322,23 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   calculatorTable() {
     let tongSoLuong: number = 0;
     let tongDonGia: number = 0;
+    let soLuongDviTsan: number = 0;
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+        maDviTsan: key,
+        children: value
+      })).value();
+      item.dataDviTsan = dataGroup;
+      soLuongDviTsan += item.dataDviTsan.length;
+      tongSoLuong += item.soLuongChiCuc;
       item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
         tongDonGia += child.donGiaDeXuat;
       })
-      item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongDonGia: tongDonGia,
+      slDviTsan: soLuongDviTsan,
     });
   }
 
@@ -370,7 +393,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.dataChiTieu = res2.data;
       if (this.dataChiTieu) {
         this.formData.patchValue({
-          soQdCtieu: res2.data.soQuyetDinh
+          soQdCtieu: res2.data.soQuyetDinh,
+          idSoQdCtieu: res2.data.id
         });
       }
     } else {

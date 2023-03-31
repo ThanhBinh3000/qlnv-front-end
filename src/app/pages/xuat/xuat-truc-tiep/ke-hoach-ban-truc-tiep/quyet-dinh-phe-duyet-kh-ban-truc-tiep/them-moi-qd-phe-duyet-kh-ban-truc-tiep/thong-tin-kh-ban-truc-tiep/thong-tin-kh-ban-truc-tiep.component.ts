@@ -7,7 +7,6 @@ import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
-import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 
 @Component({
@@ -22,12 +21,11 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
-
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
   dataChiTieu: any;
-
+  listPhuongThucThanhToan: any[] = [];
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
@@ -70,6 +68,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
+        await this.ptThanhToan(this.dataInput)
       } else {
         this.formData.reset();
       }
@@ -105,6 +104,24 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
         }
       },
     });
+  }
+
+  async ptThanhToan(data) {
+    if (data.pthucTtoan == '1') {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '1',
+          giaTri: 'Tiền mặt',
+        },
+      ];
+    } else {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '2',
+          giaTri: 'Chuyển khoản',
+        },
+      ];
+    }
   }
 
   isDisable() {

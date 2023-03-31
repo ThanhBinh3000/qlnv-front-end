@@ -5,17 +5,12 @@ import {Base2Component} from "../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
-import {KtKhXdHangNamService} from "../../../services/kt-kh-xd-hang-nam.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {NgxSpinnerService} from "ngx-spinner";
-import {DonviService} from "../../../services/donvi.service";
-import {DANH_MUC_LEVEL} from "../../luu-kho/luu-kho.constant";
 import {MESSAGE} from "../../../constants/message";
 import {DanhMucService} from "../../../services/danhmuc.service";
-import {
-  DialogThemDanhMucDungChungComponent
-} from "../../../components/dialog/dialog-them-danh-muc-dung-chung/dialog-them-danh-muc-dung-chung.component";
 import {ThemMoiDmDviLqComponent} from "./them-moi-dm-dvi-lq/them-moi-dm-dvi-lq.component";
+import {DanhMucDviLqService} from "../../../services/quantri-danhmuc/danh-muc-dvi-lq.service";
 @Component({
   selector: 'app-danh-muc-dvi-lq',
   templateUrl: './danh-muc-dvi-lq.component.html',
@@ -32,16 +27,16 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : KtKhXdHangNamService,
+    private dmDviLqService : DanhMucDviLqService,
     private dmService : DanhMucService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super(httpClient, storageService, notification, spinner, modal, dmDviLqService);
     super.ngOnInit()
     this.formData = this.fb.group({
-      loaiDvi : [null],
-      mst : [null],
+      type : [null],
+      mstCccd : [null],
       ten : [null],
-      dienThoai : [null],
+      sdt : [null],
       diaChi : [null],
       trangThai : [null]
     });
@@ -70,13 +65,7 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
     }
   }
 
-  initForm() {
-    this.formData.patchValue({
-      role : this.userService.isCuc() ? 'CUC' : 'TC'
-    })
-  }
-
-  async themMoi() {
+  async themMoi(id) {
     let modalTuChoi = this.modal.create({
       nzContent: ThemMoiDmDviLqComponent,
       nzMaskClosable: false,
@@ -86,11 +75,13 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
       nzFooter: null,
       nzClassName: 'themdmdungchung',
       nzComponentParams: {
-
+        idInput : id
       },
     });
     modalTuChoi.afterClose.subscribe((data) => {
-      this.search();
+      if (data) {
+        this.search();
+      }
     })
   }
 }

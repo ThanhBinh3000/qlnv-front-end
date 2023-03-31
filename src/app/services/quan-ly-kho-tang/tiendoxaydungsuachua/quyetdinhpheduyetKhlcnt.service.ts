@@ -7,15 +7,21 @@ import {OldResponseData} from "../../../interfaces/response";
 @Injectable({
   providedIn: 'root',
 })
-export class QuyetdinhpheduyetTktcTdtService extends BaseService {
+export class QuyetdinhpheduyetKhlcntService extends BaseService {
   GATEWAY = '/qlnv-kho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tien-do-xdsc/xay-dung/quyetdinh-pd-tktc-tdt', '');
+    super(httpClient, 'tien-do-xdsc/xay-dung/quyetdinh-pd-khlcnt', '');
   }
 
   search(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+
+  getLastRecordBySoQdPdDaDtxd(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-cv-da-th-by-qdpddadtxd`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

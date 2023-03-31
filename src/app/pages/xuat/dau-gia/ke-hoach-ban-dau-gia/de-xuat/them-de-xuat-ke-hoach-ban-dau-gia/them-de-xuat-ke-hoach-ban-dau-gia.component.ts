@@ -70,6 +70,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
+      idSoQdCtieu: [],
       soQdCtieu: [, [Validators.required]],
       loaiVthh: [,],
       tenLoaiVthh: [, [Validators.required]],
@@ -99,6 +100,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
+      donGiaVat: [],
     });
   }
 
@@ -160,6 +162,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           thoiGianDuKien: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null
         })
         this.dataTable = data.children;
+        this.fileDinhKem = data.fileDinhKems;
         this.calculatorTable();
       }
     }
@@ -215,6 +218,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
+          this.formData.patchValue({
+            donGiaVat: data.giaQdVat
+          })
         }
         if (res.statusCode == API_STATUS_CODE.SUCCESS) {
           this.formData.patchValue({
@@ -248,6 +254,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
+        donGiaVat: this.formData.value.donGiaVat,
       },
     });
     modalGT.afterClose.subscribe((data) => {
@@ -320,7 +327,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
         body.tgianDkienDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
       }
-      body.fileDinhKemReq = this.fileDinhKem;
+      body.fileDinhKems = this.fileDinhKem;
       body.children = this.dataTable;
       let res = await this.createUpdate(body);
       if (res) {
@@ -349,8 +356,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
+
+
       this.formData.patchValue({
-        soQdCtieu: res2.data.soQuyetDinh
+        soQdCtieu: res2.data.soQuyetDinh,
+        idSoQdCtieu: res2.data.id
       });
     } else {
       this.formData.patchValue({

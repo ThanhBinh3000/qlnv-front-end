@@ -124,10 +124,13 @@
                 <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</th>
                 <th>{{ thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
                 <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ (thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1'
+                <th>{{ (thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat * thongtinPhanLo.khoanTienDatTruoc /100 ) |
+                    number :
+                    '1.0-1'
                     : 'vi_VN'}}</th>
                 <th>{{ (thongtinPhanLo.soLuong *
-                    thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1' : 'vi_VN' }}</th>
+                    thongtinPhanLo.donGiaVat * thongtinPhanLo.khoanTienDatTruoc / 100 ) | number : '1.0-1' : 'vi_VN' }}
+                </th>
                 <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -153,10 +156,10 @@
                     <td>{{ data.soLuong * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                     <td>{{ data.donGiaVat }}</td>
                     <td>{{ data.soLuong * data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ (data.soLuong * data.donGiaDeXuat * khoanTienDatTruoc /
+                    <td>{{ (data.soLuong * data.donGiaDeXuat * data.khoanTienDatTruoc /
                         100 ) | number :
                         '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ (data.soLuong * data.donGiaVat * khoanTienDatTruoc / 100 )
+                    <td>{{ (data.soLuong * data.donGiaVat * data.khoanTienDatTruoc / 100 )
                         | number :
                         '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
@@ -208,16 +211,19 @@
                     </td>
 
                     <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.giaKhongVat" [nzMin]=" 1"
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.donGiaDeXuat" [nzMin]=" 1"
                             [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
-                    <td>{{thongtinPhanLo.donGiaVat}}</td>
-                    <td>{{thongtinPhanLo.giaKhoiDiemDduyet}}</td>
-                    <td>{{thongtinPhanLo.tienDatTruoc}}</td>
-                    <td>{{thongtinPhanLo.tienDatTruocDduyet}}</td>
+                    <td>{{thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat * thongtinPhanLo.khoanTienDatTruoc / 100
+                        | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{thongtinPhanLo.soLuong *
+                        thongtinPhanLo.donGiaVat * thongtinPhanLo.khoanTienDatTruoc / 100 | number : '1.0-1' : 'vi_VN'}}
+                    </td>
                     <td class="text-center">
                         <a (click)="saveEdit(i)" class="save">
                             <i class="icon htvbdh_tcdt_save"></i>

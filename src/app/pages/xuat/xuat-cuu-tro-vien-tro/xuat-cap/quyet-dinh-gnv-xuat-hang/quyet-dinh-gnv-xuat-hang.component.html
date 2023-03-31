@@ -45,18 +45,18 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG CỨU TRỢ, VIỆN TRỢ</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XOA')" type="button"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH_XOA')" type="button"
           class="btn btn-sub btn-xoa" (click)="deleteMulti()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_EXP')" type="button" class="btn btn-sub"
+        <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH_EXP')" type="button" class="btn btn-sub"
           (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(null, false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && userService.isCuc()">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH_THEM') && userService.isCuc()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -187,11 +187,11 @@
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO ) && userService.isCuc()
-              && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM')" (click)="redirectToChiTiet(data.id,true)">
+              && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH_THEM')" (click)="redirectToChiTiet(data.id,true)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()
-              && userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_XOA')" (click)="delete(data)">
+              && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDGNVXH_XOA')" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

@@ -27,7 +27,8 @@
         <span>Từ chối</span>
       </button>
       <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat ml-2"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')" (click)=" pheDuyet()">
+              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
+              (click)=" pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -110,7 +111,7 @@
             <nz-form-label nzRequired>Mã tờ trình</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input nz-input formControlName="maToTrinh" [readonly]="true"/>
+                <input nz-input formControlName="maToTrinh" [readonly]="isView"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -143,39 +144,107 @@
       </div>
     </div>
   </div>
-</div>
-<nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
-          [nzShowPagination]="false" nzBordered>
-  <thead>
-  <tr>
-    <th class="text-center" nzWidth="40px" rowSpan="2">STT</th>
-    <th class="text-center" nzWidth="150px" rowSpan="2">Tên công trình</th>
-    <th class="text-center" nzWidth="150px" rowSpan="2">Điểm kho</th>
-    <th class="text-center" nzWidth="200px" rowSpan="2">Địa điểm</th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Thời gian thực hiện</th>
-    <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt báo cáo kinh tế kỹ <br> thuật hoặc khái toán
-      TMĐT
-    </th>
-    <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt quyết toán công trình <br> hoàn thành</th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế kế <br> hoạch vốn <br> đến ngày</th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế dự toán <br> đã cấp <br> đến ngày</th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Tình hình thực <br> hiện đến <br> ngày...</th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế <br> hoạch vốn <br> {{formData.value.namKeHoach}}
-    </th>
-    <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
-    <th class="text-center" nzWidth="150px" rowSpan="2">Nội dung</th>
-  </tr>
-  <tr>
-    <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
-    <th class="text-center">Giá trị dự toán hoặc khái toán TMĐT</th>
-    <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
-    <th class="text-center">Giá trị phê duyệt quyết <br> toán hoàn thành</th>
-  </tr>
-  </thead>
-  <tbody *ngIf="!dataTable">
-  </tbody>
-  <tbody *ngIf="dataTable">
-  <tr *ngFor="let data of dataTable; let idx = index">
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formDataTongHop" class="pd-10" *ngIf="isTongHop">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzSpan="16" class="mg-t-10">
+        <span class="font-weight-bold">Nhu cầu đối với công trình có TMĐT lớn hơn 5.000 triệu đồng: </span>
+        <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình hoàn thành trước 2020 và chuyển tiếp hoàn thành năm 2020(11 công trình)
+          </nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2020 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2021 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Công trình khởi công mới 2022 (13 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="16" class="mg-t-10">
+        <span class="font-weight-bold">Nhu cầu đối với công trình có TMĐT dưới 5.000 triệu đồng: </span>
+        <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình hoàn thành trước 2020 và chuyển tiếp hoàn thành năm 2020(11 công trình)
+          </nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2020 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2021 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Công trình khởi công mới 2022 (13 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+    </div>
+
+  </form>
+  <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+            [nzShowPagination]="false" nzBordered>
+    <thead>
+    <tr>
+      <th class="text-center" nzWidth="40px" rowSpan="2">STT</th>
+      <th class="text-center" nzWidth="150px" rowSpan="2">Tên công trình</th>
+      <th class="text-center" nzWidth="150px" rowSpan="2">Điểm kho</th>
+      <th class="text-center" nzWidth="200px" rowSpan="2">Địa điểm</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Thời gian thực hiện</th>
+      <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt báo cáo kinh tế kỹ <br> thuật hoặc khái toán
+        TMĐT
+      </th>
+      <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt quyết toán công trình <br> hoàn thành</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế kế <br> hoạch vốn <br> đến ngày</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế dự toán <br> đã cấp <br> đến ngày</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Tình hình thực <br> hiện đến <br> ngày...</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế <br> hoạch vốn <br> {{formData.value.namKeHoach}}
+      </th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
+      <th class="text-center" nzWidth="150px" rowSpan="2">Nội dung</th>
+    </tr>
+    <tr>
+      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center">Giá trị dự toán hoặc khái toán TMĐT</th>
+      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center">Giá trị phê duyệt quyết <br> toán hoàn thành</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="!dataTable">
+    </tbody>
+    <tbody *ngIf="dataTable">
+    <tr *ngFor="let data of dataTable; let idx = index">
       <td>{{ idx + 1 }}</td>
       <td>{{ data.tenCongTrinh }}</td>
       <td>{{ data.tenDiemKho }}</td>
@@ -192,29 +261,173 @@
       <td>{{ data.ncKhVon }}</td>
       <td>{{ data.noiDung }}</td>
       <td></td>
-  </tr>
-  </tbody>
-  <tfoot>
-  <td></td>
-  <td class="text-uppercase font-weight-bold">Tổng</td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-  <td></td>
-  <td nzRight></td>
-  </tfoot>
+    </tr>
+    </tbody>
+    <tfoot>
+    <td></td>
+    <td class="text-uppercase font-weight-bold">Tổng</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td></td>
+    <td nzRight></td>
+    </tfoot>
+  </nz-table>
+  <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span class="text-uppercase font-weight-bold">PHƯƠNG ÁN TỔNG CỤC</span>
+      </div>
+    </div>
+  </div>
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formDataTongHop" class="pd-10" *ngIf="isTongHop">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzSpan="16" class="mg-t-10">
+        <span class="font-weight-bold">Nhu cầu đối với công trình có TMĐT lớn hơn 5.000 triệu đồng: </span>
+        <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình hoàn thành trước 2020 và chuyển tiếp hoàn thành năm 2020(11 công trình)
+          </nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2020 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2021 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Công trình khởi công mới 2022 (13 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="16" class="mg-t-10">
+        <span class="font-weight-bold">Nhu cầu đối với công trình có TMĐT dưới 5.000 triệu đồng: </span>
+        <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+      </div>
+      <div nz-col nzSpan="8">
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình hoàn thành trước 2020 và chuyển tiếp hoàn thành năm 2020(11 công trình)
+          </nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2020 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Trả nợ công trình khởi công mới 2021 (12 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4" class="mg-t-10">
+        <nz-form-item>
+          <nz-form-label>Công trình khởi công mới 2022 (13 công trình)</nz-form-label>
+          <span class="font-weight-bold" style="color: blue">5.000.000.000 đồng</span>
+        </nz-form-item>
+      </div>
+    </div>
 
-</nz-table>
-
+  </form>
+  <nz-table class="nowrap pd-10" [nzData]="dataTableTc" [nzFrontPagination]="false" *ngIf="isTongHop"
+            [nzShowPagination]="false" nzBordered>
+    <thead>
+    <tr>
+      <th class="text-center" nzWidth="40px" rowSpan="2">STT</th>
+      <th class="text-center" nzWidth="150px" rowSpan="2">Tên công trình</th>
+      <th class="text-center" nzWidth="150px" rowSpan="2">Điểm kho</th>
+      <th class="text-center" nzWidth="200px" rowSpan="2">Địa điểm</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Thời gian thực hiện</th>
+      <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt báo cáo kinh tế kỹ <br> thuật hoặc khái toán
+        TMĐT
+      </th>
+      <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt quyết toán công trình <br> hoàn thành</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế kế <br> hoạch vốn <br> đến ngày</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Lũy kế dự toán <br> đã cấp <br> đến ngày</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Tình hình thực <br> hiện đến <br> ngày...</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế <br> hoạch vốn <br> {{formData.value.namKeHoach}}
+      </th>
+      <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
+      <th class="text-center" nzWidth="150px" rowSpan="2">Nội dung</th>
+    </tr>
+    <tr>
+      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center">Giá trị dự toán hoặc khái toán TMĐT</th>
+      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center">Giá trị phê duyệt quyết <br> toán hoàn thành</th>
+    </tr>
+    </thead>
+    <tbody *ngIf="!dataTableTc">
+    </tbody>
+    <tbody *ngIf="dataTableTc">
+    <tr *ngFor="let data of dataTableTc; let idx = index">
+      <td>{{ idx + 1 }}</td>
+      <td>{{ data.tenCongTrinh }}</td>
+      <td>{{ data.tenDiemKho }}</td>
+      <td>{{ data.diaDiem }}</td>
+      <td>{{ data.tgThucHien }}</td>
+      <td>{{ data.ngayBhTmdt }}</td>
+      <td>{{ data.giaTriTmdt }}</td>
+      <td>{{ data.ngayBhPd }}</td>
+      <td>{{ data.giaTriPd }}</td>
+      <td>{{ data.luyKeKh }}</td>
+      <td>{{ data.luyKeDuToan }}</td>
+      <td>{{ data.tinhHinh }}</td>
+      <td>{{ data.ncKhVon }}</td>
+      <td>{{ data.ncKhVon }}</td>
+      <td>{{ data.noiDung }}</td>
+      <td></td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <td></td>
+    <td class="text-uppercase font-weight-bold">Tổng</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td></td>
+    <td nzRight></td>
+    </tfoot>
+  </nz-table>
+</div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>

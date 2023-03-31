@@ -20,6 +20,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   loaiVthh: string;
   dsDonvi: any[] = [];
   userdetail: any = {};
+  idQdChiTieu: any;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -57,6 +58,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       ngayKyQd: [],
       ngayPduyet: [],
       loaiVthh: [],
+      trangThai: [],
     });
 
     this.filterTable = {
@@ -84,6 +86,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        trangThai: this.userService.isTongCuc() ? this.STATUS.DA_DUYET_LDC : null
       })
       await Promise.all([
         this.timKiem(),
@@ -135,5 +138,13 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   clearFilter() {
     this.formData.reset();
     this.timKiem();
+  }
+
+  openViewChiTieu(idQdChiTieu: number) {
+    this.idQdChiTieu = idQdChiTieu;
+  }
+
+  closeViewChiTieu() {
+    this.idQdChiTieu = null;
   }
 }

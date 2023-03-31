@@ -46,6 +46,20 @@
   color: #ff7a7b !important;
 }
 
+:host ::ng-deep .ant-descriptions-item-content {
+  background: #ffffff;
+  color: #001CFF;
+  font-size: 18px;
+}
+
+:host ::ng-deep .ant-descriptions-item-container .ant-descriptions-item-label {
+  margin-left: 4px;
+  min-width: 120px;
+  text-align: left;
+  display: block;
+  font-weight: bold;
+}
+
 ::ng-deep .ant-modal-header, ::ng-deep .ant-modal-footer {
   background-color: #f3f3f3;
 }

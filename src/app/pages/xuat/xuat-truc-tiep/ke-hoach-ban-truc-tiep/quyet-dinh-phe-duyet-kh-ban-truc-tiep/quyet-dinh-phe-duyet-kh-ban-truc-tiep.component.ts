@@ -49,7 +49,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
+      slDviTsan: '',
       soHopDong: '',
       tenTrangThai: '',
     };

@@ -106,4 +106,12 @@ export const STATUS_LABEL = {
   [STATUS.CHO_DUYET_LDV]: 'Chờ duyệt lãnh đạo vụ',
 } as const;
 
+export enum CHUC_NANG {
+  XEM = 'XEM',
+  SUA = 'SUA',
+  DUYET_TP = 'DUYET_TP',
+  DUYET_LDC = 'DUYET_LDC',
+  XOA = 'XOA',
+}
+
 

@@ -40,21 +40,23 @@
                 <nz-form-item>
                     <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="20">
+            <div nz-col [nzSpan]="22">
             </div>
-            <div nz-col [nzSpan]="4">
-                <div class="text-danger float-right" nzRight>
-                    <span>
-                        Đơn vị: kg
-                    </span>
-                </div>
+            <div nz-col [nzSpan]="2">
+                <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                        <span class="text-green">Đơn vị :{{formData.value.dviTinh}}</span>
+                    </nz-form-control>
+                </nz-form-item>
             </div>
         </div>
         <br />
@@ -71,9 +73,18 @@
                 <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
                 <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất (1)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg) (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ/kg) (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ) (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Giá khởi
+                    điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Giá khởi
+                    điểm đề xuất (kg) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ/kg) (4)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>
@@ -118,11 +129,11 @@
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number : '1.0-1'
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat | number : '1.0-1'
                     :
                     'vi_VN'}}</th>
                 <th>{{ thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1' :
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' :
                     'vi_VN'
                     }}</th>
 
@@ -148,9 +159,9 @@
                     <td>{{ data.duDau | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{ data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaDeXuat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.soLuong * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                     <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.soLuong * data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
                         <a (click)="startEdit(i)">
                             <i class="fa fa-pencil"></i>
@@ -202,10 +213,10 @@
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number :
+                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat | number :
                         '1.0-1' : 'vi_VN'}}</td>
                     <td>{{thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1'
+                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1'
                         : 'vi_VN'}}</td>
 
                     <td class="text-center">
