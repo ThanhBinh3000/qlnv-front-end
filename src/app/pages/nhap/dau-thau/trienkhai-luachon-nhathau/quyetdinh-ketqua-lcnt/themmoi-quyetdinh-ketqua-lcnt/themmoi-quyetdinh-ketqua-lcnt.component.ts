@@ -47,6 +47,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   listNam: any[] = [];
 
   isQdkqlcnt: boolean = true;
+  listFileDinhKem: any[] = [];
 
   userInfo: UserLogin;
   STATUS = STATUS
@@ -89,7 +90,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   }
 
   async ngOnInit() {
-    console.log(this.isView);
+    console.log(this.isViewDetail);
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;
@@ -114,13 +115,14 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
 
   async getDetail(id: number) {
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
+    console.log(res)
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.formData.patchValue({
         soQd: dataDetail.soQd?.split('/')[0],
       })
-      this.fileDinhKem = dataDetail.qdKhlcntDtl.dxuatKhLcntHdr.fileDinhKems;
+      this.fileDinhKem = dataDetail.fileDinhKems;
     }
   }
 
@@ -134,6 +136,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
+    debugger
     body.fileDinhKems = this.fileDinhKem;
     let res;
     if (this.formData.get('id').value > 0) {
@@ -292,27 +295,27 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     });
   }
 
-  // getNameFile(event?: any, item?: FileDinhKem) {
-  //   const element = event.currentTarget as HTMLInputElement;
-  //   const fileList: FileList | null = element.files;
-  //   if (fileList) {
-  //     const itemFile = {
-  //       name: fileList[0].name,
-  //       file: event.target.files[0] as File,
-  //     };
-  //     this.uploadFileService
-  //       .uploadFile(itemFile.file, itemFile.name)
-  //       .then((resUpload) => {
-  //         const fileDinhKem = new FileDinhKem();
-  //         fileDinhKem.fileName = resUpload.filename;
-  //         this.formData.patchValue({
-  //           // nameFilePhuongAn: resUpload.filename
-  //         })
-  //         fileDinhKem.fileSize = resUpload.size;
-  //         fileDinhKem.fileUrl = resUpload.url;
-  //         // this.filePhuongAn = fileDinhKem;
-  //       });
-  //   }
-  // }
+  getNameFile(event?: any, item?: FileDinhKem) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          const fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          this.formData.patchValue({
+            // nameFilePhuongAn: resUpload.filename
+          })
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+          // this.filePhuongAn = fileDinhKem;
+        });
+    }
+  }
 
 }
