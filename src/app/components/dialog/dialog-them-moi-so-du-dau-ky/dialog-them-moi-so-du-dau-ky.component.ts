@@ -50,7 +50,8 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       loaiVthh: ['', Validators.required],
       cloaiVthh: ['', Validators.required],
       slTon: ['', Validators.required],
-      dviTinh: ['']
+      dviTinh: [''],
+      isKhoiTao : [true]
     })
   }
 
@@ -94,6 +95,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.slTon = this.formData.value.slTon
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
+    body.isKhoiTao = this.formData.value.isKhoiTao
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

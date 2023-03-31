@@ -136,6 +136,7 @@ export class MangLuoiKhoComponent implements OnInit {
       ngayNhapDay: [''],
       sdt: [''],
       idParent: [''],
+      isKhoiTao : [null]
     })
   }
 
@@ -355,15 +356,15 @@ export class MangLuoiKhoComponent implements OnInit {
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
         // maCha:dataNode && dataNode.id ? dataNode.id : null,
-        tichLuongTkLt: dataNode.tichLuongTkLt ,
-        dienTichDat: dataNode.dienTichDat ,
-        tichLuongTkVt: dataNode.tichLuongTkVt ,
-        theTichTkLt: dataNode.theTichTkLt,
-        theTichTkVt: dataNode.theTichTkVt,
-        tichLuongKdLt: dataNode.tichLuongKdLt ,
-        tichLuongKdVt: dataNode.tichLuongKdVt,
-        tichLuongSdLt:  dataNode.tichLuongTkLt- dataNode.tichLuongKdLt,
-        tichLuongSdVt: dataNode.tichLuongTkVt - dataNode.tichLuongKdVt,
+        tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt : 0 ,
+        dienTichDat: dataNode.dienTichDat ?  dataNode.dienTichDat : 0 ,
+        tichLuongTkVt: dataNode.tichLuongTkVt ? dataNode.tichLuongTkVt : 0,
+        theTichTkLt: dataNode.theTichTkLt ? dataNode.theTichTkLt : 0,
+        theTichTkVt: dataNode.theTichTkVt ? dataNode.theTichTkVt  :0,
+        tichLuongKdLt: dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt  :0 ,
+        tichLuongKdVt: dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt  :0,
+        tichLuongSdLt:  (dataNode.tichLuongTkLt- dataNode.tichLuongKdLt) > 0 ? dataNode.tichLuongTkLt- dataNode.tichLuongKdLt : 0,
+        tichLuongSdVt: (dataNode.tichLuongTkVt - dataNode.tichLuongKdVt) ? dataNode.tichLuongTkVt - dataNode.tichLuongKdVt : 0,
         theTichSdLt: ( dataNode.theTichTkLt - dataNode.theTichKdLt) > 0 ? (dataNode.theTichTkLt - dataNode.theTichKdLt) : 0,
         theTichSdVt: (dataNode.theTichTkVt - dataNode.theTichKdVt) > 0 ? (dataNode.theTichTkVt - dataNode.theTichKdVt ) : 0,
         theTichKdLt: dataNode.theTichKdLt ? dataNode.theTichKdLt : 0,
@@ -535,9 +536,13 @@ export class MangLuoiKhoComponent implements OnInit {
           type = 'nha-kho';
         }
         if (this.levelNode == 6) {
+          body.isKhoiTao = this.detailDonVi.value.coLoKho == true ? false : true
+          body.coLoKho = this.detailDonVi.value.coLoKho == true ? "01" : "00"
+          body.slTon = body.slTon ? body.slTon : 0
           type = 'ngan-kho';
         }
         if (this.levelNode == 7) {
+          body.isKhoiTao = true
           type = 'ngan-lo';
         }
         this.mangLuoiKhoService.updateKho(type, body).then((res: OldResponseData) => {

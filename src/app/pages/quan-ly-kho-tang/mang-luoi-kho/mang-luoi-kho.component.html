@@ -431,7 +431,8 @@
                       <nz-form-label>Tổng diện tích (m2)</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input formControlName="dienTichDat" [readonly]="true"/>
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                           [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -615,8 +616,8 @@
                           <nz-form-label> Diện tích (m2)</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input formControlName="dienTichDat" [readonly]="isEditData" nz-input/>
-                            </nz-input-group>
+                              <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                               [nzParser]="globals.parser"></nz-input-number>                            </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -846,8 +847,8 @@
                       <nz-form-label>Diện tích (m2)</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input formControlName="dienTichDat" nz-input [readonly]="isEditData"/>
-                        </nz-input-group>
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                           [nzParser]="globals.parser"></nz-input-number>                        </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -928,7 +929,7 @@
                       <nz-form-label>Tổng tích lượng thiết kế - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <input nz-input formControlName="tichLuongTkLt" [readOnly]="true"/>
+                          <input nz-input formControlName="tichLuongTkLt" [readOnly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -988,7 +989,7 @@
                       <nz-form-label>Tổng thể tích thiết kế - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input [readonly]="!isEditData" nz-input formControlName="theTichTkLt"
+                          <input [readonly]="true" nz-input formControlName="theTichTkLt"
                                  [readOnly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
@@ -999,7 +1000,7 @@
                       <nz-form-label>Tổng thể tích thiết kế - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input formControlName="theTichTkVt" [readOnly]="isEditData"/>
+                          <input nz-input formControlName="theTichTkVt" [readOnly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1279,7 +1280,7 @@
                       <nz-form-label>Tích lượng đã SD - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
+                          <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                            formControlName="tichLuongSdLt"></nz-input-number>
                         </nz-input-group>
@@ -1291,7 +1292,7 @@
                       <nz-form-label>Tích lượng đã SD - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
+                          <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                            formControlName="tichLuongSdVt"></nz-input-number>
                         </nz-input-group>
@@ -1338,7 +1339,7 @@
                       <nz-form-label>Thể tích thiết kế - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input formControlName="theTichTkLt" [readOnly]="true"/>
+                          <input nz-input formControlName="theTichTkLt" [readOnly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1348,7 +1349,7 @@
                       <nz-form-label>Thể tích thiết kế - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input formControlName="theTichTkVt" [readOnly]="true"/>
+                          <input nz-input formControlName="theTichTkVt" [readOnly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1378,7 +1379,7 @@
                       <nz-form-label>Thể tích khả dụng - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input formControlName="theTichKdLt" [readonly]="true"/>
+                          <input nz-input formControlName="theTichKdLt" [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1388,7 +1389,7 @@
                       <nz-form-label>Thể tích khả dụng - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input formControlName="theTichKdVt" [readonly]="true"/>
+                          <input nz-input formControlName="theTichKdVt" [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
