@@ -47,14 +47,16 @@
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="20">
+            <div nz-col [nzSpan]="22">
             </div>
-            <div nz-col [nzSpan]="4">
-                <div class="text-danger float-right" nzRight>
-                    <span>
-                        Đơn vị: kg
-                    </span>
-                </div>
+            <div nz-col [nzSpan]="2">
+                <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                        <span class="text-green">Đơn vị :{{formData.value.dviTinh}}</span>
+                    </nz-form-control>
+                </nz-form-item>
             </div>
         </div>
         <br />
@@ -71,8 +73,14 @@
                 <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
                 <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    đề xuất (đ)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.loaiVthh?.startsWith('02')">Đơn giá
+                    được duyệt (đ)</th>
                 <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất (đ)</th>
                 <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
