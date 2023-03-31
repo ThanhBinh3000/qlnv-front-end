@@ -22,7 +22,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  isView = false;
   idHopDong: number;
   isEditHopDong: boolean
 
@@ -90,11 +90,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     }
   }
 
-  async getDetailHopDong($event, id: number) {
+  async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
     this.idHopDong = id;
+    this.isView = b;
     this.spinner.hide();
   }
 
