@@ -566,11 +566,11 @@ export class AddBaoCaoComponent implements OnInit {
 
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
           const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04").lstCtietBcaos
-          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3").tongCong
-          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.1").tongCong
-          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.2").tongCong
-          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.3").tongCong
-          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.4").tongCong
+          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3")?.tongCong
+          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.1")?.tongCong
+          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.2")?.tongCong
+          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.3")?.tongCong
+          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.4")?.tongCong
           dataInfo.extraData.push({
             dtoanGiao: tongCong,
             id: uuid.v4() + "FE",
@@ -627,7 +627,7 @@ export class AddBaoCaoComponent implements OnInit {
             maNdung: "0.1.2.3.3",
             tongCong: tongPl1X
           })
-          
+
           dataInfo.extraData.push({
             dtoanGiao: tongCong2,
             id: uuid.v4() + "FE",
