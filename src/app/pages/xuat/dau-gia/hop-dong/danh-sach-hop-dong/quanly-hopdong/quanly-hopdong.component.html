@@ -206,30 +206,32 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of basicTable.data,let i = index">
-                            <td>{{ i + 1}}</td>
-                            <td>{{data.soHd}}</td>
-                            <td>{{data.tenHd}}</td>
-                            <td>{{data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
-                            <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td></td>
-                            <td>{{data.tenTrangThai}}</td>
-                            <td>
-                                <a *ngIf="data.trangThai == STATUS.DA_KY"
-                                    (click)="getDetailHopDong($event,data.id,true)">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
-                                    (click)="redirectHopDong(true,data.id)">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
-                                    (click)="deleteHd(data)">
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
-                            </td>
-                        </tr>
+                        <ng-container *ngFor="let data of basicTable.data,let i = index">
+                            <tr [ngClass]="{'bg-selected': data.selected}" (click)="selectRow(data)">
+                                <td>{{ i + 1}}</td>
+                                <td>{{data.soHd}}</td>
+                                <td>{{data.tenHd}}</td>
+                                <td>{{data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
+                                <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td></td>
+                                <td>{{data.tenTrangThai}}</td>
+                                <td>
+                                    <a *ngIf="data.trangThai == STATUS.DA_KY"
+                                        (click)="getDetailHopDong($event,data.id,true)">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                        (click)="redirectHopDong(true,data.id)">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
+                                        (click)="deleteHd(data)">
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </nz-table>
             </nz-card>

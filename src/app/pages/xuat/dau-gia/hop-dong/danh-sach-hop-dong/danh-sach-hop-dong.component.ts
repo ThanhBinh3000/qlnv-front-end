@@ -71,7 +71,6 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        nam: dayjs().get('year')
       })
       await this.search();
       this.spinner.hide();
