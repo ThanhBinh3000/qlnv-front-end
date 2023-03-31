@@ -87,14 +87,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tgianGnhan: [, [Validators.required]],
       tgianGnhanGhiChu: [null],
       pthucGnhan: [, [Validators.required]],
-      thongBaoKh: [, [Validators.required]],
+      thongBao: [, [Validators.required]],
       khoanTienDatTruoc: [, [Validators.required]],
 
       tongSoLuong: [null],
-      tongTienGiaDeXuat: [null],
-      tongTienGiaVat: [null],
-      tongTienDatCocDx: [null],
-      tongTienDatCocVat: [null],
+      tongTienKdiem: [null],
+      tongTienKdienDonGia: [null],
+      tongTienDatTruoc: [null],
+      tongTienDatTruocDonGia: [null],
 
       ghiChu: [null],
       trangThai: [STATUS.DU_THAO],
@@ -284,29 +284,45 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongTienGiaDeXuat: number = 0;
-    let tongTienGiaVat: number = 0;
+    let tongTienKdiem: number = 0;
+    let tongTienKdienDonGia: number = 0;
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
       item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
-        tongTienGiaDeXuat += child.donGiaDeXuat * child.soLuong;
-        tongTienGiaVat += child.donGiaVat * child.soLuong;
+        item.tienDtruocDxChiCuc += child.soLuong * child.donGiaDeXuat;
+        item.tienDtruocDdChiCuc += child.soLuong * child.donGiaVat;
       })
-      item.soLuong = soLuongChiCuc;
+      tongSoLuong += item.soLuongChiCuc / 1000;
+      tongTienKdiem += item.tienDtruocDxChiCuc;
+      tongTienKdienDonGia += item.tienDtruocDdChiCuc;
+
+
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienGiaDeXuat: tongTienGiaDeXuat,
-      tongTienGiaVat: tongTienGiaVat,
-      tongTienDatCocDx: tongTienGiaDeXuat + (tongTienGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100),
-      tongTienDatCocVat: tongTienGiaVat + (tongTienGiaVat * this.formData.value.khoanTienDatTruoc / 100),
+      tongTienKdiem: tongTienKdiem,
+      tongTienKdienDonGia: tongTienKdienDonGia,
+      tongTienDatTruoc: tongTienKdiem + (tongTienKdiem * this.formData.value.khoanTienDatTruoc / 100),
+      tongTienDatTruocDonGia: tongTienKdienDonGia + (tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100)
     });
   }
 
   deleteRow(i: number) {
-    this.dataTable = this.dataTable.filter((item, index) => index != i);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable = this.dataTable.filter((item, index) => index != i);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async save(isGuiDuyet?) {
@@ -335,7 +351,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           this.idInput = res.id;
           this.guiDuyet();
         } else {
-          this.quayLai()
+          // this.quayLai()
         }
       }
     }
