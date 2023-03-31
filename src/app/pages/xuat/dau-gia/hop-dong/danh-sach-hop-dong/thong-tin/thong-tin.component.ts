@@ -196,6 +196,8 @@ export class ThongTinComponent extends Base2Component implements OnInit {
       return;
     }
     let body = this.formData.value;
+    console.log(body.listMaDviTsan, 55);
+    body.maDviTsan = body.listMaDviTsan.join(',');
     body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
     body.children = this.dataTable;
     let data = await this.createUpdate(body);
