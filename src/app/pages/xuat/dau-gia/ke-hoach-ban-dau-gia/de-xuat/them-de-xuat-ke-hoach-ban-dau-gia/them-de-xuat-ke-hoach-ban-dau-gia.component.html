@@ -344,7 +344,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }} Tấn</span>
+                  <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }}
+                    {{formData.value.dviTinh}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -396,9 +397,15 @@
               <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
               <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
               <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+                xuất (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+                xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá
+                được duyệt (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá
+                được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>

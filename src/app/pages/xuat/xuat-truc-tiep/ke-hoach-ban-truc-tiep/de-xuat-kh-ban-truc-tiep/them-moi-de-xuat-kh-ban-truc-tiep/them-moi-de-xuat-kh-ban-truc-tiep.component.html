@@ -30,18 +30,6 @@
                 <span>Lưu</span>
             </button>
         </ng-container>
-        <ng-container *ngIf="userService.isTongCuc()">
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
-                (click)="tuChoi()">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button"
-                class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Duyệt</span>
-            </button>
-        </ng-container>
     </div>
 </nz-affix>
 

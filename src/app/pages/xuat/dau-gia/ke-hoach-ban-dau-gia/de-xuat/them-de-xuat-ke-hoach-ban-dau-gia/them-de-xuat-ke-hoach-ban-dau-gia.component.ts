@@ -6,7 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import { API_STATUS_CODE } from 'src/app/constants/config';
+import { API_STATUS_CODE, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
@@ -101,11 +101,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
       donGiaVat: [],
+      dviTinh: [],
+      typeVthh: [''],
     });
   }
 
   async ngOnInit() {
     this.spinner.show();
+    this.formData.patchValue({
+      typeVthh: this.loaiVthhInput,
+    })
     this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
@@ -205,6 +210,15 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
             tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
           });
         }
+        if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.THOC)) {
+          this.formData.patchValue({
+            dviTinh: 'Kg',
+          });
+        } else {
+          this.formData.patchValue({
+            dviTinh: data.maDviTinh,
+          });
+        }
         let res = await this.dmTieuChuanService.getDetailByMaHh(
           this.formData.get('cloaiVthh').value,
         );
@@ -254,7 +268,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         loaiVthh: this.formData.get('loaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
-        donGiaVat: this.formData.value.donGiaVat,
+        donGiaVat: this.formData.get('donGiaVat').value,
+        dviTinh: this.formData.get('dviTinh').value,
       },
     });
     modalGT.afterClose.subscribe((data) => {

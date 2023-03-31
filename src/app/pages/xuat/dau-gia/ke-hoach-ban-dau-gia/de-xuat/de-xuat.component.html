@@ -84,7 +84,7 @@
             <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
             <th class="text-center" style="width: 5%;">Số QĐ giao chỉ tiêu</th>
             <th class="text-center" style="width: 7%;">Trạng thái đề xuất</th>
-            <th class="text-center" style="width: 7%;">Trạng thái tổng hợp</th>
+            <th class="text-center" style="width: 7%;">Mã tổng hợp</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -207,10 +207,16 @@
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.soDviTsan}}</td>
             <td>{{ data.slHdDaKy}}</td>
-            <td><a nz-button nzType="link" nzBlock (click)="openViewChiTieu(data.idSoQdCtieu)">{{ data.soQdCtieu}}</a>
+            <td>
+              <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCtieu)">{{ data.soQdCtieu}}</a>
             </td>
+            <td>{{ data.soQdCtieu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td>{{ data.maThop == null ? data.tenTrangThaiTh : data.maThop}}
+            <td *ngIf="userService.isTongCuc() ">
+              <a nz-button nzType="link" nzBlock (click)="openModalTh(data.idThop)">{{ data.idThop == null?
+                data.tenTrangThaiTh: data.idThop}}</a>
+            </td>
+
             <td class="text-left">
               <a (click)="goDetail(data.id,['XHDTQG_PTDG_KHBDG_LT_DEXUAT_XEM','XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM'])"
                 *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_CBV )">
@@ -252,16 +258,29 @@
   <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idSelected" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
   </app-them-de-xuat-ke-hoach-ban-dau-gia>
 </div>
-<!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="idQdChiTieu" [nzFooter]="modalFooterViewChiTieu"
-  [nzClosable]="true" (nzOnCancel)="closeViewChiTieu()" nzTitle="QUYẾT ĐỊNH GIAO CHỈ TIÊU">
-  <ng-container class="modal__content custom-scroll-modal" *nzModalContent>
-    <!--    <form nz-form>-->
-    <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idQdChiTieu" [isViewDetail]="false">
-    </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+  <ng-container *nzModalContent class="modal__content">
+    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
   </ng-container>
-  <ng-template #modalFooterViewChiTieu>
-    <button nz-button class="btn btn-main" (click)="closeViewChiTieu()">Đóng</button>
-    <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
-  </ng-template>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModalChiTieu()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idChiTieu" [isViewDetail]="true"
+      [isViewOnModal]="true"></app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalChiTieu()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
 </nz-modal>

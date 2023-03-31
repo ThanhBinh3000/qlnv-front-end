@@ -20,7 +20,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   loaiVthh: string;
   dsDonvi: any[] = [];
   userdetail: any = {};
-  idQdChiTieu: any;
+  idChiTieu: number = 0;
+  isViewChiTieu: boolean = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -42,9 +45,9 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
-    private donviService: DonviService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
@@ -140,11 +143,23 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     this.timKiem();
   }
 
-  openViewChiTieu(idQdChiTieu: number) {
-    this.idQdChiTieu = idQdChiTieu;
+  openModalChiTieu(id: number) {
+    this.idChiTieu = id;
+    this.isViewChiTieu = true;
   }
 
-  closeViewChiTieu() {
-    this.idQdChiTieu = null;
+  closeModalChiTieu() {
+    this.idChiTieu = null;
+    this.isViewChiTieu = false;
+  }
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
   }
 }

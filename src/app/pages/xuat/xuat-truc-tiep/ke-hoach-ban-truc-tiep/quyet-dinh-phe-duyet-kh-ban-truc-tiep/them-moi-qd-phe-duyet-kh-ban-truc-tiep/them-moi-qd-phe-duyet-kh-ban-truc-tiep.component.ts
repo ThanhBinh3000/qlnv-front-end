@@ -31,6 +31,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

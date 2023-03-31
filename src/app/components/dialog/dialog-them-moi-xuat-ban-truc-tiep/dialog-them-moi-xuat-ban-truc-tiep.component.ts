@@ -101,17 +101,16 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   initForm() {
     this.userInfo = this.userService.getUserLogin();
     this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
+    this.formData.patchValue({
+      donGiaVat: this.donGiaVat,
+      dviTinh: this.dviTinh,
+      loaiVthh: this.loaiVthh,
+    })
     this.loadDonVi();
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
-    } else {
-      this.formData.patchValue({
-        donGiaVat: this.donGiaVat,
-        dviTinh: this.dviTinh,
-        loaiVthh: this.loaiVthh,
-      })
     }
     this.checkDisabledSave();
   }

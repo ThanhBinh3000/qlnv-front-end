@@ -17,7 +17,10 @@ import { saveAs } from 'file-saver';
 export class DeXuatComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
-  idQdChiTieu: any;
+  idThop: number = 0;
+  isViewThop: boolean = false;
+  idChiTieu: number = 0;
+  isViewChiTieu: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -71,14 +74,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     }
   }
 
-  openViewChiTieu(idQdChiTieu: number) {
-    this.idQdChiTieu = idQdChiTieu;
-  }
-
-  closeViewChiTieu() {
-    this.idQdChiTieu = null;
-  }
-
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -98,4 +93,25 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
+  openModalChiTieu(id: number) {
+    this.idChiTieu = id;
+    this.isViewChiTieu = true;
+  }
+
+  closeModalChiTieu() {
+    this.idChiTieu = null;
+    this.isViewChiTieu = false;
+  }
+
 }
