@@ -43,6 +43,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
 
   searchFilter = {
     soQdPdKhlcnt: '',
+    soQdPdKqlcnt: '',
     soQdinh: '',
     namKhoach: '',
     ngayTongHop: '',
@@ -169,10 +170,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   }
 
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number, roles: any) {
+    if (roles != "NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM") {
+      this.isViewDetail = false;
+    } else {
+      this.isViewDetail = true;
+    }
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
   }
 
   async showList() {
@@ -378,18 +383,18 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy','ngayGiaoNhan','ngayHieuLuc','ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
-          }else if(['tenLoaiVthh', 'tenCloaiVthh'].includes(key)){
+          } else if (['tenLoaiVthh', 'tenCloaiVthh'].includes(key)) {
             if (item['qdKhlcntDtl'].hhQdKhlcntHdr.tenLoaiVthh && item['qdKhlcntDtl'].hhQdKhlcntHdr.tenLoaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
             }
             if (item['qdKhlcntDtl'].hhQdKhlcntHdr.tenCloaiVthh && item['qdKhlcntDtl'].hhQdKhlcntHdr.tenCloaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
             }
-          }else {
+          } else {
             if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
             }

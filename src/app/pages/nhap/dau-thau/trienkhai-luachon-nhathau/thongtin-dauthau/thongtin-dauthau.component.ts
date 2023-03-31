@@ -17,9 +17,9 @@ import { STATUS } from 'src/app/constants/status';
 import {
   ThongTinDauThauService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import {StorageService} from "../../../../../services/storage.service";
-import {HttpClient} from "@angular/common/http";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../services/storage.service";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -48,7 +48,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   STATUS = STATUS
-
+  isView: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
     { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
@@ -205,13 +205,18 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     }
   }
 
-  redirectToChiTiet(data) {
+  redirectToChiTiet(data, roles?: any) {
     // VẬt tư
     // if (this.loaiVthh.startsWith('02')) {
     //   this.selectedId = data.hhQdKhlcntHdr.id;
     // } else {
     //   this.selectedId = data.id;
     // }
+    if (roles == 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') {
+      this.isView = true;
+    } else {
+      this.isView = false
+    }
     this.selectedId = data.id;
     this.isDetail = true;
   }
@@ -230,6 +235,8 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     this.searchFilter.loaiVthh = null;
     this.searchFilter.soQdPdKhlcnt = null;
     this.searchFilter.soQdPdKqlcnt = null;
+    this.tuNgayQd = null;
+    this.denNgayQd = null;
     this.search();
   }
 
