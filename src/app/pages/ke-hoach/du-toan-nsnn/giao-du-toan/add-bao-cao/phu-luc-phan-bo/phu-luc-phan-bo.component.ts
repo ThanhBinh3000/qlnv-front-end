@@ -118,7 +118,10 @@ export class PhuLucPhanBoComponent implements OnInit {
       this.dataInfo.extraData.forEach(item => {
         if (item.maNdung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-          this.lstCtietBcao[index].lstCtietDvis = item.lstCtietDvis;
+          if (index != -1) {
+            this.lstCtietBcao[index].lstCtietDvis = item?.lstCtietDvis;
+          }
+
           // this.sum(this.lstCtietBcao[index].stt)
         }
       })

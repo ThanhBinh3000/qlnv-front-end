@@ -108,6 +108,7 @@ export class TongHopComponent implements OnInit {
 
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
+
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -348,6 +349,7 @@ export class TongHopComponent implements OnInit {
                 danhMuc: data.danhMuc,
                 tenDanhMuc: data.tenDanhMuc,
                 dviTinh: data.dviTinh,
+                lstDviCapDuoi: data.lstDviCapDuoi,
             }
             this.lstCtietBcao.forEach(item => {
                 if (getHead(item.stt) == stt) {
