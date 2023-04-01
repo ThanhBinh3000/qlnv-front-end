@@ -259,11 +259,12 @@
 										{{ displayValue(editCache[data.id].data.luyKeCong) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCapUng) }}
-									</td>
-									<td>
 										{{ displayValue(editCache[data.id].data.luyKeCapVon) }}
 									</td>
+									<td>
+										{{ displayValue(editCache[data.id].data.luyKeCapUng) }}
+									</td>
+
 									<td>
 										{{ displayValue(editCache[data.id].data.tongVonVaDtDaCap) }}
 									</td>
@@ -275,12 +276,12 @@
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.vonDuyetCapUng"
+											[(ngModel)]="editCache[data.id].data.vonDuyetCapVon"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>
 										<input class="money-input" currencyMask [options]="amount"
-											[(ngModel)]="editCache[data.id].data.vonDuyetCapVon"
+											[(ngModel)]="editCache[data.id].data.vonDuyetCapUng"
 											(ngModelChange)="changeModel(data.id)" />
 									</td>
 									<td>

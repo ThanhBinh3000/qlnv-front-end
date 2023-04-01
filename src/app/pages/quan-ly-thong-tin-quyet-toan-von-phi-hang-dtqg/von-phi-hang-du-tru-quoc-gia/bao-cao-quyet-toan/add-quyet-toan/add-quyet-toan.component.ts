@@ -1038,6 +1038,7 @@ export class AddQuyetToanComponent implements OnInit {
         maDviTinh: data.maDviTinh,
         donGiaMua: null,
         soLuong: null,
+        thanhTien: null,
         checked: data.checked,
         level: data.level,
       }

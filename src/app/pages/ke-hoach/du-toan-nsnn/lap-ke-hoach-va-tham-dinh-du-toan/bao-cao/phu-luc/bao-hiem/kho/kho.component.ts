@@ -423,9 +423,19 @@ export class KhoComponent implements OnInit {
         })
     }
 
+    getHead(stt: string) {
+        return parseInt(stt.split(".")[1], 10);
+    }
+
     sortReport() {
         this.setLevel();
         this.lstCtietBcao.sort((a, b) => {
+            if (this.getHead(a.stt) > this.getHead(b.stt)) {
+                return 1;
+            }
+            if (this.getHead(a.stt) < this.getHead(b.stt)) {
+                return -1;
+            }
             //level nho hon dat len truoc
             if (a.level > b.level) {
                 return 1;
@@ -461,7 +471,7 @@ export class KhoComponent implements OnInit {
                 this.lstCtietBcao[i].unitSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi)?.length;
             }
             if (i == 0 || this.lstCtietBcao[i].maDiaChiKho != this.lstCtietBcao[i - 1].maDiaChiKho) {
-                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho)?.length;
+                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi && e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho)?.length;
             }
         }
     }
