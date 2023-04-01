@@ -322,14 +322,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   calculatorTable() {
     let tongSoLuong: number = 0;
     let tongDonGia: number = 0;
-    let soLuongDviTsan: number = 0;
     this.dataTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
-        maDviTsan: key,
-        children: value
-      })).value();
-      item.dataDviTsan = dataGroup;
-      soLuongDviTsan += item.dataDviTsan.length;
       tongSoLuong += item.soLuongChiCuc;
       item.children.forEach(child => {
         tongDonGia += child.donGiaDeXuat;
@@ -338,7 +331,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongDonGia: tongDonGia,
-      slDviTsan: soLuongDviTsan,
     });
   }
 
