@@ -17,7 +17,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import {convertTrangThai} from "../../../../../../shared/commonFunction";
+import { convertTrangThai } from "../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -42,6 +42,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -118,7 +119,12 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+      this.showFirstRow(event, this.dataTableDanhSachDX[0].idDxHdr);
     }
+  }
+
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
   }
 
   async loadDataComboBox() {
@@ -243,8 +249,13 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }

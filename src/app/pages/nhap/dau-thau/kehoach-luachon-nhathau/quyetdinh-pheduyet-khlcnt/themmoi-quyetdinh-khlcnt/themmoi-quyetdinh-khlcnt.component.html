@@ -70,7 +70,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{maQd}}">
-                <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
+                <nz-input-number [ngClass]="'number-input'" formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
+                  [nzStep]="1" [nzSize]="'small'"
                   [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== '' || isView">
                 </nz-input-number>
               </nz-input-group>
@@ -118,9 +119,7 @@
               </nz-form-control>
             </nz-form-item>
           </nz-radio-group>
-          <nz-radio-group
-            [nzDisabled]="true"
-            nzSize="small" class="rdo-input" formControlName="phanLoai">
+          <nz-radio-group [nzDisabled]="true" nzSize="small" class="rdo-input" formControlName="phanLoai">
             <nz-form-item *ngIf="loaiVthh != '02' && this.idInput != 0">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
@@ -516,7 +515,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)">
+            <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)"
+              [ngClass]="{'bg-selected': i == 0 && this.selected}">
               <td class="text-center">{{i + 1}} </td>
               <td>{{ data.tenDvi }}</td>
               <td>{{ data.diaChiDvi }}</td>

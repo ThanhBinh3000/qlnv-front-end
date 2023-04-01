@@ -28,7 +28,8 @@
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) && !isView
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) && !isView
         && (loaiVthhInput === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM'))"
         type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
@@ -185,17 +186,20 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
+              <nz-input-group nzAddOnAfterIcon="folder-open"
+                (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" *ngIf="(userService.isCuc() || userService.isTongCuc || showFromTH) && !this.loaiVthhInput.startsWith('02')">
+        <div nz-col [nzSpan]="6"
+          *ngIf="(userService.isCuc() || userService.isTongCuc || showFromTH) && !this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
+              <nz-input-group nzAddOnAfterIcon="folder-open"
+                (click)="isView ? '' : (showFromTH ? '' : selectHangHoa())">
                 <input [disabled]="isView" [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
               </nz-input-group>
             </nz-form-control>
@@ -205,7 +209,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="moTaHangHoa" [readOnly]="isView"/>
+              <input nz-input formControlName="moTaHangHoa" [readOnly]="isView" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -418,7 +422,8 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
+            </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
@@ -452,7 +457,8 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'}}</span>
+          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm
+            nhập hàng'}}</span>
         </div>
       </div>
       <div class="buttons" *ngIf="!isView">
@@ -485,7 +491,7 @@
       <tbody>
         <ng-container *ngFor="let item of listDataGroup , let i = index">
           <tr>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
             <td></td>
             <td></td>
@@ -497,7 +503,7 @@
             <td></td>
             <td *ngIf="userService.isCuc() && !isView"></td>
           </tr>
-          <ng-container *ngIf="expandSet.has(i)">
+          <ng-container>
             <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
               <td></td>
               <td></td>
@@ -555,7 +561,7 @@
           <th>Đơn giá đã duyệt gồm VAT (đ)</th>
           <th>Tổng mức đầu tư(đ)</th>
           <th>Tổng mức đầu tư theo đơn giá đã duyệt(đ)</th>
-          <th style="width: 5%;" *ngIf="!isView" >Hành động</th>
+          <th style="width: 5%;" *ngIf="!isView">Hành động</th>
         </tr>
       </thead>
       <tbody>
