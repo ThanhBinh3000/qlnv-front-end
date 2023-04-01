@@ -30,18 +30,6 @@
                 <span>Lưu</span>
             </button>
         </ng-container>
-        <ng-container *ngIf="userService.isTongCuc()">
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
-                (click)="tuChoi()">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button"
-                class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Duyệt</span>
-            </button>
-        </ng-container>
     </div>
 </nz-affix>
 
@@ -178,7 +166,7 @@
                 </div>
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
                                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
