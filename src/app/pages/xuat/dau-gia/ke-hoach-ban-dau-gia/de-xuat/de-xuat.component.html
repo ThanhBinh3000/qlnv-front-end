@@ -49,7 +49,7 @@
       </form>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearForm()">
+          <button nz-button class="search__button--clear" (click)="clearFilter()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -112,8 +112,10 @@
             <th></th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                  (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
+                <nz-select nzAllowClear [(ngModel)]="filterTable.namKh"
+                  (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
@@ -123,22 +125,18 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayTao"
+                  (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
-                  (input)="filterInTable('ngayPduyet',filterTable.ngayPduyet)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayPduyet"
+                  (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group>
@@ -147,13 +145,11 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKyQd"
-                  (input)="filterInTable('ngayKyQd',filterTable.ngayKyQd)" size="small" />
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyQd"
+                  (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
+                </nz-date-picker>
               </nz-input-group>
-              <ng-template #suffixTemplateInfo123>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group>
@@ -194,8 +190,10 @@
 
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                  (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th *ngIf="userService.isTongCuc() ">
@@ -225,7 +223,7 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.soDviTsan}}</td>
+            <td>{{ data.slDviTsan}}</td>
             <td>{{ data.slHdDaKy}}</td>
             <td>
               <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCtieu)">{{ data.soQdCtieu}}</a>
