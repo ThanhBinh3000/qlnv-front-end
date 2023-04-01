@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { saveAs } from 'file-saver';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 
 @Component({
@@ -35,7 +36,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
     this.formData = this.fb.group({
       namKh: '',
-      ngayThop: '',
+      ngayThopTu: '',
+      ngayThopDen: '',
       loaiVthh: '',
       tenLoaiVthh: '',
       cloaiVthh: '',
@@ -57,10 +59,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-      })
       this.timKiem();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -70,21 +70,49 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     }
   }
 
-  async timKiem() {
-    if (this.formData.value.ngayThop) {
-      this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
-    }
+  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
-    await this.search();
   }
-
   clearFilter() {
     this.formData.reset();
     this.timKiem();
+    this.search();
   }
 
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.tongHopKhBanTrucTiepService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Thong-tin-tong-hop-ke-hoach-ban-truc-tiep.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  disabledNgayThopTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayThopDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayThopDen.getTime();
+  };
+
+  disabledNgayThopDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayThopTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
+  };
 }
 

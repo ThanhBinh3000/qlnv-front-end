@@ -106,6 +106,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
+      idSoQdCc: [''],
     });
   }
 
@@ -368,7 +369,8 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQdCc: res2.data.soQuyetDinh
+        soQdCc: res2.data.soQuyetDinh,
+        idSoQdCc: res2.data.id
       });
     } else {
       this.formData.patchValue({

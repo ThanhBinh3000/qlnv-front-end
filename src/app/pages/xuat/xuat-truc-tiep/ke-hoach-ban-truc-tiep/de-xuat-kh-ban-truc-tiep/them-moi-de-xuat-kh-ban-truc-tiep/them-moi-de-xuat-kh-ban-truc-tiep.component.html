@@ -30,18 +30,6 @@
                 <span>Lưu</span>
             </button>
         </ng-container>
-        <ng-container *ngIf="userService.isTongCuc()">
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
-                (click)="tuChoi()">
-                <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Từ chối</span>
-            </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button"
-                class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-                <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Duyệt</span>
-            </button>
-        </ng-container>
     </div>
 </nz-affix>
 
@@ -138,8 +126,8 @@
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập kế hoạch </nz-form-label>
-                        <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy" formControlName="ngayTao">
                             </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
@@ -178,7 +166,7 @@
                 </div>
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                        <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="showFromTH ? '' : selectHangHoa()">
                                 <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
@@ -403,7 +391,7 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="7">{{item.tenDvi}}</td>
-                                <td>{{item.soLuong}}</td>
+                                <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -463,7 +451,7 @@
                             <td>{{i + 1}}</td>
                             <td>{{ item.tenDvi }}</td>
                             <td>{{ item.diaChi }}</td>
-                            <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                         </tr>
 
                     </tbody>
@@ -471,7 +459,7 @@
                         <tr *ngIf="dataTable.length > 0">
                             <th></th>
                             <th colspan="2">Cộng</th>
-                            <th>{{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN'}}</th>
+                            <th>{{ calcTong('soLuongChiCuc') | number : '1.0-1' : 'vi_VN'}}</th>
                         </tr>
                     </tfoot>
                 </nz-table>

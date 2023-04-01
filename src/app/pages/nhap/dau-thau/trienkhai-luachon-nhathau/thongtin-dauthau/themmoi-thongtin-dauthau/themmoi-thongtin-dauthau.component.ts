@@ -1,4 +1,4 @@
-import {DatePipe, formatDate} from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
@@ -35,6 +35,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
+  @Input() isView: boolean;
 
 
   constructor(
@@ -110,6 +111,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   danhsachDx: any[] = [];
   listOfData: any[] = [];
   listDataGroup: any[] = [];
+  donGiaVatObject: any;
 
 
   userInfo: UserLogin;
@@ -223,6 +225,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailDtlCuc(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
+      this.donGiaVatObject = res.data
+      console.log("getDetailDtlCuc", res.data)
       let tongMucDtTrung = 0
       data.children.forEach(item => {
         if (item.trangThai == STATUS.THANH_CONG) {
@@ -254,10 +258,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
         cloaiVthh: data.hhQdKhlcntHdr.cloaiVthh,
         tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
-        tgianBdauTchuc: formatDate( data.dxuatKhLcntHdr.tgianBdauTchuc,"dd/MM/yyyy", 'en-US'),
-        tgianDthau: formatDate( data.dxuatKhLcntHdr.tgianDthau,"HH:mm dd/MM/yyyy", 'en-US'),
-        tgianMthau: formatDate( data.dxuatKhLcntHdr.tgianMthau,"HH:mm dd/MM/yyyy", 'en-US'),
-        tgianNhang: formatDate( data.dxuatKhLcntHdr.tgianNhang,"HH:mm dd/MM/yyyy", 'en-US'),
+        tgianBdauTchuc: formatDate(data.dxuatKhLcntHdr.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
+        tgianDthau: formatDate(data.dxuatKhLcntHdr.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
+        tgianMthau: formatDate(data.dxuatKhLcntHdr.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
+        tgianNhang: formatDate(data.dxuatKhLcntHdr.tgianNhang, "dd/MM/yyyy", 'en-US'),
       });
       this.formData.patchValue({
         trangThai: data.trangThai,
@@ -265,9 +269,20 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
       this.listOfData = data.children;
       this.convertListData()
+      debugger
+      this.showFirstRow(event, this.listDataGroup)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+  }
+
+  async showFirstRow($event, dataGoiThau: any) {
+    // for (let j = 0; dataGoiThau.length > 0 ; j++) {
+    //   for (let k = 0; dataGoiThau[0].dataChild.length > 0; k++) {
+    await this.showDetail($event, dataGoiThau[0].dataChild[0]);
+    // }
+    // }
+
   }
 
   convertListData() {
@@ -371,7 +386,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   async saveGoiThauPopup() {
     if (this.listNthauNopHs.length > 0) {
       this.saveGoiThau();
-    }else{
+    } else {
       const modalThongBao = this.modal.create({
         nzTitle: 'Thông báo',
         nzContent: DialogThongBaoThongTinDauThauComponent,
@@ -382,7 +397,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         nzComponentParams: {},
       });
       modalThongBao.afterClose.toPromise().then((data) => {
-        if(data){
+        if (data) {
           this.saveGoiThau();
         }
       });
@@ -408,10 +423,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async showDetail($event, dataGoiThau: any) {
+    debugger
+    console.log($event)
     await this.spinner.show();
     this.listNthauNopHs = [];
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    }
 
     this.idGoiThau = dataGoiThau.id;
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
@@ -486,7 +505,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   validateItemSave(dataSave, index?): boolean {
     if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
       if (dataSave.trangThai == STATUS.TRUNG_THAU) {
-        if (dataSave.donGia >= this.formData.get('donGiaVat').value) {
+        debugger
+        var checkVat = this.donGiaVatObject.donGiaVat ? this.donGiaVatObject.donGiaVat : (this.donGiaVatObject.children[0].donGiaVat ? this.donGiaVatObject.children[0].donGiaVat : (this.donGiaVatObject.children[0].children[0].donGiaVat ? this.donGiaVatObject.children[0].children[0].donGiaVat : null))
+        if (dataSave.donGia >= checkVat) {
           this.notification.error(MESSAGE.ERROR, "Đơn giá nhà thầu không được lớn hơn đơn giá VAT")
           return false
         }
@@ -539,6 +560,62 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     } else {
       this.expandSet3.delete(id);
     }
+  }
+
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    this.listDataGroup.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data)
+        })
+      }
+    })
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column];
+          return prev;
+        }, 0);
+        result = sum
+      } else {
+        let list = arr.filter(item => item.tenDonVi == tenDvi)
+        if (list && list.length > 0) {
+          const sum = list.reduce((prev, cur) => {
+            prev += cur[column];
+            return prev;
+          }, 0);
+          result = sum
+        }
+      }
+    }
+    return result;
+  }
+
+  sumThanhTien(column?: string) {
+    let result = 0;
+    let arr = [];
+    this.listDataGroup.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data)
+        })
+      }
+      if (arr && arr.length > 0) {
+        const sum = arr.reduce((prev, cur) => {
+          if (cur['trangThai'] != 41 && column == 'chenhLech') {
+            prev += (cur['donGiaNhaThau'] - cur['donGiaVat']) * cur['soLuong'] * 1000;
+          } else {
+            prev += cur[column] * 1000 * cur['soLuong'];
+          }
+          return prev;
+        }, 0);
+        result = sum
+      }
+    })
+
+    return result;
   }
 
 }

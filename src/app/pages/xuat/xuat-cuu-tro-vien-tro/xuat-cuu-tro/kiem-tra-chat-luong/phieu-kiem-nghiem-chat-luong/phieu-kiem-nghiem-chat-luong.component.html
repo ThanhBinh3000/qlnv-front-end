@@ -234,6 +234,7 @@
                                     <td>{{lv1.ngayKnMau}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td>{{lv1.tenNhaKho}}</td>
+                                    <td>{{lv1.tenNganKho}}</td>
                                     <td>{{lv1.tenLoKho}}</td>
                                     <td>{{lv1.soBienBan}}</td>
                                     <td>{{lv1.ngayLayMau}}</td>
@@ -241,7 +242,7 @@
                                     <td>{{lv1.ngayXuatDocKho}}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && isOwner(lv1.maDvi)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>

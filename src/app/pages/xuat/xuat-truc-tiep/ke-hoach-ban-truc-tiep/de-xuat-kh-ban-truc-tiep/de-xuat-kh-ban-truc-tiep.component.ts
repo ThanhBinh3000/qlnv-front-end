@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -20,6 +19,10 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   loaiVthh: string;
   dsDonvi: any[] = [];
   userdetail: any = {};
+  idChiTieu: number = 0;
+  isViewChiTieu: boolean = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -41,9 +44,9 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
-    private donviService: DonviService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private donviService: DonviService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
@@ -53,10 +56,14 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       maDvi: [],
       tenDvi: [],
       trichYeu: [],
-      ngayTao: [],
-      ngayKyQd: [],
-      ngayPduyet: [],
+      ngayTaoTu: [],
+      ngayTaoDen: [],
+      ngayDuyetTu: [],
+      ngayDuyetDen: [],
+      ngayKyQdTu: [],
+      ngayKyQdDen: [],
       loaiVthh: [],
+      trangThai: [],
     });
 
     this.filterTable = {
@@ -81,12 +88,9 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      })
+      this.timKiem();
       await Promise.all([
-        this.timKiem(),
+        this.search(),
         this.initData()
       ]);
       await this.spinner.hide();
@@ -112,28 +116,79 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  async timKiem() {
+  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isTongCuc() ? this.STATUS.DA_DUYET_LDC : null
     })
-    if (this.formData.value.ngayTao) {
-      this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayPduyet) {
-      this.formData.value.ngayDuyetTu = dayjs(this.formData.value.ngayPduyet[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetDen = dayjs(this.formData.value.ngayPduyet[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayKyQd) {
-      this.formData.value.ngayKyQdTu = dayjs(this.formData.value.ngayKyQd[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
   }
 
   clearFilter() {
     this.formData.reset();
     this.timKiem();
+    this.search();
+  }
+
+  disabledNgayTaoTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayTaoDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
+  };
+
+  disabledNgayTaoDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayTaoTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
+  };
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
+  };
+
+  disabledNgayKyQdTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyQdDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+  };
+
+  disabledNgayKyQdDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyQdTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+  };
+
+  openModalChiTieu(id: number) {
+    this.idChiTieu = id;
+    this.isViewChiTieu = true;
+  }
+
+  closeModalChiTieu() {
+    this.idChiTieu = null;
+    this.isViewChiTieu = false;
+  }
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
   }
 }

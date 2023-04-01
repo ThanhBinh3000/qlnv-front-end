@@ -31,6 +31,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -149,7 +150,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         namKh: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
-        tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
       })
       await this.selectMaTongHop(dataTongHop.id);
@@ -250,13 +250,15 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.tongHopKhBanTrucTiepService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
+        data.children.forEach((item) => {
+          soLuongDviTsan += item.slDviTsan;
+        })
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
-          tchuanCluong: data.tchuanCluong,
-          soQdCc: data.soQdCc,
+          slDviTsan: soLuongDviTsan,
           idThHdr: event,
           idTrHdr: null,
           soTrHdr: null,
@@ -265,17 +267,10 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               const dataRes = res.data;
-              dataRes.children.forEach((item) => {
-                let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
-                  maDviTsan: key,
-                  children: value
-                })).value();
-                item.dataDviTsan = dataGroup;
-                soLuongDviTsan += item.dataDviTsan.length;
-              });
               this.formData.patchValue({
-                slDviTsan: soLuongDviTsan,
-              });
+                tchuanCluong: dataRes.tchuanCluong,
+                soQdCc: dataRes.soQdCtieu,
+              })
               dataRes.idDxHdr = dataRes.id;
               this.danhsachDx.push(dataRes);
             }
@@ -334,7 +329,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   async onChangeIdTrHdr(data) {
     await this.spinner.show();
-    let soLuongDviTsan: number = 0;
     this.danhsachDx = [];
     if (data) {
       const res = await this.deXuatKhBanTrucTiepService.getDetail(data.id)
@@ -342,17 +336,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         const dataRes = res.data;
         dataRes.idDxHdr = dataRes.id;
         this.danhsachDx.push(dataRes);
-        dataRes.children.forEach((item) => {
-          let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
-            maDviTsan: key,
-            children: value
-          })).value();
-          item.dataDviTsan = dataGroup;
-          soLuongDviTsan += item.dataDviTsan.length;
-        })
-        this.formData.patchValue({
-          slDviTsan: soLuongDviTsan,
-        });
         let tongMucDt = 0
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
@@ -371,13 +354,13 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           pthucGnhan: data.pthucGnhan,
           thongBaoKh: data.thongBaoKh,
           soQdCc: data.soQdCtieu,
-          trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
           maDvi: data.maDvi,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
+          slDviTsan: dataRes.slDviTsan,
           tongMucDt: tongMucDt
         })
         this.dataInput = null;

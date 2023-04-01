@@ -247,6 +247,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   }
 
   async bindingDataDdNhap(data) {
+    console.log(data, 6666);
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
@@ -257,6 +258,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
       })
     }
   }

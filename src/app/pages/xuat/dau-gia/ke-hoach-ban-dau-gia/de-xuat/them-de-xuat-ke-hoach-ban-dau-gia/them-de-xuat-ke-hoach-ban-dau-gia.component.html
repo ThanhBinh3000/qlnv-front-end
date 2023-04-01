@@ -232,7 +232,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn thanh toán (Ngày) </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-number formControlName="tgianTtoan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  <nz-input-number formControlName="tgianTtoan" nz-input [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
                     [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisable()">
                   </nz-input-number>
                 </nz-form-control>
@@ -274,7 +274,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Thời hạn giao nhận (Ngày) </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <nz-input-number formControlName="tgianGnhan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  <nz-input-number formControlName="tgianGnhan" nz-input [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
                     [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisable()">
                   </nz-input-number>
                 </nz-form-control>
@@ -313,7 +313,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán đấu giá </nz-form-label>
                 <nz-form-control nz-col [nzErrorTip]="error">
-                  <textarea [readonly]="isDisable()" nz-input [rows]="3" formControlName="thongBaoKh"></textarea>
+                  <textarea [readonly]="isDisable()" nz-input [rows]="3" formControlName="thongBao"></textarea>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -334,7 +334,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfter="%">
                     <nz-input-number nz-input [nzSize]="'small'" [nzDisabled]="isDisable()"
-                      formControlName="khoanTienDatTruoc">
+                      formControlName="khoanTienDatTruoc" [nzMin]="0" [nzMax]="100" [nzStep]="1">
                     </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
@@ -344,7 +344,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }} Tấn</span>
+                  <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }}
+                    {{formData.value.dviTinh}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -352,7 +353,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienGiaDeXuat | number : '1.0-1' : 'vi_VN'}}
+                  <span class="text-green">{{formData.value.tongTienKdiem | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -361,7 +362,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienGiaVat | number : '1.0-1' : 'vi_VN'}}
+                  <span class="text-green">{{formData.value.tongTienKdienDonGia | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -370,7 +371,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienDatCocDx | number : '1.0-1' : 'vi_VN'}} (vnd)</span>
+                  <span class="text-green">{{formData.value.tongTienDatTruoc | number : '1.0-1' : 'vi_VN'}} (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -378,7 +379,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienDatCocVat | number : '1.0-1' : 'vi_VN'}}
+                  <span class="text-green">{{formData.value.tongTienDatTruocDonGia | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -396,9 +397,15 @@
               <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
               <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
               <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+                xuất (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+                xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá
+                được duyệt (đ/kg)</th>
+              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá
+                được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
@@ -421,13 +428,15 @@
             <ng-container *ngFor="let item of dataTable , let i = index">
               <tr>
                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                <td colspan="7">{{item.tenDvi}}</td>
-                <td>{{item.tongSoLuong}}</td>
+                <td colspan="5">{{item.tenDvi}}</td>
+                <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
+                <td>{{item.tienDtruocDxChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{item.tienDtruocDdChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>
                   <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                     <i class="fa fa-pencil"></i>
@@ -489,7 +498,7 @@
               <td>{{i + 1}}</td>
               <td>{{ item.tenDvi }}</td>
               <td>{{ item.diaChi }}</td>
-              <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
 
           </tbody>
@@ -497,7 +506,7 @@
             <tr *ngIf="dataTable.length > 0">
               <th></th>
               <th colspan="2">Cộng</th>
-              <th>{{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN'}}</th>
+              <th>{{ calcTong('soLuongChiCuc') | number : '1.0-1' : 'vi_VN'}}</th>
             </tr>
           </tfoot>
         </nz-table>

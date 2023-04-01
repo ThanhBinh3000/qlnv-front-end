@@ -29,6 +29,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   @Input() id: number;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
 
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;

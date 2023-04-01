@@ -24,3 +24,8 @@
      border-right: solid 1px #e2e2e2;
 
  }
+
+ ::ng-deep .ant-input-number-input {
+     color: #001CFF !important;
+     font-weight: bold;
+ }

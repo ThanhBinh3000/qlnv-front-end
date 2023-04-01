@@ -23,6 +23,12 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
 
   dsDonvi: any[] = [];
   userdetail: any = {};
+  idThop: number = 0;
+  isViewThop: boolean = false;
+  idChiTieu: number = 0;
+  isViewChiTieu: boolean = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -57,8 +63,10 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
       maDvi: [],
       tenDvi: [],
       soDxuat: [],
-      ngayTao: [],
-      ngayPduyet: [],
+      ngayTaoTu: [],
+      ngayTaoDen: [],
+      ngayDuyetTu: [],
+      ngayDuyetDen: [],
       trichYeu: [],
       noiDungThop: [],
       trangThaiTh: [],
@@ -89,7 +97,7 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await Promise.all([
-        this.timKiem(),
+        this.search(),
         this.initData()
       ]);
       await this.spinner.hide();
@@ -99,18 +107,6 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  async timKiem() {
-    if (this.formData.value.ngayTao) {
-      this.formData.value.ngayTaoTu = dayjs(this.formData.value.ngayTao[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayTaoDen = dayjs(this.formData.value.ngayTao[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayPduyet) {
-      this.formData.value.ngayDuyetTu = dayjs(this.formData.value.ngayPduyet[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDuyetDen = dayjs(this.formData.value.ngayPduyet[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
   }
 
   async loadDsTong() {
@@ -148,4 +144,62 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     }
   }
 
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
+  openModalChiTieu(id: number) {
+    this.idChiTieu = id;
+    this.isViewChiTieu = true;
+  }
+
+  closeModalChiTieu() {
+    this.idChiTieu = null;
+    this.isViewChiTieu = false;
+  }
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+
+  disabledNgayTaoTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayTaoDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayTaoDen.getTime();
+  };
+
+  disabledNgayTaoDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayTaoTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
+  };
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
+  };
 }

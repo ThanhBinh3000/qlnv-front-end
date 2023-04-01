@@ -20,8 +20,18 @@
                         <input class="search__input" placeholder="" nz-input formControlName="noiDungThop" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Ngày duyệt kế hoạch</label>
-                        <nz-range-picker formControlName="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày lập kế hoạch</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayThopTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayThopTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayThopDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayThopDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -30,7 +40,7 @@
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
-                <button nz-button class="search__button--search" (click)="timKiem()">
+                <button nz-button class="search__button--search" (click)="search()">
                     <i nz-icon nzType="search"></i>
                     Tìm kiếm
                 </button>
@@ -45,7 +55,7 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -86,13 +96,11 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                                    (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayTao"
+                                    (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))">
+                                </nz-date-picker>
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="calendar"></i>
-                            </ng-template>
                         </th>
                         <th>
                             <nz-input-group>

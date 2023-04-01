@@ -12,6 +12,7 @@ import { ThongtinDexuatMuattComponent } from './quyetdinh-pheduyet-khmtt/themmoi
 import { MainKehoachLuachonMuatructiepComponent } from './main-kehoach-luachon-muatructiep/main-kehoach-luachon-muatructiep.component';
 import { DanhsachKehoachMuatructiepComponent } from './danhsach-kehoach-muatructiep/danhsach-kehoach-muatructiep.component';
 import { ThemmoiKehoachMuatructiepComponent } from './danhsach-kehoach-muatructiep/themmoi-kehoach-muatructiep/themmoi-kehoach-muatructiep.component';
+import { KeHoachVonDauNamModule } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
 @NgModule({
   declarations: [
     KehoachLuachonMuatructiepComponent,
@@ -24,13 +25,14 @@ import { ThemmoiKehoachMuatructiepComponent } from './danhsach-kehoach-muatructi
     ThongtinDexuatMuattComponent,
     MainKehoachLuachonMuatructiepComponent,
   ],
+  exports: [
+    KehoachLuachonMuatructiepComponent,
+  ],
   imports: [
     CommonModule,
     ComponentsModule,
     MainModule,
-  ],
-  exports: [
-    KehoachLuachonMuatructiepComponent,
+    KeHoachVonDauNamModule
   ]
 })
 export class KehoachLuachonMuatructiepModule { }

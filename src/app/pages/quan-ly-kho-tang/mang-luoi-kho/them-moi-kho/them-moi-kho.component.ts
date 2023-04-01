@@ -38,6 +38,7 @@ export class ThemMoiKhoComponent implements OnInit {
   isVisible = false;
   levelNode: number = 0;
   userInfo: UserLogin
+  regexMa = '^[0-9]$'
 
   dataDetail: any;
   nodeSelected: any;
@@ -81,7 +82,7 @@ export class ThemMoiKhoComponent implements OnInit {
       ngankhoId: [''],
       tongkhoId: [''],
       diaChi: [''],
-      tenChiCuc: [''],
+      tenTongKho: [''],
       tenNganlo: [''],
       maNganlo: [''],
       tenDiemkho: [''],
@@ -126,6 +127,7 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
+      isKhoiTao : [true]
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -213,11 +215,17 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
+          if (dataNodeRes && dataNodeRes.maNgankho && dataNodeRes.coLoKho != '01') {
+            this.notification.error(MESSAGE.ERROR, "Không thể thăm lô kho vào ngăn kho này!!");
+            this.levelNode = 0;
+            return;
+          }
           this.formKho.patchValue({
+            tenC: dataNodeRes.tenDiemkho,
             tenDiemkho: dataNodeRes.tenDiemkho,
             tenNhakho: dataNodeRes.tenNhakho,
             tenNgankho: dataNodeRes.tenNgankho,
-            tenChiCuc: dataNodeRes.tenTongkho,
+            tenTongKho: dataNodeRes.tenTongKho,
             diaChi: dataNodeRes.diaChi,
           });
           this.idReq = dataNodeRes.id
@@ -232,11 +240,6 @@ export class ThemMoiKhoComponent implements OnInit {
     if (loaiVthh.length > 0) {
       this.dsChungLoaiHangHoa = loaiVthh[0].child;
     }
-  }
-
-
-  enumToSelectList() {
-
   }
 
   listType = ["MLK", "DV"]
@@ -278,6 +281,7 @@ export class ThemMoiKhoComponent implements OnInit {
       body.maNganlo = this.formKho.value.maCha +  this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
       body.dviReq = bodyDvi
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -308,6 +312,8 @@ export class ThemMoiKhoComponent implements OnInit {
       body.maNgankho = this.formKho.value.maCha +  this.formKho.value.maNgankho;
       body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.isKhoiTao = this.formKho.get('coLoKho').value ? false : true;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -336,6 +342,7 @@ export class ThemMoiKhoComponent implements OnInit {
       body.dviReq = bodyDvi
       body.maNhakho = this.formKho.value.maCha +  this.formKho.value.maNhakho;
       body.diemkhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -363,6 +370,7 @@ export class ThemMoiKhoComponent implements OnInit {
       let body = this.formKho.value;
       body.dviReq = bodyDvi
       body.tongkhoId = this.idReq;
+      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
@@ -402,13 +410,13 @@ export class ThemMoiKhoComponent implements OnInit {
     this.helperService.removeValidators(this.formKho);
     switch (this.levelNode) {
       case 1 : {
-        this.formKho.controls['maDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['maDiemkho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenDiemkho'].setValidators([Validators.required])
         this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 2 : {
-        this.formKho.controls['maNhakho'].setValidators([Validators.required])
+        this.formKho.controls['maNhakho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNhakho'].setValidators([Validators.required])
         this.formKho.controls['loaikhoId'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
@@ -416,16 +424,20 @@ export class ThemMoiKhoComponent implements OnInit {
         break;
       }
       case 3 : {
-        this.formKho.controls['maNgankho'].setValidators([Validators.required])
+        this.formKho.controls['maNgankho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNgankho'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         this.formKho.controls['coLoKho'].setValidators([Validators.required])
         break;
       }
       case 4 : {
-        this.formKho.controls['maNganlo'].setValidators([Validators.required])
+        this.formKho.controls['maNganlo'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
         this.formKho.controls['tenNganlo'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
+        this.formKho.controls['theTichTkVt'].setValidators([Validators.required])
         break;
       }
     }

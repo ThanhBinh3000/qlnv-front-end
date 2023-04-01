@@ -29,6 +29,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

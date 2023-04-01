@@ -25,7 +25,7 @@
           <nz-form-label nzRequired>Tích lượng đã sử dụng - LT</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="dvi">
-              <nz-input-number  formControlName="tichLuongSdLt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
+              <nz-input-number [nzMax]="detail.tichLuongTkLt ? detail.tichLuongTkLt : 9999999 "  formControlName="tichLuongSdLt" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -35,7 +35,7 @@
           <nz-form-label nzRequired>Tích lượng đã sử dụng - VT</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="dvi">
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="tichLuongSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
+              <nz-input-number [nzMax]="detail.tichLuongTkVt ? detail.tichLuongTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="tichLuongSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -45,7 +45,7 @@
           <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="m3">
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
+              <nz-input-number [nzMax]="detail.theTichTkLt ? detail.theTichTkLt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -55,7 +55,7 @@
           <nz-form-label nzRequired>Thể tích đã sử dụng - VT</nz-form-label>
           <nz-form-control>
             <nz-input-group  [nzAddOnAfter]="m3">
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
+              <nz-input-number  [nzMax]="detail.theTichTkVt ? detail.theTichTkVt : 9999999 " [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  formControlName="theTichSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -116,10 +116,34 @@
         <nz-form-item>
           <nz-form-label > Ngày nhập đầy cuối cùng </nz-form-label>
           <nz-form-control>
-            <nz-date-picker [nzDisabled]="true" formControlName="ngayNhapDay"></nz-date-picker>
+            <nz-date-picker formControlName="ngayNhapDay"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
       </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label nzRequired>Thành tiền (đ)</nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number formControlName="thanhTien" [nzMin]="1"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item>
+        <nz-form-label >Giá bình quân</nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="formData.value.thanhTien / formData.value.slTon" [nzMin]="1"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
     <ng-template #error let-control>
       <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
       </ng-container>
