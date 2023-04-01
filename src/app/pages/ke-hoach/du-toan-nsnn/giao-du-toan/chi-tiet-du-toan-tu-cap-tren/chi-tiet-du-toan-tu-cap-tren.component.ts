@@ -1,5 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
@@ -16,7 +16,7 @@ import { Globals } from 'src/app/shared/globals';
 import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
 import { DON_VI_TIEN, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './chi-tiet-du-toan-tu-cap-tren.constant';
+import { NOI_DUNG } from '../tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.constant';
 // import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { NOI_DUNG } from './nhan-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 

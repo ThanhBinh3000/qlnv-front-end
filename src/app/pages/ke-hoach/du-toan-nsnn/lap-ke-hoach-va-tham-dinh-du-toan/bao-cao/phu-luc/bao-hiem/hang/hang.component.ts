@@ -377,10 +377,20 @@ export class HangComponent implements OnInit {
         })
     }
 
+    getHead(stt: string) {
+        return parseInt(stt.split(".")[1], 10);
+    }
+
     sortReport() {
         this.setLevel();
         this.lstCtietBcao.sort((a, b) => {
-            //level nho hon dat len truoc
+            // level nho hon dat len truoc
+            if (this.getHead(a.stt) > this.getHead(b.stt)) {
+                return 1;
+            }
+            if (this.getHead(a.stt) < this.getHead(b.stt)) {
+                return -1;
+            }
             if (a.level > b.level) {
                 return 1;
             }
@@ -424,10 +434,10 @@ export class HangComponent implements OnInit {
                 this.lstCtietBcao[i].unitSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi)?.length;
             }
             if (i == 0 || this.lstCtietBcao[i].maDiaChiKho != this.lstCtietBcao[i - 1].maDiaChiKho) {
-                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho)?.length;
+                this.lstCtietBcao[i].locationSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi && e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho)?.length;
             }
             if (i == 0 || this.lstCtietBcao[i].maNhaKho != this.lstCtietBcao[i - 1].maNhaKho) {
-                this.lstCtietBcao[i].storehouseSpan = this.lstCtietBcao.filter(e => e.maNhaKho == this.lstCtietBcao[i].maNhaKho)?.length;
+                this.lstCtietBcao[i].storehouseSpan = this.lstCtietBcao.filter(e => e.maDvi == this.lstCtietBcao[i].maDvi && e.maDiaChiKho == this.lstCtietBcao[i].maDiaChiKho && e.maNhaKho == this.lstCtietBcao[i].maNhaKho)?.length;
             }
         }
         this.updateEditCache();

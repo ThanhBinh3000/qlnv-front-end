@@ -246,16 +246,16 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     this.namPa = this.newDate.getFullYear();
 
     // lấy danh sách đơn vị
-    await this.danhMuc.dMDonVi().toPromise().then(
-      (data) => {
-        if (data.statusCode === 0) {
-          this.donVis = data?.data;
-          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
-        }
-      }
-    );
+    // await this.danhMuc.dMDonVi().toPromise().then(
+    //   (data) => {
+    //     if (data.statusCode === 0) {
+    //       this.donVis = data?.data;
+    //       this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+    //     }
+    //   }
+    // );
 
     await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
       (res) => {
@@ -278,7 +278,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       // khi không có id thì thực hiện tạo mới
       this.maDonViTao = this.userInfo?.MA_DVI;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
+      // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
       this.maDviTien = '1'
       this.listIdFilesDelete = this.data?.listIdDeleteFiles;
       this.lstCtietBcao = this.data?.lstCtiets;
@@ -294,6 +294,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.location.back();
       }
     }
+
+    await this.getChildUnit();
+
     if (this.status) {
       this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
     } else {
@@ -302,6 +305,26 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   };
+
+  async getChildUnit() {
+    const request = {
+      maDviCha: this.maDonViTao,
+      trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.lstDvi = data.data;
+          this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    )
+  }
 
   async submitReport() {
     this.modal.confirm({
