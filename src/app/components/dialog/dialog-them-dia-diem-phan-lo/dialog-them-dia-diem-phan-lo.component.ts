@@ -24,6 +24,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   thongtinPhanLo: DanhSachPhanLo;
   loaiVthh: any;
   dataChiTieu: any;
+  dviTinh: any;
   dataEdit: any;
   listOfData: any[] = [];
   tableExist: boolean = false;
@@ -65,6 +66,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       diaChi: [null],
       slChiTieu: [null],
       slKeHoachDd: [null],
+      donGiaVat: [null],
+      loaiVthh: [null],
+      dviTinh: [null]
     });
   }
 
@@ -97,6 +101,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   initForm() {
     this.userInfo = this.userService.getUserLogin();
     this.thongtinPhanLo = new DanhSachPhanLo();
+    this.formData.patchValue({
+      donGiaVat: this.donGiaVat,
+      dviTinh: this.dviTinh,
+      loaiVthh: this.loaiVthh,
+    })
     this.loadDonVi();
     if (this.dataEdit) {
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
@@ -205,7 +214,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.thongtinPhanLo.diaDiemKho = diemKho.diaChi;
       this.thongtinPhanLo.donGiaVat = this.donGiaVat;
       this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
-      this.thongtinPhanLo.dviTinh = 'Kg'
+      this.thongtinPhanLo.dviTinh = this.dviTinh
     }
   }
 

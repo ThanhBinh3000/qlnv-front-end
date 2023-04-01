@@ -10,6 +10,7 @@ import { ThemMoiTongHopKhBanTrucTiepComponent } from './tong-hop-ke-hoach-ban-tr
 import { QuyetDinhPheDuyetKhBanTrucTiepComponent } from './quyet-dinh-phe-duyet-kh-ban-truc-tiep/quyet-dinh-phe-duyet-kh-ban-truc-tiep.component';
 import { ThemMoiQdPheDuyetKhBanTrucTiepComponent } from './quyet-dinh-phe-duyet-kh-ban-truc-tiep/them-moi-qd-phe-duyet-kh-ban-truc-tiep/them-moi-qd-phe-duyet-kh-ban-truc-tiep.component';
 import { ThongTinKhBanTrucTiepComponent } from './quyet-dinh-phe-duyet-kh-ban-truc-tiep/them-moi-qd-phe-duyet-kh-ban-truc-tiep/thong-tin-kh-ban-truc-tiep/thong-tin-kh-ban-truc-tiep.component';
+import { KeHoachVonDauNamModule } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
 
 
 
@@ -30,7 +31,8 @@ import { ThongTinKhBanTrucTiepComponent } from './quyet-dinh-phe-duyet-kh-ban-tr
   imports: [
     CommonModule,
     ComponentsModule,
-    MainModule
+    MainModule,
+    KeHoachVonDauNamModule
   ]
 })
 export class KeHoachBanTrucTiepModule { }

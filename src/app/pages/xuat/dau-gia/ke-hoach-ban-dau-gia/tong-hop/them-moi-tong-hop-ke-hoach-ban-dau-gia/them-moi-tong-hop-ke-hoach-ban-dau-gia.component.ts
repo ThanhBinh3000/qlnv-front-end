@@ -28,6 +28,7 @@ import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
