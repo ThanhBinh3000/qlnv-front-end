@@ -328,7 +328,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   async getGiaToiDa(ma: string) {
-    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI);
+    let res = await this.dxuatKhLcntService.getGiaBanToiDa(ma, this.userInfo.MA_DVI, this.namKeHoach);
     if (res.msg === MESSAGE.SUCCESS) {
       this.giaToiDa = res.data;
     }
