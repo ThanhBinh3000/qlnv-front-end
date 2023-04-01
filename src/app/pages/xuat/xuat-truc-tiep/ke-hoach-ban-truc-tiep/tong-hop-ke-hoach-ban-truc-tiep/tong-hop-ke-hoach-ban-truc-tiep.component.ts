@@ -36,7 +36,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
     this.formData = this.fb.group({
       namKh: '',
-      ngayThop: '',
+      ngayThopTu: '',
+      ngayThopDen: '',
       loaiVthh: '',
       tenLoaiVthh: '',
       cloaiVthh: '',
@@ -58,10 +59,8 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-      })
       this.timKiem();
+      await this.search();
       this.spinner.hide();
     }
     catch (e) {
@@ -71,22 +70,16 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     }
   }
 
-  async timKiem() {
-    if (this.formData.value.ngayThop) {
-      this.formData.value.ngayThopTu = dayjs(this.formData.value.ngayThop[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayThopDen = dayjs(this.formData.value.ngayThop[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
-  }
-
-  clearFilter() {
-    this.formData.reset();
+  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
-    this.timKiem();
   }
-
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
 
   export() {
     if (this.totalRecord > 0) {
@@ -107,5 +100,19 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  disabledNgayThopTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayThopDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayThopDen.getTime();
+  };
+
+  disabledNgayThopDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayThopTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
+  };
 }
 

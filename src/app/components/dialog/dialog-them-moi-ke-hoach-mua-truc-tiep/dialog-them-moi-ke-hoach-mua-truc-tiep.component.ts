@@ -144,7 +144,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   async changeChiCuc(event) {
     let body = {
-      year: 2022,
+      year: this.namKh,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }

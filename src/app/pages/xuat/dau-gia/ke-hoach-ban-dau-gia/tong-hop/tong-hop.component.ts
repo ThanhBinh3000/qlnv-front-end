@@ -20,6 +20,12 @@ export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isQuyetDinh: boolean = false;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
+    { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
+    { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -31,7 +37,8 @@ export class TongHopComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formData = this.fb.group({
       namKh: dayjs().get('year'),
-      ngayThop: '',
+      ngayThopTu: '',
+      ngayThopDen: '',
       loaiVthh: '',
       tenLoaiVthh: '',
       cloaiVthh: '',
@@ -54,15 +61,7 @@ export class TongHopComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-        this.formData.patchValue({
-          typeLoaiVthh: LOAI_HANG_DTQG.VAT_TU
-        })
-      } else {
-        this.formData.patchValue({
-          loaiVthh: this.loaiVthh,
-        })
-      }
+      this.timKiem();
       await this.search();
       this.spinner.hide();
     }
@@ -93,6 +92,18 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.search;
   }
 
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -112,5 +123,19 @@ export class TongHopComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
+  disabledNgayThopTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayThopDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayThopDen.getTime();
+  };
+
+  disabledNgayThopDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayThopTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
+  };
 
 }
