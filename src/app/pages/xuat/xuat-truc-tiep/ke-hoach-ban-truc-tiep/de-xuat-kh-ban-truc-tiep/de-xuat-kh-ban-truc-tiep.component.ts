@@ -88,11 +88,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-        trangThai: this.userService.isTongCuc() ? this.STATUS.DA_DUYET_LDC : null
-      })
+      this.timKiem();
       await Promise.all([
         this.search(),
         this.initData()
@@ -120,12 +116,17 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     }
   }
 
-  clearFilter() {
-    this.formData.reset();
+  timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isTongCuc() ? this.STATUS.DA_DUYET_LDC : null
     })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
     this.search();
   }
 
