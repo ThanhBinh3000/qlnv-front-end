@@ -189,7 +189,14 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 					item.uyNhchiMaNguonNs = null;
 					item.uyNhchiNienDoNs = null;
 					item.uyNhchiNienSoTien = null;
-					item.vonDnghiCapLanNay = sumNumber([item.gtTheoKeHoach, -item.luyKeCong]);
+					if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+						item.vonDnghiCapLanNay = sumNumber([item.gtTheoKeHoach, -item.luyKeCong]);
+					} else if (this.response.loaiDnghi != Utils.MUA_VTU) {
+						item.tongVonVaDtDaCap = sumNumber([item.duToanDaGiao, item.luyKeCong]);
+						item.vonDnghiCapLanNay = sumNumber([item.gtHopDong, -item.tongVonVaDtDaCap]);
+					} else {
+						item.soConDuocTt = sumNumber([item.gtriThucHien, -item.soTtLuyKe]);
+					}
 				}
 			})
 			if (this.response.loaiDnghi != Utils.MUA_VTU) {

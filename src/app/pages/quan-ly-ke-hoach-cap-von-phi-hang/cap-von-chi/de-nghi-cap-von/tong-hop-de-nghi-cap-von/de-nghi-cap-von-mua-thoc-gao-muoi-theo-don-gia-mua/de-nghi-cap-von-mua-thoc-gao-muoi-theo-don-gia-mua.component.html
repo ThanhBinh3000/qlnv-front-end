@@ -154,7 +154,7 @@
 							<tr>
 								<th nzLeft></th>
 								<th nzLeft>Tổng cộng</th>
-								<th></th>
+								<th>{{displayValue(total.slKeHoach)}}</th>
 								<th></th>
 								<th>{{displayValue(total.gtTheoKeHoach)}}</th>
 								<th>{{displayValue(total.luyKeCapVon)}}</th>
@@ -261,10 +261,10 @@
 										{{ displayValue(editCache[data.id].data.gtTheoKeHoach) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCapUng) }}
+										{{ displayValue(editCache[data.id].data.luyKeCapVon) }}
 									</td>
 									<td>
-										{{ displayValue(editCache[data.id].data.luyKeCapVon) }}
+										{{ displayValue(editCache[data.id].data.luyKeCapUng) }}
 									</td>
 									<td>
 										{{ displayValue(editCache[data.id].data.luyKeCong) }}

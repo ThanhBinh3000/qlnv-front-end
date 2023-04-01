@@ -475,7 +475,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongVonVaDtDaCap]);
 		this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
 		this.editCache[id].data.tongCap = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCong]);
-		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.vonDuyetCong]);
+		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.duToanDaGiao, -this.editCache[id].data.vonDuyetCong]);
 	}
 
 	getTotal() {
@@ -487,14 +487,14 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 			this.total.duToanDaGiao = sumNumber([this.total.duToanDaGiao, item.duToanDaGiao]);
 			this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
 			this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
-			this.total.luyKeCong = sumNumber([this.total.luyKeCapUng, this.total.luyKeCapVon]);
+			this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);
 			this.total.tongVonVaDtDaCap = sumNumber([this.total.duToanDaGiao, this.total.luyKeCong]);
 			this.total.vonDnghiCapLanNay = sumNumber([this.total.gtHopDong, -this.total.tongVonVaDtDaCap]);
 			this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
 			this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon])
-			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCapUng, this.total.vonDuyetCapVon]);
-			this.total.tongCap = sumNumber([this.total.tongVonVaDtDaCap, this.total.vonDuyetCong]);
-			this.total.soConDuocCap = sumNumber([this.total.gtHopDong, -this.total.tongCap]);
+			this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+			this.total.tongCap = sumNumber([this.total.tongCap, item.tongCap]);
+			this.total.soConDuocCap = sumNumber([this.total.soConDuocCap, item.soConDuocCap]);
 		})
 	}
 
