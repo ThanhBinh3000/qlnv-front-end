@@ -7,12 +7,10 @@
           <nz-form-item>
             <nz-form-label>Chọn ĐV cấp trên(Chi cục/Điểm kho/Nhà kho/Ngăn kho)</nz-form-label>
             <nz-form-control>
-              <nz-input-group>
                 <nz-tree-select #treeSelect [nzNodes]="nodesTree" (nzTreeClick)="getDetailMlkByKey($event.node)"
                                 nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                                 formControlName="maCha">
                 </nz-tree-select>
-              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -20,9 +18,7 @@
           <nz-form-item>
             <nz-form-label>Mã đơn vị cấp trên</nz-form-label>
             <nz-form-control>
-              <nz-input-group>
                 <input nz-input readonly [(ngModel)]="formKho.value.maCha" [ngModelOptions]="{standalone: true}"/>
-              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -854,7 +850,7 @@
               <nz-form-label >Tích lượng thiết kế -LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <nz-input-number formControlName="tichLuongTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number  formControlName="tichLuongTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -865,7 +861,7 @@
               <nz-form-label >Tích lượng thiết kế - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  <nz-input-number  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    formControlName="tichLuongTkVt"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -876,7 +872,7 @@
               <nz-form-label >Tích lượng đã sử dụng - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                  <nz-input-number  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    nzDisabled formControlName="tichLuongSdLt"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -920,7 +916,7 @@
               <nz-form-label >Thể tích thiết kế - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <nz-input-number formControlName="theTichTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number   formControlName="theTichTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -928,10 +924,10 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label >Thể tích thiết kế - LT</nz-form-label>
+              <nz-form-label >Thể tích thiết kế - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <nz-input-number formControlName="theTichTkVt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number  formControlName="theTichTkVt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
