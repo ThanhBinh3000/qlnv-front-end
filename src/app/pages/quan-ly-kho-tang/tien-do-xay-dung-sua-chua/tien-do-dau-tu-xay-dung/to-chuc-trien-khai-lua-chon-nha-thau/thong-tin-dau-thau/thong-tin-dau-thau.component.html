@@ -96,28 +96,28 @@
           </td>
           <td>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                     (input)="filterInTable('ngayKy',filterTable.ngayKy)"/>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
-                     (input)="filterInTable('tongTien',filterTable.tongTien)"/>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdDaDtxd"
-                     (input)="filterInTable('soQdPdDaDtxd',filterTable.soQdPdDaDtxd)"/>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
                               [(ngModel)]="filterTable.ngayKy"
                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
               ></nz-date-picker>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
+                     (input)="filterInTable('soGoiThau',filterTable.soGoiThau)"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThauTc"
+                     (input)="filterInTable('soGoiThauTc',filterTable.soGoiThauTc)"/>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThauTb"
+                     (input)="filterInTable('soGoiThauTb',filterTable.soGoiThauTb)"/>
             </nz-input-group>
           </td>
           <td>
@@ -149,9 +149,9 @@
           <td>{{ data.tenDuAn }}</td>
           <td>{{ data.chuDauTu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY'  }}</td>
-          <td>1</td>
-          <td>2</td>
-          <td>3</td>
+          <td>{{ data.soGoiThau }}</td>
+          <td>{{ data.soGoiThauTc ? data.soGoiThauTc : 0   }}</td>
+          <td>{{ data.soGoiThauTb ? data.soGoiThauTb : 0}}</td>
           <td>{{ data.soQdPdDaDtxd }}</td>
           <td>{{ data.soQdPdDaDtxd }}</td>
           <td class="text-left">{{ data.tenTrangThaiDt }}</td>
