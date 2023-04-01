@@ -21,6 +21,17 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   isViewThop: boolean = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - CB Vụ' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - CB Vụ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -52,7 +63,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       trichYeu: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
+      slDviTsan: '',
       slHdDaKy: '',
       soQdCtieu: '',
       soQdPd: '',
@@ -62,11 +73,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-        trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
-      })
+      this.timKiem()
       await this.search();
     }
     catch (e) {
@@ -74,6 +81,12 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem()
+    this.search();
   }
 
   export() {
@@ -94,6 +107,14 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
+    })
   }
 
   openModalTh(id: number) {
