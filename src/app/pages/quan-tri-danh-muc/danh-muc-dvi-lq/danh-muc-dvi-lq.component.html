@@ -59,7 +59,7 @@
     <div class="group-button">
       <h3> DANH SÁCH DANH MỤC ĐƠN VỊ LIÊN QUAN</h3>
       <div class="buttons">
-        <button (click)="deleteMulti()" type="button" class="btn btn-sub btn-xoa">
+        <button (click)="delete('multi')" type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -84,7 +84,6 @@
           </th>
           <th class="text-center" nzWidth="40px">STT</th>
           <th class="text-center" nzWidth="150px">MST/CCCD/CMND</th>
-          <th class="text-center" nzWidth="90px">Phiên bản</th>
           <th class="text-center" nzWidth="200px">Tên cá nhân/công ty</th>
           <th class="text-center" nzWidth="120px">Loại đơn vị</th>
           <th class="text-center" nzWidth="120px">Phân loại</th>
@@ -107,7 +106,6 @@
                    [nzDisabled]="data.trangThai == '01'"></label>
           </td>          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td class="text-center">{{data.mstCccd}}</td>
-          <td class="text-center">{{data.version}}</td>
           <td class="text-center">{{data.ten}}</td>
           <td class="text-center">{{data.tenLoaiDvi}}</td>
           <td class="text-center">{{data.tenPloai}}</td>
@@ -124,7 +122,7 @@
             <a (click)="themMoi(data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="delete(data)">
+            <a (click)="delete('single', data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
