@@ -17,6 +17,11 @@ import { StorageService } from 'src/app/services/storage.service';
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -31,7 +36,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
-      ngayKyQd: null,
+      ngayKyQdTu: null,
+      ngayKyQdDen: null,
       soTrHdr: null,
       lastest: 0
     })
@@ -53,9 +59,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
+      this.timKiem();
       await this.search();
       await this.spinner.hide();
     }
@@ -65,5 +69,32 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      lastest: 0
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
+  disabledNgayKyQdTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyQdDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+  };
+
+  disabledNgayKyQdDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyQdTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+  };
 
 }

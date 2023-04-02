@@ -4,25 +4,25 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
                     <div nz-col nzSpan="2">
-                        <label> Năm kế hoạch </label>
+                        <label class="search__label"> Năm kế hoạch </label>
                         <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số QĐ PD KH BTT</label>
+                        <label class="search__label">Số QĐ PD KH BTT</label>
                         <input placeholder="Nhập số quyết định" nz-input formControlName="soQdPd" />
                     </div>
                     <div nz-col nzSpan="10">
-                        <label>Trích yếu</label>
+                        <label class="search__label">Trích yếu</label>
                         <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
                     </div>
                     <div nz-col nzSpan="5">
-                        <label>Ngày Ký QĐ</label>
+                        <label class="search__label">Ngày Ký QĐ</label>
                         <nz-range-picker formControlName="ngayKyQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
                     <div nz-col nzSpan="3">
-                        <label>Số KH/Tờ trình</label>
+                        <label class="search__label">Số KH/Tờ trình</label>
                         <input placeholder="nhập số KH/Tờ trình" nz-input formControlName="soTrHdr" />
                     </div>
                 </div>
