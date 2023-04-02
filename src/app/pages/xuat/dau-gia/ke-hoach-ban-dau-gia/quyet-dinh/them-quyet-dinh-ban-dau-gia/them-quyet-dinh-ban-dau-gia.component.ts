@@ -32,6 +32,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() idTh: number = 0;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

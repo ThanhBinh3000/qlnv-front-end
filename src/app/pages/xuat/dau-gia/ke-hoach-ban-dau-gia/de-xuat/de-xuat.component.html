@@ -218,7 +218,11 @@
             <td>{{ data.soDxuat }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soQdPd}}</td>
+
+            <td>
+              <a nz-button nzType="link" nzBlock (click)="openModalQdPd(data.idSoQdPd)">{{
+                data.soQdPd}}</a>
+            </td>
             <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
@@ -275,6 +279,19 @@
   <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idSelected" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
   </app-them-de-xuat-ke-hoach-ban-dau-gia>
 </div>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-them-quyet-dinh-ban-dau-gia>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
 
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
   <ng-container *nzModalContent class="modal__content">

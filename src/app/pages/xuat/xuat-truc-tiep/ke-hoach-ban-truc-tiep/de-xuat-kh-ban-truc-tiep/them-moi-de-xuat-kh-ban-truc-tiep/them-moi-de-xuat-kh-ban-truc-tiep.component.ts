@@ -165,7 +165,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        this.calculatorTable();
+        // this.calculatorTable();
       }
     }
   }

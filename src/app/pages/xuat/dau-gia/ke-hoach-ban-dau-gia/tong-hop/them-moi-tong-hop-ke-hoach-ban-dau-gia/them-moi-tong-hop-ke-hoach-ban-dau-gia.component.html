@@ -148,6 +148,8 @@
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>SL đơn vị tài sản</th>
+                            <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
+                            <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
                             <th>Trạng thái</th>
                         </tr>
                     </thead>
@@ -158,7 +160,9 @@
                             <td>{{ data.soDxuat }}</td>
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                             <td>{{ data.trichYeu}}</td>
-                            <td>{{ data.soDviTsan}}</td>
+                            <td>{{ data.slDviTsan}}</td>
+                            <td>{{ data.tongTienKdienDonGia | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.tongTienDatTruocDonGia | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
                         </tr>
                     </tbody>
