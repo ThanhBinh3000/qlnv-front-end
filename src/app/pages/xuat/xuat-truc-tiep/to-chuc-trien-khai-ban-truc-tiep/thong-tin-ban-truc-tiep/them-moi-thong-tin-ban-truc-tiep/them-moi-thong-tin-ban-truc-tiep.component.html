@@ -4,9 +4,8 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button
-            *ngIf="this.userService.isCuc() && formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ||  formData.value.trangThai == STATUS.DANG_CAP_NHAT"
-            type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
+        <button *ngIf="this.userService.isCuc() && formData.value.trangThai == STATUS.DANG_CAP_NHAT" type="button"
+            class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
         </button>
@@ -289,7 +288,7 @@
                                 <td>{{ data.ngayChaoGia | date: 'dd/MM/YYYY' }}</td>
                                 <td>{{ data.soLuong| number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td>{{ data.thueGtgt }}</td>
+                                <td>{{ data.thueGtgt | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.fileDinhKems?.fileName }}</td>
                                 <td> <label nz-checkbox [(ngModel)]="data.luaChon" [nzDisabled]="isDisable()"></label>

@@ -37,6 +37,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   showFromTH: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
 
 
   listLoaiHinhNx: any[] = [];

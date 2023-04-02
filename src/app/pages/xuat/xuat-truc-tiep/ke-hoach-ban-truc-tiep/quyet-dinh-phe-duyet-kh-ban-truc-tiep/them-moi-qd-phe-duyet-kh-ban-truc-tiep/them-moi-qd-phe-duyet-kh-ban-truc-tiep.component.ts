@@ -32,6 +32,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() idTh: number = 0;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -127,6 +128,9 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       await Promise.all([
         this.bindingDataTongHop(this.dataTongHop),
       ]);
+      if (this.idTh) {
+        await this.selectMaTongHop(this.idTh)
+      }
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
