@@ -16,7 +16,10 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 })
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  idDxKh: number = 0;
+  isViewDxKh: boolean = false;
+  idThop: number = 0;
+  isViewThop: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -36,7 +39,8 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
-      ngayKyQd: null,
+      ngayKyQdTu: null,
+      ngayKyQdDen: null,
       soTrHdr: null,
       lastest: 0
     })
@@ -88,5 +92,39 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     this.formData.reset();
     this.timKiem();
   }
+
+  openModalDxKh(id: number) {
+    this.idDxKh = id;
+    this.isViewDxKh = true;
+  }
+
+  closeModalDxKh() {
+    this.idDxKh = null;
+    this.isViewDxKh = false;
+  }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
+  disabledNgayKyQdTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyQdDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+  };
+
+  disabledNgayKyQdDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyQdTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+  };
 
 }

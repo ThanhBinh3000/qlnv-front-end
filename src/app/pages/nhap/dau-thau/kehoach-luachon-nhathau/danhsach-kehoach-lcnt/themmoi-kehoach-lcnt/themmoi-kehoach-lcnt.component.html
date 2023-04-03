@@ -343,6 +343,15 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <span class="blue-text">{{formData.value.vat ? formData.value.vat + '%' : ''}}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> % bảo lãnh dự thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
@@ -354,7 +363,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tiền đảm bảo thực hiện hợp đồng
             </nz-form-label>
@@ -376,13 +385,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number
-                  [ngModel]="formData.value.tongMucDt + ( formData.value.tongMucDt * formData.value.gtriHdong / 100 )"
+                <nz-input-number [ngModel]="formData.value.tongMucDtDx * formData.value.gtriHdong / 100 "
                   [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                   [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser">
@@ -391,12 +399,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> % thuế VAT
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng tiền bảo lãnh dự thầu và bảo đảm thực hiện hợp đồng
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.vat ? formData.value.vat + '%' : ''}}</span>
+              <nz-input-group nzAddOnAfter="đ">
+                <nz-input-number
+                  [ngModel]="formData.value.tongMucDtDx  +(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +  +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
+                  [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -493,8 +507,8 @@
           <tr>
             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
-            <td></td>
-            <td></td>
+            <td>{{item.soLuongTheoChiTieu}}</td>
+            <td>{{item.soLuongDaMua}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -509,17 +523,17 @@
               <td></td>
               <td>{{dtGoiThau.goiThau}}</td>
               <td>{{dtGoiThau.diaDiemNhap}}</td>
-              <td>{{dtGoiThau.soLuongChiTieu}}</td>
-              <td>{{dtGoiThau.soLuongDaMua}}</td>
+              <td></td>
+              <td></td>
               <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaDx | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaVat) + (dtGoiThau.soLuong * dtGoiThau.donGiaVat *
+              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh) + (dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *
                 formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right" *ngIf="userService.isCuc() && !isView">
-                <a *ngIf="!isDisbleForm()" (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                   <i class="fa fa-pencil"></i>
                 </a>
                 <a *ngIf="!isDisbleForm()" (click)="deleteRow(dtGoiThau.idx)">
@@ -538,6 +552,9 @@
         <td></td>
         <td class="background-last-row text-left blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
+        <td>
+        <td class="background-last-row text-left blue-text">{{ calcTongThanhTienBaoLanh() | number : '1.0-1' : 'vi_VN'
+          }}</td>
       </tr>
     </nz-table>
     <!-- END TABLE LƯƠNG THỰC  -->

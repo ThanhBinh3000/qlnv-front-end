@@ -21,6 +21,8 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   isViewThop: boolean = false;
   idChiTieu: number = 0;
   isViewChiTieu: boolean = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -135,6 +137,16 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   closeModalChiTieu() {
     this.idChiTieu = null;
     this.isViewChiTieu = false;
+  }
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {

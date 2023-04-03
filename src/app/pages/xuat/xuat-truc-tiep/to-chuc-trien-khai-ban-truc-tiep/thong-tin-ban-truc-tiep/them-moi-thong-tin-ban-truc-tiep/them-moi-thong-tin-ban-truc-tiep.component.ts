@@ -217,10 +217,22 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     if (!this.listOfData) {
       this.listOfData = [];
     }
-    this.listOfData = [...this.listOfData, this.rowItem];
-    this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
-    this.emitDataTable();
-    this.updateEditCache()
+    if (this.validateThongTinDviChaoGia()) {
+      this.listOfData = [...this.listOfData, this.rowItem];
+      this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
+      this.emitDataTable();
+      this.updateEditCache()
+    }
+  }
+
+  validateThongTinDviChaoGia(): boolean {
+    if (this.rowItem.tochucCanhan && this.rowItem.mst && this.rowItem.diaDiemChaoGia && this.rowItem.sdt && this.rowItem.ngayChaoGia && this.rowItem.soLuong && this.rowItem.donGia && this.rowItem.thueGtgt) {
+      return true;
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      return false
+    }
+
   }
 
   clearItemRow() {

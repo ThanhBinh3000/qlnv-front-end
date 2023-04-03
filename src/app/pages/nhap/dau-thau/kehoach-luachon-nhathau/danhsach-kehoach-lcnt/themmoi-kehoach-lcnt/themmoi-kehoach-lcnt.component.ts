@@ -89,6 +89,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listDataGroup: any[] = [];
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  tongTienHopDong: any;
 
   constructor(
     httpClient: HttpClient,
@@ -134,7 +135,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
       donGiaVat: [],
-      // donGiaDx: [],
       vat: ['5'],
       tongMucDt: [null, [Validators.required]],
       tongMucDtDx: [null, [Validators.required]],
@@ -161,7 +161,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       });
     }
     if (this.idInput > 0) {
-      // await this.getDetail(this.idInput);
+      await this.getDetail(this.idInput);
     } else {
       this.initForm();
     }
@@ -234,7 +234,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              this.convertListData();
+              if (dataDetail.loaiVthh != '02') {
+                this.convertListDataLuongThuc()
+              } else {
+                this.convertListData();
+              }
               this.bindingCanCu(dataDetail.ccXdgDtlList);
             }
           }
@@ -350,7 +354,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (this.userService.isTongCuc()) {
       this.themMoiTongCuc(data, index);
     } else {
-      this.themMoiCuc(data, index);
+      this.themMoiCuc();
     }
   }
 
@@ -384,7 +388,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         let tongMucDtDx: number = 0;
         this.listOfData.forEach((item) => {
           tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
-          tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx;
+          tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaTamTinh;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
@@ -394,10 +398,24 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     });
   }
 
-  themMoiCuc(data?: any, index?: number) {
+  themMoiCuc(goiThau?: string) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return;
+    }
+    let data = [];
+    let listGoiThau = [];
+    this.listOfData.forEach(item => {
+      listGoiThau.push(item.goiThau)
+      if (goiThau && goiThau != '' && item.goiThau == goiThau) {
+        data.push(item)
+      }
+    })
+    let setListGoiThau = new Set(listGoiThau);
+    listGoiThau = [...setListGoiThau]
+    let disabledGoiThau = false;
+    if (goiThau && goiThau != '') {
+      disabledGoiThau = true;
     }
     const modalGT = this.modal.create({
       nzTitle: '',
@@ -407,10 +425,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
+        disabledGoiThau: disabledGoiThau,
+        dataAll: this.listOfData,
+        listGoiThau: listGoiThau,
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
         cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+        namKhoach: this.formData.get('namKhoach').value,
         donGiaVat: this.formData.value.donGiaVat
       },
     });
@@ -418,22 +441,21 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
-      if (index >= 0) {
-        this.listOfData[index] = res.value;
-      } else {
-        this.listOfData = [...this.listOfData, res.value];
+      if (goiThau && goiThau != '') {
+        this.listOfData = this.listOfData.filter(item => item.goiThau !== goiThau);
       }
+      this.listOfData = [...this.listOfData, res.value];
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
-        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaDx;
+        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaTamTinh;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
         tongMucDtDx: tongMucDtDx,
       });
-      this.convertListData();
+      this.convertListDataLuongThuc();
     });
 
   }
@@ -475,8 +497,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  async luuVaGuiDuyet (isGuiDuyet) {
-    debugger
+  async luuVaGuiDuyet(isGuiDuyet) {
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {
@@ -535,7 +556,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  clearValidatorLuuDuThao () {
+  clearValidatorLuuDuThao() {
     Object.keys(this.formData.controls).forEach(key => {
       const control = this.formData.controls[key];
       control.clearValidators();
@@ -1080,6 +1101,24 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       .value()
   }
 
+  convertListDataLuongThuc() {
+    let listChild = [];
+    this.listOfData.forEach(item => {
+      item.children.forEach(i => {
+        listChild.push(i)
+      })
+    })
+    this.helperService.setIndexArray(listChild);
+    this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => (
+      {
+        tenDvi: key,
+        soLuongTheoChiTieu: value[0].soLuongTheoChiTieu,
+        soLuongDaMua: value[0].soLuongDaMua,
+        dataChild: value
+      }))
+      .value()
+  }
+
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -1121,7 +1160,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  calcTongSl () {
+  calcTongSl() {
     if (this.listOfData) {
       let sum = 0
       this.listOfData.forEach(item => {
@@ -1135,17 +1174,31 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  calcTongThanhTien () {
+  calcTongThanhTien() {
     if (this.listOfData) {
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaDx;
+          prev += cur.soLuong * item.donGiaTamTinh;
           return prev;
         }, 0);
         sum += sumChild;
       })
       return sum;
+    }
+  }
+
+  calcTongThanhTienBaoLanh() {
+    if (this.listOfData) {
+      let sum = 0
+      this.listOfData.forEach(item => {
+        const sumChild = item.children.reduce((prev, cur) => {
+          prev += cur.soLuong * item.donGiaTamTinh;
+          return prev;
+        }, 0);
+        sum += sumChild;
+      })
+      return sum * (100 + this.formData.get('gtriDthau').value) / 100;
     }
   }
 

@@ -99,6 +99,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
       donGiaVat: [],
+      tongDonGia: [],
       dviTinh: [''],
       typeVthh: [''],
     });
@@ -166,7 +167,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        this.calculatorTable();
       }
     }
   }
@@ -324,12 +324,14 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     let tongSoLuong: number = 0;
     let tongTienKdiem: number = 0;
     let tongTienKdienDonGia: number = 0;
+    let tongDonGia: number = 0;
     this.dataTable.forEach((item) => {
       item.children.forEach(child => {
         item.tienDtruocDxChiCuc += child.soLuong * child.donGiaDeXuat;
         item.tienDtruocDdChiCuc += child.soLuong * child.donGiaVat;
+        tongDonGia += child.donGiaDeXuat;
       })
-      tongSoLuong += item.soLuongChiCuc / 1000;
+      tongSoLuong += item.soLuongChiCuc;
       tongTienKdiem += item.tienDtruocDxChiCuc;
       tongTienKdienDonGia += item.tienDtruocDdChiCuc;
     });
@@ -338,7 +340,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tongTienKdiem: tongTienKdiem,
       tongTienKdienDonGia: tongTienKdienDonGia,
       tongTienDatTruoc: tongTienKdiem + (tongTienKdiem * this.formData.value.khoanTienDatTruoc / 100),
-      tongTienDatTruocDonGia: tongTienKdienDonGia + (tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100)
+      tongTienDatTruocDonGia: tongTienKdienDonGia + (tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100),
+      tongDonGia: tongDonGia,
     });
   }
 
