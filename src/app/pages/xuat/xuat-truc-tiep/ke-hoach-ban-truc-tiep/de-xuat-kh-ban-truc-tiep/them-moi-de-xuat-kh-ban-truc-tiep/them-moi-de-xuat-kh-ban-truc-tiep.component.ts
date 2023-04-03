@@ -37,6 +37,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   showFromTH: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
 
 
   listLoaiHinhNx: any[] = [];
@@ -165,7 +166,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        this.calculatorTable();
+        // this.calculatorTable();
       }
     }
   }

@@ -26,6 +26,7 @@ import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-han
 export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

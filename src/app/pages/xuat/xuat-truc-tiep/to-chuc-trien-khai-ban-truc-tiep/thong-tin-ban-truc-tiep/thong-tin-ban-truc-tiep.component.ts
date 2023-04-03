@@ -25,6 +25,13 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   userdetail: any = {};
   pthucBanTrucTiep: string;
   selectedId: number = 0;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
+    { ma: this.STATUS.DANG_CAP_NHAT, giaTri: 'Đang cập nhật' },
+    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -38,8 +45,9 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
     this.formData = this.fb.group({
       namKh: null,
-      ngayNhanCgia: null,
-      toChucCaNhan: null,
+      ngayCgiaTu: null,
+      ngayCgiaDen: null,
+      tochucCanhan: null,
       maDvi: null,
       maDviChiCuc: null,
       tenDvi: null,
@@ -60,12 +68,9 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      })
+      this.thimKiem();
       await Promise.all([
-        this.timKiem(),
+        this.search(),
         this.initData()
       ]);
     } catch (e) {
@@ -89,22 +94,17 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     await this.loadDsTong();
   }
 
-  async timKiem() {
-    if (this.formData.value.ngayNhanCgia) {
-      this.formData.value.ngayCgiaTu = dayjs(this.formData.value.ngayNhanCgia[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayCgiaDen = dayjs(this.formData.value.ngayNhanCgia[1]).format('YYYY-MM-DD')
-    }
-    await this.search();
-  }
-
-  clearFilter() {
-    this.formData.reset();
+  thimKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       lastest: 1
     })
-    this.timKiem();
+  }
+  clearFilter() {
+    this.formData.reset();
+    this.thimKiem();
+    this.search();
   }
 
   redirectToChiTiet(isView: boolean, id: number, pthucBanTrucTiep: string) {
@@ -113,4 +113,18 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.isView = isView;
     this.pthucBanTrucTiep = pthucBanTrucTiep;
   }
+
+  disabledNgayChaoGiaTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayCgiadDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayCgiadDen.getTime();
+  };
+
+  disabledNgayChaoGiaDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayCgiaTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayCgiaTu.getTime();
+  };
 }
