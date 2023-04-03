@@ -359,11 +359,11 @@ export class Base2Component implements OnInit {
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (body.id && body.id > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           this.spinner.hide();
           return res.data;
         } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           this.spinner.hide();
           return res.data;
         }
@@ -431,7 +431,7 @@ export class Base2Component implements OnInit {
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
+            this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
             this.spinner.hide();
             this.goBack();
           } else {
