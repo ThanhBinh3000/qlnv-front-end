@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
@@ -24,6 +23,8 @@ import { isEmpty } from 'lodash'
 import { Base2Component } from "../../../../../../components/base2/base2.component";
 import { StorageService } from "../../../../../../services/storage.service";
 import { HttpClient } from "@angular/common/http";
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { FILETYPE } from 'src/app/constants/fileType';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
@@ -47,8 +48,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   listNam: any[] = [];
 
   isQdkqlcnt: boolean = true;
-  listFileDinhKem: any[] = [];
-
+  danhSachFileDinhKem: FileDinhKem[] = [];
+  danhSachFileCanCuPL: FileDinhKem[] = [];
+  listFile: any[] = []
   userInfo: UserLogin;
   STATUS = STATUS
   constructor(
@@ -84,7 +86,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         tenTrangThai: ['Dự thảo'],
         loaiVthh: [''],
         cloaiVthh: [''],
-        fileDinhKems: [null],
+        fileDinhKems: new FormControl([]),
       }
     );
   }
@@ -122,7 +124,15 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       this.formData.patchValue({
         soQd: dataDetail.soQd?.split('/')[0],
       })
-      this.fileDinhKem = dataDetail.fileDinhKems;
+      if (dataDetail.children.length > 0) {
+        dataDetail.children.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.danhSachFileDinhKem.push(item)
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.danhSachFileCanCuPL.push(item)
+          }
+        })
+      }
     }
   }
 
@@ -137,7 +147,19 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       body.soQd = this.formData.value.soQd + this.maQd;
     }
     debugger
-    body.fileDinhKems = this.fileDinhKem;
+    if (this.danhSachFileDinhKem.length > 0) {
+      this.danhSachFileDinhKem.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.danhSachFileCanCuPL.length > 0) {
+      this.danhSachFileCanCuPL.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    body.fileDinhKems = this.listFile;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);

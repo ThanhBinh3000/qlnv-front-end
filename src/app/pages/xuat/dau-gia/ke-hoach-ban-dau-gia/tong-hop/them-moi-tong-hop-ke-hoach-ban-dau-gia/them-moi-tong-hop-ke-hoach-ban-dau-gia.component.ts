@@ -28,6 +28,7 @@ import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -71,7 +72,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       tenCloaiVthh: ['', [Validators.required]],
       trangThai: [''],
       tenTrangThai: ['Chưa Tạo QĐ'],
-      typeLoaiVthh: []
     })
   }
 
@@ -152,9 +152,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   async save() {
     let body = this.formData.value;
-    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
-      body.typeLoaiVthh = LOAI_HANG_DTQG.VAT_TU;
-    }
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
       this.quayLai();

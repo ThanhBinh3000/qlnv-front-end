@@ -32,6 +32,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Input() idTh: number = 0;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -77,6 +78,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
+      soQdCc: [''],
     })
   }
 
@@ -150,7 +152,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         nam: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
-        tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
       })
       await this.selectMaTongHop(dataTongHop.id);
@@ -267,6 +268,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
             await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 const dataRes = res.data;
+                this.formData.patchValue({
+                  tchuanCluong: dataRes.tchuanCluong,
+                  soQdCc: dataRes.soQdCtieu,
+                })
                 dataRes.idDxHdr = dataRes.id;
                 this.danhsachDx.push(dataRes);
               }
@@ -334,6 +339,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         dataRes.idDxHdr = dataRes.id;
         this.danhsachDx.push(dataRes);
         let tongMucDt = 0
+        console.log(data, 111)
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,

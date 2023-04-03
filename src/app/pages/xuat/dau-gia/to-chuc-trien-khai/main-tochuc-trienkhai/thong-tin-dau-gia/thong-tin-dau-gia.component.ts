@@ -1,13 +1,16 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from "dayjs";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { MESSAGE } from "../../../../../../constants/message";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {MESSAGE} from "../../../../../../constants/message";
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
+import {
+  QuyetDinhPdKhBdgService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 
 @Component({
   selector: 'app-thong-tin-dau-gia',
@@ -58,10 +61,7 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
-      await this.search();
+      await this.timKiem();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -69,4 +69,38 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     }
   }
 
+  async timKiem() {
+    let arr = [];
+    try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh
+      })
+      await this.search();
+      let dt=  this.dataTable.flatMap(row => {
+        return row.children.map(data => {
+          return Object.assign(cloneDeep(row), data);
+        })
+      })
+      console.log(arr)
+      this.dataTable=cloneDeep(dt);
+      console.log(dt)
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  showList() {
+    this.isDetail = false;
+    this.timKiem();
+  }
+
+  clearForm(currentSearch?: any) {
+    this.formData.reset();
+    if (currentSearch) {
+      this.formData.patchValue(currentSearch)
+    }
+    this.timKiem();
+  }
 }

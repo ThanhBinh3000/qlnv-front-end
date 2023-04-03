@@ -37,6 +37,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   showFromTH: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
 
 
   listLoaiHinhNx: any[] = [];
@@ -61,14 +62,14 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
-      tenDvi: ['',],
+      tenDvi: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
       diaChi: [''],
-      namKh: [dayjs().get('year'),],
+      namKh: [dayjs().get('year')],
       soDxuat: [''],
       trichYeu: [''],
-      ngayTao: [dayjs().format('YYYY-MM-DD'),],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
       ngayPduyet: [''],
       soQdCtieu: [''],
       loaiVthh: ['', [Validators.required]],
@@ -165,7 +166,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        this.calculatorTable();
+        // this.calculatorTable();
       }
     }
   }
@@ -322,14 +323,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   calculatorTable() {
     let tongSoLuong: number = 0;
     let tongDonGia: number = 0;
-    let soLuongDviTsan: number = 0;
     this.dataTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
-        maDviTsan: key,
-        children: value
-      })).value();
-      item.dataDviTsan = dataGroup;
-      soLuongDviTsan += item.dataDviTsan.length;
       tongSoLuong += item.soLuongChiCuc;
       item.children.forEach(child => {
         tongDonGia += child.donGiaDeXuat;
@@ -338,7 +332,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
       tongDonGia: tongDonGia,
-      slDviTsan: soLuongDviTsan,
     });
   }
 
@@ -486,35 +479,41 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["tenDvi"].setValidators([Validators.required]);
       this.formData.controls["maDvi"].setValidators([Validators.required]);
       this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+      this.formData.controls["diaChi"].setValidators([Validators.required]);
       this.formData.controls["namKh"].setValidators([Validators.required]);
       this.formData.controls["soDxuat"].setValidators([Validators.required]);
       this.formData.controls["trichYeu"].setValidators([Validators.required]);
       this.formData.controls["ngayTao"].setValidators([Validators.required]);
       this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      this.formData.controls["tgianDkienTu"].setValidators([Validators.required]);
-      this.formData.controls["tgianDkienDen"].setValidators([Validators.required]);
+      // this.formData.controls["tgianDkienTu"].setValidators([Validators.required]);
+      // this.formData.controls["tgianDkienDen"].setValidators([Validators.required]);
       this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
       this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
       this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
       this.formData.controls["pthucGnhan"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
     } else {
       this.formData.controls["tenDvi"].clearValidators();
       this.formData.controls["maDvi"].clearValidators();
       this.formData.controls["loaiHinhNx"].clearValidators();
+      this.formData.controls["diaChi"].clearValidators();
       this.formData.controls["namKh"].clearValidators();
       this.formData.controls["soDxuat"].clearValidators();
       this.formData.controls["trichYeu"].clearValidators();
       this.formData.controls["ngayTao"].clearValidators();
       this.formData.controls["soQdCtieu"].clearValidators();
-      this.formData.controls["thoiGianDuKien"].clearValidators();
-      this.formData.controls["tgianDkienTu"].clearValidators();
-      this.formData.controls["tgianDkienDen"].clearValidators();
-      this.formData.controls["tgianTtoan"].clearValidators();
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["thoiGianDuKien"].clearValidators();
+      // this.formData.controls["tgianDkienTu"].clearValidators();
+      // this.formData.controls["tgianDkienDen"].clearValidators();
+      this.formData.controls["tgianTtoan"].clearValidators();
+      this.formData.controls["pthucTtoan"].clearValidators();
+      this.formData.controls["tgianGnhan"].clearValidators();
+      this.formData.controls["pthucGnhan"].clearValidators();
+
     }
   }
 }

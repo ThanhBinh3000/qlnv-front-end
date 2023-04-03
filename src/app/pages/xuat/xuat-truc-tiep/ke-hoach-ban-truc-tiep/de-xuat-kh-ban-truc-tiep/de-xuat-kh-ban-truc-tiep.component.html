@@ -4,36 +4,66 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="24">
                     <div nz-col nzSpan="2">
-                        <label> Năm kế hoạch </label>
+                        <label class="search__label"> Năm kế hoạch </label>
                         <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="3">
-                        <label> Số kế hoạch </label>
+                        <label class="search__label"> Số kế hoạch </label>
                         <input placeholder="" nz-input formControlName="soDxuat" />
                     </div>
                     <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
-                        <label>Đơn vị</label>
+                        <label class="search__label">Đơn vị</label>
                         <nz-select formControlName="maDvi">
                             <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
-                        <label>Ngày lập kế hoạch</label>
-                        <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày lập kế hoạch</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayTaoTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayTaoTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayTaoDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayTaoDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
-                        <label>Ngày duyệt kế hoạch</label>
-                        <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày duyệt kế hoạch</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayDuyetTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDuyetTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayDuyetDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayDuyetDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div nz-col nzSpan="6">
-                        <label>Trích yếu</label>
+                        <label class="search__label">Trích yếu</label>
                         <input placeholder="" nz-input formControlName="trichYeu" />
                     </div>
                     <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
-                        <label>Ngày ký</label>
-                        <nz-range-picker formControlName="ngayKyQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày ký</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayKyQdTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKyQdTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -43,7 +73,7 @@
                         <i class="icon  htvbdh_nhap-lai1"></i>
                         Xóa điều kiện
                     </button>
-                    <button nz-button class="search__button--search" (click)="timKiem()">
+                    <button nz-button class="search__button--search" (click)="search()">
                         <i nz-icon nzType="search"></i>
                         Tìm kiếm
                     </button>
@@ -104,8 +134,11 @@
                         <th></th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                                    (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.namKh"
+                                    (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                                        [nzLabel]="p.text"></nz-option>
+                                </nz-select>
                             </nz-input-group>
                         </th>
                         <th>
@@ -221,14 +254,18 @@
                         <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td *ngIf="userService.isCuc()">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-                        <td class="text-blue">{{ data.soQdPd}}</td>
+                        <td>
+                            <a nz-button nzType="link" nzBlock (click)="openModalQdPd(data.idSoQdPd)">{{
+                                data.soQdPd}}</a>
+                        </td>
                         <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td>{{ data.slDviTsan }}</td>
                         <td></td>
-                        <td><a nz-button nzType="link" nzBlock (click)="openViewChiTieu(data.idSoQdCtieu)">{{
+                        <td>
+                            <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCtieu)">{{
                                 data.soQdCtieu}}</a>
                         </td>
                         <td>{{ data.tenTrangThai }}</td>
@@ -276,16 +313,27 @@
     </app-them-moi-de-xuat-kh-ban-truc-tiep>
 </div>
 <!--xem -->
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="idQdChiTieu" [nzFooter]="modalFooterViewChiTieu"
-    [nzClosable]="true" (nzOnCancel)="closeViewChiTieu()" nzTitle="QUYẾT ĐỊNH GIAO CHỈ TIÊU">
-    <ng-container class="modal__content custom-scroll-modal" *nzModalContent>
-        <!--    <form nz-form>-->
-        <!-- <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idQdChiTieu" (showListEvent)="showList()"
-            [isViewDetail]="false">
-        </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc> -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
     </ng-container>
-    <ng-template #modalFooterViewChiTieu>
-        <button nz-button class="btn btn-main" (click)="closeViewChiTieu()">Đóng</button>
-        <!--    <button nz-button class="btn btn-main" (click)="handleOkSuaNoiDung()">Lưu</button>-->
-    </ng-template>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModalChiTieu()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idChiTieu" [isViewDetail]="true"
+            [isViewOnModal]="true"></app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalChiTieu()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
 </nz-modal>

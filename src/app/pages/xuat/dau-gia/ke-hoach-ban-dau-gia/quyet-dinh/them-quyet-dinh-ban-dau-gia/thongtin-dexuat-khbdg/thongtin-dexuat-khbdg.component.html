@@ -73,9 +73,10 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group>
-                <input nz-input readonly formControlName="pthucTtoan" />
-              </nz-input-group>
+              <nz-select formControlName="pthucTtoan" nzDisabled>
+                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -145,23 +146,23 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Tấn</span>
+              <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Kg</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="7">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tổng tiền giá KĐ theo ĐG được duyệt </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Tổng tiền khởi điểm theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongTienGiaDeXuat |number: '1.0-1'}} (vnd)</span>
+              <span class="text-green" nzDisabled>{{formData.value.tongTienKdienDonGia |number: '1.0-1'}} (vnd)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="7">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tổng khoản tiền ĐT theo ĐG được duyệt </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongTienGiaVat |number: '1.0-1'}}
+              <span class="text-green" nzDisabled>{{formData.value.tongTienDatTruocDonGia |number: '1.0-1'}}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>
@@ -178,47 +179,26 @@
           <th width="60px" class="text-center"></th>
           <th nzWidth="150px" class="text-center wrap">Chi cục</th>
           <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-          <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-          <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
           <th class="text-center wrap">Lô kho</th>
           <th nzWidth="100px" class="text-center wrap">Mã đơn vị tài sản</th>
-          <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
           <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
           <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-          <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-          <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
-          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
-          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
-          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước (đ)</th>
           <th nzWidth="50px">Hành động</th>
-        </tr>
-        <tr>
-          <th colspan="8"></th>
-          <th>(1)</th>
-          <th></th>
-          <th>(2)</th>
-          <th>(3) = (1) * (2)</th>
-          <th class="wrap">(4) - tự động lấy từ giá cụ thể được duyệt</th>
-          <th>(5) = (1) * (4)</th>
-          <th class="wrap">= (3) * % khoản tiền đặt trước</th>
-          <th class="wrap">= (5) * % khoản tiền đặt trước</th>
-          <th></th>
         </tr>
       </thead>
       <tbody>
         <ng-container *ngFor="let item of dataTable , let i = index">
           <tr>
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td colspan="7">{{item.tenDvi}}</td>
-            <td>{{item.tongSoLuong}}</td>
+            <td colspan="4">{{item.tenDvi}}</td>
+            <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.tienDtruocDdChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             <td>
               <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
                 <i class="fa fa-pencil"></i>
@@ -230,23 +210,14 @@
               <td></td>
               <td></td>
               <td>{{children.tenDiemKho}}</td>
-              <td>{{children.tenNhakho}}</td>
-              <td>{{children.tenNganKho}}</td>
               <td>{{children.tenLoKho}}</td>
               <td>{{children.maDviTsan}}</td>
-              <td>{{children.duDau | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{children.dviTinh}}</td>
-              <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
               <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{ (children.soLuong * children.donGiaDeXuat) + (children.soLuong * children.donGiaDeXuat *
-                formData.value.khoanTienDatTruoc /
-                100 ) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{ (children.soLuong * children.donGiaVat) + (children.soLuong * children.donGiaVat *
-                formData.value.khoanTienDatTruoc / 100 ) |
-                number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{(children.soLuong * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 ) | number :
+                '1.0-1' : 'vi_VN' }}</td>
               <td class="text-right">
               </td>
             </tr>

@@ -4,31 +4,41 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
                     <div nz-col nzSpan="2">
-                        <label> Năm kế hoạch </label>
+                        <label class="search__label"> Năm kế hoạch </label>
                         <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số QĐ PĐ KH BĐG</label>
+                        <label class="search__label">Số QĐ PĐ KH BĐG</label>
                         <input placeholder="Nhập số quyết định" nz-input formControlName="soQdPd" />
                     </div>
                     <div nz-col nzSpan="10">
-                        <label>Trích yếu</label>
+                        <label class="search__label">Trích yếu</label>
                         <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
                     </div>
                     <div nz-col nzSpan="5">
-                        <label>Ngày Ký QĐ</label>
-                        <nz-range-picker formControlName="ngayKyQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày Ký QĐ</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayKyQdTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKyQdTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayKyQdDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayKyQdDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div nz-col nzSpan="3">
-                        <label>Số KH/Tờ trình</label>
+                        <label class="search__label">Số KH/Tờ trình</label>
                         <input placeholder="nhập số KH/Tờ trình" nz-input formControlName="soTrHdr" />
                     </div>
                 </div>
             </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -85,10 +95,10 @@
                         <th></th>
                         <th></th>
                         <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                                    (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
-                            </nz-input-group>
+                            <nz-select nzAllowClear [(ngModel)]="filterTable.nam"
+                                (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            </nz-select>
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -150,9 +160,11 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenTrangThai"
-                                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                                    (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                                    <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
+                                        [nzLabel]="p.giaTri"></nz-option>
+                                </nz-select>
                             </nz-input-group>
                         </th>
                         <th></th>

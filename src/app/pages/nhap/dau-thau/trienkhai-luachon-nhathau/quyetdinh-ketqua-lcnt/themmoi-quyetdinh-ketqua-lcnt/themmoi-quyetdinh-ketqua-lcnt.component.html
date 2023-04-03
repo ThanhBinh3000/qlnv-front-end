@@ -59,8 +59,8 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
-                  [nzDisabled]="disableForm()">
+                <nz-input-number [ngClass]="'number-input'" formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
+                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="disableForm()">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -112,7 +112,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem"></file-list>
+              <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="danhSachFileCanCuPL"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -122,7 +122,7 @@
               File đính kèm quyết định đã ký
             </nz-form-label>
             <div class="list-file">
-              <file-list [isViewDetail]="isViewDetail" [data]="fileDinhKem"></file-list>
+              <file-list [isViewDetail]="isViewDetail" [data]="danhSachFileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>

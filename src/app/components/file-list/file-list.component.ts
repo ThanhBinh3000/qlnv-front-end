@@ -1,12 +1,12 @@
-import {saveAs} from 'file-saver';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {Component, Input, OnInit} from '@angular/core';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from "ng-zorro-antd/modal";
+import { saveAs } from 'file-saver';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'file-list',
@@ -18,7 +18,7 @@ export class FileListComponent implements OnInit {
   @Input() trangThai: string;
   @Input() isViewDetail: boolean;
   @Input() disabled: boolean = false;
-  @Input() isQdkqlcnt: boolean = false;
+  @Input() isCanCuPL: boolean = false;
 
   fileAdd: FileDinhKem = new FileDinhKem();
 
@@ -81,7 +81,7 @@ export class FileListComponent implements OnInit {
   }
 
   addFile() {
-    if (this.isQdkqlcnt == false && (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '')) {
+    if (this.isCanCuPL == false && (!this.fileAdd || !this.fileAdd.noiDung || this.fileAdd.noiDung == '' || !this.fileAdd.fileName || this.fileAdd.fileName == '')) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng nhập file");
       return;
     }
