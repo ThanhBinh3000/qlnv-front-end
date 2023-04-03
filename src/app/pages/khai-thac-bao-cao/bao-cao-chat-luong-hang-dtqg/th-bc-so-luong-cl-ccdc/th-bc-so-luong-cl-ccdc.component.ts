@@ -4,7 +4,6 @@ import { StorageService } from "../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { ThongTu1452013Service } from "../../../../services/bao-cao/ThongTu1452013.service";
 import { UserService } from "../../../../services/user.service";
 import { DonviService } from "../../../../services/donvi.service";
 import { DanhMucService } from "../../../../services/danhmuc.service";
@@ -14,6 +13,7 @@ import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { saveAs } from "file-saver";
+import { BcCLuongHangDTQGService } from 'src/app/services/bao-cao/BcCLuongHangDTQG.service';
 
 @Component({
   selector: 'app-th-bc-so-luong-cl-ccdc',
@@ -40,12 +40,12 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private thongTu1452013Service: ThongTu1452013Service,
+    private bcCLuongHangDTQGService: BcCLuongHangDTQGService,
     public userService: UserService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     public globals: Globals) {
-    super(httpClient, storageService, notification, spinner, modal, thongTu1452013Service);
+    super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
       {
         nam: [dayjs().get("year"), [Validators.required]],
@@ -97,7 +97,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
         saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
@@ -127,7 +127,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
       body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
       body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
