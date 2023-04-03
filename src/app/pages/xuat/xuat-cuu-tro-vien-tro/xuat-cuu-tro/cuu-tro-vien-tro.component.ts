@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {CHUC_NANG, STATUS} from "../../../../constants/status";
-import {cloneDeep} from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { CHUC_NANG, STATUS } from "../../../../constants/status";
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-cuu-tro-vien-tro',
@@ -34,16 +34,18 @@ export class CuuTroVienTroComponent implements OnInit {
 
   checkStatusPermission(data: any, action: any) {
     let mapQuyen = {
-      XEM: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC, STATUS.DA_DUYET_LDC],
-      SUA: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC],
+      XEM: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC, STATUS.DA_DUYET_LDC, STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC],
+      SUA: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       XOA: [STATUS.DU_THAO],
       DUYET_TP: [STATUS.CHO_DUYET_TP],
       DUYET_LDC: [STATUS.CHO_DUYET_LDC],
-      XEM_NO: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC],
+      DUYET_LDCC: [STATUS.CHO_DUYET_LDCC],
+      XEM_NO: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDCC],
       SUA_NO: [],
       XOA_NO: [],
       DUYET_TP_NO: [STATUS.CHO_DUYET_TP],
-      DUYET_LDC_NO: [STATUS.CHO_DUYET_LDC]
+      DUYET_LDC_NO: [STATUS.CHO_DUYET_LDC],
+      DUYET_LDCC_NO: [STATUS.CHO_DUYET_LDCC]
     }
     let actionTmp = cloneDeep(action);
     if (data.maDvi !== this.userService.getUserLogin().MA_PHONG_BAN) {
@@ -52,8 +54,8 @@ export class CuuTroVienTroComponent implements OnInit {
     if (data) {
       if (action == CHUC_NANG.XEM) {
         return mapQuyen[actionTmp].includes(data.trangThai) && !this.checkStatusPermission(data, CHUC_NANG.SUA)
-      } else if (action == CHUC_NANG.DUYET_TP || action == CHUC_NANG.DUYET_LDC) {
-        return mapQuyen[actionTmp].includes(data.trangThai) && this.userService.isCuc()
+      } else if (action == CHUC_NANG.DUYET_TP || action == CHUC_NANG.DUYET_LDC || action == CHUC_NANG.DUYET_LDCC) {
+        return mapQuyen[actionTmp].includes(data.trangThai) && (this.userService.isCuc() || this.userService.isChiCuc())
       } else {
         return mapQuyen[actionTmp].includes(data.trangThai)
       }
