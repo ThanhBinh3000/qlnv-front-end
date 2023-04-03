@@ -15,6 +15,7 @@ import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/s
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
+import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 
 @Component({
   selector: 'app-quyetdinh-ketqua-lcnt',
@@ -47,7 +48,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     soQdinh: '',
     namKhoach: '',
     ngayTongHop: '',
+    cloaiVthh: '',
+    tenCloaiVthh: '',
     loaiVthh: '',
+    tenVthh: '',
     trichYeu: '',
     soGoiThau: ''
   };
@@ -145,6 +149,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
       loaiVthh: this.loaiVthh,
+      cloaiVthh: this.searchFilter.cloaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
@@ -189,8 +194,13 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.searchFilter.namKhoach = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
+    this.searchFilter.cloaiVthh = null;
+    this.searchFilter.tenVthh = null;
+    this.searchFilter.tenCloaiVthh = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.soQdPdKhlcnt = null;
+    this.searchFilter.soQdPdKqlcnt = null;
+
     this.search();
   }
 
@@ -254,14 +264,15 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
             : null,
           soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
           soQdinh: this.searchFilter.soQdinh,
-          loaiVthh: this.searchFilter.loaiVthh,
+          cloaiVthh: this.searchFilter.cloaiVthh,
+          loaiVthh: this.loaiVthh,
           namKhoach: this.searchFilter.namKhoach
 
         };
         this.quyetDinhPheDuyetKetQuaLCNTService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-phe-duyet-ket0-qua-lcnt.xlsx'),
+            saveAs(blob, 'quyet-dinh-phe-duyet-ket-qua-lcnt.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -421,5 +432,28 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       tgianThienHd: '',
       statusConvert: '',
     }
+  }
+
+  selectHangHoa() {
+    let data = this.loaiVthh;
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Danh sách hàng hóa',
+      nzContent: DialogDanhSachHangHoaComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: data
+      },
+    });
+    modalTuChoi.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.searchFilter.cloaiVthh = data.ma,
+          this.searchFilter.tenCloaiVthh = data.ten,
+          this.searchFilter.loaiVthh = data.parent.ma,
+          this.searchFilter.tenVthh = data.parent.ten
+      }
+    });
   }
 }

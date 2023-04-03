@@ -89,6 +89,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
 
   STATUS = STATUS
+  selected: boolean = false;
 
   dataInput: any;
   dataInputCache: any;
@@ -221,6 +222,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       namKhoach: dayjs().get('year'),
       phanLoai: this.loaiVthh == '02' ? 'TTr' : 'TH'
     })
+  }
+
+  async showFirstRow($event, dataGoiThau: any) {
+    await this.showDetail($event, dataGoiThau);
   }
 
   async loadDataComboBox() {
@@ -471,6 +476,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           })
         }
       }
+      this.showFirstRow(event, this.danhsachDx[0]);
     };
   }
   l
@@ -639,15 +645,25 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   index = 0;
   async showDetail($event, index) {
+    debugger
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
-    this.isTongHop = this.formData.value.phanLoai == 'TH';
-    console.log(this.danhsachDx);
-    this.dataInput = this.danhsachDx[index];
-    this.dataInputCache = this.danhsachDxCache[index];
-    this.index = index;
-    await this.spinner.hide();
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow');
+      this.isTongHop = this.formData.value.phanLoai == 'TH';
+      this.dataInput = this.danhsachDx[index];
+      this.dataInputCache = this.danhsachDxCache[index];
+      this.index = index;
+      await this.spinner.hide();
+    } else {
+      this.selected = true
+      this.isTongHop = this.formData.value.phanLoai == 'TH';
+      this.dataInput = this.danhsachDx[0];
+      this.dataInputCache = this.danhsachDxCache[0];
+      this.index = 0;
+      await this.spinner.hide();
+    }
   }
 
   setNewSoLuong($event) {

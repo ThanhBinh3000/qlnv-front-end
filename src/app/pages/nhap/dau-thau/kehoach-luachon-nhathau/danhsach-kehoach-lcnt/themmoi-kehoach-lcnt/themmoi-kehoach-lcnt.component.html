@@ -505,7 +505,7 @@
       <tbody>
         <ng-container *ngFor="let item of listDataGroup , let i = index">
           <tr>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
             <td>{{item.soLuongTheoChiTieu}}</td>
             <td>{{item.soLuongDaMua}}</td>
@@ -517,7 +517,7 @@
             <td></td>
             <td *ngIf="userService.isCuc() && !isView"></td>
           </tr>
-          <ng-container *ngIf="expandSet.has(i)">
+          <ng-container>
             <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
               <td></td>
               <td></td>
