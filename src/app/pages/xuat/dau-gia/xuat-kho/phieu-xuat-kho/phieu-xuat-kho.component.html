@@ -193,7 +193,7 @@
                                     <td>{{lv1.ngayKn}}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO  && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
