@@ -68,24 +68,11 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"></nz-form-label>
-                                </nz-form-item>
-                            </div>
+
                         </div>
                     </div>
                     <div nz-col nzSpan="8">
                         <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Loại hợp đồng
-                                    </nz-form-label>
-                                    <nz-form-control>
-                                        <input nz-input formControlName="loaiHdong" readonly />
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng số DVT tài sản
@@ -116,7 +103,12 @@
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"></nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="soLuongXuatBan" readonly />
+                                        </nz-input-group>
+                                    </nz-form-control>
                                 </nz-form-item>
                             </div>
                         </div>
@@ -147,16 +139,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán </nz-form-label>
-                                    <nz-form-control>
-                                        <nz-input-group>
-                                            <input nz-input formControlName="soLuongXuatBan" readonly />
-                                        </nz-input-group>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
+
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Thành tiền </nz-form-label>
@@ -217,10 +200,6 @@
                                 <td></td>
                                 <td>{{data.tenTrangThai}}</td>
                                 <td>
-                                    <a *ngIf="data.trangThai == STATUS.DA_KY"
-                                        (click)="getDetailHopDong($event,data.id,true)">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
                                     <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
                                         (click)="redirectHopDong(true,data.id)">
                                         <i class="fa fa-pencil"></i>

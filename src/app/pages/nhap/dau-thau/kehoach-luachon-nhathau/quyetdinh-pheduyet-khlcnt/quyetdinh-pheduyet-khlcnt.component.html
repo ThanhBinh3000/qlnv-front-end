@@ -16,19 +16,9 @@
           <label class="search__label">Trích yếu</label>
           <input class="search__input" placeholder="Nhập nội dung" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="5">
           <label class="search__label">Ngày quyết định</label>
-          <div nz-row [nzGutter]="24">
-            <div nz-col nzSpan="12" class="cus-start-date">
-              <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayKy"
-                nzPlaceHolder="Ngày bắt đầu">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="12" class="cus-end-date">
-              <nz-date-picker [nzDisabledDate]="disabledDenNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayKy"
-                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
-            </div>
-          </div>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">

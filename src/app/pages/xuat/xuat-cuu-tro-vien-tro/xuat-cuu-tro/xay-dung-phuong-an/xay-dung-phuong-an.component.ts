@@ -1,20 +1,20 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {DonviService} from 'src/app/services/donvi.service';
-import {isEmpty} from 'lodash';
-import {CHUC_NANG, STATUS} from 'src/app/constants/status';
-import {CuuTroVienTroComponent} from "../cuu-tro-vien-tro.component";
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
+import { CHUC_NANG, STATUS } from 'src/app/constants/status';
+import { CuuTroVienTroComponent } from "../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-xay-dung-phuong-an',
@@ -29,25 +29,25 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
-    {ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
   ];
   listTrangThaiTh: any[] = [
-    {ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp'},
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
-    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
-    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã tạo - CĐ Vụ'},
+    { ma: this.STATUS.CHUA_TONG_HOP, giaTri: 'Chưa tổng hợp' },
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ' },
   ];
 
   listTrangThaiQd: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
   ];
   public vldTrangThai: CuuTroVienTroComponent;
 
@@ -101,10 +101,11 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
   isView = false;
 
   disabledStartNgayDX = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayDxTu) {
+    if (startValue && this.formData.value.ngayDxDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+    } else {
       return false;
     }
-    return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
   };
 
   disabledEndNgayDx = (endValue: Date): boolean => {
@@ -113,11 +114,12 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
   };
+
   disabledStartNgayKt = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKetThucTu) {
-      return false;
+    if (startValue && this.formData.value.ngayKetThucDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
     }
-    return startValue.getTime() > this.formData.value.ngayKetThucDen.getTime();
+    return false;
   };
 
   disabledEndNgayKt = (endValue: Date): boolean => {

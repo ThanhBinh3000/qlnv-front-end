@@ -11,15 +11,15 @@
           </div>
           <div nz-col nzSpan="4">
             <label> Số kế hoạch/đề xuất</label>
-            <input placeholder="" nz-input formControlName="soDxuat" />
+            <input placeholder="" nz-input formControlName="soDxuat"/>
           </div>
           <div nz-col nzSpan="4">
             <label> Số QĐ PD kế hoạch BĐG</label>
-            <input placeholder="" nz-input formControlName="soQdPdKhBdg" />
+            <input placeholder="" nz-input formControlName="soQdPdKhBdg"/>
           </div>
           <div nz-col nzSpan="4">
             <label> Số QĐ PD kết quả BĐG</label>
-            <input placeholder="" nz-input formControlName="soQdPdKqBdg" />
+            <input placeholder="" nz-input formControlName="soQdPdKqBdg"/>
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày QĐ PD kết quả BĐG</label>
@@ -33,7 +33,7 @@
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
-          <button nz-button class="search__button--search" (click)="search()">
+          <button nz-button class="search__butt on--search" (click)="timKiem()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
@@ -44,18 +44,18 @@
       <h3 class="text-uppercase">Quản lý thông tin đấu giá</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="goDetail(723)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
-    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <!--<nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
@@ -105,9 +105,9 @@
                       (click)="goDetail(dataChild.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
+                    &lt;!&ndash; <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
                       <i class="fa fa-trash-o do"></i>
-                    </a> -->
+                    </a> &ndash;&gt;
                   </td>
                 </tr>
               </ng-container>
@@ -123,6 +123,67 @@
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              </ng-template>
+            </nz-pagination>
+          </div>
+        </div>
+      </div>
+    </nz-card>-->
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+        <thead>
+        <tr>
+          <th width="30px">STT</th>
+          <th width="">Năm</th>
+          <th width="">Số QĐ KH BĐG</th>
+          <th width="">Ngày QĐ PD KQBĐG</th>
+          <th width="">Loại hàng hoá</th>
+          <th width="">Chủng loại hàng hóa</th>
+          <th width="">Số KH/đề xuất</th>
+          <th width="">Tên đơn vị</th>
+          <th width="">Trạng thái thực hiện</th>
+          <th width="90px">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let data of dataTable; let i = index">
+          <tr>
+            <td>{{data.id}}</td>
+            <td>{{ data.nam }}</td>
+            <td>{{ data.soQdPd}}</td>
+            <td>{{ data.ngayPduyet }}</td>
+            <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.tenCloaiVthh }}</td>
+            <td>{{data.soDxuat}}</td>
+            <td>{{data.tenDvi}}</td>
+            <td>{{data.tenTrangThai}}</td>
+            <td class="text-left">
+              <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT" (click)="goDetail(data.id)">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a *ngIf="data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT"
+                 (click)="goDetail(data.id)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="data.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(data)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai">
+          </div>
+          <div class="canphai">
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                           (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
               </ng-template>
