@@ -457,7 +457,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async saveAndSend() {
-    await this.createUpdate(this.formData.value);
+    let result = await this.createUpdate(this.formData.value);
+    this.idInput = result.id;
     await this.approve(this.idInput, STATUS.CHO_DUYET_LDCC, 'Bạn có muốn gửi duyệt ?');
   }
 
