@@ -1,5 +1,5 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isQuyetDinh">
-    <div class="btn-group">
+    <div class="btn-group" *ngIf="!isViewOnModal">
         <button type="button" class="btn btn-sub" (click)="quayLai()">
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
@@ -163,7 +163,7 @@
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.slDviTsan}}</td>
                             <td>{{ data.tongDonGia | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{ data.tongDonGia *data.tongSoLuong| number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.donGiaVat *data.tongSoLuong| number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
                             <td>
                                 <a (click)="showDetail($event,data.idDxHdr)">

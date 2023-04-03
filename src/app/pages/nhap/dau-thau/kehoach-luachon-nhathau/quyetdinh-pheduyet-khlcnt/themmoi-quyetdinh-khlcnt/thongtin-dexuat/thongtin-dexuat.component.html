@@ -113,8 +113,8 @@
         </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group nzAddOnAfter="%">
-            <nz-input-number formControlName="gtriHdong" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-              [nzStep]="1" [nzSize]="'small'"
+            <nz-input-number [ngClass]="{'number-blue': true}" formControlName="gtriHdong" nz-input [nzMin]="1"
+              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
               [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
             </nz-input-number>
           </nz-input-group>
@@ -149,7 +149,8 @@
         </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group nzAddOnAfter="%">
-            <nz-input-number nz-input [nzSize]="'small'" formControlName="vat" nzDisabled>
+            <nz-input-number [ngClass]="{'number-blue': true}" nz-input [nzSize]="'small'" formControlName="vat"
+              nzDisabled>
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -182,8 +183,8 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL đề xuất mua </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group>
-            <nz-input-number class="text-right" nz-input formControlName="soLuong" [nzSize]="'small'"
-              [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+            <nz-input-number [ngClass]="{'number-blue': true}" class="text-right" nz-input formControlName="soLuong"
+              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
             </nz-input-number>
           </nz-input-group>
         </nz-form-control>
@@ -231,13 +232,13 @@
     <tbody>
       <ng-container *ngFor="let item of listDataGroup , let i = index">
         <tr>
-          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+          <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td colspan="3">{{item.tenDvi}}</td>
           <td></td>
           <td></td>
           <td *ngIf="!isView"></td>
         </tr>
-        <ng-container *ngIf="expandSet.has(i)">
+        <ng-container>
           <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
             <td></td>
             <td></td>

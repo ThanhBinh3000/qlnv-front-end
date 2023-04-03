@@ -84,4 +84,41 @@ export class DanhMucDviLqComponent extends Base2Component implements OnInit {
       }
     })
   }
+
+  delete( type, item?: any) {
+    let dataDelete = [];
+    if (type == 'single') {
+      dataDelete.push(item.id)
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.checked) {
+            dataDelete.push(item.id);
+          }
+        });
+      }
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.dmDviLqService.delete({idList: dataDelete}).then(async () => {
+            await this.search();
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 }

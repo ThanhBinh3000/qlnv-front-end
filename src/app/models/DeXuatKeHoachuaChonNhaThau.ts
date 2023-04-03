@@ -105,10 +105,12 @@ export class DanhSachGoiThau {
   diaDiemNhap: string;
   donGia: number;
   donGiaVat: number;
+  donGiaDx: number;
   goiThau: string;
   id: number;
   soLuong: number;
   soLuongTheoChiTieu: number;
+  soLuongDaMua: number;
   thanhTien: string;
   bangChu: string;
   giaTriDamBao: string

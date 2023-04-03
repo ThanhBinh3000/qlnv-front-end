@@ -112,6 +112,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   listOfData: any[] = [];
   listDataGroup: any[] = [];
   donGiaVatObject: any;
+  selected: boolean = false;
 
 
   userInfo: UserLogin;
@@ -269,7 +270,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
       this.listOfData = data.children;
       this.convertListData()
-      debugger
       this.showFirstRow(event, this.listDataGroup)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -430,8 +430,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     if ($event.type == 'click') {
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow')
+      this.selected = false;
+    } else {
+      this.selected = true;
     }
-
     this.idGoiThau = dataGoiThau.id;
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {

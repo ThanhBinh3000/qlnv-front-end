@@ -19,6 +19,9 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
   @Input() loaiVthh: string;
   @Input()
   listVthh: any[] = [];
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
+  isQuyetDinh: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
@@ -69,6 +72,25 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  taoQdinh(id: number) {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = true;
+    this.idSelected = id;
+  }
+
+  showTongHop() {
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    setActive.classList.add('ant-menu-item-selected');
+    this.isQuyetDinh = false;
+    this.search;
+  }
 
   timKiem() {
     this.formData.patchValue({
@@ -114,5 +136,15 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     }
     return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
   };
+
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
 }
 
