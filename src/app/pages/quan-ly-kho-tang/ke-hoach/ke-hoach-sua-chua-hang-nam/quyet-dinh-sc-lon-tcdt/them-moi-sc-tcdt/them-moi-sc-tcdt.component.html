@@ -21,13 +21,13 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub do ml-2"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
               (click)="reject(id, STATUS.TU_CHOI_LDV)">
         <i class="icon htvbdh_tcdt_tuchoi "></i>
         <span>Từ chối</span>
       </button>
       <button class="btn btn-sub btn-sm waves-effect waves-light xanh-nhat ml-2"
-              *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && userService.isTongCuc() && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_THDEXUATCUC_DUYETLDV')"
               (click)=" pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>

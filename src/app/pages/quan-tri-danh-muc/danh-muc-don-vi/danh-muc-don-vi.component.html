@@ -117,6 +117,19 @@
                 <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
               </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Vùng miền
+                </nz-form-label>
+                <nz-form-control>
+                  <nz-radio-group formControlName="vungMien" [nzDisabled]="!isEditData">
+                    <label nz-radio nzValue="Miền Bắc"> Miền Bắc </label>
+                    <label nz-radio nzValue="Miền Trung"> Miền Trung </label>
+                    <label nz-radio nzValue="Miền Nam"> Miền Nam </label>
+                  </nz-radio-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
                 <nz-form-label></nz-form-label>
