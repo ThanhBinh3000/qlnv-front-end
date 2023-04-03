@@ -10,7 +10,7 @@ import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { StorageService } from 'src/app/services/storage.service';
-
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -25,6 +25,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   isView = false;
   idHopDong: number;
   isEditHopDong: boolean
+  rowSelected: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -64,6 +65,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     ]);
     if (this.id) {
       await this.getDetail(this.id)
+      await this.selectRow(this.dataTable[0])
     }
     await this.spinner.hide()
   }
@@ -89,9 +91,13 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       }
     }
   }
-  async selectRow(item?: any) {
-
-
+  async selectRow(item: any) {
+    this.dataTable.forEach(i => i.selected = false);
+    item.selected = true;
+    this.idHopDong = cloneDeep(item.id);
+    this.isView = true;
+    console.log(item, "item");
+    console.log(this.idHopDong);
   }
   async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
