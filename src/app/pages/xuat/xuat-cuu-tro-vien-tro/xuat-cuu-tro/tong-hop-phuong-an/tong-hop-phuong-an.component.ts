@@ -27,6 +27,12 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhCache: string;
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,

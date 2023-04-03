@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -29,7 +29,7 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./thong-tin.component.scss']
 })
 
-export class ThongTinComponent extends Base2Component implements OnInit {
+export class ThongTinComponent extends Base2Component implements OnInit, OnChanges {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() idKqBdg: number;
@@ -123,6 +123,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.id);
     this.maHopDongSuffix = `/${this.formData.value.nam}/HĐMB`;
     await Promise.all([
       this.loadDataComboBox(),
@@ -447,6 +448,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
-
+  ngOnChanges(changes: SimpleChanges) {
+    this.ngOnInit()
+    // changes.prop contains the old and the new value...
+  }
 }
 

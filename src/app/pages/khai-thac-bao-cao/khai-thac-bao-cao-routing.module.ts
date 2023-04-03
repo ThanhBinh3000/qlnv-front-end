@@ -1,8 +1,8 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {AuthGuard} from "../../guard/auth.guard";
-import {KhaiThacBaoCaoComponent} from "./khai-thac-bao-cao.component";
-import {BaoCaoTheoTtqdComponent} from "./bao-cao-theo-ttqd/bao-cao-theo-ttqd.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from "../../guard/auth.guard";
+import { KhaiThacBaoCaoComponent } from "./khai-thac-bao-cao.component";
+import { BaoCaoTheoTtqdComponent } from "./bao-cao-theo-ttqd/bao-cao-theo-ttqd.component";
 
 const routes: Routes = [{
   path: '',
@@ -13,7 +13,13 @@ const routes: Routes = [{
       path: '',
       redirectTo: 'bao-cao-theo-ttqd',
       pathMatch: 'full'
-    },/*
+    },
+    {
+      path: '/bao-cao-chat-luong-hang-dtqg',
+      redirectTo: 'bao-cao-chat-luong-hang-dtqg',
+      canActivate: [AuthGuard],
+    },
+    /*
     {
       path: 'bao-cao-theo-ttqd',
       component: BaoCaoTheoTtqdComponent,
@@ -23,6 +29,11 @@ const routes: Routes = [{
       path: 'bao-cao-theo-ttqd',
       loadChildren: () =>
         import('./bao-cao-theo-ttqd/bao-cao-theo-ttqd.module').then((m) => m.BaoCaoTheoTtqdModule),
+    },
+    {
+      path: 'bao-cao-chat-luong-hang-dtqg',
+      loadChildren: () =>
+        import('./bao-cao-chat-luong-hang-dtqg/bao-cao-chat-luong-hang-dtqg.module').then((m) => m.BaoCaoChatLuongHangDtqgModule),
     },
   ],
 },];
