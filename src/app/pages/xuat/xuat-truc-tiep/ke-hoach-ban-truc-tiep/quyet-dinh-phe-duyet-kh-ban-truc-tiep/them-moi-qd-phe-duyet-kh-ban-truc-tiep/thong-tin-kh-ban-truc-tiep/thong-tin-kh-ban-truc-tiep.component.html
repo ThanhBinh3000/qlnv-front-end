@@ -187,11 +187,15 @@
                     <tr>
                         <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                         <td colspan="4">{{item.tenDvi}}</td>
+                        <td> {{item.soLuongChiCuc}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td *ngIf="!isView"> </td>
+                        <td>
+                            <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(i)">
                         <tr *ngFor="let children of item.children, let y = index">
@@ -201,16 +205,12 @@
                             <td>{{children.tenLoKho}}</td>
                             <td>{{children.maDviTsan}}</td>
                             <td *ngIf="isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td *ngIf="!isView"><nz-input-number [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser" nz-input
-                                    [(ngModel)]="children.soLuong"></nz-input-number></td>
+                            <td *ngIf="!isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{children.dviTinh}}</td>
                             <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right" *ngIf="!isView">
-                                <a (click)="deleteRow(y)" class="text-center">
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
+
                             </td>
                         </tr>
                     </ng-container>

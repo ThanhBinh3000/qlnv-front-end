@@ -36,6 +36,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   idInput: number;
   @Input()
   showFromTH: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

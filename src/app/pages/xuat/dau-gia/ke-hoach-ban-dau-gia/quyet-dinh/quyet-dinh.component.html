@@ -181,11 +181,17 @@
                         <td>{{ data.soQdPd }}</td>
                         <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.soTrHdr }}</td>
-                        <td>{{ data.idThHdr }}</td>
+                        <td>
+                            <a nz-button nzType="link" nzBlock (click)="openModalDxKh(data.idTrHdr)">{{
+                                data.soTrHdr}}</a>
+                        </td>
+                        <td *ngIf="userService.isTongCuc()">
+                            <a nz-button nzType="link" nzBlock (click)="openModalTh(data.idThHdr)">{{
+                                data.idThHdr}}</a>
+                        </td>
                         <td>{{data.tenLoaiVthh}}</td>
                         <td>{{data.tenCloaiVthh}}</td>
-                        <td>{{data.soDviTsan}}</td>
+                        <td>{{data.slDviTsan}}</td>
                         <td>{{data.slHdDaKy}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
@@ -231,3 +237,29 @@
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
     </app-them-quyet-dinh-ban-dau-gia>
 </div>
+
+<!--xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewDxKh" (nzOnCancel)="closeModalDxKh()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idDxKh" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+        </app-them-de-xuat-ke-hoach-ban-dau-gia>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalDxKh()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
