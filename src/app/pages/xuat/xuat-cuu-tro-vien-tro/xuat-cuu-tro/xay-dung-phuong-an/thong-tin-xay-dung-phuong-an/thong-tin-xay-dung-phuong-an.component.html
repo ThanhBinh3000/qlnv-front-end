@@ -71,9 +71,11 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
-            class="btn btn-sub"
-            (click)="saveAndChangeStatus(STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?','Đề xuất đã hoàn thành.')">
+    <button
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc() && formData.value.maDvi.length===6"
+      type="button"
+      class="btn btn-sub"
+      (click)="saveAndChangeStatus(STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?','Đề xuất đã hoàn thành.')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
     </button>
@@ -225,15 +227,15 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input formControlName="tenVthh" [readonly]="isView"/>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="4">
+        <!--        <div nz-col [nzSpan]="3">-->
+        <!--          <nz-form-item>-->
+        <!--            <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>-->
+        <!--            <nz-form-control nz-col [nzSpan]="24">-->
+        <!--              <input nz-input formControlName="tenVthh" [readonly]="isView"/>-->
+        <!--            </nz-form-control>-->
+        <!--          </nz-form-item>-->
+        <!--        </div>-->
+        <div nz-col [nzSpan]="7">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày đề xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -385,7 +387,8 @@
       <nz-descriptions-item nzTitle="Thành tiền">{{tongThanhTien|number:'':'vi'}} đ</nz-descriptions-item>
       <nz-descriptions-item class="red-value1"
                             nzTitle="Số lượng đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp"
-                            *ngIf="formData.value.loaiVthh =='0102'"><span style="color: #ff7a7b !important;"> {{tongSoLuongXuatCap|number:'':'vi'}} {{formData.value.donViTinh}}</span>
+                            *ngIf="formData.value.loaiVthh =='0102'"><span
+        style="color: #ff7a7b !important;"> {{tongSoLuongXuatCap|number:'':'vi'}} {{formData.value.donViTinh}}</span>
       </nz-descriptions-item>
 
     </nz-descriptions>

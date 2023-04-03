@@ -713,6 +713,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else {
       let result = await this.createUpdate(this.formData.value);
       if (result) {
+        this.idInput = result.id;
         await this.approve(this.idInput, STATUS.CHO_DUYET_TP, message);
       }
     }
@@ -723,6 +724,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     let result = await this.createUpdate(this.formData.value);
     if (result) {
+      this.idInput = result.id;
       await this.approve(this.idInput, status, message, null, sucessMessage);
     }
   }
