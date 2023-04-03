@@ -156,15 +156,12 @@
           <td>{{ data.soQdPdDaDtxd }}</td>
           <td class="text-left">{{ data.tenTrangThaiDt }}</td>
           <td class="text-center">
-            <a *ngIf="data.trangThai == STATUS.BAN_HANH "
+            <a *ngIf="data.trangThaiDt == STATUS.DA_HOAN_THANH"
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
-              <i class="fa fa-trash-o do"></i>
+            <a *ngIf="data.trangThaiDt != STATUS.DA_HOAN_THANH" (click)="redirectToChiTiet(data.id)">
+              <i class="icon htvbdh_soanthao"></i>
             </a>
           </td>
         </tr>
@@ -191,7 +188,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <!--  <app-thong-tin-quyet-dinh-phe-duyet-khlcnt [id]="selectedId" (showListEvent)="showList()"-->
-  <!--                                             [isViewDetail]="isViewDetail"-->
-  <!--                                             [idInput]="selectedId"></app-thong-tin-quyet-dinh-phe-duyet-khlcnt>-->
+  <app-cap-nhat-thong-tin-dau-thau [id]="selectedId" (showListEvent)="showList()"
+                                   [isViewDetail]="isViewDetail"
+                                   [idInput]="selectedId"></app-cap-nhat-thong-tin-dau-thau>
 </ng-template>
