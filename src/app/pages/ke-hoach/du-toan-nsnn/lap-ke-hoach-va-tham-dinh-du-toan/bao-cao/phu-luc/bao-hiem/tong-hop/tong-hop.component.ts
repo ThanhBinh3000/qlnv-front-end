@@ -316,7 +316,7 @@ export class TongHopComponent implements OnInit {
     sortUnit() {
         this.lstCtietBcao.forEach(data => {
             data.lstDviCapDuoi.sort((a, b) => {
-                if (this.getIndex(a.maDvi) <= this.getIndex(b.maDvi)) {
+                if (this.getIndex(a.maDvi) >= this.getIndex(b.maDvi)) {
                     return 1;
                 }
                 return -1;
