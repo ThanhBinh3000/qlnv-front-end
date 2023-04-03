@@ -8,6 +8,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-dau-thau',
@@ -55,6 +56,7 @@ export class ThongTinDauThauComponent extends Base2Component implements OnInit {
       this.formData.value.ngayKyTu = this.formData.value.ngayKy[0];
       this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
     }
+    this.formData.value.trangThai = STATUS.BAN_HANH;
     this.search();
   }
 
