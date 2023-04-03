@@ -316,7 +316,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'Danh sách đề xuất kế hoạch bán đấu giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
