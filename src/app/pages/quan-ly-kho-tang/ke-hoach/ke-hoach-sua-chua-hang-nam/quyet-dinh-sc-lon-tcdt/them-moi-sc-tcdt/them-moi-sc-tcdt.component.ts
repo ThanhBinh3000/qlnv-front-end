@@ -183,8 +183,14 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
         trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
+      case STATUS.TU_CHOI_LDTC :
       case STATUS.CHO_DUYET_LDV : {
-        trangThai = STATUS.DA_DUYET_LDV
+        trangThai = STATUS.CHO_DUYET_LDTC
+        break;
+      }
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.DA_DUYET_LDTC
+        break;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
