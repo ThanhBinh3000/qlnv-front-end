@@ -254,34 +254,39 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.tongHopKhBanTrucTiepService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        data.children.forEach((item) => {
-          soLuongDviTsan += item.slDviTsan;
-        })
-        this.formData.patchValue({
-          cloaiVthh: data.cloaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          slDviTsan: soLuongDviTsan,
-          idThHdr: event,
-          idTrHdr: null,
-          soTrHdr: null,
-        })
-        for (let item of data.children) {
-          await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              const dataRes = res.data;
-              this.formData.patchValue({
-                tchuanCluong: dataRes.tchuanCluong,
-                soQdCc: dataRes.soQdCtieu,
-              })
-              dataRes.idDxHdr = dataRes.id;
-              this.danhsachDx.push(dataRes);
-            }
+        if (data.idSoQdPd) {
+          this.loadChiTiet(data.idSoQdPd)
+        } else {
+          data.children.forEach((item) => {
+            soLuongDviTsan += item.slDviTsan;
           })
-        };
-        this.dataInput = null;
-        this.dataInputCache = null;
+          this.formData.patchValue({
+            cloaiVthh: data.cloaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            loaiVthh: data.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            slDviTsan: soLuongDviTsan,
+            idThHdr: event,
+            idTrHdr: null,
+            soTrHdr: null,
+          })
+          for (let item of data.children) {
+            await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                const dataRes = res.data;
+                this.formData.patchValue({
+                  tchuanCluong: dataRes.tchuanCluong,
+                  soQdCc: dataRes.soQdCtieu,
+                })
+                dataRes.idDxHdr = dataRes.id;
+                this.danhsachDx.push(dataRes);
+              }
+            })
+          };
+          this.dataInput = null;
+          this.dataInputCache = null;
+        }
+
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

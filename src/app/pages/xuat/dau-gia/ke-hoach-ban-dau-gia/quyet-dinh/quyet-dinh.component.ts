@@ -16,7 +16,10 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  idThop: number = 0;
+  isViewThop: boolean = false;
+  idDxKh: number = 0;
+  isViewDxKh: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -82,6 +85,27 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
     this.timKiem();
     this.search();
   }
+
+  openModalDxKh(id: number) {
+    this.idDxKh = id;
+    this.isViewDxKh = true;
+  }
+
+  closeModalDxKh() {
+    this.idDxKh = null;
+    this.isViewDxKh = false;
+  }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
 
   disabledNgayKyQdTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayKyQdDen) {
