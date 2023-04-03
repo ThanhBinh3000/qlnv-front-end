@@ -169,6 +169,13 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
+    if (this.dataTableDetail && this.dataTableDetail.length > 0) {
+      this.dataTableDetail.forEach(item => {
+        if (item.loaiHinh && item.loaiHinh.length > 0) {
+          item.loaiHinh = item.loaiHinh.toString();
+        }
+      })
+    }
     this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     let res = await this.createUpdate(this.formData.value)
@@ -233,7 +240,6 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
       })
       this.rowItem.tenLoaiHinh = listTenLh.toString();
     }
-    this.rowItem.loaiHinh = this.rowItem.loaiHinh.toString();
     this.dataTableDetail = [...this.dataTableDetail, this.rowItem];
     this.rowItem = new DinhMucTrangBiMm();
     this.updateEditCache();
