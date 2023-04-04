@@ -71,7 +71,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         ngayQdGiaoNvXh: [, [Validators.required]],
         ktvBaoQuan: [],
         soBienBan: [, [Validators.required]],
-        ngayLayMau: [, [Validators.required]],
+        ngayLayMau: [,],
         dviKiemNghiem: [, [Validators.required]],
         diaDiemLayMau: [, [Validators.required]],
         loaiVthh: [],
@@ -240,7 +240,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     const diffList = [
       ...this.listDiaDiemNhap.filter((e) => {
         return !this.bienBan.some((bb) => {
-          if (bb.maLoKho.lenght > 0 && e.maLoKho.lenght > 0) {
+          if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
             return e.maLoKho === bb.maLoKho;
           } else {
             return e.maDiemKho === bb.maDiemKho;
