@@ -15,7 +15,7 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO) && userService.isCuc() "
+              *ngIf=" (formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO) && userService.isCuc() && !isViewDetail "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
@@ -34,7 +34,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc()"
+              *ngIf=" (formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc() && !isViewDetail"
               (click)="save(false)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -72,7 +72,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="namKeHoach">
+                <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="namKeHoach">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                   </nz-option>
                 </nz-select>
@@ -87,7 +87,7 @@
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{maQd}}">
                 <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                 [nzSize]="'small'">
+                                 [nzDisabled]="isViewDetail" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -97,13 +97,13 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
             </nz-form-label>
-            <input formControlName="trichYeu" class="search__input" nz-input/>
+            <input [readonly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
@@ -146,7 +146,7 @@
         <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
           <br> {{formData.value.namKeHoach - 1}}</th>
         <th class="text-center" nzWidth="150px" rowSpan="2" nzRight>Ghi chú</th>
-        <th class="text-center" nzWidth="69px" rowSpan="2" nzRight>Hành động</th>
+        <th class="text-center" nzWidth="69px" rowSpan="2" *ngIf="!isViewDetail" nzRight>Hành động</th>
       </tr>
       <tr>
         <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
@@ -162,7 +162,7 @@
         <td class="text-center"></td>
         <td class="text-center">
           <nz-input-group>
-            <nz-select [ngModel]="rowItem.maCongTrinh" nzAllowClear (ngModelChange)="changDmSuaChua($event)">
+            <nz-select [ngModel]="rowItem.maCongTrinh"  nzAllowClear (ngModelChange)="changDmSuaChua($event)">
               <nz-option *ngFor="let item of listDmSuaChua" [nzLabel]="item.tenCongTrinh" [nzValue]="item.maCongTrinh">
               </nz-option>
             </nz-select>
@@ -229,7 +229,7 @@
                            [nzParser]="globals.parser"></nz-input-number>
         </td>
         <td class="text-center">
-          <nz-input-number [(ngModel)]="rowItem.ncKhVon" [nzSize]="'small'" [nzFormatter]="globals.formatter" nzDisabled
+          <nz-input-number [(ngModel)]="rowItem.lastNcKhVon" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                            [nzMin]="0"
                            [nzParser]="globals.parser"></nz-input-number>
         </td>
@@ -262,10 +262,9 @@
           <td>{{ data.luyKeDuToan }}</td>
           <td>{{ data.tinhHinh }}</td>
           <td>{{ data.ncKhVon }}</td>
-          <td>{{ data.ncKhVon }}</td>
+          <td>{{ data.lastNcKhVon }}</td>
           <td>{{ data.ghiChu }}</td>
-          <td></td>
-          <td style="text-align: center;" nzRight>
+          <td style="text-align: center;" nzRight *ngIf="!isViewDetail">
             <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
@@ -284,11 +283,6 @@
                            [nzValue]="item.maCongTrinh">
                 </nz-option>
               </nz-select>
-            </nz-input-group>
-          </td>
-          <td class="text-center">
-            <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem" readonly/>
             </nz-input-group>
           </td>
           <td class="text-center">
@@ -355,14 +349,14 @@
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
           <td class="text-center">
-            <nz-input-number [(ngModel)]="dataEdit[idx].data.ncKhVon" [nzSize]="'small'"
+            <nz-input-number [(ngModel)]="dataEdit[idx].data.lastNcKhVon" [nzSize]="'small'"
                              [nzFormatter]="globals.formatter"
                              [nzMin]="0"
                              [nzParser]="globals.parser"></nz-input-number>
           </td>
           <td class="text-center">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu" readonly/>
+              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu" />
             </nz-input-group>
           </td>
           <td class="text-center" nzRight *ngIf="!isViewDetail">
@@ -382,18 +376,17 @@
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
       <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
-      <td nzRight></td>
+      <td nzRight *ngIf="!isViewDetail"></td>
       </tfoot>
-
     </nz-table>
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
@@ -423,7 +416,6 @@
         <td>{{ data.tenCongTrinh }}</td>
         <td>{{ data.qdThamQuyen }}</td>
         <td>{{ data.tieuChuan }}</td>
-        <td>{{ data.tgSuaChua }}</td>
         <td>{{ data.lyDo }}</td>
         <td>{{ data.duToan }}</td>
         <td>{{ data.tgThucHien }}</td>

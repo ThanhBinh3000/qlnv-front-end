@@ -45,7 +45,7 @@
               <nz-form-label nzRequired>Mã điểm kho</nz-form-label>
               <nz-form-control nzErrorTip="Mã sai định dạng">
                 <nz-input-group [nzAddOnBefore]="formKho.value.maCha">
-                  <input nz-input formControlName="maDiemKho" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
+                  <input nz-input formControlName="maDiemkho" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -86,7 +86,7 @@
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
                   <nz-input-number formControlName="dienTichDat" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                   [nzParser]="globals.parser" nzDisabled></nz-input-number>
+                                   [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>

@@ -79,9 +79,11 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc()" type="button"
-            class="btn btn-sub"
-            (click)="approve(idInput,STATUS.DU_THAO,'Bạn có muốn đổi trạng thái để chỉnh sửa đề xuất này ?')">
+    <button
+      *ngIf="formData.value.trangThai == STATUS.DA_TAO_CBV && userService.isTongCuc() && !formData.value.idQdPd && !formData.value.idThop"
+      type="button"
+      class="btn btn-sub"
+      (click)="approve(idInput,STATUS.DU_THAO,'Bạn có muốn đổi trạng thái để chỉnh sửa đề xuất này ?')">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Chỉnh sửa</span>
     </button>

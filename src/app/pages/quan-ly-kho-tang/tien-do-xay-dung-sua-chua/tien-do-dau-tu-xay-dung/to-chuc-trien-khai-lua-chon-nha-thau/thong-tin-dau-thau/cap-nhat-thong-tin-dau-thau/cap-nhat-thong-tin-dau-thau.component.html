@@ -4,8 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
-            type="button" class="btn btn-sub xanh-nhat" (click)="banHanh(idInput)">
+    <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+            type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat(idInput)">
       <i class="icon htvbdh_checkfile2"></i>
       <span>Hoàn thành cập nhật</span>
     </button>
@@ -111,14 +111,14 @@
           <span>Danh sách các gói thầu</span>
         </div>
       </div>
-      <!--        <div class="buttons">-->
-      <!--          <button-->
-      <!--            *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData() && !isView"-->
-      <!--            class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThauPopup()">-->
-      <!--            <i class="icon htvbdh_tcdt_save"></i>-->
-      <!--            <span>Lưu</span>-->
-      <!--          </button>-->
-      <!--        </div>-->
+      <div class="buttons">
+        <button
+          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+          class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
+      </div>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
       <nz-table nzBordered [nzData]="listGoiThau"
@@ -136,14 +136,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of listGoiThau , let i = index" (click)="showDetail($event,item)">
+        <tr *ngFor="let item of listGoiThau , let i = index" [ngClass]="{'bg-selected': item.selected}"
+            (click)="showDetail(item)">
           <td>{{i + 1}}</td>
           <td>{{item.noiDung}}</td>
           <td>{{item.giaTri | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>aaaa</td>
-          <td>aaaa</td>
-          <td>0</td>
-          <td></td>
+          <td>{{item.nhaThauTrung}}</td>
+          <td>{{item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{ item.giaTri - item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.tenTrangThai}}</td>
           <td></td>
         </tr>
         </tbody>
@@ -183,8 +184,7 @@
           <th>Số điện thoại</th>
           <th>Giá dự thầu</th>
           <th>Trạng thái</th>
-          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT"
-              width="30px">Hành động
+          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail" width="30px">Hành động
           </th>
         </tr>
         <tr
@@ -202,13 +202,13 @@
           </th>
           <th>
             <nz-select [nzDisabled]="isViewDetail" [(ngModel)]="rowItemNtNopHs.trangThai"
-                       (ngModelChange)="changeTrangThai($event)">
+                       (ngModelChange)="changeTrangThai($event,'add')">
               <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value"
                          [nzLabel]="p.text">
               </nz-option>
             </nz-select>
           </th>
-          <th>
+          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail">
             <a disabled="isView" (click)="isViewDetail ? '' : addRow()"
                [class.disabled]="(!rowItemNtNopHs.tenNhaThau && !rowItemNtNopHs.maSoThue && !rowItemNtNopHs.diaChi && !rowItemNtNopHs.soDienThoai &&  !rowItemNtNopHs.giaDuThau)">
               <i class="fa fa-plus"></i>
@@ -221,7 +221,8 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of listNthauNopHs, let i = index">
-          <ng-container *ngIf="!data.edit; else editTemplate">
+          <ng-container
+            *ngIf="(dataNhaThauGuiHsEdit && dataNhaThauGuiHsEdit[i] && !dataNhaThauGuiHsEdit[i].edit); else editTemplate">
             <td class="text-center">{{i + 1}}</td>
             <td>{{ data.tenNhaThau }}</td>
             <td>{{ data.maSoThue }}</td>
@@ -230,14 +231,14 @@
             <td>{{ data.giaDuThau | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td
-              *ngIf="formData.value.trangThaDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail"
+              *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail"
               class="text-center">
-<!--              <a (click)="startEdit(i)">-->
-<!--                <i class=" fa fa-pencil"></i>-->
-<!--              </a>-->
-              <!--                                    <a (click)="deleteRowItem(i)">-->
-              <!--                                        <i class="fa fa-trash-o do"></i>-->
-              <!--                                    </a>-->
+              <a (click)="editDataNhaThauGuiHs(i)">
+                <i class=" fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteRowItem(i)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
             </td>
           </ng-container>
           <ng-template #editTemplate>
@@ -262,13 +263,13 @@
             </td>
             <td>
               <nz-select [(ngModel)]="dataNhaThauGuiHsEdit[i].data.trangThai"
-                         (ngModelChange)="changeTrangThai($event)">
+                         (ngModelChange)="changeTrangThai($event,'edit',i)">
                 <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value"
                            [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
             </td>
-            <td class="text-center">
+            <td class="text-center" >
               <a (click)="saveEditNhaThauNopHs(i)" class="save">
                 <i class="fa fa-save"></i>
               </a>

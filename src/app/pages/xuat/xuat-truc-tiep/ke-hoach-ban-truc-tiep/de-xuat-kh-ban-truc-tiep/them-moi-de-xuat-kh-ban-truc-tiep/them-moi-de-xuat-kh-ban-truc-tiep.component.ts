@@ -127,7 +127,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'X');
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_TT');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];

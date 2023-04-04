@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { OldResponseData } from 'src/app/interfaces/response';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {OldResponseData} from 'src/app/interfaces/response';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzTreeComponent} from 'ng-zorro-antd/tree';
+import {DonviService} from 'src/app/services/donvi.service';
+import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 
 
 @Component({
@@ -16,7 +16,7 @@ import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
   styleUrls: ['./new-don-vi.component.scss']
 })
 export class NewDonViComponent implements OnInit {
-  @ViewChild('treeSelect', { static: false }) treeSelect!: NzTreeComponent;
+  @ViewChild('treeSelect', {static: false}) treeSelect!: NzTreeComponent;
 
   data: any;
   nodesTree: any = [];
@@ -32,6 +32,8 @@ export class NewDonViComponent implements OnInit {
   levelNode: number = 0;
 
   dataDetail: any;
+  radioValue: any;
+
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -48,8 +50,9 @@ export class NewDonViComponent implements OnInit {
       sdt: [''],
       fax: [''],
       trangThai: [true],
-      type: [true],
+      type: [null],
       ghiChu: [''],
+      vungMien: [''],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       console.log(value.length / 2);
@@ -59,7 +62,17 @@ export class NewDonViComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.nodesTree.forEach(item => {
+      if (item && item.children && item.children.length > 0) {
+        item.children.forEach(cuc => {
+          if (cuc && cuc.children && cuc.children.length > 0) {
+            cuc.children.forEach(chicuc => {
+              chicuc.children = []
+            })
+          }
+        })
+      }
+    })
   }
 
 
@@ -78,12 +91,8 @@ export class NewDonViComponent implements OnInit {
     }
     let body = this.formDonVi.value;
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    if (this.levelNode == 2) {
-      body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : LOAI_DON_VI.MLK;
-    }
-    if (this.levelNode > 2) {
-      body.type = LOAI_DON_VI.PB
-    }
+    body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
+    body.maDvi = body.maDviCha + body.maDvi
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

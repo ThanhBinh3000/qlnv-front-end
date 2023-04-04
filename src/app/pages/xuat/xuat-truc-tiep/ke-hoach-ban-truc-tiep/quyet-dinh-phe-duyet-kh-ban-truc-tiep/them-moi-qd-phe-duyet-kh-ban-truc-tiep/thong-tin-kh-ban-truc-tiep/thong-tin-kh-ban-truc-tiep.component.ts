@@ -8,6 +8,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 
 @Component({
   selector: 'app-thong-tin-kh-ban-truc-tiep',
@@ -85,24 +86,41 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
     }
   }
 
-  deleteRow(index: any) {
-    console.log(index, 888);
-
-    this.modal.confirm({
+  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    const modalGT = this.modal.create({
+      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
+      nzMaskClosable: false,
       nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-
-        } catch (e) {
-          console.log('error', e);
-        }
+      nzWidth: '2500px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
       },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      if (index >= 0) {
+        this.dataTable[index] = data;
+      }
+      this.calculatorTable();
+    });
+  };
+
+  calculatorTable() {
+    let tongSoLuong: number = 0;
+    let tongDonGia: number = 0;
+    this.dataTable.forEach((item) => {
+      tongSoLuong += item.soLuongChiCuc;
+      item.children.forEach(child => {
+        tongDonGia += child.donGiaDeXuat;
+      })
+    });
+    this.formData.patchValue({
+      tongSoLuong: tongSoLuong,
+      tongDonGia: tongDonGia,
     });
   }
 

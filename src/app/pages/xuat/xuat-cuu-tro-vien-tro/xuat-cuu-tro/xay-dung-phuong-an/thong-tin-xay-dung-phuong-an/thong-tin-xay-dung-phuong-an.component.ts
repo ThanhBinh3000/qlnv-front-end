@@ -150,6 +150,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         noiDungDx: [''],
         trangThai: [STATUS.DU_THAO],
         maTongHop: [''],
+        idQdPd: [''],
+        soQdPd: [''],
         tongSoLuong: [0],
         thanhTien: [0],
         ngayGduyet: [''],

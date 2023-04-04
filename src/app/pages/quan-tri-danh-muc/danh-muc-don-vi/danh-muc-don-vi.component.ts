@@ -61,6 +61,7 @@ export class DanhMucDonViComponent implements OnInit {
       trangThai: [''],
       type: [],
       ghiChu: [''],
+      vungMien: [''],
     })
   }
 
@@ -138,6 +139,7 @@ export class DanhMucDonViComponent implements OnInit {
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
             vaiTro: res.data.vaiTro,
+            vungMien : res.data.vungMien
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
@@ -159,7 +161,7 @@ export class DanhMucDonViComponent implements OnInit {
     let body = {
       ...this.detailDonVi.value,
       trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB  : (this.detailDonVi.value.capDvi > 2 ? LOAI_DON_VI.MLK : null)
+      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB  : LOAI_DON_VI.DV
     };
     this._modalService.confirm({
       nzClosable: false,

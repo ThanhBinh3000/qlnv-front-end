@@ -188,6 +188,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'NHAP_DT');
     }

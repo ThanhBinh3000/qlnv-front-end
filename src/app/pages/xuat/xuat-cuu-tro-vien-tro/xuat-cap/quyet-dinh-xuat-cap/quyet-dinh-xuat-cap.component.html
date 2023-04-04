@@ -47,7 +47,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="goDetail(null)"
-                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPDPA_THEM')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo QĐ xuất cấp</span>
         </button>
@@ -152,7 +152,7 @@
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() &&
-            (userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDPDPA_XOA'))" (click)="delete(data)">
+            (userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XOA'))" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
