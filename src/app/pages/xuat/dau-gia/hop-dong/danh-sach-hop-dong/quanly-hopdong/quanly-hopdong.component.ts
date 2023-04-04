@@ -92,12 +92,14 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     }
   }
   async selectRow(item: any) {
-    this.dataTable.forEach(i => i.selected = false);
-    item.selected = true;
-    this.idHopDong = cloneDeep(item.id);
-    this.isView = true;
-    console.log(item, "item");
-    console.log(this.idHopDong);
+    if (this.dataTable.length > 0) {
+      this.dataTable.forEach(i => i.selected = false);
+      item.selected = true;
+      this.idHopDong = cloneDeep(item.id);
+      this.isView = true;
+      console.log(item, "item");
+      console.log(this.idHopDong);
+    }
   }
   async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
