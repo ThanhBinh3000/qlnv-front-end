@@ -150,6 +150,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         noiDungDx: [''],
         trangThai: [STATUS.DU_THAO],
         maTongHop: [''],
+        idQdPd: [''],
+        soQdPd: [''],
         tongSoLuong: [0],
         thanhTien: [0],
         ngayGduyet: [''],
@@ -215,7 +217,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+      this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
   }
 
@@ -713,6 +715,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else {
       let result = await this.createUpdate(this.formData.value);
       if (result) {
+        this.idInput = result.id;
         await this.approve(this.idInput, STATUS.CHO_DUYET_TP, message);
       }
     }
@@ -723,6 +726,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
     let result = await this.createUpdate(this.formData.value);
     if (result) {
+      this.idInput = result.id;
       await this.approve(this.idInput, status, message, null, sucessMessage);
     }
   }

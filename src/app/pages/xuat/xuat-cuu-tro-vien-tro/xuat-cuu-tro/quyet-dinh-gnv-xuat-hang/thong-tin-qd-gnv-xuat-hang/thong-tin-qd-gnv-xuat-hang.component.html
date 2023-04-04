@@ -38,7 +38,8 @@
         <span>Ban Hành</span>
       </button> -->
       <!--    end cap truong phong-->
-      <button (click)="saveAndSend(STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Lưu và gửi duyệt thành công!')"
+      <button
+        (click)="saveAndSend(STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')"
         *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
         || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
         class="btn btn-sub" type="button">
