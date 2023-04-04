@@ -318,7 +318,9 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
+        }   else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       })
       this.modal.close(true);
     }
@@ -347,6 +349,8 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }   else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
       this.modal.close(true);
@@ -368,7 +372,7 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
-      body.dviReq = bodyDvi
+      body.dviReq = bodyDvi;
       body.tongkhoId = this.idReq;
       body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
@@ -376,32 +380,34 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }  else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
       this.modal.close(true);
     } else {
 
     }
-    this.spinner.hide()
+    this.spinner.hide();
   }
 
   saveKho(level?) {
     switch (level) {
       case 4: {
         this.saveNganLo();
-        break
+        break;
       }
       case 3 : {
         this.saveNganKho();
-        break
+        break;
       }
       case 2 : {
         this.saveNhaKho();
-        break
+        break;
       }
       case 1 : {
         this.saveDiemKho();
-        break
+        break;
       }
     }
   }
@@ -420,7 +426,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['tenNhakho'].setValidators([Validators.required])
         this.formKho.controls['loaikhoId'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
-        this.formKho.controls['chatLuongId'].setValidators([Validators.required])
+        this.formKho.controls['chatluongId'].setValidators([Validators.required])
         break;
       }
       case 3 : {
