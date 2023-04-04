@@ -100,11 +100,11 @@
 
                         <div nz-col nzSpan="4">
                             <nz-form-item class="form-item">
-                                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ xuất
-                                    hàng</nz-form-label>
+                                <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ giao nhiệm vụ xuất hàng
+                                </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                                        <input [readonly]="isView" nz-input formControlName="soQdGiaoNvXh" readonly />
+                                        <input nz-input formControlName="soQdGiaoNvXh" [readonly]="isView" />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -113,7 +113,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="ktvBaoQuan" readonly="isView" />
+                                    <input nz-input formControlName="ktvBaoQuan" readonly />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -145,7 +145,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Đơn vị kiểm nghiệm</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="dviKiemNghiem" readonly="isView" />
+                                    <input nz-input formControlName="dviKiemNghiem" [disabled]="isView" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -153,7 +153,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired>Địa điểm lấy mẫu</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="diaDiemLayMau" readonly="isView" />
+                                    <input nz-input formControlName="diaDiemLayMau" [disabled]="isView" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -299,7 +299,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                         <nz-input-number type="text" nz-input [nzSize]="'small'" formControlName="soLuongMau"
-                            nzDisabled="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                            [nzDisabled]="isView" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </nz-form-control>
@@ -311,7 +311,7 @@
                         Phương pháp lấy mẫu
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
-                        <nz-select formControlName="ppLayMau" nzDisabled="isView">
+                        <nz-select formControlName="ppLayMau" [nzDisabled]="isView">
                             <nz-option *ngFor="let item of phuongPhapLayMaus" [nzValue]="item.ma"
                                 [nzLabel]="item.giaTri">
                             </nz-option>
@@ -325,7 +325,7 @@
                         Các chỉ tiêu cần kiểm tra
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
-                        <input nz-input formControlName="chiTieuKiemTra" readonly="isView" />
+                        <input nz-input formControlName="chiTieuKiemTra" [readonly]="isView" />
                     </nz-form-control>
                 </nz-form-item>
             </div>
@@ -333,7 +333,8 @@
                 <nz-form-item>
                     <nz-form-label [nzNoColon]="true">
                     </nz-form-label>
-                    <label nz-checkbox formControlName="ketQuaNiemPhong" [(ngModel)]="checked">Đã niêm phong mẫu</label>
+                    <label nz-checkbox formControlName="ketQuaNiemPhong" [(ngModel)]="checked" [nzDisabled]="isView">Đã
+                        niêm phong mẫu</label>
                 </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
