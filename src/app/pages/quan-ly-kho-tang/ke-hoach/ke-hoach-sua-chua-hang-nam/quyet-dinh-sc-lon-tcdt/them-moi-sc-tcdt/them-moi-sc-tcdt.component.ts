@@ -89,6 +89,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       this.isTongHop = true;
       let detail = res.data;
       this.dataTable = detail.ktKhDxSuaChuaLonCtiets
+      this.dataTableTc = detail.ktKhDxSuaChuaLonCtiets
       this.spinner.hide()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -111,7 +112,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
-    body.chiTiets = this.dataTable
+    body.chiTiets = this.dataTableTc
     body.chiTietDms = []
     let data = await this.createUpdate(body)
     if (data) {
@@ -216,27 +217,31 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       sum = this.dataTable.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
-            prev += cur.tmdtDuKien;
+            prev += cur.giaTriTmdt;
             break;
           }
           case '2' : {
-            prev += cur.nstwDuKien;
+            prev += cur.giaTriPd;
             break;
           }
           case '3' : {
-            prev += cur.tongSoLuyKe;
+            prev += cur.luyKeKh;
             break;
           }
           case '4' : {
-            prev += cur.luyKeNstw;
+            prev += cur.luyKeDuToan;
             break;
           }
           case '5' : {
-            prev += cur.tmdtDuyet;
+            prev += cur.tinhHinh;
             break;
           }
           case '6' : {
-            prev += cur.nstwDuyet;
+            prev += cur.ncKhVon;
+            break;
+          }
+          case '7' : {
+            prev += cur.lastNcKhVon;
             break;
           }
         }
