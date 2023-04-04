@@ -269,9 +269,7 @@
                     <nz-form-item>
                       <nz-form-label>Tên chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
-                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                         formControlName="tenTongKho"></nz-input-number>
+                        <input formControlName="tenTongKho" nz-input [readonly]="true"/>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
