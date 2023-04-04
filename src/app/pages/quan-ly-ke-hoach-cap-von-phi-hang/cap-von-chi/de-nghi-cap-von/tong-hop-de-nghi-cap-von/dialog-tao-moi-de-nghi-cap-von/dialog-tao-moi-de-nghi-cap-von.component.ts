@@ -55,6 +55,11 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 				this.loaiDns = LOAI_DE_NGHI;
 			}
 		}
+		if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+			this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
+		} else {
+			this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_THOC);
+		}
 	}
 
 	//neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;

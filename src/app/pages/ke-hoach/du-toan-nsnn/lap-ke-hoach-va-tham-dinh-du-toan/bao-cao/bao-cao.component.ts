@@ -945,67 +945,41 @@ export class BaoCaoComponent implements OnInit {
                             }
                         })
                     }
-                    //phu luc 1
-                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01N');
-                    const data21 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01X');
-                    if (data2?.trangThai != '3' && data21?.trangThai != '3') {
-                        let obj1 = {
-                            stt: "",
-                            level: 0,
-                            tenNdung: "",
-                            thienNtruoc: 0,
-                            namDtoan: 0,
-                            namUocThien: 0,
-                            namKh: 0,
-                            giaTriThamDinh: 0,
-                        }
-                        let obj2 = {
-                            stt: "",
-                            level: 0,
-                            tenNdung: "",
-                            thienNtruoc: 0,
-                            namDtoan: 0,
-                            namUocThien: 0,
-                            namKh: 0,
-                            giaTriThamDinh: 0,
-                        }
-                        data21?.lstCtietLapThamDinhs?.forEach(itm => {
-                            const level = itm.stt.split('.').length - 2;
-                            if (level == 0) {
-                                obj1.stt = itm.stt;
-                                obj1.level = itm.level;
-                                obj1.thienNtruoc = itm.thienNamTruoc;
-                                obj1.namDtoan = itm.dtoanNamHtai;
-                                obj1.namUocThien = itm.uocNamHtai;
-                                obj1.namKh = itm.ttienNamDtoan;
-                                obj1.giaTriThamDinh = itm.ttienTd
-                            }
-
-                        })
-                        data2?.lstCtietLapThamDinhs?.forEach(item => {
+                    //phu luc 1 nhap
+                    const data2N = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01N');
+                    if (data2N?.trangThai != '3') {
+                        data2N.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
-                                obj2.stt = item.stt;
-                                obj2.level = item.level;
-                                obj2.tenNdung = item.tenDanhMuc;
-                                obj2.thienNtruoc = item.thienNamTruoc;
-                                obj2.namDtoan = item.dtoanNamHtai;
-                                obj2.namUocThien = item.uocNamHtai;
-                                obj2.namKh = item.ttienNamDtoan;
-                                obj2.giaTriThamDinh = item.ttienTd
+                                dataInfo.extraData.push({
+                                    stt: '0.1.1.2.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    tenNdung: item.tenDanhMuc,
+                                    thienNtruoc: item.thienNamTruoc,
+                                    namDtoan: item.dtoanNamHtai,
+                                    namUocThien: item.uocNamHtai,
+                                    namKh: item.ttienNamDtoan,
+                                    giaTriThamDinh: item.ttienTd,
+                                })
                             }
                         })
-                        if (obj2.level == 0 && obj1.level == 0) {
-                            dataInfo.extraData.push({
-                                stt: '0.1.1.2.' + obj2.stt.substring(obj2.stt.lastIndexOf('.') + 1, obj2.stt.length),
-                                tenNdung: obj2.tenNdung,
-                                thienNtruoc: obj2.thienNtruoc + obj1.thienNtruoc,
-                                namDtoan: obj2.namDtoan + obj1.namDtoan,
-                                namUocThien: obj2.namUocThien + obj1.namUocThien,
-                                namKh: obj2.namKh + obj1.namKh,
-                                giaTriThamDinh: obj2.giaTriThamDinh + obj1.giaTriThamDinh,
-                            })
-                        }
+                    }
+                    //phu luc 1 xuat
+                    const data2X = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01X');
+                    if (data2X?.trangThai != '3') {
+                        data2X.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                dataInfo.extraData.push({
+                                    stt: '0.1.1.3.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    tenNdung: item.tenDanhMuc,
+                                    thienNtruoc: item.thienNamTruoc,
+                                    namDtoan: item.dtoanNamHtai,
+                                    namUocThien: item.uocNamHtai,
+                                    namKh: item.ttienNamDtoan,
+                                    giaTriThamDinh: item.ttienTd,
+                                })
+                            }
+                        })
                     }
                     //phu luc 2
                     const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02');
@@ -1014,7 +988,7 @@ export class BaoCaoComponent implements OnInit {
                             const level = item.stt.split('.').length - 2;
                             if (level == 1) {
                                 dataInfo.extraData.push({
-                                    stt: '0.1.1.3.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    stt: '0.1.1.4.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
                                     tenNdung: item.tenDanhMuc,
                                     thienNtruoc: item.thNamTruoc,
                                     namDtoan: item.namDtoan,
