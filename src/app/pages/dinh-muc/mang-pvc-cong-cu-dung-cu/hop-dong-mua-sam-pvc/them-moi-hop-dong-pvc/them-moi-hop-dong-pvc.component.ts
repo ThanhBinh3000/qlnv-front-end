@@ -284,6 +284,10 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
       this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = new MmHopDongCt();
       this.updateEditCache();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không tìm thấy thông tin phân bổ.");
+      this.spinner.hide();
+      return;
     }
   }
 
@@ -431,17 +435,18 @@ export class ThemMoiHopDongPvcComponent extends Base2Component implements OnInit
         }
         this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item.maCcdc))
         this.buildDiaDiemTc()
+        return  check;
       } else {
         if (!this.listDiaDiem) {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
           check = false
-          return;
+          return  check;
         }
       }
     } else {
       check = false
       this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
-      return;
+      return  check;
     }
     return check;
   }
