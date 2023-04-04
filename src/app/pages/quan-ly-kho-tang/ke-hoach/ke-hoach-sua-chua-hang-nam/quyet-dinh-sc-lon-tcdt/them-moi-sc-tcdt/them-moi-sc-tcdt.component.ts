@@ -89,6 +89,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       this.isTongHop = true;
       let detail = res.data;
       this.dataTable = detail.ktKhDxSuaChuaLonCtiets
+      this.dataTableTc = detail.ktKhDxSuaChuaLonCtiets
       this.spinner.hide()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -111,7 +112,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
-    body.chiTiets = this.dataTable
+    body.chiTiets = this.dataTableTc
     body.chiTietDms = []
     let data = await this.createUpdate(body)
     if (data) {
@@ -183,8 +184,14 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
         trangThai = STATUS.CHO_DUYET_LDV;
         break;
       }
+      case STATUS.TU_CHOI_LDTC :
       case STATUS.CHO_DUYET_LDV : {
-        trangThai = STATUS.DA_DUYET_LDV
+        trangThai = STATUS.CHO_DUYET_LDTC
+        break;
+      }
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.DA_DUYET_LDTC
+        break;
       }
     }
     await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
@@ -210,27 +217,31 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       sum = this.dataTable.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
-            prev += cur.tmdtDuKien;
+            prev += cur.giaTriTmdt;
             break;
           }
           case '2' : {
-            prev += cur.nstwDuKien;
+            prev += cur.giaTriPd;
             break;
           }
           case '3' : {
-            prev += cur.tongSoLuyKe;
+            prev += cur.luyKeKh;
             break;
           }
           case '4' : {
-            prev += cur.luyKeNstw;
+            prev += cur.luyKeDuToan;
             break;
           }
           case '5' : {
-            prev += cur.tmdtDuyet;
+            prev += cur.tinhHinh;
             break;
           }
           case '6' : {
-            prev += cur.nstwDuyet;
+            prev += cur.ncKhVon;
+            break;
+          }
+          case '7' : {
+            prev += cur.lastNcKhVon;
             break;
           }
         }
@@ -247,5 +258,28 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     } else {
       this.expandSet.delete(id);
     }
+  }
+
+  editRow(idx: number) {
+
+  }
+
+  deleteItem(index: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTableTc.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 }

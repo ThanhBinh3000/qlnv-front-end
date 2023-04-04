@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH && !isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -490,7 +490,7 @@
               <th style="width: 2%">STT</th>
               <th style="width: 40%">Tên chi cục</th>
               <th style="width: 40%">Địa chỉ</th>
-              <th style="width: 10%">Số lượng</th>
+              <th style="width: 10%">Số lượng (Kg)</th>
             </tr>
           </thead>
           <tbody>

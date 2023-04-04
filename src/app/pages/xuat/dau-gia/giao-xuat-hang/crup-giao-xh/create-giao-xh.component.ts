@@ -1,26 +1,26 @@
-import {Component, Input, OnInit,} from '@angular/core';
-import {FormGroup, Validators} from '@angular/forms';
+import { Component, Input, OnInit, } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {STATUS} from 'src/app/constants/status';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QuyetDinhGiaoNvXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import {DANH_MUC_LEVEL} from "src/app/pages/luu-kho/luu-kho.constant";
-import {DonviService} from "src/app/services/donvi.service";
+import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
+import { DonviService } from "src/app/services/donvi.service";
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -143,10 +143,10 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.spinner.show();
     let dsQdPd = []
     let re = await this.hopDongXuatHangService.search({
-        trangThai: STATUS.DA_KY,
-        maDvi: this.formData.value.maDvi,
-        nam: this.formData.value.nam
-      }
+      trangThai: STATUS.DA_KY,
+      maDvi: this.formData.value.maDvi,
+      nam: this.formData.value.nam
+    }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -281,24 +281,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     return false;
   }
 
-  getNameFileQD($event: any) {
-    if ($event.target.files) {
-      const itemFile = {
-        name: $event.target.files[0].name,
-        file: $event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          let fileDinhKemQd = new FileDinhKem();
-          fileDinhKemQd.fileName = resUpload.filename;
-          fileDinhKemQd.fileSize = resUpload.size;
-          fileDinhKemQd.fileUrl = resUpload.url;
-          fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({fileDinhKem: fileDinhKemQd, fileName: itemFile.name})
-        });
-    }
-  }
 
   async loadDiemKho() {
     const body = {
@@ -391,6 +373,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
 
   async saveRow(index, index1) {
     let currentData = this.dataTable[index].children[index1];
-    Object.assign(currentData, this.formDataRow.value, {isEdit: false})
+    Object.assign(currentData, this.formDataRow.value, { isEdit: false })
   }
 }

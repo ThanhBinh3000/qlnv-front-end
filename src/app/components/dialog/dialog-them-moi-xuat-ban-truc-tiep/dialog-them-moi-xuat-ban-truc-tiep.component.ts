@@ -179,12 +179,14 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
     const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
-      this.formData.patchValue({
-        tenDvi: res.data.tenDvi,
-        diaChi: res.data.diaChi,
-        soLuongKh: soLuongDaLenKh.data,
-        soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
-      })
+      if (chiCuc.soLuongXuat) {
+        this.formData.patchValue({
+          tenDvi: res.data.tenDvi,
+          diaChi: res.data.diaChi,
+          soLuongKh: soLuongDaLenKh.data,
+          soLuongChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
+        })
+      }
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     }

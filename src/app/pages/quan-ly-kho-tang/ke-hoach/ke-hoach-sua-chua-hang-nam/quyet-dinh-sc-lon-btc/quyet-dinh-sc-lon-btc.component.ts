@@ -8,9 +8,10 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../constants/message";
-import {DonviService} from "../../../../../services/donvi.service";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-btc',
@@ -19,50 +20,39 @@ import {DonviService} from "../../../../../services/donvi.service";
 })
 export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit {
   isViewDetail : boolean;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+  ];
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : KtKhXdHangNamService,
-    private dviService : DonviService
+    private qdScBtcService : KtKhSuaChuaBtcService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi : [null],
-      soCongVan : [null],
-      tenCongTrinh : [null],
-      diaDiem : [null],
+      soQd : [null],
       trichYeu : [null],
       ngayKy : [null],
-      namBatDau : [null],
-      namKetThuc : [null],
-      role : [null],
+      ngayKyTu : [null],
+      ngayKyDen : [null],
+      namKeHoach : [null],
+      trangThai : [null],
     });
-    this.filterTable = {
-      soCongVan: '',
-      ngayKy: '',
-      namKeHoach: '',
-      tmdt: '',
-      trichYeu: '',
-      soQdTrunghan: '',
-      tenTrangThai: '',
-    };
+    this.filterTable = {};
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.formData.patchValue({
-        role : this.userService.isCuc() ? 'CUC': 'TC',
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
-      })
       await Promise.all([
-        this.search()
+        this.filter()
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -72,16 +62,23 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
     }
   }
 
-  initForm() {
-    this.formData.patchValue({
-      role : this.userService.isCuc() ? 'CUC' : 'TC'
-    })
-  }
-
   redirectToChiTiet(id: number, isView?: boolean) {
     this.idSelected = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
+  }
+
+  async filter() {
+    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
+      this.formData.patchValue({
+        ngayKyTu : this.formData.value.ngayKy[0],
+        ngayKyDen : this.formData.value.ngayKy[1]
+      })
+    }
+    this.formData.patchValue({
+      maDvi :  this.userInfo.MA_DVI
+    })
+    await this.search();
   }
 
 

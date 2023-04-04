@@ -15,12 +15,10 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { chain } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
-import { async } from '@angular/core/testing';
-import { E } from '@angular/cdk/keycodes';
 import { STATUS } from 'src/app/constants/status';
 
 @Component({
@@ -123,24 +121,23 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   async ngOnInit() {
-    console.log(this.id);
     this.maHopDongSuffix = `/${this.formData.value.nam}/HĐMB`;
     await Promise.all([
       this.loadDataComboBox(),
       this.loadDsHd()
     ]);
-    if (this.idKqBdg) {
-      this.onChangeKqBdg(this.idKqBdg);
-    }
+
     if (this.id) {
       await this.loadChiTiet(this.id);
     } else {
       this.initForm();
     }
+    if (this.idKqBdg) {
+      await this.onChangeKqBdg(this.idKqBdg);
+    }
   }
 
   initForm() {
-    console.log(this.userInfo, 5);
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null,
@@ -161,19 +158,14 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   async loadChiTiet(id) {
     let data = await this.detail(id);
     this.formData.patchValue({
-      soHd: data.soHd.split('/')[0]
+      soHd: data.soHd.split('/')[0],
     })
-    console.log(data);
-    this.dataTable = data.children;
+    this.dataTable = cloneDeep(data.children);
     this.dataTable.forEach(e =>
       e.tenChiCuc = e.tenDvi,
     )
-    this.formData.patchValue({
-      listMaDviTsan: this.formData.value.maDviTsan.split(","),
-    })
     this.dataTablePhuLuc = data.phuLuc;
     this.objHopDongHdr = data;
-    console.log(this.objHopDongHdr, "hopDongXuatHangService");
   }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
@@ -205,7 +197,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       return;
     }
     let body = this.formData.value;
-    console.log(body.listMaDviTsan, 55);
     body.maDviTsan = body.listMaDviTsan.join(',');
     body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
     body.children = this.dataTable;
@@ -316,7 +307,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.listHdDaKy, "this.listHdDaKy");
   }
   setListDviTsan(inputTable) {
     this.listDviTsan = [];
@@ -340,11 +330,16 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         }
       })
     })
-    this.listDviTsan = this.listDviTsan.filter(dviTsan => {
-      const dviTsanId = dviTsan.maDviTsan.toString();
-      const hdDviTsans = this.listHdDaKy.flatMap(hd => hd.maDviTsan.split(","));
-      return !hdDviTsans.includes(dviTsanId);
-    });
+    console.log(this.objHopDongHdr, 999);
+    if (this.formData.value.maDviTsan?.length > 0) {
+      this.listDviTsan = this.formData.value.listMaDviTsan;
+    } else {
+      this.listDviTsan = this.listDviTsan.filter(dviTsan => {
+        const dviTsanId = dviTsan.maDviTsan.toString();
+        const hdDviTsans = this.listHdDaKy.flatMap(hd => hd.maDviTsan.split(","));
+        return !hdDviTsans.includes(dviTsanId);
+      });
+    }
   }
 
   taiLieuDinhKem(type?: string) {
@@ -406,6 +401,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   selectMaDviTsan() {
+    console.log(this.listDviTsan, 456);
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
       let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
       listAll.forEach(s => {
