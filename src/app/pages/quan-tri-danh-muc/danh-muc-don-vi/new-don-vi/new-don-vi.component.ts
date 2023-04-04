@@ -50,7 +50,7 @@ export class NewDonViComponent implements OnInit {
       sdt: [''],
       fax: [''],
       trangThai: [true],
-      type: [true],
+      type: [null],
       ghiChu: [''],
       vungMien: [''],
     })
@@ -91,7 +91,7 @@ export class NewDonViComponent implements OnInit {
     }
     let body = this.formDonVi.value;
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
+    body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
     body.maDvi = body.maDviCha + body.maDvi
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
