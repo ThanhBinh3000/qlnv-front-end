@@ -24,6 +24,8 @@ import {
 } from "../../../components/dialog/dialog-them-moi-so-du-dau-ky/dialog-them-moi-so-du-dau-ky.component";
 import {Tcdtnn} from "../../../models/Tcdtnn";
 import {DialogKtGiaoKhoComponent} from "../../../components/dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component";
+import {NzFormatEmitEvent, NzTreeService} from "ng-zorro-antd/tree";
+import {NzTreeBaseService, NzTreeNodeOptions} from "ng-zorro-antd/core/tree";
 
 
 @Component({
@@ -616,8 +618,9 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   create() {
+    var nodesTree = this.nodes;
     let modal = this._modalService.create({
-      nzTitle: 'THÊM MỚI TỔ CHỨC KHO',
+      nzTitle: 'Thêm mới tổ chức kho',
       nzContent: ThemMoiKhoComponent,
       nzClosable: true,
       nzFooter: null,
@@ -747,6 +750,43 @@ export class MangLuoiKhoComponent implements OnInit {
     modalQD.afterClose.subscribe((data) => {
       if (data) {
       }
+    });
+  }
+
+  async loadChildren(event: NzFormatEmitEvent) {
+    this.spinner.show()
+    let data = event.node.origin
+    let body = {
+      maDvi: data.maDvi,
+      type: this.listType
+    }
+    if (event.keys.length > 0) {
+      await this.donviService.getAllChildrenByMadvi(body).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res && res.data && res.data.length > 0) {
+            let children = res.data
+            this.loadNode(children).then(children => {
+              event.node.children = [];
+              event.node.addChildren(children);
+            });
+          }
+          this.spinner.hide()
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
+          this.spinner.hide()
+          return;
+        }
+      })
+    }
+    this.spinner.hide()
+  }
+
+  loadNode(data): Promise<NzTreeNodeOptions[]> {
+    return new Promise(resolve => {
+      setTimeout(
+        () =>
+          resolve(data)
+      );
     });
   }
 }

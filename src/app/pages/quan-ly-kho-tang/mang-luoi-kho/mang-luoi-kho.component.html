@@ -17,7 +17,7 @@
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-tree #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+        <nz-tree #nzTreeComponent nzAsyncData  [nzData]="nodes" (nzClick)="nzClickNodeTree($event)" (nzExpandChange)="loadChildren($event)"
                  (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
         </nz-tree>
       </nz-card>
