@@ -29,7 +29,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   maTrinh: String;
   listOfData: any[] = [];
   showFromTT: boolean;
-  radioValue: string;
+  @Input() isViewOnModal: boolean;
 
   constructor(
     private httpClient: HttpClient,
@@ -136,11 +136,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.BAN_HANH;
         msg = MESSAGE.PHE_DUYET_CONFIRM
         break;
@@ -186,6 +181,8 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       maDvi: this.userInfo.MA_DVI,
+      pthucBanTrucTiep: 'Chào giá',
+      typeSoQdKq: 0,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -234,7 +231,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         idPdKhDtl: data.id,
         idPdKhHdr: data.xhQdPdKhBttHdr.id
       })
-      this.radioValue = data.pthucBanTrucTiep;
       this.dataTable = data.children;
       if (this.dataTable) {
         this.dataTable.forEach((item) => {
@@ -299,7 +295,6 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     $event.target.parentElement.classList.add('selectedRow');
     this.listOfData = item.children;
     this.showFromTT = true;
-    this.radioValue = 'Chào giá'
   }
 
 }

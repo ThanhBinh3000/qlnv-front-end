@@ -41,7 +41,7 @@
                     [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KH BÁN TRỰC TIẾP </span>
+                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN TRỰC TIẾP </span>
             </div>
         </div>
     </div>
@@ -223,8 +223,8 @@
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.trichYeu }}</td>
                             <td>{{ data.tenDuAn }}</td>
-                            <td>{{ data.tongSoLuong * 1000 | number: '1.0-1' }}</td>
-                            <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
+                            <td>{{ data.tongSoLuong * data.donGiaVat | number: '1.0-1' }}</td>
                         </tr>
                     </tbody>
                 </nz-table>
