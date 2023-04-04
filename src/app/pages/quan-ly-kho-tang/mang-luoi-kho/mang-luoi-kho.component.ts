@@ -42,11 +42,11 @@ export class MangLuoiKhoComponent implements OnInit {
     maDonVi: ''
   };
 
-  loaiHangHoa : any = {
-    "thoc" : false,
-    "gao" : false,
-    "muoi" : false,
-    "vattu" : false,
+  loaiHangHoa: any = {
+    "thoc": false,
+    "gao": false,
+    "muoi": false,
+    "vattu": false,
   }
 
   detailTcdtnn: Tcdtnn = new Tcdtnn();
@@ -145,7 +145,7 @@ export class MangLuoiKhoComponent implements OnInit {
       ngayNhapDay: [''],
       sdt: [''],
       idParent: [''],
-      isKhoiTao : [null]
+      isKhoiTao: [null]
     })
   }
 
@@ -246,24 +246,24 @@ export class MangLuoiKhoComponent implements OnInit {
         let rs = chain(value)
           .groupBy("tenNhaKho")
           .map((v, k) => {
-            let rs1 = chain(v)
-              .groupBy("tenNganKho")
-              .map((v1,k1) => {
-                let rs2 = chain(v1)
-                  .groupBy("tenNganLo")
-                  .map((v2,k2) => {
-                    return {
-                      idVirtual: uuid.v4(),
-                      tenDviCha: k2,
-                      childData: v2
-                    }
-                  }).value()
-                    return {
-                  idVirtual: uuid.v4(),
-                  tenDviCha: k1,
-                  childData: rs2
-                }
-              }).value()
+              let rs1 = chain(v)
+                .groupBy("tenNganKho")
+                .map((v1, k1) => {
+                  let rs2 = chain(v1)
+                    .groupBy("tenNganLo")
+                    .map((v2, k2) => {
+                      return {
+                        idVirtual: uuid.v4(),
+                        tenDviCha: k2,
+                        childData: v2
+                      }
+                    }).value()
+                  return {
+                    idVirtual: uuid.v4(),
+                    tenDviCha: k1,
+                    childData: rs2
+                  }
+                }).value()
               return {
                 idVirtual: uuid.v4(),
                 tenDviCha: k,
@@ -331,8 +331,8 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
-  updateCheckboxHh(listHh : any[]) {
-    if(listHh && listHh.length > 0 ) {
+  updateCheckboxHh(listHh: any[]) {
+    if (listHh && listHh.length > 0) {
       listHh.forEach(item => {
         if (item == "0101") {
           this.loaiHangHoa.thoc = true;
@@ -365,7 +365,7 @@ export class MangLuoiKhoComponent implements OnInit {
         maDvi: dataNode.origin.key,
         capDvi: this.nodeSelected.capDvi
       }
-      await this.mangLuoiKhoService.getDetailByMa(body).then( (res: OldResponseData) => {
+      await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.detailDonVi.reset();
           const dataNodeRes = res.data.object;
@@ -385,17 +385,17 @@ export class MangLuoiKhoComponent implements OnInit {
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
         // maCha:dataNode && dataNode.id ? dataNode.id : null,
-        tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt : 0 ,
-        dienTichDat: dataNode.dienTichDat ?  dataNode.dienTichDat : 0 ,
+        tichLuongTkLt: dataNode.tichLuongTkLt ? dataNode.tichLuongTkLt : 0,
+        dienTichDat: dataNode.dienTichDat ? dataNode.dienTichDat : 0,
         tichLuongTkVt: dataNode.tichLuongTkVt ? dataNode.tichLuongTkVt : 0,
         theTichTkLt: dataNode.theTichTkLt ? dataNode.theTichTkLt : 0,
-        theTichTkVt: dataNode.theTichTkVt ? dataNode.theTichTkVt  :0,
-        tichLuongKdLt: dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt  :0 ,
-        tichLuongKdVt: dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt  :0,
-        tichLuongSdLt:  (dataNode.tichLuongTkLt- dataNode.tichLuongKdLt) > 0 ? dataNode.tichLuongTkLt- dataNode.tichLuongKdLt : 0,
+        theTichTkVt: dataNode.theTichTkVt ? dataNode.theTichTkVt : 0,
+        tichLuongKdLt: dataNode.tichLuongKdLt ? dataNode.tichLuongKdLt : 0,
+        tichLuongKdVt: dataNode.tichLuongKdVt ? dataNode.tichLuongKdVt : 0,
+        tichLuongSdLt: (dataNode.tichLuongTkLt - dataNode.tichLuongKdLt) > 0 ? dataNode.tichLuongTkLt - dataNode.tichLuongKdLt : 0,
         tichLuongSdVt: (dataNode.tichLuongTkVt - dataNode.tichLuongKdVt) ? dataNode.tichLuongTkVt - dataNode.tichLuongKdVt : 0,
-        theTichSdLt: ( dataNode.theTichTkLt - dataNode.theTichKdLt) > 0 ? (dataNode.theTichTkLt - dataNode.theTichKdLt) : 0,
-        theTichSdVt: (dataNode.theTichTkVt - dataNode.theTichKdVt) > 0 ? (dataNode.theTichTkVt - dataNode.theTichKdVt ) : 0,
+        theTichSdLt: (dataNode.theTichTkLt - dataNode.theTichKdLt) > 0 ? (dataNode.theTichTkLt - dataNode.theTichKdLt) : 0,
+        theTichSdVt: (dataNode.theTichTkVt - dataNode.theTichKdVt) > 0 ? (dataNode.theTichTkVt - dataNode.theTichKdVt) : 0,
         theTichKdLt: dataNode.theTichKdLt ? dataNode.theTichKdLt : 0,
         theTichKdVt: dataNode.theTichKdVt ? dataNode.theTichKdVt : 0,
         ghiChu: dataNode.ghiChu ? dataNode.ghiChu : null,
@@ -413,20 +413,20 @@ export class MangLuoiKhoComponent implements OnInit {
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
-          ngankhoId : dataNode.idParent,
-          tenNgankho : dataNode.tenNgankho,
-          tenNhakho : dataNode.tenNhakho,
-          tenDiemkho : dataNode.tenDiemkho,
-          tenTongKho : dataNode.tenTongKho,
+          ngankhoId: dataNode.idParent,
+          tenNgankho: dataNode.tenNgankho,
+          tenNhakho: dataNode.tenNhakho,
+          tenDiemkho: dataNode.tenDiemkho,
+          tenTongKho: dataNode.tenTongKho,
         })
       }
       if (this.levelNode == 6) {
         this.detailDonVi.patchValue({
-          nhakhoId : dataNode.idParent,
-          tenNhakho : dataNode.tenNhakho,
-          tenDiemkho : dataNode.tenDiemkho,
-          tenTongKho : dataNode.tenTongKho,
-          soLokho : dataNode.soLokho,
+          nhakhoId: dataNode.idParent,
+          tenNhakho: dataNode.tenNhakho,
+          tenDiemkho: dataNode.tenDiemkho,
+          tenTongKho: dataNode.tenTongKho,
+          soLokho: dataNode.soLokho,
         })
       }
       if (this.levelNode == 5) {
@@ -434,12 +434,12 @@ export class MangLuoiKhoComponent implements OnInit {
         this.dataTableHhCtiet = dataNode.ctietHhTrongKho
         this.convertDataToTree()
         this.detailDonVi.patchValue({
-          diemkhoId : dataNode.idParent,
-          tenThuKho : dataNode.tenThuKho,
-          tenDiemkho : dataNode.tenDiemkho,
-          tenTongKho : dataNode.tenTongKho,
-          soNgankho : dataNode.soNgankho,
-          soLokho : dataNode.soLokho,
+          diemkhoId: dataNode.idParent,
+          tenThuKho: dataNode.tenThuKho,
+          tenDiemkho: dataNode.tenDiemkho,
+          tenTongKho: dataNode.tenTongKho,
+          soNgankho: dataNode.soNgankho,
+          soLokho: dataNode.soLokho,
         })
       }
       if (this.levelNode == 4) {
@@ -447,12 +447,12 @@ export class MangLuoiKhoComponent implements OnInit {
         this.dataTableHhCtiet = dataNode.ctietHhTrongKho
         this.convertDataToTree()
         this.detailDonVi.patchValue({
-          tongkhoId : dataNode.idParent,
-          tenTongKho : dataNode.tenTongKho,
-          soNhakho : dataNode.soNhakho,
-          soNgankho : dataNode.soNgankho,
-          soLokho : dataNode.soLokho,
-          tenThuKho : dataNode.tenThuKho
+          tongkhoId: dataNode.idParent,
+          tenTongKho: dataNode.tenTongKho,
+          soNhakho: dataNode.soNhakho,
+          soNgankho: dataNode.soNgankho,
+          soLokho: dataNode.soLokho,
+          tenThuKho: dataNode.tenThuKho
         })
       }
       if (this.levelNode == 3) {
@@ -460,11 +460,11 @@ export class MangLuoiKhoComponent implements OnInit {
         this.dataTableHhCtiet = dataNode.ctietHhTrongKho
         this.convertDataToTree()
         this.detailDonVi.patchValue({
-          tongkhoId : dataNode.idParent,
+          tongkhoId: dataNode.idParent,
           soDiemkho: dataNode.soDiemkho,
-          soNhakho : dataNode.soNhakho,
-          soNgankho : dataNode.soNgankho,
-          soLokho : dataNode.soLokho,
+          soNhakho: dataNode.soNhakho,
+          soNgankho: dataNode.soNgankho,
+          soLokho: dataNode.soLokho,
         })
       }
       if (this.levelNode == 2) {
@@ -472,17 +472,17 @@ export class MangLuoiKhoComponent implements OnInit {
         this.dataTableHhCtiet = dataNode.ctietHhTrongKho
         this.convertDataToTree()
         this.detailDonVi.patchValue({
-          soChiCuc : dataNode.soChiCuc,
-          soDiemkho : dataNode.soDiemkho,
-          soNhakho : dataNode.soNhakho,
-          soNgankho : dataNode.soNgankho,
-          soLokho : dataNode.soLokho,
+          soChiCuc: dataNode.soChiCuc,
+          soDiemkho: dataNode.soDiemkho,
+          soNhakho: dataNode.soNhakho,
+          soNgankho: dataNode.soNgankho,
+          soLokho: dataNode.soLokho,
         })
       }
       this.checkLoKho = dataNode.coLoKho == '01' ? true : false;
       this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhkems : null
     }
-    if (this.levelNode == 1 ) {
+    if (this.levelNode == 1) {
       this.detailTcdtnn.soCuc = dataNode.soCuc ? dataNode.soCuc : 0;
       this.detailTcdtnn.soChiCuc = dataNode.soChiCuc;
       this.detailTcdtnn.soDiemKho = dataNode.soDiemKho;
@@ -490,9 +490,9 @@ export class MangLuoiKhoComponent implements OnInit {
       this.detailTcdtnn.soNhaKho = dataNode.soNhaKho;
       this.detailTcdtnn.tichLuongTk = dataNode.tichLuongTk;
       this.detailTcdtnn.tichLuongKd = dataNode.tichLuongKd;
-      this.detailTcdtnn.tichLuongSd = (dataNode.tichLuongTk - dataNode.tichLuongKd ) > 0 ? (dataNode.tichLuongTk - dataNode.tichLuongKd ) : 0
-      this.detailTcdtnn.diaChi =  dataNode.diaChi;
-      this.detailTcdtnn.sdt =  dataNode.sdt;
+      this.detailTcdtnn.tichLuongSd = (dataNode.tichLuongTk - dataNode.tichLuongKd) > 0 ? (dataNode.tichLuongTk - dataNode.tichLuongKd) : 0
+      this.detailTcdtnn.diaChi = dataNode.diaChi;
+      this.detailTcdtnn.sdt = dataNode.sdt;
     }
   }
 
@@ -536,7 +536,7 @@ export class MangLuoiKhoComponent implements OnInit {
     this.isEditData = editData
   }
 
-   update() {
+  update() {
     this.helperService.markFormGroupTouched(this.detailDonVi);
     if (this.detailDonVi.invalid) {
       return;
@@ -550,7 +550,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk:async () => {
+      nzOnOk: async () => {
         this.spinner.show()
         let body = {
           ...this.detailDonVi.value,
@@ -559,7 +559,7 @@ export class MangLuoiKhoComponent implements OnInit {
         };
         let type;
         if (this.levelNode == 4) {
-            type = 'diem-kho';
+          type = 'diem-kho';
         }
         if (this.levelNode == 5) {
           type = 'nha-kho';
@@ -589,8 +589,6 @@ export class MangLuoiKhoComponent implements OnInit {
       }
     });
   }
-
-
 
 
   delete() {
@@ -736,16 +734,14 @@ export class MangLuoiKhoComponent implements OnInit {
 
   openDialogGiaoKho() {
     const modalQD = this.modals.create({
-      nzTitle: '' ,
+      nzTitle: '',
       nzContent: DialogKtGiaoKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1500px',
       nzFooter: null,
       nzStyle: {top: '100px'},
-      nzComponentParams: {
-
-      },
+      nzComponentParams: {},
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
