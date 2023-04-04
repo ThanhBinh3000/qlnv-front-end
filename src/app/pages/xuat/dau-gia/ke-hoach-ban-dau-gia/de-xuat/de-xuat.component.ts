@@ -44,7 +44,7 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      namKh: [],
       soDxuat: [],
       loaiVthh: [],
       trichYeu: [],

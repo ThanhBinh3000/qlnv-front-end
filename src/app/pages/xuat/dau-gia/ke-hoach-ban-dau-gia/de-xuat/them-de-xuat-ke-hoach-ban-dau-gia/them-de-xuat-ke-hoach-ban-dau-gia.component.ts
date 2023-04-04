@@ -340,8 +340,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       tongSoLuong: tongSoLuong,
       tongTienKdiem: tongTienKdiem,
       tongTienKdienDonGia: tongTienKdienDonGia,
-      tongTienDatTruoc: tongTienKdiem + (tongTienKdiem * this.formData.value.khoanTienDatTruoc / 100),
-      tongTienDatTruocDonGia: tongTienKdienDonGia + (tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100),
+      tongTienDatTruoc: tongTienKdiem * this.formData.value.khoanTienDatTruoc / 100,
+      tongTienDatTruocDonGia: tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100,
       tongDonGia: tongDonGia,
     });
   }
@@ -522,7 +522,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+      // this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
       this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
       // this.formData.controls["tgianDkienTu"].setValidators([Validators.required]);
       // this.formData.controls["tgianDkienDen"].setValidators([Validators.required]);
@@ -543,7 +543,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       this.formData.controls["soQdCtieu"].clearValidators();
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
-      this.formData.controls["moTaHangHoa"].clearValidators();
+      // this.formData.controls["moTaHangHoa"].clearValidators();
       this.formData.controls["thoiGianDuKien"].clearValidators();
       // this.formData.controls["tgianDkienTu"].clearValidators();
       // this.formData.controls["tgianDkienDen"].clearValidators();
