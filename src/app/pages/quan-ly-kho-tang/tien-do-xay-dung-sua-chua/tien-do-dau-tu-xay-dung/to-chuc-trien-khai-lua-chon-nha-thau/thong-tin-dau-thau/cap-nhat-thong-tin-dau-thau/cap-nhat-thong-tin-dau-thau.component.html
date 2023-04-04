@@ -113,7 +113,7 @@
       </div>
       <div class="buttons">
         <button
-          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT_THEM')"
           class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
