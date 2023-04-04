@@ -275,8 +275,8 @@
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                 !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
-                !vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)&&
-                !vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) &&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')) &&
                 userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XEM')">
               <i class="fa fa-eye"></i>
             </a>
