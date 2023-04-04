@@ -261,6 +261,10 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
       this.dataTable = [...this.dataTable, this.rowItem];
       this.rowItem = new MmHopDongCt();
       this.updateEditCache();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không tìm thấy thông tin phân bổ của hàng hóa! ");
+      this.spinner.hide();
+      return;
     }
   }
 
@@ -409,17 +413,18 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         }
         this.listDiaDiem = res.data.filter(item => tableHangHoa.includes(item.maTaiSan))
         this.buildDiaDiemTc()
+        return check
       } else {
         if (!this.listDiaDiem) {
           check= false
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
-          return;
+          return check;
         }
       }
     } else {
       check= false
       this.notification.error(MESSAGE.ERROR, 'Vui lòng phân bổ hàng hóa trước!!!!')
-      return;
+      return check;
     }
   }
 
