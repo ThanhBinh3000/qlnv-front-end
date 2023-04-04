@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+    <button *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
             type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat(idInput)">
       <i class="icon htvbdh_checkfile2"></i>
       <span>Hoàn thành cập nhật</span>
@@ -113,7 +113,7 @@
       </div>
       <div class="buttons">
         <button
-          *ngIf="idGoiThau > 0 && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
+          *ngIf="idGoiThau > 0 && formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT  && !isViewDetail"
           class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -184,8 +184,7 @@
           <th>Số điện thoại</th>
           <th>Giá dự thầu</th>
           <th>Trạng thái</th>
-          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT"
-              width="30px">Hành động
+          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail" width="30px">Hành động
           </th>
         </tr>
         <tr
@@ -209,7 +208,7 @@
               </nz-option>
             </nz-select>
           </th>
-          <th>
+          <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail">
             <a disabled="isView" (click)="isViewDetail ? '' : addRow()"
                [class.disabled]="(!rowItemNtNopHs.tenNhaThau && !rowItemNtNopHs.maSoThue && !rowItemNtNopHs.diaChi && !rowItemNtNopHs.soDienThoai &&  !rowItemNtNopHs.giaDuThau)">
               <i class="fa fa-plus"></i>
@@ -232,7 +231,7 @@
             <td>{{ data.giaDuThau | number : '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td
-              *ngIf="formData.value.trangThaDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail"
+              *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail"
               class="text-center">
               <a (click)="editDataNhaThauGuiHs(i)">
                 <i class=" fa fa-pencil"></i>
@@ -270,7 +269,7 @@
                 </nz-option>
               </nz-select>
             </td>
-            <td class="text-center">
+            <td class="text-center" >
               <a (click)="saveEditNhaThauNopHs(i)" class="save">
                 <i class="fa fa-save"></i>
               </a>
