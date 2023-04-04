@@ -259,4 +259,27 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
       this.expandSet.delete(id);
     }
   }
+
+  editRow(idx: number) {
+
+  }
+
+  deleteItem(index: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTableTc.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
 }
