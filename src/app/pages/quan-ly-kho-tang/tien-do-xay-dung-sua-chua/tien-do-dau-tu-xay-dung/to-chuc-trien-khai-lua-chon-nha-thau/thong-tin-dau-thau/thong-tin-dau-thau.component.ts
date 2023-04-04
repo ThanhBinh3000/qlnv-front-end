@@ -44,7 +44,7 @@ export class ThongTinDauThauComponent extends Base2Component implements OnInit {
       tenDuAn: [''],
       chuDauTu: [''],
       soQdPdDaDtxd: [''],
-      trangThai: [''],
+      trangThai: [STATUS.BAN_HANH],
       ngayKy: [''],
       trichYeu: [''],
     });
