@@ -303,7 +303,6 @@ export class ThemMoiQdMuaSamPvcComponent extends Base2Component implements OnIni
               item.id = null;
               item.tieuChuan = item.slTieuChuanTc
               item.donGiaTd = item.donGia
-              item.maDvi = res.data.maDvi
             })
             this.convertListData()
             this.expandAll();
