@@ -126,13 +126,14 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       this.loadDataComboBox(),
       this.loadDsHd()
     ]);
-    if (this.idKqBdg) {
-      await this.onChangeKqBdg(this.idKqBdg);
-    }
+
     if (this.id) {
       await this.loadChiTiet(this.id);
     } else {
       this.initForm();
+    }
+    if (this.idKqBdg) {
+      await this.onChangeKqBdg(this.idKqBdg);
     }
   }
 
@@ -330,7 +331,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       })
     })
     console.log(this.objHopDongHdr, 999);
-    if (this.formData.value.maDviTsan.length > 0) {
+    if (this.formData.value.maDviTsan?.length > 0) {
       this.listDviTsan = this.formData.value.listMaDviTsan;
     } else {
       this.listDviTsan = this.listDviTsan.filter(dviTsan => {
@@ -410,7 +411,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
           }
         });
       });
-      console.log("cmm");
       this.buildTableView();
     }
   }
