@@ -228,19 +228,8 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async pheDuyet() {
-    let trangThai;
-    switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.DA_DUYET_LDTC
-      }
-    }
-    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
+  async daKy() {
+    await this.approve(this.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')
   }
 
   async themMoiCtiet() {
@@ -393,7 +382,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
     }
   }
 
-  async loadDsHangHoa(soQdMs: string, tableHangHoa: any[]) : Promise<boolean> {
+  async loadDsHangHoa(soQdMs: string, tableHangHoa: any[]): Promise<boolean> {
     let check = true
     let body = {
       soQdMs: soQdMs,
@@ -416,13 +405,13 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
         return check
       } else {
         if (!this.listDiaDiem) {
-          check= false
+          check = false
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy thông tin phân bổ!')
           return check;
         }
       }
     } else {
-      check= false
+      check = false
       this.notification.error(MESSAGE.ERROR, 'Vui lòng phân bổ hàng hóa trước!!!!')
       return check;
     }
@@ -461,7 +450,7 @@ export class MmThongTinHopDongComponent extends Base2Component implements OnInit
 
   convertListDiaDiem() {
     let arr = [];
-    if (this.listDiaDiem && this.listDiaDiem.length >  0) {
+    if (this.listDiaDiem && this.listDiaDiem.length > 0) {
       this.listDiaDiem.forEach(item => {
         if (item.childData && item.childData.length > 0) {
           item.childData.forEach(data => {
