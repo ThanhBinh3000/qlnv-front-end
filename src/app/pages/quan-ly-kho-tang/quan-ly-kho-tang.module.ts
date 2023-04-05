@@ -118,6 +118,7 @@ import { ThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-da
 import { QuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/quyet-dinh-phe-duyet-kqlcnt.component';
 import { DialogQdScBtcComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-btc/them-moi-qd-sc-btc/dialog-qd-sc-btc/dialog-qd-sc-btc.component';
 import { CapNhatThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau.component';
+import { ThongTinQuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt.component';
 
 
 @NgModule({
@@ -176,6 +177,7 @@ import { CapNhatThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tie
     QuyetDinhPheDuyetKqlcntComponent,
     DialogQdScBtcComponent,
     CapNhatThongTinDauThauComponent,
+    ThongTinQuyetDinhPheDuyetKqlcntComponent,
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
