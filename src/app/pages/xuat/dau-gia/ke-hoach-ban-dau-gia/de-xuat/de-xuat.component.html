@@ -240,31 +240,62 @@
                 data.tenTrangThaiTh: data.idThop}}</a>
             </td>
             <td class="text-left">
-              <a *ngIf="loaiVthh.startsWith('02') ? ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.TU_CHOI_TP ||
-              data.trangThai == STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_CBV)  &&            
-              userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM')) : 
-              ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.TU_CHOI_TP ||
-              data.trangThai == STATUS.CHO_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_CBV)  &&   
-              userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XEM')) " (click)="goDetail(data.id)">
+              <a *ngIf="loaiVthh.startsWith('02') ? 
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_CBV))
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_CBV)
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_CBV)
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.DA_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.TU_CHOI_CBV) :
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_CBV))
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_CBV)
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_CBV)
+              ||(!userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.DA_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.TU_CHOI_CBV)"
+                (click)="goDetail(data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="loaiVthh.startsWith('02') ?((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP ||  data.trangThai == STATUS.TU_CHOI_LDC ||  data.trangThai == STATUS.TU_CHOI_CBV)
-               && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM')) :
-               ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP ||  data.trangThai == STATUS.TU_CHOI_LDC ||  data.trangThai == STATUS.TU_CHOI_CBV)
-               && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM')) " (click)="goDetail(data.id)">
+              <a *ngIf=" loaiVthh.startsWith('02') ? 
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_CBV) :
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && data.trangThai == STATUS.DU_THAO)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_CBV)"
+                (click)="goDetail(data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="loaiVthh.startsWith('02') ? 
-              (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP')) ||
-               (data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC')) ||
-                (data.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU')) : 
-              (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP')) ||
-               (data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC')) ||
-                (data.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU')) "
-                (click)="goDetail(data.id)">
+              <a *ngIf=" loaiVthh.startsWith('02') ?
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.DA_DUYET_LDC) :
+              (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU') && data.trangThai == STATUS.DA_DUYET_LDC)
+              " (click)="goDetail(data.id)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
-              <a *ngIf="loaiVthh.startsWith('02') ? (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA')):
+              <a *ngIf="loaiVthh.startsWith('02') ? 
+              (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA')):
                (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA')) "
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
