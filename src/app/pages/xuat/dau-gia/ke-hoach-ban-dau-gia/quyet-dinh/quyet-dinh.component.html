@@ -195,17 +195,15 @@
                         <td>{{data.slHdDaKy}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id)"
-                                *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM')">
+                            <a (click)="goDetail(data.id)" *ngIf="((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.BAN_HANH )
+                                && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM'))">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM')) && userService.isTongCuc()"
+                            <a *ngIf="((data.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM'))"
                                 (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')) && userService.isTongCuc()"
+                            <a *ngIf="((data.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA'))"
                                 (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>

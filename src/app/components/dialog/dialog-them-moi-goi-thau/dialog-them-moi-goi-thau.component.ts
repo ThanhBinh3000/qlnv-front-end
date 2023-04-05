@@ -70,7 +70,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       tenCloaiVthh: [null],
       dviTinh: [this.dviTinh],
       soLuong: [null],
-      donGiaVat: [320000, [Validators.required]],
+      donGiaVat: [null],
       donGiaTamTinh: [null],
       maDvi: ['']
     });
@@ -99,7 +99,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   async onChangeCloaiVthh($event) {
-    debugger
     let cloaiSelected = this.listChungLoai.filter(item => item.ma == $event);
     this.getGiaToiDa($event);
     let bodyPag = {
@@ -159,6 +158,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         cloaiVthh: dataDetail.cloaiVthh,
         diaDiemNhap: dataDetail.diaDiemNhap,
         donGia: dataDetail.donGia,
+        donGiaTamTinh: dataDetail.donGiaTamTinh,
         dviTinh: dataDetail.dviTinh,
         loaiHdong: dataDetail.loaiHdong,
         hthucLcnt: dataDetail.hthucLcnt,
@@ -186,10 +186,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, 'Danh sách địa điểm nhập không được để trống');
       return;
     }
-    // if (this.giaToiDa == null) {
-    //   this.notification.error(MESSAGE.ERROR, 'Chủng loại hàng hóa chưa có giá mua tối đa');
-    //   return;
-    // }
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước');
+      return;
+    }
     // if (this.validateRangPrice()) {
     //   this.notification.error(MESSAGE.ERROR, 'Giá tạm tính phải nhỏ hơn giá mua tối đa (' + this.giaToiDa + ')');
     //   return;
@@ -306,8 +306,17 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
   }
 
+  clearCuc() {
+    this.thongTinCuc.maDvi = null;
+    this.thongTinCuc.soLuong = null;
+  }
+  clearChiCuc() {
+    this.thongTinChiCuc.maDvi = null;
+    this.thongTinChiCuc.soLuong = null;
+  }
   clearDiemKho() {
-
+    this.thongTinDiemKho.maDvi = null;
+    this.thongTinDiemKho.soLuong = null;
   }
 
   expandSet = new Set<number>();
