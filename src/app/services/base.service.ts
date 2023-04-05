@@ -26,7 +26,7 @@ export abstract class BaseService {
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `http://192.168.5.184:1702/kh-cn-bq/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -41,7 +41,7 @@ export abstract class BaseService {
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `http://192.168.5.184:1702/kh-cn-bq/chi-tiet/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
