@@ -55,7 +55,6 @@ export class NewDonViComponent implements OnInit {
       vungMien: [''],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
-      console.log(value.length / 2);
       let node = this.treeSelect.getTreeNodeByKey(value);
       this.levelNode = node.level
     });
