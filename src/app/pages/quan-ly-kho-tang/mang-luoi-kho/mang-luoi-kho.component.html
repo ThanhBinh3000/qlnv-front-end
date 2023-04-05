@@ -17,7 +17,7 @@
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-tree #nzTreeComponent nzAsyncData [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+        <nz-tree #nzTreeSelectComponent nzAsyncData [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
                  (nzExpandChange)="loadChildren($event)"
                  (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
         </nz-tree>
@@ -35,39 +35,37 @@
       </div>
       <nz-tabset nzType="card" class="tab__container mt-16" *ngIf="levelNode != 1">
         <nz-tab [nzTitle]="'Thông tin kho tàng'" class="bb-lay-mau__container">
-          <span *ngIf="levelNode == 0"><h2
-            class="text-primary mt-2">Vui lòng chọn đơn vị kho ở menu bên trái</h2> </span>
           <nz-card *ngIf="levelNode != 0">
-            <div class="group-button">
-              <h2 *ngIf="levelNode == 2 ">Thông tin Cục </h2>
-              <h2 *ngIf="levelNode == 3">Thông tin Chi Cục </h2>
-              <h2 *ngIf="levelNode == 4">Thông tin điểm kho </h2>
-              <h2 *ngIf="levelNode == 5">Thông tin nhà kho </h2>
-              <h2 *ngIf="levelNode == 6">Thông tin ngăn kho </h2>
-              <h2 *ngIf="levelNode == 7">Thông tin lô kho </h2>
-              <div class="buttons" *ngIf="levelNode > 3 ">
-                <button nz-button class="btn btn-sub do" (click)="delete()">
-                  <i class="fa fa-trash-o do"></i>
-                  Xóa
-                </button>
-                <button nz-button class="btn btn-sub xanh-nhat" (click)="themSoDuDauKy()" *ngIf="checkStatusSurplus()">
-                  <i class="icon htvbdh_dau-cong"></i>
-                  Khởi tạo số dư đầu kỳ
-                </button>
-                <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(false)" *ngIf="isEditData">
-                  <i class="icon htvbdh_bosungfile"></i>
-                  Sửa
-                </button>
-                <button nz-button class="btn btn-sub" (click)="showEdit(true)" *ngIf="!isEditData">
-                  <i class="fa fa-times"></i>
-                  Hủy bỏ
-                </button>
-                <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="!isEditData">
-                  <i class="fa fa-save"></i>
-                  Lưu
-                </button>
+              <div class="header header-green-background mg-t-10">
+                <div class="header-text">
+                  <div class="title-chi-tieu">
+                    <span class="text-uppercase font-weight-bold">THÔNG TIN CHUNG</span>
+                  </div>
+                </div>
+                <div class="buttons" *ngIf="levelNode > 3 ">
+                  <button nz-button class="btn btn-sub do" (click)="delete()">
+                    <i class="fa fa-trash-o do"></i>
+                    Xóa
+                  </button>
+                  <button nz-button class="btn btn-sub xanh-nhat" (click)="themSoDuDauKy()" *ngIf="checkStatusSurplus()">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    Khởi tạo số dư đầu kỳ
+                  </button>
+                  <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(false)" *ngIf="isEditData">
+                    <i class="icon htvbdh_bosungfile"></i>
+                    Sửa
+                  </button>
+                  <button nz-button class="btn btn-sub" (click)="showEdit(true)" *ngIf="!isEditData">
+                    <i class="fa fa-times"></i>
+                    Hủy bỏ
+                  </button>
+                  <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="!isEditData">
+                    <i class="fa fa-save"></i>
+                    Lưu
+                  </button>
+                </div>
+
               </div>
-            </div>
             <div class="mg-t-10" *ngIf="this.levelNode == 6">
               <label class="font-weight-bold">Loại hàng hóa</label>
               <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" nzDisabled class="font-weight-bold"
@@ -979,8 +977,7 @@
                       <nz-form-label>Tổng tích lượng thiết kế - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="tichLuongTkLt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongTkLt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -992,8 +989,7 @@
                       <nz-form-label>Tổng tích lượng thiết kế - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi" p>
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="tichLuongTkVt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongTkVt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1029,8 +1025,7 @@
                       <nz-form-label>Tổng tích lượng khả dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="tichLuongKdLt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongKdLt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1042,8 +1037,7 @@
                       <nz-form-label>Tổng tích lượng khả dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="tichLuongKdVt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="tichLuongKdVt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1055,8 +1049,7 @@
                       <nz-form-label>Tổng thể tích thiết kế - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="theTichTkLt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="theTichTkLt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1068,8 +1061,7 @@
                       <nz-form-label>Tổng thể tích thiết kế - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="theTichTkVt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="theTichTkVt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1105,8 +1097,7 @@
                       <nz-form-label>Tổng thế tích khả dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="theTichKdLt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="theTichKdLt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1118,8 +1109,7 @@
                       <nz-form-label>Tổng thế tích khả dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <nz-input-number [nzDisabled]="isEditData && detailDonVi.value.coLoKho"
-                                           formControlName="theTichKdVt"
+                          <nz-input-number [nzDisabled]="isEditData" formControlName="theTichKdVt"
                                            [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                            [nzParser]="globals.parser"></nz-input-number>
                         </nz-input-group>
@@ -1589,12 +1579,16 @@
               </ng-template>
             </form>
             <ng-container *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5">
-              <div class="group-button">
-                <h2 *ngIf="levelNode == 2">Danh sách Chi Cục</h2>
-                <h2 *ngIf="levelNode == 3">Danh sách điểm kho</h2>
-                <h2 *ngIf="levelNode == 4">Danh sách nhà kho</h2>
-                <h2 *ngIf="levelNode == 5">Danh sách ngăn kho</h2>
-              </div>
+                <div class="header header-green-background mg-t-10">
+                  <div class="header-text">
+                    <div class="title-chi-tieu">
+                      <span class="text-uppercase font-weight-bold" *ngIf="levelNode == 2">Danh sách Chi Cục</span>
+                      <span class="text-uppercase font-weight-bold" *ngIf="levelNode == 3">Danh sách điểm kho</span>
+                      <span class="text-uppercase font-weight-bold" *ngIf="levelNode == 4">Danh sách nhà kho</span>
+                      <span class="text-uppercase font-weight-bold" *ngIf="levelNode == 5">Danh sách ngăn kho</span>
+                    </div>
+                  </div>
+                </div>
               <nz-table class="pd-10" [nzData]="dataTable" nzBordered [nzFrontPagination]="false"
                         [nzShowPagination]="false">
                 <thead>
@@ -1654,8 +1648,12 @@
                 </tr>
                 </tfoot>
               </nz-table>
-              <div class="group-button">
-                <h2 class="text-uppercase">Thông tin chung hàng hóa</h2>
+              <div class="header header-green-background mg-t-10">
+                <div class="header-text">
+                  <div class="title-chi-tieu">
+                    <span class="text-uppercase font-weight-bold">Thông tin chung hàng hóa</span>
+                  </div>
+                </div>
               </div>
               <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>
@@ -1675,8 +1673,12 @@
                 </tr>
                 </tbody>
               </nz-table>
-              <div class="group-button">
-                <h2 class="text-uppercase">Thông tin chi tiết hàng hóa</h2>
+              <div class="header header-green-background mg-t-10">
+                <div class="header-text">
+                  <div class="title-chi-tieu">
+                    <span class="text-uppercase font-weight-bold">Thông tin chi tiết hàng hóa</span>
+                  </div>
+                </div>
               </div>
               <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                 <thead>

@@ -166,6 +166,10 @@ export class MangLuoiKhoComponent implements OnInit {
       this.getListTtKho(),
       this.loadTinhTrangLoKho()
     ]);
+    let node = this.nzTreeSelectComponent.getTreeNodeByKey(this.nodes[0].maDvi);
+    if (node) {
+      this.nzClickNodeTree(node, true)
+    }
     this.spinner.hide();
   }
 
@@ -284,14 +288,21 @@ export class MangLuoiKhoComponent implements OnInit {
   theTich: string = 'm3';
   listTinhTrang: any[] = [];
 
-  nzClickNodeTree(event: any): void {
+  nzClickNodeTree(event: any, type?: any): void {
     this.spinner.show()
     this.detailDonVi.reset();
-    if (event.keys.length > 0) {
-      this.isEditData = true;
-      this.nodeSelected = event.node.origin;
-      this.levelNode = this.nodeSelected.capDvi;
-      this.getDetailMlkByKey(event.node)
+    if (event) {
+      if (type) {
+        this.isEditData = true;
+        this.nodeSelected = event.origin;
+        this.levelNode = this.nodeSelected.capDvi;
+        this.getDetailMlkByKey(event)
+      } else {
+        this.isEditData = true;
+        this.nodeSelected = event.node.origin;
+        this.levelNode = this.nodeSelected.capDvi;
+        this.getDetailMlkByKey(event.node)
+      }
     }
     this.spinner.hide()
   }

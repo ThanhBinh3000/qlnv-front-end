@@ -28,6 +28,8 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
   isTongHop: boolean = false;
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
+  isEdit: number;
+  dataEdit : any
 
   constructor(
     httpClient: HttpClient,
@@ -261,7 +263,8 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
   }
 
   editRow(idx: number) {
-
+    this.isEdit = idx
+    this.dataEdit = this.dataTableTc[idx].ncKhVon
   }
 
   deleteItem(index: any) {
@@ -281,5 +284,14 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  saveEdit() {
+    this.isEdit = -1;
+  }
+
+  cancelEdit(data: any) {
+    data.ncKhVon = this.dataEdit
+    this.isEdit = -1
   }
 }
