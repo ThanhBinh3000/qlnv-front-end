@@ -51,11 +51,7 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
         nam: [dayjs().get("year"), [Validators.required]],
         maCuc: null,
         maChiCuc: null,
-        loaiVthh: null,
-        cloaiVthh: null,
-        thoiGianSx: null,
-        thoiGianSxTu: null,
-        thoiGianSxDen: null,
+        maDvi: null,
       }
     );
   }
@@ -93,14 +89,15 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
       }
       let body = this.formData.value;
+      body.maDvi = body.maCuc == null ? null : (body.maChiCuc == null ? body.maCuc : body.maChiCuc)
       body.typeFile = "xlsx";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
+      body.fileName = "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.jrxml";
+      body.tenBaoCao = "Tổng hợp báo cáo số lượng, chất lượng máy móc, thiết bị chuyên dùng";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongMmTbcd(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
+        saveAs(this.excelBlob, "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -123,11 +120,12 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
       }
       let body = this.formData.value;
+      body.maDvi = body.maCuc == null ? null : (body.maChiCuc == null ? body.maCuc : body.maChiCuc)
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
+      body.fileName = "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.jrxml";
+      body.tenBaoCao = "Tổng hợp báo cáo số lượng, chất lượng máy móc, thiết bị chuyên dùng";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
+      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongMmTbcd(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });
@@ -137,6 +135,13 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async clearFilter() {
+    // this.formData.get('nam').setValue(null);
+    this.formData.get('maCuc').setValue(null);
+    this.formData.get('maChiCuc').setValue(null);
+    this.formData.get('maDvi').setValue(null);
   }
 
   async loadDsDonVi() {
