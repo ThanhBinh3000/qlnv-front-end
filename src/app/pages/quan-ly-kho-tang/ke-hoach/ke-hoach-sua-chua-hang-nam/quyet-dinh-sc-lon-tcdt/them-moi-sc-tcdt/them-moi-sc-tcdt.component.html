@@ -260,26 +260,26 @@
       <td>{{ data.ncKhVon }}</td>
       <td>{{ data.ncKhVon }}</td>
       <td>{{ data.noiDung }}</td>
-      <td></td>
     </tr>
     </tbody>
     <tfoot>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">Tổng</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td></td>
-    <td nzRight></td>
+    <tr>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">Tổng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
+    </tr>
     </tfoot>
   </nz-table>
   <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
@@ -403,10 +403,16 @@
       <td>{{ data.luyKeKh }}</td>
       <td>{{ data.luyKeDuToan }}</td>
       <td>{{ data.tinhHinh }}</td>
+      <td *ngIf="isEdit != idx">{{ data.ncKhVon }}</td>
+      <td *ngIf="isEdit == idx">
+        <nz-input-number [(ngModel)]="data.ncKhVon" [nzSize]="'small'"
+                         [nzFormatter]="globals.formatter" [nzMin]="0"
+                         [nzParser]="globals.parser"></nz-input-number>
+      </td>
       <td>{{ data.ncKhVon }}</td>
       <td>{{ data.lastNcKhVon }}</td>
       <td>{{ data.noiDung }}</td>
-      <td class="text-center" *ngIf="!isView">
+      <td class="text-center" *ngIf="!isView && isEdit != idx">
         <a (click)="editRow(idx)">
           <i class="fa fa-pencil"></i>
         </a>
@@ -414,25 +420,33 @@
           <i class="fa fa-trash-o do"></i>
         </a>
       </td>
+      <td class="text-center"  *ngIf="!isView && isEdit == idx">
+        <a class="save" (click)="saveEdit()">
+          <i class="fa fa-save"></i>
+        </a>
+        <a (click)="cancelEdit(data)">
+          <i class="fa fa-ban do"></i> </a>
+      </td>
     </tr>
     </tbody>
     <tfoot>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">Tổng</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td></td>
-    <td nzRight></td>
+    <tr>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">Tổng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td nzRight></td>
+    </tr>
     </tfoot>
   </nz-table>
 </div>
