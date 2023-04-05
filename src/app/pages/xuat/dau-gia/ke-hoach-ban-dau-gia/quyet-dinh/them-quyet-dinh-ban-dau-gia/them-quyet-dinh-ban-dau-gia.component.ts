@@ -79,6 +79,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
+      slDviTsan: [],
     })
   }
 
@@ -246,6 +247,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   async selectMaTongHop(event) {
     await this.spinner.show()
+    let soLuongDviTsan: number = 0;
     if (event) {
       const res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
@@ -253,6 +255,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         if (data.idQdPd) {
           this.loadChiTiet(data.idQdPd)
         } else {
+          data.children.forEach((item) => {
+            soLuongDviTsan += item.slDviTsan;
+          })
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
@@ -260,6 +265,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
             tenLoaiVthh: data.tenLoaiVthh,
             tchuanCluong: data.tchuanCluong,
             soQdCc: data.soQdPd,
+            slDviTsan: soLuongDviTsan,
             idThHdr: event,
             idTrHdr: null,
             soTrHdr: null,
@@ -310,7 +316,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'Danh sách đề xuất kế hoạch bán đấu giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -339,7 +345,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         dataRes.idDxHdr = dataRes.id;
         this.danhsachDx.push(dataRes);
         let tongMucDt = 0
-        console.log(data, 111)
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
@@ -360,6 +365,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
+          slDviTsan: dataRes.slDviTsan,
           maDvi: data.maDvi,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,

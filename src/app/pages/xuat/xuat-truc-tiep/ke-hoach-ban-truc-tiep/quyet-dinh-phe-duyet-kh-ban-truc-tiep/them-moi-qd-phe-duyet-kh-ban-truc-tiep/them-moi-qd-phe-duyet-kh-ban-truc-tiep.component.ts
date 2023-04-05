@@ -20,7 +20,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-import { chain } from 'lodash'
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
@@ -254,34 +253,39 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       const res = await this.tongHopKhBanTrucTiepService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        data.children.forEach((item) => {
-          soLuongDviTsan += item.slDviTsan;
-        })
-        this.formData.patchValue({
-          cloaiVthh: data.cloaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          loaiVthh: data.loaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          slDviTsan: soLuongDviTsan,
-          idThHdr: event,
-          idTrHdr: null,
-          soTrHdr: null,
-        })
-        for (let item of data.children) {
-          await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              const dataRes = res.data;
-              this.formData.patchValue({
-                tchuanCluong: dataRes.tchuanCluong,
-                soQdCc: dataRes.soQdCtieu,
-              })
-              dataRes.idDxHdr = dataRes.id;
-              this.danhsachDx.push(dataRes);
-            }
+        if (data.idSoQdPd) {
+          this.loadChiTiet(data.idSoQdPd)
+        } else {
+          data.children.forEach((item) => {
+            soLuongDviTsan += item.slDviTsan;
           })
-        };
-        this.dataInput = null;
-        this.dataInputCache = null;
+          this.formData.patchValue({
+            cloaiVthh: data.cloaiVthh,
+            tenCloaiVthh: data.tenCloaiVthh,
+            loaiVthh: data.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            slDviTsan: soLuongDviTsan,
+            idThHdr: event,
+            idTrHdr: null,
+            soTrHdr: null,
+          })
+          for (let item of data.children) {
+            await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                const dataRes = res.data;
+                this.formData.patchValue({
+                  tchuanCluong: dataRes.tchuanCluong,
+                  soQdCc: dataRes.soQdCtieu,
+                })
+                dataRes.idDxHdr = dataRes.id;
+                this.danhsachDx.push(dataRes);
+              }
+            })
+          };
+          this.dataInput = null;
+          this.dataInputCache = null;
+        }
+
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

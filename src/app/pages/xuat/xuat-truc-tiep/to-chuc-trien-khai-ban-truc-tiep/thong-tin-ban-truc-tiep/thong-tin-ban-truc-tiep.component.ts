@@ -25,6 +25,10 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   userdetail: any = {};
   pthucBanTrucTiep: string;
   selectedId: number = 0;
+  idQdPdKh: number = 0;
+  isViewQdPdKh: boolean = false;
+  idQdPdKq: number = 0;
+  isViewQdPdKq: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_CAP_NHAT, giaTri: 'Chưa cập nhật' },
@@ -114,11 +118,31 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.pthucBanTrucTiep = pthucBanTrucTiep;
   }
 
+  openModalQdPdKh(id: number) {
+    this.idQdPdKh = id;
+    this.isViewQdPdKh = true;
+  }
+
+  closeModalQdPdKh() {
+    this.idQdPdKh = null;
+    this.isViewQdPdKh = false;
+  }
+
+  openModalQdPdKq(id: number) {
+    this.idQdPdKq = id;
+    this.isViewQdPdKq = true;
+  }
+
+  closeModalQdPdKq() {
+    this.idQdPdKq = null;
+    this.isViewQdPdKq = false;
+  }
+
   disabledNgayChaoGiaTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayCgiadDen) {
+    if (!startValue || !this.formData.value.ngayCgiaDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.ngayCgiadDen.getTime();
+    return startValue.getTime() > this.formData.value.ngayCgiaDen.getTime();
   };
 
   disabledNgayChaoGiaDen = (endValue: Date): boolean => {

@@ -51,6 +51,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   @Input() loaiVthh: string;
   @Input() id: number;
   @Output() showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
   private flagInit = false;
   public dsQdPd: any;
   public dsNoiDung: any;

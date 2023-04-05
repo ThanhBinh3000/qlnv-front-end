@@ -3,13 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import dayjs from "dayjs";
 import { MESSAGE } from 'src/app/constants/message';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-qd-pd-ket-qua-btt',
   templateUrl: './qd-pd-ket-qua-btt.component.html',
@@ -19,8 +19,14 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
 
-  dsDonvi: any[] = [];
-  userdetail: any = {};
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Đã Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+  ];
   constructor(
     private httpClient: HttpClient,
     private donviService: DonviService,
@@ -35,10 +41,8 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       namKh: [''],
       loaiVthh: [''],
-      trichYeu: [''],
-      ngayKy: [],
-      maDvi: [''],
-      tenDvi: [],
+      ngayCgiaTu: null,
+      ngayCgiaDen: null,
     });
     this.filterTable = {
       soQdKq: '',
@@ -58,12 +62,8 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
-      this.formData.patchValue({
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-        loaiVthh: this.loaiVthh
-      })
+      this.thimKiem();
       await this.search();
-      await this.initData()
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -71,18 +71,50 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadDsTong() {
-    const dsTong = await this.donviService.layDonViCon();
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong.data;
+  export() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.qdPdKetQuaBttService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'Danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
+  thimKiem() {
+    this.formData.patchValue({
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      loaiVthh: this.loaiVthh
+    })
   }
 
+  clearFilter() {
+    this.formData.reset();
+    this.thimKiem();
+    this.search();
+  }
+
+  disabledNgayChaoGiaTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayCgiaDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayCgiaDen.getTime();
+  };
+
+  disabledNgayChaoGiaDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayCgiaTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayCgiaTu.getTime();
+  };
 }

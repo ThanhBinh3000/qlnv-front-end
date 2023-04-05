@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
     <div class="btn-group">
         <button type="button" class="btn btn-sub" (click)="goBack()">
             <i class="fa fa-arrow-left"></i>
@@ -10,18 +10,18 @@
             <span>Lưu và gửi duyệt</span>
         </button>
         <button
-            *ngIf=" isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.DA_DUYET_LDC && formData.value.trangThai != STATUS.BAN_HANH"
+            *ngIf=" isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.CHO_DUYET_LDC && formData.value.trangThai != STATUS.BAN_HANH"
             type="button" class="btn btn-sub do" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
         <button
-            *ngIf="isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.DA_DUYET_LDC && formData.value.trangThai != STATUS.BAN_HANH"
+            *ngIf="isDisabled() && userService.isCuc() && formData.value.trangThai != STATUS.CHO_DUYET_LDC  && formData.value.trangThai != STATUS.BAN_HANH"
             type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDC" class="btn btn-sub xanh-nhat"
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC" class="btn btn-sub xanh-nhat"
             (click)="guiDuyet()">
             <i class="icon htvbdh_chuyenvanthu"></i>
             <span>Ban hành</span>
@@ -255,7 +255,7 @@
                 </nz-table>
 
                 <nz-table class="nowrap pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
-                    [nzShowPagination]="false" *ngIf="showFromTT && radioValue == formData.value.pthucBanTrucTiep">
+                    [nzShowPagination]="false" *ngIf="showFromTT">
                     <thead>
                         <tr>
                             <th style=" width: 2%;">STT</th>

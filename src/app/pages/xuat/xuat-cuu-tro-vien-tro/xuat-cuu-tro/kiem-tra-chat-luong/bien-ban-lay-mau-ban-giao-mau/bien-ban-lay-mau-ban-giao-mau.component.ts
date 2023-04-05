@@ -11,6 +11,8 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
+import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
+import { CHUC_NANG } from 'src/app/constants/status';
 @Component({
   selector: 'app-bien-ban-lay-mau-ban-giao-mau',
   templateUrl: './bien-ban-lay-mau-ban-giao-mau.component.html',
@@ -22,16 +24,19 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  public vldTrangThai: CuuTroVienTroComponent;
+  CHUC_NANG = CHUC_NANG;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
+    private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBanGiaoMauService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       soBienBan: null,
       soQdGiaoNvXh: null,
@@ -41,7 +46,8 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       ngayLayMau: null,
       ngayLayMauTu: null,
       ngayLayMauDen: null,
-      type: null
+      type: null,
+      loaiVthh: null,
     })
     this.filterTable = {
       soQdGiaoNvXh: '',
@@ -66,7 +72,8 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
-
+  idQdGnv: number = 0;
+  openQdGnv = false;
 
   ngOnInit(): void {
     try {
@@ -80,10 +87,6 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     }
   }
 
-  async search(roles?): Promise<void> {
-    await super.search(roles);
-    this.buildTableView();
-  }
 
   async initData() {
     this.userInfo = this.userService.getUserLogin();
@@ -100,12 +103,16 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
+    console.log(this.loaiVthh, 111);
     if (this.formData.value.ngayLayMau) {
       this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
       this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
     }
-
-    await this.search();
+    // this.formData.value.loaiVthh = this.loaiVthh;
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
+    await super.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
   }
@@ -116,8 +123,9 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
       .map((value, key) => {
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
         let nam = quyetDinh.nam;
+        let idQdGiaoNvXh = quyetDinh.idQdGiaoNvXh;
         let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, idQdGiaoNvXh: idQdGiaoNvXh, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
       }).value();
     this.children = dataView
     this.expandAll()
@@ -145,4 +153,15 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+
+  openQdGnvModal(id: number) {
+    this.idQdGnv = id;
+    this.openQdGnv = true;
+  }
+
+  closeQdGnvModal() {
+    this.idQdGnv = null;
+    this.openQdGnv = false;
+  }
+
 }

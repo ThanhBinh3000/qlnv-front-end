@@ -175,6 +175,9 @@ import {
   DialogThongBaoThongTinDauThauComponent
 } from "./dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
 import { DialogKtGiaoKhoComponent } from './dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component';
+import {
+  DialogQdPdKhlcntComponent
+} from "./dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
 @NgModule({
   declarations: [
     //components
@@ -298,6 +301,7 @@ import { DialogKtGiaoKhoComponent } from './dialog/dialog-kt-giao-kho/dialog-kt-
     DialogThemMoiBangKeBanLeComponent,
     DialogThongBaoThongTinDauThauComponent,
     DialogKtGiaoKhoComponent,
+    DialogQdPdKhlcntComponent
   ],
   imports: [
     CommonModule,

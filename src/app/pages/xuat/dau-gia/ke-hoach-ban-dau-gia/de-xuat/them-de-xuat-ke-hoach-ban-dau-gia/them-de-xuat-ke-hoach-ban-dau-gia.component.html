@@ -1,18 +1,24 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH && !isViewOnModal">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <ng-container *ngIf="userService.isCuc()">
+    <ng-container>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+        *ngIf="loaiVthhInput.startsWith('02') ? ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP')) ||
+         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU'))):
+         ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP')) ||
+         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU'))) "
         type="button" class="btn btn-sub do" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+        *ngIf="loaiVthhInput.startsWith('02') ? ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP')) ||
+         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU'))):
+         ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP')) ||
+         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU'))) "
         type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
@@ -30,7 +36,7 @@
         <span>Lưu</span>
       </button>
     </ng-container>
-    <ng-container *ngIf="userService.isTongCuc()">
+    <!-- <ng-container *ngIf="userService.isTongCuc()">
       <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
         (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
@@ -41,7 +47,7 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-    </ng-container>
+    </ng-container> -->
   </div>
 </nz-affix>
 
@@ -490,7 +496,7 @@
               <th style="width: 2%">STT</th>
               <th style="width: 40%">Tên chi cục</th>
               <th style="width: 40%">Địa chỉ</th>
-              <th style="width: 10%">Số lượng</th>
+              <th style="width: 10%">Số lượng (Kg)</th>
             </tr>
           </thead>
           <tbody>

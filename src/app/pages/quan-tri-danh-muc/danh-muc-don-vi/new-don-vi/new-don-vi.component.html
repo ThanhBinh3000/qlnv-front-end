@@ -49,8 +49,8 @@
         <nz-form-item>
           <nz-form-label nzRequired>Mã đơn vị</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-group>
-              <input nz-input formControlName="maDvi" />
+            <nz-input-group [nzAddOnBefore]="formDonVi.value.maDviCha">
+              <input nz-input formControlName="maDvi" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -97,6 +97,19 @@
         <nz-form-item>
           <nz-form-label></nz-form-label>
           <label nz-checkbox formControlName="type">Là phòng ban</label>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Vùng miền
+          </nz-form-label>
+          <nz-form-control>
+            <nz-radio-group formControlName="vungMien" >
+              <label nz-radio nzValue="Miền Bắc"> Miên bắc </label>
+              <label nz-radio nzValue="Miền Trung"> Miền trung </label>
+              <label nz-radio nzValue="Miền Nam"> Miền Nam </label>
+            </nz-radio-group>
+          </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">

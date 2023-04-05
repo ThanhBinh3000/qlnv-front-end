@@ -79,12 +79,12 @@
                   <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <nz-select nzMode="multiple" formControlName="listMaDviTsan" (ngModelChange)="selectMaDviTsan()"
-                        [nzDisabled]="isView">
+                      <nz-select nzMode="multiple" formControlName="listMaDviTsan" (ngModelChange)="selectMaDviTsan()">
                         <nz-option *ngFor="let item of listDviTsan" [nzValue]="item.maDviTsan"
                           [nzLabel]="item.maDviTsan">
                         </nz-option>
-                      </nz-select> </nz-input-group>
+                      </nz-select>
+                    </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>

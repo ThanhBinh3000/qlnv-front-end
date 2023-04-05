@@ -9,6 +9,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class ThanhPhanThamGiaComponent implements OnInit {
 
   @Input() loaiDaiDien: string;
+  @Input() isView: boolean;
   @Input() dataTable: any[] = [];
   @Output() dataTableChange = new EventEmitter<any[]>();
 

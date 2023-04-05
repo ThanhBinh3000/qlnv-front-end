@@ -35,6 +35,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
   listDataGroup: any[] = [];
   dataTable: any[] = [];
   dataChiTieu: any;
+  listPhuongThucThanhToan: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -96,6 +97,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
         for (let i = 0; i < this.formData.value.children.length; i++) {
           this.expandSet.add(i);
         }
+        await this.ptThanhToan(this.dataInput)
       } else {
         this.formData.reset();
       }
@@ -124,7 +126,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '2000px',
+      nzWidth: '2500px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
@@ -139,28 +141,44 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       }
       this.calculatorTable();
     });
-  }
+  };
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-
+    let tongDonGia: number = 0;
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
+      tongSoLuong += item.soLuongChiCuc;
       item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
+        tongDonGia += child.donGiaDeXuat;
       })
-      item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
+      tongDonGia: tongDonGia,
     });
-    this.dataInput.soLuong = tongSoLuong * 1000
   }
 
   changeFormData() {
     if (this.formData.value.id) {
       this.dataChange.emit(this.formData.value);
+    }
+  }
+
+  async ptThanhToan(data) {
+    if (data.pthucTtoan == '1') {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '1',
+          giaTri: 'Tiền mặt',
+        },
+      ];
+    } else {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '2',
+          giaTri: 'Chuyển khoản',
+        },
+      ];
     }
   }
 }

@@ -83,7 +83,7 @@ export class MmThongTinHienTrangComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
-          this.dataTable = data.listQlDinhMucPhiHienTrangMmtbDtl
+          this.dataTable = data.listQlDinhMucHienTrangMmtbDtl;
           this.updateEditCache()
         }
       } else {
