@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {OldResponseData} from '../interfaces/response';
-import {Observable} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { OldResponseData } from '../interfaces/response';
+import { Observable } from 'rxjs';
 
 export abstract class BaseService {
   table = '';
@@ -26,12 +26,12 @@ export abstract class BaseService {
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
+    const url = `http://192.168.5.184:1702/kh-cn-bq/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
+    const url = `http://192.168.5.184:1702/kh-cn-bq/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -41,7 +41,7 @@ export abstract class BaseService {
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
+    const url = `http://192.168.5.184:1702/kh-cn-bq/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -51,7 +51,7 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    const url = `http://192.168.5.184:1702/kh-cn-bq/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -62,12 +62,12 @@ export abstract class BaseService {
 
   export(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
-    return this._httpClient.post(url, body, {responseType: 'blob'});
+    return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
   exportReport(body: any): Observable<Blob> {
     const url = `http://192.168.5.184:3333/nhap-xuat-ton/bao-cao-chi-tiet`;
-    return this._httpClient.post(url, body, {responseType: 'blob'});
+    return this._httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteMuti(body): Promise<OldResponseData> {

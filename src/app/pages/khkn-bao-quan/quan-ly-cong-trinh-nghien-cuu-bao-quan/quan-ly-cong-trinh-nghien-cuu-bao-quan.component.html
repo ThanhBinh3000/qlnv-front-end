@@ -39,7 +39,8 @@
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="nam"> Thời gian thực hiện </nz-form-label>
             <nz-range-picker nzMode="month" [(ngModel)]="searchFilter.thoiGian"
-              [nzPlaceHolder]="['thời gian bắt đầu', 'thời gian kết thúc']" [ngModelOptions]="{standalone: true}">
+              [nzPlaceHolder]="['thời gian bắt đầu', 'thời gian kết thúc']" nzFormat="MM/yyyy"
+              [ngModelOptions]="{standalone: true}">
             </nz-range-picker>
           </div>
         </div>
@@ -118,14 +119,14 @@
             </td>
             <th>
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyTu"
+                <nz-date-picker nzFormat="MM/yyyy" nzMode="month" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyTu"
                   (ngModelChange)="filterInTable('ngayKyTu', convertDateToString(filterTable.ngayKyTu))">
                 </nz-date-picker>
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyDen"
+                <nz-date-picker nzFormat="MM/yyyy" nzMode="month" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyDen"
                   (ngModelChange)="filterInTable('ngayKyDen', convertDateToString(filterTable.ngayKyDen))">
                 </nz-date-picker>
               </nz-input-group>
@@ -149,8 +150,8 @@
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
             <td>{{ data.tenCapDt }}</td>
-            <td>{{ data.ngayKyTu | date: 'dd/MM/YYYY'}}</td>
-            <td>{{ data.ngayKyDen | date: 'dd/MM/YYYY'}}</td>
+            <td>{{ data.ngayKyTu | date: 'MM/YYYY'}}</td>
+            <td>{{ data.ngayKyDen | date: 'MM/YYYY'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai == STATUS.DA_NGHIEM_THU">

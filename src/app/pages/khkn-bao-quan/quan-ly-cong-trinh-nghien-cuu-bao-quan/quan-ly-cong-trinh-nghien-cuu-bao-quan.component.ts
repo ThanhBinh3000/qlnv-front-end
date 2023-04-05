@@ -183,10 +183,10 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         capDeTai: this.searchFilter.capDeTai,
         trangThai: this.searchFilter.trangThai,
         thoiGianTu: this.searchFilter.thoiGian
-          ? dayjs(this.searchFilter.thoiGian[0])
+          ? dayjs(this.searchFilter.thoiGian[0]).startOf('month')
           : null,
         thoiGianDen: this.searchFilter.thoiGian
-          ? dayjs(this.searchFilter.thoiGian[1])
+          ? dayjs(this.searchFilter.thoiGian[1]).endOf('month')
           : null,
         paggingReq: {
           limit: this.pageSize,
@@ -425,7 +425,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   convertDateToString(event: any): string {
     let result = '';
     if (event) {
-      result = dayjs(event).format('DD/MM/YYYY').toString()
+      result = dayjs(event).format('MM/YYYY').toString()
     }
     return result;
   }
