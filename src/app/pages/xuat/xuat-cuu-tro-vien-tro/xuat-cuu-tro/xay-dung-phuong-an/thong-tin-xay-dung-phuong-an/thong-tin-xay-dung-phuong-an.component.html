@@ -72,7 +72,7 @@
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc() && formData.value.maDvi.length===6"
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
       type="button"
       class="btn btn-sub"
       (click)="saveAndChangeStatus(STATUS.DA_TAO_CBV,'Bạn có muốn hoàn thành đề xuất này ?','Đề xuất đã hoàn thành.')">
