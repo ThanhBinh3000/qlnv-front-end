@@ -31,7 +31,7 @@ export abstract class BaseService {
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `http://192.168.5.184:1702/kh-cn-bq/cap-nhat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
@@ -51,7 +51,7 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `http://192.168.5.184:1702/kh-cn-bq/tra-cuu`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
