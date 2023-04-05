@@ -615,7 +615,7 @@ export class MangLuoiKhoComponent implements OnInit {
         this.donviService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            // xét node về không
+            // set node về không
             this.nodeSelected = []
             this.layTatCaDonViTheoTree()
           } else {
