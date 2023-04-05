@@ -183,7 +183,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           tenDvi: res.data.tenDvi,
           diaChi: res.data.diaChi,
           slKeHoachDd: soLuongDaLenKh.data,
-          slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
+          slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU || LOAI_HANG_DTQG.MUOI) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
         })
       }
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
@@ -263,7 +263,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.thongtinPhanLo.tenNganKho = nganKho.tenDvi;
 
     }
-
   }
 
   async changeLoKho(index?) {
@@ -279,7 +278,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   addDiemKho() {
-    if (this.validateDiemKho()) {
+    if (this.validateDiemKho() && this.validateSoLuong(true)) {
       this.thongtinPhanLo.donGiaVat = this.donGiaVat;
       this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
       this.listOfData = [...this.listOfData, this.thongtinPhanLo];
@@ -317,28 +316,33 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateSoLuong(isAdd?) {
-    return true;
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKh
+    const soLuongConLai = this.formData.value.slChiTieu - this.formData.value.slKeHoachDd
     const soLuong1 = this.thongtinPhanLo.duDau
     let soLuong = 0
+    let tongSoLuong = 0
     if (isAdd) {
       soLuong += this.thongtinPhanLo.soLuong;
+      tongSoLuong += this.thongtinPhanLo.soLuong;
     }
     this.listOfData.forEach(item => {
-      soLuong += item.soLuong
+      tongSoLuong += item.soLuong
     })
-    if (soLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng chỉ tiêu ")
+    if (soLuong > soLuong1) {
+      this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá số lượng tồn kho. Xin vui lòng nhập lại ")
       return false
     }
-    if (soLuong > soLuong1) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng tồn kho ")
+    if (soLuong > soLuongConLai) {
+      console.log(soLuong, 111)
+      console.log(soLuongConLai, 222)
+      this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
       return false
-
+    }
+    if (tongSoLuong > soLuongConLai) {
+      this.notification.error(MESSAGE.ERROR, " Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
+      return false
     } else {
       return true;
     }
-
   }
 
   clearDiemKho() {
