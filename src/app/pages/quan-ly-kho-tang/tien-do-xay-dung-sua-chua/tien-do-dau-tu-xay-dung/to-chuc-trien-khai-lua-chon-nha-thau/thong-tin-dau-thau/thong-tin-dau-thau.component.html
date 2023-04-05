@@ -128,8 +128,8 @@
           </td>
           <td>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdDaDtxd"
-                     (input)="filterInTable('soQdPdDaDtxd',filterTable.soQdPdDaDtxd)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKqlcnt"
+                     (input)="filterInTable('soQdPdKqlcnt',filterTable.soQdPdKqlcnt)"/>
             </nz-input-group>
           </td>
           <td>
@@ -145,15 +145,15 @@
         </tr>
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td>{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.soQd }}</td>
+          <td style="color: blue">{{ data.soQd }}</td>
           <td>{{ data.tenDuAn }}</td>
           <td>{{ data.chuDauTu }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY'  }}</td>
           <td>{{ data.soGoiThau }}</td>
           <td>{{ data.soGoiThauTc ? data.soGoiThauTc : 0   }}</td>
           <td>{{ data.soGoiThauTb ? data.soGoiThauTb : 0}}</td>
-          <td>{{ data.soQdPdDaDtxd }}</td>
-          <td>{{ data.soQdPdDaDtxd }}</td>
+          <td style="color: blue">{{ data.soQdPdDaDtxd }}</td>
+          <td style="color: blue">{{ data.soQdPdKqlcnt }}</td>
           <td class="text-left">{{ data.tenTrangThaiDt }}</td>
           <td class="text-center">
             <a *ngIf="data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT"

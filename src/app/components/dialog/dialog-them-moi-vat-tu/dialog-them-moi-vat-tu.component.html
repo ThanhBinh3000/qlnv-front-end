@@ -87,115 +87,21 @@
   </div>
   <br />
 </form>
-<!--<nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"-->
-<!--          [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">-->
-<!--  <thead>-->
-<!--  <tr>-->
-<!--    <th width="150px" class="text-center">Chi cục DTNN</th>-->
-<!--    <th width="150px" class="text-center">Điểm kho</th>-->
-<!--    <th class="text-center">Địa điểm kho</th>-->
-<!--    <th width="120px" class="text-center">Số lượng (Kg)</th>-->
-<!--    <th width="120px" class="text-center">Thành tiền đề xuất (đ)</th>-->
-<!--    <th width="120px" class="text-left">Thành tiền theo đơn giá đã duyệt (đ)</th>-->
-<!--    <th width="80px" class="text-center">Hành động</th>-->
-<!--  </tr>-->
-<!--  </thead>-->
-<!--  <tbody>-->
-<!--  <tr>-->
-<!--    <td>-->
-<!--      <nz-select [(ngModel)]="thongtinDauThau.maDvi" (ngModelChange)="changeChiCuc($event)">-->
-<!--        <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>-->
-<!--      </nz-select>-->
-<!--    </td>-->
-<!--    <td>-->
-<!--      <nz-select [(ngModel)]="thongtinDauThau.maDiemKho" (ngModelChange)="changeDiemKho()">-->
-<!--        <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>-->
-<!--      </nz-select>-->
-<!--    </td>-->
-<!--    <td>{{thongtinDauThau.diaDiemNhap}} </td>-->
-<!--    <td>-->
-<!--      <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinDauThau.soLuong" [nzMin]="1"-->
-<!--                       (input)="calculator()"-->
-<!--                       [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
-<!--      </nz-input-number>-->
-<!--    </td>-->
-<!--    <td disabled="true">{{thongtinDauThau.thanhTienDx}}</td>-->
-<!--    <td disabled="true">{{thongtinDauThau.thanhTienQd}}</td>-->
-<!--    <td class="text-center">-->
-<!--      <a (click)="addDiemKho()">-->
-<!--        <i class="icon htvbdh_dau-cong xanhla"></i>-->
-<!--      </a>-->
-<!--      <a (click)="clearDiemKho()">-->
-<!--        <i class="fa fa-refresh"></i>-->
-<!--      </a>-->
-<!--    </td>-->
-<!--  </tr>-->
-<!--  <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">-->
-<!--    <ng-container *ngIf="!data.edit; else editTemplate">-->
-<!--      <td>{{ data.tenDvi }}</td>-->
-<!--      <td>{{ data.tenDiemKho }}</td>-->
-<!--      <td>{{ data.diaDiemNhap }}</td>-->
-<!--      <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--      <td>{{ data.thanhTienDx | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--      <td>{{ data.thanhTienQd | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--      <td class="text-center">-->
-<!--        <a (click)="startEdit(i)">-->
-<!--          <i class="fa fa-pencil"></i>-->
-<!--        </a>-->
-<!--        <a (click)="deleteRow(i)">-->
-<!--          <i class="fa fa-trash-o do"></i>-->
-<!--        </a>-->
-<!--      </td>-->
-<!--    </ng-container>-->
-<!--    <ng-template #editTemplate>-->
-<!--      <td>-->
-<!--        <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho(i)">-->
-<!--          <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>-->
-<!--        </nz-select>-->
-<!--      </td>-->
-<!--      <td>{{data.diaDiemNhap}} </td>-->
-<!--      <td>-->
-<!--        <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1"-->
-<!--                         (input)="calculatorEdit(i)"-->
-<!--                         [nzSize]="'small'">-->
-<!--        </nz-input-number>`-->
-<!--      </td>-->
-<!--      <td>{{ data.thanhTienDx | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--      <td>{{ data.thanhTienQd | number : '1.0-1' : 'vi_VN'}}</td>-->
-<!--      <td class="text-center">-->
-<!--        <a (click)="saveEdit(i)" class="save">-->
-<!--          <i class="icon htvbdh_tcdt_save"></i>-->
-<!--        </a>-->
-<!--        <a (click)="cancelEdit(i)">-->
-<!--          <i class="fa fa-ban do"></i>-->
-<!--        </a>-->
-<!--      </td>-->
-<!--    </ng-template>-->
-<!--  </tr>-->
-<!--  <tr *ngIf="listOfData.length > 0">-->
-<!--    <td colspan="2" class="first-last-row-table background-last-row text-left">Cộng</td>-->
-<!--    <td class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>-->
-<!--    <td></td>-->
-<!--    <td></td>-->
-<!--    <td></td>-->
-<!--  </tr>-->
-<!--  </tbody>-->
-<!--</nz-table>-->
 <div class="mt-16">
   <nz-table nzBordered [nzData]="listOfData" [nzFrontPagination]="false" [nzShowPagination]="false"
     [nzScroll]="{ x: 'scroll', y: 'scroll' }">
     <thead>
       <tr>
         <th nzWidth="40px"></th>
-        <th nzWidth="250px" class="text-center">Chi cục DTNN</th>
-        <th nzWidth="200px" class="text-center">Điểm kho</th>
-        <th nzWidth="200px" class="text-center">Địa điểm kho</th>
-        <th nzWidth="200px" class="text-center wrap-text">SL theo chỉ tiêu KH năm</th>
-        <th nzWidth="250px" class="text-center wrap-text">SL theo KH năm đã được duyệt</th>
-        <th nzWidth="150px" class="text-center">Số lượng nhập</th>
-        <th nzWidth="200px" class="text-center">Thành tiền tạm tính (đ)</th>
-        <th nzWidth="250px" class="text-left wrap-text">Thành tiền theo đơn giá đã duyệt (đ)</th>
-        <th nzWidth="100px" [nzRight]="true" class="text-center">Hành động</th>
+        <th nzWidth="240px" class="text-center">Chi cục DTNN</th>
+        <th nzWidth="170px" class="text-center">Điểm kho</th>
+        <th nzWidth="190px" class="text-center">Địa điểm kho</th>
+        <th nzWidth="100px" class="text-center wrap-text">SL theo chỉ tiêu KH năm</th>
+        <th nzWidth="130px" class="text-center wrap-text">SL theo KH năm đã được duyệt</th>
+        <th nzWidth="100px" class="text-center">Số lượng nhập</th>
+        <th nzWidth="165px" class="text-center wrap-text">Thành tiền tạm tính (đ)</th>
+        <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá đã duyệt (đ)</th>
+        <th nzWidth="90px" [nzRight]="true" class="text-center">Hành động</th>
       </tr>
     </thead>
     <tbody>
@@ -217,14 +123,14 @@
           <a (click)="addChiCuc()">
             <i class="icon htvbdh_dau-cong xanhla"></i>
           </a>
-          <a (click)="clearDiemKho()">
+          <a (click)="clearChiCuc()">
             <i class="fa fa-refresh"></i>
           </a>
         </td>
       </tr>
       <ng-container *ngFor="let dataChiCuc of listOfData , let i = index">
         <tr class="root-tree">
-          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event, dataChiCuc.maDvi)"></td>
           <td>{{ dataChiCuc.tenDvi }}</td>
           <td></td>
           <td></td>
