@@ -115,7 +115,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="namKhoach">
+              <nz-select formControlName="namKhoach" (ngModelChange)="onChangeNamKh()">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -724,9 +724,9 @@
           </td>
         </tr>
         <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
-          <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
+          <ng-container>
             <td>{{i + 1}}</td>
-            <td>{{data.tenTlieu}}</td>
+            <td>{{data.children[0].noiDung}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
             <td class="action text-right">
               <a (click)="downloadFile(data.children[0])">
@@ -745,7 +745,7 @@
           <ng-template #editBaoGiaTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
+              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.noiDung" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -810,7 +810,7 @@
         <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
           <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
             <td>{{i + 1}}</td>
-            <td>{{data.tenTlieu}}</td>
+            <td>{{data.children[0].noiDung}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
             <td class="action text-right">
               <a (click)="downloadFile(data.children[0])">
@@ -829,7 +829,7 @@
           <ng-template #editCoSoTemplate>
             <td></td>
             <td>
-              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
+              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.noiDung" />
             </td>
             <td>
               <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"

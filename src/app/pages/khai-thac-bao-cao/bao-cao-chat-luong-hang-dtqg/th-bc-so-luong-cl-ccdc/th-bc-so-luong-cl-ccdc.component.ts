@@ -6,7 +6,6 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { UserService } from "../../../../services/user.service";
 import { DonviService } from "../../../../services/donvi.service";
-import { DanhMucService } from "../../../../services/danhmuc.service";
 import { Globals } from "../../../../shared/globals";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
@@ -43,7 +42,6 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
     private bcCLuongHangDTQGService: BcCLuongHangDTQGService,
     public userService: UserService,
     private donViService: DonviService,
-    private danhMucService: DanhMucService,
     public globals: Globals) {
     super(httpClient, storageService, notification, spinner, modal, bcCLuongHangDTQGService);
     this.formData = this.fb.group(
@@ -51,11 +49,6 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
         nam: [dayjs().get("year"), [Validators.required]],
         maCuc: null,
         maChiCuc: null,
-        loaiVthh: null,
-        cloaiVthh: null,
-        thoiGianSx: null,
-        thoiGianSxTu: null,
-        thoiGianSxDen: null,
       }
     );
   }
@@ -70,8 +63,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
         });
       }
       await Promise.all([
-        this.loadDsDonVi(),
-        this.loadDsVthh()
+        this.loadDsDonVi()
       ]);
     } catch (e) {
       console.log("error: ", e);
@@ -82,25 +74,21 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "th_bc_sl_cl_ccdc.pdf");
   }
 
   async downloadExcel() {
     try {
       this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "xlsx";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
+      body.fileName = "th_bc_sl_cl_ccdc.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.excelBlob = s;
         this.excelSrc = await new Response(s).arrayBuffer();
-        saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
+        saveAs(this.excelBlob, "th_bc_sl_cl_ccdc.xlsx");
       });
       this.showDlgPreview = true;
     } catch (e) {
@@ -118,14 +106,10 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
   async preView() {
     try {
       this.spinner.show();
-      if (this.formData.value.thoiGianSx) {
-        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
-        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
-      }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
+      body.fileName = "th_bc_sl_cl_ccdc.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng chất lượng Công cụ dụng cụ";
       body.trangThai = "01";
       await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongCcdc(body).then(async s => {
         this.pdfBlob = s;
@@ -167,35 +151,5 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-  }
-
-  async loadDsVthh() {
-    this.listVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data.filter(item => item.ma != "02");
-    }
-  }
-
-  async changeLoaiVthh(event) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listCloaiVthh = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  changeCloaiVthh(event) {
-
-  }
-  addRow() {
-    this.rows.push({})
-  }
-
-  deleteRow(index: number) {
-    this.rows.splice(index, 1)
   }
 }

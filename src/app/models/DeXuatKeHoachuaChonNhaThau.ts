@@ -128,6 +128,7 @@ export class CanCuXacDinh {
   idVirtual: number;
   loaiCanCu: string;
   tenTlieu: string;
+  noiDung: string;
   taiLieu: any;
   moTa: string;
   fileDinhKems: Array<FileDinhKem>;

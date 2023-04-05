@@ -15,7 +15,7 @@ import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
-import { API_STATUS_CODE } from 'src/app/constants/config';
+import { API_STATUS_CODE, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
@@ -39,7 +39,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
   templateUrl: './themmoi-kehoach-lcnt.component.html',
   styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent extends Base2Component implements OnInit, OnChanges {
+export class ThemmoiKehoachLcntComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -160,6 +160,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         text: dayjs().get('year') - i,
       });
     }
+    this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
+    this.loadDanhMucHang();
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     } else {
@@ -210,6 +212,20 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
+  }
+
+  async loadDanhMucHang() {
+    await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        const data = hangHoa.data.filter(item => item.ma == this.loaiVthhInput.slice(0, 2));
+        if (this.loaiVthhInput == LOAI_HANG_DTQG.MUOI || this.loaiVthhInput == LOAI_HANG_DTQG.VAT_TU) {
+          this.formData.get('tenLoaiVthh').setValue(data[0].ten);
+        } else {
+          const dataChild = data[0].child.filter(item => item.ma == this.loaiVthhInput)
+          this.formData.get('tenLoaiVthh').setValue(dataChild[0].ten);
+        }
+      }
+    })
   }
 
   onChangeLhNx($event) {
@@ -343,6 +359,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
         } else {
           this.formData.patchValue({
+            cloaiVthh: data.ma,
             loaiVthh: data.ma,
             tenLoaiVthh: data.ten
           });
@@ -360,7 +377,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   themMoiTongCuc(data?: any, index?: number) {
-    if (!this.formData.get('loaiVthh').value) {
+    if (this.formData.get('loaiVthh').value == null || this.formData.get('cloaiVthh').value == null) {
       this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
       return;
     }
@@ -371,6 +388,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzClosable: false,
       nzWidth: '1500px',
       nzFooter: null,
+      nzClassName: 'dialog-vat-tu',
       nzComponentParams: {
         data: data,
         loaiVthh: this.formData.get('loaiVthh').value,
@@ -425,6 +443,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzClosable: false,
       nzWidth: '1500px',
       nzFooter: null,
+      nzClassName: 'dialog-luong-thuc',
       nzComponentParams: {
         disabledGoiThau: disabledGoiThau,
         dataAll: this.listOfData,
@@ -478,7 +497,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (this.formData.invalid) {
         return;
       }
-      this.formData.get('loaiVthh').setValue(this.loaiVthhInput)
+      if (this.formData.get('loaiVthh').value == null) {
+        this.formData.get('loaiVthh').setValue(this.loaiVthhInput)
+      }
       await this.luuVaGuiDuyet(isGuiDuyet);
     } else {
       this.helperService.markFormGroupTouched(this.formData);
@@ -601,6 +622,10 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         soQd: '150/TCDT',
       });
     }
+  }
+
+  onChangeNamKh() {
+    this.getDataChiTieu();
   }
 
   convertTienTobangChu(tien: number): string {
@@ -883,6 +908,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         fileDinhKem.fileName = resUpload.filename;
         fileDinhKem.fileSize = resUpload.size;
         fileDinhKem.fileUrl = resUpload.url;
+        const lastPeriodIndex = resUpload.filename.lastIndexOf(".");
+        if (lastPeriodIndex !== -1) {
+          fileDinhKem.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
+        } else {
+          fileDinhKem.noiDung = resUpload.filename;
+        }
         if (type == 'bao-gia') {
           if (id == 0) {
             this.addModelBaoGia.taiLieu = [];
@@ -1145,12 +1176,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     } else {
       this.expandSet3.delete(id);
     }
-  }
-
-  async ngOnChanges(changes: SimpleChanges) {
-    if (changes) {
-      await this.getDetail(this.idInput);
-    };
   }
 
   isDisbleForm(): boolean {
