@@ -28,12 +28,16 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
+  listNam: any[] = [];
+  yearNow = dayjs().get('year');
 
   searchFilter = {
     soPhieu: '',
     ngayTongHop: '',
     ketLuan: '',
     soQuyetDinh: '',
+    namKhoach: '',
+    soBb: ''
   };
 
   optionsDonVi: any[] = [];
@@ -55,10 +59,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isView: boolean = false;
   idQdGiaoNvNh: number = 0;
   isTatCa: boolean = false;
-
+  tuNgayLP: Date | null = null;
+  denNgayLP: Date | null = null;
+  tuNgayKT: Date | null = null;
+  denNgayKT: Date | null = null;
   allChecked = false;
   indeterminate = false;
-
   STATUS = STATUS;
 
   filterTable: any = {
@@ -89,6 +95,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -141,12 +153,20 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "page": this.page - 1
       },
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKhoach,
+      soBbNtBq: this.searchFilter.soBb,
+      tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
+      tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable)
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
           item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
@@ -200,7 +220,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       ngayTongHop: '',
       ketLuan: '',
       soQuyetDinh: '',
+      namKhoach: '',
+      soBb: ''
     };
+    this.tuNgayLP = null;
+    this.denNgayLP = null;
+    this.tuNgayKT = null;
+    this.denNgayKT = null;
     this.search();
   }
 
@@ -389,4 +415,42 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
+    }
+  }
+
+  disabledTuNgayLP = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayLP) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayLP.getTime();
+  };
+
+  disabledDenNgayLP = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayLP) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayLP.getTime();
+  };
+
+  disabledTuNgayKT = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayLP) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayLP.getTime();
+  };
+
+  disabledDenNgayKT = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayLP) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayLP.getTime();
+  };
+
 }

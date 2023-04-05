@@ -13,7 +13,7 @@ export class ChucNangKiemTraComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.typeVthh);
-    this.tabSelected = this.typeVthh.startsWith('02') ? 3 : 0;
+    this.tabSelected = this.typeVthh.startsWith('02') ? 3 : 1;
   }
 
   tabSelected: number = 0;
