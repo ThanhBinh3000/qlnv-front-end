@@ -318,11 +318,11 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.modal.close(true);
         }   else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       })
-      this.modal.close(true);
     }
     this.spinner.hide()
   }
@@ -349,11 +349,11 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.modal.close(true);
         }   else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
-      this.modal.close(true);
     }
     this.spinner.hide()
   }
@@ -380,11 +380,11 @@ export class ThemMoiKhoComponent implements OnInit {
       this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.modal.close(true);
         }  else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
-      this.modal.close(true);
     } else {
 
     }
