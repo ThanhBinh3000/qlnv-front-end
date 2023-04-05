@@ -56,9 +56,9 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 			}
 		}
 		if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
-			this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
 		} else {
-			this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_THOC);
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
 		}
 	}
 

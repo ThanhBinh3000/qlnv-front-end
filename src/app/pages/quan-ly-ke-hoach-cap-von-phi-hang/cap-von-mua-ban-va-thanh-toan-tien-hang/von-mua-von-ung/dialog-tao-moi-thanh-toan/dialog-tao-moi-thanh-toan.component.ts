@@ -52,6 +52,15 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
     }
 
+    changeDnghi() {
+        this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_VTU);
+        if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
+        } else {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_THOC);
+        }
+    }
+
     //lay ra chi tiet cua de nghi
     async getDetail() {
         if (!this.response.namDnghi || !this.response.canCuVeGia) {
