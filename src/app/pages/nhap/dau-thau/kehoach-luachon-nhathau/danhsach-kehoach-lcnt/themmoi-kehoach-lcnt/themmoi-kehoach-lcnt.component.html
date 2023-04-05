@@ -507,8 +507,8 @@
           <tr>
             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
-            <td>{{item.soLuongTheoChiTieu}}</td>
-            <td>{{item.soLuongDaMua}}</td>
+            <td class="text-right">{{item.soLuongTheoChiTieu}}</td>
+            <td class="text-right">{{item.soLuongDaMua}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -525,12 +525,13 @@
               <td>{{dtGoiThau.diaDiemNhap}}</td>
               <td></td>
               <td></td>
-              <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh) + (dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *
+              <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{dtGoiThau.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">{{(dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh) + (dtGoiThau.soLuong *
+                dtGoiThau.donGiaTamTinh *
                 formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right" *ngIf="userService.isCuc() && !isView">
                 <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
@@ -548,12 +549,12 @@
         <td></td>
         <td></td>
         <td colspan="4" class="first-last-row-table background-last-row text-left blue-text">Tổng</td>
-        <td class="background-last-row text-left blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
-        <td class="background-last-row text-left blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
         <td>
-        <td class="background-last-row text-left blue-text">{{ calcTongThanhTienBaoLanh() | number : '1.0-1' : 'vi_VN'
+        <td class="background-last-row text-right blue-text">{{ calcTongThanhTienBaoLanh() | number : '1.0-1' : 'vi_VN'
           }}</td>
       </tr>
     </nz-table>
@@ -592,12 +593,12 @@
             <td></td>
             <td></td>
             <td></td>
-            <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{item.dviTinh }}</td>
-            <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-center">{{item.dviTinh }}</td>
+            <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right">{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="!isView">
               <a (click)="themMoiGoiThau(item,i)">
                 <i class="fa fa-pencil"></i>
@@ -619,12 +620,12 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.dviTinh }}</td>
-                <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.dviTinh }}</td>
+                <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">
                 </td>
               </tr>
@@ -640,12 +641,12 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
-                    <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{chiCuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{chiCuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                     <td class="text-right">
                     </td>
                   </tr>
@@ -659,12 +660,12 @@
                       <td>{{diemKho.tenDvi}}</td>
                       <td></td>
                       <td></td>
-                      <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                       <td></td>
-                      <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="text-right">
                       </td>
                     </tr>
@@ -675,6 +676,20 @@
           </ng-container>
         </ng-container>
       </tbody>
+      <tr *ngIf="listDataGroup.length > 0">
+        <td></td>
+        <td></td>
+        <td colspan="4" class="first-last-row-table background-last-row text-left blue-text">Tổng</td>
+        <td></td>
+        <td></td>
+        <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
+          'vi_VN'}}</td>
+        <td></td>
+      </tr>
     </nz-table>
     <!-- END TABLE VẬT TƯ  -->
   </nz-card>
