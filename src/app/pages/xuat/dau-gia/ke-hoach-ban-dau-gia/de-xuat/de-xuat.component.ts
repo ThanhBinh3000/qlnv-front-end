@@ -91,26 +91,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
     this.search();
   }
 
-  export() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        this.deXuatKhBanDauGiaService
-          .export(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, 'Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,

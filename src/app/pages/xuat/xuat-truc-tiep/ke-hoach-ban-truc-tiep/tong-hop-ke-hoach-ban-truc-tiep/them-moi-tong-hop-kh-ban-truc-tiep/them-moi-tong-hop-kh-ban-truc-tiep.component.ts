@@ -35,7 +35,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   datePipe = new DatePipe('en-US');
-
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -103,11 +103,20 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
           idTh: data.id
         })
         this.dataTable = data.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
       }
       else {
         this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+
       }
     }
+  }
+
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
   }
 
   async tongHopDeXuatTuCuc() {
@@ -135,6 +144,9 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTable = dataDetail.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -221,8 +233,13 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }
