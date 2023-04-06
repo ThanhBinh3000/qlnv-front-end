@@ -5,22 +5,10 @@
             <span>Quay lại</span>
         </button>
         <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC "
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
-
-        </button>
-        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() "
-            (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi do"></i>
-            <span>Từ chối</span>
-        </button>
-        <button class="btn btn-sub xanh-nhat" (click)="pheDuyet()" *ngIf="  this.userService.isChiCuc() && isDisabled() 
-        && (userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KT')  
-        || userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_LDCCUC'))">
-            <i class="icon htvbdh_tcdt_pheduyet "></i>
-            <span>Duyệt</span>
         </button>
         <button class="btn btn-sub xanh"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
@@ -28,6 +16,40 @@
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
+        <button type="button" class="btn btn-sub do"
+            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KTVBQ') "
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+        </button>
+        <button type="button" class="btn btn-sub do"
+            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KT  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KT') "
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+        </button>
+        <button type="button" class="btn btn-sub do"
+            *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDCC  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_LDCCUC') "
+            (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_KTVBQ  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KTVBQ')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet "></i>
+            <span>Duyệt</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && formData.value.trangThai == STATUS.CHO_DUYET_KT && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_KT')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_KT)" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet "></i>
+            <span>Duyệt</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_DUYET_LDCCUC')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet "></i>
+            <span>Duyệt</span>
+        </button>
+
     </div>
 </nz-affix>
 <div class="bg-trang">

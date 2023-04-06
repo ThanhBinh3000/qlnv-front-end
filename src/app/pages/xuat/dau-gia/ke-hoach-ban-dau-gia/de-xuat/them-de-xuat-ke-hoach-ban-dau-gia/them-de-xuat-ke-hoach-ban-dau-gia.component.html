@@ -6,31 +6,45 @@
     </button>
     <ng-container>
       <button
-        *ngIf="loaiVthhInput.startsWith('02') ? ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP')) ||
-         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU'))):
-         ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP')) ||
-         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU'))) "
+        *ngIf=" loaiVthhInput.startsWith('02') ?  
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+        ||  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)
+        || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') && (formData.value.trangThai===STATUS.DA_DUYET_LDC) :
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+        ||  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)
+        || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
         type="button" class="btn btn-sub do" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="loaiVthhInput.startsWith('02') ? ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP')) ||
-         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU'))):
-         ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP')) ||
-         (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC')) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU'))) "
+        *ngIf=" loaiVthhInput.startsWith('02') ?  
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+        ||  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)
+        || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_DUYET_CANBOVU') && (formData.value.trangThai===STATUS.DA_DUYET_LDC) :
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+        ||  userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)
+        || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_DUYET_CANBOVU') && (formData.value.trangThai===STATUS.DA_DUYET_LDC)"
         type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
+        *ngIf=" loaiVthhInput.startsWith('02') ? 
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC) || (formData.value.trangThai===STATUS.TU_CHOI_CBV)) :
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC) || (formData.value.trangThai===STATUS.TU_CHOI_CBV))"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV ) "
+        *ngIf=" loaiVthhInput.startsWith('02') ? 
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC) || (formData.value.trangThai===STATUS.TU_CHOI_CBV)) :
+        userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+        || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC) || (formData.value.trangThai===STATUS.TU_CHOI_CBV))"
         type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -207,7 +221,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input [readonly]="isDisable()" formControlName="moTaHangHoa" />
                 </nz-form-control>
