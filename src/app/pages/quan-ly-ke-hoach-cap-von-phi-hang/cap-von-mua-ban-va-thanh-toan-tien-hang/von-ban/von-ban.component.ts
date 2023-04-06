@@ -86,9 +86,9 @@ export class VonBanComponent implements OnInit {
             data => {
                 if (data.statusCode == 0) {
                     if (this.userService.isCuc()) {
-                        this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CDT') || e.tenVietTat.indexOf('_VP') != -1));
+                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CDT'));
                     } else {
-                        this.donVis = data.data.filter(e => e.tenVietTat && (e.tenVietTat.startsWith('CCDT') || e.tenVietTat.indexOf('_VP') != -1))
+                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CCDT'))
                     }
                 } else {
 
