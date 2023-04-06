@@ -23,6 +23,8 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  idThop: number = 0;
+  isViewThop: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -190,5 +192,15 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
   closeModalQdPd() {
     this.idQdPd = null;
     this.isViewQdPd = false;
+  }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
   }
 }

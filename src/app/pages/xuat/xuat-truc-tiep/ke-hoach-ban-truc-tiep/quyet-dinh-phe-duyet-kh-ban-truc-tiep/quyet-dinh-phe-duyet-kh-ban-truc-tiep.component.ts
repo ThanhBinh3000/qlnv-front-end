@@ -62,10 +62,8 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
-      await this.timKiem();
+      this.timKiem();
+      await this.search();
       await this.spinner.hide();
     }
     catch (e) {
@@ -76,21 +74,16 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   }
 
   async timKiem() {
-    if (this.formData.value.ngayKyQd) {
-      this.formData.value.ngayKyQdTu = dayjs(this.formData.value.ngayKyQd[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKyQdDen = dayjs(this.formData.value.ngayKyQd[1]).format('YYYY-MM-DD')
-    }
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       lastest: 0
     })
-
-    await this.search();
   }
 
   clearFilter() {
     this.formData.reset();
     this.timKiem();
+    this.search();
   }
 
   openModalDxKh(id: number) {

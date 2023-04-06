@@ -50,7 +50,7 @@
                     <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_EXP')" type="button"
-                    class="btn btn-sub" (click)="export()">
+                    class="btn btn-sub" (click)="exportData('Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -147,7 +147,11 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.noiDungThop }}</td>
                         <td>{{ data.namKh }}</td>
-                        <td>{{ data.soQdPd }}</td>
+                        <td>
+                            <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" nzBlock
+                                (click)="openModalQdPd(data.idQdPd)">{{
+                                data.soQdPd}}</a>
+                        </td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
@@ -194,3 +198,16 @@
     <app-them-quyet-dinh-ban-dau-gia [idTh]="idSelected" (showListEvent)="showTongHop()">
     </app-them-quyet-dinh-ban-dau-gia>
 </div>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-quyet-dinh-ban-dau-gia>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

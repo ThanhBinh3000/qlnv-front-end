@@ -19,6 +19,8 @@ import { saveAs } from 'file-saver';
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isQuyetDinh: boolean = false;
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
@@ -104,24 +106,14 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.search();
   }
 
-  export() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        this.tongHopDeXuatKeHoachBanDauGiaService
-          .export(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, 'Danh-sach-tong-hop-ke-hoach-ban-dau-gia.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
+
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
   }
 
   disabledNgayThopTu = (startValue: Date): boolean => {
