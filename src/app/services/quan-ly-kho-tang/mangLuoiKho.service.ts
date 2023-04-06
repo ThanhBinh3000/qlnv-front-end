@@ -29,4 +29,9 @@ export class MangLuoiKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getMaKhoLonNhatTheoIdCha(type, id): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/ma-kho/${id}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }

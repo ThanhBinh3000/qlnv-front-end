@@ -629,11 +629,11 @@ export class MangLuoiKhoComponent implements OnInit {
   create() {
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
-      nzTitle: 'Thêm mới tổ chức kho',
+      nzTitle: 'THÊM MỚI TỔ CHỨC KHO',
       nzContent: ThemMoiKhoComponent,
       nzClosable: true,
       nzFooter: null,
-      nzStyle: {top: '50px'},
+      nzStyle: {top: '50px',backgroud:'red'},
       nzWidth: 1600
     });
     modal.afterClose.subscribe(res => {
