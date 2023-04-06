@@ -147,7 +147,8 @@ export class MangLuoiKhoComponent implements OnInit {
       ngayNhapDay: [''],
       sdt: [''],
       idParent: [''],
-      isKhoiTao: [null]
+      isKhoiTao: [null],
+      dviReq: [null]
     })
   }
 
@@ -681,6 +682,25 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   themSoDuDauKy() {
+    let dviReq = {
+      "diaChi": this.detailDonVi.value.diaChi,
+      "fax": this.nodeDetail.fax,
+      "id": this.nodeDetail.id,
+      "maDvi": this.nodeDetail.maDvi,
+      "maDviCha":  this.nodeDetail.maDviCha,
+      "maKhqlh": this.nodeDetail.maKhqlh,
+      "maKtbq": this.nodeDetail.maKtbq,
+      "maQd": this.nodeDetail.maQd,
+      "maQhns":this.nodeDetail.maQhns,
+      "maTckt": this.nodeDetail.maTckt,
+      "maTr": this.nodeDetail.maTr,
+      "sdt": this.nodeDetail.sdt,
+      "tenDvi": this.levelNode == 4 ? this.detailDonVi.value.tenDiemkho : this.levelNode == 5 ? this.detailDonVi.value.tenNhakho : this.levelNode == 6 ? this.detailDonVi.value.tenNgankho : this.detailDonVi.value.tenNganlo,
+      "tenVietTat": this.nodeDetail.tenVietTat,
+      "trangThai": this.nodeDetail.trangThai,
+      "type": this.nodeDetail.type,
+    }
+    this.detailDonVi.value.dviReq = dviReq
     const modalQD = this.modals.create({
       nzTitle: 'KHỞI TẠO SỐ DƯ ĐẦU KỲ CHO NGĂN/LÔ KHO',
       nzContent: DialogThemMoiSoDuDauKyComponent,
