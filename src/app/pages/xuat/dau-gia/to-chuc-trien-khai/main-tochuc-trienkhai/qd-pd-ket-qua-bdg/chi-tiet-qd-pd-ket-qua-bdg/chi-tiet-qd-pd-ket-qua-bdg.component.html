@@ -47,10 +47,10 @@
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung">
+      <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
         <form nz-form nzLayout="vertical" [formGroup]="formData">
           <div nz-row [nzGutter]="[20]">
-            <div nz-col nzSpan="2">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Năm kế hoạch
                 </nz-form-label>
@@ -83,7 +83,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -92,7 +92,7 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày ký</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -103,6 +103,49 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
+                    [nzDisabled]="isDisabled()">
+                    <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="3">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                <nz-form-control>
+                  <nz-select formControlName="kieuNx" [nzDisabled]="true">
+                    <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfterIcon="folder-open">
+                    <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-input-group nzAddOnAfterIcon="folder-open">
+                    <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
+                  </nz-input-group>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="6">
+              <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Mã thông báo bán đấu giá</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabled() ? null : openMaThongBao()">
@@ -111,10 +154,10 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="3">
+            <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzTooltipTitle="Số biên bản bán đấu giá/số thông báo bán đấu giá không thành" nzRequired
-                  [nzNoColon]="true">Số biên bản </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Số biên bản bán đấu giá/số thông báo bán đấu giá không
+                  thành </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabled() ? null : openMaThongBao()">
                     <input [readonly]="true" nz-input formControlName="soBienBan" readonly />
@@ -162,14 +205,21 @@
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" nzSpan="24">
+                <nz-form-label [nzNoColon]="true">
                   Căn cứ pháp lý
                 </nz-form-label>
+                <div class="list-file">
+                  <file-list [disabled]="isDisabled()" [data]="fileDinhKems"></file-list>
+                </div>
               </nz-form-item>
+            </div>
+            <div nz-col nzSpan="24">
               <nz-form-item>
-                <div class="list-file" nz-col nzSpan="24">
-                  <file-list [data]="fileDinhKem" [disabled]="isDisabled()">
-                  </file-list>
+                <nz-form-label [nzNoColon]="true">
+                  File đính kèm QĐ PDKQBĐG đã ký
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
                 </div>
               </nz-form-item>
             </div>
@@ -178,7 +228,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="Thông tin quyết định phê duyệt kết quả bán đấu giá">
+      <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ ĐẤU GIÁ">
         <nz-table class="pd-10 " [nzScroll]="{ x: '1400px' }" nzBordered [nzData]="dataTable">
           <thead>
             <tr>
@@ -195,8 +245,8 @@
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá trúng DG (đồng)</th>
-              <th nzWidth="100px" class="text-center wrap">Thành tiền đồng (đồng)</th>
+              <th nzWidth="100px" class="text-center wrap">Đơn giá trúng DG (đ)</th>
+              <th nzWidth="100px" class="text-center wrap">Thành tiền đồng (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Tổ chức/ cá nhân trúng đấu giát</th>
             </tr>
           </thead>
@@ -255,6 +305,18 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-col nzSpan="24">
+        <nz-form-item class="form-item display-block">
+          <nz-form-label [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <nz-form-control>
+            <textarea [readonly]="isDisabled()" nz-input [rows]="3" formControlName="ghiChu"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </form>
   </nz-card>
 </div>
 <ng-template #error let-control>

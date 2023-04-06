@@ -8,6 +8,8 @@ import { UserService } from "../../../../../services/user.service";
 })
 export class MainTochucTrienkhaiComponent implements OnInit {
   @Input() inputLoaiVthh: string;
+  @Input()
+  listVthh: any[] = [];
   constructor(public userService: UserService) {
   }
 

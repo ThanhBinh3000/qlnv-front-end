@@ -363,8 +363,7 @@
                             <th></th>
                             <th nzWidth="150px" class="text-center wrap">Chi cục</th>
                             <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-                            <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-                            <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
+
                             <th class="text-center wrap">Lô kho</th>
                             <th nzWidth="100px" class="text-center wrap"
                                 *ngIf="!formData.value.typeVthh?.startsWith('02')">MĐVTS</th>
@@ -390,7 +389,7 @@
                         <ng-container *ngFor="let item of dataTable , let i = index">
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                                <td colspan="7">{{item.tenDvi}}</td>
+                                <td colspan="5">{{item.tenDvi}}</td>
                                 <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
@@ -411,9 +410,9 @@
                                     <td></td>
                                     <td></td>
                                     <td>{{children.tenDiemKho}}</td>
-                                    <td>{{children.tenNhaKho}}</td>
-                                    <td>{{children.tenNganKho}}</td>
-                                    <td>{{children.tenLoKho}}</td>
+                                    <td>{{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
+                                        {{children.tenNhaKho}}
+                                    </td>
                                     <td>{{children.maDviTsan}}</td>
                                     <td>{{children.duDau | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
