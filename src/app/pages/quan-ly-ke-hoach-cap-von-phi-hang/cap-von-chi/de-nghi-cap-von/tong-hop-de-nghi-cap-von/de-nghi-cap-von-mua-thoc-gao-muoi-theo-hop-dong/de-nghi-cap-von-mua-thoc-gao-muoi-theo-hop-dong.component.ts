@@ -475,7 +475,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 		this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongVonVaDtDaCap]);
 		this.editCache[id].data.vonDuyetCong = sumNumber([this.editCache[id].data.vonDuyetCapUng, this.editCache[id].data.vonDuyetCapVon]);
 		this.editCache[id].data.tongCap = sumNumber([this.editCache[id].data.tongVonVaDtDaCap, this.editCache[id].data.vonDuyetCong]);
-		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.duToanDaGiao, -this.editCache[id].data.vonDuyetCong]);
+		this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtHopDong, -this.editCache[id].data.tongCap]);
 	}
 
 	getTotal() {
