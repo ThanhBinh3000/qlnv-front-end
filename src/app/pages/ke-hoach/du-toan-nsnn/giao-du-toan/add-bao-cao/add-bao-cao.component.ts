@@ -46,32 +46,6 @@ export class ItemData {
 }
 
 export class BaoCao {
-  // id: string;
-  // nam: number;
-  // lstBcaoDviTrucThuocs: any[];
-  // lstCtiets: ItemData[];
-  // lstFiles: any[];
-  // ngayTao: any;
-  // nguoiTao: string;
-  // maBcao: string;
-  // maDvi: string;
-  // maDviCha: string;
-  // trangThai: string;
-  // ngayTrinh: any;
-  // ngayDuyet: any;
-  // ngayPheDuyet: any;
-  // ngayTraKq: any;
-  // soQd: ItemCongVan;
-  // lyDoTuChoi: string;
-  // giaoSoTranChiId: string;
-  // thuyetMinh: string;
-  // fileDinhKems: any[];
-  // listIdDeleteFiles: string[];
-  // tongHopTuIds: any[];
-  // maGiao: string;
-  // maPaCha: string;
-  // maPa: string;
-
   id: string;
   maPa: string;
   maBcao: string; // Thêm trường maBcao	
@@ -306,14 +280,6 @@ export class AddBaoCaoComponent implements OnInit {
         this.baoCao.lstFiles = [];
         this.baoCao.listIdFiles = [];
       }
-      // this.baoCao.trangThai = "1";
-      // this.baoCao.nguoiTao = this.userInfo?.sub;
-      // this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
-      // this.baoCao.namPa = this.data?.namPa;
-      // this.baoCao.namDtoan = this.data?.namDtoan;
-      // this.baoCao.tongHopTuIds = [];
-      // this.baoCao.lstFiles = [];
-      // this.baoCao.listIdFiles = [];
       if (this.baoCao.lstGiaoDtoanTrucThuocs?.length == 0) {
         this.listAppendix.forEach(item => {
           if (item.id == "pl04") {
@@ -470,8 +436,6 @@ export class AddBaoCaoComponent implements OnInit {
       statusBtnPrint: this.printStatus,
       acceptStatus: this.acceptStatus,
       status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
-      // viewAppraisalValue: this.viewAppraisalValue,
-      // editAppraisalValue: this.acceptStatus,
       isSynthetic: isSynthetic
     };
 
@@ -566,15 +530,15 @@ export class AddBaoCaoComponent implements OnInit {
 
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
           const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04").lstCtietBcaos
-          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3")?.tongCong
-          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.1")?.tongCong
-          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.2")?.tongCong
-          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.3")?.tongCong
-          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.3.4")?.tongCong
+          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2")?.tongCong
+          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
+          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
+          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
+          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
           dataInfo.extraData.push({
             dtoanGiao: tongCong,
             id: uuid.v4() + "FE",
-            stt: "0.1.2.3",
+            stt: "0.1.2.2",
             loaiPa: null,
             nguonKhac: null,
             nguonNsnn: null,
@@ -586,14 +550,14 @@ export class AddBaoCaoComponent implements OnInit {
                 soTranChi: soTranChi
               }
             ],
-            maNdung: "0.1.2.3",
+            maNdung: "0.1.2.2",
             tongCong: soTranChi
           })
 
           dataInfo.extraData.push({
             dtoanGiao: tongCong1N,
             id: uuid.v4() + "FE",
-            stt: "0.1.2.3.2",
+            stt: "0.1.2.2.2",
             loaiPa: null,
             nguonKhac: null,
             nguonNsnn: null,
@@ -605,14 +569,14 @@ export class AddBaoCaoComponent implements OnInit {
                 soTranChi: tongPl1N
               }
             ],
-            maNdung: "0.1.2.3.2",
+            maNdung: "0.1.2.2.2",
             tongCong: tongPl1N
           })
 
           dataInfo.extraData.push({
             dtoanGiao: tongCong1X,
             id: uuid.v4() + "FE",
-            stt: "0.1.2.3.3",
+            stt: "0.1.2.2.3",
             loaiPa: null,
             nguonKhac: null,
             nguonNsnn: null,
@@ -624,33 +588,14 @@ export class AddBaoCaoComponent implements OnInit {
                 soTranChi: tongPl1X
               }
             ],
-            maNdung: "0.1.2.3.3",
+            maNdung: "0.1.2.2.3",
             tongCong: tongPl1X
-          })
-
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong2,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.3.4",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
-                soTranChi: tongPl2
-              }
-            ],
-            maNdung: "0.1.2.3.4",
-            tongCong: tongPl2
           })
 
           dataInfo.extraData.push({
             dtoanGiao: tongCong3,
             id: uuid.v4() + "FE",
-            stt: "0.1.2.3.1",
+            stt: "0.1.2.2.4",
             loaiPa: null,
             nguonKhac: null,
             nguonNsnn: null,
@@ -662,8 +607,27 @@ export class AddBaoCaoComponent implements OnInit {
                 soTranChi: tongPl3
               }
             ],
-            maNdung: "0.1.2.3.1",
+            maNdung: "0.1.2.2.4",
             tongCong: tongPl3
+          })
+
+          dataInfo.extraData.push({
+            dtoanGiao: tongCong2,
+            id: uuid.v4() + "FE",
+            stt: "0.1.2.2.1",
+            loaiPa: null,
+            nguonKhac: null,
+            nguonNsnn: null,
+            panDtCtietId: null,
+            lstCtietDvis: [
+              {
+                id: uuid.v4() + "FE",
+                maDviNhan: this.userInfo.MA_DVI,
+                soTranChi: tongPl2
+              }
+            ],
+            maNdung: "0.1.2.2.1",
+            tongCong: tongPl2
           })
         }
         break;
@@ -1015,7 +979,6 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
-    console.log(this.userService)
     // let isParent
     // if (this.userInfo.CAP_DVI == "1") {
     //   this.childUnit.forEach(s => {

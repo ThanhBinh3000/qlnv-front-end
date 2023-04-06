@@ -96,10 +96,6 @@
                                 <th rowspan="2" nzWidth="300px">Tổng cộng</th>
                                 <th colspan="2" nzWidth="200px">Trong đó</th>
                                 <th rowspan="2" [hidden]="status"></th>
-                                <!-- <th rowspan="2" [hidden]="status">
-                                    <label nz-checkbox [(ngModel)]="allChecked"
-                                        (ngModelChange)="updateAllChecked()"></label>
-                                </th> -->
                             </tr>
                             <tr>
                                 <th style="width: 50%">
@@ -113,7 +109,7 @@
                         <tbody>
                             <tr *ngFor="let data of lstCtietBcao; let i = index">
                                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                    <td [nzIndentSize]="data.level! * 8">
+                                    <td>
                                         {{getChiMuc(data.stt)}}
                                     </td>
                                     <td>
@@ -125,25 +121,15 @@
                                     </td>
                                     <td>{{displayValue(data.tongCong)}}</td>
                                     <td>{{displayValue(data.nguonNsnn)}}</td>
-                                    <td>{{displayValue(data.nguonKhac)}}</td>
-                                    <!-- <td [hidden]="status">
-                                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td> -->
+                                    <td>{{displayValue(data.nguonKhac)}}</td>  
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </ng-container>
                                     </td>
-                                    <!-- <td [hidden]="status">
-                                        <i class="fa fa-plus" (click)="addLine(data.id)"></i>
-                                    </td> -->
-                                    <!-- <td [hidden]="status">
-                                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                            (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
-                                    <td [nzIndentSize]="data.level * 8">
+                                    <td>
                                         {{getChiMuc(editCache[data.id].data.stt)}}
                                     </td>
                                     <td>
@@ -242,16 +228,6 @@
 
             <ng-template #extraTemplate>
                 <div class="buttons">
-                    <!-- <button type="button" class="btn btn-sub btn-xoa" (click)="deleteAllChecked()" [hidden]="status">
-                        <i class="fa fa-trash-o do"></i>
-                        <span>Xóa</span>
-                    </button>
-                    <ng-container *ngIf="lstCtietBcao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-                            <i class="icon htvbdh_dau-cong"></i>
-                            <span>Thêm</span>
-                        </button>
-                    </ng-container> -->
                 </div>
             </ng-template>
         </div>

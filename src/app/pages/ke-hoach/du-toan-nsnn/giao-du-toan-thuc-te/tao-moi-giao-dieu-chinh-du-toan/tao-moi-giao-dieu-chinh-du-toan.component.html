@@ -61,7 +61,7 @@
         <div class="header-text">
           <div class="title-chi-tieu">
             <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-            <span>Phương án giao điều chỉnh dự toán chi NSNN </span>
+            <span>Phương án giao điều chỉnh dự toán chi NSNN</span>
           </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -135,28 +135,15 @@
               <tr>
                 <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
                 <th rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
+                <th rowspan="2">Số tiền giao từ cấp trên</th>
                 <th rowspan="2">Tổng số</th>
                 <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
                 <th rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
               </tr>
-              <!-- <tr>
-                <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                  (nzOnConfirm)="deleteCol(item.maDvi)">
-                  {{item.tenDvi}}
-                </th>
-              </tr> -->
               <tr>
-                <!-- <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
-                  <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                    (nzOnConfirm)="deleteCol(item.maDvi)">
-                    {{item.tenDvi}}
-                  </th>
-                </ng-container>
-                <ng-template #nonDeleteCol> -->
-                  <th *ngFor="let item of lstDvi">
-                    {{getUnitName(item.maDvi)}}
-                  </th>
-                <!-- </ng-template> -->
+                <th *ngFor="let item of lstDvi">
+                  {{getUnitName(item.maDvi)}}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -175,6 +162,7 @@
                     </div>
                   </td>
                   <td>{{displayValue(data.tongCong)}}</td>
+                  <td>{{displayValue(data.tongCongSoTranChi)}}</td>
                   <td *ngFor="let item of lstDvi">
                     <div *ngFor="let e of data.lstCtietDvis;">
                       <div *ngIf="e.maDviNhan == item.maDvi">
@@ -202,6 +190,9 @@
                   <td>
                     {{displayValue(editCache[data.id].data.tongCong)}}
                   </td>
+                  <td>
+                    {{displayValue(editCache[data.id].data.tongCongSoTranChi)}}
+                  </td>
                   <td *ngFor="let item of lstDvi">
                     <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
                       <div *ngIf="e.maDviNhan == item.maDvi">
@@ -224,7 +215,7 @@
                 <tr [hidden]="statusBtnGiao">
                   <td nzLeft></td>
                   <td nzLeft></td>
-                  <td nzLeft></td>
+                  <td></td>
                   <td *ngFor="let item of lstDvi">
                     <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
                       <div *ngIf="e.maDviNhan == item.maDvi">
@@ -340,25 +331,9 @@
       </nz-card>
       <ng-template #extraTemplate>
         <div class="buttons">
-          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" *ngIf="!status">
-            <i class="fa fa-trash-o"></i>
-            <span>Xóa</span>
-          </button>
-          <ng-container *ngIf="lstCtietBcao.length == 0">
-            <button type="button" class="btn btn-main" (click)="addLine(null)" *ngIf="!status">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm hàng</span>
-            </button>
-          </ng-container>
           <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo">
             <span>Giao toàn bộ</span>
           </button>
-          <ng-container *ngIf="lstCtietBcao.length == 0">
-            <button type="button" class="btn btn-main" (click)="addAllCol()" *ngIf="!status">
-              <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm cột</span>
-            </button>
-          </ng-container>
           <button type="button" class="btn btn-sub" *ngIf="!status">
             <i class="icon htvbdh_tcdt_import"></i>
             <span>Import</span>

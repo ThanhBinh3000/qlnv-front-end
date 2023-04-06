@@ -31,7 +31,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
 
   filterTable: any = {
     maPa: '',
-    ngayTaoTu: '',
+    ngayTao: '',
     namPa: '',
   };
 
@@ -179,7 +179,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
 
   addNewReport() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Thông tin tạo mới báo cáo điều chỉnh dự toán chi ngân sách nhà nước',
+      nzTitle: 'Thông tin tạo mới quyết định giao số trần chi của Bộ Tài Chính',
       nzContent: DialogTaoMoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
