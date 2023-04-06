@@ -1,25 +1,33 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { saveAs } from 'file-saver';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {saveAs} from 'file-saver';
+import {
+  HopDongXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { chain, cloneDeep } from 'lodash';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  QdPdKetQuaBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {
+  ThongTinDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import {chain, cloneDeep} from 'lodash';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin',
@@ -46,6 +54,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   expandSetString = new Set<string>();
   listMaDvts = [];
   listHdDaKy = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -124,7 +133,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.maHopDongSuffix = `/${this.formData.value.nam}/HĐMB`;
     await Promise.all([
       this.loadDataComboBox(),
-      this.loadDsHd()
     ]);
 
     if (this.id) {
@@ -134,6 +142,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }
     if (this.idKqBdg) {
       await this.onChangeKqBdg(this.idKqBdg);
+      await this.loadDsHd();
     }
   }
 
@@ -227,6 +236,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.formData.controls["ghiChu"].setValidators([Validators.required]);
 
   }
+
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
     this.idPhuLuc = id;
@@ -297,6 +307,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   async loadDsHd() {
     let body = {
+      soQdKq: this.formData.value.soQdKq,
       trangThai: STATUS.DA_KY,
       loaiVthh: this.loaiVthh,
     }
@@ -308,8 +319,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
   setListDviTsan(inputTable) {
+    console.log(inputTable, 'inputTable')
     this.listDviTsan = [];
+
     inputTable.forEach((item) => {
       item.children.forEach(element => {
         element.maChiCuc = item.maDvi
@@ -317,7 +331,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         element.diaChi = item.diaChi
         element.donGiaVat = element.donGiaTraGia
       });
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
+        maDviTsan: key,
+        children: value
+      })).value();
+      console.log(dataGroup, 'dataGroup')
       item.dataDviTsan = dataGroup;
       item.dataDviTsan.forEach(x => {
         x.soLanTraGia = x.children[0].soLanTraGia
@@ -330,16 +348,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         }
       })
     })
-    console.log(this.objHopDongHdr, 999);
-    if (this.formData.value.maDviTsan?.length > 0) {
-      this.listDviTsan = this.formData.value.listMaDviTsan;
-    } else {
-      this.listDviTsan = this.listDviTsan.filter(dviTsan => {
-        const dviTsanId = dviTsan.maDviTsan.toString();
-        const hdDviTsans = this.listHdDaKy.flatMap(hd => hd.maDviTsan.split(","));
-        return !hdDviTsans.includes(dviTsanId);
-      });
+
+    if (!this.id) {
+      this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => s1.maDviTsan === s.maDviTsan));
     }
+
   }
 
   taiLieuDinhKem(type?: string) {
@@ -401,7 +414,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   selectMaDviTsan() {
-    console.log(this.listDviTsan, 456);
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
       let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
       listAll.forEach(s => {
@@ -414,11 +426,13 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       this.buildTableView();
     }
   }
+
   objectArrayIncludes(array, obj) {
     return array.some(function (element) {
       return element.id === obj.id;
     });
   }
+
   buildTableView() {
     let dataView = chain(this.listMaDvts)
       .groupBy("tenChiCuc")
@@ -436,17 +450,24 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.expandAll()
 
   }
+
   expandAll() {
     this.dataTable.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }
+
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
+
   ngOnChanges(changes: SimpleChanges) {
-    this.ngOnInit()
-    // changes.prop contains the old and the new value...
+    /*console.log(changes)
+    console.log(changes.id.isFirstChange())
+    if(!changes.id.isFirstChange()) {
+      this.ngOnInit()
+    }*/
+    this.ngOnInit();
   }
 }
 
