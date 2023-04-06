@@ -74,8 +74,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   phuongAnViewCache: any[] = [];
   listThanhTien: number[] = [0];
   listSoLuong: number[] = [0];
+  listSoLuongDx: number[] = [0];
   listThanhTienCache: number[] = [0];
   listSoLuongCache: number[] = [0];
+  listSoLuongDxCache: number[] = [0];
   slXuatCap: number = 0;
   slXuatCapCache: number = 0;
   expandSetString = new Set<string>();
@@ -630,9 +632,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     this.phuongAnView = dataView;
 
     this.expandAll()
+    console.log(this.deXuatPhuongAnCache, "deXuatPhuongAnCache");
     if (this.deXuatPhuongAnCache.length !== 0) {
       this.listThanhTienCache = this.deXuatPhuongAnCache.map(s => s.thanhTien);
       this.listSoLuongCache = this.deXuatPhuongAnCache.map(s => s.soLuongXuatChiCuc);
+      this.deXuatPhuongAnCache.map(s => this.listSoLuongDxCache = s.soLuongXuat);
     } else {
       this.listThanhTienCache = [0];
       this.listSoLuongCache = [0];
@@ -641,6 +645,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (this.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
+      this.deXuatPhuongAn.map(s => this.listSoLuongDx = s.soLuongXuat);
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
@@ -766,8 +771,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   tinhXuatCap() {
-    console.log(this.formData.value.xuatCap, "11");
-
     let tongSoLuongXuat = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTe = this.phuongAnView.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     if (tongSoLuongXuat > tongSoLuongXuatThucTe) {
@@ -776,17 +779,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.slXuatCap = null;
     }
     this.tongSoLuongDxuat = tongSoLuongXuatThucTe;
-    if (this.formData.value.xuatCap == true) {
-      this.formData.patchValue({
-        soLuongXuaCap: this.slXuatCap,
-        xuatCap: true
-      })
-    } else {
-      this.formData.patchValue({
-        soLuongXuaCap: null,
-        xuatCap: false
-      })
-    }
+    this.formData.patchValue({
+      soLuongXuaCap: this.slXuatCap,
+    })
     let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     if (tongSoLuongXuatCache > tongSoLuongXuatThucTeCache) {
