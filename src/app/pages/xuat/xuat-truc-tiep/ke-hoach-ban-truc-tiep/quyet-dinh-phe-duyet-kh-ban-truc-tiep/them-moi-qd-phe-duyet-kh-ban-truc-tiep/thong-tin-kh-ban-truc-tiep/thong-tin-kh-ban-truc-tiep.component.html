@@ -202,7 +202,9 @@
                             <td></td>
                             <td></td>
                             <td>{{children.tenDiemKho}}</td>
-                            <td>{{children.tenLoKho}}</td>
+                            <td>{{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}
+                                {{children.tenNhaKho}}
+                            </td>
                             <td>{{children.maDviTsan}}</td>
                             <td *ngIf="isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                             <td *ngIf="!isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>

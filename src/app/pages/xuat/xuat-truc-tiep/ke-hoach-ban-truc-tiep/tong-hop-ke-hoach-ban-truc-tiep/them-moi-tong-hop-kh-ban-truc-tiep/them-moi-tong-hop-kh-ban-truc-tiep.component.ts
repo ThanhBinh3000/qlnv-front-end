@@ -232,6 +232,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   idRowSelect: number;
   async showDetail($event, id: number) {
+    await this.spinner.show();
     if ($event.type == 'click') {
       this.selected = false
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
