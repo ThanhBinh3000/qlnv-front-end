@@ -22,13 +22,13 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DU_THAO_QD ? 'status-xanh' : 'status-do' ">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span>Tổng hợp kế hoạch bán đấu giá</span>
+                <span>TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ</span>
             </div>
         </div>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16">
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Thông tin tổng hợp'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ'" [nzActive]="true">
                 <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
                     <div nz-row [nzGutter]="20">
                         <div nz-col [nzSpan]="2">
@@ -94,7 +94,7 @@
     <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="isTongHop">
         <!--  Start Thông tin chung-->
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
                 <form nzLayout="vertical" nz-form [formGroup]="formData">
                     <div nz-row [nzGutter]="20">
                         <div nz-col [nzSpan]="6">
@@ -137,7 +137,7 @@
         <!--  End thông tin chung-->
 
         <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'Thông tin chi tiết đề xuất của các cục DTNN KV'" [nzActive]="true">
+            <nz-collapse-panel [nzHeader]="'THÔNG TIN CHI TIẾT ĐỀ XUẤT CỦA CÁC CỤC DTNN KV'" [nzActive]="true">
                 <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
                     <thead>

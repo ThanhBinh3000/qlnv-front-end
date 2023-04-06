@@ -501,7 +501,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     let ngayTao = new Date(pipe.transform(this.formData.value.ngayTao, 'yyyy-MM-dd'));
     let ngayPduyet = new Date(pipe.transform(this.formData.value.ngayPduyet, 'yyyy-MM-dd'));
     if (this.formData.value.ngayPduyet) {
-      if (ngayTao >= ngayPduyet) {
+      if (ngayTao > ngayPduyet) {
         this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
         return false
       }
