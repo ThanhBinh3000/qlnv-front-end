@@ -215,6 +215,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.thongtinPhanLo.donGiaVat = this.donGiaVat;
       this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
       this.thongtinPhanLo.dviTinh = this.dviTinh
+      this.thongtinPhanLo.maNhaKho = null;
+      this.thongtinPhanLo.maNganKho = null;
+      this.thongtinPhanLo.maLoKho = null;
     }
   }
 
