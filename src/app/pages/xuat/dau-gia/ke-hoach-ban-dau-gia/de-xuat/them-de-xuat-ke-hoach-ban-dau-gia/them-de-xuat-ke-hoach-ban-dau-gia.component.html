@@ -73,7 +73,7 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Đề xuất kế hoạch bán đấu giá</span>
+        <span>ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ</span>
       </div>
     </div>
   </div>
@@ -86,7 +86,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <!-- //Thông tin chung -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Thông tin chung'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="6">
@@ -502,7 +502,7 @@
 
     <!-- // Địa điểm giao nhận hàng -->
     <nz-collapse nzAccordion>
-      <nz-collapse-panel [nzHeader]="'Địa điểm giao nhận hàng'" [nzActive]="true">
+      <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM GIAO NHẬN HÀNG'" [nzActive]="true">
         <nz-table #ttChungDDGiaoNhan class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
           [nzData]="dataTable" nzBordered>
           <thead>
