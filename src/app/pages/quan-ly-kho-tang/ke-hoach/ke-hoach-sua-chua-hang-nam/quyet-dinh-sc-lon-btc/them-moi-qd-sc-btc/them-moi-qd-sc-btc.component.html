@@ -161,14 +161,14 @@
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.tgThucHien }}</td>
         <td>{{ data.ngayBhTmdt }}</td>
-        <td>{{ data.giaTriTmdt }}</td>
+        <td>{{ data.giaTriTmdt | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.ngayBhPd }}</td>
-        <td>{{ data.giaTriPd }}</td>
-        <td>{{ data.luyKeKh }}</td>
-        <td>{{ data.luyKeDuToan }}</td>
-        <td>{{ data.tinhHinh }}</td>
-        <td>{{ data.ncKhVon }}</td>
-        <td>{{ data.lastNcKhVon }}</td>
+        <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.luyKeKh | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.luyKeDuToan | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.tinhHinh | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.ncKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.lastNcKhVon | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.ghiChu }}</td>
       </tr>
       </tbody>
@@ -225,19 +225,31 @@
         <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.tgThucHien }}</td>
-        <td>{{ data.giaTriTmdt }}</td>
-        <td>{{ data.giaTriPd }}</td>
-        <td>{{ data.luyKeKh }}</td>
-        <td>{{ data.ncKhVon }}</td>
+        <td>{{ data.giaTriTmdt | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.luyKeKh | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.ncKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+        <td *ngIf="isEdit == idx">
+          <nz-input-number [(ngModel)]="data.ncKhVon" [nzSize]="'small'"
+                           [nzFormatter]="globals.formatter" [nzMin]="0"
+                           [nzParser]="globals.parser"></nz-input-number>
+        </td>
         <td>{{ data.ghiChu }}</td>
-          <td style="text-align: center;" nzRight>
-            <a (click)="editItem(idx)">
-              <i class=" fa fa-pencil"></i>
-            </a>
-            <a (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
+        <td class="text-center" *ngIf="!isViewDetail && isEdit != idx" nzRight>
+          <a (click)="editRow(idx)">
+            <i class="fa fa-pencil"></i>
+          </a>
+          <a (click)="deleteItem(idx)">
+            <i class="fa fa-trash-o do"></i>
+          </a>
+        </td>
+        <td class="text-center" *ngIf="!isViewDetail && isEdit == idx" nzRight>
+          <a class="save" (click)="saveEdit()">
+            <i class="fa fa-save"></i>
+          </a>
+          <a (click)="cancelEdit(data)">
+            <i class="fa fa-ban do"></i> </a>
+        </td>
       </tr>
       </tbody>
       <tfoot>

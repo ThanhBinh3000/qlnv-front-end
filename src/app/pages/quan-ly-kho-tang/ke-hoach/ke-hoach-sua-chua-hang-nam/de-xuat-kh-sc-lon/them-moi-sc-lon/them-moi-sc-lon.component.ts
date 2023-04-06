@@ -234,6 +234,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
     this.rowItem.maDvi = this.userInfo.MA_DVI
     this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItemDm.ghiChu = this.rowItem.ghiChu;
     this.dataTableDm = [...this.dataTableDm, this.rowItemDm]
     this.rowItem = new KtKhDxScLonCtiet();
     this.updateEditCache()
@@ -286,9 +287,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         this.rowItemDm.tieuChuan = result[0].tieuChuan;
         this.rowItemDm.tgSuaChua = result[0].tgSuaChua;
         this.rowItemDm.lyDo = result[0].lyDo;
-        this.rowItemDm.duToan = result[0].lyDo;
+        this.rowItemDm.duToan = result[0].duToan;
         this.rowItemDm.tgThucHien = result[0].tgThucHien + '-' + result[0].tgHoanThanh
-        this.rowItemDm.ghiChu = result[0].ghiChu
       }
     }
   }

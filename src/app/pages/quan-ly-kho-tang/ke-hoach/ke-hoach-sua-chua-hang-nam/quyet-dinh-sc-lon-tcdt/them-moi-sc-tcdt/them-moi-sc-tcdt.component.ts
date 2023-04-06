@@ -11,6 +11,7 @@ import * as uuid from "uuid";
 import {MESSAGE} from "../../../../../../constants/message";
 import dayjs from "dayjs";
 import {STATUS} from "../../../../../../constants/status";
+import { cloneDeep } from 'lodash';
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
@@ -28,7 +29,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
   isTongHop: boolean = false;
   formDataTongHop: FormGroup
   expandSet = new Set<number>();
-  isEdit: number;
+  isEdit: number = -1;
   dataEdit : any
 
   constructor(
@@ -89,9 +90,9 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     let res = await this.dexuatService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
-      let detail = res.data;
-      this.dataTable = detail.ktKhDxSuaChuaLonCtiets
-      this.dataTableTc = detail.ktKhDxSuaChuaLonCtiets
+      let detail = res.data.ktKhDxSuaChuaLonCtiets;
+      this.dataTable =  detail
+      this.dataTableTc = cloneDeep(this.dataTable);
       this.spinner.hide()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -115,6 +116,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
     body.chiTiets = this.dataTableTc
+    body.chiTietsTh = this.dataTable
     body.chiTietDms = []
     let data = await this.createUpdate(body)
     if (data) {
@@ -151,8 +153,8 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.fileDinhKem = data.listFileDinhKems;
-          this.dataTableTc = data.chiTietThs
-          this.dataTable = data.chiTiets
+          this.dataTableTc = data.chiTiets
+          this.dataTable = data.chiTietThs
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -213,9 +215,9 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     return check;
   }
 
-  calcTong(type) {
+  calcTong(type, table : any[]) {
     let sum;
-    if (this.dataTable && this.dataTable.length > 0) {
+    if (table && table.length > 0) {
       sum = this.dataTable.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
