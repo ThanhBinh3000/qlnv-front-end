@@ -97,8 +97,6 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       item.selected = true;
       this.idHopDong = cloneDeep(item.id);
       this.isView = true;
-      console.log(item, "item");
-      console.log(this.idHopDong);
     }
   }
   async getDetailHopDong($event, id: number, b: boolean) {
