@@ -96,7 +96,7 @@
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              Số quyết định giao nhiệm vụ nhập hàng
+              Số QĐ giao NV nhập hàng
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
@@ -121,7 +121,7 @@
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>
-              Số lượng cân nhập
+              Số lượng cần nhập
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -152,7 +152,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTao">
+                <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayTao">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -224,7 +224,7 @@
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Loại hàng nhập kho
+              Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -250,7 +250,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="true" nz-input formControlName="tenDiemKho" readonly />
+                <input nz-input formControlName="tenDiemKho" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -260,7 +260,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="true" nz-input formControlName="tenNhaKho" readonly />
+                <input nz-input formControlName="tenNhaKho" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -270,7 +270,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="true" nz-input formControlName="tenNganKho" readonly />
+                <input nz-input formControlName="tenNganKho" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -280,7 +280,7 @@
             <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="true" nz-input formControlName="tenLoKho" readonly />
+                <input nz-input formControlName="tenLoKho" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -303,7 +303,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số phiếu nhập kho</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> DS phiếu nhập kho</nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openSoPhieuNhapKho()">
                 <input [readonly]="true" nz-input formControlName="soPhieuNhapKho" readonly />
@@ -394,8 +394,8 @@
             <th rowSpan="2" width="60px" class="text-center">STT<br />(A)</th>
             <th rowSpan="2" width="500px" class="text-center">Nội dung<br />(B)</th>
             <th rowSpan="2" class="text-center">Đơn vị tính<br />(C)</th>
-            <th colSpan="3" class="text-center">Chi phí thực hiện trong năm</th>
-            <th colSpan="2" class="text-center">Chi phí thực hiện đã quyết toán năm trước</th>
+            <th colSpan="3" class="text-center">Kê lót/Bảo quản trong năm</th>
+            <th colSpan="2" class="text-center">Khối lượng đã quyết toán năm trước</th>
             <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br />(6) = (3) + (5)</th>
             <th rowSpan="2" width="140px" class="text-center" *ngIf="!(isDisableField() || isView)">
               HÀNH ĐỘNG</th>
@@ -412,35 +412,35 @@
           <tr *ngIf="!(isDisableField() || isView)">
             <td></td>
             <td>
-              <input type="text" nz-input class="w-300" [(ngModel)]="create.noiDung" />
+              <input type="text" nz-input class="w-300" [(ngModel)]="create.noiDungDvi" />
             </td>
             <td>
-              <nz-select [(ngModel)]="create.dvt" class="w-200">
+              <nz-select [(ngModel)]="create.dvtDvi" class="w-200">
                 <nz-option *ngFor="let item of listDonViTinh" [nzValue]="item.maDviTinh" [nzLabel]="item.tenDviTinh">
                 </nz-option>
               </nz-select>
             </td>
             <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongTn"
+              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongBqDvi"
                 (input)="caculatorSoLuong(create)" maxlength="18" />
             </td>
             <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaTn"
+              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.donGiaBqDvi"
                 (input)="caculatorSoLuong(create)" maxlength="18" />
             </td>
             <td class="bg-gray">{{create.thanhTienTn ?? 0 | number: '1.0-1'}}</td>
             <td>
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongQt"
+              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongKlDvi"
                 (input)="caculatorSoLuong(create)" maxlength="18" />
             </td>
             <td class="bg-gray">
-              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.thanhTienQt"
+              <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.thanhTienKlDvi"
                 (input)="caculatorSoLuong(create)" maxlength="18" />
             </td>
             <td>{{create.tongGtri ?? 0 | number: '1.0-1'}}</td>
             <td>
               <a (click)="addRow()"
-                [class.disabled]="!create.noiDung || !create.dvt || create.noiDung == '' || create.dvt == ''">
+                [class.disabled]="!create.noiDungDvi || !create.dvtDvi || create.noiDungDvi == '' || create.dvtDvi == ''">
                 <i class="fa fa-plus"></i>
               </a>
               <a (click)="clearItemRow()">
@@ -563,8 +563,8 @@
             <th rowSpan="2" width="60px" class="text-center">STT<br />(A)</th>
             <th rowSpan="2" width="500px" class="text-center">Nội dung<br />(B)</th>
             <th rowSpan="2" class="text-center">Đơn vị tính<br />(C)</th>
-            <th colSpan="3" class="text-center">Chi phí thực hiện trong năm</th>
-            <th colSpan="2" class="text-center">Chi phí thực hiện đã quyết toán năm trước</th>
+            <th colSpan="3" class="text-center">Kê lót/bảo quản trong năm</th>
+            <th colSpan="2" class="text-center">Khối lượng đã quyết toán năm trước</th>
             <th rowSpan="2" class="text-center">TỔNG GIÁ TRỊ<br />(6) = (3) + (5)</th>
             <th rowSpan="2" width="140px" class="text-center" *ngIf="!(isDisableField() || isView)">
               HÀNH ĐỘNG</th>
