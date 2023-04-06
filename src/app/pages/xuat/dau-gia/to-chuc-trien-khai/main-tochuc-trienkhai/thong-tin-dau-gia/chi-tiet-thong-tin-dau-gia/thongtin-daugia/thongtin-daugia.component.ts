@@ -265,6 +265,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       loai: key,
       dataChild: value
     })).value();
+    this.rowItemToChuc = {}
   }
 
   findTableName(name) {
@@ -306,8 +307,17 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     })).value();
   }
 
-  editRow(idVirtual) {
-
+  editRow(data:any) {
+    this.dataNguoiTgia.forEach(s=>s.isEdit = false);
+    let currentRow = this.dataNguoiTgia.find(s=>s.idVirtual== data.idVirtual);
+    currentRow.isEdit = true;
+    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+      loai: key,
+      dataChild: value
+    })).value();
+  }
+  saveRow(data:any) {
+    console.log(data)
   }
 
   cancelEdit(idVirtual) {
