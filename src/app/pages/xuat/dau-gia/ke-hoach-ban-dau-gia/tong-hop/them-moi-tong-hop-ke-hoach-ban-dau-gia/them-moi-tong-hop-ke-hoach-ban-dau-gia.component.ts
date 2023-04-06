@@ -17,7 +17,6 @@ import { DatePipe } from '@angular/common';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -37,7 +36,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   datePipe = new DatePipe('en-US');
-
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -102,14 +101,23 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           idTh: data.id
         })
         this.dataTable = data.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
       }
       else {
         this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
   }
 
-  async tongHopDeXuatTuCuc($event) {
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
+  }
+
+
+  async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
@@ -134,7 +142,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         })
         this.dataTable = dataDetail.children;
         if (this.dataTable && this.dataTable.length > 0) {
-          this.showDetail($event, this.dataTable[0].idDxHdr)
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
         }
         this.isTongHop = true;
       } else {
@@ -221,9 +229,13 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   idRowSelect: number;
   async showDetail($event, id: number) {
-    await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }

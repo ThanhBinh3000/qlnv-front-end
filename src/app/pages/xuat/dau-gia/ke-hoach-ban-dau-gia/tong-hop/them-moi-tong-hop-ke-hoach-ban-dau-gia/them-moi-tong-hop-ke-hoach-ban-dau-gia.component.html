@@ -78,7 +78,7 @@
                         <div nz-col [nzSpan]="24" *ngIf="!isViewOnModal">
                             <div class="tong-hop-button group-button-search mt-16">
                                 <button class="btn btn-main btn-sm waves-effect waves-light"
-                                    (click)="tongHopDeXuatTuCuc($event)" *ngIf="!formData.value.id">
+                                    (click)="tongHopDeXuatTuCuc()" *ngIf="!formData.value.id">
                                     <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
                                     <span>Tổng hợp KH bán đấu giá</span>
                                 </button>
@@ -154,7 +154,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of dataTable;let i = index" (click)="showDetail($event,data.idDxHdr)">
+                        <tr *ngFor="let data of dataTable;let i = index"
+                            [ngClass]="{'bg-selected': i == 0 && this.selected}"
+                            (click)="showDetail($event,data.idDxHdr)">
                             <td class="text-center">{{i + 1}} </td>
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.soDxuat }}</td>
