@@ -80,7 +80,7 @@ export class PhuLucPhanBoComponent implements OnInit {
   async initialization() {
     this.spinner.show();
     this.maDvi = this.dataInfo.maDvi;
-
+    console.log(this.dataInfo);
     // lấy danh sách đơn vị
     await this.danhMuc.dMDonVi().toPromise().then(
       (data) => {
@@ -101,7 +101,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     this.isSynthetic = this.dataInfo?.isSynthetic;
     this.statusBtnOk = this.dataInfo?.statusBtnOk;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
-
+ 
     this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
     if (this.isSynthetic && this.isSynthetic == true) {
       let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.maDvi);
@@ -254,7 +254,7 @@ export class PhuLucPhanBoComponent implements OnInit {
       lstCtietDvis: data,
     }
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    // this.sum(this.lstCtietBcao[index].stt);
+    this.sum(this.lstCtietBcao[index].stt);
     this.updateEditCache();
   }
 

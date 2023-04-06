@@ -1,25 +1,24 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
-import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import * as fileSaver from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
 // import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import * as uuid from 'uuid';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { UserService } from 'src/app/services/user.service';
+import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import * as uuid from 'uuid';
 
 export class ItemData {
   id!: any;
@@ -194,35 +193,18 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
 
   async initialization() {
+    this.spinner.show();
     this.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.userInfo);
-
     this.maDonViTao = this.userInfo?.MA_DVI;
-    await this.danhMuc.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
     if (this.id) {
       await this.getDetailReport();
     } else {
       this.isStatus = this.data.isStatus;
       this.maDonViTao = this.userInfo?.MA_DVI;
-      this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.maDviTien = '1';
-      this.spinner.show();
-
       this.namPa = this.data?.namPa;
-
       this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
@@ -237,8 +219,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         },
       );
-      // this.namPa = this.newDate.getFullYear();
-      this.spinner.hide()
     }
 
     if (this.lstCtietBcao.length == 0) {
@@ -257,19 +237,40 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         item.stt = item.maNdung;
       })
     }
-    this.sortByIndex();
-    const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-    if (capDvi != Utils.TONG_CUC) {
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+    if (this.userInfo.CAP_DVI != Utils.TONG_CUC) {
       this.statusBtnSave = true;
       this.statusBtnNew = true;
       this.statusBtnCopy = true;
       this.statusBtnPrint = true;
       this.status = true;
     }
+    await this.getChildUnit();
     this.getStatusButton();
     this.updateEditCache();
     this.spinner.hide();
   };
+
+  // get danh sách đơn vị con 
+  async getChildUnit() {
+    const request = {
+      maDviCha: this.maDonViTao,
+      trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.lstDvi = data.data;
+          this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    )
+  }
 
   setLevel() {
     this.lstCtietBcao.forEach(item => {
@@ -278,10 +279,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     })
   }
 
-  getIdCha(maKM: any) {
-    return this.noiDungs.find(e => e.ma == maKM)?.maCha;
-  }
-
+  // check điều kiện ẩn hiện nút trong màn hình 
   getStatusButton() {
     if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
       this.status = true;
@@ -326,6 +324,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
   };
 
+  // all api get chi tiết màn hình
   async getDetailReport() {
     this.spinner.show();
     await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
@@ -334,12 +333,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.id = data.data.id;
           this.lstCtietBcao = data.data.lstCtiets[0];
           this.maDviTien = data.data.maDviTien;
-          this.sortByIndex();
-          // this.lstCtietBcao.forEach(item => {
-          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
-          //   item.nguonNsnn = divMoney(item.nguonNsnn, this.maDviTien);
-          //   item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
-          // })
           this.namPa = data.data.namPa;
           this.isStatus = data.data.trangThai;
           this.maPa = data.data.maPa;
@@ -358,6 +351,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.statusBtnPrint = true;
             this.status = true;
           }
+          this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
           this.getStatusButton();
           this.updateEditCache();
         } else {
@@ -369,42 +363,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       },
     );
     this.spinner.hide();
-  };
-
-  sortByIndex() {
-    this.setLevel();
-    this.lstCtietBcao.sort((item1, item2) => {
-      if (item1.level > item2.level) {
-        return 1;
-      }
-      if (item1.level < item2.level) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-        return 1;
-      }
-      return 0;
-    });
-    const lstTemp: any[] = [];
-    this.lstCtietBcao.forEach(item => {
-      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-      if (index == -1) {
-        lstTemp.splice(0, 0, item);
-      } else {
-        lstTemp.splice(index + 1, 0, item);
-      }
-    })
-
-    this.lstCtietBcao = lstTemp;
-  }
-
-  setDetail() {
-    this.lstCtietBcao.forEach(item => {
-      item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
-    })
   };
 
   //upload file
@@ -429,6 +387,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     return temp;
   }
 
+  // call api lưu  
   async save() {
     let checkSaveEdit;
     if (!this.maDviTien) {
@@ -563,6 +522,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     this.spinner.hide();
   };
 
+  // back lại trang trước 
   back() {
     const obj = {
       tabSelected: "dsquyetDinh",
@@ -570,7 +530,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     this.dataChange.emit(obj);
   };
 
-
+  // Tạo mới phương án 
   async taoMoiPhuongAn() {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
@@ -610,7 +570,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         id: uuid.v4() + 'FE',
       })
     })
-    const request1 = {
+    const request = {
       id: null,
       fileDinhKems: [],
       listIdDeleteFiles: [],
@@ -627,36 +587,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       idPaBTC: this.id,
       tabSelected: 'phuongAnGiaoDuToan',
     };
-
-    // const request2 = {
-    //   id: null,
-    //   fileDinhKems: [],
-    //   listIdDeleteFiles: [],
-    //   lstCtiets: lstCtietBcaoTemp,
-    //   maDvi: this.maDonViTao,
-    //   maDviTien: this.maDviTien,
-    //   maPa: maPa,
-    //   maPaCha: maPaCha,
-    //   namPa: this.namPa,
-    //   maPhanGiao: "2",
-    //   maLoaiDan: '2',
-    //   trangThai: "1",
-    //   thuyetMinh: "",
-    //   idPaBTC: this.id,
-    //   tabSelected: 'phuongAnGiaoDieuChinh',
-    // };
-
-    // if (loaiPa) {
-    //   if (loaiPa == 1) {
-    this.dataChange.emit(request1);
-    // }
-
-    //   if (loaiPa == 2) {
-    //     this.dataChange.emit(request2);
-    //   }
-    // }
+    this.dataChange.emit(request);
   };
 
+  // Hiển thị popup copy
   showDialogCopy() {
     const obj = {
       namBcao: this.namPa,
@@ -679,6 +613,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     });
   }
 
+  // hàm thực thi copy
   async doCopy(response: any) {
     let maBcaoNew: string;
     await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
@@ -744,6 +679,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     );
   }
 
+  // check trạng thái để đặt class cho thẻ trạng thái 
   statusClass() {
     if (Utils.statusSave.includes(this.isStatus)) {
       return 'du-thao-va-lanh-dao-duyet';
@@ -752,6 +688,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
   };
 
+  // hiển thị tên trạng thái
   getStatusName(status: string) {
     return this.trangThais.find(e => e.id == status)?.tenDm;
   };
@@ -795,16 +732,19 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
   };
 
+  // get tên đơn vị tiền dựa trên mã đơn vị tiền
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   };
 
+  // update trạng thái checkbox của tất cả các dòng 
   updateAllChecked() {
     this.lstCtietBcao.forEach(item => {
       item.checked = this.allChecked;
     })
   };
 
+  // hiển thị số thứ tự
   getChiMuc(str: string): string {
     str = str.substring(str.indexOf('.') + 1, str.length);
     let xau = "";
@@ -834,62 +774,15 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     return xau;
   };
 
+  // hiển thị số trên màn theo kiểu hiển thị tiền 
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
   };
 
-  getHead(str: string): string {
-    return str.substring(0, str.lastIndexOf('.'));
-  }
-  // lấy phần đuôi của stt
-  getTail(str: string): number {
-    return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-  }
-  //tìm vị trí cần để thêm mới
-  findVt(str: string): number {
-    const start: number = this.lstCtietBcao.findIndex(e => e.stt == str);
-    let index: number = start;
-    for (let i = start + 1; i < this.lstCtietBcao.length; i++) {
-      if (this.lstCtietBcao[i].stt.startsWith(str)) {
-        index = i;
-      }
-    }
-    return index;
-  }
-  //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-  replaceIndex(lstIndex: number[], heSo: number) {
-    //thay doi lai stt cac vi tri vua tim duoc
-    lstIndex.forEach(item => {
-      const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-      const nho = this.lstCtietBcao[item].stt;
-      this.lstCtietBcao.forEach(item => {
-        item.stt = item.stt.replace(nho, str);
-      })
-    })
-  }
-
-  deleteLine(id: any) {
-    const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    const nho: string = this.lstCtietBcao[index].stt;
-    const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    const stt: string = this.lstCtietBcao[index].stt;
-    //xóa phần tử và con của nó
-    this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
-    //update lại số thức tự cho các phần tử cần thiết
-    const lstIndex: number[] = [];
-    for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-      if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-        lstIndex.push(i);
-      }
-    }
-    this.replaceIndex(lstIndex, -1);
-    this.sum(stt)
-    this.updateEditCache();
-  };
-
+  // hàm tính tổng cộng dồn trong 1 cột 
   sum(stt: string) {
-    stt = this.getHead(stt);
+    stt = getHead(stt);
     while (stt != '0') {
       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
       const data = this.lstCtietBcao[index];
@@ -902,19 +795,18 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         level: data.level,
       }
       this.lstCtietBcao.forEach(item => {
-        if (this.getHead(item.stt) == stt) {
-          this.lstCtietBcao[index].nguonKhac = sumNumber([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]) ;
-          this.lstCtietBcao[index].nguonNsnn = sumNumber([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]) ;
-          this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]) ;
-          // this.lstCtietBcao[index].nguonNsnn += item.nguonNsnn;
-          // this.lstCtietBcao[index].tongCong += item.tongCong;
+        if (getHead(item.stt) == stt) {
+          this.lstCtietBcao[index].nguonKhac = sumNumber([this.lstCtietBcao[index].nguonKhac, item.nguonKhac]);
+          this.lstCtietBcao[index].nguonNsnn = sumNumber([this.lstCtietBcao[index].nguonNsnn, item.nguonNsnn]);
+          this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong]);
         }
       })
-      stt = this.getHead(stt);
+      stt = getHead(stt);
     }
     this.getTotal();
   };
 
+  // hàm tính tổng 
   getTotal() {
     this.total.nguonKhac = 0;
     this.total.nguonNsnn = 0;
@@ -928,6 +820,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     })
   };
 
+  // update dữ liệu từ editcache vào lstCtietBcao
   updateEditCache(): void {
     this.lstCtietBcao.forEach(item => {
       this.editCache[item.id] = {
@@ -939,19 +832,21 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     })
   };
 
+  // check có đối tượng có cấp thấp hơn đối tượng ở vị trí hiện tại không 
   getLowStatus(str: string) {
-    const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
+    const index: number = this.lstCtietBcao.findIndex(e => getHead(e.stt) == str);
     if (index == -1) {
       return false;
     }
     return true;
   };
 
+  // đổi trạng thái edit sang true
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   };
 
-  // huy thay doi
+  // Hủy thay đổi 
   cancelEdit(id: string): void {
     const index = this.lstCtietBcao.findIndex(item => item.id === id);
     // lay vi tri hang minh sua
@@ -961,206 +856,12 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
   };
 
-  addLine(id: any) {
-    const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.idKm;
-    const obj = {
-      maKhoanMuc: maNdung,
-      lstKhoanMuc: this.noiDungs,
-    }
-
-    const modalIn = this.modal.create({
-      nzTitle: 'Danh sách lĩnh vực',
-      nzContent: DialogThemKhoanMucComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '65%',
-      nzFooter: null,
-      nzComponentParams: {
-        obj: obj
-      },
-    });
-    modalIn.afterClose.subscribe((res) => {
-      if (res) {
-        const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.maKhoanMuc);
-        if (index == -1) {
-          const data: any = {
-            ...this.initItem,
-            maNdung: res.maKhoanMuc,
-            level: this.noiDungs.find(e => e.id == maNdung)?.level,
-          };
-          if (this.lstCtietBcao.length == 0) {
-            this.addFirst(data);
-          } else {
-            this.addSame(id, data);
-          }
-        }
-        id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
-        res.lstKhoanMuc.forEach(item => {
-          if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
-            const data: ItemData = {
-              ...this.initItem,
-              maNdung: item.id,
-              level: item.level,
-            };
-            this.addLow(id, data);
-          }
-        })
-        this.updateEditCache();
-      }
-    });
-  };
-
-  addFirst(initItem: ItemData) {
-    if (initItem.id) {
-      const item: ItemData = {
-        ...initItem,
-        stt: "0.1",
-      }
-      this.lstCtietBcao.push(item);
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    } else {
-      const item: ItemData = {
-        ...initItem,
-        level: 0,
-        id: uuid.v4() + 'FE',
-        stt: "0.1",
-      }
-      this.lstCtietBcao.push(item);
-
-      this.editCache[item.id] = {
-        edit: true,
-        data: { ...item }
-      };
-    }
-  };
-
-  addLow(id: any, initItem: ItemData) {
-    const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-    let index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    let stt: string;
-    if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
-      stt = data.stt + '.1';
-    } else {
-      index = this.findVt(data.stt);
-      for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
-        if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
-          stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
-          break;
-        }
-      }
-    }
-
-    // them moi phan tu
-    if (initItem.id) {
-      const item: ItemData = {
-        ...initItem,
-        stt: stt,
-      }
-      this.lstCtietBcao.splice(index + 1, 0, item);
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    } else {
-      if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-        this.sum(stt);
-        this.updateEditCache();
-      }
-      const item: ItemData = {
-        ...initItem,
-        id: uuid.v4() + "FE",
-        stt: stt,
-      }
-      this.lstCtietBcao.splice(index + 1, 0, item);
-
-      this.editCache[item.id] = {
-        edit: true,
-        data: { ...item }
-      };
-    }
-  };
-
-  addSame(id: any, initItem: ItemData) {
-    const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-    const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-    const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
-    const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
-    // tim cac vi tri can thay doi lai stt
-    const lstIndex: number[] = [];
-    for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
-      if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-        lstIndex.push(i);
-      }
-    }
-    this.replaceIndex(lstIndex, 1);
-    // them moi phan tu
-    if (initItem.id) {
-      const item: ItemData = {
-        ...initItem,
-        stt: head + "." + (tail + 1).toString(),
-      }
-      this.lstCtietBcao.splice(ind + 1, 0, item);
-      this.editCache[item.id] = {
-        edit: false,
-        data: { ...item }
-      };
-    } else {
-      const item: ItemData = {
-        ...initItem,
-        id: uuid.v4() + "FE",
-        stt: head + "." + (tail + 1).toString(),
-      }
-      this.lstCtietBcao.splice(ind + 1, 0, item);
-      this.editCache[item.id] = {
-        edit: true,
-        data: { ...item }
-      };
-    }
-  };
-
-  updateChecked(id: any) {
-    const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
-    //đặt các phần tử con có cùng trạng thái với nó
-    this.lstCtietBcao.forEach(item => {
-      if (item.stt.startsWith(data.stt)) {
-        item.checked = data.checked;
-      }
-    })
-    //thay đổi các phần tử cha cho phù hợp với tháy đổi của phần tử con
-    let index: number = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(data.stt));
-    if (index == -1) {
-      this.allChecked = this.checkAllChild('0');
-    } else {
-      let nho: boolean = this.lstCtietBcao[index].checked;
-      while (nho != this.checkAllChild(this.lstCtietBcao[index].stt)) {
-        this.lstCtietBcao[index].checked = !nho;
-        index = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
-        if (index == -1) {
-          this.allChecked = !nho;
-          break;
-        }
-        nho = this.lstCtietBcao[index].checked;
-      }
-    }
-  };
-
-  checkAllChild(str: string): boolean {
-    let nho = true;
-    this.lstCtietBcao.forEach(item => {
-      if ((this.getHead(item.stt) == str) && (!item.checked) && (item.stt != str)) {
-        nho = item.checked;
-      }
-    })
-    return nho;
-  };
-
+  // Theo dõi thay đổi trong dòng 
   changeModel(id: any) {
     this.editCache[id].data.tongCong = Number(this.editCache[id].data.nguonNsnn) + Number(this.editCache[id].data.nguonKhac);
   };
 
+  // Lưu dữ liệu từ editCache vào lstCtiteBcao
   saveEdit(id: string): void {
     if (
       (!this.editCache[id].data.nguonKhac && this.editCache[id].data.nguonKhac !== 0) ||
@@ -1182,24 +883,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     this.sum(this.lstCtietBcao[index].stt);
   };
 
+  // Xóa file 
   deleteFile(id: string): void {
     this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
     this.listIdFilesDelete.push(id);
   };
-
-  deleteAllChecked() {
-    const lstId: any[] = [];
-    this.lstCtietBcao.forEach(item => {
-      if (item.checked) {
-        lstId.push(item.id);
-      }
-    })
-    lstId.forEach(item => {
-      if (this.lstCtietBcao.findIndex(e => e.id == item) != -1) {
-        this.deleteLine(item);
-      }
-    })
-  };
-
 }

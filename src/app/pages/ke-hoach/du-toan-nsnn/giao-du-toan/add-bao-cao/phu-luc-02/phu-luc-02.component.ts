@@ -11,7 +11,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
@@ -112,9 +112,7 @@ export class PhuLuc02Component implements OnInit {
       }
     })
     console.log(this.lstCtietBcao);
-
-
-    this.sortByIndex();
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
@@ -141,63 +139,63 @@ export class PhuLuc02Component implements OnInit {
     )
   }
 
-  setIndex() {
-    const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maDmuc);
-    for (let i = 0; i < lstVtuTemp.length; i++) {
-      const stt = '0.' + (i + 1).toString();
-      const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
-      this.lstCtietBcao[index].stt = stt;
-      const lstDmTemp = this.lstCtietBcao.filter(e => e.danhMuc == lstVtuTemp[i].danhMuc && !!e.maDmuc);
-      for (let j = 0; j < lstDmTemp.length; j++) {
-        const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
-        this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
-      }
-    }
-    lstVtuTemp.forEach(item => {
-      this.sum(item.stt + '.1');
-    })
-  }
+  // setIndex() {
+  //   const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maDmuc);
+  //   for (let i = 0; i < lstVtuTemp.length; i++) {
+  //     const stt = '0.' + (i + 1).toString();
+  //     const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
+  //     this.lstCtietBcao[index].stt = stt;
+  //     const lstDmTemp = this.lstCtietBcao.filter(e => e.danhMuc == lstVtuTemp[i].danhMuc && !!e.maDmuc);
+  //     for (let j = 0; j < lstDmTemp.length; j++) {
+  //       const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
+  //       this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
+  //     }
+  //   }
+  //   lstVtuTemp.forEach(item => {
+  //     this.sum(item.stt + '.1');
+  //   })
+  // }
 
-  sortByIndex() {
-    if (this.lstCtietBcao?.length > 0 && !this.lstCtietBcao[0].stt) {
-      this.setIndex();
-    }
-    this.setLevel();
-    this.lstCtietBcao.sort((item1, item2) => {
-      if (item1.level > item2.level) {
-        return 1;
-      }
-      if (item1.level < item2.level) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-        return 1;
-      }
-      return 0;
-    });
-    const lstTemp: ItemData[] = [];
-    this.lstCtietBcao.forEach(item => {
-      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-      if (index == -1) {
-        lstTemp.splice(0, 0, item);
-      } else {
-        lstTemp.splice(index + 1, 0, item);
-      }
-    })
+  // sortByIndex() {
+  //   if (this.lstCtietBcao?.length > 0 && !this.lstCtietBcao[0].stt) {
+  //     this.setIndex();
+  //   }
+  //   this.setLevel();
+  //   this.lstCtietBcao.sort((item1, item2) => {
+  //     if (item1.level > item2.level) {
+  //       return 1;
+  //     }
+  //     if (item1.level < item2.level) {
+  //       return -1;
+  //     }
+  //     if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+  //       return -1;
+  //     }
+  //     if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+  //       return 1;
+  //     }
+  //     return 0;
+  //   });
+  //   const lstTemp: ItemData[] = [];
+  //   this.lstCtietBcao.forEach(item => {
+  //     const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+  //     if (index == -1) {
+  //       lstTemp.splice(0, 0, item);
+  //     } else {
+  //       lstTemp.splice(index + 1, 0, item);
+  //     }
+  //   })
 
-    this.lstCtietBcao = lstTemp;
-  }
+  //   this.lstCtietBcao = lstTemp;
+  // }
 
 
-  setLevel() {
-    this.lstCtietBcao.forEach(item => {
-      const str: string[] = item.stt.split('.');
-      item.level = str.length - 2;
-    })
-  }
+  // setLevel() {
+  //   this.lstCtietBcao.forEach(item => {
+  //     const str: string[] = item.stt.split('.');
+  //     item.level = str.length - 2;
+  //   })
+  // }
 
   // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
   getHead(str: string): string {
@@ -494,43 +492,43 @@ export class PhuLuc02Component implements OnInit {
     this.getTotal();
   }
 
-  sum1() {
-    this.lstCtietBcao.forEach(itm => {
-      let stt = this.getHead(itm.stt);
-      while (stt != '0') {
-        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-        const data = this.lstCtietBcao[index];
-        this.lstCtietBcao[index] = {
-          ...new ItemData(),
-          id: data.id,
-          stt: data.stt,
-          danhMuc: data.danhMuc,
-          maDmuc: data.maDmuc,
-          tenDanhMuc: data.tenDanhMuc,
-          level: data.level,
-          namDtSluong: data.namDtSluong,
-          maDviTinh: data.maDviTinh,
-          namDtDmuc: data.namDtDmuc,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
-        }
-        this.lstCtietBcao.forEach(item => {
-          if (this.getHead(item.stt) == stt) {
-            this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
-          }
-        })
-        stt = this.getHead(stt);
-      }
-      // this.getTotal();
-      this.getTotal();
-    })
+  // sum1() {
+  //   this.lstCtietBcao.forEach(itm => {
+  //     let stt = this.getHead(itm.stt);
+  //     while (stt != '0') {
+  //       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+  //       const data = this.lstCtietBcao[index];
+  //       this.lstCtietBcao[index] = {
+  //         ...new ItemData(),
+  //         id: data.id,
+  //         stt: data.stt,
+  //         danhMuc: data.danhMuc,
+  //         maDmuc: data.maDmuc,
+  //         tenDanhMuc: data.tenDanhMuc,
+  //         level: data.level,
+  //         namDtSluong: data.namDtSluong,
+  //         maDviTinh: data.maDviTinh,
+  //         namDtDmuc: data.namDtDmuc,
+  //         // sluongNamDtoan: data.sluongNamDtoan,
+  //         // ttienNamDtoan: data.ttienNamDtoan,
+  //         // thienNamTruoc: data.thienNamTruoc,
+  //         // dtoanNamHtai: data.dtoanNamHtai,
+  //         // uocNamHtai: data.uocNamHtai,
+  //         // dmucNamDtoan: data.dmucNamDtoan,
+  //         // ttienTd: data.ttienTd,
+  //       }
+  //       this.lstCtietBcao.forEach(item => {
+  //         if (this.getHead(item.stt) == stt) {
+  //           this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
+  //         }
+  //       })
+  //       stt = this.getHead(stt);
+  //     }
+  //     // this.getTotal();
+  //     this.getTotal();
+  //   })
 
-  }
+  // }
 
   getTotal() {
     this.total = new ItemData();

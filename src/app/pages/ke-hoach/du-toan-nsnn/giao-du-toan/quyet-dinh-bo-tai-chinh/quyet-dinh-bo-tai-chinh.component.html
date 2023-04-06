@@ -78,8 +78,8 @@
             </ng-template>
           </th>
           <th>
-            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTaoTu"
-              (ngModelChange)="filterInTable('ngayTaoTu',filterTable.ngayTaoTu, true)">
+            <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayTao"
+              (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao, true)">
             </nz-date-picker>
           </th>
           <th>
@@ -107,7 +107,7 @@
             {{ data.maPa}}
           </td>
           <td>
-            {{ data.ngayTaoTu}}
+            {{ data.ngayTao}}
           </td>
           <td>
             {{data.namPa}}
