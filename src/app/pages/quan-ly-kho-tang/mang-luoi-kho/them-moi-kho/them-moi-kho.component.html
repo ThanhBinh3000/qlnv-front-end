@@ -264,7 +264,7 @@
                   <nz-form-label>Số ngăn kho</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <input nz-input formControlName="soNganKho"/>
+                      <input nz-input formControlName="soNganKhoTk"/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
@@ -275,10 +275,10 @@
               </div>
               <div nz-col nzSpan="7">
                 <nz-form-item>
-                  <nz-form-label> Diện tích</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label> Diện tích mỗi ngăn kho</nz-form-label>
+                  <nz-form-control>
                     <nz-input-group [nzAddOnAfter]="dienTich">
-                      <nz-input-number formControlName="dienTichDat" [nzSize]="'small'"
+                      <nz-input-number formControlName="dienTichNganKhoTk" [nzSize]="'small'"
                                        [nzFormatter]="globals.formatter"
                                        [nzParser]="globals.parser"></nz-input-number>
                     </nz-input-group>
@@ -336,6 +336,18 @@
                   <nz-option *ngFor="let item of listChatLuong" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                   </nz-option>
                 </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col nzSpan="4">
+            <nz-form-item>
+              <nz-form-label> Diện tích</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group [nzAddOnAfter]="dienTich">
+                  <nz-input-number formControlName="dienTichDat" [nzSize]="'small'"
+                                   [nzFormatter]="globals.formatter"
+                                   [nzParser]="globals.parser"></nz-input-number>
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>

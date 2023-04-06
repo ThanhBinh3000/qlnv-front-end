@@ -106,6 +106,8 @@ export class MangLuoiKhoComponent implements OnInit {
       maNhakho: [''],
       tenNgankho: [''],
       maNgankho: [''],
+      soNganKhoTk: [''],
+      dienTichNganKhoTk: [''],
       loaikhoId: [''],
       nhakhoId: [''],
       loaiVthh: [''],
@@ -291,6 +293,7 @@ export class MangLuoiKhoComponent implements OnInit {
   nzClickNodeTree(event: any, type?: any): void {
     this.spinner.show()
     this.detailDonVi.reset();
+    this.fileDinhKems = []
     if (event) {
       if (type) {
         this.isEditData = true;
@@ -421,6 +424,7 @@ export class MangLuoiKhoComponent implements OnInit {
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
         loaikhoId: dataNode.loaikhoId,
         coLoKho: dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false,
+        trangThai : dataNode.trangThai == TrangThaiHoatDong.HOAT_DONG ? true : false
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
@@ -451,6 +455,8 @@ export class MangLuoiKhoComponent implements OnInit {
           tenTongKho: dataNode.tenTongKho,
           soNgankho: dataNode.soNgankho,
           soLokho: dataNode.soLokho,
+          soNganKhoTk : dataNode.soNganKhoTk,
+          dienTichNganKhoTk : dataNode.dienTichNganKhoTk,
         })
       }
       if (this.levelNode == 4) {
@@ -568,6 +574,26 @@ export class MangLuoiKhoComponent implements OnInit {
           trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
           type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
         };
+        let dviReq = {
+          "diaChi": this.detailDonVi.value.diaChi,
+          "fax": this.nodeDetail.fax,
+          "id": this.nodeDetail.id,
+          "maDvi": this.nodeDetail.maDvi,
+          "maDviCha":  this.nodeDetail.maDviCha,
+          "maKhqlh": this.nodeDetail.maKhqlh,
+          "maKtbq": this.nodeDetail.maKtbq,
+          "maQd": this.nodeDetail.maQd,
+          "maQhns":this.nodeDetail.maQhns,
+          "maTckt": this.nodeDetail.maTckt,
+          "maTr": this.nodeDetail.maTr,
+          "sdt": this.nodeDetail.sdt,
+          "tenDvi": this.levelNode == 4 ? this.detailDonVi.value.tenDiemkho : this.levelNode == 5 ? this.detailDonVi.value.tenNhakho : this.levelNode == 6 ? this.detailDonVi.value.tenNgankho : this.detailDonVi.value.tenNganlo,
+          "tenVietTat": this.nodeDetail.tenVietTat,
+          "trangThai": this.nodeDetail.trangThai,
+          "type": this.nodeDetail.type,
+        }
+        body.dviReq = dviReq
+        body.fileDinhkems = this.fileDinhKems;
         let type;
         if (this.levelNode == 4) {
           type = 'diem-kho';
@@ -690,7 +716,6 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDtqgkv: this.nodeDetail.tenDvi,
           maDtqgkv: this.nodeDetail.maDvi,
           ghiChu: this.nodeDetail.ghiChu,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi,
         });
         break;
@@ -699,7 +724,6 @@ export class MangLuoiKhoComponent implements OnInit {
         this.detailDonVi.patchValue({
           tenTongKho: this.nodeDetail.tenDvi,
           maTongKho: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi,
         });
         break;
@@ -708,7 +732,6 @@ export class MangLuoiKhoComponent implements OnInit {
         this.detailDonVi.patchValue({
           tenDiemkho: this.nodeDetail.tenDvi,
           maDiemkho: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi
         });
         break;
@@ -717,7 +740,6 @@ export class MangLuoiKhoComponent implements OnInit {
         this.detailDonVi.patchValue({
           tenNhakho: this.nodeDetail.tenDvi,
           maNhakho: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi
         });
         break;
@@ -726,7 +748,6 @@ export class MangLuoiKhoComponent implements OnInit {
         this.detailDonVi.patchValue({
           tenNgankho: this.nodeDetail.tenDvi,
           maNgankho: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi,
         });
         break;
@@ -735,7 +756,6 @@ export class MangLuoiKhoComponent implements OnInit {
         this.detailDonVi.patchValue({
           tenNganlo: this.nodeDetail.tenDvi,
           maNganlo: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
           diaChi: this.nodeDetail.diaChi,
         });
         break;

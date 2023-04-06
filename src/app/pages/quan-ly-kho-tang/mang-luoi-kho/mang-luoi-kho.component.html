@@ -429,7 +429,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenDiemkho" nz-input [readonly]="true"/>
+                            <input formControlName="tenDiemkho" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -639,10 +639,10 @@
                           </div>
                           <div nz-col nzSpan="7">
                             <nz-form-item>
-                              <nz-form-label>Số ngăn kho</nz-form-label>
+                              <nz-form-label>Số ngăn kho thiết kế</nz-form-label>
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                  <input formControlName="soNgankho" [readonly]="true" nz-input/>
+                                  <input formControlName="soNganKhoTk" [readonly]="isEditData" nz-input/>
                                 </nz-input-group>
                               </nz-form-control>
                             </nz-form-item>
@@ -653,10 +653,10 @@
                           </div>
                           <div nz-col nzSpan="7">
                             <nz-form-item>
-                              <nz-form-label> Diện tích (m2)</nz-form-label>
+                              <nz-form-label> Diện tích mỗi ngăn kho (m2)</nz-form-label>
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                  <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat"
+                                  <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichNganKhoTk"
                                                    [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                                    [nzParser]="globals.parser"></nz-input-number>
                                 </nz-input-group>
