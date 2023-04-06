@@ -1,26 +1,16 @@
-
+import { cloneDeep } from 'lodash';
 import {Component, Input, OnInit, } from '@angular/core';
 import {Validators} from "@angular/forms";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
-import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
-import {KtKhXdHangNamService} from "../../../../../../services/kt-kh-xd-hang-nam.service";
-import {DonviService} from "../../../../../../services/donvi.service";
-import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
-import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
-import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";
-import {
-  DialogMmMuaSamComponent
-} from "../../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
-import {KtKhDxScLonCtiet} from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/them-moi-sc-lon.component";
 import dayjs from "dayjs";
 import {DialogQdScBtcComponent} from "./dialog-qd-sc-btc/dialog-qd-sc-btc.component";
 import {STATUS} from "../../../../../../constants/status";
@@ -41,13 +31,14 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   maQd: string;
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: KtKhDxScLonCtiet = new KtKhDxScLonCtiet();
-  dataEdit: { [key: string]: { edit: boolean; data: KtKhDxScLonCtiet } } = {};
   tablePaTc: any[] = []
+  dataEdit : any
 
   listLoaiDuAn: any[] = [];
   listDxCuc: any[] = [];
+  listTongHop: any[] = [];
   typeQd: string
+  isEdit : number = -1
 
   constructor(
     private httpClient: HttpClient,
@@ -69,10 +60,11 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       trichYeu : [null],
       ngayKy : [null, Validators.required],
       ngayTrinhBtc : [null, Validators.required],
-      maTh : [null, Validators.required],
-      soTt : [null, Validators.required],
+      maTh : [null],
+      soTt : [null],
       trangThai : ['00'],
       tenTrangThai : ['Dự thảo'],
+      type : ['00']
     });
   }
 
@@ -141,10 +133,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       let res = await this.dexuatService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        this.listDxCuc = []
-        this.listDxCuc = data.content;
-        if (this.listDxCuc) {
-          this.listDxCuc = this.listDxCuc.filter(
+        this.listTongHop = []
+        this.listTongHop = data.content;
+        if (this.listTongHop) {
+          this.listTongHop = this.listTongHop.filter(
             (item) => (item.trangThai == this.STATUS.DA_DUYET_LDTC && !item.qdBtcId)
           )
         }
@@ -166,7 +158,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     if (type == 'DX') {
       result = this.listDxCuc.filter(item => item.soCongVan = event)
     } else {
-      result = this.listDxCuc.filter(item => item.id = event)
+      result = this.listTongHop.filter(item => item.id = event)
     }
     if (result && result.length > 0) {
       let detailTh = result[0]
@@ -175,15 +167,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         if (res.data) {
           this.dataTable = []
           const data = res.data;
-          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
-          if (this.dataTable && this.dataTable.length > 0) {
-            this.dataTable.forEach(item => {
-              item.id = null;
-              item.ghiChu = null;
-              item.soLuong = item.soLuongTc
-              item.slTieuChuan = item.slTieuChuanTc
-            })
-          }
+          this.dataTable = data.chiTiets;
+          this.tablePaTc = cloneDeep(this.dataTable)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg)
@@ -225,9 +210,9 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
-    body.soCongVan = body.soCongVan + this.maQd
+    body.soQd = body.soQd + this.maQd
     body.fileDinhKems = this.fileDinhKem
-    body.ctiets = this.dataTable
+    body.ctietList = this.dataTable
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -259,6 +244,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   chonMaTongHop() {
     if (!this.isViewDetail && this.typeQd == 'TH') {
+      this.formData.controls['maTh'].setValidators(Validators.required);
+      this.formData.controls['soTt'].clearValidators()
       let modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH TỔNG HỢP PHƯƠNG ÁN SỬA CHỮA LỚN CỦA CỤC',
         nzContent: DialogQdScBtcComponent,
@@ -268,11 +255,15 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           type: "01",
-          listTh : this.listDxCuc
+          listTh : this.listTongHop
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
+          this.formData.patchValue({
+            maTh : data.id
+          })
+          this.changSoTh(data.id, 'TH')
         }
       })
     }
@@ -280,6 +271,8 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
 
   chonSoDxCuc() {
     if (!this.isViewDetail && this.typeQd == 'DX') {
+      this.formData.controls['soTt'].setValidators(Validators.required);
+      this.formData.controls['maTh'].clearValidators()
       let modalQD = this.modal.create({
         nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
         nzContent: DialogQdScBtcComponent,
@@ -294,12 +287,45 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
+            this.formData.patchValue({
+              soTt : data.soCongVan
+            })
+          this.changSoTh(data.soCongVan, 'DX')
         }
       })
     }
   }
 
-  editItem(idx: number) {
+  editRow(idx: number) {
+    this.isEdit = idx
+    this.dataEdit = this.dataTable[idx].ncKhVon
+  }
 
+  deleteItem(index: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  saveEdit() {
+    this.isEdit = -1;
+  }
+
+  cancelEdit(data: any) {
+    data.ncKhVon = this.dataEdit
+    this.isEdit = -1
   }
 }

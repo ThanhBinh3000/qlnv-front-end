@@ -71,7 +71,7 @@
         </button>
         <button
           *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_EXP') "
-          type="button" class="btn btn-sub" (click)="export()">
+          type="button" class="btn btn-sub" (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -222,7 +222,8 @@
             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
 
             <td>
-              <a nz-button nzType="link" nzBlock (click)="openModalQdPd(data.idSoQdPd)">{{
+              <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link" nzBlock
+                (click)="openModalQdPd(data.idSoQdPd)">{{
                 data.soQdPd}}</a>
             </td>
             <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
@@ -232,12 +233,15 @@
             <td>{{ data.slDviTsan}}</td>
             <td>{{ data.slHdDaKy}}</td>
             <td>
-              <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCtieu)">{{ data.soQdCtieu}}</a>
+              <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link" nzBlock
+                (click)="openModalChiTieu(data.idSoQdCtieu)">{{
+                data.soQdCtieu}}</a>
             </td>
             <td>{{ data.tenTrangThai }}</td>
-            <td *ngIf="userService.isTongCuc() ">
-              <a nz-button nzType="link" nzBlock (click)="openModalTh(data.idThop)">{{ data.idThop == null?
-                data.tenTrangThaiTh: data.idThop}}</a>
+            <td *ngIf="userService.isTongCuc()">
+              <span *ngIf="!data.idThop">{{data.tenTrangThaiTh}}</span>
+              <a *ngIf="data.idThop" nz-button nzType="link" nzBlock (click)="openModalTh(data.idThop)">{{
+                data.idThop}}</a>
             </td>
             <td class="text-left">
               <a *ngIf="loaiVthh.startsWith('02') ? 

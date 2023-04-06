@@ -26,7 +26,12 @@ export class ThemMoiKhoComponent implements OnInit {
   @ViewChild('treeSelect', {static: false}) treeSelect!: NzTreeComponent;
 
   data: any;
-
+  loaiHangHoa: any = {
+    "thoc": false,
+    "gao": false,
+    "muoi": false,
+    "vattu": false,
+  }
   idReq: number = 0;
   nodesTree: any = [];
   options = {
@@ -91,6 +96,8 @@ export class ThemMoiKhoComponent implements OnInit {
       tenNhakho: [''],
       maNhakho: [''],
       tenNgankho: [''],
+      soNganKhoTk: [''],
+      dienTichNganKhoTk: [''],
       maNgankho: [''],
       loaikhoId: [''],
       nhakhoId: [''],
@@ -98,7 +105,7 @@ export class ThemMoiKhoComponent implements OnInit {
       cloaiVthh: [''],
       trangThai: [true],
       type: [true],
-      coLoKho: [true],
+      coLoKho: [],
       ghiChu: [''],
       nhiemVu: [''],
       tichLuongTkLt: [''],
@@ -127,7 +134,8 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
-      isKhoiTao : [true]
+      isKhoiTao: [true],
+      loaiHangHoa : []
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -135,6 +143,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.nodeSelected = node.origin
         this.levelNode = node.level + 1
       }
+      this.listFileDinhKem = []
       this.setValidators();
       if (this.levelNode != 1) {
         this.formKho.patchValue({
@@ -171,6 +180,7 @@ export class ThemMoiKhoComponent implements OnInit {
       this.listTinhTrang = res.data;
     }
   }
+
   async loadChatLuongKho() {
     this.listChatLuong = [];
     let res = await this.danhMucService.danhMucChungGetAll('CL_KHO');
@@ -206,20 +216,27 @@ export class ThemMoiKhoComponent implements OnInit {
     }
   }
 
+
+  convertNumberToString(value) {
+    return value < 10 ? "0" + value.toString() : value.toString();
+  }
+
   async getDetailMlkByKey(dataNode) {
     if (dataNode) {
       let body = {
         maDvi: dataNode.origin.key,
         capDvi: dataNode.origin.capDvi
       }
+      let idMlk;
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
           if (dataNodeRes && dataNodeRes.maNgankho && dataNodeRes.coLoKho != '01') {
-            this.notification.error(MESSAGE.ERROR, "Không thể thăm lô kho vào ngăn kho này!!");
+            this.notification.error(MESSAGE.ERROR, "Không thể thêm lô kho vào ngăn kho này!");
             this.levelNode = 0;
             return;
           }
+          idMlk = dataNodeRes.id;
           this.formKho.patchValue({
             tenC: dataNodeRes.tenDiemkho,
             tenDiemkho: dataNodeRes.tenDiemkho,
@@ -230,7 +247,67 @@ export class ThemMoiKhoComponent implements OnInit {
           });
           this.idReq = dataNodeRes.id
         }
-      })
+      });
+      //tự động gen mã kho mới
+      let type = '';
+      switch (this.levelNode) {
+        case 4: {
+          type = 'ngan-lo'
+          break;
+        }
+        case 3 : {
+          type = 'ngan-kho'
+          break;
+        }
+        case 2 : {
+          type = 'nha-kho'
+          break;
+        }
+        case 1 : {
+          type = 'diem-kho'
+          break;
+        }
+      }
+      if (this.levelNode < 5 && type && idMlk) {
+        await this.khoService.getMaKhoLonNhatTheoIdCha(type, idMlk).then((res: OldResponseData) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            let charLast = "00";
+            let maxMaKho = dataNode.origin.key;
+            if (res.data) {
+              charLast = res.data.slice(-2);
+              maxMaKho = res.data;
+            }
+            let valueNext = this.convertNumberToString(parseInt(charLast) + 1);
+            let maKhoMoi = res.data ? maxMaKho.slice(0, -2) + valueNext : maxMaKho + valueNext;
+            switch (this.levelNode) {
+              case 4: {
+                this.formKho.patchValue({
+                  maNganlo: maKhoMoi
+                });
+                break;
+              }
+              case 3 : {
+                this.formKho.patchValue({
+                  maNgankho: maKhoMoi
+                });
+                break;
+              }
+              case 2 : {
+                this.formKho.patchValue({
+                  maNhakho: maKhoMoi
+                });
+                break;
+              }
+              case 1 : {
+                this.formKho.patchValue({
+                  maDiemkho: maKhoMoi
+                });
+                break;
+              }
+            }
+          }
+        });
+      }
     }
   }
 
@@ -270,18 +347,24 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
+    if (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+      this.spinner.hide()
+      return;
+    }
     if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenNganlo;
-      bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNganlo;
+      bodyDvi.maDvi = this.formKho.value.maNganlo;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
-      body.ngankhoId = this.idReq
-      body.maNganlo = this.formKho.value.maCha +  this.formKho.value.maNganlo;
+      body.loaiHangHoa = this.setLoaiHangHoa();
+      body.ngankhoId = this.idReq;
+      body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
       body.dviReq = bodyDvi
-      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -301,27 +384,33 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
+    if (!this.formKho.value.coLoKho && (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) ) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+      this.spinner.hide()
+      return;
+    }
     if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenNgankho;
-      bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNgankho;
+      bodyDvi.maDvi = this.formKho.value.maNgankho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.dviReq = bodyDvi
-      body.maNgankho = this.formKho.value.maCha +  this.formKho.value.maNgankho;
+      body.loaiHangHoa = this.setLoaiHangHoa();
+      body.maNgankho = this.formKho.value.maNgankho;
       body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
-      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.isKhoiTao = this.formKho.get('coLoKho').value ? false : true;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.modal.close(true);
-        }   else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
       })
     }
     this.spinner.hide()
@@ -338,19 +427,19 @@ export class ThemMoiKhoComponent implements OnInit {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenNhakho;
-      bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maNhakho;
+      bodyDvi.maDvi = this.formKho.value.maNhakho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.dviReq = bodyDvi
-      body.maNhakho = this.formKho.value.maCha +  this.formKho.value.maNhakho;
+      body.maNhakho = this.formKho.value.maNhakho;
       body.diemkhoId = this.idReq;
-      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.modal.close(true);
-        }   else {
+        } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
@@ -369,19 +458,19 @@ export class ThemMoiKhoComponent implements OnInit {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
       bodyDvi.tenDvi = this.formKho.value.tenDiemkho;
-      bodyDvi.maDvi = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
+      bodyDvi.maDvi = this.formKho.value.maDiemkho;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.dviReq = bodyDvi;
       body.tongkhoId = this.idReq;
-      body.trangThai = this.formKho.get('trangThai').value ?TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
-      body.maDiemkho = this.formKho.value.maCha +  this.formKho.value.maDiemkho;
+      body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
+      body.maDiemkho = this.formKho.value.maDiemkho;
       body.fileDinhkems = this.listFileDinhKem;
       this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.modal.close(true);
-        }  else {
+        } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
@@ -416,13 +505,13 @@ export class ThemMoiKhoComponent implements OnInit {
     this.helperService.removeValidators(this.formKho);
     switch (this.levelNode) {
       case 1 : {
-        this.formKho.controls['maDiemkho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
+        this.formKho.controls['maDiemkho'].setValidators([Validators.required])
         this.formKho.controls['tenDiemkho'].setValidators([Validators.required])
         this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 2 : {
-        this.formKho.controls['maNhakho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
+        this.formKho.controls['maNhakho'].setValidators([Validators.required])
         this.formKho.controls['tenNhakho'].setValidators([Validators.required])
         this.formKho.controls['loaikhoId'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
@@ -430,14 +519,14 @@ export class ThemMoiKhoComponent implements OnInit {
         break;
       }
       case 3 : {
-        this.formKho.controls['maNgankho'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
+        this.formKho.controls['maNgankho'].setValidators([Validators.required])
         this.formKho.controls['tenNgankho'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         this.formKho.controls['coLoKho'].setValidators([Validators.required])
         break;
       }
       case 4 : {
-        this.formKho.controls['maNganlo'].setValidators([Validators.required,Validators.pattern("[0-9]{2}")])
+        this.formKho.controls['maNganlo'].setValidators([Validators.required])
         this.formKho.controls['tenNganlo'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
@@ -447,5 +536,26 @@ export class ThemMoiKhoComponent implements OnInit {
         break;
       }
     }
+  }
+
+  setLoaiHangHoa() : string {
+    let arr = [];
+    if (this.loaiHangHoa.gao) {
+      arr.push("0102")
+    }
+    if (this.loaiHangHoa.thoc) {
+      arr.push("0101")
+    }
+    if (this.loaiHangHoa.vattu) {
+      arr.push("02")
+    }
+    if (this.loaiHangHoa.muoi) {
+      arr.push("04")
+    }
+    let string = ''
+    if (arr && arr.length > 0) {
+      string = arr.toString()
+    }
+    return string;
   }
 }

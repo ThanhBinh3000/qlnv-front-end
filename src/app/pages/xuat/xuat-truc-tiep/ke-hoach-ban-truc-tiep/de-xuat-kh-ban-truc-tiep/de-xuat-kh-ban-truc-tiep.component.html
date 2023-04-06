@@ -89,7 +89,8 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -255,7 +256,8 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td *ngIf="userService.isCuc()">{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                         <td>
-                            <a nz-button nzType="link" nzBlock (click)="openModalQdPd(data.idSoQdPd)">{{
+                            <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link" nzBlock
+                                (click)="openModalQdPd(data.idSoQdPd)">{{
                                 data.soQdPd}}</a>
                         </td>
                         <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
@@ -265,11 +267,16 @@
                         <td>{{ data.slDviTsan }}</td>
                         <td></td>
                         <td>
-                            <a nz-button nzType="link" nzBlock (click)="openModalChiTieu(data.idSoQdCtieu)">{{
+                            <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link" nzBlock
+                                (click)="openModalChiTieu(data.idSoQdCtieu)">{{
                                 data.soQdCtieu}}</a>
                         </td>
                         <td>{{ data.tenTrangThai }}</td>
-                        <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThaiTh}}
+                        <td *ngIf="userService.isTongCuc()">
+                            <span *ngIf="!data.idThop">{{data.tenTrangThaiTh}}</span>
+                            <a *ngIf="data.idThop" nz-button nzType="link" nzBlock (click)="openModalTh(data.idThop)">{{
+                                data.idThop}}</a>
+                        </td>
                         <td class="text-left">
                             <a (click)="goDetail(data.id,['XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM','XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM'])"
                                 *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC )">
@@ -336,6 +343,19 @@
     </ng-container>
     <div *nzModalFooter>
         <button nz-button (click)="closeModalChiTieu()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
+    <ng-container *nzModalContent class="modal__content">
+        <app-them-moi-tong-hop-kh-ban-truc-tiep [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-tong-hop-kh-ban-truc-tiep>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalTh()" class="modal__button--cancel">
             <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
             Đóng
         </button>

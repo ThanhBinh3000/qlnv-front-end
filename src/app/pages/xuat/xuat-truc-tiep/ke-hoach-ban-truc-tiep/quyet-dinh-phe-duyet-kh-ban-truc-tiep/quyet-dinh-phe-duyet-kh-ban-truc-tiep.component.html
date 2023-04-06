@@ -42,7 +42,7 @@
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
-                <button nz-button class="search__button--search" (click)="timKiem()">
+                <button nz-button class="search__button--search" (click)="search()">
                     <i nz-icon nzType="search"></i>
                     Tìm kiếm
                 </button>
@@ -56,7 +56,8 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()"
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-truc-tiep.xlsx')"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
@@ -183,11 +184,13 @@
                         <td>{{data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{data.trichYeu }}</td>
                         <td>
-                            <a nz-button nzType="link" nzBlock (click)="openModalDxKh(data.idTrHdr)">{{
+                            <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link" nzBlock
+                                (click)="openModalDxKh(data.idTrHdr)">{{
                                 data.soTrHdr}}</a>
                         </td>
                         <td>
-                            <a nz-button nzType="link" nzBlock (click)="openModalTh(data.idThHdr)">{{
+                            <a *ngIf="data.idThHdr" nz-button nzType="link" nzBlock
+                                (click)="openModalTh(data.idThHdr)">{{
                                 data.idThHdr}}</a>
                         </td>
                         <td>{{data.tenLoaiVthh}}</td>

@@ -40,13 +40,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
-
   danhsachDx: any[] = [];
-
   dataInput: any;
   dataInputCache: any;
-
   isTongHop: boolean
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -144,6 +142,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     // })
   }
 
+  async showFirstRow($event, dataDxBdg: any) {
+    await this.showDetail($event, dataDxBdg);
+  }
+
   async bindingDataTongHop(dataTongHop?) {
     if (dataTongHop) {
       this.formData.patchValue({
@@ -202,6 +204,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         soQdPd: data.soQdPd?.split('/')[0]
       })
       this.danhsachDx = data.children;
+      if (this.danhsachDx && this.danhsachDx.length > 0) {
+        this.showFirstRow(event, this.danhsachDx[0]);
+      }
       this.fileDinhKem = data.fileDinhKems;
     }
     this.spinner.hide()
@@ -280,6 +285,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
                 })
                 dataRes.idDxHdr = dataRes.id;
                 this.danhsachDx.push(dataRes);
+                if (this.danhsachDx && this.danhsachDx.length > 0) {
+                  this.showFirstRow(event, this.danhsachDx[0]);
+                }
               }
             })
           };
@@ -344,6 +352,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         const dataRes = res.data;
         dataRes.idDxHdr = dataRes.id;
         this.danhsachDx.push(dataRes);
+        if (this.danhsachDx && this.danhsachDx.length > 0) {
+          this.showFirstRow(event, this.danhsachDx[0]);
+        }
         let tongMucDt = 0
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
@@ -384,16 +395,30 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   index = 0;
   async showDetail($event, index) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
-    this.isTongHop = this.formData.value.phanLoai == 'TH';
-    this.dataInput = this.danhsachDx[index];
-    if (this.dataInput) {
-      let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
-      this.dataInputCache = res.data;
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow');
+      this.isTongHop = this.formData.value.phanLoai == 'TH';
+      this.dataInput = this.danhsachDx[index];
+      if (this.dataInput) {
+        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+        this.dataInputCache = res.data;
+      }
+      this.index = index;
+      await this.spinner.hide();
+    } else {
+      this.selected = true
+      this.isTongHop = this.formData.value.phanLoai == 'TH';
+      this.dataInput = this.danhsachDx[0];
+      if (this.dataInput) {
+        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+        this.dataInputCache = res.data;
+      }
+      this.index = 0;
+      await this.spinner.hide();
     }
-    this.index = index;
-    await this.spinner.hide();
+
   }
 
   getNameFile(event?: any, item?: FileDinhKem) {

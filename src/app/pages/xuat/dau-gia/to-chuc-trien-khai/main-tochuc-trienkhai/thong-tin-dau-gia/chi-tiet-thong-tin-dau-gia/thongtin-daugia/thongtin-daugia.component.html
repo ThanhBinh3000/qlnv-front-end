@@ -415,9 +415,9 @@
                             <a (click)="addRow(rowItemKhach,'KM')">
                                 <i class="fa fa-plus"></i>
                             </a>
-                            <a (click)="clearRow()">
-                                <i class="fa fa-refresh "></i>
-                            </a>
+<!--                            <a (click)="clearRow()">-->
+<!--                                <i class="fa fa-refresh "></i>-->
+<!--                            </a>-->
                         </th>
                     </tr>
                 </thead>
@@ -429,7 +429,7 @@
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
-                                <a (click)="editRow(data.idVirtual)">
+                                <a (click)="editRow(data)">
                                     <i class=" fa fa-pencil"></i>
                                 </a>
                                 <a (click)="deleteRow(data.idVirtual)">
@@ -461,21 +461,35 @@
                             <a (click)="addRow(rowItemDgv,'DGV')">
                                 <i class="fa fa-plus"></i>
                             </a>
-                            <a (click)="clearRow()">
-                                <i class="fa fa-refresh "></i>
-                            </a>
+<!--                            <a (click)="clearRow()">-->
+<!--                                <i class="fa fa-refresh "></i>-->
+<!--                            </a>-->
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <ng-container *ngFor="let data of findTableName('DGV')?.dataChild , let i = index">
-                        <tr>
+                      <tr *ngIf="data.isEdit">
+                        <td>{{i+1}}</td>
+                        <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
+                        <td><input nz-input [(ngModel)]="data.chucVu" /></td>
+                        <td><input nz-input [(ngModel)]="data.diaChi" /></td>
+                        <td *ngIf="!isDisabled()">
+                          <a (click)="saveRow(data)">
+                            <i class=" fa fa-save"></i>
+                          </a>
+                          <a (click)="cancelEdit(data)">
+                            <i class="fa fa-close"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr *ngIf="!data.isEdit">
                             <td>{{i+1}}</td>
                             <td>{{data.hoVaTen}}</td>
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
-                                <a (click)="editRow(data.idVirtual)">
+                                <a (click)="editRow(data)">
                                     <i class=" fa fa-pencil"></i>
                                 </a>
                                 <a (click)="deleteRow(data.idVirtual)">
@@ -507,9 +521,9 @@
                             <a (click)="addRow(rowItemToChuc,'NTG')">
                                 <i class="fa fa-plus"></i>
                             </a>
-                            <a (click)="clearRow()">
-                                <i class="fa fa-refresh "></i>
-                            </a>
+<!--                            <a (click)="clearRow()">-->
+<!--                                <i class="fa fa-refresh "></i>-->
+<!--                            </a>-->
                         </th>
                     </tr>
                 </thead>
@@ -521,7 +535,7 @@
                             <td>{{data.soCccd}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
-                                <a (click)="editRow(data.idVirtual)">
+                                <a (click)="editRow(data)">
                                     <i class=" fa fa-pencil"></i>
                                 </a>
                                 <a (click)="deleteRow(data.idVirtual)">

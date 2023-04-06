@@ -55,7 +55,8 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="export()">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Thong-tin-tong-hop-ke-hoach-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -153,7 +154,8 @@
                         <td>{{ data.noiDungThop }}</td>
                         <td>{{ data.namKh }}</td>
                         <td>
-                            <a nz-button nzType="link" nzBlock (click)="openModalQdPd(data.idSoQdPd)">{{
+                            <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link" nzBlock
+                                (click)="openModalQdPd(data.idSoQdPd)">{{
                                 data.soQdPd}}</a>
                         </td>
                         <td>{{ data.tenLoaiVthh }}</td>
