@@ -57,21 +57,15 @@ export class NewDonViComponent implements OnInit {
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       this.levelNode = node.level
+      if (this.levelNode == 3) {
+        this.formDonVi.patchValue({
+          type : true
+        })
+      }
     });
   }
 
   ngOnInit(): void {
-    this.nodesTree.forEach(item => {
-      if (item && item.children && item.children.length > 0) {
-        item.children.forEach(cuc => {
-          if (cuc && cuc.children && cuc.children.length > 0) {
-            cuc.children.forEach(chicuc => {
-              chicuc.children = []
-            })
-          }
-        })
-      }
-    })
   }
 
 
