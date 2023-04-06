@@ -262,7 +262,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         };
         this.listDiemKho.push(item);
       }
-      console.log('listDiemKho', this.listDiemKho)
     }
   }
 
@@ -331,10 +330,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  onExpandChange(id: number, checked: boolean, maDvi: string): void {
+  onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
-      this.onChangeChiCuc(maDvi);
     } else {
       this.expandSet.delete(id);
     }
@@ -400,7 +398,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   validateGiaDeXuat() {
     if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước');
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải <= giá mua tối đa.');
       return;
     } else if (this.formData.get('donGiaTamTinh').value > this.giaToiDa) {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn giá tối đa (" + this.giaToiDa + " đ)")
@@ -496,5 +494,11 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.calculatorThanhTienDx();
       return sum;
     }
+  }
+
+  loadDiemKho(ma: string) {
+    this.listDiemKho = []
+    this.onChangeChiCuc(ma);
+    console.log('test', ma)
   }
 }

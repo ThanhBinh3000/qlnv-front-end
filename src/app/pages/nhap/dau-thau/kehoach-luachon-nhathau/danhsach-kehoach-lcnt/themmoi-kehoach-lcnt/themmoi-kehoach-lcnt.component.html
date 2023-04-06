@@ -428,9 +428,12 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
+              <nz-select formControlName="nguonVon" [nzDisabled]="true">
+                <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -445,12 +448,9 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon" [nzDisabled]="true">
-                <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
+              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -492,7 +492,7 @@
           <th>Tên gói thầu</th>
           <th>Địa điểm nhập kho</th>
           <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
-          <th>Đã lên kế hoạch mua</th>
+          <th>SL theo KH năm đã được duyệt</th>
           <th>SL nhập (kg)</th>
           <th>Đơn giá đề xuất (đ)</th>
           <th>Thành tiền tạm tính (đ)</th>
@@ -507,11 +507,12 @@
           <tr>
             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="3">{{item.tenDvi}}</td>
-            <td class="text-right">{{item.soLuongTheoChiTieu}}</td>
-            <td class="text-right">{{item.soLuongDaMua}}</td>
+            <td class="text-right red-text">{{item.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right red-text">{{item.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right bold-700">{{ item.dataChild[0].soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td class="text-right bold-700">{{ item.dataChild[0].soLuong * item.dataChild[0].donGiaTamTinh | number :
+              '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -548,7 +549,10 @@
       <tr *ngIf="listDataGroup.length > 0">
         <td></td>
         <td></td>
-        <td colspan="4" class="first-last-row-table background-last-row text-left blue-text">Tổng</td>
+        <td></td>
+        <td class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
+        <td></td>
+        <td></td>
         <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
         <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' : 'vi_VN' }}</td>
@@ -741,7 +745,7 @@
         <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
           <ng-container>
             <td>{{i + 1}}</td>
-            <td>{{data.children[0].noiDung}}</td>
+            <td>{{data.tenTlieu}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
             <td class="action text-right">
               <a (click)="downloadFile(data.children[0])">
@@ -825,7 +829,7 @@
         <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
           <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
             <td>{{i + 1}}</td>
-            <td>{{data.children[0].noiDung}}</td>
+            <td>{{data.tenTlieu}}</td>
             <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
             <td class="action text-right">
               <a (click)="downloadFile(data.children[0])">

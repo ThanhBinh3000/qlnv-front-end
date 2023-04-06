@@ -284,30 +284,20 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "kqDanhGia": this.searchFilter.ketLuan,
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.loaiVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayLapPhieu": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQd": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "tenNguoiGiao": null,
-          "trangThai": null
+          loaiVthh: this.loaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          soQd: this.searchFilter.soQuyetDinh,
+          namNhap: this.searchFilter.namKhoach,
+          soBbNtBq: this.searchFilter.soBb,
+          tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
+          tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
-          .exportList(body)
+        this.quyetDinhGiaoNhapHangService
+          .exportBbNtBq(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
