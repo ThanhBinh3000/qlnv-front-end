@@ -17,7 +17,7 @@
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-tree #nzTreeSelectComponent nzAsyncData [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+        <nz-tree #nzTreeSelectComponent  [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
                  (nzExpandChange)="loadChildren($event)"
                  (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
         </nz-tree>
@@ -43,11 +43,11 @@
                   </div>
                   <div nz-col nzSpan="12" class="text-left" *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)">
                     <label class="font-weight-bold">Loại hàng hóa</label>
-                    <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" nzDisabled class="font-weight-bold"
+                    <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold"
                            style="margin-left: 20px" nz-checkbox>Thóc</label>
-                    <label [(ngModel)]="loaiHangHoa.gao" nzDisabled class="font-weight-bold" nz-checkbox>Gạo</label>
-                    <label [(ngModel)]="loaiHangHoa.muoi" nzDisabled class="font-weight-bold" nz-checkbox>Muối</label>
-                    <label [(ngModel)]="loaiHangHoa.vattu" nzDisabled class="font-weight-bold" nz-checkbox>Vật tư</label>
+                    <label [(ngModel)]="loaiHangHoa.gao" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Gạo</label>
+                    <label [(ngModel)]="loaiHangHoa.muoi"  [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Muối</label>
+                    <label [(ngModel)]="loaiHangHoa.vattu" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Vật tư</label>
                   </div>
                   <div class="text-right" nz-col nzSpan="12">
                     <button nz-button class="btn btn-sub do ml-2" (click)="delete()">
@@ -1137,7 +1137,7 @@
                           <nz-form-label>Loại hàng hóa</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-select formControlName="loaiVthh" [nzDisabled]="isEditData"
+                              <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                                          (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                            [nzValue]="item.ma"></nz-option>
@@ -1151,7 +1151,7 @@
                           <nz-form-label>Chủng loại hàng hóa</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-select [nzDisabled]="isEditData" formControlName="cloaiVthh"
+                              <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
                                          (ngModelChange)="onChangCloaiVthh($event)">
                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
                                            [nzValue]="item.ma"></nz-option>
@@ -1165,7 +1165,7 @@
                           <nz-form-label>Số lượng tồn đầu kỳ</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="isEditData" formControlName="slTon"
+                              <nz-input-number [nzDisabled]="true" formControlName="slTon"
                                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                                [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
@@ -1187,7 +1187,7 @@
                           <nz-form-label>Ngày nhập đầy</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="isEditData"
+                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"
                                               nzFormat="dd/MM/yyyy"
                                               [nzDisabled]="true"></nz-date-picker>
                             </nz-input-group>
@@ -1198,7 +1198,7 @@
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                        <textarea formControlName="nhiemVu" [readonly]="isEditData" rows="3" class="search__input"
+                        <textarea formControlName="nhiemVu" [readonly]="true" rows="3" class="search__input"
                                   nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
@@ -1480,7 +1480,7 @@
                           <nz-form-label>Loại hàng hóa</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-select formControlName="loaiVthh" [nzDisabled]="isEditData"
+                              <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                                          (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                            [nzValue]="item.ma"></nz-option>
@@ -1494,7 +1494,7 @@
                           <nz-form-label>Chủng loại hàng hóa</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-select [nzDisabled]="isEditData && detailDonVi.value.loaiVthh"
+                              <nz-select [nzDisabled]="true"
                                          formControlName="cloaiVthh"
                                          (ngModelChange)="onChangCloaiVthh($event)">
                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
@@ -1509,7 +1509,7 @@
                           <nz-form-label>Số lượng</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                formControlName="slTon"></nz-input-number>
                             </nz-input-group>
@@ -1530,7 +1530,7 @@
                         <nz-form-item>
                           <nz-form-label> Tình trạng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="tinhtrangId" [nzDisabled]="isEditData">
+                            <nz-select formControlName="tinhtrangId" [nzDisabled]="true">
                               <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                               </nz-option>
                             </nz-select>
@@ -1585,9 +1585,9 @@
                 </form>
               </nz-collapse-panel>
             </nz-collapse>
-            <ng-container *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5">
+            <ng-container *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5 || (levelNode == 6 && detailDonVi.value.coLoKho) ">
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" [nzHeader]="levelNode == 2 ? 'DANH SÁCH CHI CỤC' : levelNode == 3 ? 'DANH SÁCH ĐIỂM KHO' : levelNode == 4 ? 'DANH SÁCH NHÀ KHO' : 'DANH SÁCH NGĂN KHO' ">
+                <nz-collapse-panel nzActive="true" [nzHeader]="levelNode == 2 ? 'DANH SÁCH CHI CỤC' : levelNode == 3 ? 'DANH SÁCH ĐIỂM KHO' : levelNode == 4 ? 'DANH SÁCH NHÀ KHO' :  levelNode == 5 ? 'DANH SÁCH NGĂN KHO' : 'DANH SÁCH LÔ KHO' ">
                   <nz-table class="pd-10" [nzData]="dataTable" nzBordered [nzFrontPagination]="false"
                             [nzShowPagination]="false">
                     <thead>
