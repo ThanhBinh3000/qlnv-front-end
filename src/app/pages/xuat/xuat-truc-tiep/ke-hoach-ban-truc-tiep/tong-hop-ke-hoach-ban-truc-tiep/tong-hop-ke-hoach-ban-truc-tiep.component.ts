@@ -103,26 +103,6 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     this.search();
   }
 
-  export() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        this.tongHopKhBanTrucTiepService
-          .export(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, 'Thong-tin-tong-hop-ke-hoach-ban-truc-tiep.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
   disabledNgayThopTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayThopDen) {
       return false;

@@ -209,7 +209,8 @@
                         <td></td>
                         <td></td>
                         <td>{{phanLo.tenDiemKho}}</td>
-                        <td>{{phanLo.tenLoKho}}</td>
+                        <td>{{phanLo.tenLoKho == null ? phanLo.tenNganKho : phanLo.tenLoKho }} {{phanLo.tenNhaKho}}
+                        </td>
                         <td>{{phanLo.maDviTsan}}</td>
                         <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                         <td>{{phanLo.dviTinh }}</td>
