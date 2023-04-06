@@ -151,6 +151,7 @@
                             <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
                             <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
                             <th>Trạng thái</th>
+                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -166,6 +167,12 @@
                             <td>{{ data.tongTienKdienDonGia | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tongTienDatTruocDonGia | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
+                            <td>
+                                <a>
+                                    <i class="icon htvbdh_tcdt_print"></i>
+                                </a>
+                            </td>
+
                         </tr>
                     </tbody>
                 </nz-table>
