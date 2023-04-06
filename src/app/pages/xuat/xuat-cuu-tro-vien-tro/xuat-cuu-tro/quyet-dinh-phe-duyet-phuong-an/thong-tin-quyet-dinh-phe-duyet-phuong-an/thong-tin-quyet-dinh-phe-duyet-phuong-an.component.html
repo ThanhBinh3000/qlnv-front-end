@@ -231,36 +231,44 @@
                       <div nz-col nzSpan="6">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            Tổng số lượng viện trợ, cứu trợ
+                            Tổng số lượng đề xuất CT,VT
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-statistic
-                              [nzValue]="listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
+                            <span class="text-blue">{{listSoLuongDxCache | nzAggregate: 'sum'|number: '1.0-1' :
+                              'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col nzSpan="10">
+                      <div nz-col nzSpan="6">
+                        <nz-form-item>
+                          <nz-form-label [nzNoColon]="true">
+                            Tổng số lượng thực tế xuất CT,VT của từng chi cục
+                          </nz-form-label>
+                          <nz-form-control [nzErrorTip]="error">
+                            <span class="text-blue">{{listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1' :
+                              'vi_VN'}} {{formData.value.donViTinh}}</span>
+                          </nz-form-control>
+                        </nz-form-item>
+                      </div>
+                      <div nz-col nzSpan="6">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
                             Thành Tiền
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-statistic
-                              [nzValue]="listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
+                            <span class="text-blue">{{listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1' :
+                              'vi_VN'}} (đ)</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
-                      <div nz-col nzSpan="8" *ngIf="this.formData.value.loaiVthh=='0102'">
+                      <div nz-col nzSpan="6" *ngIf="this.formData.value.loaiVthh=='0102'">
                         <nz-form-item>
                           <nz-form-label [nzNoColon]="true">
-                            SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
+                            SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                           </nz-form-label>
-                          <!-- <nz-form-control [nzErrorTip]="error">
-                            <nz-statistic [nzValueStyle]="{ color: 'red'}"
-                              [nzValue]="slXuatCapCache|number: '1.0-1' : 'vi_VN'"></nz-statistic>
-                          </nz-form-control> -->
-                          <nz-form-control [nzErrorTip]="error" *ngIf="formData.value.xuatCap == true">
-                            <span>{{slXuatCapCache > 0 ? slXuatCapCache : ''| number: '1.0-1' : 'vi_VN'}}</span>
+                          <nz-form-control [nzErrorTip]="error">
+                            <span class="text-danger">{{slXuatCapCache > 0 ? (slXuatCapCache |number: '1.0-1' : 'vi_VN')
+                              : ''}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -381,32 +389,45 @@
                     <div nz-col nzSpan="6">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          Tổng số lượng viện trợ, cứu trợ
+                          Tổng số lượng đề xuất CT,VT
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic
-                            [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
+                          <span class="text-blue">{{listSoLuongDx | nzAggregate: 'sum'|number: '1.0-1' :
+                            'vi_VN'}} {{formData.value.donViTinh}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
-                    <div nz-col nzSpan="10">
+                    <div nz-col nzSpan="6">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          Thành Tiền {{formData.value.soLuongXuaCap}}
+                          Tổng số lượng thực tế xuất CT,VT của từng chi cục
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <nz-statistic
-                            [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1' : 'vi_VN'"></nz-statistic>
+                          <span class="text-blue">{{listSoLuong | nzAggregate: 'sum'|number: '1.0-1' :
+                            'vi_VN'}} {{formData.value.donViTinh}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
-                    <div nz-col nzSpan="8" *ngIf="this.formData.value.loaiVthh=='0102'">
+                    <div nz-col nzSpan="6">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          SL đề xuất ctvt trong kho không đáp ứng chuyển sang xuất cấp
+                          Thành Tiền {{formData.value.soLuongXuaCap}} (đ)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                          <span>{{formData.value.soLuongXuaCap| number: '1.0-1' : 'vi_VN'}}</span>
+                          <span class="text-blue">{{listThanhTien | nzAggregate: 'sum'|number: '1.0-1' :
+                            'vi_VN'}} {{formData.value.donViTinh}}</span>
+                        </nz-form-control>
+                      </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6" *ngIf="this.formData.value.loaiVthh=='0102'">
+                      <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                          SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error" (ngModelChange)="tinhXuatCap()">
+                          <span class="text-danger">{{formData.value.soLuongXuaCap>0?(formData.value.soLuongXuaCap|
+                            number: '1.0-1' : 'vi_VN'):''}}
+                            {{formData.value.donViTinh}}</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -518,8 +539,8 @@
                     </ng-container>
                   </tbody>
                 </nz-table>
-                <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" [nzDisabled]="slXuatCap == null"
-                  [(ngModel)]="this.formData.value.xuatCap" (ngModelChange)="tinhXuatCap()">
+                <label nz-checkbox *ngIf="this.formData.value.loaiVthh=='0102'" [nzDisabled]="isView"
+                  [(ngModel)]="this.formData.value.xuatCap">
                   Đồng ý duyệt xuất cấp
                 </label>
               </nz-card>
