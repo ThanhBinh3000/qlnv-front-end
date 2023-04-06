@@ -11,6 +11,7 @@ import {DanhMucService} from "../../../services/danhmuc.service";
 import {API_STATUS_CODE} from "../../../constants/config";
 import * as dayjs from "dayjs";
 import {OldResponseData} from "../../../interfaces/response";
+import {TrangThaiHoatDong} from "../../../constants/status";
 
 @Component({
   selector: 'app-dialog-them-moi-so-du-dau-ky',
@@ -57,6 +58,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   }
 
   async ngOnInit() {
+    console.log(this.detail)
     await Promise.all([
       this.getAllLoaiVthh(),
       this.loadDsNam(),
@@ -86,6 +88,10 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     if (this.formData.invalid) {
       return;
     }
+    if (!this.checkValidateLoaiVthh()) {
+      this.notification.error(MESSAGE.ERROR, 'Loại hàng hóa không hợp lệ!')
+      return;
+    }
     let body = this.detail
     body.tichLuongKdLt = (body.tichLuongTkLt - this.formData.value.tichLuongSdLt) >= 0 ? body.tichLuongTkLt - this.formData.value.tichLuongSdLt : 0
     body.tichLuongKdVt = (body.tichLuongKdVt - this.formData.value.tichLuongSdVt) >= 0 ? body.tichLuongKdVt - this.formData.value.tichLuongSdVt : 0
@@ -97,6 +103,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
     body.isKhoiTao = this.formData.value.isKhoiTao
+    body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -145,5 +152,21 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
         dviTinh: res.data ? res.data.maDviTinh : null
       })
     }
+  }
+
+  checkValidateLoaiVthh() : boolean {
+    let check = false;
+    if (this.detail.loaiHangHoa) {
+      let arr = this.detail.loaiHangHoa.split(",");
+      if (arr && arr.length > 0) {
+        console.log(arr)
+        arr.forEach(item => {
+          if (this.formData.value.loaiVthh == item) {
+            check =true
+          }
+        })
+      }
+    }
+    return check;
   }
 }
