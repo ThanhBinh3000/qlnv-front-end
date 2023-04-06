@@ -28,14 +28,21 @@
       <div class="header header-green-background mg-t-16">
         <div class="header-text">
           <div class="title-chi-tieu">
-            <span></span>
-            <span *ngIf="levelNode == 1">Thêm mới điểm kho</span>
-            <span *ngIf="levelNode == 2">Thêm mới nhà kho</span>
-            <span *ngIf="levelNode == 3">Thêm mới ngăn kho</span>
-            <span *ngIf="levelNode == 4">Thêm mới lô kho</span>
+            <span  class="text-uppercase font-weight-bold" *ngIf="levelNode == 1">Thêm mới điểm kho</span>
+            <span  class="text-uppercase font-weight-bold"  *ngIf="levelNode == 2">Thêm mới nhà kho</span>
+            <span  class="text-uppercase font-weight-bold"  *ngIf="levelNode == 3">Thêm mới ngăn kho</span>
+            <span   class="text-uppercase font-weight-bold" *ngIf="levelNode == 4">Thêm mới lô kho</span>
           </div>
         </div>
       </div>
+    </div>
+    <div class="mg-t-10" *ngIf="this.levelNode == 4 || (this.levelNode == 3 && !formKho.value.coLoKho)">
+      <label class="font-weight-bold">Loại hàng hóa</label>
+      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" class="font-weight-bold"
+             style="margin-left: 20px" nz-checkbox>Thóc</label>
+      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.gao"  class="font-weight-bold" nz-checkbox>Gạo</label>
+      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.muoi"  class="font-weight-bold" nz-checkbox>Muối</label>
+      <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="loaiHangHoa.vattu"  class="font-weight-bold" nz-checkbox>Vật tư</label>
     </div>
     <nz-card class="mt16 flex-card p-lr16">
       <nz-card class="mt16 flex-card p-lr16" *ngIf="levelNode == 1">

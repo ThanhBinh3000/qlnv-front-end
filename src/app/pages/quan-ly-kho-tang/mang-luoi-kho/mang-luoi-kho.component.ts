@@ -148,7 +148,8 @@ export class MangLuoiKhoComponent implements OnInit {
       sdt: [''],
       idParent: [''],
       isKhoiTao: [null],
-      dviReq: [null]
+      dviReq: [null],
+      loaiHangHoa : []
     })
   }
 
@@ -396,7 +397,10 @@ export class MangLuoiKhoComponent implements OnInit {
   bindingDataDetail(dataNode) {
     if (this.levelNode != 1) {
       this.convertDataChild(dataNode);
-      this.updateCheckboxHh(dataNode.listMaHh ? dataNode.listMaHh : []);
+      if (dataNode.loaiHangHoa){
+        let arr = dataNode.loaiHangHoa.split(",");
+        this.updateCheckboxHh(arr && arr.length > 0 ? arr : []);
+      }
       this.detailDonVi.patchValue({
         id: dataNode && dataNode.id ? dataNode.id : null,
         // maCha:dataNode && dataNode.id ? dataNode.id : null,
@@ -425,7 +429,8 @@ export class MangLuoiKhoComponent implements OnInit {
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
         loaikhoId: dataNode.loaikhoId,
         coLoKho: dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false,
-        trangThai : dataNode.trangThai == TrangThaiHoatDong.HOAT_DONG ? true : false
+        trangThai : dataNode.trangThai == TrangThaiHoatDong.HOAT_DONG ? true : false,
+        loaiHangHoa : dataNode.loaiHangHoa
       });
       if (this.levelNode == 7) {
         this.detailDonVi.patchValue({
@@ -593,6 +598,7 @@ export class MangLuoiKhoComponent implements OnInit {
           "trangThai": this.nodeDetail.trangThai,
           "type": this.nodeDetail.type,
         }
+        body.trangThai = this.detailDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
         body.dviReq = dviReq
         body.fileDinhkems = this.fileDinhKems;
         let type;

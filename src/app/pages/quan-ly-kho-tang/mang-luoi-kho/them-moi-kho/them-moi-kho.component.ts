@@ -26,7 +26,12 @@ export class ThemMoiKhoComponent implements OnInit {
   @ViewChild('treeSelect', {static: false}) treeSelect!: NzTreeComponent;
 
   data: any;
-
+  loaiHangHoa: any = {
+    "thoc": false,
+    "gao": false,
+    "muoi": false,
+    "vattu": false,
+  }
   idReq: number = 0;
   nodesTree: any = [];
   options = {
@@ -100,7 +105,7 @@ export class ThemMoiKhoComponent implements OnInit {
       cloaiVthh: [''],
       trangThai: [true],
       type: [true],
-      coLoKho: [true],
+      coLoKho: [],
       ghiChu: [''],
       nhiemVu: [''],
       tichLuongTkLt: [''],
@@ -129,7 +134,8 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
-      isKhoiTao: [true]
+      isKhoiTao: [true],
+      loaiHangHoa : []
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -341,6 +347,11 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
+    if (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+      this.spinner.hide()
+      return;
+    }
     if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
@@ -348,7 +359,8 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.maDvi = this.formKho.value.maNganlo;
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
-      body.ngankhoId = this.idReq
+      body.loaiHangHoa = this.setLoaiHangHoa();
+      body.ngankhoId = this.idReq;
       body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
       body.dviReq = bodyDvi
@@ -372,6 +384,11 @@ export class ThemMoiKhoComponent implements OnInit {
       this.spinner.hide()
       return;
     }
+    if (!this.formKho.value.coLoKho && (!this.loaiHangHoa.gao && !this.loaiHangHoa.thoc && !this.loaiHangHoa.muoi && !this.loaiHangHoa.vattu) ) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn chưa nhập loại hàng hóa')
+      this.spinner.hide()
+      return;
+    }
     if (this.idReq != 0) {
       let bodyDvi = this.formDvi.value;
       bodyDvi.maDviCha = this.formKho.value.maCha;
@@ -380,6 +397,7 @@ export class ThemMoiKhoComponent implements OnInit {
       bodyDvi.diaChi = this.formKho.value.diaChi;
       let body = this.formKho.value;
       body.dviReq = bodyDvi
+      body.loaiHangHoa = this.setLoaiHangHoa();
       body.maNgankho = this.formKho.value.maNgankho;
       body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
@@ -518,5 +536,26 @@ export class ThemMoiKhoComponent implements OnInit {
         break;
       }
     }
+  }
+
+  setLoaiHangHoa() : string {
+    let arr = [];
+    if (this.loaiHangHoa.gao) {
+      arr.push("0102")
+    }
+    if (this.loaiHangHoa.thoc) {
+      arr.push("0101")
+    }
+    if (this.loaiHangHoa.vattu) {
+      arr.push("02")
+    }
+    if (this.loaiHangHoa.muoi) {
+      arr.push("04")
+    }
+    let string = ''
+    if (arr && arr.length > 0) {
+      string = arr.toString()
+    }
+    return string;
   }
 }

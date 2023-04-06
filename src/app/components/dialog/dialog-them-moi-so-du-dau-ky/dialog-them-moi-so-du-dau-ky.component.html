@@ -116,7 +116,7 @@
         <nz-form-item>
           <nz-form-label > Ngày nhập đầy cuối cùng </nz-form-label>
           <nz-form-control>
-            <nz-date-picker formControlName="ngayNhapDay"></nz-date-picker>
+            <nz-date-picker nzFormat="dd/MM/yyyy" formControlName="ngayNhapDay"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -137,7 +137,7 @@
         <nz-form-label >Giá bình quân</nz-form-label>
         <nz-form-control>
           <nz-input-group>
-            <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="formData.value.thanhTien / formData.value.slTon" [nzMin]="1"
+            <nz-input-number nzDisabled [ngModelOptions]="{standalone: true}" [(ngModel)]="formData.value.thanhTien / formData.value.slTon" [nzMin]="1"
                              [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
           </nz-input-group>
