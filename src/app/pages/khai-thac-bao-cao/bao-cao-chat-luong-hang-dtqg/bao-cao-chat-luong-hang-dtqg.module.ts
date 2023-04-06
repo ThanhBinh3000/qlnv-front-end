@@ -11,13 +11,15 @@ import {
 } from "./th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung/th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung.component";
 import { BaoCaoChatLuongHangDtqgComponent } from "./bao-cao-chat-luong-hang-dtqg.component";
 import { ThBcSoLuongClCcdcComponent } from "./th-bc-so-luong-cl-ccdc/th-bc-so-luong-cl-ccdc.component";
+import { BaoCaoHaoHutHangDtqgComponent } from './bao-cao-hao-hut-hang-dtqg/bao-cao-hao-hut-hang-dtqg.component';
 
 
 @NgModule({
   declarations: [
     ThBcSoLuongClMayMocThietBiChuyenDungComponent,
     BaoCaoChatLuongHangDtqgComponent,
-    ThBcSoLuongClCcdcComponent
+    ThBcSoLuongClCcdcComponent,
+    BaoCaoHaoHutHangDtqgComponent
   ],
   imports: [
     CommonModule,

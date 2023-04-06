@@ -331,9 +331,10 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  onExpandChange(id: number, checked: boolean): void {
+  onExpandChange(id: number, checked: boolean, maDvi: string): void {
     if (checked) {
       this.expandSet.add(id);
+      this.onChangeChiCuc(maDvi);
     } else {
       this.expandSet.delete(id);
     }
@@ -410,11 +411,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   clearDiemKho() {
-    this.thongtinDauThau.maDiemKho = null;
-    this.thongtinDauThau.diaDiemNhap = null;
-    this.thongtinDauThau.soLuong = null;
-    this.thongtinDauThau.thanhTienDx = null;
-    this.thongtinDauThau.thanhTienQd = null;
+    this.thongTinDiemKho.maDvi = null;
+    this.thongTinDiemKho.soLuong = null;
+  }
+
+  clearChiCuc() {
+    this.thongTinChiCuc.maDvi = null
   }
 
   calculatorThanhTien() {

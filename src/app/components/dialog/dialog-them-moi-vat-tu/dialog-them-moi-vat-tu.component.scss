@@ -21,16 +21,24 @@
   font-weight: 500;
   font-size: 12px;
 }
+
 .root-input td {
   background-color: #BDBDBD;
 }
+
 .body-input td {
   background-color: #EBEDFF;
 }
+
 .root-tree td {
   background-color: #D9D9D9;
 }
-.wrap-text {
-  width: 100px;
-  overflow-wrap: break-word;
+
+th.wrap-text {
+  white-space: normal !important;
+  word-wrap: break-word !important;
+}
+
+::ng-deep .dialog-luong-thuc .ant-modal-content .ant-modal-body {
+  padding: 0px 20px 5px 20px;
 }

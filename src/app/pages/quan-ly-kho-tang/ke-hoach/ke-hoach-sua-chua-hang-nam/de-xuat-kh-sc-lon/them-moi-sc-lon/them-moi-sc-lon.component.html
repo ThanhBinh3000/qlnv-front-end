@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
       <span
-        [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_CBV || formData.value.trangThai == STATUS.DA_DUYET_LDC  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span>ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN CỦA CỤC </span>
@@ -126,7 +126,7 @@
       </div>
     </div>
     <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered>
+                    [nzShowPagination]="false" nzBordered>
       <thead>
       <tr>
         <th class="text-center" nzWidth="40px" rowSpan="2">STT</th>
@@ -235,7 +235,7 @@
         </td>
         <td class="text-center">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.ghiChu" readonly/>
+            <input nz-input [(ngModel)]="rowItem.ghiChu" />
           </nz-input-group>
         </td>
         <td class="text-center" nzRight *ngIf="!isViewDetail">

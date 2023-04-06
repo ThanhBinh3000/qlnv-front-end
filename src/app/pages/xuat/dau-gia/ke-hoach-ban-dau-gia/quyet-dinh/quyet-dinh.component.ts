@@ -42,7 +42,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       ngayKyQdTu: null,
       ngayKyQdDen: null,
       soTrHdr: null,
-      lastest: 0
+      lastest: 0,
+      trangThai: null,
     })
     this.filterTable = {
       namKh: '',
@@ -76,7 +77,8 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      lastest: 0
+      lastest: 0,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 

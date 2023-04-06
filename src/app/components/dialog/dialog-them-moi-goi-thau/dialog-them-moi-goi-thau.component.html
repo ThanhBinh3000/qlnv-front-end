@@ -26,7 +26,7 @@
       </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item nz-col [nzSpan]="24">
-          <nz-form-label [nzSpan]="24" [nzNoColon]="true"> Đơn giá mua tối đa gồm VAT đã được duyệt</nz-form-label>
+          <nz-form-label [nzSpan]="24" [nzNoColon]="true"> Đơn giá mua tối đa gồm VAT (đã được duyệt)</nz-form-label>
           <nz-form-control [nzSpan]="24">
             <span class="blue-text">{{giaToiDa | number : '1.0-1' : 'vi_VN'}}</span>
           </nz-form-control>
@@ -36,12 +36,12 @@
         <nz-form-item [nzErrorTip]="error">
           <nz-form-label [nzNoColon]="true"> Đơn giá tạm tính</nz-form-label>
           <nz-input-number formControlName="donGiaTamTinh" class="text-right" nz-input [nzSize]="'small'"
-                           [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+            [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="5">
         <nz-form-item nz-col [nzSpan]="24">
-          <nz-form-label [nzSpan]="24" [nzNoColon]="true"> Đơn giá đã duyệt bao gồm thuế VAT</nz-form-label>
+          <nz-form-label [nzSpan]="24" [nzNoColon]="true"> Đơn giá đã duyệt gồm thuế VAT</nz-form-label>
           <nz-form-control [nzSpan]="24">
             <span class="blue-text">{{donGiaVat | number : '1.0-1' : 'vi_VN'}}</span>
           </nz-form-control>
@@ -51,7 +51,8 @@
         <nz-form-item nz-col [nzSpan]="24">
           <nz-form-label [nzSpan]="24" [nzNoColon]="true">Tổng số lượng nhập</nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <span class="blue-text">{{formGoiThau.value.soLuong != null ? formGoiThau.value.soLuong + " (Bộ)" : 0}}</span>
+            <span class="blue-text">{{formGoiThau.value.soLuong != null ? formGoiThau.value.soLuong + " (Bộ)" :
+              0}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -59,8 +60,8 @@
         <nz-form-item nz-col [nzSpan]="24">
           <nz-form-label [nzSpan]="24" [nzNoColon]="true">Tổng thành tiền tạm tính (đ)</nz-form-label>
           <nz-form-control [nzSpan]="24">
-            <span
-              class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</span>
+            <span class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaTamTinh | number : '1.0-1' :
+              'vi_VN'}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -68,31 +69,32 @@
         <nz-form-item nz-col [nzSpan]="24">
           <nz-form-label [nzSpan]="24" [nzNoColon]="true"> Tổng thành tiền theo đơn giá đã duyệt (đ)</nz-form-label>
           <nz-form-control [nzSpan]="24">
-          <span
-            class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN'}}</span>
+            <span class="blue-text">{{formGoiThau.value.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' :
+              'vi_VN'}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
     </div>
   </form>
   <div class="mt-16">
-    <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
+    <nz-table nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
+      [nzScroll]="{ x: 'scroll', y: 'scroll' }">
       <thead>
         <tr>
-          <th width="60px"></th>
-          <th width="150px">Cục DTNN</th>
-          <th width="150px">Chi cục DTNN</th>
-          <th width="150px">Điểm kho</th>
-          <th>SL chỉ tiêu KH</th>
-          <th>SL đã lên KH mua</th>
-          <th>Số lượng nhập</th>
-          <th>Thành tiền tạm tính (đ)</th>
-          <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
-          <th width="100px" *ngIf="!isReadOnly" class="text-center">Thao tác</th>
+          <th nzWidth="40px"></th>
+          <th nzWidth="235px" class="text-center">Cục DTNN</th>
+          <th nzWidth="235px" class="text-center">Chi cục DTNN</th>
+          <th nzWidth="160px" class="text-center">Điểm kho</th>
+          <th nzWidth="120px" class="text-center wrap-text">SL theo chỉ tiêu KH năm</th>
+          <th nzWidth="130px" class="text-center wrap-text">SL theo KH năm đã được duyệt</th>
+          <th nzWidth="120px" class="text-center">Số lượng nhập</th>
+          <th nzWidth="160px" class="text-center wrap-text">Thành tiền tạm tính (đ)</th>
+          <th nzWidth="150px" class="text-center wrap-text">Thành tiền theo đơn giá đã duyệt (đ)</th>
+          <th nzWidth="80px" [nzRight]="true" *ngIf="!isReadOnly" class="text-center">Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="!isReadOnly">
+        <tr *ngIf="!isReadOnly" class="root-input">
           <td></td>
           <td>
             <nz-select [(ngModel)]="thongTinCuc.maDvi" (ngModelChange)="onChangeCuc($event)">
@@ -114,13 +116,13 @@
             <a (click)="addCuc()">
               <i class="icon htvbdh_dau-cong xanhla"></i>
             </a>
-            <a (click)="clearDiemKho()">
+            <a (click)="clearCuc()">
               <i class="fa fa-refresh"></i>
             </a>
           </td>
         </tr>
         <ng-container *ngFor="let dataCuc of dataTable , let i = index">
-          <tr>
+          <tr class="root-tree">
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td>{{ dataCuc.tenDvi }}</td>
             <td></td>
@@ -137,7 +139,7 @@
             </td>
           </tr>
           <ng-container *ngIf="expandSet.has(i)">
-            <tr *ngIf="!isReadOnly">
+            <tr *ngIf="!isReadOnly" class="body-tree">
               <td></td>
               <td></td>
               <td>
@@ -160,7 +162,7 @@
                 <a (click)="addChiCuc(i,dataCuc.maDvi)">
                   <i class="icon htvbdh_dau-cong xanhla"></i>
                 </a>
-                <a (click)="clearDiemKho()">
+                <a (click)="clearChiCuc()">
                   <i class="fa fa-refresh"></i>
                 </a>
               </td>
@@ -183,7 +185,7 @@
                 </td>
               </tr>
               <ng-container *ngIf="expandSet2.has(y)">
-                <tr>
+                <tr class="body-input">
                   <td></td>
                   <td></td>
                   <td></td>
