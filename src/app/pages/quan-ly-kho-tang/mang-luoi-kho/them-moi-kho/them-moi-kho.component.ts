@@ -91,6 +91,8 @@ export class ThemMoiKhoComponent implements OnInit {
       tenNhakho: [''],
       maNhakho: [''],
       tenNgankho: [''],
+      soNganKhoTk: [''],
+      dienTichNganKhoTk: [''],
       maNgankho: [''],
       loaikhoId: [''],
       nhakhoId: [''],
@@ -135,6 +137,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.nodeSelected = node.origin
         this.levelNode = node.level + 1
       }
+      this.listFileDinhKem = []
       this.setValidators();
       if (this.levelNode != 1) {
         this.formKho.patchValue({
