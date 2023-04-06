@@ -35,11 +35,15 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
+  listNam: any[] = [];
+  yearNow = dayjs().get('year');
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
   muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
-
+  tuNgayLP: Date | null = null;
+  denNgayLP: Date | null = null;
+  tuNgayKT: Date | null = null;
+  denNgayKT: Date | null = null;
   soQuyetDinh: string;
   soBB: number = null;
   ngayTongHop: any = null;
@@ -60,6 +64,15 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+
+  searchFilter = {
+    soPhieu: '',
+    ngayTongHop: '',
+    ketLuan: '',
+    soQuyetDinh: '',
+    namKhoach: '',
+    soBb: ''
+  };
 
   filterTable: any = {
     soQuyetDinhNhap: '',
@@ -96,6 +109,12 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       // if (!this.typeVthh || this.typeVthh == '') {
       //   this.isTatCa = true;
       // }
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       this.userInfo = this.userService.getUserLogin();
       // let res = await this.donViService.layTatCaDonVi();
       // this.optionsDonVi = [];
@@ -216,13 +235,18 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   clearFilter() {
-    this.inputDonVi = '';
-    this.soBB = null;
-    this.ngayTongHop = null;
-    this.diemKho = '';
-    this.nhaKho = '';
-    this.nganLo = '';
-    this.soQuyetDinh = null;
+    this.searchFilter = {
+      soPhieu: '',
+      ngayTongHop: '',
+      ketLuan: '',
+      soQuyetDinh: '',
+      namKhoach: '',
+      soBb: ''
+    };
+    this.tuNgayLP = null;
+    this.denNgayLP = null;
+    this.tuNgayKT = null;
+    this.denNgayKT = null;
     this.search();
   }
 
@@ -234,7 +258,14 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         "page": this.page - 1
       },
       loaiVthh: this.typeVthh,
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKhoach,
+      soBbNtBq: this.searchFilter.soBb,
+      tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
+      tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -498,4 +529,32 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  disabledTuNgayLP = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayLP) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayLP.getTime();
+  };
+
+  disabledDenNgayLP = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayLP) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayLP.getTime();
+  };
+
+  disabledTuNgayKT = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayLP) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayLP.getTime();
+  };
+
+  disabledDenNgayKT = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayLP) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayLP.getTime();
+  };
 }

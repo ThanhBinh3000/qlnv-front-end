@@ -314,8 +314,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.fileDinhKems = this.listFileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
+      debugger
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
     } else {
+      debugger
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
     }
     debugger
