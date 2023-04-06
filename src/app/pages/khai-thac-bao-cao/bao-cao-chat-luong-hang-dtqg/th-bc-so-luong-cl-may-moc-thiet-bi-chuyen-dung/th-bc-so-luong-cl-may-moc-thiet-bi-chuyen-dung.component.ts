@@ -125,10 +125,10 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
       body.fileName = "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.jrxml";
       body.tenBaoCao = "Tổng hợp báo cáo số lượng, chất lượng máy móc, thiết bị chuyên dùng";
       body.trangThai = "01";
-      await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongMmTbcd(body).then(async s => {
-        this.pdfBlob = s;
-        this.pdfSrc = await new Response(s).arrayBuffer();
-      });
+      // await this.bcCLuongHangDTQGService.baoCaoSLuongCLuongMmTbcd(body).then(async s => {
+      //   this.pdfBlob = s;
+      //   this.pdfSrc = await new Response(s).arrayBuffer();
+      // });
       this.showDlgPreview = true;
     } catch (e) {
       console.log(e);
