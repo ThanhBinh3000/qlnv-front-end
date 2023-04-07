@@ -220,10 +220,14 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
-      this.listGoiThau.forEach(item => {
+      // this.listGoiThau.forEach(item => {
+      //   item.id = null
+      // })
+      this.formData.value.listKtXdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
+      this.formData.value.listKtXdscQuyetDinhPdKqlcntDsgt.forEach(item => {
+        item.idGoiThau = item.id;
         item.id = null
       })
-      this.formData.value.listKtXdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
     } else {
       this.notification.success(MESSAGE.ERROR, "Kết quả lựa chọn nhà thầu không được để trống.");
       return;
@@ -245,9 +249,9 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       this.formData.value.fileDinhKems = this.listFile;
     }
     let res = await this.createUpdate(this.formData.value)
-    // if (res) {
-    //   this.goBack()
-    // }
+    if (res) {
+      this.goBack()
+    }
   }
 
   // async changeSoQdPdKhlcnt(event) {
