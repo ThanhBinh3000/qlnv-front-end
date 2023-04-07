@@ -220,11 +220,11 @@ export class AddBaoCaoComponent implements OnInit {
 
   async initialization() {
     this.spinner.show();
+    console.log(this.data);
     this.baoCao.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
-    this.getListUser();
-    await this.getChildUnit();
-
+    await this.getListUser();
+  
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
@@ -291,7 +291,7 @@ export class AddBaoCaoComponent implements OnInit {
         });
       }
     }
-
+    await this.getChildUnit();
     this.getStatusButton();
     this.spinner.hide();
   };

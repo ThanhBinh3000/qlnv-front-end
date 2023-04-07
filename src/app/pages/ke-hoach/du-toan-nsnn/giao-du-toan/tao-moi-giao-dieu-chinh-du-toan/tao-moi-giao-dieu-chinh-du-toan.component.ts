@@ -397,10 +397,6 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
             }
             )
           }
-          this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1" && this.trangThaiBanGhi == "6") {
-            this.statusBtnTongHop = false
-          }
           if (this.lstCtietBcao[0].lstCtietDvis.length > 0) {
             this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
               this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
@@ -731,6 +727,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
               }
             }
             this.id = data.data.id;
+            await this.getDetailReport();
             await this.getStatusButton();
             this.listFile = [];
           } else {

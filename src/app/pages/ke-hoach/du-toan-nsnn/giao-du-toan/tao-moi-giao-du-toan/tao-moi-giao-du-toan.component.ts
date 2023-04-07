@@ -384,10 +384,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
               item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
             })
           }
-          this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1" && this.trangThaiBanGhi == "6") {
-            this.statusBtnTongHop = false
-          }
           this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
           this.updateEditCache();
           this.getStatusButton();
@@ -695,6 +691,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
               }
             }
             this.id = data.data.id;
+            await this.getDetailReport();
             await this.getStatusButton();
             this.listFile = [];
           } else {
@@ -711,7 +708,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             await this.getDetailReport();
-            this.getStatusButton();
+            await this.getStatusButton();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -790,7 +787,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       this.statusBtnGiao = true;
       this.statusGiaoToanBo = true;
     }
-    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd?.fileName != null && this.trangThaiBanGhi == '6' && this.userInfo.CAP_DVI == "2") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {

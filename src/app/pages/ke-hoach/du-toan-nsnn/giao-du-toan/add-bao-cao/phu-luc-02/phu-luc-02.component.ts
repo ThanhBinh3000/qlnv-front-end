@@ -112,7 +112,8 @@ export class PhuLuc02Component implements OnInit {
       }
     })
     console.log(this.lstCtietBcao);
-    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+    // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+    this.sortByIndex();
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
@@ -139,63 +140,63 @@ export class PhuLuc02Component implements OnInit {
     )
   }
 
-  // setIndex() {
-  //   const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maDmuc);
-  //   for (let i = 0; i < lstVtuTemp.length; i++) {
-  //     const stt = '0.' + (i + 1).toString();
-  //     const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
-  //     this.lstCtietBcao[index].stt = stt;
-  //     const lstDmTemp = this.lstCtietBcao.filter(e => e.danhMuc == lstVtuTemp[i].danhMuc && !!e.maDmuc);
-  //     for (let j = 0; j < lstDmTemp.length; j++) {
-  //       const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
-  //       this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
-  //     }
-  //   }
-  //   lstVtuTemp.forEach(item => {
-  //     this.sum(item.stt + '.1');
-  //   })
-  // }
+  setIndex() {
+    const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maDmuc);
+    for (let i = 0; i < lstVtuTemp.length; i++) {
+      const stt = '0.' + (i + 1).toString();
+      const index = this.lstCtietBcao.findIndex(e => e.id == lstVtuTemp[i].id);
+      this.lstCtietBcao[index].stt = stt;
+      const lstDmTemp = this.lstCtietBcao.filter(e => e.danhMuc == lstVtuTemp[i].danhMuc && !!e.maDmuc);
+      for (let j = 0; j < lstDmTemp.length; j++) {
+        const ind = this.lstCtietBcao.findIndex(e => e.id == lstDmTemp[j].id);
+        this.lstCtietBcao[ind].stt = stt + '.' + (j + 1).toString();
+      }
+    }
+    lstVtuTemp.forEach(item => {
+      this.sum(item.stt + '.1');
+    })
+  }
 
-  // sortByIndex() {
-  //   if (this.lstCtietBcao?.length > 0 && !this.lstCtietBcao[0].stt) {
-  //     this.setIndex();
-  //   }
-  //   this.setLevel();
-  //   this.lstCtietBcao.sort((item1, item2) => {
-  //     if (item1.level > item2.level) {
-  //       return 1;
-  //     }
-  //     if (item1.level < item2.level) {
-  //       return -1;
-  //     }
-  //     if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-  //       return -1;
-  //     }
-  //     if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-  //       return 1;
-  //     }
-  //     return 0;
-  //   });
-  //   const lstTemp: ItemData[] = [];
-  //   this.lstCtietBcao.forEach(item => {
-  //     const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-  //     if (index == -1) {
-  //       lstTemp.splice(0, 0, item);
-  //     } else {
-  //       lstTemp.splice(index + 1, 0, item);
-  //     }
-  //   })
+  sortByIndex() {
+    if (this.lstCtietBcao?.length > 0 && !this.lstCtietBcao[0].stt) {
+      this.setIndex();
+    }
+    this.setLevel();
+    this.lstCtietBcao.sort((item1, item2) => {
+      if (item1.level > item2.level) {
+        return 1;
+      }
+      if (item1.level < item2.level) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+        return -1;
+      }
+      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+        return 1;
+      }
+      return 0;
+    });
+    const lstTemp: ItemData[] = [];
+    this.lstCtietBcao.forEach(item => {
+      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+      if (index == -1) {
+        lstTemp.splice(0, 0, item);
+      } else {
+        lstTemp.splice(index + 1, 0, item);
+      }
+    })
 
-  //   this.lstCtietBcao = lstTemp;
-  // }
+    this.lstCtietBcao = lstTemp;
+  }
 
 
-  // setLevel() {
-  //   this.lstCtietBcao.forEach(item => {
-  //     const str: string[] = item.stt.split('.');
-  //     item.level = str.length - 2;
-  //   })
-  // }
+  setLevel() {
+    this.lstCtietBcao.forEach(item => {
+      const str: string[] = item.stt.split('.');
+      item.level = str.length - 2;
+    })
+  }
 
   // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
   getHead(str: string): string {
