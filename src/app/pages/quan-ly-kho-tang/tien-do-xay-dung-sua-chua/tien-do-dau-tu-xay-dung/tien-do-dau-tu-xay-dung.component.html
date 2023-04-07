@@ -10,10 +10,10 @@
     <li nz-menu-item (click)="selectTab('03')"  *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
       Quyết định phê duyệt KH lựa chọn nhà thầu
     </li>
-    <li nz-menu-item (click)="selectTab('04')">
+    <li nz-menu-item (click)="selectTab('04')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT') || userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
       Tổ chức triển khai KH lựa chọn nhà thầu
     </li>
-    <li nz-menu-item (click)="selectTab('05')">
+    <li nz-menu-item (click)="selectTab('05')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
       Hợp đồng và PL hợp đồng
     </li>
     <li nz-menu-item (click)="selectTab('06')">
@@ -37,7 +37,7 @@
   <app-to-chuc-trien-khai-lua-chon-nha-thau></app-to-chuc-trien-khai-lua-chon-nha-thau>
 </ng-container>
 <ng-container *ngIf="tabSelected == '05'">
-  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>
+  <app-hop-dong></app-hop-dong>
 </ng-container>
 <ng-container *ngIf="tabSelected == '06'">
   <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>

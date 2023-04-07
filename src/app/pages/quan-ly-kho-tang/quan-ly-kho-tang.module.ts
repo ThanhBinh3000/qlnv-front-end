@@ -120,6 +120,7 @@ import { DialogQdScBtcComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/qu
 import { CapNhatThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau/cap-nhat-thong-tin-dau-thau.component';
 import { ThongTinQuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt.component';
 import { HopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/hop-dong.component';
+import { ThongTinHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/thong-tin-hop-dong.component';
 
 
 @NgModule({
@@ -180,6 +181,7 @@ import { HopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay
     CapNhatThongTinDauThauComponent,
     ThongTinQuyetDinhPheDuyetKqlcntComponent,
     HopDongComponent,
+    ThongTinHopDongComponent,
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
