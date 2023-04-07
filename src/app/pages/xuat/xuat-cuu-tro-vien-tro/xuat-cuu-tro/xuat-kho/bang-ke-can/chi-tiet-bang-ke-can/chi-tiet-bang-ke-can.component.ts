@@ -697,10 +697,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
   async trongLuongTruBi() {
     let data = cloneDeep(this.formData.value);
-    if (this.formData.value.tongTrongLuongBaoBi) {
+    if (data.tongTrongLuongBaoBi) {
       let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
       this.formData.patchValue({
         tongTrongLuongHang: tongTrongLuongHang,
+        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
       });
     }
   }
