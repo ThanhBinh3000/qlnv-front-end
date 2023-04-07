@@ -132,7 +132,8 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     await this.hopDongBttService.search({
       trangThai: STATUS.DA_KY,
       maDvi: this.formData.value.maDvi,
-      namKh: this.formData.value.namKh
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh
     }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
