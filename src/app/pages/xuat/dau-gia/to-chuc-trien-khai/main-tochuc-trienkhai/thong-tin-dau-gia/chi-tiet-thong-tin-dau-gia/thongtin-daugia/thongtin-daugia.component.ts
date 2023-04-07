@@ -257,7 +257,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     body.children.forEach(s => {
       s.children.forEach(s1 => {
         let dataDviTsanCurrent = s.dataDviTsan.find(s2 => s1.id === s2.id);
-        s1.soLanTraGia = dataDviTsanCurrent.donGiaTraGia;
+        s1.soLanTraGia = dataDviTsanCurrent.soLanTraGia;
         s1.donGiaTraGia = dataDviTsanCurrent.donGiaTraGia;
         s1.toChucCaNhan = dataDviTsanCurrent.toChucCaNhan;
       })
