@@ -29,9 +29,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   dataChiTieu: any;
   dataEdit: any;
   listOfData: any[] = [];
-  tableExist: boolean = false;
-  selectedChiCuc: boolean = false;
-  isValid: boolean = false;
   userInfo: UserLogin;
   donGiaVat: number = 0;
   giaToiDa: any;
@@ -90,8 +87,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.userInfo = await this.userService.getUserLogin();
     this.initForm();
     this.getGiaToiDa();
-    this.updateEditCache();
-    this.disableChiCuc();
   }
 
   save() {
@@ -138,7 +133,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       })
       this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1') : '';
     }
-    // this.checkDisabledSave();
   }
 
   async loadDonVi() {
@@ -175,38 +169,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     let res = await this.dxuatKhLcntService.getGiaBanToiDa(this.cloaiVthh, this.userInfo.MA_DVI, this.namKhoach);
     if (res.msg === MESSAGE.SUCCESS) {
       this.giaToiDa = res.data;
-    }
-  }
-
-  checkDisabledSave() {
-    this.isValid = this.listOfData && this.listOfData.length > 0
-  }
-
-  async changeChiCuc(event) {
-    let body = {
-      year: 2022,
-      loaiVthh: this.loaiVthh,
-      maDvi: event
-    }
-    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body);
-    let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
-    const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
-    this.listDiemKho = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.formData.patchValue({
-        tenDvi: res.data.tenTongKho,
-        soLuongDaMua: soLuongDaLenKh.data,
-        soLuongChiTieu: chiCuc.soLuongNhap
-      })
-      for (let i = 0; i < res.data?.child.length; i++) {
-        const item = {
-          'value': res.data.child[i].maDiemkho,
-          'text': res.data.child[i].tenDiemkho,
-          'diaDiemNhap': res.data.child[i].diaChi,
-        };
-        this.listDiemKho.push(item);
-      };
-      this.thongtinDauThau = new DanhSachGoiThau();
     }
   }
 
@@ -322,7 +284,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
     }
-    // this.checkDisabledSave();
   }
 
   validateDataAdd(type, index?): boolean {
@@ -360,23 +321,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     } else if (i >= 0) {
       this.listOfData = this.listOfData.filter((d, index) => index !== i);
       this.listAllDiemKho.splice(i, 1);
-    }
-  }
-
-  validateSoLuong(isAdd?) {
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongDaMua
-    let soLuong = 0
-    if (isAdd) {
-      soLuong += this.thongtinDauThau.soLuong;
-    }
-    this.listOfData.forEach(item => {
-      soLuong += item.soLuong
-    })
-    if (soLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
-      return false
-    } else {
-      return true;
     }
   }
 
@@ -435,50 +379,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         +this.formData.get('donGiaTamTinh').value,
     });
     this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1') : '0';
-  }
-
-  calculator() {
-    this.thongtinDauThau.thanhTienDx = this.thongtinDauThau.soLuong * this.formData.get('donGiaTamTinh').value
-    this.thongtinDauThau.thanhTienQd = this.thongtinDauThau.soLuong * this.formData.get('donGiaVat').value
-  }
-  calculatorEdit(i: number) {
-    this.listOfData[i].thanhTienDx = this.listOfData[i].soLuong * this.formData.get('donGiaTamTinh').value
-    this.listOfData[i].thanhTienQd = this.listOfData[i].soLuong * this.formData.get('donGiaTamTinh').value
-  }
-
-  editCache: { [key: string]: { edit: boolean; data: any } } = {};
-
-  startEdit(index: number): void {
-    this.listOfData[index].edit = true
-  }
-
-  cancelEdit(index: number): void {
-    if (this.validateSoLuong()) {
-      this.listOfData[index].edit = false
-    }
-  }
-
-  saveEdit(index: number): void {
-    if (this.validateSoLuong()) {
-      this.listOfData[index].edit = false
-    }
-  }
-
-  updateEditCache(): void {
-    this.listOfData.forEach((item, index) => {
-      this.editCache[index] = {
-        edit: false,
-        data: { ...item }
-      };
-    });
-  }
-
-  disableChiCuc() {
-    if (this.listOfData.length > 0) {
-      this.selectedChiCuc = true;
-    } else {
-      this.selectedChiCuc = false;
-    }
   }
 
   calcTong() {
