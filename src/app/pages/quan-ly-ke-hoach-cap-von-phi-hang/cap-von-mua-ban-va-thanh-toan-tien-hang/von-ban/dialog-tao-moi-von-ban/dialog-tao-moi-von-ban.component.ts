@@ -39,7 +39,7 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
         if (!this.userService.isCuc()) {
             this.response.canCuVeGia = Utils.QD_DON_GIA;
         }
-
+        this.changeLoaiDn();
         this.userInfo = this.userService.getUserLogin();
     }
 
