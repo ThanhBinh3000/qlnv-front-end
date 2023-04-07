@@ -296,6 +296,10 @@ export class MangLuoiKhoComponent implements OnInit {
     this.spinner.show()
     this.detailDonVi.reset();
     this.fileDinhKems = []
+    this.loaiHangHoa.gao = false;
+    this.loaiHangHoa.thoc = false;
+    this.loaiHangHoa.vattu = false;
+    this.loaiHangHoa.muoi = false;
     if (event) {
       if (type) {
         this.isEditData = true;
@@ -424,7 +428,7 @@ export class MangLuoiKhoComponent implements OnInit {
         chatluongId: dataNode.chatluongId,
         loaiVthh: dataNode.loaiVthh ? dataNode.loaiVthh : null,
         cloaiVthh: dataNode.cloaiVthh ? dataNode.cloaiVthh : null,
-        slTon: dataNode.slTon ? dataNode.slTon : null,
+        slTon: dataNode.slTon ? dataNode.slTon : 0,
         dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
         loaikhoId: dataNode.loaikhoId,
@@ -442,6 +446,8 @@ export class MangLuoiKhoComponent implements OnInit {
         })
       }
       if (this.levelNode == 6) {
+        this.dataTableHh = dataNode.hangHoaTrongKho
+        this.dataTableHhCtiet = dataNode.ctietHhTrongKho
         this.detailDonVi.patchValue({
           nhakhoId: dataNode.idParent,
           tenNhakho: dataNode.tenNhakho,
@@ -580,6 +586,7 @@ export class MangLuoiKhoComponent implements OnInit {
           trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
           type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
         };
+        body.loaiHangHoa = this.setLoaiHangHoa();
         let dviReq = {
           "diaChi": this.detailDonVi.value.diaChi,
           "fax": this.nodeDetail.fax,
@@ -842,4 +849,26 @@ export class MangLuoiKhoComponent implements OnInit {
       );
     });
   }
+
+  setLoaiHangHoa() : string {
+    let arr = [];
+    if (this.loaiHangHoa.gao) {
+      arr.push("0102")
+    }
+    if (this.loaiHangHoa.thoc) {
+      arr.push("0101")
+    }
+    if (this.loaiHangHoa.vattu) {
+      arr.push("02")
+    }
+    if (this.loaiHangHoa.muoi) {
+      arr.push("04")
+    }
+    let string = ''
+    if (arr && arr.length > 0) {
+      string = arr.toString()
+    }
+    return string;
+  }
+
 }
