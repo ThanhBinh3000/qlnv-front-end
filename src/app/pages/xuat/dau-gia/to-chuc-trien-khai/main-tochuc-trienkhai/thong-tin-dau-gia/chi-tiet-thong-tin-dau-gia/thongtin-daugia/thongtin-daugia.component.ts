@@ -1,20 +1,20 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { chain, cloneDeep } from 'lodash'
+import {StorageService} from 'src/app/services/storage.service';
+import {chain, cloneDeep} from 'lodash'
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { MESSAGE } from 'src/app/constants/message';
+import {MESSAGE} from 'src/app/constants/message';
 
 @Component({
   selector: 'app-thongtin-daugia',
@@ -196,17 +196,22 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   convertDataTable() {
+    console.log(this.dataTable, 1111111);
+
+
     this.dataTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({
-        maDviTsan: key,
-        children: value
-      })).value();
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => {
+        let current = value.find(s => s.maDviTsan == key);
+        return {
+          maDviTsan: key,
+          children: value,
+          soLanTraGia: current.soLanTraGia,
+          donGiaTraGia: current.donGiaTraGia,
+          toChucCaNhan: current.toChucCaNhan,
+          id: current.id
+        }
+      }).value();
       item.dataDviTsan = dataGroup;
-      item.dataDviTsan.forEach(x => {
-        x.soLanTraGia = x.children[0].soLanTraGia
-        x.donGiaTraGia = x.children[0].donGiaTraGia
-        x.toChucCaNhan = x.children[0].toChucCaNhan
-      })
     })
   }
 
@@ -249,6 +254,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     });
     body.children = this.dataTable;
     body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
+    body.children.forEach(s => {
+      s.children.forEach(s1 => {
+        let dataDviTsanCurrent = s.dataDviTsan.find(s2 => s1.id === s2.id);
+        s1.soLanTraGia = dataDviTsanCurrent.soLanTraGia;
+        s1.donGiaTraGia = dataDviTsanCurrent.donGiaTraGia;
+        s1.toChucCaNhan = dataDviTsanCurrent.toChucCaNhan;
+      })
+    });
     let data = await this.createUpdate(body);
     if (data) {
       this.modal.closeAll();
@@ -269,7 +282,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   findTableName(name) {
-    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({ loai }) => loai == name) : [];
+    let data = this.dataNguoiShow ? this.dataNguoiShow.find(({loai}) => loai == name) : [];
     return data
   }
 
@@ -307,16 +320,17 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     })).value();
   }
 
-  editRow(data:any) {
-    this.dataNguoiTgia.forEach(s=>s.isEdit = false);
-    let currentRow = this.dataNguoiTgia.find(s=>s.idVirtual== data.idVirtual);
+  editRow(data: any) {
+    this.dataNguoiTgia.forEach(s => s.isEdit = false);
+    let currentRow = this.dataNguoiTgia.find(s => s.idVirtual == data.idVirtual);
     currentRow.isEdit = true;
     this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
       loai: key,
       dataChild: value
     })).value();
   }
-  saveRow(data:any) {
+
+  saveRow(data: any) {
     console.log(data)
   }
 
@@ -330,4 +344,5 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.dataTable[index].dataDviTsan[indexLv2].soLanTraGia = 1
     }
   }
+
 }
