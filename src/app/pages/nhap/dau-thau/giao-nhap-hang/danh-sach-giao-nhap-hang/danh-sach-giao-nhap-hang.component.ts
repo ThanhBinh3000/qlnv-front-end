@@ -51,7 +51,8 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     ngayQuyetDinh: null,
     namNhap: null,
     trichYeu: '',
-    loaiVthh: ''
+    loaiVthh: '',
+    cloaiVthh: ''
   };
 
   listNam: any[] = [];
@@ -76,6 +77,22 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   indeterminate = false;
   isViewDetail: boolean;
   STATUS = STATUS;
+  dsCloaiVthh: any[] = [];
+  tuNgayQuyetDinh: Date | null = null;
+  denNgayQuyetDinh: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayQuyetDinh) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayQuyetDinh.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.denNgayQuyetDinh) {
+      return false;
+    }
+    return endValue.getTime() <= this.denNgayQuyetDinh.getTime();
+  };
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -99,12 +116,23 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
+      await this.loadDsCloaiVthh(this.loaiVthh);
       await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsCloaiVthh(ma: string) {
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": ma });
+    this.dsCloaiVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsCloaiVthh = res.data;
+      }
     }
   }
 
@@ -136,27 +164,27 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       ngayQuyetDinh: null,
       namNhap: null,
       trichYeu: '',
+      cloaiVthh: '',
       loaiVthh: ''
     }
+    this.tuNgayQuyetDinh = null;
+    this.denNgayQuyetDinh = null
     this.search();
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      "denNgayQd": this.searchFilter.ngayQuyetDinh
-        ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
-        : null,
+      "tuNgayQd": this.tuNgayQuyetDinh != null ? dayjs(this.tuNgayQuyetDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
+      "denNgayQd": this.denNgayQuyetDinh != null ? dayjs(this.denNgayQuyetDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
       "loaiVthh": this.loaiVthh,
+      "cloaiVthh": this.searchFilter.cloaiVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page - 1
       },
       "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-      "tuNgayQd": this.searchFilter.ngayQuyetDinh
-        ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
-        : null,
       "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
       "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null
     }
@@ -320,12 +348,16 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   }
   filterInTable(key: string, value: string) {
-    if (value && value != '') {
+    if (value != null && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+          if (['ngayQdinh', 'tgianNkho'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
@@ -335,6 +367,13 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
   clearFilterTable() {

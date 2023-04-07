@@ -130,7 +130,7 @@
       </tr>
       <ng-container *ngFor="let dataChiCuc of listOfData , let i = index">
         <tr class="root-tree">
-          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event, dataChiCuc.maDvi)"></td>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td>{{ dataChiCuc.tenDvi }}</td>
           <td></td>
           <td></td>
@@ -149,7 +149,7 @@
           <tr class="body-input">
             <td></td>
             <td></td>
-            <td>
+            <td (click)="loadDiemKho(dataChiCuc.maDvi)">
               <nz-select [(ngModel)]="thongTinDiemKho.maDvi">
                 <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>

@@ -17,7 +17,7 @@
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-        <nz-tree #nzTreeSelectComponent nzAsyncData [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+        <nz-tree #nzTreeSelectComponent  [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
                  (nzExpandChange)="loadChildren($event)"
                  (nzContextMenu)="nzClickNodeTree($event)" [nzSearchValue]="searchValue">
         </nz-tree>
@@ -38,37 +38,40 @@
           <nz-card *ngIf="levelNode != 0">
             <nz-collapse>
               <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
-                <div class="text-right mg-t-10" *ngIf="levelNode > 3" >
-                  <button nz-button class="btn btn-sub do ml-2" (click)="delete()">
-                    <i class="fa fa-trash-o do"></i>
-                    Xóa
-                  </button>
-                  <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="themSoDuDauKy()"
-                          *ngIf="checkStatusSurplus()">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    Khởi tạo số dư đầu kỳ
-                  </button>
-                  <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="showEdit(false)" *ngIf="isEditData">
-                    <i class="icon htvbdh_bosungfile"></i>
-                    Sửa
-                  </button>
-                  <button nz-button class="btn btn-sub ml-2" (click)="showEdit(true)" *ngIf="!isEditData">
-                    <i class="fa fa-times"></i>
-                    Hủy bỏ
-                  </button>
-                  <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="update()" *ngIf="!isEditData">
-                    <i class="fa fa-save"></i>
-                    Lưu
-                  </button>
-                </div>
-
-                <div class="mg-t-10" *ngIf="this.levelNode == 6">
-                  <label class="font-weight-bold">Loại hàng hóa</label>
-                  <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" nzDisabled class="font-weight-bold"
-                         style="margin-left: 20px" nz-checkbox>Thóc</label>
-                  <label [(ngModel)]="loaiHangHoa.gao" nzDisabled class="font-weight-bold" nz-checkbox>Gạo</label>
-                  <label [(ngModel)]="loaiHangHoa.muoi" nzDisabled class="font-weight-bold" nz-checkbox>Muối</label>
-                  <label [(ngModel)]="loaiHangHoa.vattu" nzDisabled class="font-weight-bold" nz-checkbox>Vật tư</label>
+                <div class="mg-t-10" nz *ngIf="levelNode > 3" nz-row [nzGutter]="24" >
+                  <div nz-col nzSpan="12" class="text-left" *ngIf="!(this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho))">
+                  </div>
+                  <div nz-col nzSpan="12" class="text-left" *ngIf="this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho)">
+                    <label class="font-weight-bold">Loại hàng hóa</label>
+                    <label [(ngModel)]="loaiHangHoa.thoc" id="hhThoc" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold"
+                           style="margin-left: 20px" nz-checkbox>Thóc</label>
+                    <label [(ngModel)]="loaiHangHoa.gao" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Gạo</label>
+                    <label [(ngModel)]="loaiHangHoa.muoi"  [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Muối</label>
+                    <label [(ngModel)]="loaiHangHoa.vattu" [nzDisabled]="!(detailDonVi.value.slTon == 0 && !isEditData)" class="font-weight-bold" nz-checkbox>Vật tư</label>
+                  </div>
+                  <div class="text-right" nz-col nzSpan="12">
+                    <button nz-button class="btn btn-sub do ml-2" (click)="delete()">
+                      <i class="fa fa-trash-o do"></i>
+                      Xóa
+                    </button>
+                    <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="themSoDuDauKy()"
+                            *ngIf="checkStatusSurplus()">
+                      <i class="icon htvbdh_dau-cong"></i>
+                      Khởi tạo số dư đầu kỳ
+                    </button>
+                    <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="showEdit(false)" *ngIf="isEditData">
+                      <i class="icon htvbdh_bosungfile"></i>
+                      Sửa
+                    </button>
+                    <button nz-button class="btn btn-sub ml-2" (click)="showEdit(true)" *ngIf="!isEditData">
+                      <i class="fa fa-times"></i>
+                      Hủy bỏ
+                    </button>
+                    <button nz-button class="btn btn-sub xanh-nhat ml-2" (click)="update()" *ngIf="!isEditData">
+                      <i class="fa fa-save"></i>
+                      Lưu
+                    </button>
+                  </div>
                 </div>
                 <form nz-form [formGroup]="detailDonVi" [nzLayout]="'vertical'">
                   <nz-card class="mt16 flex-card p-lr16" *ngIf="levelNode == 2">
@@ -429,7 +432,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên điểm kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenDiemkho" nz-input [readonly]="true"/>
+                            <input formControlName="tenDiemkho" nz-input [readonly]="isEditData"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -639,10 +642,10 @@
                           </div>
                           <div nz-col nzSpan="7">
                             <nz-form-item>
-                              <nz-form-label>Số ngăn kho</nz-form-label>
+                              <nz-form-label>Số ngăn kho thiết kế</nz-form-label>
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                  <input formControlName="soNgankho" [readonly]="true" nz-input/>
+                                  <input formControlName="soNganKhoTk" [readonly]="isEditData" nz-input/>
                                 </nz-input-group>
                               </nz-form-control>
                             </nz-form-item>
@@ -653,10 +656,10 @@
                           </div>
                           <div nz-col nzSpan="7">
                             <nz-form-item>
-                              <nz-form-label> Diện tích (m2)</nz-form-label>
+                              <nz-form-label> Diện tích mỗi ngăn kho (m2)</nz-form-label>
                               <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                  <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichDat"
+                                  <nz-input-number [nzDisabled]="isEditData" formControlName="dienTichNganKhoTk"
                                                    [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                                    [nzParser]="globals.parser"></nz-input-number>
                                 </nz-input-group>
@@ -966,7 +969,7 @@
                           <nz-form-label></nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <label nz-checkbox formControlName="coLoKho" [nzDisabled]="isEditData"
+                              <label nz-checkbox formControlName="coLoKho" [nzDisabled]="isEditData || detailDonVi.value.coLoKho == true"
                                      (ngModelChange)="changeLoKho()">Có lô kho</label>
                             </nz-input-group>
                           </nz-form-control>
@@ -1134,7 +1137,7 @@
                           <nz-form-label>Loại hàng hóa</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-select formControlName="loaiVthh" [nzDisabled]="isEditData"
+                              <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                                          (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                            [nzValue]="item.ma"></nz-option>
@@ -1148,7 +1151,7 @@
                           <nz-form-label>Chủng loại hàng hóa</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-select [nzDisabled]="isEditData" formControlName="cloaiVthh"
+                              <nz-select [nzDisabled]="true" formControlName="cloaiVthh"
                                          (ngModelChange)="onChangCloaiVthh($event)">
                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
                                            [nzValue]="item.ma"></nz-option>
@@ -1162,7 +1165,7 @@
                           <nz-form-label>Số lượng tồn đầu kỳ</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="isEditData" formControlName="slTon"
+                              <nz-input-number [nzDisabled]="true" formControlName="slTon"
                                                [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                                [nzParser]="globals.parser"></nz-input-number>
                             </nz-input-group>
@@ -1184,7 +1187,7 @@
                           <nz-form-label>Ngày nhập đầy</nz-form-label>
                           <nz-form-control>
                             <nz-input-group>
-                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="isEditData"
+                              <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"
                                               nzFormat="dd/MM/yyyy"
                                               [nzDisabled]="true"></nz-date-picker>
                             </nz-input-group>
@@ -1195,7 +1198,7 @@
                         <nz-form-item>
                           <nz-form-label>Nhiệm vụ</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                        <textarea formControlName="nhiemVu" [readonly]="isEditData" rows="3" class="search__input"
+                        <textarea formControlName="nhiemVu" [readonly]="true" rows="3" class="search__input"
                                   nz-input placeholder="Nhập text"></textarea>
                           </nz-form-control>
                         </nz-form-item>
@@ -1477,7 +1480,7 @@
                           <nz-form-label>Loại hàng hóa</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-select formControlName="loaiVthh" [nzDisabled]="isEditData"
+                              <nz-select formControlName="loaiVthh" [nzDisabled]="true"
                                          (ngModelChange)="onChangeLoaiVthh($event)">
                                 <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
                                            [nzValue]="item.ma"></nz-option>
@@ -1491,7 +1494,7 @@
                           <nz-form-label>Chủng loại hàng hóa</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-select [nzDisabled]="isEditData && detailDonVi.value.loaiVthh"
+                              <nz-select [nzDisabled]="true"
                                          formControlName="cloaiVthh"
                                          (ngModelChange)="onChangCloaiVthh($event)">
                                 <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
@@ -1506,7 +1509,7 @@
                           <nz-form-label>Số lượng</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'"
+                              <nz-input-number [nzDisabled]="true" [nzSize]="'small'"
                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                formControlName="slTon"></nz-input-number>
                             </nz-input-group>
@@ -1527,7 +1530,7 @@
                         <nz-form-item>
                           <nz-form-label> Tình trạng lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="tinhtrangId" [nzDisabled]="isEditData">
+                            <nz-select formControlName="tinhtrangId" [nzDisabled]="true">
                               <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                               </nz-option>
                             </nz-select>
@@ -1582,9 +1585,9 @@
                 </form>
               </nz-collapse-panel>
             </nz-collapse>
-            <ng-container *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5">
+            <ng-container *ngIf="levelNode == 2 || levelNode == 3 || levelNode == 4 || levelNode == 5 || (levelNode == 6 && detailDonVi.value.coLoKho) ">
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" [nzHeader]="levelNode == 2 ? 'Danh sách Chi Cục' : levelNode == 3 ? 'Danh sách điểm kho' : levelNode == 4 ? 'Danh sách nhà kho' : 'Danh sách ngăn kho' ">
+                <nz-collapse-panel nzActive="true" [nzHeader]="levelNode == 2 ? 'DANH SÁCH CHI CỤC' : levelNode == 3 ? 'DANH SÁCH ĐIỂM KHO' : levelNode == 4 ? 'DANH SÁCH NHÀ KHO' :  levelNode == 5 ? 'DANH SÁCH NGĂN KHO' : 'DANH SÁCH LÔ KHO' ">
                   <nz-table class="pd-10" [nzData]="dataTable" nzBordered [nzFrontPagination]="false"
                             [nzShowPagination]="false">
                     <thead>
@@ -1614,15 +1617,15 @@
                     <tr *ngFor="let data of dataTable; let idx = index">
                       <td class="text-center">{{ idx + 1 }}</td>
                       <td>{{ data.tenDvi }}</td>
-                      <td>{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongKdLt + data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongKdLt | number : '1.0-1' : 'vi_VN' }}</td>
-                      <td>{{ data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt + data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongTkVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongKdLt + data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongKdLt | number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="text-right">{{ data.tichLuongKdVt | number : '1.0-1' : 'vi_VN' }}</td>
                     </tr>
                     </tbody>
                     <tfoot>
@@ -1630,24 +1633,24 @@
                       <td></td>
                       <td class="text-uppercase font-weight-bold">Tổng</td>
                       <td
-                        class="font-weight-bold">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
                       <td
-                        class="font-weight-bold">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') + calcTong('tichLuongTkVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongTkVt') | number : '1.0-1' : 'vi_VN' }}</td>
                       <td
-                        class="font-weight-bold">{{ calcTong('tichLuongKdLt') + calcTong('tichLuongKdVt')| number : '1.0-1' : 'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongKdLt') | number : '1.0-1' :'vi_VN' }}</td>
-                      <td class="font-weight-bold">{{ calcTong('tichLuongKdVt') | number : '1.0-1' : 'vi_VN' }}</td>
+                        class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') + calcTong('tichLuongKdVt')| number : '1.0-1' : 'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongKdLt') | number : '1.0-1' :'vi_VN' }}</td>
+                      <td class="font-weight-bold text-right">{{ calcTong('tichLuongKdVt') | number : '1.0-1' : 'vi_VN' }}</td>
                     </tr>
                     </tfoot>
                   </nz-table>
               </nz-collapse-panel>
               </nz-collapse>
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung hàng hóa">
+                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG HÀNG HÓA">
                   <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
                     <tr>
@@ -1661,7 +1664,7 @@
                     <tr *ngFor="let data of dataTableHh; let idx = index">
                       <td class="text-center">{{ idx + 1 }}</td>
                       <td>{{ data.tenCloaiVthh }}</td>
-                      <td>{{ data.slHienThoi | number : '1.0-1' : 'vi-VN' }}</td>
+                      <td class="text-right">{{ data.slHienThoi | number : '1.0-1' : 'vi-VN' }}</td>
                       <td>{{ data.tenDonViTinh }}</td>
                     </tr>
                     </tbody>
@@ -1669,7 +1672,7 @@
                 </nz-collapse-panel>
               </nz-collapse>
               <nz-collapse>
-                <nz-collapse-panel nzActive="true" nzHeader="Thông tin chi tiết hàng hóa">
+                <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHI TIẾT HÀNG HÓA">
                   <nz-table class="pd-10" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
                     <tr>

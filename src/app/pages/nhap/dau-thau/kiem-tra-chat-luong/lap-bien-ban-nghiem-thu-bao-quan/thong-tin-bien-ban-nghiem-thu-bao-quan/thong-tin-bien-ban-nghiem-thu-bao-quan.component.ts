@@ -146,6 +146,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       await Promise.all([
         this.loadDataComboBox(),
         this.loadSoQuyetDinh(),
+        this.loadDonViTinh()
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);

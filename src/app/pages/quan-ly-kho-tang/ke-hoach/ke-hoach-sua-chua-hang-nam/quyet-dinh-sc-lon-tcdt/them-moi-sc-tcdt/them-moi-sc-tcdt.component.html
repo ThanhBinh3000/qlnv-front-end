@@ -213,7 +213,7 @@
     </div>
 
   </form>
-  <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false" *ngIf="isTongHop"
+  <nz-table class="nowrap pd-10" [nzFrontPagination]="false" *ngIf="isTongHop" [nzData]="dataTable"
             [nzShowPagination]="false" nzBordered>
     <thead>
     <tr>
@@ -251,15 +251,15 @@
       <td>{{ data.diaDiem }}</td>
       <td>{{ data.tgThucHien }}</td>
       <td>{{ data.ngayBhTmdt }}</td>
-      <td>{{ data.giaTriTmdt }}</td>
-      <td>{{ data.ngayBhPd }}</td>
-      <td>{{ data.giaTriPd }}</td>
-      <td>{{ data.luyKeKh }}</td>
-      <td>{{ data.luyKeDuToan }}</td>
-      <td>{{ data.tinhHinh }}</td>
-      <td>{{ data.ncKhVon }}</td>
-      <td>{{ data.ncKhVon }}</td>
-      <td>{{ data.noiDung }}</td>
+      <td>{{ data.giaTriTmdt | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.ngayBhPd | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.luyKeKh | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.luyKeDuToan | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.tinhHinh | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.ncKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.lastNcKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.ghiChu }}</td>
     </tr>
     </tbody>
     <tfoot>
@@ -270,14 +270,14 @@
       <td></td>
       <td></td>
       <td></td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('1', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('2', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('3', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('4', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('5', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('6', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="font-weight-bold">{{ calcTong('7', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
     </tr>
     </tfoot>
@@ -358,15 +358,15 @@
     </div>
 
   </form>
-  <nz-table class="nowrap pd-10" [nzData]="dataTableTc" [nzFrontPagination]="false" *ngIf="isTongHop"
-            [nzShowPagination]="false" nzBordered>
+  <nz-table class="nowrap pd-10" [nzFrontPagination]="false" *ngIf="isTongHop" [nzData]="dataTableTc"
+            [nzShowPagination]="false" nzBordered >
     <thead>
     <tr>
       <th class="text-center" nzWidth="40px" rowSpan="2">STT</th>
-      <th class="text-center" nzWidth="150px" rowSpan="2">Tên công trình</th>
-      <th class="text-center" nzWidth="150px" rowSpan="2">Điểm kho</th>
+      <th class="text-center" nzWidth="120px" rowSpan="2">Tên công trình</th>
+      <th class="text-center" nzWidth="120px" rowSpan="2">Điểm kho</th>
       <th class="text-center" nzWidth="200px" rowSpan="2">Địa điểm</th>
-      <th class="text-center" nzWidth="100px" rowSpan="2">Thời gian thực hiện</th>
+      <th class="text-center" nzWidth="140px" rowSpan="2">Thời gian thực hiện</th>
       <th class="text-center" nzWidth="200px" colSpan="2">Số QĐ phê duyệt báo cáo kinh tế kỹ <br> thuật hoặc khái toán
         TMĐT
       </th>
@@ -377,14 +377,15 @@
       <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế <br> hoạch vốn <br> {{formData.value.namKeHoach}}
       </th>
       <th class="text-center" nzWidth="100px" rowSpan="2">Nhu cầu kế<br> hoạch vốn
-      <th class="text-center" nzWidth="150px" rowSpan="2">Nội dung</th>
-      <th class="text-center" nzWidth="150px" rowSpan="2" nzRight>Hành động</th>
+        <br> {{formData.value.namKeHoach - 1}}
+      <th class="text-center" nzWidth="120px" rowSpan="2">Nội dung</th>
+      <th class="text-center" nzWidth="100px" rowSpan="2" nzRight *ngIf="!isView">Hành động</th>
     </tr>
     <tr>
-      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
-      <th class="text-center">Giá trị dự toán hoặc khái toán TMĐT</th>
-      <th class="text-center">Số, ngày, tháng năm <br> ban hành</th>
-      <th class="text-center">Giá trị phê duyệt quyết <br> toán hoàn thành</th>
+      <th class="text-center" nzWidth="100px">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center" nzWidth="100px">Giá trị dự toán hoặc <br> khái toán TMĐT</th>
+      <th class="text-center" nzWidth="100px">Số, ngày, tháng năm <br> ban hành</th>
+      <th class="text-center" nzWidth="100px">Giá trị phê duyệt quyết <br> toán hoàn thành</th>
     </tr>
     </thead>
     <tbody *ngIf="!dataTableTc">
@@ -397,22 +398,21 @@
       <td>{{ data.diaDiem }}</td>
       <td>{{ data.tgThucHien }}</td>
       <td>{{ data.ngayBhTmdt }}</td>
-      <td>{{ data.giaTriTmdt }}</td>
-      <td>{{ data.ngayBhPd }}</td>
-      <td>{{ data.giaTriPd }}</td>
-      <td>{{ data.luyKeKh }}</td>
-      <td>{{ data.luyKeDuToan }}</td>
-      <td>{{ data.tinhHinh }}</td>
-      <td *ngIf="isEdit != idx">{{ data.ncKhVon }}</td>
+      <td>{{ data.giaTriTmdt | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.ngayBhPd  }}</td>
+      <td>{{ data.giaTriPd  | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ data.luyKeKh | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ data.luyKeDuToan  | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ data.tinhHinh | number : '1.0-1' : 'vi_VN' }}</td>
+      <td *ngIf="isEdit != idx">{{ data.ncKhVon | number : '1.0-1' : 'vi_VN'}}</td>
       <td *ngIf="isEdit == idx">
         <nz-input-number [(ngModel)]="data.ncKhVon" [nzSize]="'small'"
                          [nzFormatter]="globals.formatter" [nzMin]="0"
                          [nzParser]="globals.parser"></nz-input-number>
       </td>
-      <td>{{ data.ncKhVon }}</td>
-      <td>{{ data.lastNcKhVon }}</td>
-      <td>{{ data.noiDung }}</td>
-      <td class="text-center" *ngIf="!isView && isEdit != idx">
+      <td>{{ data.lastNcKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+      <td>{{ data.ghiChu }}</td>
+      <td class="text-center" *ngIf="!isView && isEdit != idx" nzRight>
         <a (click)="editRow(idx)">
           <i class="fa fa-pencil"></i>
         </a>
@@ -420,7 +420,7 @@
           <i class="fa fa-trash-o do"></i>
         </a>
       </td>
-      <td class="text-center"  *ngIf="!isView && isEdit == idx">
+      <td class="text-center" *ngIf="!isView && isEdit == idx" nzRight>
         <a class="save" (click)="saveEdit()">
           <i class="fa fa-save"></i>
         </a>
@@ -437,14 +437,15 @@
       <td></td>
       <td></td>
       <td></td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('1', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
       <td></td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('7') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('2', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('3', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('4', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('5', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('6', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('7', dataTableTc) | number : '1.0-1' : 'vi_VN'}}</td>
+      <td></td>
       <td nzRight></td>
     </tr>
     </tfoot>

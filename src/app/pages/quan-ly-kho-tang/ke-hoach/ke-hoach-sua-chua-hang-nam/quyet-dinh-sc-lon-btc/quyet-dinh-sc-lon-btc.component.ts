@@ -19,30 +19,32 @@ import {
   styleUrls: ['./quyet-dinh-sc-lon-btc.component.scss']
 })
 export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit {
-  isViewDetail : boolean;
+  isViewDetail: boolean;
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'}
   ];
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdScBtcService : KtKhSuaChuaBtcService
+    private qdScBtcService: KtKhSuaChuaBtcService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdScBtcService);
     super.ngOnInit()
     this.formData = this.fb.group({
-      maDvi : [null],
-      soQd : [null],
-      trichYeu : [null],
-      ngayKy : [null],
-      ngayKyTu : [null],
-      ngayKyDen : [null],
-      namKeHoach : [null],
-      trangThai : [null],
+      maDvi: [null],
+      soQd: [null],
+      trichYeu: [null],
+      ngayKy: [null],
+      ngayKyTu: [null],
+      ngayKyDen: [null],
+      namKeHoach: [null],
+      trangThai: [null],
+      type: ['00']
     });
     this.filterTable = {};
   }
@@ -71,15 +73,22 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
-        ngayKyTu : this.formData.value.ngayKy[0],
-        ngayKyDen : this.formData.value.ngayKy[1]
+        ngayKyTu: this.formData.value.ngayKy[0],
+        ngayKyDen: this.formData.value.ngayKy[1]
       })
     }
     this.formData.patchValue({
-      maDvi :  this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     })
     await this.search();
   }
 
+  clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI
+      })
+    this.search();
+  }
 
 }

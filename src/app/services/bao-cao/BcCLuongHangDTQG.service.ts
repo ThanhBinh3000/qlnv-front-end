@@ -18,4 +18,9 @@ export class BcCLuongHangDTQGService extends BaseService {
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 
+  baoCaoSLuongCLuongMmTbcd(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/bc-sl-cl-mm-tbcd`;
+    return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
+  }
+
 }

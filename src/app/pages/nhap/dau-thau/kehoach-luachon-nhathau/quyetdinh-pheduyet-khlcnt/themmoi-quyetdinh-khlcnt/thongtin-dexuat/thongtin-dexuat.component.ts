@@ -127,6 +127,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
+    console.log(this.listDataGroup)
   }
 
   async ngOnInit() {

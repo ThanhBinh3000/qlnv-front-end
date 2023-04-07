@@ -79,6 +79,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   maTrinh: string = '';
   addModelBaoGia: any = {
     moTa: '',
+    tenTlieu: '',
     taiLieu: [],
   };
   addModelCoSo: any = {
@@ -909,13 +910,18 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         fileDinhKem.fileSize = resUpload.size;
         fileDinhKem.fileUrl = resUpload.url;
         const lastPeriodIndex = resUpload.filename.lastIndexOf(".");
+        let fileName = '';
         if (lastPeriodIndex !== -1) {
-          fileDinhKem.noiDung = resUpload.filename.slice(0, lastPeriodIndex);
+          fileName = resUpload.filename.slice(0, lastPeriodIndex);
         } else {
-          fileDinhKem.noiDung = resUpload.filename;
+          fileName = resUpload.filename;
         }
+        fileDinhKem.noiDung = fileName
         if (type == 'bao-gia') {
           if (id == 0) {
+            if (this.addModelBaoGia.tenTlieu == null || this.addModelBaoGia.tenTlieu == '') {
+              this.addModelBaoGia.tenTlieu = fileName;
+            }
             this.addModelBaoGia.taiLieu = [];
             this.addModelBaoGia.taiLieu = [
               ...this.addModelBaoGia.taiLieu,
@@ -927,6 +933,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
               fileDinhKem,
             ];
           } else if (id > 0) {
+            if (this.editBaoGiaCache[id].data.tenTlieu == null || this.editBaoGiaCache[id].data.tenTlieu == '') {
+              this.editBaoGiaCache[id].data.tenTlieu = fileName;
+            }
             this.editBaoGiaCache[id].data.taiLieu = [];
             this.editBaoGiaCache[id].data.taiLieu = [
               ...this.editBaoGiaCache[id]?.data?.taiLieu,
@@ -940,6 +949,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
         } else if (type == 'co-so') {
           if (id == 0) {
+            if (this.addModelCoSo.tenTlieu == null || this.addModelCoSo.tenTlieu == '') {
+              this.addModelCoSo.tenTlieu = fileName;
+            }
             this.addModelCoSo.taiLieu = [];
             this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
             this.addModelCoSo.children = [];
@@ -948,6 +960,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
               fileDinhKem,
             ];
           } else if (id > 0) {
+            if (this.editCoSoCache[id].data.tenTlieu == null || this.editBaoGiaCache[id].data.tenTlieu == '') {
+              this.editCoSoCache[id].data.tenTlieu = fileName;
+            }
             this.editCoSoCache[id].data.taiLieu = [];
             this.editCoSoCache[id].data.taiLieu = [
               ...this.editCoSoCache[id]?.data?.taiLieu,
@@ -961,9 +976,17 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
         }
       });
+    console.log(this.addModelBaoGia)
   }
 
   addBaoGia() {
+    if (this.addModelBaoGia.taiLieu == null || this.addModelBaoGia.taiLieu == '') {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Vui lòng nhập file đính kèm',
+      );
+      return;
+    }
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
     taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.tenTlieu;
@@ -1030,6 +1053,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   addCoSo() {
+    if (this.addModelCoSo.taiLieu == null || this.addModelCoSo.taiLieu == '') {
+      this.notification.error(
+        MESSAGE.ERROR,
+        'Vui lòng nhập file đính kèm',
+      );
+      return;
+    }
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
     taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTlieu;

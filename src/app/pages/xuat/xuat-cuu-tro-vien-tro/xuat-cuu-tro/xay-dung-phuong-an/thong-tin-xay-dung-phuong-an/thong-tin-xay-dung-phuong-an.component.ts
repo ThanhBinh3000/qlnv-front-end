@@ -710,15 +710,21 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   async saveAndSend(message: string) {
     this.setValidForm();
     let errorSlCuc = '';
+    let errorSlChiCuc = '';
     this.phuongAnView.forEach(s => {
       s.childData.forEach(s1 => {
         if (s1.soLuongXuatCuc > s1.tonKhoCuc && s1.tonKhoCuc > s1.soLuongXuatCucThucTe) {
           errorSlCuc += s1.tenCuc + " ";
         }
+        if (s1.tonKhoCuc < s1.soLuongXuatCucThucTe) {
+          errorSlChiCuc += s1.tenCuc + " ";
+        }
       })
     })
     if (errorSlCuc) {
       this.notification.error(MESSAGE.ERROR, 'SL tồn kho thực tế vẫn đáp ứng SL xuất cứu trợ, viện trợ. Bạn vui lòng nhập thêm để đảm bảo Tổng SL đề xuất cứu trợ, viện trợ = Tổng SL thực tế xuất cứu trợ, viện trợ! ' + errorSlCuc);
+    } else if (errorSlChiCuc) {
+      this.notification.error(MESSAGE.ERROR, 'SL hàng xuất thực tế vượt quá hàng trong kho hiện tại ' + errorSlChiCuc);
     } else {
       this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
       if (this.userService.isTongCuc()) {
@@ -735,11 +741,29 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async saveAndChangeStatus(status: string, message: string, sucessMessage: string) {
     this.setValidForm();
-    this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
-    let result = await this.createUpdate(this.formData.value);
-    if (result) {
-      this.idInput = result.id;
-      await this.approve(this.idInput, status, message, null, sucessMessage);
+    let errorSlCuc = '';
+    let errorSlChiCuc = '';
+    this.phuongAnView.forEach(s => {
+      s.childData.forEach(s1 => {
+        if (s1.soLuongXuatCuc > s1.tonKhoCuc && s1.tonKhoCuc > s1.soLuongXuatCucThucTe) {
+          errorSlCuc += s1.tenCuc + " ";
+        }
+        if (s1.tonKhoCuc < s1.soLuongXuatCucThucTe) {
+          errorSlChiCuc += s1.tenCuc + " ";
+        }
+      })
+    })
+    if (errorSlCuc) {
+      this.notification.error(MESSAGE.ERROR, 'SL tồn kho thực tế vẫn đáp ứng SL xuất cứu trợ, viện trợ. Bạn vui lòng nhập thêm để đảm bảo Tổng SL đề xuất cứu trợ, viện trợ = Tổng SL thực tế xuất cứu trợ, viện trợ! ' + errorSlCuc);
+    } else if (errorSlChiCuc) {
+      this.notification.error(MESSAGE.ERROR, 'SL hàng xuất thực tế vượt quá hàng trong kho hiện tại ' + errorSlChiCuc);
+    } else {
+      this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
+      let result = await this.createUpdate(this.formData.value);
+      if (result) {
+        this.idInput = result.id;
+        await this.approve(this.idInput, status, message, null, sucessMessage);
+      }
     }
   }
 
