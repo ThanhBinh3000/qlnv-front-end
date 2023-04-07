@@ -36,6 +36,7 @@ import {
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-chi-tiet-bang-ke-can',
@@ -104,7 +105,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listSoLuong: any;
   errorInputComponent: any[] = [];
   flagInit: Boolean = true;
-
+  listDiaDiemKho: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -150,19 +151,18 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         idPhieuXuatKho: [''],
         soPhieuXuatKho: ['', [Validators.required]],
         ngayXuat: ['', [Validators.required]],
-        diaDiemKho: ['', [Validators.required]],
+        diaDiemKho: [''],
         loaiVthh: [''],
         cloaiVthh: [''],
         donViTinh: [''],
-        moTaHangHoa: [''],
         nlqHoTen: [''],
         nlqCmnd: [''],
         nlqDonVi: [''],
         nlqDiaChi: [''],
         thoiGianGiaoNhan: [''],
-        tongTrongLuong: [0],
-        tongTrongLuongBaoBi: [0],
-        tongTrongLuongHang: [0],
+        tongTrongLuong: [''],
+        tongTrongLuongBaoBi: [''],
+        tongTrongLuongHang: [''],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
         ngayPduyet: [''],
@@ -182,7 +182,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenLoKho: [''],
         nguoiPduyet: [''],
         nguoiGduyet: [''],
-        bangKeDtl: [new Array()]
+        bangKeDtl: [new Array()],
+        thuKho: ['']
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -231,6 +232,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     }
   }
 
+
   async loadDsDonVi() {
     let body = {
       trangThai: "01",
@@ -248,6 +250,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async loadDsQdGnv() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -259,7 +262,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async loadDetail(idInput: number) {
-    console.log(idInput, 'idInput')
     if (idInput > 0) {
       await this.bangKeCanCtvtService.getDetail(idInput)
         .then((res) => {
@@ -281,6 +283,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         type: "XUAT_CTVT",
+        thuKho: this.userInfo.TEN_DAY_DU,
       })
     }
 
@@ -338,7 +341,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async buildTableView() {
-    console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), 'raw')
     let dataView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
@@ -613,10 +615,26 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let body = {
           trangThai: STATUS.DA_DUYET_LDCC,
           type: "XUAT_CTVT",
+          loaiVthh: this.loaiVthh,
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
         this.dsPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
+
+        let body1 = {
+          trangThai: "01",
+          maDviCha: this.userInfo.MA_DVI
+        };
+        const res1 = await this.donViService.getAll(body1)
+        const dataDk = res1.data;
+        if (dataDk) {
+          this.listDiaDiemKho = dataDk.filter(item => item.maDvi == data.maDiemKho);
+          this.listDiaDiemKho.forEach(s => {
+            this.formData.patchValue({
+              diaDiemKho: s.diaChi,
+            })
+          })
+        }
       }
     });
   }
@@ -646,14 +664,15 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           nlqCmnd: data.soCmt,
           nlqDonVi: data.ctyNguoiGh,
           nlqDiaChi: data.diaChi,
+          thoiGianGiaoNhan: data.thoiGianGiaoNhan,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
           donViTinh: data.donViTinh,
           bangKeDtl: this.formData.value.bangKeDtl
         });
+        this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh })
       }
     });
   }
@@ -670,16 +689,21 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async tinhTong() {
     let dtl = cloneDeep(this.formData.value.bangKeDtl);
     let tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
-    let tongTrongLuongBaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongBaoBi, 0);
-    let tongSl = dtl.reduce((prev, cur) => prev + cur.soLuong, 0);
-    let tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
 
     this.formData.patchValue({
       tongTrongLuong: tongTrongLuongCaBi,
-      tongTrongLuongBaoBi: tongTrongLuongBaoBi,
-      tongTrongLuongHang: tongTrongLuongHang,
       bangKeDtl: this.formData.value.bangKeDtl
     });
+  }
+  async trongLuongTruBi() {
+    let data = cloneDeep(this.formData.value);
+    if (data.tongTrongLuongBaoBi) {
+      let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
+      this.formData.patchValue({
+        tongTrongLuongHang: tongTrongLuongHang,
+        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+      });
+    }
   }
 
   convertTienTobangChu(tien: number) {

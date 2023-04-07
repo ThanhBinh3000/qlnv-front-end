@@ -102,17 +102,21 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
+
+  async search(roles?): Promise<void> {
+    await super.search(roles);
+    this.buildTableView();
+  }
+
   async timKiem() {
-    console.log(this.loaiVthh, 111);
     if (this.formData.value.ngayLayMau) {
       this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
       this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
     }
-    // this.formData.value.loaiVthh = this.loaiVthh;
     this.formData.patchValue({
       loaiVthh: this.loaiVthh
     })
-    await super.search();
+    await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
   }

@@ -145,7 +145,7 @@
           <td>{{item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ item.giaTri - item.giaTrungThau | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{item.tenTrangThai}}</td>
-          <td></td>
+          <td>{{item.soQdPdKqlcnt}}</td>
         </tr>
         </tbody>
         <tfoot>
@@ -269,7 +269,7 @@
                 </nz-option>
               </nz-select>
             </td>
-            <td class="text-center" >
+            <td class="text-center">
               <a (click)="saveEditNhaThauNopHs(i)" class="save">
                 <i class="fa fa-save"></i>
               </a>
