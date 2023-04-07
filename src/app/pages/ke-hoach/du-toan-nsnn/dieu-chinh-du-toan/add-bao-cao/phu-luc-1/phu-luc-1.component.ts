@@ -165,9 +165,9 @@ export class PhuLuc1Component implements OnInit {
         this.sum(item.stt);
       })
     }
-    this.sortByIndex();
-    this.getTotal();
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
     this.tinhTong();
+    this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
     this.spinner.hide();
@@ -180,44 +180,6 @@ export class PhuLuc1Component implements OnInit {
       this.statusBtnOk = true;
     }
   };
-
-  sortByIndex() {
-    this.setLevel();
-    this.lstCtietBcao.sort((item1, item2) => {
-      if (item1.level > item2.level) {
-        return 1;
-      }
-      if (item1.level < item2.level) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-        return 1;
-      }
-      return 0;
-    });
-    const lstTemp: ItemData[] = [];
-    this.lstCtietBcao.forEach(item => {
-      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-      if (index == -1) {
-        lstTemp.splice(0, 0, item);
-      } else {
-        lstTemp.splice(index + 1, 0, item);
-      }
-    })
-
-    this.lstCtietBcao = lstTemp;
-  }
-
-  setLevel() {
-    this.lstCtietBcao.forEach(item => {
-      const str: string[] = item.stt.split('.');
-      item.level = str.length - 2;
-    })
-  }
-
 
   checkDelete(stt: string) {
     const level = stt.split('.').length - 2;

@@ -648,6 +648,8 @@ export class AddBaoCaoComponent implements OnInit {
     });
     modalAppendix.afterClose.toPromise().then(async (res) => {
       if (res) {
+        console.log("res: ", res);
+        
         //gan lai thong tin sau khi bieu mau duoc luu
         const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
         this.baoCao.lstCtiets[index] = res.formDetail;
