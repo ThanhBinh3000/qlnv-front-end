@@ -46,6 +46,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   disabledGoiThau: boolean = false;
   thongTinChiCuc: DanhSachGoiThau = new DanhSachGoiThau();
   thongTinDiemKho: DanhSachGoiThau = new DanhSachGoiThau();
+  listThongTinDiemKho: any[] = [];
   listGoiThau = [];
   dataAll: any[] = [];
   selectedGoiThau: any;
@@ -63,14 +64,14 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      maDvi: [null, [Validators.required]],
+      maDvi: [null],
       tenDvi: [null],
       goiThau: [null, [Validators.required]],
       tenCcuc: [null],
-      donGiaVat: [0, [Validators.required]],
+      donGiaVat: [0],
       soLuongDaMua: [null],
       soLuongChiTieu: [null],
-      soLuong: [null, [Validators.required]],
+      soLuong: [null],
       thanhTien: [null],
       bangChu: [null],
       children: [null],
@@ -83,6 +84,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
+  listAllDiemKho: any[] = [];
 
   async ngOnInit() {
     this.userInfo = await this.userService.getUserLogin();
@@ -93,9 +95,17 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   save() {
+    if (this.formData.get('goiThau').value == null) {
+      this.notification.error(MESSAGE.ERROR, "Tên gói thầu không được để trống.")
+      return;
+    }
+    if (this.listOfData.length <= 0) {
+      this.notification.error(MESSAGE.ERROR, "Địa điểm nhập hàng và số lượng không được để trống.")
+      return;
+    }
     if (this.validateGiaDeXuat()) {
-      let dataDiemNhap = '';
       this.listOfData.forEach(item => {
+        let dataDiemNhap = '';
         item.children.forEach(child => {
           dataDiemNhap += child.tenDvi + "(" + child.soLuong + "), "
         })
@@ -106,7 +116,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       })
       this.formData.patchValue({
         children: this.listOfData,
-        diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
+        // diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
       })
       this._modalRef.close(this.formData);
     }
@@ -128,7 +138,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       })
       this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1') : '';
     }
-    this.checkDisabledSave();
+    // this.checkDisabledSave();
   }
 
   async loadDonVi() {
@@ -265,7 +275,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  addChiCuc() {
+  async addChiCuc() {
+    await this.onChangeChiCuc(this.thongTinChiCuc.maDvi);
     if (this.validateDataAdd('chiCuc')) {
       if (this.thongTinChiCuc.maDvi) {
         this.thongTinChiCuc.children = [];
@@ -279,6 +290,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.expandSet.clear();
         const maxIndex = this.listOfData.length > 0 ? this.listOfData.length - 1 : 0
         this.expandSet.add(maxIndex)
+        this.listThongTinDiemKho.push(new DanhSachGoiThau());
+        this.listAllDiemKho.push(this.listDiemKho);
+        this.listDiemKho = [];
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
@@ -287,12 +301,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   addDiemKho(i) {
     if (this.validateDataAdd('diemKho', i)) {
-      if (this.thongTinDiemKho.maDvi && this.thongTinDiemKho.soLuong) {
+      if (this.listThongTinDiemKho[i].maDvi && this.listThongTinDiemKho[i].soLuong) {
         if (this.validateSlChiCuc(i)) {
-          let dataDvi = this.listDiemKho.filter(d => d.value == this.thongTinDiemKho.maDvi);
-          this.thongTinDiemKho.tenDvi = dataDvi[0].text;
-          this.thongTinDiemKho.diaDiemNhap = dataDvi[0].diaDiemNhap;
-          this.listOfData[i].children = [...this.listOfData[i].children, this.thongTinDiemKho];
+          let dataDvi = this.listAllDiemKho[i].filter(d => d.value == this.listThongTinDiemKho[i].maDvi);
+          this.listThongTinDiemKho[i].tenDvi = dataDvi[0].text;
+          this.listThongTinDiemKho[i].diaDiemNhap = dataDvi[0].diaDiemNhap;
+          this.listOfData[i].children = [...this.listOfData[i].children, this.listThongTinDiemKho[i]];
           let soLuong: number = 0;
           this.listOfData[i].children.forEach(item => {
             soLuong = soLuong + item.soLuong
@@ -302,13 +316,13 @@ export class DialogThemMoiVatTuComponent implements OnInit {
             soLuong: soLuong,
           })
           this.calcTong();
-          this.thongTinDiemKho = new DanhSachGoiThau();
+          this.listThongTinDiemKho[i] = new DanhSachGoiThau();
         }
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
     }
-    this.checkDisabledSave();
+    // this.checkDisabledSave();
   }
 
   validateDataAdd(type, index?): boolean {
@@ -345,22 +359,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.listOfData[i].children = this.listOfData[i].children.filter((d, index) => index !== y);
     } else if (i >= 0) {
       this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    }
-  }
-
-  changeDiemKho(index?) {
-    if (index >= 0) {
-      let diemKho = this.listDiemKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
-      if (diemKho.length > 0) {
-        this.editCache[index].data.tenDiemKho = diemKho[0].text;
-        this.editCache[index].data.diaDiemNhap = diemKho[0].diaDiemNhap;
-      }
-    } else {
-      let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinDauThau.maDiemKho);
-      if (diemKho.length > 0) {
-        this.thongtinDauThau.tenDiemKho = diemKho[0].text;
-        this.thongtinDauThau.diaDiemNhap = diemKho[0].diaDiemNhap;
-      }
+      this.listAllDiemKho.splice(i, 1);
     }
   }
 
@@ -408,9 +407,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  clearDiemKho() {
-    this.thongTinDiemKho.maDvi = null;
-    this.thongTinDiemKho.soLuong = null;
+  clearDiemKho(i) {
+    this.listThongTinDiemKho[i].maDvi = null;
+    this.listThongTinDiemKho[i].soLuong = null;
   }
 
   clearChiCuc() {
@@ -485,6 +484,9 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   calcTong() {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
+        if (cur.soLuong == undefined && cur.soLuong == null) {
+          cur.soLuong = 0
+        }
         prev += cur.soLuong;
         return prev;
       }, 0);
@@ -494,11 +496,5 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.calculatorThanhTienDx();
       return sum;
     }
-  }
-
-  loadDiemKho(ma: string) {
-    this.listDiemKho = []
-    this.onChangeChiCuc(ma);
-    console.log('test', ma)
   }
 }
