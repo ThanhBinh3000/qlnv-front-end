@@ -25,7 +25,7 @@ import { ChiTietList } from 'src/app/models/QdPheDuyetKHBanDauGia';
   styleUrls: ['./them-moi-bb-lay-mau-ban-giao-mau.component.scss']
 })
 export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -115,7 +115,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async ngOnInit() {
     try {
       this.spinner.show();
-
       await Promise.all([
         this.loadSoQuyetDinh(),
         this.loadPhuongPhapLayMau(),
@@ -173,6 +172,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -213,10 +213,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
       loaiVthh: data.loaiVthh,
-      cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
-      tenCloaiVthh: data.tenCloaiVthh,
-      moTaHangHoa: data.moTaHangHoa,
 
     });
     this.listBienBan(data.soQd)
@@ -237,6 +234,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     let res = await this.bienBanLayMauBanGiaoMauService.search(body)
     const data = res.data;
     this.bienBan = data.content;
+    console.log(this.bienBan, "this.bienBan");
+    console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap");
     const diffList = [
       ...this.listDiaDiemNhap.filter((e) => {
         return !this.bienBan.some((bb) => {
