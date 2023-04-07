@@ -8,8 +8,9 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QdPdKetQuaBanDauGiaService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
-import dayjs from "dayjs";
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-qd-pd-ket-qua-bdg',
@@ -20,8 +21,9 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
+  typeLoaiVthh: any[] = [];
   listVthh: any[] = [];
-
+  listCloaiVthh: any[] = [];
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -33,11 +35,12 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   ];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
@@ -45,6 +48,7 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       nam: [null],
       loaiVthh: [null],
+      cloaiVthh: [null],
       soQdKq: [null],
       trichYeu: [null],
       ngayPduyetTu: [null],
@@ -70,7 +74,10 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       this.thimKiem();
-      await this.search();
+      await Promise.all([
+        this.search(),
+        this.onChangeCLoaiVthh(),
+      ])
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -83,12 +90,36 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
     })
+
   }
 
   clearFilter() {
     this.formData.reset();
     this.thimKiem();
     this.search();
+  }
+
+  async onChangeCLoaiVthh() {
+    if (this.loaiVthh && this.typeLoaiVthh) {
+      this.listVthh = [];
+      let body = {
+        "str": this.loaiVthh
+      };
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        this.listVthh = this.typeLoaiVthh.filter(s => s.ma === LOAI_HANG_DTQG.VAT_TU)
+      } else {
+        this.listVthh = this.typeLoaiVthh;
+      }
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data.filter(s => s.ten != null && s.ma != null);
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
