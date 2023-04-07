@@ -124,12 +124,11 @@
                 <td>BB tịnh kho</td>
                 <td>{{ dataChild.tenTrangThai }}</td>
                 <td class="text-left">
-                  <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC"
-                    (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
+                  <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC" (click)="goDetail(dataChild.id)">
                     <i class="fa fa-eye"></i>
                   </a>
                   <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDCC && this.userService.isChiCuc()"
-                    (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
+                    (click)="goDetail(dataChild.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a *ngIf="dataChild.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()"
