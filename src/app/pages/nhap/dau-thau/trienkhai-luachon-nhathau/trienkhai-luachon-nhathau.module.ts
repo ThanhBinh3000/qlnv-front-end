@@ -10,6 +10,7 @@ import { DauThauModule } from 'src/app/pages/nhap/dau-thau/dau-thau.module';
 import { ThemmoiQuyetdinhKetquaLcntComponent } from './quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt/themmoi-quyetdinh-ketqua-lcnt.component';
 import { TheoPhuongThucDauThauComponent } from './theo-phuong-thuc-dau-thau/theo-phuong-thuc-dau-thau.component';
 import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thongtin-dauthau/themmoi-thongtin-dauthau.component';
+import { KehoachLuachonNhathauModule } from '../kehoach-luachon-nhathau/kehoach-luachon-nhathau.module';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
     CommonModule,
     ComponentsModule,
     MainModule,
+    KehoachLuachonNhathauModule
   ],
   exports: [
     TrienkhaiLuachonNhathauComponent,

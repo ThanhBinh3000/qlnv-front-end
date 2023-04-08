@@ -27,7 +27,7 @@ import { HttpClient } from "@angular/common/http";
   styleUrls: ['./thongtin-dauthau.component.scss']
 })
 export class ThongtinDauthauComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: String;
+  @Input() loaiVthh: string;
   constructor(
     private router: Router,
     spinner: NgxSpinnerService,
@@ -95,6 +95,13 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  idDx: number = 0;
+  soDx: string;
+  openDxKhlcnt = false;
+  idQdKq: number = 0;
+  openQdKqKhlcnt = false;
+  idQdPdKq: number = 0;
+  openQdPdKqKhlcnt = false;
 
   async ngOnInit() {
     await this.spinner.show();
@@ -413,5 +420,40 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+
+  openDxKhlcntModal(id?: number, soDx?: string) {
+    if (id) {
+      this.idDx = id;
+    } else {
+      this.soDx = soDx;
+    }
+    this.openDxKhlcnt = true;
+  }
+
+  closeDxKhlcntModal() {
+    this.idDx = null;
+    this.soDx = null;
+    this.openDxKhlcnt = false;
+  }
+
+  openQdKqKhlcntModal(id?: number) {
+    this.idQdKq = id;
+    this.openQdKqKhlcnt = true;
+  }
+
+  closeQdKqKhlcntModal() {
+    this.idQdKq = null;
+    this.openQdKqKhlcnt = false;
+  }
+
+  openQdPdKqKhlcntModal(id?: number) {
+    this.idQdPdKq = id;
+    this.openQdPdKqKhlcnt = true;
+  }
+
+  closeQdPdKqKhlcntModal() {
+    this.idQdPdKq = null;
+    this.openQdPdKqKhlcnt = false;
   }
 }

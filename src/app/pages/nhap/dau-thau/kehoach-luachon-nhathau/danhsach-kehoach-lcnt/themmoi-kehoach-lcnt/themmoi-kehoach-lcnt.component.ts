@@ -49,6 +49,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   @Input()
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() soDx: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -162,9 +163,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
     this.loadDanhMucHang();
+    debugger
     if (this.idInput > 0) {
-      await this.getDetail(this.idInput);
+      await this.getDetail(this.idInput, null);
     } else {
+      if (this.soDx) {
+        await this.getDetail(null, this.soDx);
+      }
       this.initForm();
     }
     await Promise.all([
@@ -237,10 +242,41 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  async getDetail(id: number) {
+  async getDetail(id?: number, soDx?: string) {
+    debugger
     if (id) {
       await this.dauThauService
         .getDetail(id)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            const dataDetail = res.data;
+            this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+            this.formData.patchValue({
+              soDxuat: dataDetail.soDxuat?.split('/')[0]
+            })
+            if (dataDetail) {
+              this.fileDinhKem = dataDetail.fileDinhKems;
+              this.listOfData = dataDetail.dsGtDtlList;
+              if (dataDetail.loaiVthh != '02') {
+                this.convertListDataLuongThuc()
+              } else {
+                this.convertListData();
+              }
+              this.bindingCanCu(dataDetail.ccXdgDtlList);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    }
+    if (soDx) {
+      var body = this.formData.value
+      body.soDxuat = soDx
+      await this.dauThauService
+        .getDetailBySoDx(body)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dataDetail = res.data;
