@@ -16,7 +16,7 @@ export const MAIN_ROUTES = {
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   // quantrihethong: 'quan-tri-he-thong',
-  dieuChuyen: 'dieu-chuyen',
+  dieuChuyenNoiBo: 'dieu-chuyen-noi-bo',
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
   quanTriHeThong: 'quan-tri-he-thong',
@@ -65,7 +65,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Điều chuyển nội bộ',
-    route: MAIN_ROUTES.dieuChuyen,
+    route: MAIN_ROUTES.dieuChuyenNoiBo,
     code: 'DCNB'
   },
   {

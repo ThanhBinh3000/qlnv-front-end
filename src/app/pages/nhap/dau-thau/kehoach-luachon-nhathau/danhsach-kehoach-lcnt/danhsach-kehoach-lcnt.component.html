@@ -250,7 +250,16 @@
             </td>
             <td class="text-left">
               <a (click)="detail(data, true)"
-                *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM'): userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM')">
+                *ngIf="loaiVthh != '02' && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM')
+              && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM') ? (data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_TP && data.trangThai != STATUS.TU_CHOI_LDC) 
+              :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_TP') ? data.trangThai != STATUS.CHO_DUYET_TP
+              :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_DUYET_LDCUC') ? data.trangThai != STATUS.CHO_DUYET_LDC : true)))">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a (click)="detail(data, true)"
+                *ngIf="loaiVthh === '02' && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM') 
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') ? (data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_LDV)
+                :  (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_DUYET_LDVU') ? data.trangThai != STATUS.CHO_DUYET_LDV : true))">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDC  )
@@ -283,7 +292,7 @@
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->

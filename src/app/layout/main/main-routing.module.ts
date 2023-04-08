@@ -113,6 +113,12 @@ const routes: Routes = [
           import('../../pages/sua-chua/sua-chua.module').then((m) => m.SuaChuaModule),
         canActivate: [AuthGuard],
       },
+      {
+        path: MAIN_ROUTES.dieuChuyenNoiBo,
+        loadChildren: () =>
+          import('../../pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.module').then((m) => m.DieuChuyenNoiBoModule),
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {

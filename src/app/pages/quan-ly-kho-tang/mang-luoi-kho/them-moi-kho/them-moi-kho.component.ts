@@ -363,6 +363,10 @@ export class ThemMoiKhoComponent implements OnInit {
       body.ngankhoId = this.idReq;
       body.maNganlo = this.formKho.value.maNganlo;
       body.fileDinhkems = this.listFileDinhKem;
+      body.tichLuongKdLt = body.tichLuongTkLt;
+      body.tichLuongKdVt = body.tichLuongTkVt;
+      body.theTichKdLt = body.theTichTkLt;
+      body.theTichKdVt = body.theTichTkVt;
       body.dviReq = bodyDvi
       body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
@@ -399,6 +403,10 @@ export class ThemMoiKhoComponent implements OnInit {
       body.dviReq = bodyDvi
       body.loaiHangHoa = this.setLoaiHangHoa();
       body.maNgankho = this.formKho.value.maNgankho;
+      body.tichLuongKdLt = body.tichLuongTkLt;
+      body.tichLuongKdVt = body.tichLuongTkVt;
+      body.theTichKdLt = body.theTichTkLt;
+      body.theTichKdVt = body.theTichTkVt;
       body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
       body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG

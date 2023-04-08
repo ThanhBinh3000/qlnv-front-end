@@ -8,7 +8,6 @@ import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from 'src/app/constants/status';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -21,6 +20,9 @@ import {
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
 import { DonviService } from "src/app/services/donvi.service";
+import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -36,11 +38,10 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   dataInput: any;
   dataInputCache: any;
   formDataRow: FormGroup;
-  listDiaDiem: any = [];
-  listDiemKho: any[] = [];
-  listNhaKho: any[] = [];
-  listNganKho: any[] = [];
-  listLoKho: any[] = [];
+  fileDinhKems: any[] = []
+
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -48,8 +49,10 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private hopDongXuatHangService: HopDongXuatHangService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
     private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
@@ -80,20 +83,11 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       fileName: [],
-      lyDoTuChoi: []
+      lyDoTuChoi: [],
+      loaiHinhNx: [],
+      kieuNx: [],
     });
 
-    this.formDataRow = this.fb.group({
-      maDiemKho: [],
-      maNhaKho: [],
-      maNganKho: [],
-      maLoKho: [],
-      tenDiemKho: [],
-      tenNhaKho: [],
-      tenNganKho: [],
-      tenLoKho: [],
-      soLuong: [],
-    })
   }
 
   setValidator(isGuiDuyet?) {
@@ -115,9 +109,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
-      await Promise.all([
-        this.loadDiemKho()
-      ]);
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
       } else {
@@ -142,12 +133,11 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async openDialogSoHopDong() {
     this.spinner.show();
     let dsQdPd = []
-    let re = await this.hopDongXuatHangService.search({
+    await this.hopDongXuatHangService.search({
       trangThai: STATUS.DA_KY,
       maDvi: this.formData.value.maDvi,
       nam: this.formData.value.nam
-    }
-    ).then(res => {
+    }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
@@ -155,7 +145,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         }
       }
     });
-    console.log(re, 1111)
     this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách căn cứ trên hợp đồng',
@@ -172,7 +161,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.hopDongXuatHangService.getDetail(data.id).then(res => {
+        await this.hopDongXuatHangService.getDetail(data.id).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               const data = res.data;
@@ -190,9 +179,28 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
                 donViTinh: data.donViTinh,
                 tgianGnhan: data.tgianGnhan,
                 trichYeu: data.trichYeu,
-                tenTtcn: data.tenNguoiDdien
+                tenTtcn: data.tenNguoiDdien,
               })
               this.dataTable = data.children;
+              await this.qdPdKetQuaBanDauGiaService.search({
+                soQdKq: data.soQdKq,
+                loaiVthh: data.loaiVthh,
+                nam: data.nam,
+                lastest: 1
+              }).then(dataQdKq => {
+                if (dataQdKq.msg == MESSAGE.SUCCESS) {
+                  let dataQd = dataQdKq.data.content[0];
+                  this.qdPdKetQuaBanDauGiaService.getDetail(dataQd.id).then(async s => {
+                    this.formData.patchValue({
+                      trichYeu: s.data.trichYeu,
+                      tgianGnhan: s.data.tgianGnhan,
+                      kieuNx: s.data.kieuNx,
+                      loaiHinhNx: s.data.loaiHinhNx
+                    })
+                    await this.loadDataComboBox(s.data)
+                  })
+                }
+              });
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -203,13 +211,28 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     });
   }
 
+  async loadDataComboBox(data) {
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    console.log(resNx, 999)
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.ma == data.loaiHinhNx);
+    }
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
+    }
+  }
+
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKem = this.fileDinhKem;
     body.children = this.dataTable;
     let data = await this.createUpdate(body);
     if (data) {
@@ -269,6 +292,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         soQd: data.soQd?.split('/')[0]
       })
       this.dataTable = data.children;
+      this.fileDinhKems = data.fileDinhKems;
+      this.fileDinhKem = data.fileDinhKem;
+      await this.loadDataComboBox(data);
     }
     ;
   }
@@ -281,98 +307,13 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     return false;
   }
 
-
-  async loadDiemKho() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-    this.listDiaDiem = await this.donviService.layDonViTheoCapDo(body);
-    let res = this.listDiaDiem[DANH_MUC_LEVEL.DIEM_KHO];
-    this.listDiemKho = res.filter(item => item.type == "MLK")
-  }
-
-  async changeDiemKho(maDiemKho: any) {
-    this.formDataRow.patchValue({
-      maNhaKho: null,
-      maNganKho: null,
-      maLoKho: null,
-      tenNhaKho: null,
-      tenNganKho: null,
-      tenLoKho: null,
-    })
-    let res = this.listDiaDiem[DANH_MUC_LEVEL.NHA_KHO];
-    this.listNhaKho = res.filter(item => item.type == "MLK" && item.maDviCha == maDiemKho)
-      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
-  }
-
-  async changeNhaKho(maNhaKho: any) {
-    this.formDataRow.patchValue({
-      maNganKho: null,
-      maLoKho: null,
-      tenNganKho: null,
-      tenLoKho: null,
-    })
-    let res = this.listDiaDiem[DANH_MUC_LEVEL.NGAN_KHO];
-    this.listNganKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNhaKho)
-      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
-  }
-
-  async changeNganKho(maNganKho: any) {
-    this.formDataRow.patchValue({
-      maLoKho: null,
-      tenLoKho: null,
-    })
-    let res = this.listDiaDiem[DANH_MUC_LEVEL.LO_KHO];
-    this.listLoKho = res.filter(item => item.type == "MLK" && item.maDviCha == maNganKho)
-      .sort((a, b) => a.tenDvi.localeCompare(b.tenDvi));
-  }
-
-  clearRow() {
-
-  }
-
-  addRow(data) {
-    // data.children = [...data.children,this.formDataRow];
-    // this.formDataRow.patchValue({
-    //
-    //   "idDtl": data.id,
-    //   "maDiemKho": "0101020102",
-    //   "maNhaKho": "010102010201",
-    //   "maNganKho": "01010201020101",
-    //   "maLoKho": null,
-    //   "soLuong": 20000,
-    //   "donGiaVat": 7700,
-    //   "maDviTsan": "02",
-    //   "tenDiemKho": "Điểm kho Ninh Dân",
-    //   "tenNhaKho": "Kho M6",
-    //   "tenNganKho": "Ngăn kho số 1",
-    //   "tenLoKho": null
-    // })
-    // this.formDataRow.reset();
-  }
-
-  async editRow(children) {
-    this.dataTable.forEach(s => {
-      s.children?.forEach(s1 => s1.isEdit = false)
-    });
-    await Promise.all([
-      this.changeDiemKho(children.maDiemKho),
-      this.changeNhaKho(children.maNhaKho),
-      this.changeNganKho(children.maNganKho)
-    ])
-    await this.formDataRow.patchValue(children)
-    children.isEdit = true;
-  }
-
-  async cancelRow(children) {
-    this.dataTable.forEach(s => {
-      s.children?.forEach(s1 => s1.isEdit = false)
-    });
-  }
-
-  async saveRow(index, index1) {
-    let currentData = this.dataTable[index].children[index1];
-    Object.assign(currentData, this.formDataRow.value, { isEdit: false })
+  calcTong(column) {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur[column];
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 }
