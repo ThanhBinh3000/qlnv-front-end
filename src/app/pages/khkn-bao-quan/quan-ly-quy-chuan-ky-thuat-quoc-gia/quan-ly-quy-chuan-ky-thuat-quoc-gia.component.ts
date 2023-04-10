@@ -34,7 +34,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   dsCha: any = {};
   dsCon: any = {};
   STATUS: STATUS
-
+  listChungLoaiHangHoa: any[] = [];
   formData: FormGroup;
 
   searchFilter = {
@@ -150,7 +150,19 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       }
     }
   }
-
+  async changeHangHoa(event: any) {
+    if (event) {
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      console.log(res, 5555);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiHangHoa = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
 
   async getListBoNganh() {
     this.dsBoNganh = [];

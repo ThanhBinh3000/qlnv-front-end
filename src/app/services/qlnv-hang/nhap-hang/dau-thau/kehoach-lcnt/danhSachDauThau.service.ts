@@ -30,4 +30,9 @@ export class DanhSachDauThauService extends BaseService {
     return this.httpClient.post(url, body).toPromise();
   }
 
+  getDetailBySoDx(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/bySdx`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }
