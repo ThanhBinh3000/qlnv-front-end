@@ -340,7 +340,7 @@
                         <ng-container>
                             <tr *ngFor="let dtGoiThau of item.dataChild, let y = index"
                                 (click)="showDetail($event,dtGoiThau)"
-                                [ngClass]="{'bg-selected': this.selected && y == 0}">
+                                [ngClass]="{'bg-selected': this.selected && y == 0 && i == 0}">
                                 <td></td>
                                 <td></td>
                                 <td>{{dtGoiThau.goiThau}}</td>
