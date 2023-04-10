@@ -111,6 +111,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   danhsachDx: any[] = [];
   listOfData: any[] = [];
   listDataGroup: any[] = [];
+  listDataChiCuc: any[] = [];
+  listDataChiCucCTiet: any[] = [];
   donGiaVatObject: any;
   selected: boolean = false;
 
@@ -288,7 +290,20 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
+    // this.convertListDataLuongThuc()
   }
+
+  // convertListDataLuongThuc() {
+  //   let listChild = [];
+  //   this.listOfData.forEach(item => {
+  //     item.children.forEach(i => {
+  //       listChild.push(i)
+  //     })
+  //   })
+  //   this.helperService.setIndexArray(listChild);
+  //   this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value })).value()
+  //   console.log(this.listDataGroup)
+  // }
 
 
   expandSet = new Set<number>();
@@ -610,18 +625,21 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       }
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
-          if (cur['trangThai'] != 41 && column == 'chenhLech') {
-            prev += (cur['donGiaNhaThau'] - cur['donGiaVat']) * cur['soLuong'] * 1000;
+          if (cur['trangThai'] == 40 && column == 'chenhLech') {
+            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaVat']) * cur['soLuong'] * 1000);
           } else {
             prev += cur[column] * 1000 * cur['soLuong'];
           }
-          return prev;
+          return prev ? prev : 0;
         }, 0);
         result = sum
       }
     })
-
     return result;
+  }
+
+  abs(value: number): number {
+    return Math.abs(value);
   }
 
 }

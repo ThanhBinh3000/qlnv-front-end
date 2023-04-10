@@ -10,6 +10,7 @@ import { PhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/phieu-ktra-
 import { ThemPhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/them-phieu-ktra-cluong-btt/them-phieu-ktra-cluong-btt.component';
 import { HoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/ho-so-ky-thuat-btt.component';
 import { ThemMoiHoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt.component';
+import { GiaoNvXuatHangBttModule } from '../giao-nv-xuat-hang-btt/giao-nv-xuat-hang-btt.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ThemMoiHoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/them-moi-ho
 
   ],
   imports: [
+    GiaoNvXuatHangBttModule,
     CommonModule,
     ComponentsModule,
     DirectivesModule,
