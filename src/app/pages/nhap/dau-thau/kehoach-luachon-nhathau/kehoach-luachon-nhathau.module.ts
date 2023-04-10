@@ -12,7 +12,7 @@ import { ThemmoiTonghopKhlcntComponent } from './tong-hop-khlcnt/themmoi-tonghop
 import { TongHopKhlcntComponent } from './tong-hop-khlcnt/tong-hop-khlcnt.component';
 import { ThongtinDexuatComponent } from './quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/thongtin-dexuat/thongtin-dexuat.component';
 import { MainKehoachLuachonNhathauComponent } from './main-kehoach-luachon-nhathau/main-kehoach-luachon-nhathau.component';
-import {FormsModule} from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import {
   KeHoachVonDauNamModule
 } from "../../../ke-hoach/giao-ke-hoach-va-du-toan/ke-hoach-von-dau-nam/ke-hoach-von-dau-nam.module";
@@ -40,9 +40,13 @@ import {
   exports: [
     KeHoachLuachonNhathauComponent,
     DanhsachKehoachLcntComponent,
+    ThemmoiKehoachLcntComponent,
     QuyetdinhPheduyetKhlcntComponent,
+    ThemmoiQuyetdinhKhlcntComponent,
     TongHopKhlcntComponent,
-    ThemmoiQuyetdinhKhlcntComponent
+    ThemmoiTonghopKhlcntComponent,
+    ThongtinDexuatComponent,
+    MainKehoachLuachonNhathauComponent,
   ]
 })
 export class KehoachLuachonNhathauModule { }

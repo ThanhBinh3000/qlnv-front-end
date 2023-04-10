@@ -108,7 +108,7 @@
       <tr *ngIf="!isReadOnly" class="root-input">
         <td></td>
         <td>
-          <nz-select [(ngModel)]="thongTinChiCuc.maDvi" (ngModelChange)="onChangeChiCuc($event)">
+          <nz-select [(ngModel)]="thongTinChiCuc.maDvi">
             <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
           </nz-select>
         </td>
@@ -149,9 +149,9 @@
           <tr class="body-input">
             <td></td>
             <td></td>
-            <td (click)="loadDiemKho(dataChiCuc.maDvi)">
-              <nz-select [(ngModel)]="thongTinDiemKho.maDvi">
-                <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text">
+            <td>
+              <nz-select [(ngModel)]="listThongTinDiemKho[i].maDvi">
+                <nz-option *ngFor="let p of listAllDiemKho[i]" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
             </td>
@@ -159,7 +159,7 @@
             <td></td>
             <td></td>
             <td>
-              <nz-input-number [(ngModel)]="thongTinDiemKho.soLuong" class="text-right" nz-input [nzMin]="1"
+              <nz-input-number [(ngModel)]="listThongTinDiemKho[i].soLuong" class="text-right" nz-input [nzMin]="1"
                 [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </td>
@@ -169,7 +169,7 @@
               <a (click)="addDiemKho(i)">
                 <i class="icon htvbdh_dau-cong xanhla"></i>
               </a>
-              <a (click)="clearDiemKho()">
+              <a (click)="clearDiemKho(i)">
                 <i class="fa fa-refresh"></i>
               </a>
             </td>
@@ -204,8 +204,7 @@
         <i aria-hidden="true" class="fa fa-sign-out"></i>
         Hủy
       </button>
-      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
-        [disabled]="!isValid">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
         <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </button>

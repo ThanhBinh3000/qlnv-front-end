@@ -36,6 +36,7 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
   openTHopKhlcnt = false;
 
   idDx: number = 0;
+  soDx: string;
   openDxKhlcnt = false;
   isView: boolean;
   tuNgayKy: Date | null = null;
@@ -450,13 +451,18 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.openTHopKhlcnt = false;
   }
 
-  openDxKhlcntModal(id: number) {
-    this.idDx = id;
+  openDxKhlcntModal(id?: number, soDx?: string) {
+    if (id) {
+      this.idDx = id;
+    } else {
+      this.soDx = soDx;
+    }
     this.openDxKhlcnt = true;
   }
 
   closeDxKhlcntModal() {
     this.idDx = null;
+    this.soDx = null;
     this.openDxKhlcnt = false;
   }
 

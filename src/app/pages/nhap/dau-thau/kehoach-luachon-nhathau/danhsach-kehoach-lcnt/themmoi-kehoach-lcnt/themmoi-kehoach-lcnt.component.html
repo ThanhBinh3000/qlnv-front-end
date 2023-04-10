@@ -509,9 +509,9 @@
             <td colspan="3">{{item.tenDvi}}</td>
             <td class="text-right red-text">{{item.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right red-text">{{item.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right bold-700">{{ item.dataChild[0].soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right bold-700">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
-            <td class="text-right bold-700">{{ item.dataChild[0].soLuong * item.dataChild[0].donGiaTamTinh | number :
+            <td class="text-right bold-700">{{ item.soLuong * item.dataChild[0].donGiaTamTinh | number :
               '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>

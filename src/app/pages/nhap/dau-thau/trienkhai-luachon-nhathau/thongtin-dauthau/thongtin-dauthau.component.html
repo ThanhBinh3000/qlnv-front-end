@@ -192,9 +192,22 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.namKhoach : data.namKhoach}}</td>
-            <td>{{ data.soDxuat }}</td>
-            <td>{{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : null }}</td>
-            <td>{{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : null }}</td>
+            <td>
+              <a style="color: blue; font-weight: bold;"
+                (click)="data.idTrHdr ? openDxKhlcntModal(data.idDxHdr) : openDxKhlcntModal(null, data.soDxuat)">
+                {{ data.soDxuat }}
+              </a>
+            </td>
+            <td>
+              <a style="color: blue; font-weight: bold;" (click)="openQdKqKhlcntModal(data.hhQdKhlcntHdr.id)">
+                {{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : null }}
+              </a>
+            </td>
+            <td>
+              <a style="color: blue; font-weight: bold;" (click)="openQdPdKqKhlcntModal(data.hhQdPduyetKqlcntHdr.id)">
+                {{ data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.soQd : null }}
+              </a>
+            </td>
             <td>{{ (data.hhQdPduyetKqlcntHdr ? data.hhQdPduyetKqlcntHdr.ngayKy : null) | date: 'dd/MM/YYYY' }}
             </td>
             <td>{{ data.soGthau }}</td>
@@ -251,3 +264,44 @@
     (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau>
 </ng-container>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxKhlcnt" (nzOnCancel)="closeDxKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-kehoach-lcnt [isView]="true" [idInput]="idDx" [soDx]="soDx" [loaiVthhInput]="loaiVthh"
+      [isViewOnModal]="true">
+    </app-themmoi-kehoach-lcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdKqKhlcnt"
+  (nzOnCancel)="closeQdKqKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-khlcnt [idInput]="idQdKq" [isView]="true" [loaiVthh]="loaiVthh" (showListEvent)="showList()"
+      [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-khlcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdKqKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKqKhlcnt"
+  (nzOnCancel)="closeQdPdKqKhlcntModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-quyetdinh-ketqua-lcnt [idInput]="idQdPdKq" [isView]="true" [loaiVthh]="loaiVthh"
+      (showListEvent)="showList()" [isViewOnModal]="true">
+    </app-themmoi-quyetdinh-ketqua-lcnt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdKqKhlcntModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
