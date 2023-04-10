@@ -26,7 +26,8 @@ import { KeHoachVonDauNamModule } from "../../../ke-hoach/giao-ke-hoach-va-du-to
     ThongTinKhBanTrucTiepComponent
   ],
   exports: [
-    MainKeHoachBanTrucTiepComponent
+    MainKeHoachBanTrucTiepComponent,
+    ThemMoiQdPheDuyetKhBanTrucTiepComponent,
   ],
   imports: [
     CommonModule,

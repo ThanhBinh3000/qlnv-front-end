@@ -662,7 +662,7 @@
                                 <tr>
                                     <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                     <td colspan="4">{{item.tenDvi}}</td>
-                                    <td>{{item.soLuong}}</td>
+                                    <td class="text-black">{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

@@ -18,7 +18,8 @@ import { saveAs } from 'file-saver';
 export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
-
+  idQdPdKh: number = 0;
+  isViewQdPdKh: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -117,4 +118,15 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayCgiaTu.getTime();
   };
+
+  openModalQdPdKh(id: number) {
+    this.idQdPdKh = id;
+    this.isViewQdPdKh = true;
+  }
+
+  closeModalQdPdKh() {
+    this.idQdPdKh = null;
+    this.isViewQdPdKh = false;
+  }
+
 }

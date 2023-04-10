@@ -55,6 +55,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       maQhns: [''],
       idQd: ['', [Validators.required]],
       soQd: ['', [Validators.required]],
+      ngayQd: [''],
       soHd: [''],
       loaiBienBan: ['', [Validators.required]],
       ngayHd: [''],
@@ -145,6 +146,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       this.formData.patchValue({
         soQd: data.soQd,
         idQd: data.id,
+        ngayQd: data.ngayTao,
         soHd: data.soHd,
         ngayHd: data.ngayHd,
         loaiVthh: data.loaiVthh,
@@ -208,7 +210,6 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      loaiBienBan: this.listBienBan[0].ma,
       soBienBan: `${id}/${this.formData.get('namKh').value}/BBLM-CCDTVP`,
       tenKtv: this.userInfo.TEN_DAY_DU,
     });
@@ -221,7 +222,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     // Loại biên bản
     await this.danhMucService.danhMucChungGetAll("LOAI_BIEN_BAN").then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listBienBan = res.data.filter(item => item.ma == 'LBGM');
+        this.listBienBan = res.data;
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);

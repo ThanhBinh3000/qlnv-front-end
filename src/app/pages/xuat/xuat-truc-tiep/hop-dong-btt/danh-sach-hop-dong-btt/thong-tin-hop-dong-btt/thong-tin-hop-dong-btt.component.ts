@@ -224,7 +224,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         loaiVthh: this.loaiVthh,
         namKh: this.formData.value.namHd,
         pthucBanTrucTiep: "Chào giá",
-        maDvi: this.userInfo.MA_DVI
+        maDvi: this.userInfo.MA_DVI,
+        // trangThaiHd: STATUS.CHUA_THUC_HIEN || STATUS.DANG_THUC_HIEN,
       };
 
       let res = await this.qdPdKetQuaBttService.search(body)
@@ -478,11 +479,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               if (x.maDviTsan) {
                 x.tenDvi = item.tenDvi
                 x.maDvi = item.maDvi
-                x.soLuong = item.soLuong
+                x.soLuongChiCuc = item.soLuongChiCuc
                 x.diaChi = item.diaChi
                 x.donGiaVat = item.donGiaVat
                 this.formData.patchValue({
-                  slUyQuyenChiCucKh: item.soLuong,
+                  slUyQuyenChiCucKh: item.soLuongChiCuc,
                 });
                 this.listDviTsan = [...this.listDviTsan, x];
               }
@@ -499,9 +500,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           if (x.maDviTsan) {
             x.tenDvi = item.tenDvi
             x.maDvi = item.maDvi
-            x.soLuong = item.soLuong
             x.diaChi = item.diaChi
             x.donGiaVat = item.donGiaVat
+            x.children.forEach(s => {
+              x.soLuongChiCuc = s.soLuong;
+            })
             this.listDviTsan = [...this.listDviTsan, x];
           }
         })

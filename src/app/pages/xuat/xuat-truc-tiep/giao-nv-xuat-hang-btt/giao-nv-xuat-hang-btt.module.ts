@@ -20,7 +20,7 @@ import { ThemMoiQdGiaoNvXuatBttComponent } from './qd-giao-nv-xuat-btt/them-moi-
     ],
     exports: [
         GiaoNvXuatHangBttComponent,
-
+        ThemMoiQdGiaoNvXuatBttComponent,
     ]
 })
 export class GiaoNvXuatHangBttModule { }
