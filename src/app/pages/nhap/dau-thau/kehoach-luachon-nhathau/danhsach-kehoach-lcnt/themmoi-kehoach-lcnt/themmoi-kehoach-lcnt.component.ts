@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { chain } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -12,11 +12,9 @@ import {
 } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
 import { API_STATUS_CODE, LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
@@ -49,6 +47,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   @Input()
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
+  @Input() soDx: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -60,10 +59,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   listDiemKho: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
-  danhMucDonVi: any;
   i = 0;
-  editId: string | null = null;
   tabSelected: string = 'thongTinChung';
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -123,7 +119,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
-      tchuanCluong: [null],
+      tchuanCluong: [null, [Validators.required]],
       tenDuAn: [null, [Validators.required]],
       loaiHdong: [null, [Validators.required]],
       hthucLcnt: [null, [Validators.required]],
@@ -163,9 +159,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
     this.loadDanhMucHang();
+    debugger
     if (this.idInput > 0) {
-      await this.getDetail(this.idInput);
+      await this.getDetail(this.idInput, null);
     } else {
+      if (this.soDx) {
+        await this.getDetail(null, this.soDx);
+      }
       this.initForm();
     }
     await Promise.all([
@@ -191,7 +191,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'NHAP_DT');
     }
@@ -238,10 +237,41 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
   }
 
-  async getDetail(id: number) {
+  async getDetail(id?: number, soDx?: string) {
+    debugger
     if (id) {
       await this.dauThauService
         .getDetail(id)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            const dataDetail = res.data;
+            this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+            this.formData.patchValue({
+              soDxuat: dataDetail.soDxuat?.split('/')[0]
+            })
+            if (dataDetail) {
+              this.fileDinhKem = dataDetail.fileDinhKems;
+              this.listOfData = dataDetail.dsGtDtlList;
+              if (dataDetail.loaiVthh != '02') {
+                this.convertListDataLuongThuc()
+              } else {
+                this.convertListData();
+              }
+              this.bindingCanCu(dataDetail.ccXdgDtlList);
+            }
+          }
+        })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    }
+    if (soDx) {
+      var body = this.formData.value
+      body.soDxuat = soDx
+      await this.dauThauService
+        .getDetailBySoDx(body)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dataDetail = res.data;
@@ -503,6 +533,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       }
       await this.luuVaGuiDuyet(isGuiDuyet);
     } else {
+      this.khoiPhucValidator()
+      this.setValidator(isGuiDuyet);
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
@@ -577,6 +609,33 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.formData.controls["tgianNhang"].setValidators([Validators.required]);
       this.formData.controls["tgianThien"].clearValidators();
     }
+  }
+
+  khoiPhucValidator() {
+    this.formData.controls["tenDvi"].setValidators([Validators.required]);
+    this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+    this.formData.controls["kieuNx"].setValidators([Validators.required]);
+    this.formData.controls["namKhoach"].setValidators([Validators.required]);
+    this.formData.controls["soQd"].setValidators([Validators.required]);
+    this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+    this.formData.controls["tenDuAn"].setValidators([Validators.required]);
+    this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
+    this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
+    this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
+    this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+    this.formData.controls["gtriDthau"].setValidators([Validators.required]);
+    this.formData.controls["gtriHdong"].setValidators([Validators.required]);
+    this.formData.controls["tongMucDt"].setValidators([Validators.required]);
+    this.formData.controls["tongMucDtDx"].setValidators([Validators.required]);
+    this.formData.controls["nguonVon"].setValidators([Validators.required]);
+    this.formData.controls["tgianNhang"].setValidators([Validators.required]);
+    this.formData.controls["tgianThien"].setValidators([Validators.required]);
+    this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
   }
 
   clearValidatorLuuDuThao() {
@@ -976,7 +1035,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
         }
       });
-    console.log(this.addModelBaoGia)
   }
 
   addBaoGia() {
@@ -1175,10 +1233,17 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       {
         tenDvi: key,
         soLuongTheoChiTieu: value[0].soLuongTheoChiTieu,
+        soLuong: null,
         soLuongDaMua: value[0].soLuongDaMua,
         dataChild: value
-      }))
-      .value()
+      })).value()
+    this.listDataGroup.forEach(item => {
+      let sluong = 0;
+      item.dataChild.forEach(i => {
+        sluong = sluong + i.soLuong
+      })
+      item.soLuong = sluong;
+    })
   }
 
   expandSet = new Set<number>();

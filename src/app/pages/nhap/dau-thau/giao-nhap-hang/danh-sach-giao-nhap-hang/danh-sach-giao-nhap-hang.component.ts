@@ -440,7 +440,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhGiaoNhapHangService.deleteMuti({ ids: dataDelete });
+            let res = await this.quyetDinhGiaoNhapHangService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

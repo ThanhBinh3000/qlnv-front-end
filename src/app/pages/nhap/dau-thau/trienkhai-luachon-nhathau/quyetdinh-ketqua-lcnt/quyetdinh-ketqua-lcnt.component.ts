@@ -24,7 +24,7 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 })
 export class QuyetdinhKetquaLcntComponent implements OnInit {
 
-  @Input() loaiVthh: String
+  @Input() loaiVthh: string
 
   constructor(
     private router: Router,

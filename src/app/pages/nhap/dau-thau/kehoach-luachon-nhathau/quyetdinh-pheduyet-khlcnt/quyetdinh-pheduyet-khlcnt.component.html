@@ -182,7 +182,9 @@
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>
-              <a style="color: blue; font-weight: bold;" (click)="openDxKhlcntModal(data.idTrHdr)">{{ data.soTrHdr}}</a>
+              <a style="color: blue; font-weight: bold;"
+                (click)="data.idTrHdr ? openDxKhlcntModal(data.idTrHdr) : openDxKhlcntModal(null, data.soTrHdr)">{{
+                data.soTrHdr}}</a>
             </td>
             <td *ngIf="userService.isTongCuc()">
               <a style="color: blue; font-weight: bold;" (click)="openTHopKhlcntModal(data.idThHdr)">{{
@@ -225,7 +227,7 @@
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->
@@ -255,7 +257,8 @@
 </nz-modal>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxKhlcnt" (nzOnCancel)="closeDxKhlcntModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-themmoi-kehoach-lcnt [isView]="true" [idInput]="idDx" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+    <app-themmoi-kehoach-lcnt [isView]="true" [idInput]="idDx" [soDx]="soDx" [loaiVthhInput]="loaiVthh"
+      [isViewOnModal]="true">
     </app-themmoi-kehoach-lcnt>
   </ng-container>
   <div *nzModalFooter>

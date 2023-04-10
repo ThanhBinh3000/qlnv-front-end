@@ -288,7 +288,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
-    console.log(this.listDataGroup)
   }
 
 
@@ -424,8 +423,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async showDetail($event, dataGoiThau: any) {
-    debugger
-    console.log($event)
     await this.spinner.show();
     this.listNthauNopHs = [];
     if ($event.type == 'click') {
@@ -508,11 +505,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   validateItemSave(dataSave, index?): boolean {
     if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
       if (dataSave.trangThai == STATUS.TRUNG_THAU) {
-        debugger
         var checkVat
-        // var checkVat = this.donGiaVatObject.donGiaVat ? this.donGiaVatObject.donGiaVat : (this.donGiaVatObject.children[0].donGiaVat ? this.donGiaVatObject.children[0].donGiaVat : (this.donGiaVatObject.children[0].children[0].donGiaVat ? this.donGiaVatObject.children[0].children[0].donGiaVat : null))
         this.listDataGroup.forEach(item => {
-          debugger
           item.dataChild.forEach(res => {
             if (this.idGoiThau == res.id) {
               checkVat = res.donGiaVat ? res.donGiaVat : res.donGiaTamTinh

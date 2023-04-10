@@ -32,6 +32,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
   listOfData: any[] = [];
+  isEditing: boolean = false;
+  editingSoLuong: any;
 
 
   constructor(
@@ -192,5 +194,22 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.convertListData();
     });
   };
+
+  onInput(event: any) {
+    const value = event;
+    this.editingSoLuong = parseInt(value.replaceAll('.', ''));
+  }
+
+  editRow(dtGoiThau: any, idx: number) {
+    this.isEditing = true;
+    this.editingSoLuong = dtGoiThau.soLuong;
+  }
+
+
+  onBlur(dtGoiThau: any) {
+    dtGoiThau.soLuong = this.editingSoLuong;
+    this.isEditing = false;
+  }
+
 
 }
