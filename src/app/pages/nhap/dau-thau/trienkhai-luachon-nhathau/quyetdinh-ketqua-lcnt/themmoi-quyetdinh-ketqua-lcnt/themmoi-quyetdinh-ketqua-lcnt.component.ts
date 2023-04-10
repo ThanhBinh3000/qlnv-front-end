@@ -34,7 +34,7 @@ import { FILETYPE } from 'src/app/constants/fileType';
 export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() loaiVthh: String;
+  @Input() loaiVthh: string;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
   @Input() isViewOnModal: boolean;
