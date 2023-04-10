@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { Base2Component } from './../../../../components/base2/base2.component';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -50,6 +51,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listVanBan: any[] = [];
   listVanBanId: any = [];
   dsBoNganh: any[] = [];
+  listAll: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -67,6 +69,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       soVanBan: ['', [Validators.required]],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
+      ngayHetHieuLuc: [''],
       soHieuQuyChuan: ['', [Validators.required]],
       apDungTai: [''],
       idVanBanThayThe: [''],
@@ -81,7 +84,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       maDvi: [''],
       ldoTuChoi: [''],
       apDungCloaiVthh: [false],
-      listTenLoaiVthh: ['']
+      listTenLoaiVthh: [''],
+      type: [''],
     });
   }
 
@@ -367,13 +371,29 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           ds = ds.flat();
           this.listOfOption = ds;
         }
+        let body = {
+        }
+        let res = await this.khCnQuyChuanKyThuat.search(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          let list = res.data.content;
+          this.listAll = list;
+        }
+        this.listOfOption = this.listOfOption.filter(f => {
+          if (f.maHangHoa === "04" || f.maHangHoa.substring(0, 2) === "01") {
+            return !this.listAll.some(s1 => s1.loaiVthh === f.maHangHoa);
+          } else {
+            return true;
+          }
+        });
+
+        console.log(this.listOfOption, "this.listOfOption");
+
       }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
 
   async changeListOfTagOptions(cloaiVtt, typeData?) {
     let lss = [];
