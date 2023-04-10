@@ -14,8 +14,8 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub xanh-nhat ml-2" (click)="banHanh(idInput)"
-              *ngIf="(idInput && idInput > 0) && (formData.value.trangThai == STATUS.DU_THAO) ">
+      <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Ban hành</span>
       </button>
