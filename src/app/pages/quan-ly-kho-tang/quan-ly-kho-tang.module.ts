@@ -121,6 +121,11 @@ import { CapNhatThongTinDauThauComponent } from './tien-do-xay-dung-sua-chua/tie
 import { ThongTinQuyetDinhPheDuyetKqlcntComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/to-chuc-trien-khai-lua-chon-nha-thau/quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt/thong-tin-quyet-dinh-phe-duyet-kqlcnt.component';
 import { HopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/hop-dong.component';
 import { ThongTinHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/thong-tin-hop-dong.component';
+import { ThemMoiHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/them-moi-hop-dong/them-moi-hop-dong.component';
+import { PhuLucHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/hop-dong/thong-tin-hop-dong/phu-luc-hop-dong/phu-luc-hop-dong.component';
+import {
+  ThemMoiThongBaoScLonComponent
+} from "./ke-hoach/ke-hoach-sua-chua-hang-nam/qd-thong-bao-sua-chua-lon/them-moi-thong-bao-sc-lon/them-moi-thong-bao-sc-lon.component";
 
 
 @NgModule({
@@ -182,6 +187,9 @@ import { ThongTinHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-da
     ThongTinQuyetDinhPheDuyetKqlcntComponent,
     HopDongComponent,
     ThongTinHopDongComponent,
+    ThemMoiHopDongComponent,
+    PhuLucHopDongComponent,
+    ThemMoiThongBaoScLonComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

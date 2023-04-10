@@ -142,7 +142,7 @@
           <td class="text-blue">{{ data.soQdPdKqlcnt }}</td>
           <td>{{ data.soGoiThau }}</td>
           <td>{{ data.soGoiThauTc }}</td>
-          <td>{{ data.soGoiThauTc }}</td>
+          <td>{{ data.soHopDongDaKy }}</td>
           <td>{{ data.chuDauTu }}</td>
           <td class="text-left">{{ data.tenTrangThaiHd }}</td>
           <td class="text-center">
@@ -180,5 +180,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-hop-dong [id]="selectedId"></app-thong-tin-hop-dong>
+  <app-them-moi-hop-dong [id]="selectedId" (showListEvent)="showList()"
+                         [isViewDetail]="isViewDetail"
+                         [idInput]="selectedId" [flagThemMoi]="'addnew'"></app-them-moi-hop-dong>
 </ng-template>
