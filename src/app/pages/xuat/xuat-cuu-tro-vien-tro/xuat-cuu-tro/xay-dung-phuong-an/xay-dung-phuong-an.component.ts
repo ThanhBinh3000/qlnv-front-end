@@ -117,7 +117,7 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
 
   disabledStartNgayKt = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayKetThucDen) {
-      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+      return startValue.getTime() > this.formData.value.ngayKetThucDen.getTime();
     }
     return false;
   };

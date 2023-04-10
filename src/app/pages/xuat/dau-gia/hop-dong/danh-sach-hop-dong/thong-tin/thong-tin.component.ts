@@ -1,19 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {saveAs} from 'file-saver';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { saveAs } from 'file-saver';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
@@ -23,11 +23,11 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {chain, cloneDeep} from 'lodash';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { chain, cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
-import {STATUS} from 'src/app/constants/status';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin',
@@ -54,7 +54,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   expandSetString = new Set<string>();
   listMaDvts = [];
   listHdDaKy = [];
-
+  listHangHoaAll: any[] = [];
+  listLoaiHangHoa: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -113,6 +114,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         loaiVthh: [''],
         cloaiVthh: [''],
         moTaHangHoa: [''],
+        donViTinh: [''],
         dviTinh: [''],
         soLuong: [''],
         tongTien: [''],
@@ -133,6 +135,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.maHopDongSuffix = `/${this.formData.value.nam}/HĐMB`;
     await Promise.all([
       this.loadDataComboBox(),
+      this.loadDsVthh(),
     ]);
 
     if (this.id) {
@@ -179,9 +182,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
     this.setValidator();
+    let data = this.formData.value;
+    data.maDviTsan = data.listMaDviTsan.join(',');
+    data.soHd = this.formData.value.soHd + this.maHopDongSuffix;
+    data.children = this.dataTable;
     if (this.formData.value.id > 0) {
-      let data = this.formData.value;
-      data.maDviTsan = data.listMaDviTsan.join(',');
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
@@ -192,7 +197,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       }
     }
 
@@ -279,6 +284,13 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       }
     });
   }
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHangHoaAll = res.data;
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    }
+  }
 
   async onChangeKqBdg(id) {
     if (id > 0) {
@@ -300,6 +312,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
               moTaHangHoa: dataThongTin.moTaHangHoa
             });
             this.listDviLquan = dataThongTin.listNguoiTgia;
+            this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == dataThongTin.loaiVthh)?.maDviTinh })
           }
         })
     }
@@ -398,21 +411,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   }
 
-  filterDataDviTsan(item) {
-    // if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-    //   let maDviFirst = this.formData.value.listMaDviTsan[0];
-    //   const data = this.listDviTsan.filter(x => {
-    //     return x.maDviTsan == maDviFirst
-    //   })[0];
-    //   if (data.toChucCaNhan == item.toChucCaNhan) {
-    //     return false
-    //   } else {
-    //     return true
-    //   }
-    // }
-    // return false
-  }
-
   selectMaDviTsan() {
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
       let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
@@ -437,15 +435,19 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     let dataView = chain(this.listMaDvts)
       .groupBy("tenChiCuc")
       .map((value, key) => {
-        let tenChiCuc = value.find(f => f.tenChiCuc === key)
+        let tenChiCuc = value.find(f => f.tenChiCuc === key);
+        let tongSl = value.reduce((prev, cur) => prev + cur.soLuong, 0);
         return {
           idVirtual: uuid.v4(),
           tenChiCuc: key,
           maDvi: tenChiCuc.maChiCuc,
-          children: value
+          children: value,
+          soLuong: tongSl,
+          donGiaVat: tenChiCuc.donGiaVat,
+          diaChi: tenChiCuc.diaChi,
         };
-
       }).value();
+
     this.dataTable = dataView
     this.expandAll()
 
