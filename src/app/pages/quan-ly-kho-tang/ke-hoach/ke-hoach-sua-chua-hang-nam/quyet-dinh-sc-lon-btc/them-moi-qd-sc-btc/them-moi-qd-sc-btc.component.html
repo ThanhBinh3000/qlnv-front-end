@@ -228,7 +228,7 @@
         <td>{{ data.giaTriTmdt | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.giaTriPd | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.luyKeKh | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.ncKhVon | number : '1.0-1' : 'vi_VN' }}</td>
+        <td *ngIf="isEdit != idx">{{ data.ncKhVon | number : '1.0-1' : 'vi_VN' }}</td>
         <td *ngIf="isEdit == idx">
           <nz-input-number [(ngModel)]="data.ncKhVon" [nzSize]="'small'"
                            [nzFormatter]="globals.formatter" [nzMin]="0"

@@ -37,7 +37,7 @@
         <nz-tab [nzTitle]="'Thông tin kho tàng'" class="bb-lay-mau__container">
           <nz-card *ngIf="levelNode != 0">
             <nz-collapse>
-              <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
+              <nz-collapse-panel nzActive="true" [nzHeader]="levelNode == 2 ? 'THÔNG TIN CỤC DTNN KV' : levelNode == 3 ? 'THÔNG TIN CHI CỤC DTNN' : levelNode == 4 ? 'THÔNG TIN ĐIỂM KHO' :  levelNode == 5 ? ' THÔNG TIN NHÀ KHO' : levelNode == 6 ? 'THÔNG TIN NGĂN KHO' : 'THÔNG TIN LÔ KHO'">
                 <div class="mg-t-10" nz *ngIf="levelNode > 3" nz-row [nzGutter]="24" >
                   <div nz-col nzSpan="12" class="text-left" *ngIf="!(this.levelNode == 7 || (this.levelNode == 6 && !detailDonVi.value.coLoKho))">
                   </div>
@@ -1597,6 +1597,7 @@
                       <th rowspan="2" *ngIf="levelNode == 3">Tên điểm kho</th>
                       <th rowspan="2" *ngIf="levelNode == 4">Tên nhà kho</th>
                       <th rowspan="2" *ngIf="levelNode == 5">Tên ngăn kho</th>
+                      <th rowspan="2" *ngIf="levelNode == 6">Tên lô kho</th>
                       <th colspan="3">Tổng tích lượng thiết kế (tấn kho)</th>
                       <th colspan="3">Tổng tích lượng đã sử dụng (tấn kho)</th>
                       <th colspan="3">Tổng tích lượng khả dụng (tấn kho)</th>

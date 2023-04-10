@@ -86,8 +86,9 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-        maDvi: this.userInfo.MA_DVI
-      })
+      maDvi: this.userInfo.MA_DVI,
+      type: "00"
+    })
     this.search();
   }
 
