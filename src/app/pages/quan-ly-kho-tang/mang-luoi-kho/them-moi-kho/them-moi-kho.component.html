@@ -734,12 +734,52 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="4" *ngIf="!formKho.value.coLoKho">
             <nz-form-item>
-              <nz-form-label>Thời điểm nhập kho (năm)</nz-form-label>
+              <nz-form-label>Loại hàng hóa</nz-form-label>
               <nz-form-control>
                 <nz-input-group>
-                  <input formControlName="namNhap" nz-input [readOnly]="true"/>
+                  <input [readonly]="true" type="text" nz-input>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="!formKho.value.coLoKho">
+            <nz-form-item>
+              <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <input [readonly]="true" type="text" nz-input>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="2" *ngIf="!formKho.value.coLoKho">
+            <nz-form-item>
+              <nz-form-label>Số lượng</nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <input nz-input [readOnly]="true"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="2" *ngIf="!formKho.value.coLoKho">
+            <nz-form-item>
+              <nz-form-label>Đơn vị tính</nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <input nz-input [readonly]="true"/>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4" *ngIf="!formKho.value.coLoKho">
+            <nz-form-item>
+              <nz-form-label>Thời điểm nhập kho</nz-form-label>
+              <nz-form-control>
+                <nz-input-group>
+                  <nz-date-picker [nzDisabled]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
