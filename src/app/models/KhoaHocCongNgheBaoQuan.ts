@@ -3,6 +3,7 @@ export class QuyChunKyThuatQuocGia {
     id: number;
     idHdr: number;
     tenChiTieu: string;
+    thuTuHt: string;
     chiTieuCha: boolean;
     maDvi: string;
     mucYeuCauNhap: string;
@@ -11,6 +12,7 @@ export class QuyChunKyThuatQuocGia {
     mucYeuCauXuat: string;
     mucYeuCauXuatToiDa: string;
     mucYeuCauXuatToiThieu: string;
+    phuongPhapXd: string;
     loaiVthh: string;
     cloaiVthh: string;
     tenLoaiVthh: string;

@@ -16,8 +16,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import dayjs from "dayjs";
 import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
-import { DialogDanhSachHangHoaComponent } from './../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { STATUS } from 'src/app/constants/status';
+
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
   templateUrl: './quan-ly-quy-chuan-ky-thuat-quoc-gia.component.html',
@@ -33,7 +33,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   dataTest: any = {};
   dsCha: any = {};
   dsCon: any = {};
-  STATUS: STATUS
+  STATUS = STATUS;
   listChungLoaiHangHoa: any[] = [];
   formData: FormGroup;
 
