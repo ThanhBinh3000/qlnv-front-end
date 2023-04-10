@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isViewOnModal">
     <div class="btn-group">
         <button type="button" class="btn btn-sub" (click)="goBack()">
             <i class="fa fa-arrow-left"></i>
@@ -196,24 +196,13 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'QDDX'">
+                        <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Thời gian giao nhận </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-date-picker formControlName="tgianGnhan" nzFormat="dd/MM/yyyy"
                                         [nzDisabled]="true">
                                     </nz-date-picker>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'HD'">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian giao nhận
-                                </nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy"
-                                        [nzDisabled]="true">
-                                    </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -285,7 +274,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{ data.soLuong }}</td>
+                                <td class="text-black">{{ data.soLuongChiCuc }}</td>
                             </tr>
                             <ng-container *ngIf="expandSet.has(i)">
                                 <tr *ngFor="let children of data.children">
@@ -299,8 +288,15 @@
                                 </tr>
                             </ng-container>
                         </ng-container>
-
                     </tbody>
+                    <tfoot>
+                        <tr *ngIf="dataTable.length > 0">
+                            <th colspan="5"></th>
+                            <th class="text-green">TỔNG SỐ</th>
+                            <th class="text-green"> {{ calcTong('soLuongChiCuc') | number : '1.0-1' : 'vi_VN' }}
+                            </th>
+                        </tr>
+                    </tfoot>
                 </nz-table>
             </nz-collapse-panel>
         </nz-collapse>

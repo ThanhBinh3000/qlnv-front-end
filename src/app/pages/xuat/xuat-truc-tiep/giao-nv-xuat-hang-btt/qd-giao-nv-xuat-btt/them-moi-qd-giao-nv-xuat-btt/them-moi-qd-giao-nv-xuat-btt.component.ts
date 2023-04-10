@@ -26,7 +26,7 @@ import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-t
 export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
-
+  @Input() isViewOnModal: boolean;
   maQd: string = null;
   dataInput: any;
   dataInputCache: any;
@@ -69,8 +69,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       donViTinh: [''],
       tgianGnhan: [''],
       thoiGianDuKien: [''],
-      tgianGnhanTu: [],
-      tgianGnhanDen: [],
       trichYeu: [''],
       trangThaiXh: [''],
       tenTrangThaiXh: [''],
@@ -176,9 +174,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
                 soLuong: data.soLuong,
                 donGia: data.donGia == null ? data.donGiaKhongVat : data.donGia,
                 donViTinh: data.dviTinh,
-                tgianGnhanTu: data.tgianGnhanTu,
-                tgianGnhanDen: data.tgianGnhanDen,
-                thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null,
                 trichYeu: data.trichYeu,
                 tenTtcn: data.tenDviMua
               })
@@ -371,5 +366,13 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     }
   }
 
-
+  calcTong(column) {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur[column];
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
 }

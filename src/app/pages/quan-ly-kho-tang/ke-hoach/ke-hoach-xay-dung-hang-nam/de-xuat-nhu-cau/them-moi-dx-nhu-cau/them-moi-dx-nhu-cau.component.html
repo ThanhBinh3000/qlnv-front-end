@@ -34,7 +34,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc()) || (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())"
+              *ngIf=" ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc())"
               (click)="save(false)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -250,13 +250,13 @@
           <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
           <td>{{ data.khoi }}</td>
           <td>{{ data.soQdPd }}</td>
-          <td>{{ data.tmdtDuKien }}</td>
-          <td>{{ data.nstwDuKien }}</td>
-          <td>{{ data.tongSoLuyKe }}</td>
-          <td>{{ data.luyKeNstw }}</td>
-          <td>{{ data.tmdtDuyet }}</td>
-          <td>{{ data.nstwDuyet }}</td>
-          <td>{{ data.vonDauTu }}</td>
+          <td class="text-right">{{ data.tmdtDuKien }}</td>
+          <td class="text-right">{{ data.nstwDuKien }}</td>
+          <td class="text-right">{{ data.tongSoLuyKe }}</td>
+          <td class="text-right">{{ data.luyKeNstw }}</td>
+          <td class="text-right">{{ data.tmdtDuyet }}</td>
+          <td class="text-right">{{ data.nstwDuyet }}</td>
+          <td class="text-right">{{ data.vonDauTu }}</td>
           <td style="text-align: center;" nzRight *ngIf="!isViewDetail">
             <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
@@ -368,13 +368,13 @@
       <td></td>
       <td></td>
       <td></td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold text-right">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
       <td nzRight></td>
       </tfoot>
 

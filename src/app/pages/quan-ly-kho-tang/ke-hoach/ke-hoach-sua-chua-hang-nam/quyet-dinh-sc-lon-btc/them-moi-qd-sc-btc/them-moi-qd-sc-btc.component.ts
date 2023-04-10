@@ -183,19 +183,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     if (id > 0) {
       let res = await this.qdScBtcService.getDetail(id);
       const data = res.data;
+      this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        id: data.id,
-        maDvi : data.maDvi,
-        tenDvi : data.tenDvi,
-        soQd: data.soQd ? data.soQd.split('/')[0] : '',
-        namKeHoach : data.namKeHoach,
-        trichYeu : data.trichYeu,
-        ngayKy : data.ngayKy,
-        trangThai : data.trangThai,
-        tenTrangThai : data.tenTrangThai,
-      });
+        soQd : data.soQd ? data.soQd.split("/")[0] : ''
+      })
       this.fileDinhKem = data.fileDinhKems
-      this.dataTable = data.ctiets;
+      this.tablePaTc = data.phuongAnTc;
+      this.dataTable = data.ctietList;
     }
   }
 

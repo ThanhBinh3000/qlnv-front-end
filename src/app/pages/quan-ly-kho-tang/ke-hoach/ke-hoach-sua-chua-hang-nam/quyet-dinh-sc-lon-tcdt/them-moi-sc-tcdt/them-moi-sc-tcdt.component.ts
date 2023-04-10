@@ -116,7 +116,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let body = this.formData.value;
     body.chiTiets = this.dataTableTc
-    body.chiTietsTh = this.dataTable
+    body.chiTietThs = this.dataTable
     body.chiTietDms = []
     let data = await this.createUpdate(body)
     if (data) {
@@ -218,7 +218,7 @@ export class ThemMoiScTcdtComponent extends Base2Component implements OnInit {
   calcTong(type, table : any[]) {
     let sum;
     if (table && table.length > 0) {
-      sum = this.dataTable.reduce((prev, cur) => {
+      sum = table.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
             prev += cur.giaTriTmdt;

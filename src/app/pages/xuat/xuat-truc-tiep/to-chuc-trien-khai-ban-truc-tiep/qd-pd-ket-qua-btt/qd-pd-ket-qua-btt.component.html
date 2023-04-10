@@ -136,7 +136,11 @@
                     <td>{{ data.soQdKq }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.tenDvi }}</td>
-                    <td class="text-blue">{{ data.soQdPd }}</td>
+                    <td>
+                        <a *ngIf="data.soQdPd && data.idPdKhHdr" nz-button nzType="link" nzBlock
+                            (click)="openModalQdPdKh(data.idPdKhHdr)">{{
+                            data.soQdPd}}</a>
+                    </td>
                     <td>{{ data.tenLoaiVthh }}</td>
                     <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.tenTrangThai }}</td>
@@ -180,3 +184,17 @@
     <app-them-qd-pd-ket-qua-btt [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
     </app-them-qd-pd-ket-qua-btt>
 </div>
+
+<!--xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdPdKh()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

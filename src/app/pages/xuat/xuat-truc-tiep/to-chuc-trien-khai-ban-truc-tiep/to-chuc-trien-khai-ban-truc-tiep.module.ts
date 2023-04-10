@@ -7,6 +7,7 @@ import { ThongTinBanTrucTiepComponent } from './thong-tin-ban-truc-tiep/thong-ti
 import { ThemMoiThongTinBanTrucTiepComponent } from './thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep/them-moi-thong-tin-ban-truc-tiep.component';
 import { QdPdKetQuaBttComponent } from './qd-pd-ket-qua-btt/qd-pd-ket-qua-btt.component';
 import { ThemQdPdKetQuaBttComponent } from './qd-pd-ket-qua-btt/them-qd-pd-ket-qua-btt/them-qd-pd-ket-qua-btt.component';
+import { KeHoachBanTrucTiepModule } from '../ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.module';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ThemQdPdKetQuaBttComponent } from './qd-pd-ket-qua-btt/them-qd-pd-ket-q
   imports: [
     CommonModule,
     ComponentsModule,
-    MainModule
+    MainModule,
+    KeHoachBanTrucTiepModule
   ]
 })
 export class ToChucTrienKhaiBanTrucTiepModule {

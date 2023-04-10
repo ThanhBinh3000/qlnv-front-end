@@ -31,6 +31,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { convertDviTinh } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -61,6 +62,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   listHopDong: any[] = [];
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
+  listDviChuDongTh: any[] = [];
+  createRowUpdate: any = {};
+  tongKphi: any;
 
 
   create: any = {};
@@ -392,25 +396,36 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
 
   addRow() {
-    // if (!this.detail?.detail) {
-    //   this.detail.detail = [];
-    // }
-    // this.sortTableId();
-    // let item = cloneDeep(this.create);
-    // item.stt = this.detail?.detail.length + 1;
-    // this.detail.detail = [
-    //   ...this.detail?.detail,
-    //   item,
-    // ]
-    this.updateEditCache();
+    debugger
+    console.log(this.create)
+    this.listDviChuDongTh = [
+      ...this.listDviChuDongTh,
+      this.create
+    ];
     this.clearItemRow();
+  }
+
+  startEdit(index: number): void {
+    this.listDviChuDongTh[index].edit = true;
+    this.createRowUpdate = cloneDeep(this.listDviChuDongTh[index]);
+  }
+
+  saveEdit(dataUpdate, index: any): void {
+    // if (this.validateItemSave(this.itemRowUpdate, index)) {
+    this.listDviChuDongTh[index] = this.createRowUpdate;
+    this.listDviChuDongTh[index].edit = false;
+    // };
+
   }
 
   clearItemRow() {
     this.create = {};
-    this.create.dvt = "Tấn";
+    // this.create.dvt = "Tấn";
   }
 
+  convertDviTinh(maDviTinh: any) {
+    return convertDviTinh(maDviTinh);
+  }
   cancelEdit(stt: number): void {
     // const index = this.detail?.detail.findIndex(item => item.stt === stt);
     // this.editDataCache[stt] = {
@@ -419,11 +434,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     // };
   }
 
-  saveEdit(stt: number): void {
-    // const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    // Object.assign(this.detail?.detail[index], this.editDataCache[stt].data);
-    // this.editDataCache[stt].edit = false;
-  }
 
   updateEditCache(): void {
     // if (this.detail?.detail && this.detail?.detail.length > 0) {
@@ -438,9 +448,32 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   caculatorSoLuong(item: any) {
     if (item) {
-      item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
-      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0);
+      item.thanhTienBq = (item?.soLuongBqDvi ?? 0) * (item?.donGiaBqDvi ?? 0);
+      item.tongGtri = parseInt(item?.thanhTienBq) + parseInt(item?.thanhTienKlDvi);
     }
+  }
+
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    this.listDviChuDongTh.forEach(item => {
+      if (item && item.length > 0) {
+        item.forEach(data => {
+          arr.push(data)
+        })
+      }
+    })
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += cur[column];
+          return prev;
+        }, 0);
+        result = sum
+      }
+    }
+    this.tongKphi = result;
+    return result;
   }
 
 

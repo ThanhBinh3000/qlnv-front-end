@@ -185,13 +185,16 @@
               <td>{{ data.tenTrangThai }}</td>
               <td>{{ data.trangThaiHl }}</td>
               <td class="text-left">
-                <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai !== '00'">
+                <a *ngIf="data.trangThai!=  userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XEM')"
+                  (click)="redirectToChiTiet(true,data.id)">
                   <i class="fa fa-eye"></i>
                 </a>
-                <a (click)="redirectToChiTiet(false,data.id)" *ngIf="(data.trangThai == '00' )">
+                <a *ngIf="(data.trangThai=='00' || data.trangThai== STATUS.TU_CHOI_LDV) 
+                && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM')" (click)="redirectToChiTiet(false,data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="xoaItem(data)" *ngIf="(data.trangThai == '00')">
+                <a *ngIf="data.trangThai==STATUS.DU_THAO
+                && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XOA')" (click)="xoaItem(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
