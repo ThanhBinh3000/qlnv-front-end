@@ -1,1 +1,84 @@
-<p>thong-tin-hop-dong works!</p>
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_KY  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThai }}
+        </span>
+        <span class="text-uppercase">Quản lý hợp đồng/ phụ lục hợp đồng</span>
+      </div>
+    </div>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Đã ký</span>
+    </button>
+    <button (click)="save()"
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
+            class="btn btn-main btn-sm waves-effect waves-light ml-2">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</div>
+<nz-card class="mt16 flex-card p-lr16 mg-t-10">
+  <div class="header header-green-background mg-t-10">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span class="text-uppercase font-weight-bold">Thông tin chung</span>
+      </div>
+    </div>
+  </div>
+  <div nz-row [nzGutter]="[24]">
+    <div nz-col nzSpan="12">
+      <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="soQdPdKhlcnt" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Tên dự án</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="tenDuAn" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+    <div nz-col nzSpan="12">
+      <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Chủ đầu tư</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="chuDauTu" readonly/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <span>{{tongMucDt | number}}</span>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</nz-card>
