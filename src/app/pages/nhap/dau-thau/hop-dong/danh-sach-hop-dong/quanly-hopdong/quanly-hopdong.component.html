@@ -220,8 +220,8 @@
                             <th>Hành động</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr *ngFor="let data of basicTable.data,let i = index">
+                    <tbody class="table-body">
+                        <tr *ngFor="let data of basicTable.data,let i = index" class="table-row">
                             <td>{{ i + 1}}</td>
                             <td>{{data.goiThau}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
