@@ -30,10 +30,8 @@
           <th rowspan="2" nzWidth="300px">Nhóm</th>
           <th rowspan="2">Tổng điều chỉnh giảm </th>
           <th rowspan="2">Tổng điều chỉnh tăng</th>
-          <!-- <th rowspan="2">Tổng cộng</th> -->
-
-          <th colspan="{{lstDvi.length}}" >Danh sách đơn vị</th>
-          <th rowspan="2" colspan="3" [hidden]="status"></th>
+          <th colspan="{{lstDvi.length}}">Danh sách đơn vị</th>
+          <!-- <th rowspan="2" colspan="3" [hidden]="status"></th> -->
         </tr>
         <tr>
           <th *ngFor="let item of lstDvi">
@@ -41,29 +39,22 @@
           </th>
         </tr>
       </thead>
-      <!-- <tbody>
-          <tr *ngFor="let data of lstCtietBcao; let i = index">
-            <td [nzIndentSize]="data.level! * 8">
-              {{getChiMuc(data.stt)}}
-            </td>
-            <td>
-              <div *ngFor="let item of noiDungs">
-                <div *ngIf="item.ma ==data.maNoiDung">
-                  {{item.tenDm}}
-                </div>
-              </div>
-            </td>
-            <td>{{displayValue(data.tongCong)}}</td>
-            <td *ngFor="let item of lstDvi">
-              <div *ngFor="let e of data.lstCtietDvis;">
-                <div *ngIf="e.maDviNhan == item.maDvi">
-                  {{displayValue(e.soTranChi)}}
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody> -->
       <tbody>
+        <tr>
+          <td class="text-center"></td>
+          <td>Tổng cộng</td>
+          <td>{{displayValue(total.tongDchinhGiam)}}</td>
+          <td>{{displayValue(total.tongDchinhTang)}}</td>
+          <td *ngFor="let item of lstDvi">
+            <div *ngFor="let data of lstCtietBcao">
+              <div *ngFor="let e of data.child;">
+                <div *ngIf="e.maDviBcao == item.maDvi">
+                  <!-- {{displayValue(e.dtoanVuTvqtDnghi)}} -->
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
         <tr *ngFor="let data of lstCtietBcao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
             <td [nzIndentSize]="data.level! * 8">
@@ -85,11 +76,11 @@
                 </div>
               </div>
             </td>
-            <td [hidden]="status">
+            <!-- <td [hidden]="status">
               <ng-container *ngIf="!getLowStatus(data.stt)">
                 <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </ng-container>
-            </td>
+            </td> -->
           </ng-container>
           <ng-template #editTemplate>
             <td [nzIndentSize]="data.level * 8">
@@ -117,10 +108,7 @@
                 </div>
               </div>
             </td>
-            <!-- <td [hidden]="status">
-                <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-              </td> -->
-            <td>
+            <!-- <td>
               <a (click)="saveEdit(data.id)" class="save">Lưu</a>
             </td>
             <td [hidden]="status">
@@ -128,11 +116,7 @@
                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
                 Hủy
               </a>
-            </td>
-            <!-- <td [hidden]="status">
-                <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                  (ngModelChange)="updateChecked(data.id)"></label>
-              </td> -->
+            </td> -->
           </ng-template>
         </tr>
       </tbody>

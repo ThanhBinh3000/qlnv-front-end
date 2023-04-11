@@ -11,7 +11,7 @@ import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
@@ -63,6 +63,7 @@ export class PhuLucTongHopComponent implements OnInit {
   formDetail: any;
   isSynthetic: any;
   amount = AMOUNT;
+  total: ItemData = new ItemData();
   constructor(
     private modal: NzModalService,
     private _modalRef: NzModalRef,
@@ -91,8 +92,6 @@ export class PhuLucTongHopComponent implements OnInit {
       (data) => {
         if (data.statusCode === 0) {
           this.donVis = data?.data;
-          console.log(this.donVis);
-          
           this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
@@ -195,7 +194,8 @@ export class PhuLucTongHopComponent implements OnInit {
 
     // console.log(lstCtietTemp);
 
-    this.tinhTong()
+    this.tinhTong();
+    this.getTotal();
     this.getStatusButton();
     this.updateEditCache();
     this.spinner.hide();
@@ -258,7 +258,7 @@ export class PhuLucTongHopComponent implements OnInit {
       child: data,
     }
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    // this.sum(this.lstCtietBcao[index].stt);
+    this.sum(this.lstCtietBcao[index].stt);
     this.updateEditCache();
   }
 
@@ -490,6 +490,24 @@ export class PhuLucTongHopComponent implements OnInit {
     // this.getTotal()
   };
 
+  getTotal() {
+    debugger
+    this.total = new ItemData();
+    this.lstCtietBcao.forEach(item => {
+      const level = item.stt.split('.').length - 2;
+      if (level == 0) {
+        this.total.tongDchinhGiam = sumNumber([this.total.tongDchinhGiam, item.tongDchinhGiam]);
+        this.total.tongDchinhTang = sumNumber([this.total.tongDchinhTang, item.tongDchinhTang]);
+        // this.total.tong = sumNumber([this.total.tong, item.tong]);
+        // this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
+        // this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
+        // this.total.tongDtoanTrongNam = sumNumber([this.total.tongDtoanTrongNam, item.tongDtoanTrongNam]);
+        // this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
+        // this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
+      }
+    })
+  };
+
   tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -527,4 +545,6 @@ export class PhuLucTongHopComponent implements OnInit {
       })
     })
   };
+
+
 }

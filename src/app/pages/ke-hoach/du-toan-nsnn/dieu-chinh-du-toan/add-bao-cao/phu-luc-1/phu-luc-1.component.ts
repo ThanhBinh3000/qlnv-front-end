@@ -124,30 +124,21 @@ export class PhuLuc1Component implements OnInit {
     }
 
     if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+      console.log(this.dataInfo?.extraData);
       this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
       this.dataInfo.extraData.forEach(item => {
         if (item.maNdung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNdung);
-          // this.lstCtietBcao[index].namKh = item.namKh;
-          // this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
-
-          this.lstCtietBcao[index].dtoanKphiNamTruoc = item.dtoanKphiNamTruoc;
-          this.lstCtietBcao[index].dtoanKphiNamNay = item.dtoanKphiNamNay;
-          this.lstCtietBcao[index].tong = item.tong;
-          // this.lstCtietBcao[index].dtoanDaThien = item.dtoanDaThien;
-          // this.lstCtietBcao[index].dtoanUocThien = item.dtoanUocThien;
-          this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam;
+          this.lstCtietBcao[index].dtoanKphiNamTruoc = item?.dtoanKphiNamTruoc ? item?.dtoanKphiNamTruoc : 0;
+          this.lstCtietBcao[index].dtoanKphiNamNay = item?.dtoanKphiNamNay ? item?.dtoanKphiNamNay : 0;
+          this.lstCtietBcao[index].tong = item?.tong? item?.tong : 0;
+          this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
           if(item?.dtoanDnghiDchinh){
-            this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh;
+            this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
           }else{
             this.lstCtietBcao[index].dtoanDnghiDchinh = 0;
-
           }
-          this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi;
-          // this.lstCtietBcao[index].tongDchinhTang = item.tongDchinhTang;
-          // this.lstCtietBcao[index].tongDchinhGiam = item.tongDchinhGiam;
-          // this.lstCtietBcao[index].tongDchinhTaiDvi = item.tongDchinhTaiDvi;
-
+          this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0;
         } else {
           this.lstCtietBcao.push({
             ...new ItemData(),

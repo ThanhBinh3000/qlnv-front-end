@@ -52,7 +52,7 @@
             <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="2">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
             <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
-            <th nzWidth="50px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
+            <th nzWidth="50px" rowspan="2" *ngIf="!status || editAppraisalValue"></th>
           </tr>
           <tr>
             <th>Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo </th>
@@ -80,7 +80,7 @@
             <th *ngIf="viewAppraisalValue">11</th>
             <th>12</th>
             <th [hidden]="status"></th>
-            <th [hidden]="status && !editAppraisalValue"></th>
+            <th *ngIf="!status || editAppraisalValue"></th>
           </tr>
         </thead>
         <tbody>
@@ -102,7 +102,7 @@
             <td *ngIf="viewAppraisalValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td>{{displayValue(total.dtoanPhiBquanThieu)}}</td>
             <td [hidden]="status"></td>
-            <td [hidden]="status && !editAppraisalValue"></td>
+            <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr>
             <td [hidden]="status"></td>
@@ -122,7 +122,7 @@
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
             <td [hidden]="status"></td>
-            <td [hidden]="status && !editAppraisalValue"></td>
+            <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr>
             <td [hidden]="status"></td>
@@ -142,7 +142,7 @@
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
             <td [hidden]="status"></td>
-            <td [hidden]="status && !editAppraisalValue"></td>
+            <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
@@ -176,7 +176,7 @@
               <td [hidden]="status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status && !editAppraisalValue">
+              <td *ngIf="!status || editAppraisalValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
 
@@ -262,7 +262,7 @@
               <td [hidden]="status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status && !editAppraisalValue">
+              <td *ngIf="!status || editAppraisalValue">
                 <a class="save" (click)="saveEdit(editCache[data.id].data.id)" style="margin-right:15px">Lưu</a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                   (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>

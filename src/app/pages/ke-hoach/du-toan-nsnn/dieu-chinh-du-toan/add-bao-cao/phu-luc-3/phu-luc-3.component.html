@@ -46,7 +46,7 @@
             <th rowSpan="2" *ngIf="viewRecommendedValue" >Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="2" [hidden]="status">
             </th>
-            <th rowSpan="2" [hidden]="status && !editRecommendedValue">
+            <th rowSpan="2"  *ngIf="!status || editRecommendedValue">
             </th>
           </tr>
           <tr>
@@ -66,7 +66,7 @@
             <th>6 = 1 - 4</th>
             <th *ngIf="viewRecommendedValue">7</th>
             <th [hidden]="status"></th>
-            <th [hidden]="status && !editRecommendedValue"></th>
+            <th  *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
         <tbody>
@@ -95,7 +95,7 @@
               <td [hidden]="status">
                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status && !editRecommendedValue">
+              <td  *ngIf="!status || editRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
             </ng-container>
