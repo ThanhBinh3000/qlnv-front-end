@@ -128,6 +128,13 @@ export class HangComponent implements OnInit {
         }
 
         this.sortReport();
+        if (this.formDetail.trangThai == '3') {
+            this.lstCtietBcao.forEach(item => {
+                if (item.level == 0) {
+                    this.sum(item.stt + '.1');
+                }
+            })
+        }
 
         this.getTotal();
         this.updateEditCache();
@@ -349,7 +356,7 @@ export class HangComponent implements OnInit {
             this.lstCtietBcao[index].giaTri = null;
             this.lstCtietBcao.forEach(item => {
                 if (getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].soLuong = sumNumber([this.lstCtietBcao[index].soLuong, item.soLuong]);
+                    // this.lstCtietBcao[index].soLuong = sumNumber([this.lstCtietBcao[index].soLuong, item.soLuong]);
                     this.lstCtietBcao[index].giaTri = sumNumber([this.lstCtietBcao[index].giaTri, item.giaTri]);
                 }
             })
