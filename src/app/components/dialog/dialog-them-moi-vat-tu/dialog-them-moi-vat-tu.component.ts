@@ -173,10 +173,16 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   formDataPatchValue() {
+    if (this.dataEdit.length > 0) {
+      this.formData.patchValue({
+        goiThau: this.dataEdit[0].goiThau,
+        donGiaVat: this.dataEdit[0].donGiaVat,
+        donGiaTamTinh: this.dataEdit[0].donGiaTamTinh,
+        soLuongChiTieu: this.dataEdit[0].soLuongChiTieu,
+        soLuongDaMua: this.dataEdit[0].soLuongDaMua,
+      })
+    }
     this.formData.patchValue({
-      goiThau: this.dataEdit[0].goiThau,
-      donGiaVat: this.dataEdit[0].donGiaVat,
-      donGiaTamTinh: this.dataEdit[0].donGiaTamTinh,
       tenCloaiVthh: this.tenCloaiVthh
     })
     this.formattedDonGiaVat = this.formData.get('donGiaVat') ? formatNumber(this.formData.get('donGiaVat').value, 'vi_VN', '1.0-1') : '';
@@ -342,7 +348,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   }
 
   validateSlChiCuc(i) {
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongDaMua
+    const soLuongConLai = this.listOfData[i].soLuongTheoChiTieu - this.listOfData[i].soLuongDaMua
     let soLuong = 0
     this.listOfData[i].children.forEach(item => {
       soLuong = soLuong + item.soLuong
