@@ -32,6 +32,8 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { convertDviTinh } from 'src/app/shared/commonFunction';
+import { DanhMucCongCuDungCuService } from 'src/app/services/danh-muc-cong-cu-dung-cu.service';
+import { convertMaCcdc } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -65,6 +67,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   listDviChuDongTh: any[] = [];
   createRowUpdate: any = {};
   tongKphi: any;
+  listCcdc: any = [];
 
 
   create: any = {};
@@ -79,6 +82,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
+    private danhMucDinhMucCcdcService: DanhMucCongCuDungCuService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyNghiemThuKeLotService);
@@ -150,7 +154,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       await Promise.all([
         this.loadDataComboBox(),
         this.loadSoQuyetDinh(),
-        this.loadDonViTinh()
+        this.loadDonViTinh(),
+        this.loadListCcdc(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -355,6 +360,16 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listDviChuDongTh = res.data.children;
+          if (this.listDviChuDongTh) {
+            if (this.listDviChuDongTh && this.listDviChuDongTh.length > 0) {
+              for (let i = 0; i < this.listDviChuDongTh.length; i++) {
+                this.listDviChuDongTh[i].stt = i + 1;
+              }
+            }
+          }
+          else {
+            this.listDviChuDongTh[0] = { id: null, stt: 0 };
+          }
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
@@ -387,17 +402,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   deleteRow(data: any) {
-    // this.detail.detail = this.detail?.detail.filter(x => x.stt != data.stt);
+    this.create = this.listDviChuDongTh.filter(x => x.stt != data.stt);
     this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
   }
 
 
   addRow() {
-    debugger
     console.log(this.create)
     this.listDviChuDongTh = [
       ...this.listDviChuDongTh,
@@ -412,23 +422,20 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   saveEdit(dataUpdate, index: any): void {
-    // if (this.validateItemSave(this.itemRowUpdate, index)) {
     this.listDviChuDongTh[index] = this.createRowUpdate;
     this.listDviChuDongTh[index].edit = false;
-    // };
-
   }
 
   clearItemRow() {
     this.create = {};
-    // this.create.dvt = "Tấn";
   }
 
   convertDviTinh(maDviTinh: any) {
     return convertDviTinh(maDviTinh);
   }
   cancelEdit(stt: number): void {
-    // const index = this.detail?.detail.findIndex(item => item.stt === stt);
+    const index = this.listDviChuDongTh.findIndex(item => item.stt === stt);
+    this.listDviChuDongTh[index].edit = false;
     // this.editDataCache[stt] = {
     //   data: { ...this.detail?.detail[index] },
     //   edit: false
@@ -437,14 +444,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
 
   updateEditCache(): void {
-    // if (this.detail?.detail && this.detail?.detail.length > 0) {
-    //   this.detail?.detail.forEach((item) => {
-    //     this.editDataCache[item.stt] = {
-    //       edit: false,
-    //       data: { ...item },
-    //     };
-    //   });
-    // }
+    if (this.create && this.create.length > 0) {
+      this.listDviChuDongTh = [];
+      this.create.forEach((item) => {
+        this.listDviChuDongTh.push(item)
+      });
+    }
   }
 
   caculatorSoLuong(item: any) {
@@ -458,7 +463,6 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     let result = 0;
     let arr = [];
     this.listDviChuDongTh.forEach(item => {
-      debugger
       if (item) {
         arr.push(item)
       }
@@ -474,6 +478,20 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     }
     this.tongKphi = result;
     return result;
+  }
+
+  sumslTn(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    this.listDviChuDongTh.forEach(item => {
+      if (item) {
+        result += item.soLuongTn
+      }
+    })
+    return result;
+  }
+
+  convertSoToChu(tien: number) {
+    return convertTienTobangChu(tien);
   }
 
 
@@ -770,5 +788,39 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   print() {
 
+  }
+
+  changeCcdc(): void {
+    let item;
+    item = this.listCcdc.filter(item => item.maCcdc == this.create.noiDung)[0];
+    if (item) {
+      this.create.dvt = item.donViTinh;
+    }
+  }
+
+  async loadListCcdc() {
+    this.listCcdc = [];
+    let body = {
+      trangThai: '01',
+      paggingReq: {
+        limit: 10000,
+        page: 0,
+      }
+    };
+    let res = await this.danhMucDinhMucCcdcService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content && res.data.content.length > 0) {
+        for (let item of res.data.content) {
+          this.listCcdc.push(item);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    console.log(this.listCcdc)
+  };
+
+  convertMaCcdc(maCcdc: string) {
+    return convertMaCcdc(maCcdc);
   }
 }
