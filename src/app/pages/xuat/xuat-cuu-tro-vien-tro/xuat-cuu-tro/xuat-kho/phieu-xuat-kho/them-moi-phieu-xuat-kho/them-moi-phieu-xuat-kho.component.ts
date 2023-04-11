@@ -23,7 +23,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./them-moi-phieu-xuat-kho.component.scss']
 })
 export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -167,6 +167,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -249,6 +250,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
+        loaiVthh: this.loaiVthh
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content;

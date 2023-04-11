@@ -24,7 +24,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./them-moi-bien-ban-tinh-kho.component.scss']
 })
 export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -162,6 +162,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -252,10 +253,11 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
         type: "XUAT_CTVT",
+        loaiVthh: this.loaVthh
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
-      this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
+      this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
         s.slXuat = s.thucXuat;
