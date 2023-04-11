@@ -693,7 +693,6 @@ export class AddBaoCaoComponent implements OnInit {
         if (isSynthetic == false) {
           if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) || Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao)) {
             dataInfo.extraData = [];
-
             const data2 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl02');
             let dtoanKphiNamTruoc2 = 0;
             let dtoanKphiNamNay2 = 0;
@@ -707,18 +706,16 @@ export class AddBaoCaoComponent implements OnInit {
                 tong2 += Number(item?.tongCongDtoan);
                 tongDtoanTrongNam2 += Number(item?.thanhTienTh);
                 dtoanDnghiDchinh2 += Number(item?.dieuChinhDtoan);
-
-                dataInfo.extraData.push({
-                  stt: "0.1.1.4.1",
-                  maNdung: '0.1.1.4.1',
-                  dtoanKphiNamTruoc: dtoanKphiNamTruoc2,
-                  dtoanKphiNamNay: dtoanKphiNamNay2,
-                  tong: tong2,
-                  tongDtoanTrongNam: tongDtoanTrongNam2,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh2,
-                  dtoanVuTvqtDnghi: 0,
-                })
-
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.4.1",
+                maNdung: '0.1.1.4.1',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc2,
+                dtoanKphiNamNay: dtoanKphiNamNay2,
+                tong: tong2,
+                tongDtoanTrongNam: tongDtoanTrongNam2,
+                dtoanDnghiDchinh: dtoanDnghiDchinh2,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -735,18 +732,16 @@ export class AddBaoCaoComponent implements OnInit {
                 tong3 += Number(item?.dtoanKphiCong);
                 tongDtoanTrongNam3 += Number(item?.ncauKphi);
                 dtoanDnghiDchinh3 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
-
-                dataInfo.extraData.push({
-                  stt: "0.2.1.2",
-                  maNdung: '0.2.1.2',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay3,
-                  tong: tong3,
-                  tongDtoanTrongNam: tongDtoanTrongNam3,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh3,
-                  dtoanVuTvqtDnghi: 0,
-                })
-
+              })
+              dataInfo.extraData.push({
+                stt: "0.2.1.2",
+                maNdung: '0.2.1.2',
+                dtoanKphiNamTruoc: 0,
+                dtoanKphiNamNay: dtoanKphiNamNay3,
+                tong: tong3,
+                tongDtoanTrongNam: tongDtoanTrongNam3,
+                dtoanDnghiDchinh: dtoanDnghiDchinh3,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -764,16 +759,16 @@ export class AddBaoCaoComponent implements OnInit {
                   tongDtoanTrongNam4 += Number(item?.khoachSauDchinh);
                   dtoanDnghiDchinh4 += Number(item?.dtoanDchinhDnghiLanNay ? item?.dtoanDchinhDnghiLanNay : 0);
                 }
-                dataInfo.extraData.push({
-                  stt: "0.1.1.3",
-                  maNdung: '0.1.1.3',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay4,
-                  tong: tong4,
-                  tongDtoanTrongNam: tongDtoanTrongNam4,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh4,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.3",
+                maNdung: '0.1.1.3',
+                dtoanKphiNamTruoc: 0,
+                dtoanKphiNamNay: dtoanKphiNamNay4,
+                tong: tong4,
+                tongDtoanTrongNam: tongDtoanTrongNam4,
+                dtoanDnghiDchinh: dtoanDnghiDchinh4,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -791,16 +786,16 @@ export class AddBaoCaoComponent implements OnInit {
                   tongDtoanTrongNam5 += Number(item?.thanhTien);
                   dtoanDnghiDchinh5 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
                 }
-                dataInfo.extraData.push({
-                  stt: "0.1.1.2.2",
-                  maNdung: '0.1.1.2.2',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay5,
-                  tong: tong5,
-                  tongDtoanTrongNam: tongDtoanTrongNam5,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh5,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.2.2",
+                maNdung: '0.1.1.2.2',
+                dtoanKphiNamTruoc: 0,
+                dtoanKphiNamNay: dtoanKphiNamNay5,
+                tong: tong5,
+                tongDtoanTrongNam: tongDtoanTrongNam5,
+                dtoanDnghiDchinh: dtoanDnghiDchinh5,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -818,16 +813,16 @@ export class AddBaoCaoComponent implements OnInit {
                   tongDtoanTrongNam6 += Number(item?.sluongThienTtien);
                   dtoanDnghiDchinh6 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
                 }
-                dataInfo.extraData.push({
-                  stt: "0.1.1.2.3",
-                  maNdung: '0.1.1.2.3',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay6,
-                  tong: tong6,
-                  tongDtoanTrongNam: tongDtoanTrongNam6,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh6,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.2.3",
+                maNdung: '0.1.1.2.3',
+                dtoanKphiNamTruoc: 0,
+                dtoanKphiNamNay: dtoanKphiNamNay6,
+                tong: tong6,
+                tongDtoanTrongNam: tongDtoanTrongNam6,
+                dtoanDnghiDchinh: dtoanDnghiDchinh6,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -843,17 +838,16 @@ export class AddBaoCaoComponent implements OnInit {
                 tong7 += Number(item?.dtoanLkeDaGiao);
                 tongDtoanTrongNam7 += Number(item?.ncauDtoan);
                 dtoanDnghiDchinh7 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
-
-                dataInfo.extraData.push({
-                  stt: "0.1.1.2.4",
-                  maNdung: '0.1.1.2.4',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay7,
-                  tong: tong7,
-                  tongDtoanTrongNam: tongDtoanTrongNam7,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh7,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.2.4",
+                maNdung: '0.1.1.2.4',
+                dtoanKphiNamTruoc: 0,
+                dtoanKphiNamNay: dtoanKphiNamNay7,
+                tong: tong7,
+                tongDtoanTrongNam: tongDtoanTrongNam7,
+                dtoanDnghiDchinh: dtoanDnghiDchinh7,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -873,16 +867,16 @@ export class AddBaoCaoComponent implements OnInit {
                   tongDtoanTrongNam8 += item.tongNcauDtoan;
                   dtoanDnghiDchinh8 += Number(item?.dtoanDchinhDnghi ? item?.dtoanDchinhDnghi : 0);
                 }
-                dataInfo.extraData.push({
-                  stt: "0.1.1.2.1",
-                  maNdung: '0.1.1.2.1',
-                  dtoanKphiNamTruoc: dtoanKphiNamTruoc8,
-                  dtoanKphiNamNay: dtoanKphiNamNay8,
-                  tong: tong8,
-                  tongDtoanTrongNam: tongDtoanTrongNam8,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh8,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.1.1.2.1",
+                maNdung: '0.1.1.2.1',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc8,
+                dtoanKphiNamNay: dtoanKphiNamNay8,
+                tong: tong8,
+                tongDtoanTrongNam: tongDtoanTrongNam8,
+                dtoanDnghiDchinh: dtoanDnghiDchinh8,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 
@@ -902,16 +896,16 @@ export class AddBaoCaoComponent implements OnInit {
                   tongDtoanTrongNam9 += Number(item?.tongNcauTluong);
                   dtoanDnghiDchinh9 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
                 }
-                dataInfo.extraData.push({
-                  stt: "0.2.1.1",
-                  maNdung: '0.2.1.1',
-                  dtoanKphiNamTruoc: dtoanKphiNamTruoc9,
-                  dtoanKphiNamNay: dtoanKphiNamNay9,
-                  tong: tong9,
-                  tongDtoanTrongNam: tongDtoanTrongNam9,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh9,
-                  dtoanVuTvqtDnghi: 0,
-                })
+              })
+              dataInfo.extraData.push({
+                stt: "0.2.1.1",
+                maNdung: '0.2.1.1',
+                dtoanKphiNamTruoc: dtoanKphiNamTruoc9,
+                dtoanKphiNamNay: dtoanKphiNamNay9,
+                tong: tong9,
+                tongDtoanTrongNam: tongDtoanTrongNam9,
+                dtoanDnghiDchinh: dtoanDnghiDchinh9,
+                dtoanVuTvqtDnghi: 0,
               })
             }
 

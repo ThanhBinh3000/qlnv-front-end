@@ -45,7 +45,7 @@
             <th rowSpan="2">Tổng nhu cầu dự toán trong năm</th>
             <th rowSpan="2">Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)</th>
             <th rowSpan="2" *ngIf="viewRecommendedValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
-            <th rowSpan="2" [hidden]="status && !viewRecommendedValue"></th>
+            <th rowSpan="2" *ngIf="!status || editRecommendedValue"></th>
           </tr>
           <tr>
             <th>Dự toán năm trước chuyển sang được cho phép sử dụng cho năm nay</th>
@@ -61,7 +61,7 @@
             <th>4</th>
             <th>5 = 4 - 3</th>
             <th *ngIf="viewRecommendedValue">6</th>
-            <th [hidden]="status && !viewRecommendedValue"></th>
+            <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
         <tbody>
@@ -71,12 +71,10 @@
             <td>{{displayValue(total.dtoanKphiNamTruoc)}}</td>
             <td>{{displayValue(total.dtoanKphiNamNay)}}</td>
             <td>{{displayValue(total.tong)}}</td>
-            <!-- <td>{{displayValue(total.dtoanDaThien)}}</td>
-            <td>{{displayValue(total.dtoanUocThien)}}</td> -->
             <td>{{displayValue(total.tongDtoanTrongNam)}}</td>
             <td>{{displayValue(total.dtoanDnghiDchinh)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
-            <td [hidden]="status && !viewRecommendedValue"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
             <td class="text-center"></td>
@@ -85,11 +83,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <!-- <td></td>
-            <td></td> -->
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
-            <td [hidden]="status && !viewRecommendedValue"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
             <td class="text-center"></td>
@@ -98,11 +94,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <!-- <td></td>
-            <td></td> -->
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
-            <td [hidden]="status && !viewRecommendedValue"></td>
+            <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
@@ -120,7 +114,7 @@
               <td>{{ displayValue(data.tongDtoanTrongNam) }}</td>
               <td>{{ displayValue(data.dtoanDnghiDchinh) }}</td>
               <td *ngIf="viewRecommendedValue">{{ displayValue(data.dtoanVuTvqtDnghi) }}</td>
-              <td [hidden]="status && !viewRecommendedValue">
+              <td *ngIf="!status || editRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
             </ng-container>
@@ -135,8 +129,6 @@
                 <td>{{ displayValue(editCache[data.id].data.dtoanKphiNamTruoc) }}</td>
                 <td>{{ displayValue(editCache[data.id].data.dtoanKphiNamNay) }}</td>
                 <td>{{ displayValue(editCache[data.id].data.tong) }}</td>
-                <!-- <td>{{ displayValue(editCache[data.id].data.dtoanDaThien) }}</td>
-                <td>{{ displayValue(editCache[data.id].data.dtoanUocThien) }}</td> -->
                 <td>{{ displayValue(editCache[data.id].data.tongDtoanTrongNam) }}</td>
                 <td>{{ displayValue(editCache[data.id].data.dtoanDnghiDchinh) }}</td>
                 <td>
@@ -154,23 +146,11 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>{{ displayValue(editCache[data.id].data.tong) }}</td>
-                <!-- <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDaThien"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td>
                 <td>
-                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanUocThien"
-                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
-                </td> -->
-                <td>
-                  <!-- {{ displayValue(editCache[data.id].data.tongDtoanTrongNam) }} -->
-
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.tongDtoanTrongNam"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                  <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanDnghiDchinh"
-                    [options]="amount" /> -->
                   {{ displayValue(editCache[data.id].data.dtoanDnghiDchinh) }}
                 </td>
                 <td *ngIf="viewRecommendedValue">

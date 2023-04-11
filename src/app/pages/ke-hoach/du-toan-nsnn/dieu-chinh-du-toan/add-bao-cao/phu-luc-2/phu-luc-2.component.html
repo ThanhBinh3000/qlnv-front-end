@@ -51,7 +51,7 @@
                         <th rowSpan="2" *ngIf="viewRecommendedValue">Dự toán vụ TVQT đề nghị (+ tăng) (- giảm)</th>
                         <th rowSpan="2">Kinh phí thiếu năm {{namBcao - 1}}</th>
                         <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
-                        <th nzWidth="50px" rowspan="2" [hidden]="status && !editRecommendedValue"></th>
+                        <th nzWidth="50px" rowspan="2"  *ngIf="!status || editRecommendedValue"></th>
                     </tr>
                     <tr>
                         <th>Số lượng đã thực hiện theo quyết định phê duyệt đến thời điểm báo cáo</th>
@@ -81,7 +81,7 @@
                         <th *ngIf="viewRecommendedValue">11</th>
                         <th>12</th>
                         <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
-                        <th nzWidth="50px" rowspan="2" [hidden]="status && !editRecommendedValue"></th>
+                        <th nzWidth="50px" rowspan="2"  *ngIf="!status || editRecommendedValue"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +103,7 @@
                         <td *ngIf="viewRecommendedValue">{{displayValue(total.vuTvqtDnghiDtoan)}}</td>
                         <td>{{displayValue(total.kphiConThieu)}}</td>
                         <td [hidden]="status"></td>
-                        <td [hidden]="status && !editRecommendedValue"></td>
+                        <td  *ngIf="!status || editRecommendedValue"></td>
                     </tr>
                     <tr>
                         <td [hidden]="status"></td>
@@ -123,7 +123,7 @@
                         <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
                         <td></td>
                         <td [hidden]="status"></td>
-                        <td [hidden]="status && !editRecommendedValue"></td>
+                        <td  *ngIf="!status || editRecommendedValue"></td>
                     </tr>
                     <tr>
                         <td [hidden]="status"></td>
@@ -143,7 +143,7 @@
                         <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
                         <td></td>
                         <td [hidden]="status"></td>
-                        <td [hidden]="status && !editRecommendedValue"></td>
+                        <td  *ngIf="!status || editRecommendedValue"></td>
                     </tr>
                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
@@ -176,7 +176,7 @@
                             <td [hidden]="status">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
-                            <td [hidden]="status && !editRecommendedValue">
+                            <td  *ngIf="!status || editRecommendedValue">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
                         </ng-container>
