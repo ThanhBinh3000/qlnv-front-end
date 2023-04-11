@@ -229,10 +229,10 @@
         </thead>
         <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <th width="45px">
+          <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != STATUS.DU_THAO || !isOwner(data.maDvi)"></label>
-          </th>
+          </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
           <td>{{ data.loaiNhapXuat }}</td>
