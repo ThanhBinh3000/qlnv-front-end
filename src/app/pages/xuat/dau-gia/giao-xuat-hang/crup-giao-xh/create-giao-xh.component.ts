@@ -18,9 +18,7 @@ import {
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { DANH_MUC_LEVEL } from "src/app/pages/luu-kho/luu-kho.constant";
 import { DonviService } from "src/app/services/donvi.service";
-import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 
@@ -33,6 +31,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() isDetail;
+  @Input() isViewOnModal: boolean;
 
   maQd: string = null;
   dataInput: any;

@@ -10,6 +10,7 @@ import { TableBienBanLayMauComponent } from './bien-ban-lay-mau/table-bien-ban-l
 import { CreateBienBanLayMauComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { GiaoXuatHangModule } from '../giao-xuat-hang/giao-xuat-hang.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl
     ThemMoiPhieuKiemNghiemChatLuongComponent,
   ],
   imports: [
+    GiaoXuatHangModule,
     CommonModule,
     ComponentsModule,
     DirectivesModule,
