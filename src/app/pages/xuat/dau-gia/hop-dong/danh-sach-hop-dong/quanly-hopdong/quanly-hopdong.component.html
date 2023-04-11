@@ -197,7 +197,7 @@
                                 <td>{{data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
                                 <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td></td>
+                                <td>{{data.soQdGnv}}</td>
                                 <td>{{data.tenTrangThai}}</td>
                                 <td>
                                     <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()"
