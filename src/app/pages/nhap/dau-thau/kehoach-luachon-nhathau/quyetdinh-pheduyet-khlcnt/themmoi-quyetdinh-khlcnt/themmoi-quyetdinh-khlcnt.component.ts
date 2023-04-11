@@ -198,7 +198,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           text: dayjs().get('year') + i,
         });
       }
-      debugger
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -292,7 +291,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (resTh.msg == MESSAGE.SUCCESS) {
       this.listDanhSachTongHop = resTh.data.content;
     }
-
+    await this.spinner.hide();
   }
 
   async save(isGuiDuyet?) {
@@ -314,13 +313,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.fileDinhKems = this.listFileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
-      debugger
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
     } else {
-      debugger
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.create(body);
     }
-    debugger
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         this.idInput = res.data.id;
@@ -445,7 +441,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
-    debugger
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
       this.listToTrinh = [];
@@ -647,7 +642,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   index = 0;
   async showDetail($event, index) {
-    debugger
     await this.spinner.show();
     if ($event.type == 'click') {
       this.selected = false
