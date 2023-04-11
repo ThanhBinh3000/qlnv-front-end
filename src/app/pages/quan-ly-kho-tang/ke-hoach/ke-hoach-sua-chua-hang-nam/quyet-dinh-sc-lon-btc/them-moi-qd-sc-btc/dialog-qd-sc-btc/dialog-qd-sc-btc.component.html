@@ -5,6 +5,7 @@
       <th [width]="35">STT</th>
       <th *ngIf="type=='02'">Số đề xuất </th>
       <th *ngIf="type=='01'">Số tổng hợp</th>
+      <th *ngIf="type=='03'">Số quyết định</th>
       <th [width]="35" class=" text-center">Chọn</th>
     </tr>
     </thead>
@@ -13,6 +14,7 @@
       <td class="text-center">{{i+1}}</td>
       <td  *ngIf="type=='02'" >{{ data.soCongVan}}</td>
       <td  *ngIf="type=='01'" >{{ data.id}}</td>
+      <td  *ngIf="type=='03'" >{{ data.soQd}}</td>
       <td  class="text-center">
         <a (click)="handleOk(data)">
           <i class="icon htvbdh_dau-cong"></i>

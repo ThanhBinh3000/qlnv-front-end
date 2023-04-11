@@ -1,4 +1,4 @@
-import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG} from "../constants/config";
+import { LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG } from "../constants/config";
 import VNnum2words from 'vn-num2words';
 import { STATUS } from "../constants/status";
 
@@ -27,11 +27,11 @@ export function convertTrangThai(status: string): string {
     return 'Lãnh đạo duyệt';
   } else if (status == '11') {
     return 'Ban hành';
-  }else if (status == '26') {
+  } else if (status == '26') {
     return 'Chưa tạo QĐ';
-  }else if (status == '27') {
+  } else if (status == '27') {
     return 'Đã Dự Thảo QĐ';
-  }else if (status == '28') {
+  } else if (status == '28') {
     return 'Đã Ban Hành QĐ';
   }
 }
@@ -118,9 +118,9 @@ export function convertVthhToId(ten: string) {
 
 
 export function convertTienTobangChu(tien: number): string {
-  if(tien > 0){
+  if (tien > 0) {
     return VNnum2words(tien);
-  }else{
+  } else {
     return ''
   }
 }
@@ -129,9 +129,59 @@ export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string)
   if (statusDaDuyet && trangThai === statusDaDuyet) {
     return 'da-ban-hanh';
   }
-  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS_DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC ) {
+  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS_DA_HOAN_THANH || trangThai == STATUS.DA_DUYET_LDTC) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';
+  }
+}
+
+export function convertDviTinh(status: string): string {
+  if (status == 'M1') {
+    return 'm2';
+  } else if (status == 'M2') {
+    return 'kg';
+  } else if (status == 'M3') {
+    return 'lọ';
+  } else if (status == 'M4') {
+    return 'chiếc';
+  } else if (status == 'M5') {
+    return 'cái';
+  } else if (status == 'M6') {
+    return 'm';
+  } else if (status == 'M7') {
+    return 'tạ';
+  } else if (status == 'M8') {
+    return 'công';
+  } else if (status == 'M9') {
+    return 'máy';
+  } else if (status == 'M10') {
+    return 'thỏi';
+  } else if (status == 'M11') {
+    return 'viên';
+  } else if (status == 'M12') {
+    return 'đồng/tấn';
+  } else if (status == 'M13') {
+    return 'đồng/bộ';
+  } else if (status == 'M14') {
+    return 'đồng/tấn năm';
+  } else if (status == 'M15') {
+    return 'đồng';
+  } else if (status == 'M16') {
+    return 'đồng/chiếc';
+  } else if (status == 'M17') {
+    return 'đồng/bộ năm';
+  } else if (status == 'M18') {
+    return 'đồng/chiếc năm';
+  } else if (status == 'M19') {
+    return 'hộp';
+  } else if (status == 'M20') {
+    return 'lần';
+  } else if (status == 'M21') {
+    return 'kwh';
+  } else if (status == 'M22') {
+    return 'bộ';
+  } else if (status == 'M23') {
+    return 'Tấn';
   }
 }

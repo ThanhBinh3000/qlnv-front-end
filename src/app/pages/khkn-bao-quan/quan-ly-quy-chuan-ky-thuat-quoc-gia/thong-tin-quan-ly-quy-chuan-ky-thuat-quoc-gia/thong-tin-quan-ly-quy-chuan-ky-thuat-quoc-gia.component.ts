@@ -103,7 +103,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
-        this.maVb = '/QĐ-BTC',
+        this.maVb = this.userInfo.MA_QD,
         this.loadLoaiHangHoa(),
         this.getListBoNganh()
       ]);
@@ -128,13 +128,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
   async getDetail(id) {
+    console.log(2);
     if (id > 0) {
       let res = await this.khCnQuyChuanKyThuat.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
         this.changeListOfTagOptions(data.loaiVthh);
-
         let lss = []
         for (let item of this.listOfTagOptions) {
           lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
@@ -156,13 +156,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         this.taiLieuDinhKemList = data.fileDinhKems;
       }
     } else {
-      // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ")
+      let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ")
       this.formData.patchValue({
-        // soVanBan: id + this.maVb,
+        soVanBan: id + this.maVb,
         tenDvi: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI,
         diaChiDvi: this.userInfo.DON_VI.diaChi,
-        apDungTai: this.userInfo.TEN_DVI
+        apDungTai: this.userInfo.TEN_DVI,
+        trangThaiHl: "Còn Hiệu Lực"
       })
     }
   }
@@ -348,8 +349,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async loadLoaiHangHoa() {
+    console.log(1);
     try {
-      console.log(this.userInfo.MA_DVI.substring(0, 2), 1);
       let hangHoa: any;
       if (this.userInfo.MA_DVI == "0101") {
         hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
@@ -360,8 +361,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           "maDvi": this.userInfo.MA_DVI.substring(0, 2)
         }).toPromise();
       }
-
-      console.log(hangHoa, 5);
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           let ds = hangHoa.data.filter(element => {
@@ -385,9 +384,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
             return true;
           }
         });
-
-        console.log(this.listOfOption, "this.listOfOption");
-
       }
     } catch (error) {
       this.spinner.hide();

@@ -105,7 +105,7 @@ export class ThemMoiKhoComponent implements OnInit {
       cloaiVthh: [''],
       trangThai: [true],
       type: [true],
-      coLoKho: [],
+      coLoKho: [false],
       ghiChu: [''],
       nhiemVu: [''],
       tichLuongTkLt: [''],

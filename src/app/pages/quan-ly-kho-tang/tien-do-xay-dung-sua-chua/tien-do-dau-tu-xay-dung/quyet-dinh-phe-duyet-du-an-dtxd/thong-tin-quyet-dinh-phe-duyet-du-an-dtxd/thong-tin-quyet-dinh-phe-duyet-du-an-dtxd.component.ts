@@ -197,19 +197,27 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     this.convertListData();
   }
 
-  async save() {
+  async save(isBanHanh?) {
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
     }
+    debugger;
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
-    let res = await this.createUpdate(this.formData.value)
-    if (res) {
-      this.goBack()
+    if (isBanHanh) {
+      let res = await this.createUpdate(this.formData.value);
+      if (res) {
+        this.approve(res.id, STATUS.BAN_HANH, 'Ban hành quyết định');
+      }
+    } else {
+      let res = await this.createUpdate(this.formData.value)
+      if (res) {
+        this.goBack()
+      }
     }
   }
 

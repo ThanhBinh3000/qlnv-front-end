@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -14,29 +14,31 @@ import {ThongTinDmScLonComponent} from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lo
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
+
 @Component({
   selector: 'app-danh-muc-sc-lon',
   templateUrl: './danh-muc-sc-lon.component.html',
   styleUrls: ['./danh-muc-sc-lon.component.scss']
 })
 export class DanhMucScLonComponent extends Base2Component implements OnInit {
-  isViewDetail : boolean;
-  dsCuc : any[] = [];
-  dsKho : any[] = [];
+  isViewDetail: boolean;
+  dsCuc: any[] = [];
+  dsKho: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
   statusMm = HienTrangMayMoc
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService : DanhMucSuaChuaService,
-    private dviService : DonviService
+    private danhMucService: DanhMucSuaChuaService,
+    private dviService: DonviService
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucService);
     super.ngOnInit()
@@ -53,6 +55,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       tgHoanThanhDen: [null],
       type: ["00"],
     });
+    this.filterTable = {};
   }
 
   async ngOnInit() {
@@ -74,16 +77,22 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   async filter() {
     if (this.formData.value.tgThucHien && this.formData.value.tgHoanThanh) {
       this.formData.patchValue({
-        tgThucHienTu :  dayjs(this.formData.value.tgThucHien[0]).get('year'),
-        tgThucHienDen : dayjs(this.formData.value.tgThucHien[1]).get('year'),
-        tgHoanThanhTu : dayjs(this.formData.value.tgHoanThanh[0]).get('year'),
-        tgHoanThanhDen : dayjs(this.formData.value.tgHoanThanh[1]).get('year'),
+        tgThucHienTu: dayjs(this.formData.value.tgThucHien[0]).get('year'),
+        tgThucHienDen: dayjs(this.formData.value.tgThucHien[1]).get('year'),
+        tgHoanThanhTu: dayjs(this.formData.value.tgHoanThanh[0]).get('year'),
+        tgHoanThanhDen: dayjs(this.formData.value.tgHoanThanh[1]).get('year'),
       })
     }
     this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
+      maDvi: this.userService.isCuc() ?  this.userInfo.MA_DVI : null,
+      type : "00"
     })
     await this.search();
+  }
+
+  clearForm() {
+    this.formData.reset();
+    this.filter();
   }
 
 
@@ -106,17 +115,17 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
   }
 
-  openDialog(data : any, isView : boolean) {
+  openDialog(data: any, isView: boolean) {
     let modalQD = this.modal.create({
       nzContent: ThongTinDmScLonComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle : {top : '150px'},
+      nzStyle: {top: '150px'},
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
-        dataDetail : data,
-        isViewDetail : isView
+        dataDetail: data,
+        isViewDetail: isView
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -148,6 +157,25 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.CHUA_THUC_HIEN) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
     }
   }
 }

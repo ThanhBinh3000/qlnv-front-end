@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -9,7 +8,6 @@ import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import dayjs from "dayjs";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../constants/message";
