@@ -217,8 +217,7 @@
               Tổng chi phí (đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [nzDisabled]="isDisable()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                formControlName="tongChiPhi" type="number" nz-input [nzSize]="'small'"></nz-input-number>
+              <input type="text" currencyMask [options]="options" formControlName="tongChiPhi" nz-input>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -241,7 +240,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isDisable()" [data]="fileDinhKem"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -395,7 +394,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isDisable()" [data]="fileTienDoTh"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileTienDoTh"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -463,10 +462,10 @@
                 </nz-input-group>
               </td>
               <td>
-                <a (click)="themMoiItem1()">
+                <a [ngClass]="{'disabled': isView}" (click)="themMoiItem1()">
                   <i class="fa fa-plus"></i>
                 </a>
-                <a (click)="clearData()">
+                <a [ngClass]="{'disabled': isView}" (click)="clearData()">
                   <i class="fa fa-refresh"></i>
                 </a>
               </td>
@@ -520,7 +519,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isDisable()" [data]="fileNghiemThuTl"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileNghiemThuTl"></file-list>
             </div>
           </nz-form-item>
         </div>
