@@ -273,26 +273,14 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayQd": this.searchFilter.ngayQuyetDinh
-            ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
-            : null,
-          "loaiQd": null,
-          "maDvi": null,
-          "maVthh": null,
+          "tuNgayQd": this.tuNgayQuyetDinh != null ? dayjs(this.tuNgayQuyetDinh).format('YYYY-MM-DD') + " 00:00:00" : null,
+          "denNgayQd": this.denNgayQuyetDinh != null ? dayjs(this.denNgayQuyetDinh).format('YYYY-MM-DD') + " 23:59:59" : null,
           "loaiVthh": this.loaiVthh,
+          "cloaiVthh": this.searchFilter.cloaiVthh,
           "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
-          "ngayQd": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "soHd": null,
           "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
-          "str": null,
-          "trangThai": null,
-          "tuNgayQd": this.searchFilter.ngayQuyetDinh
-            ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
-            : null,
           "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
-          "veViec": null
+          "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null
         }
         this.quyetDinhGiaoNhapHangService
           .export(body)

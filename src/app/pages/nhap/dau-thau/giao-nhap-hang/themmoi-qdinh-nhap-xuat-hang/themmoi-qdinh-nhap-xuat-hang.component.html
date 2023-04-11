@@ -189,6 +189,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+            <input nz-input [readonly]="true" formControlName="donViTinh" />
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+            <input nz-input [readonly]="true" formControlName="donViTinh" />
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
@@ -221,11 +233,16 @@
         <th class="text-center">Chi cục DTNN KV</th>
         <th class="text-center">Điểm kho</th>
         <th class="text-center">SL nhập vào điểm kho theo QĐ</th>
-        <th class="text-center">Nhà kho</th>
-        <th class="text-center">Ngăn kho</th>
+        <th class="text-center" *ngIf="!userService.isTongCuc()">Nhà kho</th>
+        <th class="text-center" *ngIf="!userService.isTongCuc()">Ngăn kho</th>
         <th class="text-center">Lô kho</th>
-        <th nzWidth="160px" class="text-center">Số lượng</th>
-        <th class="text-center">Trạng thái</th>
+        <th class="text-center">Tổng tích lượng</th>
+        <th class="text-center">Tồn kho</th>
+        <th nzWidth="160px" class="text-center">SL nhập được phân bổ</th>
+        <th class="text-center">Số BB nhập đầy kho</th>
+        <th class="text-center" *ngIf="userService.isChiCuc()">Trạng thái</th>
+        <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái NH</th>
+        <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái phân bổ</th>
         <th *ngIf="userService.isChiCuc()" nzWidth="80px" class="text-center"></th>
       </tr>
     </thead>
@@ -237,13 +254,17 @@
           <td>{{ item.tenDvi }}</td>
           <td></td>
           <td></td>
+          <td *ngIf="!userService.isTongCuc()"></td>
+          <td *ngIf="!userService.isTongCuc()"></td>
           <td></td>
           <td></td>
           <td></td>
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ item.tenTrangThai }}</td>
-          <td *ngIf="userService.isChiCuc()">
-          </td>
+          <td></td>
+          <td *ngIf="userService.isChiCuc()">{{ item.tenTrangThai }}</td>
+          <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
+          <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
+          <td *ngIf="userService.isChiCuc()"></td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">
           <tr *ngIf="userService.isChiCuc() && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
@@ -275,12 +296,15 @@
                 </nz-option>
               </nz-select>
             </td>
+            <td></td>
+            <td></td>
             <td>
               <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input
                 [(ngModel)]="rowItem.soLuong" [nzMin]="0">
               </nz-input-number>
             </td>
-            <td> </td>
+            <td></td>
+            <td></td>
             <td style="text-align: center;">
               <a (click)="themDiaDiemNhap(i)" [ngClass]="{'isDisabled': !validateButtonThem('ddiemNhap')}">
                 <i class="fa fa-plus"></i>
@@ -296,11 +320,13 @@
             <td></td>
             <td>{{ ddNhap.tenDiemKho }}</td>
             <td>{{ ddNhap.soLuongDiemKho }}</td>
-            <td>{{ ddNhap.tenNhaKho }}</td>
-            <td>{{ ddNhap.tenNganKho }}</td>
+            <td *ngIf="!userService.isTongCuc()">{{ ddNhap.tenNhaKho }}</td>
+            <td *ngIf="!userService.isTongCuc()">{{ ddNhap.tenNganKho }}</td>
             <td>{{ ddNhap.tenLoKho }}</td>
-            <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'
-              }}</td>
+            <td></td>
+            <td></td>
+            <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td></td>
             <td></td>
             <td *ngIf="userService.isChiCuc()" style="text-align: center;">
               <a>

@@ -87,7 +87,19 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
     }
   }
 
+  disabledStartNgayLayMau = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayLayMauDen) {
+      return startValue.getTime() > this.formData.value.ngayLayMauDen.getTime();
+    }
+    return false;
+  };
 
+  disabledEndNgayLayMau = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayLayMauTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayLayMauDen.getTime();
+  };
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;

@@ -5,28 +5,37 @@
             <span>Quay lại</span>
         </button>
         <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDC "
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
             (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
-
         </button>
-        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KT')
+        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="tuChoi()">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+        </button>
+        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KT')
         && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_LDCCUC')
+        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_LDCCUC')
         && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KT')
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="pheDuyet()">
+            <i class="icon htvbdh_tcdt_pheduyet "></i>
+            <span>Duyệt</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_KT')
             && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_LDCCUC')
+        <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_DUYET_LDCCUC')
             && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
@@ -240,9 +249,10 @@
                             Tổng số lượng nhập
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number [ngModelOptions]="{standalone: true}" [ngModel]="formData.value.tongSlNhap"
-                                [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
+                            <nz-input-number nzDisabled="isView" [ngModelOptions]="{standalone: true}"
+                                [ngModel]="formData.value.tongSlNhap" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                [nzParser]="globals.parser" readonly>
                             </nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
@@ -253,7 +263,7 @@
                             Tổng số lượng xuất
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number [ngModelOptions]="{standalone: true}"
+                            <nz-input-number nzDisabled="isView" [ngModelOptions]="{standalone: true}"
                                 [ngModel]="calcTong() > 0 ? calcTong() : ''" [nzMin]="1"
                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
@@ -267,9 +277,9 @@
                             SL còn lại theo sổ sách
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number formControlName="slConLai" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                [nzParser]="globals.parser" readonly>
+                            <nz-input-number nzDisabled="isView" formControlName="slConLai" [nzMin]="1"
+                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
                             </nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
@@ -280,9 +290,10 @@
                             SL thực tế còn lại khi xuất kho lần cuối
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number formControlName="slThucTeCon" (ngModelChange)="slChenhLech()" [nzMin]="1"
-                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" readonly>
+                            <nz-input-number nzDisabled="isView" formControlName="slThucTeCon"
+                                (ngModelChange)="slChenhLech()" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                                [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                [nzParser]="globals.parser" readonly>
                             </nz-input-number>
 
                         </nz-form-control>
