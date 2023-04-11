@@ -150,6 +150,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
+        tongSlNhap: "100000"
       });
     }
 
@@ -264,12 +265,13 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-
-
   async save(isGuiDuyet?) {
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
+    body.listPhieuXuatKho.forEach(e => {
+      e.id = null;
+    });
 
     let data = await this.createUpdate(body);
     if (data) {
@@ -354,7 +356,27 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         prev += cur.slXuat;
         return prev;
       }, 0);
+      this.formData.patchValue({
+        tongSlXuat: sum,
+        slConLai: this.formData.value.tongSlNhap - sum,
+      })
       return sum;
+
+    }
+  }
+  slChenhLech() {
+    if (this.formData.value.slThucTeCon > 0 && this.formData.value.slConLai > 0) {
+      if (this.formData.value.slThucTeCon - this.formData.value.slConLai > 0) {
+        this.formData.patchValue({
+          slThua: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+          slThieu: null
+        })
+      } else {
+        this.formData.patchValue({
+          slThieu: Math.abs(this.formData.value.slThucTeCon - this.formData.value.slConLai),
+          slThua: null
+        })
+      }
     }
   }
 
