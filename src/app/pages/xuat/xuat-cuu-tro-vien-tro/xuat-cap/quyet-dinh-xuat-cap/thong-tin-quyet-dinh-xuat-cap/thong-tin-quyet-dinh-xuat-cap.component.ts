@@ -224,7 +224,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == "VIEN_TRO_CUU_TRO");
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
     }
   }
 

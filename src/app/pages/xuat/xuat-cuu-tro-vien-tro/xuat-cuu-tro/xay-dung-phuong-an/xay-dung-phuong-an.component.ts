@@ -62,7 +62,7 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     private cuuTroVienTroComponent: CuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
-    this.vldTrangThai = this.cuuTroVienTroComponent;
+    this.vldTrangThai = cuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: null,
       soDx: null,

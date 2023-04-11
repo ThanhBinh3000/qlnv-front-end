@@ -172,7 +172,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'VIEN_TRO_CUU_TRO');
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
     }
   }
 
@@ -184,12 +184,20 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     }
   }
 
+  // async loadDsVthh() {
+  //   let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listHangHoaAll = res.data;
+  //     this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+  //     this.formData.patchValue({ loaiVthh: "0101" });
+  //   }
+  // }
+
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
-      this.formData.patchValue({ loaiVthh: "0101" });
+      this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
   }
 
@@ -495,7 +503,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNhapXuat = res.data.filter(item =>
-        item.phanLoai == 'VIEN_TRO_CUU_TRO'
+        item.phanLoai == 'XUAT_CTVT'
       )
         ;
     }
