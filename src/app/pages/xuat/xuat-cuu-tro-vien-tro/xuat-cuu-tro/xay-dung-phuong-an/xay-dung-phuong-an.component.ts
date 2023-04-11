@@ -112,7 +112,7 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     if (!endValue || !this.formData.value.ngayDxTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayDxTu.getTime();
   };
 
   disabledStartNgayKt = (startValue: Date): boolean => {
@@ -126,7 +126,7 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     if (!endValue || !this.formData.value.ngayKetThucTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayKetThucDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKetThucTu.getTime();
   };
 
   async ngOnInit() {

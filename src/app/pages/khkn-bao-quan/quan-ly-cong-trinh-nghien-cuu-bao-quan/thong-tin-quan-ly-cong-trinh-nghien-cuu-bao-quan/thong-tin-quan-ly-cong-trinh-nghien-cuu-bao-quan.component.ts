@@ -16,6 +16,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from './../../../../components/base2/base2.component';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
@@ -39,7 +40,17 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   fileDinhKem: any[] = [];
   fileTienDoTh: any[] = [];
   fileNghiemThuTl: any[] = [];
-
+  options = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 1,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  }
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
