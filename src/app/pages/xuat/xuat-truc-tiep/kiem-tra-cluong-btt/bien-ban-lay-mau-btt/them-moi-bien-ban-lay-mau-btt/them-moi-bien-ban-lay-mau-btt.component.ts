@@ -31,6 +31,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idQdGiaoNvXh: number;
+  @Input() isViewOnModal: boolean;
 
   listBienBan: any[] = [];
   listDiaDiemXh: any[] = [];
