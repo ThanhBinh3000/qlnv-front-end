@@ -9,11 +9,12 @@ import { DonviService } from 'src/app/services/donvi.service';
 import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
-import { STATUS } from "src/app/constants/status";
+import {CHUC_NANG, STATUS} from "src/app/constants/status";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { isEmpty } from 'lodash';
+import {CuuTroVienTroComponent} from "../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-tong-hop-phuong-an',
@@ -26,6 +27,8 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  public vldTrangThai: CuuTroVienTroComponent;
+  CHUC_NANG = CHUC_NANG;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -40,9 +43,11 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
-    private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService
+    private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopPhuongAnCuuTroService);
+    this.vldTrangThai = cuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: dayjs().get('year'),
       soDx: null,
