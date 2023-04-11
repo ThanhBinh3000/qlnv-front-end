@@ -159,7 +159,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
     this.loadDanhMucHang();
-    debugger
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
     } else {
@@ -238,7 +237,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async getDetail(id?: number, soDx?: string) {
-    debugger
     if (id) {
       await this.dauThauService
         .getDetail(id)
@@ -492,10 +490,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
-      if (goiThau && goiThau != '') {
-        this.listOfData = this.listOfData.filter(item => item.goiThau !== goiThau);
+      if (res.value.goiThau && res.value.goiThau != '') {
+        for (let i = 0; i < this.listOfData.length; i++) {
+          if (this.listOfData[i].goiThau == res.value.goiThau) {
+            this.listOfData.splice(i, 1, res.value)
+          }
+        }
       }
-      this.listOfData = [...this.listOfData, res.value];
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
@@ -509,6 +510,15 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.convertListDataLuongThuc();
     });
 
+  }
+  deleteRowLt(i: number, goiThau: string) {
+    for (let index = 0; index < this.listOfData.length; index++) {
+      if (this.listOfData[index].goiThau == goiThau) {
+        this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+        this.helperService.setIndexArray(this.listOfData);
+        this.convertListDataLuongThuc()
+      }
+    }
   }
 
   deleteRow(i: number): void {

@@ -538,7 +538,7 @@
                 <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="!isDisbleForm()" (click)="deleteRow(dtGoiThau.idx)">
+                <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
@@ -598,7 +598,7 @@
             <td></td>
             <td></td>
             <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-center">{{item.dviTinh }}</td>
+            <td class="text-left">{{item.dviTinh }}</td>
             <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
@@ -625,7 +625,7 @@
                 <td></td>
                 <td></td>
                 <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{item.dviTinh }}</td>
+                <td class="text-left">{{item.dviTinh }}</td>
                 <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>

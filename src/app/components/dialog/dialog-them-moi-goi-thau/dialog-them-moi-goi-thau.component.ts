@@ -136,7 +136,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     let res = await this.donviService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listChiCucMap[$event] = res.data[0].children;
-      console.log(this.listChiCucMap);
     }
   }
 
@@ -235,7 +234,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addChiCuc(i, maCuc) {
-    if (this.validateDataAdd('chiCuc')) {
+    if (this.validateDataAdd('chiCuc') && this.validateSoLuongChiCuc(i)) {
       if (this.thongTinChiCuc.maDvi && this.thongTinChiCuc.soLuong) {
         let dataDvi = this.listChiCucMap[maCuc].filter(d => d.maDvi == this.thongTinChiCuc.maDvi)
         this.thongTinChiCuc.tenDvi = dataDvi[0].tenDvi;
@@ -249,7 +248,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addDiemKho(i, y, maChiCuc) {
-    if (this.validateDataAdd('diemKho')) {
+    if (this.validateDataAdd('diemKho') && this.validateSoLuongDiemKho(i, y)) {
       if (this.thongTinDiemKho.maDvi && this.thongTinDiemKho.soLuong) {
         let dataDvi = this.listDiemKhoMap[maChiCuc].filter(d => d.maDvi == this.thongTinDiemKho.maDvi);
         this.thongTinDiemKho.tenDvi = dataDvi[0].tenDvi;
@@ -259,6 +258,29 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
     }
+  }
+
+  validateSoLuongChiCuc(i) {
+    let soLuongChiCuc = 0
+    this.dataTable[i].children.forEach(i => {
+      soLuongChiCuc = soLuongChiCuc + i.soLuong
+    })
+    if (soLuongChiCuc + this.thongTinChiCuc.soLuong > this.dataTable[i].soLuong) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng nhập của Chi cục không được vượt quá số lượng nhập của Cục.")
+      return false
+    }
+    return true
+  }
+  validateSoLuongDiemKho(i, y) {
+    let soLuongDiemKho = 0
+    this.dataTable[i].children[y].children.forEach(i => {
+      soLuongDiemKho = soLuongDiemKho + i.soLuong
+    })
+    if (soLuongDiemKho + this.thongTinDiemKho.soLuong > this.dataTable[i].children[y].soLuong) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng nhập của Điểm kho không được vượt quá số lượng nhập của Chi cục.")
+      return false
+    }
+    return true
   }
 
   validateDataAdd(type): boolean {
@@ -293,7 +315,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   deleteRow(i, y, z) {
-    console.log(i, y, z);
     if (i >= 0 && y >= 0 && z >= 0) {
       // this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.splice(z, 1);
       this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.filter((d, index) => index !== z);
