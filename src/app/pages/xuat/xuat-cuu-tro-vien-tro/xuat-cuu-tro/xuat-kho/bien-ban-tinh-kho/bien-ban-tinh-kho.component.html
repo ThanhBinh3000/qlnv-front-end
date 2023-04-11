@@ -223,17 +223,17 @@
                                     <td></td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XEM')"
+                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XEM')"
                                             (click)="redirectDetail(lv1.id, true)">
                                             <i class="fa fa-eye"></i>
                                         </a>
                                         <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_KTVBQ || lv1.trangThai==STATUS.TU_CHOI_KT
-                                         || lv1.trangThai==STATUS.TU_CHOI_LDCC) && userService.isChiCuc() && isOwner(lv1.maDvi)
+                                         || lv1.trangThai==STATUS.TU_CHOI_LDCC) && userService.isChiCuc()
                                         && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_THEM')"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isChiCuc() &&  userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XOA')"
+                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && userService.isChiCuc() &&  userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XOA')"
                                             (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>

@@ -260,6 +260,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
       this.dataTable = this.listPhieuXuatKho;
       this.dataTable.forEach(s => {
+        s.id = null;
         s.slXuat = s.thucXuat;
         s.soBkCanHang = s.soBangKeCh
       }
@@ -271,9 +272,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
-    body.listPhieuXuatKho.forEach(e => {
-      e.id = null;
-    });
+
 
     let data = await this.createUpdate(body);
     if (data) {
