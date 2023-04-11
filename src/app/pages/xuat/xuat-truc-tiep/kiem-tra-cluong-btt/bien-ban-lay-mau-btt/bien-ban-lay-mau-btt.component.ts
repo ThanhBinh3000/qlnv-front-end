@@ -8,7 +8,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
 import { chain } from 'lodash';
-import * as uuid from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 @Component({
   selector: 'app-bien-ban-lay-mau-btt',
   templateUrl: './bien-ban-lay-mau-btt.component.html',
@@ -25,6 +25,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   idQdGiaoNvXh: number = 0;
   children: any = [];
   expandSetString = new Set<string>();
+  dataView: any = [];
 
   constructor(
     httpClient: HttpClient,
@@ -66,7 +67,6 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     try {
       this.timKiem(),
         await this.search();
-      this.buildTableView();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
@@ -75,10 +75,11 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   }
 
   async search(roles?): Promise<void> {
+    await this.spinner.show()
     await super.search(roles);
     this.buildTableView();
+    await this.spinner.hide()
   }
-
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
@@ -93,21 +94,52 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   }
 
   buildTableView() {
+    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
       .groupBy("soQd")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQd === key)
-        let namKh = quyetDinh.namKh;
-        let idQd = quyetDinh.idQd;
-        let ngayQd = quyetDinh.ngayQd;
-        return { idVirtual: uuid.v4(), soQd: key, idQd: idQd, namKh: namKh, ngayQd: ngayQd, childData: value };
+        let rs = chain(value)
+          .groupBy("maLoKho")
+          .map((v, k) => {
+            let rowLv2 = v.find(s => s.maLoKho === k);
+            return {
+              id: rowLv2.id,
+              idVirtual: uuidv4(),
+              maDiemKho: rowLv2.maDiemKho,
+              tenDiemKho: rowLv2.tenDiemKho,
+              maNhaKho: rowLv2.maNhaKho,
+              tenNhaKho: rowLv2.tenNhaKho,
+              maNganKho: rowLv2.maNganKho,
+              tenNganKho: rowLv2.tenNganKho,
+              maLoKho: k,
+              tenLoKho: rowLv2.tenLoKho,
+              soBienBan: rowLv2.soBienBan,
+              ngayLayMau: rowLv2.ngayLayMau,
+              soBbTinhKho: rowLv2.soBbTinhKho,
+              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
+              soBbHaoDoi: rowLv2.rowLv2,
+              trangThai: rowLv2.trangThai,
+              tenTrangThai: rowLv2.tenTrangThai,
+              childData: v
+            }
+          }
+          ).value();
+        let rowLv1 = value.find(s => s.soQd === key);
+        return {
+          idVirtual: uuidv4(),
+          soQd: key,
+          namKh: rowLv1.namKh,
+          ngayQd: rowLv1.ngayQd,
+          idQd: rowLv1.idQd,
+          childData: rs
+        };
       }).value();
-    this.children = dataView
+    this.dataView = dataView
     this.expandAll()
   }
 
   expandAll() {
-    this.children.forEach(s => {
+    this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
     })
   }

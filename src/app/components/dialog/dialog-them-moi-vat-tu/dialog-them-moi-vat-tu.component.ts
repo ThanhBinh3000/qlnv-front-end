@@ -185,14 +185,32 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listOfData.push(i)
       })
     })
-    this.listOfData.forEach((item) => {
-      item.children.forEach((i) => {
-        i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
-        i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
-      })
-
-    })
+    this.listAllDiemKho = [];
+    this.updateListAllDiemKho()
     this.calcTong()
+  }
+
+  async updateListAllDiemKho() {
+    for (let i = 0; i < this.listOfData.length; i++) {
+      const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(this.listOfData[i].maDvi);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const listDiemKho = [];
+        for (let j = 0; j < res.data?.child.length; j++) {
+          const item = {
+            'value': res.data.child[j].maDiemkho,
+            'text': res.data.child[j].tenDiemkho,
+            'diaDiemNhap': res.data.child[j].diaDiemNhap,
+          };
+          listDiemKho.push(item);
+        }
+        this.listAllDiemKho.push(listDiemKho);
+        this.listOfData[i].children.forEach((i) => {
+          i.thanhTienDx = i.soLuong * this.formData.get('donGiaTamTinh').value
+          i.thanhTienQd = i.soLuong * this.formData.get('donGiaVat').value
+          this.listThongTinDiemKho.push(new DanhSachGoiThau());
+        })
+      }
+    }
   }
 
   changeGoiThau() {
@@ -213,7 +231,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   async onChangeChiCuc(event) {
     let body = {
-      year: 2022,
+      year: this.namKhoach,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
@@ -222,7 +240,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
-      this.thongTinChiCuc.tenDvi = res.data.tenTongKho;
       this.thongTinChiCuc.soLuongDaMua = soLuongDaLenKh.data;
       this.thongTinChiCuc.soLuongTheoChiTieu = chiCuc.soLuongNhap;
       this.thongTinChiCuc.tenDvi = chiCuc.tenDonVi;
@@ -296,7 +313,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       return true;
     }
     if (type == 'diemKho') {
-      let data = this.listOfData[index].children.filter(item => item.maDvi == this.thongTinDiemKho.maDvi);
+      let data = this.listOfData[index].children.filter(item => item.maDvi == this.listThongTinDiemKho[index].maDvi);
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
@@ -330,7 +347,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.listOfData[i].children.forEach(item => {
       soLuong = soLuong + item.soLuong
     });
-    soLuong = soLuong + this.thongTinDiemKho.soLuong;
+    soLuong = soLuong + this.listThongTinDiemKho[i].soLuong;
     if (soLuong > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
       return false

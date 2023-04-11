@@ -354,6 +354,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       let res = await this.quanLyNghiemThuKeLotService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+          this.listDviChuDongTh = res.data.children;
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
@@ -448,8 +449,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   caculatorSoLuong(item: any) {
     if (item) {
-      item.thanhTienBq = (item?.soLuongBqDvi ?? 0) * (item?.donGiaBqDvi ?? 0);
-      item.tongGtri = parseInt(item?.thanhTienBq) + parseInt(item?.thanhTienKlDvi);
+      item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
+      item.tongGtri = parseInt(item?.thanhTienTn) + parseInt(item?.thanhTienQt);
     }
   }
 
@@ -457,13 +458,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     let result = 0;
     let arr = [];
     this.listDviChuDongTh.forEach(item => {
-      if (item && item.length > 0) {
-        item.forEach(data => {
-          arr.push(data)
-        })
+      debugger
+      if (item) {
+        arr.push(item)
       }
     })
-    if (arr && arr.length > 0) {
+    if (arr) {
       if (type) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[column];
@@ -722,7 +722,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           return;
         }
         let body = this.formData.value;
-        // body.detail = this.detail;
+        body.detail = this.listDviChuDongTh;
+        // body.detailDm = this.detail;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyNghiemThuKeLotService.update(body);

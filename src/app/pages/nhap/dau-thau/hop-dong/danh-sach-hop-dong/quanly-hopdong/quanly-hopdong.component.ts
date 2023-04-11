@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
 import { Globals } from 'src/app/shared/globals';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
@@ -92,15 +92,24 @@ export class QuanlyHopdongComponent implements OnInit {
     });
   }
 
-  async ngOnInit() {
-    await this.spinner.show()
-    this.userInfo = this.userService.getUserLogin();
-    await Promise.all([
-    ]);
-    if (this.id) {
-      await this.getDetail(this.id)
-    }
-    await this.spinner.hide()
+  ngOnInit() {
+    const asyncTaskPromise = new Promise<void>(async (resolve, reject) => {
+      await this.spinner.show()
+      this.userInfo = this.userService.getUserLogin();
+      await Promise.all([
+      ]);
+      if (this.id) {
+        await this.getDetail(this.id)
+      }
+      await this.spinner.hide()
+      resolve();
+    });
+    asyncTaskPromise.then(() => {
+      var firstRow = document.querySelector(".table-body tr:first-child");
+      if (firstRow) {
+        firstRow.classList.add("selectedRow");
+      }
+    });
   }
 
   async getDetail(id) {
@@ -150,7 +159,11 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    this.idHopDong = null;
+    if (this.dataTable.length > 0) {
+      this.idHopDong = this.dataTable[0].hopDong.id;
+    } else {
+      this.idHopDong = null;
+    }
   }
 
   detailLuongThuc(data) {
@@ -189,13 +202,18 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    this.idHopDong = null;
+    if (this.dataTable.length > 0) {
+      this.idHopDong = this.dataTable[0].hopDong.id;
+    } else {
+      this.idHopDong = null;
+    }
   }
 
   async getDetailHopDong($event, id: number) {
     this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    var firstRow = document.querySelector(".table-body tr.selectedRow");
+    firstRow.classList.remove('selectedRow');
+    $event.target.parentElement.parentElement.parentElement.classList.add('selectedRow')
     this.idHopDong = id;
     this.spinner.hide();
   }
