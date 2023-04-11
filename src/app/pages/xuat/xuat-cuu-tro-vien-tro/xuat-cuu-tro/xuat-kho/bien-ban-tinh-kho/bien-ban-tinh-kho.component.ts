@@ -161,6 +161,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
+    console.log(this.children, "this.children");
     this.expandAll()
 
   }
