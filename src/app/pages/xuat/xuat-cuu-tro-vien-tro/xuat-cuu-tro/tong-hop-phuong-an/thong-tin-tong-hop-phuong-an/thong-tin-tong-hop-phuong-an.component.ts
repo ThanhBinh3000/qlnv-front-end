@@ -489,12 +489,10 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
             if (this.formData.value.deXuatCuuTro) {
               this.selectRow(this.formData.value.deXuatCuuTro[0])
             }
-            console.log(this.formData.value, 8787)
             this.summaryData()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-          console.log(this.thongTinChiTiet, 'chitiet');
         });
       } catch
         (e) {
@@ -517,7 +515,6 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
       )
       ;
     }
-    console.log(this.listLoaiHinhNhapXuat, 'loaihinh');
   }
 
   thongTinTrangThai(trangThai: string): string {
