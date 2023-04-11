@@ -196,6 +196,10 @@
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a
+              (click)="taoQuyetDinh(data)">
+              <i class="icon htvbdh_soanthao"></i>
+            </a>
+            <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')"
               (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>

@@ -13,6 +13,8 @@ import {cloneDeep} from 'lodash';
 export class CuuTroVienTroComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
+  dataInit: any = {};
+  isDetail: boolean;
 
   constructor(
     public userService: UserService,
@@ -34,14 +36,14 @@ export class CuuTroVienTroComponent implements OnInit {
 
   checkStatusPermission(data: any, action: any) {
     let mapQuyen = {
-      XEM: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDV, STATUS.CHO_DUYET_LDC, STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_TP,STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
+      XEM: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDV, STATUS.CHO_DUYET_LDC, STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       SUA: [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       XOA: [STATUS.DU_THAO],
       DUYET_TP: [STATUS.CHO_DUYET_TP],
       DUYET_LDV: [STATUS.CHO_DUYET_LDV],
       DUYET_LDC: [STATUS.CHO_DUYET_LDC],
       DUYET_LDCC: [STATUS.CHO_DUYET_LDCC],
-      XEM_NO: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDV, STATUS.CHO_DUYET_LDC, STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_TP,STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
+      XEM_NO: [STATUS.DU_THAO, STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_TP, STATUS.CHO_DUYET_LDV, STATUS.CHO_DUYET_LDC, STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       SUA_NO: [],
       XOA_NO: [],
       DUYET_TP_NO: [STATUS.CHO_DUYET_TP],
@@ -68,5 +70,16 @@ export class CuuTroVienTroComponent implements OnInit {
     } else {
       return false;
     }
+  }
+
+  taoQd($event: any) {
+    this.selectTab(2);
+    this.dataInit = $event;
+    this.isDetail = true;
+  }
+
+  quayLai() {
+    this.dataInit = null;
+    this.isDetail = false;
   }
 }
