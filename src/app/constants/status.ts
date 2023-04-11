@@ -110,6 +110,7 @@ export enum CHUC_NANG {
   XEM = 'XEM',
   SUA = 'SUA',
   DUYET_TP = 'DUYET_TP',
+  DUYET_LDV = 'DUYET_LDV',
   DUYET_LDC = 'DUYET_LDC',
   DUYET_LDCC = 'DUYET_LDCC',
   XOA = 'XOA',
