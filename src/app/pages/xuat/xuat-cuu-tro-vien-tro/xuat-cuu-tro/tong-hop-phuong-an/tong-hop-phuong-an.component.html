@@ -164,7 +164,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO && vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
@@ -181,7 +181,7 @@
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                 !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
-                !vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  &&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET'))&&
                 userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XEM')">
               <i class="fa fa-eye"></i>
             </a>
