@@ -49,6 +49,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   listPhuLuc: any[] = [];
   listKlcv: any[] = [];
   rowItemKlcv: KhoiLuongCongViec = new KhoiLuongCongViec();
+  thanhTien: number = 0;
+  thanhTienBangChu: string;
 
   constructor(
     httpClient: HttpClient,
@@ -99,8 +101,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       dvccChucVu: [],
       dvccSdt: [],
       dvccStk: [],
-      thanhTien: [],
-      thanhTienBangChu: [],
+      thanhTien:[],
+      thanhTienBangChu:[],
       fileDinhKems: [null],
       listKtXdscTdxdHopDongKlcv: [[]]
     });
