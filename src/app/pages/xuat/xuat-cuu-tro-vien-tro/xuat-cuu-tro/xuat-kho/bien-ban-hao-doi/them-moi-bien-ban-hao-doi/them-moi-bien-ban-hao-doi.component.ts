@@ -26,7 +26,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./them-moi-bien-ban-hao-doi.component.scss']
 })
 export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -171,6 +171,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -184,6 +185,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
       type: "XUAT_CTVT",
+      loaiVthh: this.loaiVthh
     }
     let res = await this.bienBanTinhKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

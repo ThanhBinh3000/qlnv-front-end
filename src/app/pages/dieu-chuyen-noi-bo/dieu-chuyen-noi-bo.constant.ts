@@ -9,6 +9,14 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'ke-hoach-dieu-chuyen',
     hasTab: false,
   },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Kế hoạch điều chuyển123',
+    url: `/chi-tiet-ke-hoach-dieu-chuyen`,
+    dropdown: 'ke-hoach-dieu-chuyen',
+    idHover: 'ke-hoach-dieu-chuyen',
+    hasTab: false,
+  },
   /*{
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
