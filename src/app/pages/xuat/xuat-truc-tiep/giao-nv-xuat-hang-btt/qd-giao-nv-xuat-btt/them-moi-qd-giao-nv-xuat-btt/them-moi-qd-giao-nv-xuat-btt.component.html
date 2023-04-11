@@ -274,7 +274,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td class="text-black">{{ data.soLuongChiCuc }}</td>
+                                <td class="text-black">{{ data.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                             </tr>
                             <ng-container *ngIf="expandSet.has(i)">
                                 <tr *ngFor="let children of data.children">
@@ -284,7 +284,7 @@
                                     <td>{{ children.tenNhaKho }}</td>
                                     <td>{{ children.tenNganKho }}</td>
                                     <td>{{ children.tenLoKho }}</td>
-                                    <td>{{ children.soLuong }}</td>
+                                    <td>{{ children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 </tr>
                             </ng-container>
                         </ng-container>

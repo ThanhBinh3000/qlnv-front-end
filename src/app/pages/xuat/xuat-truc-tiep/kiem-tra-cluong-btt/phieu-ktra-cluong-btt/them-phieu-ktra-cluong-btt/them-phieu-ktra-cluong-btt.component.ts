@@ -13,8 +13,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { PhieuKtraCluongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/phieu-ktra-cluong-btt.service';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
+import { DonviService } from 'src/app/services/donvi.service';
 @Component({
   selector: 'app-them-phieu-ktra-cluong-btt',
   templateUrl: './them-phieu-ktra-cluong-btt.component.html',
@@ -33,10 +33,10 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
     private bienBanLayMauBttService: BienBanLayMauBttService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private donViService: DonviService,
     private phieuKtraCluongBttService: PhieuKtraCluongBttService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongBttService);
@@ -54,6 +54,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       soBienBan: ['', [Validators.required]],
       soQd: ['', [Validators.required]],
       idQd: ['', [Validators.required]],
+      ngayQd: [''],
 
       soPhieu: ['', [Validators.required]],
 
@@ -106,14 +107,15 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   async openDialogBbLm() {
     let data = [];
     let body = {
-      nam: dayjs().get('year'),
+      namKh: dayjs().get('year'),
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.DA_DUYET_LDCC,
-      maDvi: this.userInfo.MA_DVI
+      // maDvi: this.userInfo.MA_DVI
     }
     let res = await this.bienBanLayMauBttService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       data = res.data?.content;
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -148,6 +150,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         soBienBan: data.soBienBan,
         soQd: data.soQd,
         idQd: data.idQd,
+        ngayQd: data.ngayQd,
         idKtv: data.idKtv,
         tenKtv: data.tenKtv,
         idDdiemXh: data.idDdiemXh,

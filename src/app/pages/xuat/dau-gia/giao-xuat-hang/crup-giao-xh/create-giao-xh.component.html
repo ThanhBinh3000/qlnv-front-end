@@ -221,7 +221,7 @@
       </nz-collapse-panel>
     </nz-collapse>
     <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="ĐỊA ĐIỂM XUẤT HÀNG">
+      <nz-collapse-panel nzActive="true" nzHeader="Địa điểm xuất hàng">
         <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
             <tr>
@@ -244,7 +244,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ data.soLuong }}</td>
+                <td class="text-black">{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ data.tenTrangThai }}</td>
               </tr>
               <ng-container *ngIf="expandSet.has(i)">
@@ -255,7 +255,7 @@
                   <td>{{ children.tenNhaKho }}</td>
                   <td>{{ children.tenNganKho }}</td>
                   <td>{{ children.tenLoKho }}</td>
-                  <td>{{ children.soLuong }}</td>
+                  <td>{{ children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                   <td></td>
                 </tr>
               </ng-container>

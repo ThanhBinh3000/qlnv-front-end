@@ -136,7 +136,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     await this.hopDongXuatHangService.search({
       trangThai: STATUS.DA_KY,
       maDvi: this.formData.value.maDvi,
-      nam: this.formData.value.nam
+      nam: this.formData.value.nam,
+      loaiVthh: this.loaiVthh
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;

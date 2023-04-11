@@ -59,41 +59,39 @@
         </div>
 
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #basicTable class="nowrap" [nzData]="children" [nzFrontPagination]="false"
-                [nzShowPagination]="false" nzBordered>
+            <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
                 <thead>
                     <tr>
-                        <th nzWidth="30px">STT</th>
-                        <th nzWidth="30px"></th>
-                        <th>Số QĐ giao nhiệm vụ XH</th>
+                        <th style="width: 35px">STT</th>
+                        <th></th>
+                        <th>Số QĐ giao NVXH</th>
                         <th>Năm KH</th>
-                        <th>Thời gian XH trước ngày</th>
-                        <th>Số BB LM/BGM</th>
-                        <th>Ngày lấy mẫu</th>
+                        <th>Thời hạn XH trước ngày</th>
                         <th>Điểm kho</th>
                         <th>Lô kho</th>
+                        <th>Số BB LM/BGM</th>
+                        <th>Ngày lấy mẫu</th>
                         <th>Số BB tịnh kho</th>
                         <th>Ngày xuất dốc kho</th>
                         <th>Số BB hao dôi</th>
                         <th>Trạng thái</th>
-                        <th>Hành động</th>
+                        <th style="width: 10%">Hành động</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    <ng-container *ngFor="let data of basicTable.data, let i = index;">
-                        <tr>
-                            <td (nzExpandChange)="onExpandStringChange(data.idVirtual, $event)"
-                                [nzExpand]="expandSetString.has(data.idVirtual)" nzShowExpand="true"
-                                style="width: 35px"></td>
+                    <ng-container *ngFor="let item of tblData.data, let i = index;">
+                        <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
                             <td>{{i + 1}}</td>
+                            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                                [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+                                style="width: 35px"></td>
                             <td>
-                                <a *ngIf="data.soQd && data.idQd" nz-button nzType="link" nzBlock
-                                    (click)="openModalQdNv(data.idQd)">{{
-                                    data.soQd}}</a>
+                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link" nzBlock
+                                    (click)="openModalQdNv(item.idQd)">{{
+                                    item.soQd}}</a>
                             </td>
-                            <td>{{ data.namKh }}</td>
-                            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+                            <td>{{item.namKh}}</td>
+                            <td>{{item.ngayQd}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -103,52 +101,76 @@
                             <td></td>
                             <td></td>
                             <td class="text-left">
-                                <a (click)="redirectToChiTiet(false, 0,data.idQd)" *ngIf="userService.isChiCuc()">
-                                    <i class="fa fa-plus"></i>
-                                </a>
                             </td>
                         </tr>
-                        <ng-container *ngIf="expandSetString.has(data.idVirtual)">
-                            <ng-container *ngFor="let lv1 of data.childData,let i1=index">
-                                <tr>
+                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                                <tr class="level-2">
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{ lv1.soBienBan }}</td>
-                                    <td>{{ lv1.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{ lv1.tenDiemKho }}</td>
-                                    <td>{{lv1.tenLoKho == null ? lv1.tenNganKho : lv1.tenLoKho }},
-                                        {{lv1.tenNhaKho}}
-                                    </td>
-                                    <td>{{ lv1.soBbTinhKho }}</td>
-                                    <td>{{ lv1.ngayXuatDocKho }}</td>
-                                    <td>{{ lv1.soBbHaoDoi }}</td>
-                                    <td>{{ lv1.tenTrangThai }}</td>
+                                    <td>{{lv1.tenDiemKho}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai == STATUS.DA_DUYET_LDCC "
-                                            (click)="redirectToChiTiet(true, lv1.id)">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a *ngIf="lv1.trangThai != STATUS.DA_DUYET_LDCC "
-                                            (click)="redirectToChiTiet(false, lv1.id)">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a *ngIf="lv1.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()"
-                                            (click)="delete(lv1)">
-                                            <i class="fa fa-trash-o do"></i>
+                                        <a (click)="redirectToChiTiet(false, 0,item.idQd)"
+                                            *ngIf="userService.isChiCuc()">
+                                            <i class="fa fa-plus"></i>
                                         </a>
                                     </td>
+
                                 </tr>
+                                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                                    <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                                        <tr class="level-3">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
+                                                {{lv2.tenNhaKho}}
+                                            </td>
+                                            <td>{{lv2.soBienBan}}</td>
+                                            <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                                            <td>{{lv2.soBbTinhKho}}</td>
+                                            <td>{{lv2.ngayXuatDocKho}}</td>
+                                            <td>{{lv2.soBbHaoDoi}}</td>
+                                            <td>{{lv2.tenTrangThai}}</td>
+                                            <td class="text-left">
+                                                <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDCC "
+                                                    (click)="redirectToChiTiet(true, lv2.id)">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDCC "
+                                                    (click)="redirectToChiTiet(false, lv2.id)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a *ngIf="lv2.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()"
+                                                    (click)="delete(lv2)">
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
                     </ng-container>
                 </tbody>
             </nz-table>
-            <div class="tab-content tab-menu">
+            <div class="tab-content tab-menu" id="myTabContent">
                 <div class="tab-pane fade show active justify-content-between">
-                    <div class="trai"></div>
+                    <div class="trai">
+                    </div>
                     <div class="canphai">
                         <!-- begin phân trang  -->
                         <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
@@ -158,7 +180,7 @@
                                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
                             </ng-template>
                         </nz-pagination>
-                        <!-- end phân trang  -->
+                        <!-- end phân trang -->
                     </div>
                 </div>
             </div>
