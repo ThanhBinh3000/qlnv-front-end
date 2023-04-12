@@ -733,11 +733,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       if (this.userService.isTongCuc()) {
         await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, message);
       } else {
-        let result = await this.createUpdate(this.formData.value);
-        if (result) {
-          this.idInput = result.id;
-          await this.approve(this.idInput, STATUS.CHO_DUYET_TP, message);
-        }
+        await super.saveAndSend(this.formData.value, STATUS.CHO_DUYET_TP, message);
       }
     }
   }

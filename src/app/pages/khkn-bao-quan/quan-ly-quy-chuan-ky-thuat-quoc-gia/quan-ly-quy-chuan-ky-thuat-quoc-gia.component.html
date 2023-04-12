@@ -66,11 +66,13 @@
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_EXP')" type="button" class="btn btn-sub"
+          (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)">
+        <button *ngIf="userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM')" type="button" class="btn btn-sub xanh"
+          (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -177,16 +179,26 @@
               <td>{{ data.tenTrangThai }}</td>
               <td>{{ data.trangThaiHl }}</td>
               <td class="text-left">
-                <a *ngIf="data.trangThai!=  userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XEM')"
+                <a *ngIf=" (userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XEM') && (data.trangThai == STATUS.BAN_HANH))
+                ||(!userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDV)
+                ||(!userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.DA_DUYET_LDV)
+                ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.DU_THAO)
+                ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') &&  data.trangThai == STATUS.TU_CHOI_LDV)"
                   (click)="redirectToChiTiet(true,data.id)">
                   <i class="fa fa-eye"></i>
                 </a>
-                <a *ngIf="(data.trangThai=='00' || data.trangThai== STATUS.TU_CHOI_LDV) 
-                && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM')" (click)="redirectToChiTiet(false,data.id)">
+                <a *ngIf="(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && data.trangThai == STATUS.TU_CHOI_LDV)
+                ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_THEM') && data.trangThai == STATUS.DU_THAO)"
+                  (click)="redirectToChiTiet(false,data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="data.trangThai==STATUS.DU_THAO
-                && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XOA')" (click)="delete(data)">
+                <a *ngIf="(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDV)
+                ||(userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.DA_DUYET_LDV)"
+                  (click)="redirectToChiTiet(true,data.id)">
+                  <i class="icon htvbdh_tcdt_pheduyet"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XOA')"
+                  (click)="delete(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>

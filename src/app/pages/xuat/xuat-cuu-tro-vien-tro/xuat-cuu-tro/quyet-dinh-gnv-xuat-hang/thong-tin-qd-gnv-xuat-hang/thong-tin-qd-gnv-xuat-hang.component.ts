@@ -144,6 +144,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
+            this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -283,23 +284,26 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     })
   }
   async saveAndSend(status: string, message: string, sucessMessage: string) {
-    if (this.formData.value.id > 0) {
+    await this.saveSoQdPa();
+    await super.saveAndSend(this.formData.value, status, message, sucessMessage);
+    /*if (this.formData.value.id > 0) {
       let data = this.formData.value;
       this.saveSoQdPa();
+      await this.quyetDinhGiaoNvCuuTroService.update(this.formData.value)
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     } else {
-      let data = await this.createUpdate(this.formData.value);
       this.saveSoQdPa();
+      let data = await this.createUpdate(this.formData.value);
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    }
+    }*/
 
   }
 

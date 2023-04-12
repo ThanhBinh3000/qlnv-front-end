@@ -97,7 +97,7 @@ export class CuuTroVienTroComponent implements OnInit {
   }
 
   quayLai() {
-    this.dataInit = null;
+    this.dataInit = {};
     this.isDetail = false;
   }
 }

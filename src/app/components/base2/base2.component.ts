@@ -47,7 +47,7 @@ export class Base2Component implements OnInit {
   indeterminate = false;
 
   @Input() isDetail: boolean = false;
-  @Input() dataInit: any = {};
+  @Input() dataInit: any = null;
   idSelected: number = 0;
 
   // Service
@@ -495,6 +495,7 @@ export class Base2Component implements OnInit {
     });
   }
 
+
   checkPermission(roles): boolean {
     if (roles) {
       let type = typeof (roles);
@@ -517,6 +518,54 @@ export class Base2Component implements OnInit {
       return true
     }
     return true;
+  }
+
+  // Approve
+  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: msg,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          this.helperService.markFormGroupTouched(this.formData);
+          if (this.formData.invalid) {
+            return;
+          }
+          let res: any = {};
+          if (body.id && body.id > 0) {
+            res = await this.service.update(body);
+          } else {
+            res = await this.service.create(body);
+          }
+          if (res.msg == MESSAGE.SUCCESS) {
+            let res1 = await this.service.approve({id: res.data.id, trangThai: trangThai});
+            if (res1.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.SUCCESS);
+              this.goBack();
+              return res1;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res1.msg);
+              return null;
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            return null;
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          return null;
+        } finally {
+          await this.spinner.hide();
+        }
+      },
+    });
   }
 
   convertDateToString(event: any): string {
