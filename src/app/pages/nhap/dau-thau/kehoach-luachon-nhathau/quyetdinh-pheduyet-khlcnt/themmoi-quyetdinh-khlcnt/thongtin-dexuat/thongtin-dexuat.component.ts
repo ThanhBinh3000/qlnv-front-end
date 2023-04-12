@@ -143,9 +143,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     this.listDataChiCuc = chain(this.listDataChiCuc).groupBy('idGoiThau').value()
 
     this.listDataCuc.forEach(item => {
-      for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
-        if (item.id == this.listDataChiCuc[item.id][i].idGoiThau) {
-          this.listData.push({ tenDvi: this.listDataChiCuc[item.id][i].tenDvi, dataChild: item })
+      if (this.listDataChiCuc[item.id] != undefined) {
+        for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
+          if (item.id == this.listDataChiCuc[item.id][i].idGoiThau) {
+            this.listData.push({ tenDvi: this.listDataChiCuc[item.id][i].tenDvi, dataChild: item })
+          }
         }
       }
     })
