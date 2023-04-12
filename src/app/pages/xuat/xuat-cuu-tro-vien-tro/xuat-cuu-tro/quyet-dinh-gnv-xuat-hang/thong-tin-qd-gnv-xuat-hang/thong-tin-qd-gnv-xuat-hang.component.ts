@@ -283,7 +283,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     })
   }
   async saveAndSend(status: string, message: string, sucessMessage: string) {
-    if (this.formData.value.id > 0) {
+    await this.saveSoQdPa();
+    await super.saveAndSend(this.formData.value, status, message, sucessMessage);
+    /*if (this.formData.value.id > 0) {
       let data = this.formData.value;
       this.saveSoQdPa();
       if (data) {
@@ -299,7 +301,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    }
+    }*/
 
   }
 
