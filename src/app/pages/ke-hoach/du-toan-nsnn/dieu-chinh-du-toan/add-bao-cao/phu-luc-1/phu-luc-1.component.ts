@@ -98,6 +98,8 @@ export class PhuLuc1Component implements OnInit {
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
+    console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
+    
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({

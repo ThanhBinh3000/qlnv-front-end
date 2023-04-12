@@ -100,7 +100,7 @@ export class AddBaoCaoComponent implements OnInit {
   printStatus = true;
   okStatus = true;
   finishStatus = true;
-  viewRecommendedValue = true;
+  viewRecommendedValue : boolean;
 
   baoCao: BaoCao = new BaoCao();
   listAppendix: any[] = [];
@@ -305,6 +305,8 @@ export class AddBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
+          console.log("this.childUnit: ", this.childUnit);
+          
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -314,6 +316,7 @@ export class AddBaoCaoComponent implements OnInit {
       }
     )
   }
+  statusAppraisal = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
 
   getStatusButton() {
     const isSynthetic = this.baoCao.lstDviTrucThuoc && this.baoCao.lstDviTrucThuoc.length != 0;
@@ -333,7 +336,7 @@ export class AddBaoCaoComponent implements OnInit {
       this.status = true;
     }
 
-    this.viewRecommendedValue = Utils.statusAppraisal.includes(this.baoCao.trangThaiBaoCao);
+    this.viewRecommendedValue = this.statusAppraisal.includes(this.baoCao.trangThaiBaoCao) && this.baoCao.maDviCha.length !== 6;
     this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) && checkSave && isChild;
     this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThaiBaoCao) && checkSunmit && isChild && !(!this.baoCao.id);
     this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThaiBaoCao) && checkPass && isChild;
@@ -690,7 +693,7 @@ export class AddBaoCaoComponent implements OnInit {
     switch (formDetail.maLoai) {
       case 'pl01':
         nzContent = PhuLuc1Component;
-        if (isSynthetic == false) {
+        // if (isSynthetic == false) {
           if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) || Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao)) {
             dataInfo.extraData = [];
             const data2 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl02');
@@ -699,6 +702,7 @@ export class AddBaoCaoComponent implements OnInit {
             let tong2 = 0;
             let tongDtoanTrongNam2 = 0;
             let dtoanDnghiDchinh2 = 0;
+            let dtoanVuTvqtDnghi2 = 0;
             if (data2?.trangThai != '3') {
               data2?.lstCtietDchinh?.forEach(item => {
                 dtoanKphiNamTruoc2 += Number(item?.dtoanSuDung);
@@ -706,6 +710,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong2 += Number(item?.tongCongDtoan);
                 tongDtoanTrongNam2 += Number(item?.thanhTienTh);
                 dtoanDnghiDchinh2 += Number(item?.dieuChinhDtoan);
+                dtoanVuTvqtDnghi2 += Number(item?.vuTvqtDnghiDtoan ? item?.vuTvqtDnghiDtoan : 0);
               })
               dataInfo.extraData.push({
                 stt: "0.1.1.4.1",
@@ -715,7 +720,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong2,
                 tongDtoanTrongNam: tongDtoanTrongNam2,
                 dtoanDnghiDchinh: dtoanDnghiDchinh2,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi2,
               })
             }
 
@@ -725,6 +730,7 @@ export class AddBaoCaoComponent implements OnInit {
             let tong3 = 0;
             let tongDtoanTrongNam3 = 0;
             let dtoanDnghiDchinh3 = 0;
+            let dtoanVuTvqtDnghi3 = 0;
             if (data3?.trangThai != '3') {
               data3?.lstCtietDchinh?.forEach(item => {
                 dtoanKphiNamTruoc3 += Number(item?.dtoanKphiNtruoc);
@@ -732,6 +738,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong3 += Number(item?.dtoanKphiCong);
                 tongDtoanTrongNam3 += Number(item?.ncauKphi);
                 dtoanDnghiDchinh3 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+                dtoanVuTvqtDnghi3 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
               })
               dataInfo.extraData.push({
                 stt: "0.2.1.2",
@@ -741,7 +748,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong3,
                 tongDtoanTrongNam: tongDtoanTrongNam3,
                 dtoanDnghiDchinh: dtoanDnghiDchinh3,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi3,
               })
             }
 
@@ -751,6 +758,7 @@ export class AddBaoCaoComponent implements OnInit {
               let tong4 = 0;
               let tongDtoanTrongNam4 = 0;
               let dtoanDnghiDchinh4 = 0;
+              let dtoanVuTvqtDnghi4 = 0;
               data4?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
@@ -758,6 +766,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong4 += Number(item?.dtoanDaGiaoLke);
                   tongDtoanTrongNam4 += Number(item?.khoachSauDchinh);
                   dtoanDnghiDchinh4 += Number(item?.dtoanDchinhDnghiLanNay ? item?.dtoanDchinhDnghiLanNay : 0);
+                  dtoanVuTvqtDnghi4 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
               })
               dataInfo.extraData.push({
@@ -768,7 +777,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong4,
                 tongDtoanTrongNam: tongDtoanTrongNam4,
                 dtoanDnghiDchinh: dtoanDnghiDchinh4,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi4,
               })
             }
 
@@ -778,6 +787,7 @@ export class AddBaoCaoComponent implements OnInit {
               let tong5 = 0;
               let tongDtoanTrongNam5 = 0;
               let dtoanDnghiDchinh5 = 0;
+              let dtoanVuTvqtDnghi5 = 0;
               data5?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
@@ -785,6 +795,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong5 += Number(item?.dtoanDaGiaoLke);
                   tongDtoanTrongNam5 += Number(item?.thanhTien);
                   dtoanDnghiDchinh5 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+                  dtoanVuTvqtDnghi5 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
               })
               dataInfo.extraData.push({
@@ -795,7 +806,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong5,
                 tongDtoanTrongNam: tongDtoanTrongNam5,
                 dtoanDnghiDchinh: dtoanDnghiDchinh5,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi5,
               })
             }
 
@@ -805,6 +816,7 @@ export class AddBaoCaoComponent implements OnInit {
               let tong6 = 0;
               let tongDtoanTrongNam6 = 0;
               let dtoanDnghiDchinh6 = 0;
+              let dtoanVuTvqtDnghi6 = 0;
               data6?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
@@ -812,6 +824,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong6 += Number(item?.dtoanGiaoLke);
                   tongDtoanTrongNam6 += Number(item?.sluongThienTtien);
                   dtoanDnghiDchinh6 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+                  dtoanVuTvqtDnghi6 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
               })
               dataInfo.extraData.push({
@@ -822,7 +835,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong6,
                 tongDtoanTrongNam: tongDtoanTrongNam6,
                 dtoanDnghiDchinh: dtoanDnghiDchinh6,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi6,
               })
             }
 
@@ -833,11 +846,13 @@ export class AddBaoCaoComponent implements OnInit {
               let tong7 = 0;
               let tongDtoanTrongNam7 = 0;
               let dtoanDnghiDchinh7 = 0;
+              let dtoanVuTvqtDnghi7 = 0;
               data7?.lstCtietDchinh?.forEach(item => {
                 dtoanKphiNamNay7 += Number(item?.dtoanLkeDaGiao);
                 tong7 += Number(item?.dtoanLkeDaGiao);
                 tongDtoanTrongNam7 += Number(item?.ncauDtoan);
                 dtoanDnghiDchinh7 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                dtoanVuTvqtDnghi7 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
               })
               dataInfo.extraData.push({
                 stt: "0.1.1.2.4",
@@ -847,7 +862,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong7,
                 tongDtoanTrongNam: tongDtoanTrongNam7,
                 dtoanDnghiDchinh: dtoanDnghiDchinh7,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi7,
               })
             }
 
@@ -858,6 +873,7 @@ export class AddBaoCaoComponent implements OnInit {
               let tong8 = 0;
               let tongDtoanTrongNam8 = 0;
               let dtoanDnghiDchinh8 = 0;
+              let dtoanVuTvqtDnghi8 = 0;
               data8?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
@@ -866,6 +882,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong8 += Number(item?.kphiCong);
                   tongDtoanTrongNam8 += item.tongNcauDtoan;
                   dtoanDnghiDchinh8 += Number(item?.dtoanDchinhDnghi ? item?.dtoanDchinhDnghi : 0);
+                  dtoanVuTvqtDnghi8 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
               })
               dataInfo.extraData.push({
@@ -876,7 +893,7 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong8,
                 tongDtoanTrongNam: tongDtoanTrongNam8,
                 dtoanDnghiDchinh: dtoanDnghiDchinh8,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi8,
               })
             }
 
@@ -887,6 +904,7 @@ export class AddBaoCaoComponent implements OnInit {
               let tong9 = 0;
               let tongDtoanTrongNam9 = 0;
               let dtoanDnghiDchinh9 = 0;
+              let dtoanVuTvqtDnghi9 = 0;
               data9?.lstCtietDchinh?.forEach(item => {
                 const level = item.stt.split('.').length - 2;
                 if (level == 0) {
@@ -895,6 +913,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong9 += Number(item?.dtoanKphiCong);
                   tongDtoanTrongNam9 += Number(item?.tongNcauTluong);
                   dtoanDnghiDchinh9 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                  dtoanVuTvqtDnghi9 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
               })
               dataInfo.extraData.push({
@@ -905,13 +924,12 @@ export class AddBaoCaoComponent implements OnInit {
                 tong: tong9,
                 tongDtoanTrongNam: tongDtoanTrongNam9,
                 dtoanDnghiDchinh: dtoanDnghiDchinh9,
-                dtoanVuTvqtDnghi: 0,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi9,
               })
             }
 
             const data10 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl10');
             if (data10?.trangThai != '3') {
-              let dtoanKphiNamTruoc10 = 0;
               let dtoanKphiNamNay10 = 0;
               let tong10 = 0;
               let tongDtoanTrongNam10 = 0;
@@ -924,6 +942,7 @@ export class AddBaoCaoComponent implements OnInit {
                   tong10 += Number(item?.dtoanGiaoLke);
                   tongDtoanTrongNam10 += Number(item?.kh2021SauDchinh);
                   dtoanDnghiDchinh10 += Number(item?.dtoanDnghiDchinhLnay ? item?.dtoanDnghiDchinhLnay : 0);
+                  dtoanVuTvqtDnghi10 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
                 }
                 dataInfo.extraData.push({
                   stt: "0.1.1.1",
@@ -933,13 +952,13 @@ export class AddBaoCaoComponent implements OnInit {
                   tong: tong10,
                   tongDtoanTrongNam: tongDtoanTrongNam10,
                   dtoanDnghiDchinh: dtoanDnghiDchinh10,
-                  dtoanVuTvqtDnghi: 0,
+                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi10,
                 })
               })
             }
 
 
-          }
+          // }
         }
         break;
       case 'pl02':

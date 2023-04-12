@@ -260,7 +260,7 @@ export class PhuLuc3Component implements OnInit {
 
     if (!this.viewRecommendedValue) {
       lstCtietBcaoTemp?.forEach(item => {
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi;
+        item.dtoanVuTvqtDnghi = item.dtoanDchinh;
       })
     }
 

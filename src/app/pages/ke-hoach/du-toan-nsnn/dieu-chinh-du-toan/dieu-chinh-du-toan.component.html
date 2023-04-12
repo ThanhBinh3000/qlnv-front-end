@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
-  <ul nz-menu nzMode="horizontal">
-    <!-- <li *ngIf="isList" nz-menu-item nzSelected (click)="selectTab('danhsach')">
+  <!-- <ul nz-menu nzMode="horizontal">
+    <li *ngIf="isList" nz-menu-item nzSelected (click)="selectTab('danhsach')">
       Báo cáo
     </li>
     <li *ngIf="isAccept" nz-menu-item (click)="selectTab('capduoi')">
@@ -8,7 +8,7 @@
     </li>
     <li *ngIf="isSynthetic" nz-menu-item (click)="selectTab('tonghop')">
       Tổng hợp báo cáo từ đơn vị cấp dưới
-    </li> -->
+    </li>
     <li nz-menu-item nzSelected (click)="selectTab('danhsach')">
       Báo cáo
     </li>
@@ -18,7 +18,15 @@
     <li nz-menu-item (click)="selectTab('tonghop')">
       Tổng hợp báo cáo từ đơn vị cấp dưới
     </li>
-  </ul>
+    
+  </ul> -->
+  <ul nz-menu nzMode="horizontal">
+    <ng-container *ngFor="let data of tabList">
+        <li *ngIf="data.status" [nzSelected]="data.isSelected" nz-menu-item (click)="selectTab(data.code)">
+            {{data.name}}
+        </li>
+    </ng-container>
+</ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">

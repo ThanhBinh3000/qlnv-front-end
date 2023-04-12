@@ -109,6 +109,8 @@ export class PhuLuc4Component implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
+    console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
+    
     const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
     if (category) {
       category.data.forEach(
@@ -237,7 +239,7 @@ export class PhuLuc4Component implements OnInit {
 
     if (!this.viewRecommendedValue) {
       lstCtietBcaoTemp?.forEach(item => {
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi;
+        item.dtoanVuTvqtDnghi = item.dtoanDchinhDnghiLanNay;
       })
     }
 
@@ -408,8 +410,8 @@ export class PhuLuc4Component implements OnInit {
   changeModel(id: string): void {
     // this.editCache[id].data.tongNcauDtoanN = this.editCache[id].data.tdiemBcaoDtoan + this.editCache[id].data.dkienThienDtoan + this.editCache[id].data.dtoanThieuNtruoc;
     // // this.editCache[id].data.dtoanDchinh = Number((this.editCache[id].data.ncauChiN1 / this.editCache[id].data.uocThienN).toFixed(3));
-    this.editCache[id].data.khoachSauDchinh = this.editCache[id].data.keHoachVon + this.editCache[id].data.dtoanDchinhDnghi;
-    this.editCache[id].data.dtoanDchinhDnghiLanNay = this.editCache[id].data.khoachSauDchinh - this.editCache[id].data.dtoanDaGiaoLke;
+    this.editCache[id].data.khoachSauDchinh = sumNumber([this.editCache[id].data.keHoachVon, this.editCache[id].data.dtoanDchinhDnghi]);
+    this.editCache[id].data.dtoanDchinhDnghiLanNay = Number(this.editCache[id].data.khoachSauDchinh) - Number(this.editCache[id].data.dtoanDaGiaoLke);
   };
 
   deleteAllChecked() {
