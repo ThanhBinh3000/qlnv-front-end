@@ -255,7 +255,7 @@
                                     <td>{{lv1.soBbTinhKho}}</td>
                                     <td>{{lv1.ngayXuatDocKho | date: 'dd/MM/YYYY' }}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
-                                    <td class="text-left" *ngIf="this.userService.isTongCuc()">
+                                    <td class="text-left">
                                         <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&
                                             !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA) &&
                                             userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM')">

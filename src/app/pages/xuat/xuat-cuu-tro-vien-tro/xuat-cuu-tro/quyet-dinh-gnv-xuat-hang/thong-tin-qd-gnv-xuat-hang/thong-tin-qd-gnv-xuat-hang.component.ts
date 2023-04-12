@@ -286,14 +286,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     if (this.formData.value.id > 0) {
       let data = this.formData.value;
       this.saveSoQdPa();
+      await this.quyetDinhGiaoNvCuuTroService.update(this.formData.value)
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     } else {
-      let data = await this.createUpdate(this.formData.value);
       this.saveSoQdPa();
+      let data = await this.createUpdate(this.formData.value);
       if (data) {
         await this.approve(data.id, status, message, null, sucessMessage);
       } else {
