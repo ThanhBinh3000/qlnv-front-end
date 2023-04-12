@@ -269,7 +269,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			// this.trangThaiBanGhi = '1';
 			this.maDonViTao = this.userInfo?.MA_DVI;
 			this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-			this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
+			// this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
 			this.maDviTien = '1'
 			this.listIdFilesDelete = this.data?.listIdDeleteFiles;
 			this.lstCtietBcao = this.data?.lstCtiets;
@@ -393,11 +393,11 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 						})
 					}
 					this.checkSumUp = data.data.checkSumUp;
-					if (this.lstCtietBcao[0]?.lstCtietDvis.length > 0) {
-						this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
-							this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
-						})
-					}
+					// if (this.lstCtietBcao[0]?.lstCtietDvis.length > 0) {
+					// 	this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
+					// 		this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
+					// 	})
+					// }
 					// this.lstCtietBcao.forEach(item => {
 					//   item.tongCong = divMoney(item.tongCong, this.maDviTien);
 					//   if (item.lstCtietDvis) {

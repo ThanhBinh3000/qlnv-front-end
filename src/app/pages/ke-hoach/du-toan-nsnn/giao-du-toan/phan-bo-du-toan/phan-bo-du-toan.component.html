@@ -78,6 +78,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th width="60px">STT</th>
+          <th width="150px">Mã phương án cấp trên</th>
           <th width="150px">Mã phương án</th>
           <!-- <th width="150px">Số QĐ</th> -->
           <th width="150px">Ngày tạo</th>
@@ -90,6 +91,15 @@
         <tr class="search-table">
           <th></th>
           <th></th>
+          <th>
+            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPaCha"
+                (input)="filterInTable('maPa',filterTable.maPa, false)" size="small" />
+            </nz-input-group>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maPa"
@@ -145,6 +155,9 @@
           </td>
           <td class="text-center">
             {{ (i + 1) + (pages.page - 1)*pages.size }}
+          </td>
+          <td>
+            {{ data.maPaCha}}
           </td>
           <td>
             {{ data.maPa}}

@@ -189,7 +189,7 @@ export class PhuLucPhanBoComponent implements OnInit {
 
     // console.log(lstCtietTemp);
     console.log("this.lstCtietBcao: ", this.lstCtietBcao);
-    
+    this.tinhTong();
     this.getStatusButton();
     this.updateEditCache();
     this.spinner.hide();

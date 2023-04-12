@@ -236,7 +236,7 @@ export class PhuLuc10Component implements OnInit {
 
     if (!this.viewRecommendedValue) {
       lstCtietBcaoTemp?.forEach(item => {
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi;
+        item.dtoanVuTvqtDnghi = item.dtoanDnghiDchinhLnay;
       })
     }
 
