@@ -490,12 +490,17 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
+      let isReplace = false;
       if (res.value.goiThau && res.value.goiThau != '') {
         for (let i = 0; i < this.listOfData.length; i++) {
           if (this.listOfData[i].goiThau == res.value.goiThau) {
             this.listOfData.splice(i, 1, res.value)
+            isReplace = true;
           }
         }
+      }
+      if (isReplace == false) {
+        this.listOfData = [...this.listOfData, res.value]
       }
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
