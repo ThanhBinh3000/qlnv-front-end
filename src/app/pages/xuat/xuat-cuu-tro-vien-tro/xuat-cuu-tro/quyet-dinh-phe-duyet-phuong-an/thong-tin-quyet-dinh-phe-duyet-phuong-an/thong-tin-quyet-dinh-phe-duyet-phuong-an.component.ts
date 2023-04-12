@@ -167,7 +167,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.firstInit = false;
 
       //tao de xuat tu trang tong hop
-      if (this.dataInit) {
+      if (Object.keys(this.dataInit).length > 0) {
         await this.selectMaTongHop(this.dataInit.id);
         await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
         await this.buildTableView();
