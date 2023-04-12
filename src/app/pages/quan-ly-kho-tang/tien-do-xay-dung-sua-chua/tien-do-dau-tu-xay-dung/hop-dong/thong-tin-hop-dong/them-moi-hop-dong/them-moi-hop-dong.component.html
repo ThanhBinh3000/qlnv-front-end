@@ -39,8 +39,7 @@
                   </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonQdPdKqLCNT()">
-                      <input nz-input
-                             formControlName="soQdPdKqlcnt"/>
+                      <input nz-input formControlName="soQdPdKqlcnt"/>
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-control>
@@ -74,8 +73,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Gói thầu</nz-form-label>
                   <nz-select nzAllowClear (ngModelChange)="changeGoiThau($event)" formControlName="idGoiThau"
                              [nzDisabled]="isViewDetail ||  idInput > 0">
-                    <nz-option *ngFor="let p of listGoiThau" [nzValue]="p.idGoiThau"
-                               [nzLabel]="p.tenGoiThau"></nz-option>
+                    <nz-option *ngFor="let p of listGoiThau" [nzValue]="p.id"
+                               [nzLabel]="p.noiDung"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>
@@ -114,7 +113,7 @@
             <div nz-col nzSpan="8">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Ghi chú (cho ngày HL)
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Ghi chú (cho ngày HL)
                   </nz-form-label>
                   <input nz-input formControlName="ghiChuHieuLuc" [readonly]="isViewDetail"/>
                 </nz-form-control>
@@ -124,7 +123,7 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Loại hợp đồng</nz-form-label>
-                  <input nz-input formControlName="loaiHopDong" [readonly]="isViewDetail"/>
+                  <input nz-input formControlName="tenLoaiHopDong" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -176,7 +175,7 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Tên chủ đầu tư
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tên chủ đầu tư
                   </nz-form-label>
                   <input [readonly]="true" nz-input
                          formControlName="cdtTen" readonly="true"/>
@@ -332,7 +331,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Thành tiền
                   </nz-form-label>
-                  <input [readonly]="true" type="number" nz-input formControlName="thanhTien" readonly="true"/>
+                  <input [readonly]="true" type="text" nz-input formControlName="thanhTien" readonly="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -355,7 +354,7 @@
             </div>
           </div>
         </form>
-        <nz-table #groupingTable nzBordered [nzData]="listKlcv" class="mt-2"
+        <nz-table #groupingTable nzBordered [nzData]="dataKlcv" class="mt-2"
                   [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1200px' }">
           <thead>
           <tr>
@@ -374,29 +373,95 @@
               <input nz-input [(ngModel)]="rowItemKlcv.tenCongViec"/>
             </th>
             <th class="text-center">
-              <input nz-input [(ngModel)]="rowItemKlcv.donViTinh"/>
+              <input [maxlength]="80" nz-input [(ngModel)]="rowItemKlcv.donViTinh"/>
             </th>
             <th class="text-center">
-              <input nz-input [(ngModel)]="rowItemKlcv.khoiLuong"/>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemKlcv.khoiLuong"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
             </th>
             <th class="text-center">
-              <input nz-input [(ngModel)]="rowItemKlcv.donGia"/>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemKlcv.donGia"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
             </th>
             <th class="text-center">
+              <input nz-input [readOnly]="true" [(ngModel)]="rowItemKlcv.thanhTien"/>
             </th>
             <th class="text-center">
               <input nz-input [(ngModel)]="rowItemKlcv.ghiChu"/>
             </th>
             <th class="text-center">
-              <!--                <a *ngIf="!isViewDetail" (click)="addAddCongViecKad()">-->
-              <!--                  <i class="icon htvbdh_dau-cong"></i>-->
-              <!--                </a>-->
-              <!--                <a *ngIf="!isViewDetail" (click)="refreshCongViecKad()">-->
-              <!--                  <i class="fa fa-refresh"></i>-->
-              <!--                </a>-->
+              <a *ngIf="!isViewDetail" (click)="addKlCongViec()">
+                <i class="icon htvbdh_dau-cong"></i>
+              </a>
+              <a *ngIf="!isViewDetail" (click)="refreshKLCongViec()">
+                <i class="fa fa-refresh"></i>
+              </a>
             </th>
           </tr>
           </thead>
+          <tbody>
+          <tr *ngFor="let data of dataKlcv ;let i = index">
+            <ng-container
+              *ngIf="(dataKlcvEdit && dataKlcvEdit[i] && !dataKlcvEdit[i].edit) ; else editTemplate ">
+              <td>{{i + 1}} </td>
+              <td>{{data.tenCongViec }}</td>
+              <td>{{data.donViTinh }}</td>
+              <td class="text-right">{{data.khoiLuong  | number}}</td>
+              <td class="text-right">{{data.donGia  | number}}</td>
+              <td class="text-right">{{data.thanhTien  | number}}</td>
+              <td>{{data.ghiChu}}</td>
+              <td class="text-center">
+                <a *ngIf="!isViewDetail" (click)="editDataKlCongViec(i)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="!isViewDetail" (click)="deleteKlCongViec(i)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td class="text-center">{{i + 1}} </td>
+              <td>
+                <input nz-input [(ngModel)]="dataKlcvEdit[i].data.tenCongViec"/>
+              </td>
+              <td>
+                <input nz-input [(ngModel)]="dataKlcvEdit[i].data.donViTinh"/>
+              </td>
+              <td>
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="dataKlcvEdit[i].data.khoiLuong"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser">
+                </nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzSize]="'small'" [(ngModel)]="dataKlcvEdit[i].data.donGia"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser">
+                </nz-input-number>
+              </td>
+              <td>
+                <nz-input-number [nzSize]="'small'" readonly="true" [(ngModel)]="dataKlcvEdit[i].data.thanhTien"
+                                 [nzFormatter]="globals.formatter"
+                                 [nzParser]="globals.parser">
+                </nz-input-number>
+              </td>
+              <td class="text-right">
+                <input nz-input [(ngModel)]="dataKlcvEdit[i].data.ghiChu"/>
+              </td>
+              <td class="text-center">
+                <a (click)="saveEditKLCongViec(i)" class="save">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="cancelEditKLCongViec(i)">
+                  <i class="fa fa-ban do"></i> </a>
+              </td>
+            </ng-template>
+          </tr>
+          </tbody>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
@@ -412,7 +477,7 @@
     </form>
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="PHỤ LỤC HỢP ĐỒNG">
-        <div class="text-right mt-2" *ngIf="formData.value.trangThai !== STATUS.DA_KY">
+        <div class="text-right mt-2" *ngIf="formData.value.trangThai == STATUS.DA_KY">
           <div class="btn-group">
             <button type="button" class="btn xanh" (click)="redirectToPhuLuc(false, null)">
               <i class="icon htvbdh_dau-cong"></i>

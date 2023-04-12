@@ -42,7 +42,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listLoaiVthh: any = [];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
-  maVb: string;
   listCloaiVthh: any[] = [];
   listOfCloaiVthh: any[] = [];
   isEdit: boolean = false;
@@ -52,6 +51,10 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listVanBanId: any = [];
   dsBoNganh: any[] = [];
   listAll: any[] = [];
+  listMaSo: any[] = [
+    { maVb: '/' + dayjs().get('year') + '/TT-BTC' },
+    { maVb: '/' + dayjs().get('year') + '/QĐ-BTC' }
+  ]
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -86,6 +89,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       apDungCloaiVthh: [false],
       listTenLoaiVthh: [''],
       type: [''],
+      maVb: this.listMaSo[0].maVb
     });
   }
 
@@ -103,7 +107,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loadDsNam(),
-        this.maVb = this.userInfo.MA_QD,
         this.loadLoaiHangHoa(),
         this.getListBoNganh()
       ]);
@@ -134,6 +137,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
+        data.soVanBan = data.soVanBan.split('/')[0];
         this.changeListOfTagOptions(data.loaiVthh);
         let lss = []
         for (let item of this.listOfTagOptions) {
@@ -158,7 +162,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     } else {
       let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ")
       this.formData.patchValue({
-        soVanBan: id + this.maVb,
+        // soVanBan: id + this.maVb,
         tenDvi: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI,
         diaChiDvi: this.userInfo.DON_VI.diaChi,
@@ -225,6 +229,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       return;
     }
     let body = this.formData.value;
+    body.soVanBan = body.soVanBan + body.maVb
     body.tieuChuanKyThuat = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
@@ -249,7 +254,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -392,6 +396,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async changeListOfTagOptions(cloaiVtt, typeData?) {
+    console.log(cloaiVtt, "cloaiVtt");
     let lss = [];
     let ls = [];
     if (this.listOfTagOptions.length > 0) {
@@ -413,7 +418,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           }
         }
         if (data.length > 0) {
-          this.rowItem.tenCloaiVthh = data[0].title;
+          console.log(this.listCloaiVthh, "listCloaiVthh");
+          this.rowItem.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
+          console.log(this.rowItem.tenCloaiVthh, "this.rowItem.tenCloaiVthh");
         }
         // this.rowItem.tenCloaiVthh = data[0].title;
       };
@@ -436,22 +443,40 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
   themMoiItem() {
     if (this.dataTable) {
-      if (this.rowItem.tenChiTieu && this.rowItem.mucYeuCauNhap && this.rowItem.mucYeuCauNhapToiThieu && this.rowItem.mucYeuCauNhapToiDa &&
-        this.rowItem.mucYeuCauXuat && this.rowItem.mucYeuCauNhapToiThieu && this.rowItem.mucYeuCauXuatToiDa != null) {
-        this.sortTableId();
-        let item = cloneDeep(this.rowItem);
-        item.stt = this.dataTable.length + 1;
-        item.edit = false;
-        this.dataTable = [
-          ...this.dataTable,
-          item,
-        ]
+      if (!this.formData.value.apDungCloaiVthh && this.listCloaiVthh.length == 0) {
+        if (this.rowItem.tenChiTieu) {
+          this.sortTableId();
+          let item = cloneDeep(this.rowItem);
+          item.stt = this.dataTable.length + 1;
+          item.edit = false;
+          this.dataTable = [
+            ...this.dataTable,
+            item,
+          ]
 
-        this.rowItem = new QuyChunKyThuatQuocGia();
-        this.updateEditCache();
+          this.rowItem = new QuyChunKyThuatQuocGia();
+          this.updateEditCache();
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng nhập tên chỉ tiêu")
+        }
       } else {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+        if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
+          this.sortTableId();
+          let item = cloneDeep(this.rowItem);
+          item.stt = this.dataTable.length + 1;
+          item.edit = false;
+          this.dataTable = [
+            ...this.dataTable,
+            item,
+          ]
+
+          this.rowItem = new QuyChunKyThuatQuocGia();
+          this.updateEditCache();
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng nhập tên chỉ tiêu và chủng loại hàng hóa")
+        }
       }
+
     }
   }
 

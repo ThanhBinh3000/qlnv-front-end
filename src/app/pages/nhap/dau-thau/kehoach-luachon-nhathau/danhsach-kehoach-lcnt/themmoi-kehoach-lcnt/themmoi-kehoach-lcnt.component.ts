@@ -490,12 +490,17 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       if (!res) {
         return;
       }
+      let isReplace = false;
       if (res.value.goiThau && res.value.goiThau != '') {
         for (let i = 0; i < this.listOfData.length; i++) {
           if (this.listOfData[i].goiThau == res.value.goiThau) {
             this.listOfData.splice(i, 1, res.value)
+            isReplace = true;
           }
         }
+      }
+      if (isReplace == false) {
+        this.listOfData = [...this.listOfData, res.value]
       }
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
@@ -677,19 +682,20 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+    let res2 = null;
+    if (this.loaiVthhInput.startsWith('02')) {
+      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachVtNam(
         +this.formData.get('namKhoach').value,
       );
+    } else {
+      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+        +this.formData.get('namKhoach').value,
+      );
+    }
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
         soQd: this.dataChiTieu.soQuyetDinh
-      });
-    }
-    if (this.loaiVthhInput.startsWith('02')) {
-      this.formData.patchValue({
-        soQd: '150/TCDT',
       });
     }
   }

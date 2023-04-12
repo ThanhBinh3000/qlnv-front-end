@@ -177,6 +177,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   async loadBbLayMau() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0

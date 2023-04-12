@@ -43,7 +43,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất viện trợ cứu trợ</h3>
+      <h3 class="text-uppercase">Danh sách tổng hợp phương án xuất cứu trợ, viện trợ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteMulti()"
                 *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')">
@@ -194,6 +194,11 @@
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET')"
               (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd"
+              (click)="taoQuyetDinh(data)">
+              <i class="icon htvbdh_soanthao"></i>
             </a>
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XOA')"

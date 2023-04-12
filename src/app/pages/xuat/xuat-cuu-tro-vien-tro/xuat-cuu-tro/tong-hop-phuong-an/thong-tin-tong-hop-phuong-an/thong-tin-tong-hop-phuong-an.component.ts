@@ -127,7 +127,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         loaiVthh: [''],
         cloaiVthh: [''],
         trangThai: [''],
-        idQdPd: [0],
+        idQdPd: [''],
         soQdPd: [''],
         ngayKyQd: [''],
         ngayGduyet: [''],
@@ -234,10 +234,10 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     }
   }
 
-  async saveAndSend() {
+ /* async saveAndSend() {
     let currentData = await this.createUpdate(this.formData.value);
     await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
-  }
+  }*/
 
   async guiDuyet() {
     this.modal.confirm({

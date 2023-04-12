@@ -71,6 +71,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null, Validators.required],
+      diaChi: [],
       idDuAn: [null, Validators.required],
       tienCvDaTh: [0],
       tienCvKad: [0],
@@ -234,6 +235,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
           idQdPdDaDtxd: item.id,
           tenDuAn: item.tenDuAn,
           chuDauTu: item.chuDauTu,
+          diaChi: item.diaChi,
           idDuAn: item.idDuAn,
           tongTien: item.tongMucDt
         });
@@ -273,7 +275,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     })
   }
 
-  addAddCongViecKad() {
+  addCongViecKad() {
     this.rowItemCongViecKad.loai = '01';
     this.dataCongViecKad = [...this.dataCongViecKad, this.rowItemCongViecKad];
     this.rowItemCongViecKad = new CongViec();

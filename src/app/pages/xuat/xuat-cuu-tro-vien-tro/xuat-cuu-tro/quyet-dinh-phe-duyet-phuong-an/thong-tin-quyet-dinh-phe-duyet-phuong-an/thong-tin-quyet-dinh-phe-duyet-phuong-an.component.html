@@ -174,7 +174,6 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <span>Tổng số lượng viện trợ</span>
       <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.quyetDinhPdDtl">
         <thead>
           <tr>
@@ -411,11 +410,11 @@
                     <div nz-col nzSpan="6">
                       <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                          Thành Tiền {{formData.value.soLuongXuaCap}} (đ)
+                          Thành Tiền
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                           <span class="text-blue">{{listThanhTien | nzAggregate: 'sum'|number: '1.0-1' :
-                            'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            'vi_VN'}} (đ)</span>
                         </nz-form-control>
                       </nz-form-item>
                     </div>

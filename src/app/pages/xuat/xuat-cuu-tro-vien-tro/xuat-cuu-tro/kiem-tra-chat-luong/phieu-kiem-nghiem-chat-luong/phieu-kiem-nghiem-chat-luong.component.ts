@@ -96,6 +96,7 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
 
   async search(roles?): Promise<void> {
     await super.search(roles);
+    this.buildTableView();
   }
 
   async initData() {

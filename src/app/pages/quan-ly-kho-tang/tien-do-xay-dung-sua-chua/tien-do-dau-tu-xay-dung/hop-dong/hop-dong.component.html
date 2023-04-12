@@ -47,7 +47,7 @@
           <span>Xuất file</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM')"
-                type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
+                type="button" class="btn btn-main" (click)="redirectToChiTiet(0,'addnew',false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm hợp đồng</span>
         </button>
@@ -140,19 +140,19 @@
           <td class="text-blue">{{ data.soQdPdDaDtxd }}</td>
           <td class="text-blue">{{ data.soQd }}</td>
           <td class="text-blue">{{ data.soQdPdKqlcnt }}</td>
-          <td>{{ data.soGoiThau }}</td>
-          <td>{{ data.soGoiThauTc }}</td>
-          <td>{{ data.soHopDongDaKy }}</td>
+          <td>{{ data.soGoiThau ? data.soGoiThau : 0 }}</td>
+          <td>{{ data.soGoiThauTc ? data.soGoiThauTc : 0 }}</td>
+          <td>{{ data.soHopDongDaKy ? data.soHopDongDaKy : 0}}</td>
           <td>{{ data.chuDauTu }}</td>
           <td class="text-left">{{ data.tenTrangThaiHd }}</td>
           <td class="text-center">
             <a *ngIf="data.trangThaiHd == STATUS.DA_HOAN_THANH "
-               (click)="redirectToChiTiet(data.id, true)">
+               (click)="redirectToChiTiet(data.id,'info', true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a
               *ngIf="(data.trangThaiHd == STATUS.DANG_THUC_HIEN || data.trangThaiHd == STATUS.CHUA_THUC_HIEN) && (userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD_THEM'))"
-              (click)="redirectToChiTiet(data.id)">
+              (click)="redirectToChiTiet(data.id,'info')">
               <i class="fa fa-pencil"></i>
             </a>
           </td>
@@ -180,7 +180,8 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-them-moi-hop-dong [id]="selectedId" (showListEvent)="showList()"
-                         [isViewDetail]="isViewDetail"
-                         [idInput]="selectedId" [flagThemMoi]="'addnew'"></app-them-moi-hop-dong>
+  <app-thong-tin-hop-dong [id]="selectedId" (showListEvent)="showList()"
+                          [isViewDetail]="isViewDetail"
+                          [idInput]="selectedId" [flagThemMoi]="flagInfo"></app-thong-tin-hop-dong>
 </ng-template>
+
