@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, includes } from 'lodash';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -95,13 +95,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes) {
-      console.log(changes);
     }
   }
 
   async ngOnInit() {
     this.spinner.show();
-    console.log(this.formThongTinChung);
     try {
       this.initForm();
       await Promise.all([
@@ -131,7 +129,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
   async getDetail(id) {
-    console.log(2);
     if (id > 0) {
       let res = await this.khCnQuyChuanKyThuat.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -353,7 +350,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async loadLoaiHangHoa() {
-    console.log(1);
     try {
       let hangHoa: any;
       if (this.userInfo.MA_DVI == "0101") {
@@ -396,9 +392,33 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   }
 
   async changeListOfTagOptions(cloaiVtt, typeData?) {
-    console.log(cloaiVtt, "cloaiVtt");
     let lss = [];
     let ls = [];
+    console.log(this.listOfTagOptions, "this.listOfTagOptions");
+
+    if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh))) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Loại hàng hóa này đã tồn tại văn bản quy chuẩn/tiêu chuẩn chất lượng, bạn có chắc muốn chọn lại?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          try {
+
+          } catch (e) {
+            console.log('error', e);
+          }
+        },
+        nzOnCancel: () => {
+          this.listOfTagOptions = this.listOfTagOptions.slice(0, this.listOfTagOptions.length - 1);
+        },
+      });
+    } else {
+
+    }
     if (this.listOfTagOptions.length > 0) {
       for (let item of this.listOfTagOptions) {
         let body = {
@@ -412,15 +432,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa]
         this.listLoaiVthh = lss;
         const data = this.listCloaiVthh.filter(d => d.key)
-        if (typeData) {
-          if (data.length > 0) {
-            typeData.tenCloaiVthh = data[0].title;
-          }
-        }
+        // if (typeData) {
+        //   if (data.length > 0) {
+        //     typeData.tenCloaiVthh = data[0].title;
+        //   }
+        // }
         if (data.length > 0) {
-          console.log(this.listCloaiVthh, "listCloaiVthh");
           this.rowItem.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
-          console.log(this.rowItem.tenCloaiVthh, "this.rowItem.tenCloaiVthh");
         }
         // this.rowItem.tenCloaiVthh = data[0].title;
       };
