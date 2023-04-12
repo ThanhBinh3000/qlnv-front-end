@@ -116,6 +116,7 @@ export enum CHUC_NANG {
   XOA = 'XOA',
   DUYET_KTVBQ = 'DUYET_KTVBQ',
   DUYET_KT = 'DUYET_KT',
+  TAO_QD = 'TAO_QD',
 }
 
 

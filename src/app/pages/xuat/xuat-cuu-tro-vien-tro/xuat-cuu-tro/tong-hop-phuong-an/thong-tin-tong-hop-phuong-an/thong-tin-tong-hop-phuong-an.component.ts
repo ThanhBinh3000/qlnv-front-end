@@ -127,7 +127,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         loaiVthh: [''],
         cloaiVthh: [''],
         trangThai: [''],
-        idQdPd: [0],
+        idQdPd: [''],
         soQdPd: [''],
         ngayKyQd: [''],
         ngayGduyet: [''],
