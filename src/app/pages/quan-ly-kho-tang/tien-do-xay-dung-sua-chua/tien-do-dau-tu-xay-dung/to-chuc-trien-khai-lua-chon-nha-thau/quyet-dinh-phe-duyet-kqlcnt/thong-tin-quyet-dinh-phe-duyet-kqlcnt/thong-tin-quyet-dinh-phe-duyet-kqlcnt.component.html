@@ -155,7 +155,7 @@
                       <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
                       <nz-form-control>
                         <nz-input-group>
-                          <input nz-input formControlName="tongMucDt" readonly/>
+                          <span>{{tongMucDt | number}}</span>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -182,7 +182,7 @@
           <th class="text-center" width="150px">Thời gian thực hiện <br/> hợp đồng (ngày)</th>
           <th class="text-center" width="120px">Nhà thầu trúng</th>
           <th class="text-center" width="120px">Giá trúng thầu <br/> (đ)</th>
-          <th class="text-center" width="100px" >Trạng thái</th>
+          <th class="text-center" width="100px">Trạng thái</th>
           <th class="text-center" width="100px" *ngIf="!isViewDetail">Hành động</th>
         </tr>
         </thead>
