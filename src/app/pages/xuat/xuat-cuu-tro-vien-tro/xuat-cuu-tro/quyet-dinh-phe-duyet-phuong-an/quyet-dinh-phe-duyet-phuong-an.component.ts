@@ -26,6 +26,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  @Input() isView = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -74,7 +75,6 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   userdetail: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
-  isView = false;
   dxPaId: number = 0;
   openDxPa = false;
   idTh: number = 0;

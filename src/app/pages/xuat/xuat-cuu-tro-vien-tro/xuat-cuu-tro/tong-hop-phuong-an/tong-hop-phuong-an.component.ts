@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
 import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
 import {CHUC_NANG, STATUS} from "src/app/constants/status";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { isEmpty } from 'lodash';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {isEmpty} from 'lodash';
 import {CuuTroVienTroComponent} from "../cuu-tro-vien-tro.component";
 
 @Component({
@@ -27,15 +27,18 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  @Input() isView = false;
+  @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
   public vldTrangThai: CuuTroVienTroComponent;
   CHUC_NANG = CHUC_NANG;
 
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
-    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - CĐ Vụ'},
   ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -72,23 +75,22 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
       tenTrangThai: '',
     };
   }
+
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
-  isView = false;
+
 
   async ngOnInit() {
     try {
       this.initData()
       await this.timKiem();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    finally {
+    } finally {
       await this.spinner.hide();
     }
   }
@@ -110,6 +112,7 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
       this.dsDonvi = dsTong.data;
     }
   }
+
   async timKiem() {
     if (this.formData.value.ngayDx) {
       this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
@@ -128,4 +131,10 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+
+  taoQuyetDinh(data) {
+    this.eventTaoQd.emit(data);
+  }
+
+
 }

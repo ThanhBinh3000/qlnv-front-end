@@ -1,14 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output, } from '@angular/core';
-import { Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
+import {Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service';
@@ -18,15 +18,15 @@ import {
 import {
   TongHopPhuongAnCuuTroService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service';
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { chain, cloneDeep } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
-import { DonviService } from 'src/app/services/donvi.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import {chain, cloneDeep} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
+import {DonviService} from 'src/app/services/donvi.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -100,6 +100,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   openDxPa = false;
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -116,39 +117,39 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
 
-      id: [0],
-      maDvi: [],
-      nam: [dayjs().get("year"), [Validators.required]],
-      soQd: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
-      ngayHluc: [, [Validators.required]],
-      idTongHop: [, [Validators.required]],
-      maTongHop: [, [Validators.required]],
-      ngayThop: [, [Validators.required]],
-      idDx: [, [Validators.required]],
-      soDx: [, [Validators.required]],
-      ngayDx: [],
-      tongSoLuongDx: [],
-      tongSoLuong: [],
-      soLuongXuaCap: [],
-      loaiVthh: [],
-      cloaiVthh: [],
-      loaiNhapXuat: [],
-      trichYeu: [],
-      trangThai: [STATUS.DU_THAO],
-      lyDoTuChoi: [],
-      type: ['TH', [Validators.required]],
-      xuatCap: [false],
-      ngayPduyet: [],
-      fileDinhKem: [FileDinhKem],
-      canCu: [new Array<FileDinhKem>()],
-      tenDvi: [],
-      tenLoaiVthh: [],
-      tenCloaiVthh: [],
-      tenTrangThai: ['Dự thảo'],
-      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      donViTinh: []
-    }
+        id: [0],
+        maDvi: [],
+        nam: [dayjs().get("year"), [Validators.required]],
+        soQd: [, [Validators.required]],
+        ngayKy: [, [Validators.required]],
+        ngayHluc: [, [Validators.required]],
+        idTongHop: [, [Validators.required]],
+        maTongHop: [, [Validators.required]],
+        ngayThop: [, [Validators.required]],
+        idDx: [, [Validators.required]],
+        soDx: [, [Validators.required]],
+        ngayDx: [],
+        tongSoLuongDx: [],
+        tongSoLuong: [],
+        soLuongXuaCap: [],
+        loaiVthh: [],
+        cloaiVthh: [],
+        loaiNhapXuat: [],
+        trichYeu: [],
+        trangThai: [STATUS.DU_THAO],
+        lyDoTuChoi: [],
+        type: ['TH', [Validators.required]],
+        xuatCap: [false],
+        ngayPduyet: [],
+        fileDinhKem: [FileDinhKem],
+        canCu: [new Array<FileDinhKem>()],
+        tenDvi: [],
+        tenLoaiVthh: [],
+        tenCloaiVthh: [],
+        tenTrangThai: ['Dự thảo'],
+        quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+        donViTinh: []
+      }
     );
   }
 
@@ -164,6 +165,13 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       ]);
       await this.loadChiTiet(this.idSelected)
       this.firstInit = false;
+
+      //tao de xuat tu trang tong hop
+      if (this.dataInit) {
+        await this.selectMaTongHop(this.dataInit.id);
+        await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
+        await this.buildTableView();
+      }
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -195,7 +203,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.canCu = data.canCu;
       await this.buildTableView();
     } else {
-
     }
     await this.spinner.hide();
   }
@@ -224,7 +231,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         let listDeXuat = await Promise.all(data.deXuatCuuTro.map(async item => {
           let res1 = await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx);
           if (res1.msg === MESSAGE.SUCCESS) {
-            return Object.assign(item, { quyetDinhPdDx: res1.data.deXuatPhuongAn });
+            return Object.assign(item, {quyetDinhPdDx: res1.data.deXuatPhuongAn});
           } else {
             console.log(MESSAGE.ERROR, res1.msg);
           }
@@ -288,9 +295,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
           tongSoLuongDx: data.tongSoLuong,
           soLuongXuatCap: data.soLuongXuatCap,
           thanhTienDx: data.thanhTien
-        }, { quyetDinhPdDx: data.deXuatPhuongAn })];
+        }, {quyetDinhPdDx: data.deXuatPhuongAn})];
         //truong hop tao moi
-        this.formData.patchValue({ soDx: data.soDx })
+        this.formData.patchValue({soDx: data.soDx})
         if (this.firstInit === false) {
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
@@ -403,9 +410,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
   async changeHangHoa(event: any) {
     if (event) {
-      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+      this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh})
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -415,6 +422,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       }
     }
   }
+
   async openDialogTh() {
     if (this.formData.get('type').value != 'TH') {
       return;
@@ -501,7 +509,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   async selectHangHoa(event: any) {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;
@@ -542,7 +550,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   async selectRow(item?: any) {
-
     await this.spinner.show();
     if (item) {
       this.deXuatSelected = item;
@@ -570,19 +577,19 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-            let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
-            let rowCuc = v.find(s => s.tenCuc === k);
-            return {
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-              tenCloaiVthh: v[0].tenCloaiVthh,
-              thanhTienCuc: thanhTienCuc,
-              childData: v
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                thanhTienCuc: thanhTienCuc,
+                childData: v
+              }
             }
-          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -603,19 +610,19 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-            let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
-            let rowCuc = v.find(s => s.tenCuc === k);
-            return {
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-              tenCloaiVthh: v[0].tenCloaiVthh,
-              thanhTienCuc: thanhTienCuc,
-              childData: v
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let thanhTienCuc = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                thanhTienCuc: thanhTienCuc,
+                childData: v
+              }
             }
-          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -796,6 +803,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     this.dxPaId = id;
     this.openDxPa = true;
   }
+
   closeDxPaModal() {
     this.dxPaId = null;
     this.openDxPa = false;
