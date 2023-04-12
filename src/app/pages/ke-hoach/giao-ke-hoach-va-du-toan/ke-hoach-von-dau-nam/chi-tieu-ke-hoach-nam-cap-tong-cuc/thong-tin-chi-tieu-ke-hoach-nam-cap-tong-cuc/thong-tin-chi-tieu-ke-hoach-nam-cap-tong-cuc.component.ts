@@ -50,6 +50,7 @@ import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import {STATUS} from "../../../../../../constants/status";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
+import {QuyetDinhTtcpService} from "../../../../../../services/quyetDinhTtcp.service";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -143,7 +144,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuNhapEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuXuatEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuConEditNhapShow: any[] = []
-  dataVatTuConEditXuatShow: any[] = []
+  dataVatTuConEditXuatShow: any[] = [];
+  dataQdTtcpGiaoBTC: any;
 
   //
 
@@ -163,13 +165,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private uploadFileService: UploadFileService,
     public userService: UserService,
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
     public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.initForm();
   }
 
   ngOnInit(): void {
-    console.log(this.showListEvent,'showListEvent');
+    console.log(this.showListEvent, 'showListEvent');
     this.yearNow = dayjs().get('year');
     for (let i = 0; i < 5; i++) {
       this.listNam.push({
@@ -202,6 +205,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         namKeHoach: dayjs().get('year')
       });
       this.findCanCuByYear(this.yearNow);
+      this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
 
@@ -754,8 +758,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .loadThongTinChiTieuKeHoachNam(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+
           this.thongTinChiTieuKeHoachNam = res.data;
-          console.log(res.data);
           // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
@@ -819,7 +823,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             }).value();
           this.dataVatTuXuat.forEach(s => this.expandSetVatTuXuat.add(s.maDvi));
           this.dataVatTuXuatEdit = cloneDeep(this.dataVatTuXuat);
-
           // this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
             this.formData.controls['ngayKy'].setValidators([Validators.required])
@@ -1683,22 +1686,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
     this.findCanCuByYear(this.yearNow);
-    if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
-        luongThuc.tkdnGao[0].nam = this.yearNow - 1;
-        luongThuc.tkdnGao[1].nam = this.yearNow - 2;
-        luongThuc.tkdnGao[2].nam = this.yearNow - 3;
-        luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
-        luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
-        luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
-        luongThuc.xtnGao[0].nam = this.yearNow - 1;
-        luongThuc.xtnGao[1].nam = this.yearNow - 2;
-        luongThuc.xtnGao[2].nam = this.yearNow - 3;
-        luongThuc.xtnThoc[0].nam = this.yearNow - 1;
-        luongThuc.xtnThoc[1].nam = this.yearNow - 2;
-        luongThuc.xtnThoc[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
+    //   console.log(this.thongTinChiTieuKeHoachNam?.khLuongThuc, 'ddddddd');
+    //   this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
+    //     luongThuc.tkdnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnThoc[2].nam = this.yearNow - 3;
+    //   });
+    // }
+    this.loadQdTtcpGiaoBoNganh(this.yearNow);
     // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
     //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
     //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
@@ -2018,6 +2023,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  async loadQdTtcpGiaoBoNganh(nam) {
+    const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
+    if (res.msg == MESSAGE.SUCCESS) {
+      // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
+      this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+    }
+  }
+
   calculatorntnTongQuyThocCreate(): string {
     this.keHoachLuongThucCreate.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnThoc +
@@ -2187,7 +2200,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.tkdnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2,tkdnGao3];
+    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2, tkdnGao3];
     this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnTongSoQuyThoc;
     this.keHoachLuongThucDialog.ntnThoc = +this.keHoachLuongThucCreate.ntnThoc;
@@ -2238,7 +2251,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.xtnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2,xtnGao3];
+    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2, xtnGao3];
     this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.tkcnTongSoQuyThoc;
     this.keHoachLuongThucDialog.tkcnTongThoc =

@@ -194,7 +194,6 @@
               <br>
               ( 31/12/{{yearNow}})
             </th>
-            <!-- <th rowspan="4">Trạng thái</th> -->
             <th rowspan="4" *ngIf="!this.isViewDetail" class="text-center" width="90px" nzRight>Hành động</th>
           </tr>
           <tr>
@@ -523,107 +522,140 @@
           </tbody>
           <tfoot>
           <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
-            <td nzLeft></td>
-            <td class="first-last-row-table background-last-row" nzLeft> Cộng</td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 5,
+            <th nzLeft></th>
+            <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 6, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 6, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 7, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 7, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 8, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 8, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 9, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 9, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 10, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 10, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 11, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 11, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 12, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 12, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 13, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 13, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 14, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 14, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 15, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 15, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 16, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 16, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 17, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 17, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 18, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 18, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 19, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 19, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 20, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 20, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 21, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 21, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 22, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 22, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 23, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 23, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 24, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 24, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
-            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 25, 5,
+            </th>
+            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 25, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
-            </td>
+            </th>
             <!-- <td class="background-last-row"></td> -->
-            <td class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
-                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></td>
+            <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
+                thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="first-last-row-table background-last-row"> Chỉ tiêu của BTC</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocMua : 0)|  number: '1.0-1'}}</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoMua : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocXuat : 0)|  number: '1.0-1' }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
           </tfoot>
         </nz-table>
@@ -774,6 +806,15 @@
             <td class="text-right"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
             <td class="text-right"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
             <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
             <td></td>
           </tr>
           </tfoot>
