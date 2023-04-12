@@ -144,6 +144,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
+            this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
