@@ -216,7 +216,7 @@
   </div>
 </div>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
+  <nz-table [nzData]="listDataDetail" class="nowrap" nzBordered>
     <thead>
       <tr>
         <th style="width: 2%;">STT</th>
@@ -230,7 +230,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let item of listDataGroup , let i = index">
+      <ng-container *ngFor="let item of listDataDetail , let i = index">
         <tr>
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td colspan="3">{{item.tenDvi}}</td>
