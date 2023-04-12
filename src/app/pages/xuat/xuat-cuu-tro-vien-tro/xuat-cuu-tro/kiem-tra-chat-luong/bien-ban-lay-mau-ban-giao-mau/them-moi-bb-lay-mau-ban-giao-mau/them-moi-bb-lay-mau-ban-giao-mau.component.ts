@@ -28,6 +28,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 

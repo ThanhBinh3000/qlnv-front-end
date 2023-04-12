@@ -20,6 +20,7 @@ import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-du-an-dtxd',
@@ -52,6 +53,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     modal: NzModalService,
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private ktQdXdHangNamService: KtQdXdHangNamService,
+    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetduandtxdService)
     super.ngOnInit()
@@ -66,6 +68,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       tenDuAn: [null, Validators.required],
       idDuAn: [null, Validators.required],
       chuDauTu: [this.userInfo.TEN_DVI, Validators.required],
+      diaChi: [this.userInfo.DON_VI.diaChi],
       toChucTvtk: [null],
       chuNhiemDuAn: [null],
       mucTieuDt: [null],

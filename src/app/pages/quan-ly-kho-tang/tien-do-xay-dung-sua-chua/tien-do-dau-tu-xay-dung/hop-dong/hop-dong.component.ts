@@ -19,6 +19,7 @@ export class HopDongComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  flagInfo: string = 'addnew';
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
@@ -57,9 +58,10 @@ export class HopDongComponent extends Base2Component implements OnInit {
     this.search();
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(id: number,action, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.flagInfo = action;
     this.isViewDetail = isView ?? false;
   }
 }

@@ -185,3 +185,28 @@ export function convertDviTinh(status: string): string {
     return 'Tấn';
   }
 }
+
+
+export function convertMaCcdc(maCcdc: string): string {
+  if (maCcdc == '01.01') {
+    return 'Thiết bị chia mẫu';
+  } else if (maCcdc == '01.02') {
+    return 'Xiên lấy mẫu loại dài';
+  } else if (maCcdc == '01.03') {
+    return 'Bộ sàng thí nghiệm';
+  } else if (maCcdc == '02.64') {
+    return 'Máy hút khí';
+  } else if (maCcdc == '02.65') {
+    return 'Máy phun thuốc trừ sâu';
+  } else if (maCcdc == '02.66') {
+    return 'Quạt công nghiệp';
+  } else if (maCcdc == '02.67') {
+    return 'Máy khâu bao';
+  } else if (maCcdc == '02.68') {
+    return 'Bao PP';
+  } else if (maCcdc == '02.03') {
+    return 'Màng PVC';
+  } else if (maCcdc == '03.01') {
+    return 'Máy nạp ắc quy';
+  }
+}

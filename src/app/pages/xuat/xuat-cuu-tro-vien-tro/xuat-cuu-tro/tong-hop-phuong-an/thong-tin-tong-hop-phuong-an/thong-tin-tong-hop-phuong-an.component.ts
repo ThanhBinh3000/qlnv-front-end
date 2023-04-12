@@ -127,7 +127,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         loaiVthh: [''],
         cloaiVthh: [''],
         trangThai: [''],
-        idQdPd: [0],
+        idQdPd: [''],
         soQdPd: [''],
         ngayKyQd: [''],
         ngayGduyet: [''],
@@ -234,10 +234,10 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     }
   }
 
-  async saveAndSend() {
+ /* async saveAndSend() {
     let currentData = await this.createUpdate(this.formData.value);
     await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
-  }
+  }*/
 
   async guiDuyet() {
     this.modal.confirm({
@@ -489,12 +489,10 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
             if (this.formData.value.deXuatCuuTro) {
               this.selectRow(this.formData.value.deXuatCuuTro[0])
             }
-            console.log(this.formData.value, 8787)
             this.summaryData()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-          console.log(this.thongTinChiTiet, 'chitiet');
         });
       } catch
         (e) {
@@ -517,7 +515,6 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
       )
       ;
     }
-    console.log(this.listLoaiHinhNhapXuat, 'loaihinh');
   }
 
   thongTinTrangThai(trangThai: string): string {

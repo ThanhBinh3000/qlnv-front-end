@@ -137,15 +137,15 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         id: [0],
         nam: [dayjs().get("year")],
         maDvi: [''],
-        loaiNhapXuat: [''],
-        kieuNhapXuat: ['Xuất không thu tiền'],
+        loaiNhapXuat: ['Xuất cứu trợ'],
+        kieuNhapXuat: [''],
         soDx: ['',],
         trichYeu: ['',],
         loaiVthh: ['', [Validators.required]],
         cloaiVthh: [''],
         tenVthh: [''],
         tonKho: [0],
-        ngayDx: [''],
+        ngayDx: [new Date()],
         ngayKetThuc: [''],
         noiDungDx: [''],
         trangThai: [STATUS.DU_THAO],
@@ -188,7 +188,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         this.phuongAnRow.tonKhoCloaiVthh = 0,
       ])
 
-      await this.loadDetail(this.idInput)
+      await this.loadDetail(this.idInput);
+      await this.changeLoaiHinhNhapXuat(this.formData.value.loaiNhapXuat);
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
       this.spinner.hide();
     } catch (e) {
@@ -285,9 +286,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   changeLoaiHinhNhapXuat(event: any) {
-    let loaiHinh = this.listLoaiHinhNhapXuat.find(s => s.ma == event);
+    let loaiHinh = this.listLoaiHinhNhapXuat.find(s => s.giaTri == event);
     if (loaiHinh) {
-      this.formData.patchValue({kieuNhapXuat: loaiHinh.ghiChu.split('-')[0]})
+      this.formData.patchValue({kieuNhapXuat: this.listKieuNhapXuat.find(s => s.ma == loaiHinh.ghiChu)?.giaTri})
     }
   }
 
@@ -415,7 +416,9 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     }
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuid.v4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
-    this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten
+    this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten;
+    this.phuongAnRow.donViTinh = this.formData.value.donViTinh;
+
     //tinh xuat cap
     if (this.phuongAnRow.soLuongXuatCuc > this.phuongAnRow.tonKhoCloaiVthh && this.phuongAnRow.soLuongXuatChiCuc >= this.phuongAnRow.tonKhoCloaiVthh) {
       this.phuongAnRow.soLuongXuatCap = this.phuongAnRow.soLuongXuatCuc - this.phuongAnRow.soLuongXuatChiCuc;
@@ -730,11 +733,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       if (this.userService.isTongCuc()) {
         await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, message);
       } else {
-        let result = await this.createUpdate(this.formData.value);
-        if (result) {
-          this.idInput = result.id;
-          await this.approve(this.idInput, STATUS.CHO_DUYET_TP, message);
-        }
+        await super.saveAndSend(this.formData.value, STATUS.CHO_DUYET_TP, message);
       }
     }
   }

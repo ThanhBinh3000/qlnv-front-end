@@ -11,6 +11,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
+import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
+import { CHUC_NANG } from 'src/app/constants/status';
 @Component({
   selector: 'app-phieu-kiem-nghiem-chat-luong',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
@@ -22,16 +24,19 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: CuuTroVienTroComponent;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent,
     private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
@@ -72,7 +77,10 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
-
+  idQdGnv: number = 0;
+  openQdGnv = false;
+  idBbLm: number = 0;
+  openBbLm = false;
 
   ngOnInit(): void {
     try {
@@ -96,7 +104,19 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
+  disabledStartNgayKn = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKnDen) {
+      return startValue.getTime() >= this.formData.value.ngayKnDen.getTime();
+    }
+    return false;
+  };
 
+  disabledEndNgayKn = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKnTu.getTime();
+  };
 
   isOwner(maDvi: any) {
     return this.userInfo.MA_PHONG_BAN == maDvi;
@@ -106,24 +126,32 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     return this.userInfo.MA_DVI == maDvi;
   }
   async timKiem() {
-    if (this.formData.value.ngayLayMau) {
-      this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
+    if (this.formData.value.ngayKn) {
+      this.formData.value.ngayKnTu = dayjs(this.formData.value.ngayKn[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayKnDen = dayjs(this.formData.value.ngayKn[1]).format('YYYY-MM-DD')
     }
-
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
     await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
   }
 
   buildTableView() {
+    console.log(this.dataTable, "dataTable");
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-        let nam = quyetDinh.nam;
-        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+        if (quyetDinh != null) {
+          let nam = quyetDinh.nam;
+          let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
+          let idQdGiaoNvXh = quyetDinh.idQdGiaoNvXh;
+          return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, idQdGiaoNvXh: idQdGiaoNvXh, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+        } else {
+          return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, childData: value };
+        }
       }).value();
     this.children = dataView
     this.expandAll()
@@ -150,5 +178,26 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
+  }
+
+  openQdGnvModal(id: number) {
+    console.log(id, "id");
+    this.idQdGnv = id;
+    this.openQdGnv = true;
+  }
+
+  closeQdGnvModal() {
+    this.idQdGnv = null;
+    this.openQdGnv = false;
+  }
+
+  openBbLmModal(id: number) {
+    this.idBbLm = id;
+    this.openBbLm = true;
+  }
+
+  closeBbLmModal() {
+    this.idBbLm = null;
+    this.openBbLm = false;
   }
 }

@@ -45,6 +45,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
   listFileDinhKem: any[] = [];
   listGoiThau: any[] = [];
   listFile: any[] = []
+  tongMucDt: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -69,6 +70,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       trichYeu: [null, Validators.required],
       tenDuAn: [],
       chuDauTu: [],
+      diaChi: [],
       ghiChu: [],
       tongMucDt: [0],
       trangThai: ['00'],
@@ -117,6 +119,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
           })
           this.listGoiThau = data.listKtXdscQuyetDinhPdKqlcntDsgt;
           this.listFile = data.fileDinhKems;
+          this.tongMucDt = data.tongMucDt;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -149,9 +152,11 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
           idQdPdKhlcnt: data.id,
           soQdPdKhlcnt: data.soQd,
           chuDauTu: data.chuDauTu,
+          diaChi: data.diaChi,
           tenDuAn: data.tenDuAn,
           tongMucDt: data.tongTien
         })
+        this.tongMucDt = data.tongTien;
         //get danh sách gói thầu.
         let res = await this.quyetdinhpheduyetKhlcntService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
