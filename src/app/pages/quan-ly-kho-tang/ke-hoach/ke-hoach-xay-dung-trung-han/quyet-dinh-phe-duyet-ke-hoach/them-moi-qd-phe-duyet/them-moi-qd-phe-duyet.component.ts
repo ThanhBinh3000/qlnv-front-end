@@ -65,13 +65,13 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      phuongAnTc: [null, Validators.required],
-      soCongVan: [null, Validators.required],
-      ngayTrinhBtc: [null, Validators.required],
-      ngayKyBtc: [null, Validators.required],
-      trichYeu: [null, Validators.required],
-      namBatDau: [null, Validators.required],
-      namKetThuc:[null, Validators.required],
+      phuongAnTc: [null],
+      soCongVan: [null],
+      ngayTrinhBtc: [null],
+      ngayKyBtc: [null],
+      trichYeu: [null],
+      namBatDau: [null],
+      namKetThuc:[null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
     });
@@ -129,16 +129,15 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
+    if (isGuiDuyet) {
+      this.setValidators()
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
-    }
-    if (this.formData.value.namBatDau > this.formData.value.namKetThuc) {
-      this.notification.error(MESSAGE.ERROR, "Năm bắt đàu không được lớn hơn năm kết thúc!")
-      this.spinner.hide();
-      return
     }
     let body = this.formData.value;
     body.soCongVan = body.soCongVan + this.maQd;
@@ -170,6 +169,16 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+  setValidators() {
+    this.formData.controls['phuongAnTc'].setValidators([Validators.required])
+    this.formData.controls['soCongVan'].setValidators([Validators.required])
+    this.formData.controls['ngayTrinhBtc'].setValidators([Validators.required])
+    this.formData.controls['ngayKyBtc'].setValidators([Validators.required])
+    this.formData.controls['trichYeu'].setValidators([Validators.required])
+    this.formData.controls['namKetThuc'].setValidators([Validators.required])
+    this.formData.controls['namBatDau'].setValidators([Validators.required])
   }
 
 
