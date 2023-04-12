@@ -99,19 +99,19 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
       .groupBy("soQd")
       .map((value, key) => {
         let rs = chain(value)
-          .groupBy("maLoKho")
+          .groupBy("maDiemKho")
           .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
+            let rowLv2 = v.find(s => s.maDiemKho === k);
             return {
               id: rowLv2.id,
               idVirtual: uuidv4(),
-              maDiemKho: rowLv2.maDiemKho,
+              maLoKho: rowLv2.maLoKho,
               tenDiemKho: rowLv2.tenDiemKho,
               maNhaKho: rowLv2.maNhaKho,
               tenNhaKho: rowLv2.tenNhaKho,
               maNganKho: rowLv2.maNganKho,
               tenNganKho: rowLv2.tenNganKho,
-              maLoKho: k,
+              maDiemKho: k,
               tenLoKho: rowLv2.tenLoKho,
               soBienBan: rowLv2.soBienBan,
               ngayLayMau: rowLv2.ngayLayMau,
@@ -152,8 +152,8 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvXh?: number) {
-    this.selectedId = id;
+  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+    this.selectedId = lv2.id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvXh = idQdGiaoNvXh;

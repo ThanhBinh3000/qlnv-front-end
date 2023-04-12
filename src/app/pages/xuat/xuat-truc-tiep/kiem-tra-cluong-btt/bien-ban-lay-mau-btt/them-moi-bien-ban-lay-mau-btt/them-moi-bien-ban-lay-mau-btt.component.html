@@ -50,9 +50,11 @@
                 <nz-form-label [nzNoColon]="true">
                   Loại biên bản
                 </nz-form-label>
-                <nz-radio-group formControlName="loaiBienBan">
-                  <label *ngFor="let item of listBienBan" nz-radio [nzValue]="item.ma">{{ item.giaTri }}</label>
-                </nz-radio-group>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-radio-group formControlName="loaiBienBan">
+                    <label *ngFor="let item of listBienBan" nz-radio [nzValue]="item.ma">{{ item.giaTri }}</label>
+                  </nz-radio-group>
+                </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="2">

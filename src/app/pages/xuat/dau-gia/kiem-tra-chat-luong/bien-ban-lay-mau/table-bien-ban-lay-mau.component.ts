@@ -85,8 +85,8 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     this.search();
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvXh?: number) {
-    this.selectedId = id;
+  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+    this.selectedId = lv2.id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvXh = idQdGiaoNvXh;
@@ -105,25 +105,21 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
       .groupBy("soQd")
       .map((value, key) => {
         let rs = chain(value)
-          .groupBy("maLoKho")
+          .groupBy("maDiemKho")
           .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
+            let rowLv2 = v.find(s => s.maDiemKho === k);
             return {
               id: rowLv2.id,
               idVirtual: uuidv4(),
-              maDiemKho: rowLv2.maDiemKho,
+              maDiemKho: k,
+              tenLoKho: rowLv2.tenLoKho,
+              maLoKho: rowLv2.maLoKho,
               tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
               maNganKho: rowLv2.maNganKho,
               tenNganKho: rowLv2.tenNganKho,
-              maLoKho: k,
-              tenLoKho: rowLv2.tenLoKho,
-              soBienBan: rowLv2.soBienBan,
-              ngayLayMau: rowLv2.ngayLayMau,
-              soBbTinhKho: rowLv2.soBbTinhKho,
-              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              soBbHaoDoi: rowLv2.rowLv2,
+              soPhieuXuatKho: rowLv2.soPhieuXuatKho,
+              maKho: rowLv2.maKho,
+              tenKho: rowLv2.tenKho,
               trangThai: rowLv2.trangThai,
               tenTrangThai: rowLv2.tenTrangThai,
               childData: v

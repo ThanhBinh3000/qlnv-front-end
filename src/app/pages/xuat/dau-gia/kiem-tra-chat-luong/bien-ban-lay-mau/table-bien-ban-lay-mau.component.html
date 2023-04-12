@@ -50,7 +50,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="goDetail(null)">
+        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
+          (click)="redirectToChiTiet(false, null, null)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -116,7 +117,7 @@
                   <td></td>
                   <td></td>
                   <td class="text-left">
-                    <a (click)="redirectToChiTiet(false, 0,item.idQd)" *ngIf="userService.isChiCuc()">
+                    <a (click)="redirectToChiTiet(false, null,item.idQd)" *ngIf="userService.isChiCuc()">
                       <i class="fa fa-plus"></i>
                     </a>
                   </td>
@@ -141,10 +142,10 @@
                       <td>{{lv2.soBbHaoDoi}}</td>
                       <td>{{lv2.tenTrangThai}}</td>
                       <td class="text-left">
-                        <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDCC " (click)="redirectToChiTiet(true, lv2.id)">
+                        <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDCC " (click)="redirectToChiTiet(lv2, null, null)">
                           <i class="fa fa-eye"></i>
                         </a>
-                        <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDCC " (click)="redirectToChiTiet(false, lv2.id)">
+                        <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDCC " (click)="redirectToChiTiet(lv2, false, null)">
                           <i class="fa fa-pencil"></i>
                         </a>
                         <a *ngIf="lv2.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()" (click)="delete(lv2)">
