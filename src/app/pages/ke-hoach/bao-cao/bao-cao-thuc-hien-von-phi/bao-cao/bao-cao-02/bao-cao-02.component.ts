@@ -133,7 +133,7 @@ export class BaoCao02Component implements OnInit {
         this.idBaoCao = this.data?.idBaoCao;
         this.trangThaiPhuLuc = this.data?.trangThai;
         //tinh toan theo don vi tien va dua vao bieu mau
-        if (!this.data?.dotBcao && this.trangThaiPhuLuc == '3') {
+        if (!this.data?.dotBcao && this.trangThaiPhuLuc == '3' && !this.data?.isSynthetic) {
             this.luyKes.forEach(item => {
                 const id = parseInt(item.header, 10) - 21;
                 this.lstCtietBcao[id].data.push({
