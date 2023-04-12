@@ -113,6 +113,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       dvccSdt: [],
       dvccStk: [],
       thanhTien: [],
+      tenDuAn: [],
       thanhTienBangChu: [],
       fileDinhKems: [null],
       listKtXdscTdxdHopDongKlcv: [[]]
@@ -246,6 +247,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
           soQdPdKqlcnt: data.soQd,
           ngayKyKqlcnt: data.ngayKy,
           cdtTen: data.chuDauTu,
+          tenDuAn:data.tenDuAn,
           cdtDiaChi: data.diaChi
         })
         //get danh sách gói thầu thành công (đã có đơn vị trúng thầu).

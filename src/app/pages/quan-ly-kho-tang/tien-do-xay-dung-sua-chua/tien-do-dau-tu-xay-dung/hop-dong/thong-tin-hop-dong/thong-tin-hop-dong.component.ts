@@ -30,6 +30,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   tongMucDt: number = 0;
   @Input()
   flagThemMoi: string;
+  listHopDong: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -42,26 +43,30 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
     private hopdongService: HopdongService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKqLcntService)
+    super(httpClient, storageService, notification, spinner, modal, hopdongService)
     this.formData = this.fb.group({
       id: [],
       maDvi: [],
       soQd: [],
       ngayKy: [],
       soQdPdDaDtxd: [],
+      soQdPdKqlcnt: [],
       idQdPdDaDtxd: [],
       trichYeu: [],
       tenDuAn: [],
       chuDauTu: [],
       diaChi: [],
       idDuAn: [],
-      tienCvDaTh: [0],
+      soGoiThau: [0],
+      soGoiThauTc: [0],
+      soGoiThauTb: [0],
+      soHopDongDaKy: [0],
       tienCvKad: [0],
       tienCvKhlcnt: [0],
       tienCvChuaDdk: [0],
       tongTien: [0],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      trangThaiHd: [],
+      tenTrangThaiHd: [],
       fileDinhKems: [null],
       listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtXdscQuyetDinhPdKhlcntCvKad: null,
@@ -96,9 +101,11 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.formData.patchValue({
-            soQd: data.soQd ? data.soQd.split('/')[0] : null,
-          })
+          this.tongMucDt = data.tongTien;
+          let resp = await this.hopdongService.danhSachHdTheoKhlcnt(id);
+          if (resp.msg == MESSAGE.SUCCESS) {
+            this.listHopDong = resp.data;
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -110,5 +117,40 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     } finally {
       this.spinner.hide();
     }
+  }
+
+  delete(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.hopdongService.delete(body).then(async () => {
+            let resp = await this.hopdongService.danhSachHdTheoKhlcnt(this.idInput);
+            if (resp.msg == MESSAGE.SUCCESS) {
+              this.listHopDong = resp.data;
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  themMoiHopDong() {
+
   }
 }
