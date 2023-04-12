@@ -114,12 +114,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   }
 
   loadThongTinChiTieuKeHoachCucNam(namKh: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API_KH}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
+    const url_ = `${environment.SERVICE_API}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   loadThongTinChiTieuKeHoachVtNam(namKh: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API_KH}/chi-tieu-ke-hoach-nam/dxkh-lcnt/vt/${namKh}`;
+    const url_ = `${environment.SERVICE_API}/chi-tieu-ke-hoach-nam/dxkh-lcnt/vt/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
