@@ -120,19 +120,19 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
       .groupBy("soQd")
       .map((value, key) => {
         let rs = chain(value)
-          .groupBy("maLoKho")
+          .groupBy("maDiemKho")
           .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
+            let rowLv2 = v.find(s => s.maDiemKho === k);
             return {
               id: rowLv2.id,
+              maDiemKho: k,
               idVirtual: uuidv4(),
-              maDiemKho: rowLv2.maDiemKho,
+              maLoKho: rowLv2.maLoKho,
               tenDiemKho: rowLv2.tenDiemKho,
               maNhaKho: rowLv2.maNhaKho,
               tenNhaKho: rowLv2.tenNhaKho,
               maNganKho: rowLv2.maNganKho,
               tenNganKho: rowLv2.tenNganKho,
-              maLoKho: k,
               tenLoKho: rowLv2.tenLoKho,
               soPhieu: rowLv2.soPhieu,
               ngayKnghiem: rowLv2.ngayKnghiem,
@@ -160,11 +160,11 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     this.expandAll()
   }
 
-  editRow(lv2: any, isView: boolean) {
-    this.selectedId = lv2.id;
-    this.isDetail = true;
-    this.isView = isView;
-  }
+  // editRow(lv2: any, isView: boolean) {
+  //   this.selectedId = lv2.id;
+  //   this.isDetail = true;
+  //   this.isView = isView;
+  // }
 
   expandAll() {
     this.dataView.forEach(s => {
