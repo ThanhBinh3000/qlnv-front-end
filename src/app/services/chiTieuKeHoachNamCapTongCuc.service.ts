@@ -1,10 +1,10 @@
-import {ResponseData} from './../interfaces/response';
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {environment} from '../../environments/environment';
-import {BaseService} from './base.service';
-import {Observable} from 'rxjs';
-import {TonKhoDauNamLuongThuc} from '../models/ThongTinChiTieuKHNam';
+import { ResponseData } from './../interfaces/response';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { BaseService } from './base.service';
+import { Observable } from 'rxjs';
+import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -70,7 +70,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
-    return this.httpClient.post(url, body, {responseType: 'blob'});
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteData(id: any): Promise<any> {
@@ -95,12 +95,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   downloadFile(): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
-    return this.httpClient.post(url, null, {responseType: 'blob'});
+    return this.httpClient.post(url, null, { responseType: 'blob' });
   }
 
   downloadFileKeHoach(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}/qlnv-core/file/download`;
-    return this.httpClient.post(url, body, {responseType: 'blob'});
+    return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
   deleteMultiple(body: any): Promise<any> {
@@ -114,7 +114,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   }
 
   loadThongTinChiTieuKeHoachCucNam(namKh: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
+    const url_ = `${environment.SERVICE_API_KH}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  loadThongTinChiTieuKeHoachVtNam(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API_KH}/chi-tieu-ke-hoach-nam/dxkh-lcnt/vt/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
