@@ -394,8 +394,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async changeListOfTagOptions(cloaiVtt, typeData?) {
     let lss = [];
     let ls = [];
-    console.log(this.listOfTagOptions, "this.listOfTagOptions");
-
     if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh))) {
       this.modal.confirm({
         nzClosable: false,
