@@ -234,8 +234,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     }
   }
 
-/*  async saveAndSend() {
-    await this.saveAndSend()
+ /* async saveAndSend() {
     let currentData = await this.createUpdate(this.formData.value);
     await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
   }*/
