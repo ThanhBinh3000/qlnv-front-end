@@ -141,6 +141,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         tenCloaiVthh: [''],
         tenTrangThai: [''],
         tenDvi: [''],
+        donViTinh: [''],
         deXuatCuuTro: [new Array()]
       }
     );
@@ -165,7 +166,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         this.loadDsDonVi(),
 
       ])
-      await this.loadDetail(this.idInput)
+      await this.loadDetail(this.idInput);
       console.log(this.formData.value);
       this.spinner.hide();
     } catch (e) {
@@ -234,10 +235,10 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     }
   }
 
- /* async saveAndSend() {
-    let currentData = await this.createUpdate(this.formData.value);
-    await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
-  }*/
+  /* async saveAndSend() {
+     let currentData = await this.createUpdate(this.formData.value);
+     await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
+   }*/
 
   async guiDuyet() {
     this.modal.confirm({
@@ -457,19 +458,11 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
     this.formData.controls['noiDungThop'].setValidators([]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
-      console.log(invalid, 'invalid');
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
       return;
     } else {
       try {
-        this.spinner.show();
+        await this.spinner.show();
         let body = {
           loaiNhapXuat: this.formData.value.loaiNhapXuat,
           trangThaiList: [STATUS.DA_TAO_CBV, STATUS.DA_DUYET_LDC],
@@ -494,14 +487,14 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         });
-      } catch
-        (e) {
+      } catch (e) {
         console.log(e)
       } finally {
+        await this.spinner.hide();
         this.formData.controls['tenDvi'].setValidators([Validators.required]);
         this.formData.controls['ngayThop'].setValidators([Validators.required]);
         this.formData.controls['noiDungThop'].setValidators([Validators.required]);
-        this.spinner.hide();
+
       }
     }
 
@@ -777,24 +770,26 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
       this.tongSoLuongDeXuat = 0;
       this.tongSoLuongXuatCap = 0;
     }
-
+    this.formData.patchValue({donViTinh: this.listLoaiHangHoa.find(s => s.ma == this.formData.value.loaiVthh)?.maDviTinh})
   }
 
   async selectRow(item: any) {
-    this.formData.value.deXuatCuuTro.forEach(i => i.selected = false);
-    item.selected = true;
-    await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx)
-      .then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          res.data.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
-          this.formData.value.deXuatPhuongAn = res.data.deXuatPhuongAn;
-          this.buildTableView();
-        }
-      })
-      .catch((e) => {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      });
+    if (!item.selected) {
+      this.formData.value.deXuatCuuTro.forEach(i => i.selected = false);
+      item.selected = true;
+      await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            res.data.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+            this.formData.value.deXuatPhuongAn = res.data.deXuatPhuongAn;
+            this.buildTableView();
+          }
+        })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    }
   }
 }
