@@ -363,7 +363,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     })
 
     if (!this.id) {
-      this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => s1.maDviTsan === s.maDviTsan));
+      this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => s1.maDviTsan.split(',').includes(s.maDviTsan)));
     }
 
   }
