@@ -34,4 +34,9 @@ export class MangLuoiKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/ma-kho/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  delete(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/delete-mlk`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }
