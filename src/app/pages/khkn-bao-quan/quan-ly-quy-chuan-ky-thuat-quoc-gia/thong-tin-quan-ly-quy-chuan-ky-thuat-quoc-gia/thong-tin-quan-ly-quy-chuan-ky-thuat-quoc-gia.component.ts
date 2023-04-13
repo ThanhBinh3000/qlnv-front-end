@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { Validators } from '@angular/forms';
 import { KhCnQuyChuanKyThuat } from './../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { STATUS } from 'src/app/constants/status';
+import { STATUS, TRANG_THAI_QUY_CHUAN_TIEU_CHUAN } from "src/app/constants/status";
 import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -46,6 +46,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   listOfCloaiVthh: any[] = [];
   isEdit: boolean = false;
   rowItem: QuyChunKyThuatQuocGia = new QuyChunKyThuatQuocGia;
+  itemQuyChuan: QuyChunKyThuatQuocGia = new QuyChunKyThuatQuocGia;
   dataEdit: { [key: string]: { edit: boolean; data: QuyChunKyThuatQuocGia } } = {};
   listVanBan: any[] = [];
   listVanBanId: any = [];
@@ -83,10 +84,10 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       trangThaiHl: [null],
       trangThai: [null],
       tenTrangThai: [null,],
-      taiLieuDinhKemList: [null,],
+      taiLieuDinhKemList: [],
       maDvi: [''],
       ldoTuChoi: [''],
-      apDungCloaiVthh: [false],
+      apDungCloaiVthh: [true],
       listTenLoaiVthh: [''],
       type: [''],
       maVb: this.listMaSo[0].maVb
@@ -164,7 +165,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         maDvi: this.userInfo.MA_DVI,
         diaChiDvi: this.userInfo.DON_VI.diaChi,
         apDungTai: this.userInfo.TEN_DVI,
-        trangThaiHl: "Còn Hiệu Lực"
+        trangThaiHl: TRANG_THAI_QUY_CHUAN_TIEU_CHUAN.CON_HIEU_LUC
       })
     }
   }
@@ -210,9 +211,26 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     this.showListEvent.emit();
   }
 
+  addAllCloai() : any[] {
+    let arr = [];
+    if (this.listCloaiVthh && this.listCloaiVthh.length > 0) {
+      console.log(this.listCloaiVthh);
+      this.listCloaiVthh.forEach(item => {
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach(itemQc => {
+            this.itemQuyChuan = cloneDeep(itemQc);
+            this.itemQuyChuan.cloaiVthh = item.ma;
+            this.itemQuyChuan.loaiVthh = item.ma ? item.ma.substring(0, item.ma.length - 2) : null;
+            arr.push(this.itemQuyChuan);
+            this.itemQuyChuan = new QuyChunKyThuatQuocGia();
+          })
+        }
+      })
+    }
+    return arr;
+  }
+
   async save(isGuiDuyet?) {
-
-
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
@@ -226,8 +244,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       return;
     }
     let body = this.formData.value;
+    if (this.formData.value.apDungCloaiVthh == true) {
+      body.tieuChuanKyThuat = this.addAllCloai();
+    } else {
+      body.tieuChuanKyThuat = this.dataTable;
+    }
     body.soVanBan = body.soVanBan + body.maVb
-    body.tieuChuanKyThuat = this.dataTable;
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
     body.listTenLoaiVthh = this.listLoaiVthh.join(',');
@@ -457,14 +479,31 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   clearData() {
     this.rowItem = new QuyChunKyThuatQuocGia();
   }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.tenChiTieu == item.tenChiTieu) {
+          rs = true;
+          return;
+        }
+      })
+    }
+    return rs;
+  }
   themMoiItem() {
     if (this.dataTable) {
-      if (!this.formData.value.apDungCloaiVthh && this.listCloaiVthh.length == 0) {
+      if (this.formData.value.apDungCloaiVthh == true) {
         if (this.rowItem.tenChiTieu) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
           item.stt = this.dataTable.length + 1;
           item.edit = false;
+          if (this.checkExitsData(this.rowItem, this.dataTable)) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng không nhập trùng tên chỉ tiêu")
+            return;
+          }
           this.dataTable = [
             ...this.dataTable,
             item,

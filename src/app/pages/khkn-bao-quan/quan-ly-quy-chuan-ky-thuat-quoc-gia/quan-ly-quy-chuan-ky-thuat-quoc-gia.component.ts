@@ -55,8 +55,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implem
 
   ];
   listTrangThaiHl: any[] = [
-    { ma: 'Còn hiệu lực', giaTri: 'Còn hiệu lực' },
-    { ma: 'Hết hiệu lực', giaTri: 'Hết hiệu lực' },
+    { ma: '01', giaTri: 'Còn hiệu lực' },
+    { ma: '00', giaTri: 'Hết hiệu lực' },
   ];
 
   constructor(
