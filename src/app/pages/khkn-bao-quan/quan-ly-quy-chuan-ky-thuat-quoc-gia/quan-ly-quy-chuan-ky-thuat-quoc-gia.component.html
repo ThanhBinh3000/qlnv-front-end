@@ -108,7 +108,7 @@
         </button>
       </div>
     </div>
-    <nz-card class="mt-16 flex-card data-table">
+    <nz-card class="mt-16 flex-card">
       <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
         <tr>
@@ -186,6 +186,7 @@
               </nz-select>
             </nz-input-group>
           </th>
+          <th></th>
           <ng-template #suffixIconSearch>
 
           </ng-template>
@@ -207,7 +208,7 @@
             <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td>{{ data.trangThaiHl }}</td>
+            <td>{{ data.tenTrangThaiHl }}</td>
             <td class="text-left">
               <a *ngIf=" (userService.isAccessPermisson('KHCNBQ_QCKTTCCS_XEM') && (data.trangThai == STATUS.BAN_HANH))
                 ||(!userService.isAccessPermisson('KHCNBQ_QCKTTCCS_DUYET') && data.trangThai == STATUS.CHO_DUYET_LDV)

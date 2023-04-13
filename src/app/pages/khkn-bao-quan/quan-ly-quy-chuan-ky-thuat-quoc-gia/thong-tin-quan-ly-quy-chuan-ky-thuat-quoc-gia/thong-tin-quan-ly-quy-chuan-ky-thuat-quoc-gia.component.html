@@ -140,8 +140,8 @@
               <nz-form-label [nzNoColon]="true">
                 Loại vật tư hàng hóa
               </nz-form-label>
-              <nz-select [nzDisabled]="listVanBanId > 0 || isView" nzMode="tags" nzPlaceHolder=""
-                         [(ngModel)]="listOfTagOptions" (ngModelChange)="changeListOfTagOptions($event)"
+              <nz-select [nzDisabled]="listVanBanId > 0 || isView || dataTable.length > 0" nzMode="tags" nzPlaceHolder=""
+                         [(ngModel)]="listOfTagOptions" (ngModelChange)="changeListOfTagOptions($event, true)"
                          [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenHangHoa"
                            [nzValue]="option.maHangHoa">

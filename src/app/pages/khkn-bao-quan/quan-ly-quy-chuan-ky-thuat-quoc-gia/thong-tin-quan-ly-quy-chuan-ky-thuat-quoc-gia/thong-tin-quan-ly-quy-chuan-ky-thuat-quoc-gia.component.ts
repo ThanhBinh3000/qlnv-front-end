@@ -243,6 +243,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.spinner.hide();
       return;
     }
+    if (this.listOfTagOptions.length == 0 ) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa.')
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     if (this.formData.value.apDungCloaiVthh == true) {
       body.tieuChuanKyThuat = this.addAllCloai();
@@ -416,7 +421,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async changeListOfTagOptions(cloaiVtt, typeData?) {
     let lss = [];
     let ls = [];
-    if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh))) {
+    if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh)) && typeData) {
       this.modal.confirm({
         nzClosable: false,
         nzTitle: 'Xác nhận',
@@ -518,7 +523,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
+          console.log(item,3333333);
           item.stt = this.dataTable.length + 1;
+          item.loaiVthh = item.cloaiVthh ?  item.cloaiVthh.substring(0, item.cloaiVthh.length - 2) : null;
           item.edit = false;
           this.dataTable = [
             ...this.dataTable,
