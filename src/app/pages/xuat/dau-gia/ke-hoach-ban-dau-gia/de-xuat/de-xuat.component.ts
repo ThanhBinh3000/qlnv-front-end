@@ -8,7 +8,6 @@ import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/b
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-de-xuat',
   templateUrl: './de-xuat.component.html',
@@ -44,16 +43,16 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanDauGiaService);
     this.formData = this.fb.group({
-      namKh: [],
-      soDxuat: [],
-      loaiVthh: [],
-      trichYeu: [],
-      maDvi: [],
-      trangThaiList: [],
-      ngayTaoTu: [],
-      ngayTaoDen: [],
-      ngayDuyetTu: [],
-      ngayDuyetDen: [],
+      namKh: null,
+      soDxuat: null,
+      loaiVthh: null,
+      trichYeu: null,
+      maDvi: null,
+      trangThaiList: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
+      ngayDuyetTu: null,
+      ngayDuyetDen: null,
     });
 
     this.filterTable = {
