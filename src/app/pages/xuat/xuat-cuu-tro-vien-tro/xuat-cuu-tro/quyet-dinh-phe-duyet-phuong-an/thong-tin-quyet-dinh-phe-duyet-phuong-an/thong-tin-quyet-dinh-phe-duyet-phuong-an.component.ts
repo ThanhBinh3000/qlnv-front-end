@@ -55,6 +55,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   @Input() isView: boolean;
   @Input() idTongHop: number;
   @Input() idSelected;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() dataTongHop: any;

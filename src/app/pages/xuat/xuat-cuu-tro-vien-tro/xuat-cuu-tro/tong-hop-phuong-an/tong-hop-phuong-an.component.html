@@ -9,7 +9,7 @@
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="3">
+          <div nz-col nzSpan="4">
             <label>Đơn vị đề xuất</label>
             <nz-select formControlName="maDvi">
               <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
@@ -19,13 +19,34 @@
             <label>Số công văn/đề xuất</label>
             <input nz-input formControlName="soDx"/>
           </div>
-          <div nz-col nzSpan="4">
+
+          <div nz-col nzSpan="7">
             <label>Thời hạn xuất viện trợ, cứu trợ</label>
-            <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" [nzFormat]="globals.dateFormat"
+                                formControlName="ngayKetThucDxTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" [nzFormat]="globals.dateFormat"
+                                formControlName="ngayKetThucDxDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="7">
             <label>Ngày đề xuất</label>
-            <nz-range-picker formControlName="ngayKetThuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayDx" [nzFormat]="globals.dateFormat"
+                                formControlName="ngayDxTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayDx" [nzFormat]="globals.dateFormat"
+                                formControlName="ngayDxDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -107,7 +128,7 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.ngayThop"
+              <nz-date-picker [nzFormat]="globals.dateFormat" nzPlaceHolder="Ngày ký" [(ngModel)]="filterTable.ngayThop"
                               (ngModelChange)="filterInTable('ngayThop', convertDateToString(filterTable.ngayThop))">
               </nz-date-picker>
             </nz-input-group>
@@ -120,7 +141,7 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyQd"
+              <nz-date-picker [nzFormat]="globals.dateFormat" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyQd"
                               (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
               </nz-date-picker>
             </nz-input-group>
@@ -169,12 +190,16 @@
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.nam }}</td>
           <td>{{ data.maTongHop}}</td>
-          <td>{{ data.ngayThop | date: 'dd/MM/YYYY'}}</td>
-          <td>{{ data.soQdPd }}</td>
-          <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayThop | date: globals.dateFormat}}</td>
+          <td>
+            <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
+               (click)="openModalQdPd(data.idQdPd)">{{
+              data.soQdPd}}</a>
+          </td>
+          <td>{{ data.ngayKyQd | date: globals.dateFormat }}</td>
           <td>{{ data.tenLoaiVthh }}</td>
-          <td>{{ data.tongSlCtVt|number: '1.0-1' }}</td>
-          <td>{{ data.tongSlXuatCap|number: '1.0-1' }}</td>
+          <td>{{ data.tongSlCtVt|number: globals.numberFormat }}</td>
+          <td>{{ data.tongSlXuatCap|number: globals.numberFormat }}</td>
           <td>{{ data.noiDungThop }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
@@ -247,4 +272,21 @@
 <div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-tong-hop-phuong-an [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
   </app-thong-tin-tong-hop-phuong-an>
+</div>
+<div>
+  <nz-modal class="scroll-nz-modal" [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+            [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+      <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
+                                                    [isViewOnModal]="true"
+                                                    (showListEvent)="showList()">
+      </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </nz-modal>
 </div>

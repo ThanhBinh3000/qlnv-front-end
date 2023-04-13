@@ -31,7 +31,8 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
   @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
   public vldTrangThai: CuuTroVienTroComponent;
   CHUC_NANG = CHUC_NANG;
-
+  idQdPd: number = 0;
+  isViewQdPd: boolean = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ'},
@@ -59,7 +60,9 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
       ngayDx: null,
       ngayDxTu: null,
       ngayDxDen: null,
-      ngayKetThuc: null,
+      ngayKetThucDx: null,
+      ngayKetThucDxTu: null,
+      ngayKetThucDxDen: null,
       type: null
     })
     this.filterTable = {
@@ -136,5 +139,41 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     this.eventTaoQd.emit(data);
   }
 
+  openModalQdPd(id: number) {
+    this.idQdPd = id;
+    this.isViewQdPd = true;
+  }
 
+  closeModalQdPd() {
+    this.idQdPd = null;
+    this.isViewQdPd = false;
+  }
+
+  disabledStartNgayKt = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKetThucDxDen) {
+      return startValue.getTime() > this.formData.value.ngayKetThucDxDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKt = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKetThucDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKetThucDxTu.getTime();
+  };
+
+  disabledStartNgayDx = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDxDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayDx = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDxTu.getTime();
+  };
 }
