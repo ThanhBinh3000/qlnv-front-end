@@ -5,12 +5,9 @@ import {StorageService} from "../../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
-import {MmHienTrangMmService} from "../../../../../../services/mm-hien-trang-mm.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {FileDinhKem} from "../../../../../../models/FileDinhKem";
 import {DonviService} from "../../../../../../services/donvi.service";
-import {saveAs} from "file-saver";
 import {Validators} from "@angular/forms";
 import {
   DanhMucSuaChuaService
@@ -60,7 +57,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
-      trangThai: [null],
+      trangThai: [null, Validators.required],
       type: ["00"],
     });
   }

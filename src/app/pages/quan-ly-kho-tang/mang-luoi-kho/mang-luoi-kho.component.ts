@@ -652,12 +652,17 @@ export class MangLuoiKhoComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
+        let body = {
+          maDvi:this.nodeSelected.maDvi,
+          capDvi: this.nodeSelected.capDvi
+        }
+        this.mangLuoiKhoService.delete(body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             // set node về không
             this.nodeSelected = []
             this.layTatCaDonViTheoTree()
+            this.levelNode = 0;
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

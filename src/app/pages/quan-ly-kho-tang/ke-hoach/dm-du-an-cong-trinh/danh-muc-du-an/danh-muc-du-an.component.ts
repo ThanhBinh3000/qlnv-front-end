@@ -427,12 +427,13 @@ export class DanhMucKho {
   nstwDuyet: number;
   tongSoLuyKe: number;
   luyKeNstw: number;
+  khVonTongSo : number;
+  khVonNstw : number;
+  ncKhTongSo  : number;
+  ncKhNstw : number;
   trangThai: string;
   tenTrangThai: string;
-
   vonDauTu: number;
-
   maDvi: string
-
   loaiDuAn: string;
 }
