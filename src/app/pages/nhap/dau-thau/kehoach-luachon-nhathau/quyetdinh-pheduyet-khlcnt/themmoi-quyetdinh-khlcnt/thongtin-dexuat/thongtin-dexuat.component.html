@@ -216,21 +216,21 @@
   </div>
 </div>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-  <nz-table [nzData]="listDataDetail" class="nowrap" nzBordered>
+  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
     <thead>
       <tr>
         <th style="width: 2%;">STT</th>
         <th>Chi cục</th>
         <th>Tên gói thầu</th>
         <th>Địa điểm nhập kho</th>
-        <th>Số lượng (Tấn)</th>
+        <th>Số lượng (Kg)</th>
         <!--      <th >Đơn giá đã bao gồm VAT (đồng/kg)</th>-->
         <th>Thành tiền (giá gói thầu) (đ)</th>
         <th *ngIf="!isView"></th>
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let item of listDataDetail , let i = index">
+      <ng-container *ngFor="let item of listDataGroup , let i = index">
         <tr>
           <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td colspan="3">{{item.tenDvi}}</td>
@@ -249,7 +249,8 @@
               {{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{(dtGoiThau.donGiaTamTinh != null ?
               dtGoiThau.donGiaTamTinh * dtGoiThau.soLuong * 1000 : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *
-              dtGoiThau.soLuong * 1000 : 0)) | number: '1.0-1' : 'vi_VN'}}</td>
+              dtGoiThau.soLuong * 1000 : (dtGoiThau.donGia != null ? dtGoiThau.donGia * dtGoiThau.soLuong * 1000 : 0)))
+              | number: '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="!isView">
               <a (click)="editRow(dtGoiThau,dtGoiThau.idx)">
                 <i class="fa fa-pencil"></i>

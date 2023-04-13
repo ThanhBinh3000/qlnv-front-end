@@ -119,7 +119,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           }
         }
         this.helperService.setIndexArray(this.listOfData);
-        this.convertListData();
+        // this.convertListData();
+        this.convertListDataLuongThuc()
       } else {
         this.formData.reset();
         this.formData.patchValue({
@@ -130,42 +131,69 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     await this.spinner.hide()
   }
 
+  // convertListData() {
+  //   this.listDataChiCuc = [];
+  //   this.listDataCuc = [];
+  //   this.listDataDetail = [];
+  //   this.listOfData.forEach(item => {
+  //     this.listDataCuc.push(item)
+  //     item.children.forEach(i => {
+  //       this.listDataChiCuc.push(i)
+  //     })
+  //   })
+  //   this.listDataChiCuc = chain(this.listDataChiCuc).groupBy('idGoiThau').value()
+
+  //   this.listDataCuc.forEach(item => {
+  //     if (this.listDataChiCuc[item.id] != undefined) {
+  //       for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
+  //         if (item.id == this.listDataChiCuc[item.id][i].idGoiThau) {
+  //           this.listData.push({ tenDvi: this.listDataChiCuc[item.id][i].tenDvi, dataChild: item })
+  //         }
+  //       }
+  //     }
+  //   })
+  //   const groupedData = chain(this.listData)
+  //     .groupBy('tenDvi')
+  //     .value();
+
+  //   this.listDataDetail = Object.keys(groupedData).map(tenDvi => ({
+  //     tenDvi: tenDvi,
+  //     dataChild: groupedData[tenDvi].flatMap(item => item.dataChild)
+  //   }));
+  //   this.listDataDetail.forEach(item => {
+  //     item.dataChild = item.dataChild.filter((value, index, self) => {
+  //       return self.findIndex(v => v.id === value.id) === index;
+  //     });
+  //   });
+
+  //   console.log("3", this.listDataDetail);
+  // }
+
   convertListData() {
-    this.listDataChiCuc = [];
-    this.listDataCuc = [];
-    this.listDataDetail = [];
+    this.helperService.setIndexArray(this.listOfData);
+    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
+      .value()
+  }
+
+  convertListDataLuongThuc() {
+    let listChild = [];
     this.listOfData.forEach(item => {
-      this.listDataCuc.push(item)
       item.children.forEach(i => {
-        this.listDataChiCuc.push(i)
+        i.goiThau = item.goiThau
+        listChild.push(i)
       })
     })
-    this.listDataChiCuc = chain(this.listDataChiCuc).groupBy('idGoiThau').value()
+    this.helperService.setIndexArray(listChild);
+    this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => (
+      {
+        tenDvi: key,
+        dataChild: value
+      })).value()
+    console.log(this.listDataGroup)
+  }
 
-    this.listDataCuc.forEach(item => {
-      if (this.listDataChiCuc[item.id] != undefined) {
-        for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
-          if (item.id == this.listDataChiCuc[item.id][i].idGoiThau) {
-            this.listData.push({ tenDvi: this.listDataChiCuc[item.id][i].tenDvi, dataChild: item })
-          }
-        }
-      }
-    })
-    const groupedData = chain(this.listData)
-      .groupBy('tenDvi')
-      .value();
+  getMaGoiThauById() {
 
-    this.listDataDetail = Object.keys(groupedData).map(tenDvi => ({
-      tenDvi: tenDvi,
-      dataChild: groupedData[tenDvi].flatMap(item => item.dataChild)
-    }));
-    this.listDataDetail.forEach(item => {
-      item.dataChild = item.dataChild.filter((value, index, self) => {
-        return self.findIndex(v => v.id === value.id) === index;
-      });
-    });
-
-    console.log("3", this.listDataDetail);
   }
 
   async ngOnInit() {
@@ -232,7 +260,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   };
 
   onInput(event: any) {
-    const value = event;
+    var value: any;
+    value = event;
     this.editingSoLuong = parseInt(value.replaceAll('.', ''));
   }
 

@@ -83,20 +83,22 @@
         <div class="group-button">
             <h3> DANH SÁCH KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do"
-                    (click)="deleteMulti(['XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA','XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA'])"
-                    *ngIf="userService.isCuc()">
+                <button
+                    *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA') "
+                    type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub"
+                <button
+                    *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_EXP') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_EXP') "
+                    type="button" class="btn btn-sub"
                     (click)="exportData('Danh-sach-de-xuat-ke-hoach-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main"
-                    (click)="goDetail(null,['XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM','XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM'])"
-                    *ngIf="userService.isCuc()">
+                <button
+                    *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') : userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') "
+                    type="button" class="btn btn-main" (click)="goDetail(null)">
                     <i class=" icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -278,20 +280,52 @@
                                 data.idThop}}</a>
                         </td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id,['XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM','XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM'])"
-                                *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC )">
+                            <a *ngIf="loaiVthh.startsWith('02') ? 
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
+                               ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
+                               ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC) :
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
+                               ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
+                               ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP ||  data.trangThai == STATUS.TU_CHOI_LDC"
-                                (click)="goDetail(data.id,['XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM','XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM'])">
+                            <a *ngIf=" loaiVthh.startsWith('02') ? 
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_LDC) :
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && data.trangThai == STATUS.DU_THAO)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC"
+                            <a *ngIf=" loaiVthh.startsWith('02') ?
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC):
+                               (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
                                 (click)="goDetail(data.id)">
                                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO )"
-                                (click)="delete(data,['XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA','XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA'])">
+                            <a *ngIf="loaiVthh.startsWith('02') ? 
+                               (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA')):
+                               (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA')) "
+                                (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

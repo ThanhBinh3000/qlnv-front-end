@@ -252,7 +252,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           loaiVthh: this.formData.value.loaiVthh,
           cloaiVthh: this.formData.value.cloaiVthh,
           trangThai: STATUS.BAN_HANH,
-          maDvi: this.formData.value.maDvi
+          maDvi: this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU) ? "0101" : this.formData.value.maDvi
+          // maDvi: this.formData.value.maDvi
         }
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
