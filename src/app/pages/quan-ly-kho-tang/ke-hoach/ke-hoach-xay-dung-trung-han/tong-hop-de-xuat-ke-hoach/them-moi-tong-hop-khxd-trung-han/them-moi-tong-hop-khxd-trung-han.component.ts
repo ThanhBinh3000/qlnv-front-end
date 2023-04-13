@@ -33,6 +33,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   userInfo : UserLogin
   formData: FormGroup
+  formTongHop: FormGroup
   dataTable: any[] = []
   dataTableDx: any[] = []
   dsCuc: any[] = [];
@@ -68,6 +69,12 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       tenTrangThai: ['Dự thảo'],
       lyDo: [],
     });
+    this.formTongHop = this.fb.group({
+      namKeHoach : [dayjs().get('year')],
+      namBatDau : [],
+      namKetThuc : [],
+      loaiDuAn : [],
+    })
   }
 
   async ngOnInit() {
@@ -328,12 +335,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async tongHop() {
     this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-      this.spinner.hide();
-      return;
-    }
     let idTh = await this.userService.getId("KT_KH_TH_TRUNGHAN_SEQ");
     if (!idTh) {
       this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
