@@ -23,6 +23,7 @@ import { Validators } from '@angular/forms';
 import { ItemSoQd } from './../../../../../ke-hoach/du-toan-nsnn/giao-du-toan-thuc-te/tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
 import { async } from '@angular/core/testing';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
+import { filter } from 'rxjs/operators';
 
 /*export class noiDungCuuTro {
   idVirtual: number;
@@ -144,6 +145,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
+            this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -247,6 +249,10 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+      let muoi = res.data?.find(s => s.ma == '04');
+      if (muoi) {
+        this.listLoaiHangHoa.push(muoi);
+      }
     }
   }
 

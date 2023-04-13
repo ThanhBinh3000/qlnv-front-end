@@ -110,9 +110,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   danhsachDx: any[] = [];
   listOfData: any[] = [];
-  listDataGroup: any[] = [];
+  listDataDetail: any[] = [];
+  listData: any[] = [];
+  listDataCuc: any[] = [];
   listDataChiCuc: any[] = [];
-  listDataChiCucCTiet: any[] = [];
   donGiaVatObject: any;
   selected: boolean = false;
 
@@ -272,7 +273,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       })
       this.listOfData = data.children;
       this.convertListData()
-      this.showFirstRow(event, this.listDataGroup)
+      this.showFirstRow(event, this.listDataDetail)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -288,22 +289,42 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   convertListData() {
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
-      .value()
-    // this.convertListDataLuongThuc()
-  }
+    this.listDataChiCuc = [];
+    this.listDataCuc = [];
+    this.listDataDetail = [];
+    this.listOfData.forEach(item => {
+      this.listDataCuc.push(item)
+      item.children.forEach(i => {
+        this.listDataChiCuc.push(i)
+      })
+    })
+    this.listDataChiCuc = chain(this.listDataChiCuc).groupBy('idGoiThau').value()
 
-  // convertListDataLuongThuc() {
-  //   let listChild = [];
-  //   this.listOfData.forEach(item => {
-  //     item.children.forEach(i => {
-  //       listChild.push(i)
-  //     })
-  //   })
-  //   this.helperService.setIndexArray(listChild);
-  //   this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value })).value()
-  //   console.log(this.listDataGroup)
-  // }
+    this.listDataCuc.forEach(item => {
+      if (this.listDataChiCuc[item.id] != undefined) {
+        for (let i = 0; i < this.listDataChiCuc[item.id].length; i++) {
+          if (item.id == this.listDataChiCuc[item.id][i].idGoiThau) {
+            this.listData.push({ tenDvi: this.listDataChiCuc[item.id][i].tenDvi, dataChild: item })
+          }
+        }
+      }
+    })
+    const groupedData = chain(this.listData)
+      .groupBy('tenDvi')
+      .value();
+
+    this.listDataDetail = Object.keys(groupedData).map(tenDvi => ({
+      tenDvi: tenDvi,
+      dataChild: groupedData[tenDvi].flatMap(item => item.dataChild)
+    }));
+    this.listDataDetail.forEach(item => {
+      item.dataChild = item.dataChild.filter((value, index, self) => {
+        return self.findIndex(v => v.id === value.id) === index;
+      });
+    });
+
+    console.log("3", this.listDataDetail);
+  }
 
 
   expandSet = new Set<number>();
@@ -438,6 +459,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async showDetail($event, dataGoiThau: any) {
+    console.log(dataGoiThau);
     await this.spinner.show();
     this.listNthauNopHs = [];
     if ($event.type == 'click') {
@@ -521,7 +543,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
       if (dataSave.trangThai == STATUS.TRUNG_THAU) {
         var checkVat
-        this.listDataGroup.forEach(item => {
+        this.listDataDetail.forEach(item => {
           item.dataChild.forEach(res => {
             if (this.idGoiThau == res.id) {
               checkVat = res.donGiaVat ? res.donGiaVat : res.donGiaTamTinh
@@ -586,7 +608,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   sumslKho(column?: string, tenDvi?: string, type?: string): number {
     let result = 0;
     let arr = [];
-    this.listDataGroup.forEach(item => {
+    this.listDataDetail.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
           arr.push(data)
@@ -617,7 +639,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   sumThanhTien(column?: string) {
     let result = 0;
     let arr = [];
-    this.listDataGroup.forEach(item => {
+    this.listDataDetail.forEach(item => {
       if (item.dataChild && item.dataChild.length > 0) {
         item.dataChild.forEach(data => {
           arr.push(data)
@@ -626,7 +648,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           if (cur['trangThai'] == 40 && column == 'chenhLech') {
-            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaVat']) * cur['soLuong'] * 1000);
+            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaTamTinh']) * cur['soLuong'] * 1000);
           } else {
             prev += cur[column] * 1000 * cur['soLuong'];
           }
