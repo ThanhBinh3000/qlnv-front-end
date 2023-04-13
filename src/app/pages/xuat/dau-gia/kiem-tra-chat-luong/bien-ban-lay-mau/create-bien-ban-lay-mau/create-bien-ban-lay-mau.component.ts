@@ -98,7 +98,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       chiTieuKiemTra: ['', [Validators.required]],
       ketQuaNiemPhong: [],
       flagNiemPhong: [],
-      fileName: [],
+
     })
   }
 
@@ -116,7 +116,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   async openDialogSoQd() {
     let dataQd = [];
     let body = {
-      nam: dayjs().get('year'),
+      nam: this.formData.value.nam,
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.BAN_HANH,
       maChiCuc: this.userInfo.MA_DVI
@@ -129,7 +129,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     }
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
+      nzTitle: 'DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,

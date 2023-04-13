@@ -229,7 +229,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         this.idInput = data.id;
         this.pheDuyet();
       } else {
-        this.goBack()
+        // this.goBack()
       }
     }
   }
