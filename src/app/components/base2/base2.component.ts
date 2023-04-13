@@ -47,7 +47,7 @@ export class Base2Component implements OnInit {
   indeterminate = false;
 
   @Input() isDetail: boolean = false;
-  @Input() dataInit: any = null;
+  @Input() dataInit: any = {};
   idSelected: number = 0;
 
   // Service
