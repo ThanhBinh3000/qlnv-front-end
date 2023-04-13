@@ -61,7 +61,7 @@
           <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_EXP')" type="button"
                   class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
-            <span>Export</span>
+            <span>Xuất file</span>
           </button>
           <button
             *ngIf="(userService.isTongCuc())&& !userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_TAO_QD')"
@@ -163,7 +163,7 @@
             <td class="text-center">{{ (page - 1) * pageSize + i + 1 }}</td>
             <td>{{data.soVanBan}}</td>
             <td *ngIf="userService.isTongCuc()">{{data.tenDonVi}}</td>
-            <td>{{data.ngayKy}}</td>
+            <td>{{data.ngayKy |date: 'dd/MM/yyyy' }}</td>
             <td>{{data.trichYeu}}</td>
             <td>{{data.soQdKeHoachNam}}</td>
             <td>{{data.namKeHoach}}</td>
