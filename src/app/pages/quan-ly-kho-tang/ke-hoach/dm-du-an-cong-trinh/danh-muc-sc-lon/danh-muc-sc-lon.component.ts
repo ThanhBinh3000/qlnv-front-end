@@ -61,6 +61,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      console.log(this.userService.isCuc())
       if (this.userService.isTongCuc()) {
         this.loadDsCuc()
       }

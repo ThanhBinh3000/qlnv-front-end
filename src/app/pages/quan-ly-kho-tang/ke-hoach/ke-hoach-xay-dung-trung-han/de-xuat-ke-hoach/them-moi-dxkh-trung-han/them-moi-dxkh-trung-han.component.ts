@@ -64,12 +64,13 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       maDvi: [null],
+      namKeHoach: [dayjs().get('year'), [Validators.required]],
       tenDvi: [null],
       soCongVan: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       namBatDau: [null, [Validators.required]],
       namKetThuc: [null, [Validators.required]],
-      trichYeu: [null],
+      trichYeu: [null,  [Validators.required]],
       lyDo: [null]
     });
 
@@ -140,26 +141,28 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     });
   }
 
+  setValidators() {
+    this.formData.controls['soCongVan'].setValidators(Validators.required);
+    this.formData.controls['trichYeu'].setValidators(Validators.required);
+    this.formData.controls['ngayKy'].setValidators(Validators.required);
+    this.formData.controls['namBatDau'].setValidators(Validators.required);
+    this.formData.controls['namKetThuc'].setValidators(Validators.required);
+  }
+
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.removeValidators(this.formData);
+    if (isGuiDuyet) {
+      this.setValidators();
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    if (this.formData.value.namBatDau > this.formData.value.namKetThuc) {
-      this.notification.error(MESSAGE.ERROR, "Năm bắt đàu không được lớn hơn năm kết thúc!")
-      this.spinner.hide();
-      return
-    }
-    if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không được để trống thông tin chi tiết quy hoạch")
-      return
-      this.spinner.hide();
-    }
     let body = this.formData.value;
-    body.soCongVan = body.soCongVan + this.maQd;
+    body.soCongVan = body.soCongVan? body.soCongVan  + this.maQd : this.maQd;
     body.chiTietsReq = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI
     body.fileDinhKems = this.listFileDinhKem;
@@ -447,19 +450,19 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
             break;
           }
           case '3' : {
-            prev += cur.tongSoLuyKe;
+            prev += cur.khVonTongSo;
             break;
           }
           case '4' : {
-            prev += cur.luyKeNstw;
+            prev += cur.khVonNstw;
             break;
           }
           case '5' : {
-            prev += cur.tmdtDuyet;
+            prev += cur.ncKhTongSo;
             break;
           }
           case '6' : {
-            prev += cur.nstwDuyet;
+            prev += cur.ncKhNstw;
             break;
           }
         }
