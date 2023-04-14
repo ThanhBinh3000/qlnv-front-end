@@ -34,6 +34,7 @@ export class NewDonViComponent implements OnInit {
 
   dataDetail: any;
   radioValue: any;
+  listAllDiaDanh : any[] = []
   listTinhThanh: any[] = [];
   listQuanHuyen: any[] = [];
   listPhuongXa: any[] = [];
@@ -79,27 +80,27 @@ export class NewDonViComponent implements OnInit {
 
 
  async loadDsKhuVuc() {
-   let res = await this.danhMucService.loadDsDiaDanh();
+   let res = await this.danhMucService.loadDsDiaDanhByCap({});
    if (res.msg == MESSAGE.SUCCESS) {
-     let listKv = res.data;
-     if (listKv && listKv.length > 0) {
-       this.listTinhThanh = listKv.filter(item => item.capDiaDanh === 1);
+     this.listAllDiaDanh = res.data;
+     if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+       this.listTinhThanh = this.listAllDiaDanh.filter(item => item.capDiaDanh === 1);
      }
    }
  }
 
   changeTinhThanh(event) {
     if (event) {
-      if (this.listTinhThanh && this.listTinhThanh.length > 0) {
-        this.listQuanHuyen = this.listTinhThanh.filter(item => item.maCha == event && item.capDiaDanh === 2)
+      if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+        this.listQuanHuyen = this.listAllDiaDanh.filter(item => item.maCha == event && item.capDiaDanh === 2)
       }
     }
   }
 
   changeQuanHuyen(event) {
     if (event) {
-      if (this.listQuanHuyen && this.listQuanHuyen.length > 0) {
-        this.listPhuongXa = this.listQuanHuyen.filter(item => item.maCha == event && item.capDiaDanh === 3)
+      if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+        this.listPhuongXa = this.listAllDiaDanh.filter(item => item.maCha == event && item.capDiaDanh === 3)
       }
     }
   }
