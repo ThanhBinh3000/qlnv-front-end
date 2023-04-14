@@ -491,7 +491,6 @@ export class PhuLucTongHopComponent implements OnInit {
   };
 
   getTotal() {
-    debugger
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       const level = item.stt.split('.').length - 2;

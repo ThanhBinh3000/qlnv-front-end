@@ -213,7 +213,7 @@ export class PhanBoDuToanComponent implements OnInit {
     this.searchFilter.maPa = null;
     this.trangThai = null;
     this.trangThaiGiao = null;
-    this.searchFilter.maLoaiDan = null;
+    this.searchFilter.maLoaiDan = [3];
     this.search();
   };
 

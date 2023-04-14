@@ -73,7 +73,7 @@ export class PhanBoDuToanComponent implements OnInit {
     loai: null,
     trangThais: [],
     maPa: "",
-    maLoaiDan: null,
+    maLoaiDan: [1,2],
     soQd: "",
     trangThaiGiaos: [],
     paggingReq: {

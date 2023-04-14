@@ -246,6 +246,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maBcao = null
+    this.searchFilter.maLoaiDan = [1,2]
     this.trangThai = null;
     this.onSubmit();
   }

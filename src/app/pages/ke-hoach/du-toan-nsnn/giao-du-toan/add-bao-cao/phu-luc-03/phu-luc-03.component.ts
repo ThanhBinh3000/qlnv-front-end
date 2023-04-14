@@ -164,6 +164,8 @@ export class PhuLuc03Component implements OnInit {
 
     // this.sum1()
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+    console.log(this.lstCtietBcao);
+
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
@@ -442,7 +444,7 @@ export class PhuLuc03Component implements OnInit {
   }
   changeModel(id: string): void {
     this.editCache[id].data.namDtCphiTaiCkhoTt = mulNumber(this.editCache[id].data.namDtCphiTaiCkhoSl, this.editCache[id].data.namDtCphiTaiCkhoDm);
-    this.editCache[id].data.namDtCphiNgoaiCkhoTt  = mulNumber(this.editCache[id].data.namDtCphiNgoaiCkhoBq, this.editCache[id].data.namDtCphiTaiCkhoSl);
+    this.editCache[id].data.namDtCphiNgoaiCkhoTt = mulNumber(this.editCache[id].data.namDtCphiNgoaiCkhoBq, this.editCache[id].data.namDtCphiTaiCkhoSl);
     this.editCache[id].data.namDtTcong = sumNumber([this.editCache[id].data.namDtCphiNgoaiCkhoTt, this.editCache[id].data.namDtCphiTaiCkhoTt]);
   }
 
@@ -466,7 +468,7 @@ export class PhuLuc03Component implements OnInit {
           this.lstCtietBcao[index].namDtCphiTaiCkhoTt = sumNumber([this.lstCtietBcao[index].namDtCphiTaiCkhoTt, item.namDtCphiTaiCkhoTt]);
           this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt = sumNumber([this.lstCtietBcao[index].namDtCphiNgoaiCkhoTt, item.namDtCphiNgoaiCkhoTt]);
           this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq = sumNumber([this.lstCtietBcao[index].namDtCphiNgoaiCkhoBq, item.namDtCphiNgoaiCkhoBq]);
-          this.lstCtietBcao[index].namDtTcong = sumNumber([this.lstCtietBcao[index].namDtTcong , item.namDtTcong]);
+          this.lstCtietBcao[index].namDtTcong = sumNumber([this.lstCtietBcao[index].namDtTcong, item.namDtTcong]);
         }
       })
       stt = this.getHead(stt);

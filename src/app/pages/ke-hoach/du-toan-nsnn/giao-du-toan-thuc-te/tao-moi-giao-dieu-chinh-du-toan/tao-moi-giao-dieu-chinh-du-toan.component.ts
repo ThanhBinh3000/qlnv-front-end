@@ -240,7 +240,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		this.id = this.data.id;
 
 		// lấy mã đơn vị tạo PA
-		this.maDonViTao = this.userInfo?.MA_DVI;
+		// this.maDonViTao = this.userInfo?.MA_DVI;
 
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
@@ -322,6 +322,15 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+						this.lstDvi.push(
+						  {
+							tenDvi: this.userInfo.TEN_DVI,
+							maDvi: this.userInfo.MA_DVI
+						  }
+						)
+					  }
+					  this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
