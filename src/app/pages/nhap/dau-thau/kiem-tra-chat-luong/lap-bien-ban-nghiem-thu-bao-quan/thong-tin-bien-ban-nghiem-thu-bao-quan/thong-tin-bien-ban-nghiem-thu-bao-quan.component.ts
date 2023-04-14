@@ -470,7 +470,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     if (arr) {
       if (type) {
         const sum = arr.reduce((prev, cur) => {
-          prev += cur[column];
+          prev += parseInt(cur[column]);
           return prev;
         }, 0);
         result = sum
@@ -484,7 +484,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     let result = 0;
     this.listDviChuDongTh.forEach(item => {
       if (item) {
-        result += item.soLuongTn
+        result += parseInt(item.soLuongTn)
       }
     })
     return result;

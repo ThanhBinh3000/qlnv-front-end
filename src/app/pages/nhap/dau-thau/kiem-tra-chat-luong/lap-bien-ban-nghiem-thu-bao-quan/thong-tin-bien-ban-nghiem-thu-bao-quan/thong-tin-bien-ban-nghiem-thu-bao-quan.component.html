@@ -419,7 +419,7 @@
               </nz-select>
             </td>
             <td>
-              <input [readonly]="isView" nz-input type="string" [(ngModel)]="create.dvt" />
+              <input [readonly]="true" nz-input type="string" [(ngModel)]="create.dvt" />
             </td>
             <td>
               <input [readonly]="isView" nz-input type="string" appNumberOnly [(ngModel)]="create.soLuongTn"
@@ -516,7 +516,7 @@
             <td></td>
             <td class="text-blue">Tổng</td>
             <td></td>
-            <td class="text-blue" style="text-align: right;">{{sumslTn('soLuongTn', null, 'tong') |
+            <td class="text-blue" style="text-align: right;">{{sumslKho('soLuongTn', null, 'tong') |
               number: '1.0-3'}}</td>
             <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaTn', null, 'tong') |
               number: '1.0-3'}}</td>

@@ -82,6 +82,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       donGiaVat: [''],
       vat: [5],
       tongMucDt: [null,],
+      tongMucDtDx: [null,],
       nguonVon: [null,],
       tgianNhang: [null,],
       ghiChu: [null],

@@ -80,10 +80,8 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                 <nz-form-control>
-                                    <nz-input-number [nzSize]="'small'"
-                                        [ngModel]="formData.value.soLuong * formData.value.donGiaVat * 1000"
-                                        [ngModelOptions]="{standalone: true}" [nzFormatter]="globals.formatter"
-                                        [nzParser]="globals.parser" nzDisabled>
+                                    <nz-input-number [nzSize]="'small'" formControlName="tongMucDt"
+                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                                     </nz-input-number>
                                 </nz-form-control>
                             </nz-form-item>
@@ -350,19 +348,19 @@
                                     dtGoiThau.donGiaTamTinh ) |
                                     number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right">{{(dtGoiThau.donGiaVat != null ? dtGoiThau.soLuong *
-                                    dtGoiThau.donGiaVat * 1000 :
-                                    (dtGoiThau.donGiaTamTinh != null ? dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh *
-                                    1000 : 0)) | number: '1.0-1' : 'vi_VN'}}</td>
+                                    dtGoiThau.donGiaVat :
+                                    (dtGoiThau.donGiaTamTinh != null ? dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh : 0))
+                                    | number: '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.tenNhaThau}}</td>
                                 <td class="text-right">{{dtGoiThau.trangThai == 40 ? dtGoiThau.donGiaNhaThau : null |
                                     number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right">{{dtGoiThau.trangThai == 40 ? dtGoiThau.soLuong *
-                                    dtGoiThau.donGiaNhaThau * 1000 : 0 | number:
+                                    dtGoiThau.donGiaNhaThau : 0 | number:
                                     '1.0-1' : 'vi_VN' }}
                                 </td>
                                 <td class="text-right">{{dtGoiThau.trangThai == 40 ? abs((dtGoiThau.donGiaNhaThau -
                                     (dtGoiThau.donGiaVat != null ?
-                                    dtGoiThau.donGiaVat : dtGoiThau.donGiaTamTinh)) * dtGoiThau.soLuong * 1000) : 0 |
+                                    dtGoiThau.donGiaVat : dtGoiThau.donGiaTamTinh)) * dtGoiThau.soLuong) : 0 |
                                     number: '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                             </tr>
@@ -557,7 +555,7 @@
                                     [(ngModel)]="itemRow.donGia" [nzFormatter]="globals.formatter"
                                     [nzParser]="globals.parser"></nz-input-number>
                             </th>
-                            <th>{{ itemRow.soLuong * itemRow.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
+                            <th>{{ itemRow.soLuong * itemRow.donGia | number : '1.0-1' : 'vi_VN' }}</th>
                             <th>
                                 <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.trangThai"
                                     (ngModelChange)="changeTrangThai($event)">
@@ -587,7 +585,7 @@
                                 <td>{{ data.sdt }}</td>
                                 <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td class="text-right">{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'
+                                <td class="text-right">{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN'
                                     }}</td>
                                 <td>{{ data.tenTrangThai }}</td>
                                 <td>{{ data.lyDo }}</td>
@@ -612,7 +610,7 @@
                                     <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.donGia"
                                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                                 </td>
-                                <td class="text-right">{{ itemRowUpdate.soLuong * itemRowUpdate.donGia * 1000 | number :
+                                <td class="text-right">{{ itemRowUpdate.soLuong * itemRowUpdate.donGia | number :
                                     '1.0-1' : 'vi_VN'
                                     }}</td>
                                 <td>
