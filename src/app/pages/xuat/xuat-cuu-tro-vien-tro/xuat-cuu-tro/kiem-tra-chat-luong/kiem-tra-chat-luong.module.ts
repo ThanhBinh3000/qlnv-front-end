@@ -36,7 +36,8 @@ import { QuyetDinhGnvXuatHangModule } from "../quyet-dinh-gnv-xuat-hang/quyet-di
     ChiTietHoSoKyThuatComponent
   ],
   exports: [
-    KiemTraChatLuongComponent
+    KiemTraChatLuongComponent,
+    ThemMoiPhieuKnClComponent
   ],
   imports: [
     CommonModule,
