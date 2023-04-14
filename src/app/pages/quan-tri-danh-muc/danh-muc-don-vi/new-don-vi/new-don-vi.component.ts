@@ -8,6 +8,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NzTreeComponent} from 'ng-zorro-antd/tree';
 import {DonviService} from 'src/app/services/donvi.service';
 import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
+import { DanhMucService } from "../../../../services/danhmuc.service";
 
 
 @Component({
@@ -33,12 +34,17 @@ export class NewDonViComponent implements OnInit {
 
   dataDetail: any;
   radioValue: any;
+  listAllDiaDanh : any[] = []
+  listTinhThanh: any[] = [];
+  listQuanHuyen: any[] = [];
+  listPhuongXa: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
+    private danhMucService : DanhMucService,
     private modal: NzModalRef
   ) {
     this.formDonVi = this.fb.group({
@@ -53,6 +59,9 @@ export class NewDonViComponent implements OnInit {
       type: [null],
       ghiChu: [''],
       vungMien: [''],
+      tinhThanh: [],
+      quanHuyen: [''],
+      phuongXa: [''],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -66,11 +75,34 @@ export class NewDonViComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadDsKhuVuc()
   }
 
 
-  enumToSelectList() {
+ async loadDsKhuVuc() {
+   let res = await this.danhMucService.loadDsDiaDanhByCap({});
+   if (res.msg == MESSAGE.SUCCESS) {
+     this.listAllDiaDanh = res.data;
+     if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+       this.listTinhThanh = this.listAllDiaDanh.filter(item => item.capDiaDanh === 1);
+     }
+   }
+ }
 
+  changeTinhThanh(event) {
+    if (event) {
+      if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+        this.listQuanHuyen = this.listAllDiaDanh.filter(item => item.maCha == event && item.capDiaDanh === 2)
+      }
+    }
+  }
+
+  changeQuanHuyen(event) {
+    if (event) {
+      if (this.listAllDiaDanh && this.listAllDiaDanh.length > 0) {
+        this.listPhuongXa = this.listAllDiaDanh.filter(item => item.maCha == event && item.capDiaDanh === 3)
+      }
+    }
   }
 
   handleCancel(): void {
@@ -86,6 +118,9 @@ export class NewDonViComponent implements OnInit {
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
     body.maDvi = body.maDviCha + body.maDvi
+    if (this.levelNode == 1) {
+      body.tinhThanh = body.tinhThanh ? body.tinhThanh.toString() : null;
+    }
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

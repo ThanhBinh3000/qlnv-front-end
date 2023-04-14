@@ -68,7 +68,7 @@
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 12]">
-        <div nz-col nzSpan="2">
+        <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>
               Năm nhập
@@ -78,7 +78,7 @@
             </nz-select>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>
               Số quyết định nhập
@@ -154,7 +154,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3" *ngIf="loaiVthh == '02'">
+        <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
             <nz-form-control>
@@ -177,7 +177,7 @@
             <input nz-input [readonly]="true" formControlName="donViTinh" />
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3" *ngIf="loaiVthh == '02'">
+        <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Thời gian nhập kho muộn nhất
@@ -201,7 +201,7 @@
             <input nz-input [readonly]="true" formControlName="donViTinh" />
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Trích yếu
@@ -212,12 +212,22 @@
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isViewDetail]="isDisableForm()" [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
-              Tài liệu đính kèm
+              File đính kèm QĐ giao nhiệm vụ nhập hàng đã ký
             </nz-form-label>
           </nz-form-item>
-          <file-list [data]="listFileDinhKem" [disabled]="isDisableForm()"></file-list>
+          <file-list [data]="listFileDinhKem" [isViewDetail]="isDisableForm()"></file-list>
         </div>
       </div>
       <ng-template #error let-control>

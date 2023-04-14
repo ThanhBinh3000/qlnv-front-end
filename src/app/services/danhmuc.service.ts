@@ -14,6 +14,11 @@ export class DanhMucService extends BaseService {
     super(httpClient, 'dm-hang', '/qlnv-category');
   }
 
+  loadDsDiaDanhByCap(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/dm-dia-danh/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   loadDanhMucHangHoa() {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
     return this.httpClient.post<any>(url, null);

@@ -171,7 +171,7 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group nzAddOnAfter="đ">
-            <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
+            <nz-input-number class="text-right" nz-input formControlName="tongMucDtDx" [nzSize]="'small'"
               [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
             </nz-input-number>
           </nz-input-group>
@@ -248,8 +248,8 @@
               [class.editing]="isEditing">
               {{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{(dtGoiThau.donGiaTamTinh != null ?
-              dtGoiThau.donGiaTamTinh * dtGoiThau.soLuong * 1000 : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *
-              dtGoiThau.soLuong * 1000 : (dtGoiThau.donGia != null ? dtGoiThau.donGia * dtGoiThau.soLuong * 1000 : 0)))
+              dtGoiThau.donGiaTamTinh * dtGoiThau.soLuong : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *
+              dtGoiThau.soLuong : (dtGoiThau.donGia != null ? dtGoiThau.donGia * dtGoiThau.soLuong : 0)))
               | number: '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="!isView">
               <a (click)="editRow(dtGoiThau,dtGoiThau.idx)">

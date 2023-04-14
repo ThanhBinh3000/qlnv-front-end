@@ -184,12 +184,12 @@
                         <td>{{data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{data.trichYeu }}</td>
                         <td>
-                            <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link" nzBlock
+                            <a *ngIf="data.soTrHdr && data.idTrHdr" style="color: blue ;font-weight: bold;"
                                 (click)="openModalDxKh(data.idTrHdr)">{{
                                 data.soTrHdr}}</a>
                         </td>
                         <td>
-                            <a *ngIf="data.idThHdr" nz-button nzType="link" nzBlock
+                            <a *ngIf="data.idThHdr" style="color: blue ;font-weight: bold;"
                                 (click)="openModalTh(data.idThHdr)">{{
                                 data.idThHdr}}</a>
                         </td>

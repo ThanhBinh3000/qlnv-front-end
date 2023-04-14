@@ -58,13 +58,13 @@
     <ng-container *ngIf="userService.isChiCuc()">
       <button
         *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT"
-        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DA_HOAN_THANH)">
+        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
       <button type="button" class="btn btn-main"
         *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT)"
-        (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
+        (click)="saveDdiemNhap()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -150,9 +150,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <nz-select nzAllowClear formControlName="loaiVthh" [nzDisabled]="true" nzShowSearch>
-                <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
-              </nz-select>
+              <input formControlName="tenLoaiVthh" [readonly]="true" nz-input>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -214,7 +212,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL cứu trợ, viện trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{soLuong | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="text-blue">{{formData.value.soLuong | number : '1.0-1' :
+                'vi_VN'}} {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -222,7 +221,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thành Tiền</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{thanhTien| number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="text-blue">{{formData.value.thanhTien| number : '1.0-1' : 'vi_VN'}} (đ)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -242,7 +241,7 @@
               <th [colspan]="3">Thông tin lô kho</th>
               <th [colspan]="2">SL xuất CT, VT</th>
               <th [rowspan]="2">Trạng thái</th>
-              <th [rowspan]="2">Hành động</th>
+              <th [rowspan]="2" *ngIf="userService.isChiCuc()">Hành động</th>
             </tr>
             <tr>
               <th>Tên chủng loại hàng hóa</th>
@@ -261,7 +260,7 @@
                 <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                   [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                 <td>{{i + 1}}</td>
-                <td>{{ item.noiDung }}</td>
+                <td class="bold">{{ item.noiDung }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -271,10 +270,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donViTinh}}</td>
+                <td class="bold">{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="bold">{{formData.value.donViTinh}}</td>
                 <td></td>
-                <td>
+                <td *ngIf="userService.isChiCuc()">
                 </td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -283,20 +282,20 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv1.tenChiCuc}}</td>
-                    <td></td>
-                    <td>{{lv1.tonKhoChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
-                    <td></td>
-                    <td></td>
+                    <td class="bold">{{lv1.tenChiCuc}}</td>
+                    <td class="bold">{{lv1.tenCloaiVthh}}</td>
+                    <td class="text-blue">{{lv1.tonKhoChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-blue">{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td>{{lv1.tenTrangThaiXh}}</td>
-                    <td>
-                      <ng-container *ngIf="userService.isChiCuc()">
+                    <td *ngIf="userService.isChiCuc()">
+                      <ng-container>
                         <a (click)="showModal(lv1)">
                           <i class="fa fa-plus"></i>
                         </a>
@@ -310,7 +309,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tenCloaiVthh}}</td>
+                        <td></td>
                         <td></td>
                         <td>{{lv2.tenDiemKho}}</td>
                         <td>{{lv2.tenNhaKho}}</td>
@@ -321,8 +320,8 @@
                         <td>{{lv2.soLuongGiao | number : '1.0-1' : 'vi_VN'}}</td>
                         <td></td>
                         <td></td>
-                        <td>
-                          <ng-container *ngIf="userService.isChiCuc() ">
+                        <td *ngIf="userService.isChiCuc()">
+                          <ng-container>
                             <a>
                               <i class="fa fa-edit" (click)="suaPhuongAn(lv2)"></i>
                             </a>
@@ -333,7 +332,6 @@
                         </td>
                       </ng-container>
                     </tr>
-
                   </ng-container>
                 </ng-container>
               </ng-container>

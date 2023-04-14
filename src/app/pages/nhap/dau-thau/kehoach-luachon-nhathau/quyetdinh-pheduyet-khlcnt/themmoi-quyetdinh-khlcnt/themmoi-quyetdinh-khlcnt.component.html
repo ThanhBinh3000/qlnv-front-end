@@ -510,7 +510,7 @@
               <th>Ngày duyệt KH</th>
               <th>Trích yếu</th>
               <th>Tên dự án</th>
-              <th>Số lượng (Tấn)</th>
+              <th>Số lượng (Kg)</th>
               <th>Tổng tiền gồm thuế (đồng)</th>
             </tr>
           </thead>
@@ -526,7 +526,7 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.soLuong * data.donGiaVat * 1000 | number: '1.0-1' }}</td>
+              <td>{{ data.soLuong * data.donGiaVat | number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>

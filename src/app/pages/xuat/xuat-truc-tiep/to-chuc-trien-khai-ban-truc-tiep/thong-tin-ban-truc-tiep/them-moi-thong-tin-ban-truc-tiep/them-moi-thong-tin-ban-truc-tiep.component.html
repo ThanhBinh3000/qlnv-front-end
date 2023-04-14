@@ -5,7 +5,7 @@
             <span>Quay lại</span>
         </button>
         <button *ngIf="this.userService.isCuc() && formData.value.trangThai == STATUS.DANG_CAP_NHAT" type="button"
-            class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Hoàn thành cập nhập</span>
         </button>
@@ -47,7 +47,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="4">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Số QĐ phê duyệt/điều chỉnh KH bán trực
                                     tiếp
@@ -57,7 +57,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Tên cục DTNN KV
                                 </nz-form-label>
@@ -66,37 +66,17 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="17" *ngIf=" radioValue == 'Chào giá'">
+                        <div nz-col [nzSpan]="6" *ngIf=" radioValue != 'Chào giá'">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm chào giá </nz-form-label>
-                                <nz-form-control nz-col [nzSpan]="24">
-                                    <input placeholder="" nz-input formControlName="diaDiemChaoGia"
-                                        [readonly]="isDisable()" />
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="4">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true">Thời gian mở cửa kho bán trực
-                                    tiếp</nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
-                                        formControlName="ngayMkho">
+                                        formControlName="thoiHanBan">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="4">
-                            <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp </nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
-                                        formControlName="ngayKthuc">
-                                    </nz-date-picker>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="2">
+                        <div nz-col [nzSpan]="6" *ngIf=" radioValue != 'Chào giá'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -107,7 +87,73 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="6" *ngIf=" radioValue == 'Chào giá'">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm chào giá </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <input placeholder="" nz-input formControlName="diaDiemChaoGia"
+                                        [readonly]="isDisable()" />
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]=" radioValue == 'Chào giá' ? 3 : 6">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> loại hình nhập xuất
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
+                                        <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma"
+                                            [nzLabel]="p.giaTri">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]=" radioValue == 'Chào giá' ? 3 : 6">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất
+                                </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-select formControlName="kieuNx" [nzDisabled]="true">
+                                        <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                        </nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true">Thời gian mở cửa kho bán trực
+                                    tiếp</nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayMkho">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="6">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-date-picker [nzDisabled]="isDisable()" nzFormat="dd/MM/yyyy"
+                                        formControlName="ngayKthuc">
+                                    </nz-date-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'Chào giá'">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                        <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'Chào giá'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -118,7 +164,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="4">
+                        <div nz-col [nzSpan]="6" *ngIf=" radioValue == 'Chào giá'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                                 <nz-form-control>
@@ -184,13 +230,15 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="4">{{item.tenDvi}}</td>
-                                <td class="text-green">{{item.soLuongChiCuc}}</td>
+                                <td style="color: black ;font-weight: bold;">{{item.soLuongChiCuc | number : '1.0-1' :
+                                    'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                             </tr>
                             <ng-container *ngIf="expandSet.has(i)">
                                 <tr *ngFor="let children of item.children, let y = index"
+                                    [ngClass]="{'bg-selected': y == 0 && this.selected}"
                                     (click)="selectRow($event,children)">
                                     <td></td>
                                     <td></td>

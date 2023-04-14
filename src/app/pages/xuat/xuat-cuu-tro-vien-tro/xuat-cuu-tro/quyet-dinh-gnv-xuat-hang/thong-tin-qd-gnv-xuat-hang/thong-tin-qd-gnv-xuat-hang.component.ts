@@ -167,6 +167,8 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   buildTableView() {
     let data = cloneDeep(this.formData.value.noiDungCuuTro);
+    console.log(data, "data");
+    console.log(this.userInfo.MA_DVI, "this.userInfo.MA_DVI");
     if (this.userService.isCuc()) {
       data = data.filter(s => s.maDviChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
     }
@@ -178,28 +180,27 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenChiCuc")
-          .map((v, k) => ({
-            idVirtual: uuid.v4(),
-            tenChiCuc: k,
-            soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
-            thanhTien: v[0].thanhTien,
-            tenCloaiVthh: v[0].tenCloaiVthh,
-            tonKhoChiCuc: v[0].tonKhoChiCuc,
-            noiDung: v[0].noiDung,
-            childData: v
-          })
-          ).value();
+          .map((v, k) => {
+            let rowChiCuc = v.find(s => s.tenChiCuc == k);
+            return {
+              idVirtual: uuid.v4(),
+              tenChiCuc: k,
+              soLuongXuatChiCuc: rowChiCuc.soLuongXuatChiCuc,
+              thanhTien: rowChiCuc.thanhTien,
+              donViTinh: rowChiCuc.donViTinh,
+              tenCloaiVthh: rowChiCuc.tenCloaiVthh,
+              tonKhoChiCuc: rowChiCuc.tonKhoChiCuc,
+              noiDung: rowChiCuc.noiDung,
+              childData: v
+            };
+          }).value();
+        let title = value.find(f => f.noiDung == key);
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
         let thanhTien = rs.reduce((prev, cur) => prev + cur.thanhTien, 0);
-        let donViTinh = value[0].donViTinh;
-        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh, thanhTien: thanhTien };
+        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: title.donViTinh, thanhTien: thanhTien };
       }).value();
+
     this.noiDungCuuTroView = dataView;
-    this.soLuong = this.noiDungCuuTroView[0].soLuongXuat;
-    this.thanhTien = this.noiDungCuuTroView[0].thanhTien;
-    this.donViTinh = this.noiDungCuuTroView[0].donViTinh;
-    console.log(this.noiDungCuuTroView, 55);
-    console.log(JSON.stringify(this.noiDungCuuTroView), 'noiDungCuuTroView')
     this.expandAll()
 
   }
@@ -227,9 +228,14 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
               } else if (this.userInfo.CAP_DVI === "3") {
                 noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
               }
+              let nd = noiDungCuuTro[0].quyetDinhPdDx;
               this.formData.patchValue({
                 loaiVthh: res.data.loaiVthh,
-                noiDungCuuTro: noiDungCuuTro[0].quyetDinhPdDx,
+                tenLoaiVthh: res.data.tenLoaiVthh,
+                donViTinh: res.data.donViTinh,
+                noiDungCuuTro: nd,
+                soLuong: nd.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
+                thanhTien: nd.reduce((prev, cur) => prev + cur.thanhTien, 0),
               });
               this.selectHangHoa(res.data.loaiVthh);
               this.buildTableView()
@@ -283,9 +289,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       soQdPd: item.soQd,
       ngayKyQdPa: item.ngayKy,
       soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD,
-      tongSoLuong: this.soLuong,
-      thanhTien: this.thanhTien,
-      donViTinh: this.donViTinh,
     })
   }
   async saveAndSend(status: string, message: string, sucessMessage: string) {
@@ -497,7 +500,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.noiDungRow = {};
   }
 
-  async saveDdiemNhap(statusSave) {
+  async saveDdiemNhap(statusSave?) {
     this.spinner.show();
     this.formData.value.noiDungCuuTro.forEach(item => {
       item.trangThai = statusSave

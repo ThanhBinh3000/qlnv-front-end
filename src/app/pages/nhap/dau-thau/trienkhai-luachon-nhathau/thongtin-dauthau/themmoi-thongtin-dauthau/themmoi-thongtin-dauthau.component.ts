@@ -232,9 +232,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.donGiaVatObject = res.data
       console.log("getDetailDtlCuc", res.data)
       let tongMucDtTrung = 0
+      let tongMucDt = 0
       data.children.forEach(item => {
         if (item.trangThai == STATUS.THANH_CONG) {
-          tongMucDtTrung += item.soLuong * item.donGiaNhaThau * 1000
+          tongMucDtTrung += item.soLuong * item.donGiaNhaThau
+          tongMucDt += item.soLuong * (item.donGiaTamTinh ? item.donGiaTamTinh : item.donGiaVat)
         }
       })
       this.formData.patchValue({
@@ -243,7 +245,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
-        tongMucDt: '',
+        tongMucDt: tongMucDt,
         tongMucDtGoiTrung: tongMucDtTrung,
         tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
         tenHthucLcnt: data.hhQdKhlcntHdr.tenHthucLcnt,
@@ -272,7 +274,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenTrangThai: data.tenTrangThai
       })
       this.listOfData = data.children;
-      this.convertListData()
+      await this.convertListData()
       this.showFirstRow(event, this.listDataDetail)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -292,6 +294,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listDataChiCuc = [];
     this.listDataCuc = [];
     this.listDataDetail = [];
+    this.listData = [];
     this.listOfData.forEach(item => {
       this.listDataCuc.push(item)
       item.children.forEach(i => {
@@ -648,9 +651,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           if (cur['trangThai'] == 40 && column == 'chenhLech') {
-            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaTamTinh']) * cur['soLuong'] * 1000);
+            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaTamTinh']) * cur['soLuong']);
           } else {
-            prev += cur[column] * 1000 * cur['soLuong'];
+            prev += cur[column] * cur['soLuong'];
           }
           return prev ? prev : 0;
         }, 0);

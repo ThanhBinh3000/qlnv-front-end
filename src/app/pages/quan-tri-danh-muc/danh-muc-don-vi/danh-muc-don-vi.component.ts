@@ -13,6 +13,7 @@ import {NewDonViComponent} from './new-don-vi/new-don-vi.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {UserLogin} from "../../../models/userlogin";
 import {UserService} from "../../../services/user.service";
+import { DanhMucService } from "../../../services/danhmuc.service";
 
 
 @Component({
@@ -37,6 +38,9 @@ export class DanhMucDonViComponent implements OnInit {
   levelNode: number = 0;
   isEditData: boolean = false;
   userInfo : UserLogin
+  listTinhThanh: any[] = [];
+  listQuanHuyen: any[] = [];
+  listPhuongXa: any[] = [];
 
   constructor(
     private router: Router,
@@ -46,6 +50,7 @@ export class DanhMucDonViComponent implements OnInit {
     private helperService: HelperService,
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
+    private danhMucService: DanhMucService,
     public userService : UserService
   ) {
     this.detailDonVi = this.formBuilder.group({
@@ -62,6 +67,9 @@ export class DanhMucDonViComponent implements OnInit {
       type: [],
       ghiChu: [''],
       vungMien: [''],
+      tinhThanh: [''],
+      quanHuyen: [''],
+      phuongXa: [''],
     })
   }
 
@@ -69,7 +77,8 @@ export class DanhMucDonViComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
-      this.layTatCaDonViTheoTree()
+      this.layTatCaDonViTheoTree(),
+      this.loadDsKhuVuc()
     ]);
     this.spinner.hide();
   }
@@ -107,6 +116,16 @@ export class DanhMucDonViComponent implements OnInit {
     })
   }
 
+  async loadDsKhuVuc() {
+    let res = await this.danhMucService.loadDsDiaDanhByCap({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      let listKv = res.data;
+      if (listKv && listKv.length > 0) {
+        this.listTinhThanh = listKv.filter(item => item.capDiaDanh === 1);
+      }
+    }
+  }
+
   parentNodeSelected: any = [];
 
   nzClickNodeTree(event: any): void {
@@ -139,7 +158,10 @@ export class DanhMucDonViComponent implements OnInit {
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
             vaiTro: res.data.vaiTro,
-            vungMien : res.data.vungMien
+            vungMien : res.data.vungMien,
+            tinhThanh : res.data.capDvi == 2 && res.data.tinhThanh ? res.data.tinhThanh.split(',') : res.data.tinhThanh,
+            quanHuyen: res.data.quanHuyen,
+            phuongXa: res.data.phuongXa,
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
@@ -225,5 +247,21 @@ export class DanhMucDonViComponent implements OnInit {
         this.ngOnInit()
       }
     });
+  }
+
+  changeTinhThanh(event) {
+    if (event) {
+      if (this.listTinhThanh && this.listTinhThanh.length > 0) {
+        this.listQuanHuyen = this.listTinhThanh.filter(item => item.maCha == event && item.capDiaDanh === 2)
+      }
+    }
+  }
+
+  changeQuanHuyen(event) {
+    if (event) {
+      if (this.listQuanHuyen && this.listQuanHuyen.length > 0) {
+        this.listPhuongXa = this.listQuanHuyen.filter(item => item.maCha == event && item.capDiaDanh === 3)
+      }
+    }
   }
 }
