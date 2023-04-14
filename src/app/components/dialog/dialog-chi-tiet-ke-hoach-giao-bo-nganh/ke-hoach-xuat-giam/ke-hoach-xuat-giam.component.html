@@ -21,21 +21,21 @@
       </nz-input-number>
     </nz-form-label>
   </div>
-  <nz-table #editRowTable [nzData]="dataTable" nzBordered [nzScroll]="{ x: '1000px' }">
+  <nz-table #editRowTable [nzData]="dataTable" nzBordered [nzPageSize]="15" [nzScroll]="{ y: '500px' }">
     <thead>
     <tr>
-      <th class="text-center" width="40px">STT</th>
+      <th class="text-center" nzWidth="40px">STT</th>
       <th>Tên hàng hoá</th>
-      <th width="250px">Chủng loại hàng hoá</th>
-      <th width="100px">Đơn vị tính</th>
-      <th width="120px">Kế hoạch năm <br/> {{namHienTai}}</th>
-      <th width="100px">Hành động</th>
+      <th nzWidth="250px">Chủng loại hàng hoá</th>
+      <th nzWidth="120px">Đơn vị tính</th>
+      <th nzWidth="120px">Kế hoạch năm <br/> {{namHienTai}}</th>
+      <th nzWidth="100px">Hành động</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngIf="!isView">
-      <td class="text-center" style="width: 5%;"></td>
-      <td style="width: 45%;">
+      <td class="text-center"></td>
+      <td>
         <nz-input-group>
           <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
                      (ngModelChange)="onChangeLoaiVthh($event)">
@@ -44,7 +44,7 @@
           </nz-select>
         </nz-input-group>
       </td>
-      <td style="width: 25%;">
+      <td>
         <nz-input-group>
           <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
                      (ngModelChange)="onChangeCloaiVthh($event)">
@@ -54,19 +54,19 @@
           </nz-select>
         </nz-input-group>
       </td>
-      <td style="width: 5%;">
+      <td>
         <nz-input-group>
           <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true"/>
         </nz-input-group>
       </td>
-      <td style="width: 10%;">
+      <td>
         <nz-input-group>
           <nz-input-number [disabled]="isView" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
                            [(ngModel)]="rowItem.soLuong">
           </nz-input-number>
         </nz-input-group>
       </td>
-      <td style="text-align: center;">
+      <td>
         <a (click)="themMoiItem()">
           <i class="fa fa-plus"></i>
         </a>
@@ -82,7 +82,7 @@
         <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.dviTinh }}</td>
         <td>{{ data.soLuong }}</td>
-        <td style="text-align: center;">
+        <td>
           <a *ngIf="!isView" (click)="editItem(idx)">
             <i class=" fa fa-pencil"></i>
           </a>
@@ -93,7 +93,7 @@
       </ng-container>
       <ng-template #editTemplate>
         <td></td>
-        <td style="width: 45%;">
+        <td>
           <nz-input-group>
             <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
                        (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
@@ -102,7 +102,7 @@
             </nz-select>
           </nz-input-group>
         </td>
-        <td style="width: 25%;">
+        <td>
           <nz-input-group>
             <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false"
                        (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
@@ -112,12 +112,12 @@
             </nz-select>
           </nz-input-group>
         </td>
-        <td style="width: 5%;">
+        <td>
           <nz-input-group>
             <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true"/>
           </nz-input-group>
         </td>
-        <td style="width: 10%;">
+        <td>
           <nz-input-group>
             <input nz-input [(ngModel)]="dataEdit[idx].data.soLuong"/>
           </nz-input-group>
