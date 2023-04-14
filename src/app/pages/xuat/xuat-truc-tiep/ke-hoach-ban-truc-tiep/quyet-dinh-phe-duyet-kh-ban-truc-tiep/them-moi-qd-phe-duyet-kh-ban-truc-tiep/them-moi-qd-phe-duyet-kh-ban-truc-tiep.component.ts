@@ -12,7 +12,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from "../../../../../../constants/status";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -20,6 +19,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
@@ -35,6 +35,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  fileDinhKems: any[] = []
   maQd: string = null;
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
@@ -47,6 +48,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   isTongHop: boolean
   selected: boolean = false;
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -54,6 +57,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
@@ -79,8 +83,9 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       tenTrangThai: ['Dự thảo'],
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
-      fileName: [],
       slDviTsan: [],
+      loaiHinhNx: [''],
+      kieuNx: [''],
     })
   }
 
@@ -126,6 +131,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         this.initForm();
       }
       await Promise.all([
+        this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
       if (this.idTh) {
@@ -137,6 +143,21 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDataComboBox() {
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_TT');
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
+    }
   }
 
   initForm() {
@@ -172,14 +193,15 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       body.soQdPd = this.formData.value.soQdPd + "/" + this.maQd;
     }
     body.children = this.danhsachDx;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKem = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        this.quayLai();
+        // this.goBack();
       }
     }
     await this.spinner.hide();
@@ -187,10 +209,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   tuChoi() {
     this.reject(this.idInput, STATUS.TU_CHOI_LDV)
-  }
-
-  quayLai() {
-    this.showListEvent.emit();
   }
 
   async guiDuyet() {
@@ -210,7 +228,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         this.showFirstRow(event, this.danhsachDx[0]);
       }
-      this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem = data.fileDinhKem;
+      this.fileDinhKems = data.fileDinhKems;
     }
     this.spinner.hide()
   }
@@ -273,6 +292,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
             loaiVthh: data.loaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             slDviTsan: soLuongDviTsan,
+            loaiHinhNx: data.loaiHinhNx,
+            kieuNx: data.kieuNx,
             idThHdr: event,
             idTrHdr: null,
             soTrHdr: null,
@@ -379,6 +400,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           tenDvi: data.tenDvi,
           diaChi: data.diaChi,
           maDvi: data.maDvi,
+          loaiHinhNx: data.loaiHinhNx,
+          kieuNx: data.kieuNx,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
@@ -421,25 +444,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       await this.spinner.hide();
     }
 
-  }
-
-  getNameFileQD($event: any) {
-    if ($event.target.files) {
-      const itemFile = {
-        name: $event.target.files[0].name,
-        file: $event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          let fileDinhKemQd = new FileDinhKem();
-          fileDinhKemQd.fileName = resUpload.filename;
-          fileDinhKemQd.fileSize = resUpload.size;
-          fileDinhKemQd.fileUrl = resUpload.url;
-          fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
-        });
-    }
   }
 
   isDisabled() {

@@ -165,13 +165,11 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     let body = this.formData.value;
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
-      this.quayLai();
+      this.goBack();
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
+
 
   isDisable(): boolean {
     if (this.formData.value.id) {

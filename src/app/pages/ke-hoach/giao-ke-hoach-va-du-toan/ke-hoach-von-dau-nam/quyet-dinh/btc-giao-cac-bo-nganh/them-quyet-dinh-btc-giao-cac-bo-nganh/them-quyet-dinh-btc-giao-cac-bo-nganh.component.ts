@@ -1,18 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import * as dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { STATUS } from "../../../../../../../constants/status";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {QuyetDinhBtcNganhService} from 'src/app/services/quyetDinhBtcNganh.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
 
 @Component({
@@ -238,7 +238,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -258,7 +258,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.tongGiaTri = 0;
     let data = this.dsBoNganhTtcp.filter(item => item.maBn == $event);
     if (data && data.length > 0) {
-      this.tongGiaTri =  data.reduce((a, item) => a + (item['tongSo'] || 0), 0);
+      this.tongGiaTri = data.reduce((a, item) => a + (item['tongSo'] || 0), 0);
     } else {
       this.tongGiaTri = 0;
     }

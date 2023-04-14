@@ -1,6 +1,6 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH">
     <div class="btn-group" *ngIf="!isViewOnModal">
-        <button type="button" class="btn btn-sub" (click)="quayLai()">
+        <button type="button" class="btn btn-sub" (click)="goBack()">
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
@@ -357,7 +357,8 @@
                                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất trực tiếp
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN'
+                                    <span style="color: blue">{{formData.value.tongSoLuong | number
+                                        : '1.0-1' : 'vi_VN'
                                         }} {{formData.value.dviTinh}}</span>
                                 </nz-form-control>
                             </nz-form-item>
@@ -404,7 +405,8 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="5">{{item.tenDvi}}</td>
-                                <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td style="color: black ;font-weight: bold;">{{item.soLuongChiCuc | number : '1.0-1' :
+                                    'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
