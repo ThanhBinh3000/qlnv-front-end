@@ -117,7 +117,7 @@ export class DanhMucDonViComponent implements OnInit {
   }
 
   async loadDsKhuVuc() {
-    let res = await this.danhMucService.loadDsDiaDanh();
+    let res = await this.danhMucService.loadDsDiaDanhByCap({});
     if (res.msg == MESSAGE.SUCCESS) {
       let listKv = res.data;
       if (listKv && listKv.length > 0) {
