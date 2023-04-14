@@ -137,7 +137,7 @@
                 <nz-form-control>
                   <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear
                               formControlName="tinhThanh">
-                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.ma"
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
                                [nzLabel]="option.ten"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -150,7 +150,7 @@
                 <nz-form-control>
                   <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear (ngModelChange)="changeTinhThanh($event)"
                               formControlName="tinhThanh">
-                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.ma"
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
                                [nzLabel]="option.ten"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -162,7 +162,7 @@
                 <nz-form-control>
                   <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear (ngModelChange)="changeQuanHuyen($event)"
                               formControlName="quanHuyen">
-                    <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.ma"
+                    <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.id"
                                [nzLabel]="option.ten"></nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -174,7 +174,7 @@
                 <nz-form-control>
                   <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear
                               formControlName="phuongXa">
-                    <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.ma"
+                    <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.id"
                                [nzLabel]="option.ten"></nz-option>
                   </nz-select>
                 </nz-form-control>

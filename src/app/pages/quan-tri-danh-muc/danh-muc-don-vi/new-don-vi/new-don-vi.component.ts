@@ -60,12 +60,12 @@ export class NewDonViComponent implements OnInit {
       ghiChu: [''],
       vungMien: [''],
       tinhThanh: [],
-      quanHuyen: [''],
-      phuongXa: [''],
+      quanHuyen: [],
+      phuongXa: [],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
-      this.levelNode = node.level
+      this.levelNode = node && node.level ? node.level : null
       if (this.levelNode == 3) {
         this.formDonVi.patchValue({
           type : true
@@ -109,7 +109,21 @@ export class NewDonViComponent implements OnInit {
     this.modal.destroy();
   }
 
+  setValidators() {
+    if (this.levelNode == 1 ) {
+      this.formDonVi.controls["tinhThanh"].setValidators([Validators.required]);
+      this.formDonVi.controls["quanHuyen"].clearValidators();
+      this.formDonVi.controls["phuongXa"].clearValidators();
+    }
+    if (this.levelNode == 2) {
+      this.formDonVi.controls["tinhThanh"].setValidators([Validators.required]);
+      this.formDonVi.controls["quanHuyen"].setValidators([Validators.required]);
+      this.formDonVi.controls["phuongXa"].setValidators([Validators.required]);
+    }
+  }
+
   add() {
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formDonVi);
     if (this.formDonVi.invalid) {
       return;
@@ -135,5 +149,13 @@ export class NewDonViComponent implements OnInit {
         e.error.errors[0].defaultMessage,
       );
     });
+  }
+
+  convertDiaDanh() : any[]{
+    let arr = [];
+    if (this.levelNode == 1) {
+
+    }
+    return arr;
   }
 }

@@ -68,7 +68,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
     super.ngOnInit();
     this.formData = this.fb.group({
-      id: [''],
+      id: [null],
       soVanBan: ['', [Validators.required]],
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
@@ -134,7 +134,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
-        data.soVanBan = data.soVanBan.split('/')[0];
         this.changeListOfTagOptions(data.loaiVthh);
         let lss = []
         for (let item of this.listOfTagOptions) {
@@ -254,7 +253,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     } else {
       body.tieuChuanKyThuat = this.dataTable;
     }
-    body.soVanBan = body.soVanBan + body.maVb
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
     body.listTenLoaiVthh = this.listLoaiVthh.join(',');
