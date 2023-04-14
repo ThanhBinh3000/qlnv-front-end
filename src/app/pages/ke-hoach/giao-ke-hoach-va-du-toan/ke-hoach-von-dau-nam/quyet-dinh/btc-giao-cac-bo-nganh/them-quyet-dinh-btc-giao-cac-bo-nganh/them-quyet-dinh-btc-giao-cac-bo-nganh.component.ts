@@ -112,7 +112,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       if (data.length > 0) {
         let dataTtcp = await this.quyetDinhTtcpService.getDetail(data[0].id);
         if (dataTtcp.msg == MESSAGE.SUCCESS) {
-          console.log(dataTtcp.data);
           this.dsBoNganhTtcp = dataTtcp.data.listChiTangToanBoNganh;
         }
       } else {
@@ -237,6 +236,8 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.idInput = res.data.id;
+          this.getDataDetail(this.idInput);
         }
         // this.quayLai();
       }
