@@ -58,13 +58,13 @@
     <ng-container *ngIf="userService.isChiCuc()">
       <button
         *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT"
-        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DA_HOAN_THANH)">
+        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
       <button type="button" class="btn btn-main"
         *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT)"
-        (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
+        (click)="saveDdiemNhap()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -212,7 +212,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL cứu trợ, viện trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{soLuong | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="text-blue">{{formData.value.soLuong | number : '1.0-1' :
+                'vi_VN'}} {{formData.value.donViTinh}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -220,7 +221,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thành Tiền</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span>{{thanhTien| number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="text-blue">{{formData.value.thanhTien| number : '1.0-1' : 'vi_VN'}} (đ)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -259,7 +260,7 @@
                 <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                   [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
                 <td>{{i + 1}}</td>
-                <td>{{ item.noiDung }}</td>
+                <td class="bold">{{ item.noiDung }}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -269,8 +270,8 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donViTinh}}</td>
+                <td class="bold">{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="bold">{{formData.value.donViTinh}}</td>
                 <td></td>
                 <td *ngIf="userService.isChiCuc()">
                 </td>
@@ -281,16 +282,16 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv1.tenChiCuc}}</td>
-                    <td>{{lv1.tenCloaiVthh}}</td>
-                    <td>{{lv1.tonKhoChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="bold">{{lv1.tenChiCuc}}</td>
+                    <td class="bold">{{lv1.tenCloaiVthh}}</td>
+                    <td class="text-blue">{{lv1.tonKhoChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-blue">{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
                     <td>{{lv1.tenTrangThaiXh}}</td>
                     <td *ngIf="userService.isChiCuc()">

@@ -644,7 +644,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (this.deXuatPhuongAnCache.length !== 0) {
       this.listThanhTienCache = this.deXuatPhuongAnCache.map(s => s.thanhTien);
       this.listSoLuongCache = this.deXuatPhuongAnCache.map(s => s.soLuongXuatChiCuc);
-      this.deXuatPhuongAnCache.map(s => this.listSoLuongDxCache = s.soLuongXuat);
+      this.listSoLuongDxCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     } else {
       this.listThanhTienCache = [0];
       this.listSoLuongCache = [0];
@@ -654,6 +654,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.listThanhTien = this.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
       this.deXuatPhuongAn.map(s => this.listSoLuongDx = s.soLuongXuat);
+      this.listSoLuongDx = this.deXuatPhuongAn.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
@@ -754,7 +755,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   summaryData() {
+    console.log(this.formData.value.quyetDinhPdDtl, "this.formData.value.quyetDinhPdDtl");
     this.tongSoLuongDxuat = this.formData.value.quyetDinhPdDtl.reduce((prev, cur) => prev + cur.tongSoLuongDx, 0)
+    console.log(this.tongSoLuongDxuat, "this.tongSoLuongDxuat");
     this.tongThanhTienDxuat = this.formData.value.quyetDinhPdDtl.reduce((prev, cur) => prev + cur.thanhTienDx, 0)
   }
 
@@ -786,7 +789,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       this.slXuatCap = null;
     }
-    this.tongSoLuongDxuat = tongSoLuongXuatThucTe;
     this.formData.patchValue({
       soLuongXuaCap: this.slXuatCap,
     })
