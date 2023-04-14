@@ -1,19 +1,19 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { saveAs } from 'file-saver';
+import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
+import {Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {saveAs} from 'file-saver';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
@@ -23,11 +23,11 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { chain, cloneDeep } from 'lodash';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {chain, cloneDeep} from 'lodash';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin',
@@ -56,6 +56,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   listHdDaKy = [];
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -284,6 +285,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       }
     });
   }
+
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
@@ -312,7 +314,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
               moTaHangHoa: dataThongTin.moTaHangHoa
             });
             this.listDviLquan = dataThongTin.listNguoiTgia;
-            this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == dataThongTin.loaiVthh)?.maDviTinh })
+            this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == dataThongTin.loaiVthh)?.maDviTinh})
           }
         })
     }
@@ -412,12 +414,19 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   selectMaDviTsan() {
-    if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-      let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+    let selectDviTsan = this.formData.value.listMaDviTsan;
+    this.listDviTsan.forEach(s => s.disable = false);
+    if (selectDviTsan && selectDviTsan.length > 0) {
+      let listAll = this.listDviTsan.filter(s => selectDviTsan.includes(s.maDviTsan));
       listAll.forEach(s => {
-        s.children.forEach(e => {
-          if (!this.objectArrayIncludes(this.listMaDvts, e)) {
-            this.listMaDvts = [...this.listMaDvts, e];
+        this.listDviTsan.forEach(e => {
+          if (e.toChucCaNhan != s.toChucCaNhan) {
+            e.disable = true;
+          }
+        });
+        s.children.forEach(x => {
+          if (!this.objectArrayIncludes(this.listMaDvts, x)) {
+            this.listMaDvts = [...this.listMaDvts, x];
           }
         });
       });

@@ -181,7 +181,6 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   }
 
   openQdGnvModal(id: number) {
-    console.log(id, "id");
     this.idQdGnv = id;
     this.openQdGnv = true;
   }

@@ -229,7 +229,9 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   async save() {
+    this.formData.disable();
     let result = await this.createUpdate(this.formData.value);
+    this.formData.enable();
     if (result) {
       this.quayLai();
     }

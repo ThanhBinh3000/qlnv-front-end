@@ -122,8 +122,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   async loadDataChiTiet(id: number) {
     this.formData = this.fb.group({
       canCu: [null],
-      soQD: [null],
-      ngayKy: [null],
+      soQD: [null,[Validators.required]],
+      ngayKy: [null,[Validators.required]],
       ngayHieuLuc: [null],
       namKeHoach: [this.yearNow, [Validators.required]],
       trichYeu: [null, [Validators.required]],
@@ -185,6 +185,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               let item = {
                 id: element.idVirtual,
                 text: element.fileName,
+                fileName: element.fileName,
+                fileUrl: element.fileUrl,
+                noiDung: element.noiDung,
+                dataType: element.dataType,
+                dataId : element.dataId
               };
               if (!this.taiLieuDinhKemList) {
                 this.taiLieuDinhKemList = [];
@@ -601,7 +606,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
         }
         let body = {
           "dxDcLtVtReqList": dxDcLtVtReqList,
-          "fileDinhKemReqs": this.deXuatDieuChinh.fileDinhKemReqs,
+          "fileDinhKemReqs": this.taiLieuDinhKemList,
           "id": this.deXuatDieuChinh.id,
           "keHoachNamId": this.selectedCanCu.id,
           "loaiHangHoa": this.deXuatDieuChinh.loaiHangHoa,
