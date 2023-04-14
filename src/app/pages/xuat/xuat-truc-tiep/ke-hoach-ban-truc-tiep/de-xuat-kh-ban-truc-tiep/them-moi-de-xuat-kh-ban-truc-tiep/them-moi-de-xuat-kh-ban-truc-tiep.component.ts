@@ -372,7 +372,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         this.idInput = res.id;
         this.guiDuyet();
       } else {
-        this.quayLai()
+        // this.goBack()
       }
     }
   }
@@ -397,9 +397,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
-  }
 
   async guiDuyet() {
     if (this.dataTable.length == 0) {

@@ -14,7 +14,7 @@ import { DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
-
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-dialog-them-moi-xuat-ban-truc-tiep',
   templateUrl: './dialog-them-moi-xuat-ban-truc-tiep.component.html',
@@ -218,6 +218,7 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
       this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
       this.thongTinXuatBanTrucTiep.dviTinh = this.dviTinh
       let body = {
+        nam: this.namKh,
         maDvi: diemKho.maDviCha,
         loaiVthh: this.loaiVthh
       }
@@ -225,11 +226,11 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
           if (data.length > 0) {
-            this.thongTinXuatBanTrucTiep.duDau = data[0].slHienThoi;
+            let val = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+            this.thongTinXuatBanTrucTiep.duDau = cloneDeep(val)
           }
         }
       });
-
     }
   }
 
@@ -295,7 +296,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   addDiemKho() {
     if (this.validateDiemKho() && this.validateSoLuong(true)) {
-      this.thongTinXuatBanTrucTiep.donGiaVat = this.donGiaVat;
       this.listOfData = [...this.listOfData, this.thongTinXuatBanTrucTiep];
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
       this.formData.patchValue({
