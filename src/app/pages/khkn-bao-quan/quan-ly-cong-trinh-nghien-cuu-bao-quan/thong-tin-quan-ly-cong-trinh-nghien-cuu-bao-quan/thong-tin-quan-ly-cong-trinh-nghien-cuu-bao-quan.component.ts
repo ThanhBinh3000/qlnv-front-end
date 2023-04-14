@@ -43,7 +43,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   options = {
     allowZero: true,
     allowNegative: true,
-    precision: 1,
+    precision: 0,
     prefix: '',
     thousands: '.',
     decimal: ',',
@@ -51,6 +51,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     nullable: false,
     inputMode: CurrencyMaskInputMode.FINANCIAL
   }
+
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
