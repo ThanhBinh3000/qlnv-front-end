@@ -62,6 +62,9 @@ export class DanhMucDonViComponent implements OnInit {
       type: [],
       ghiChu: [''],
       vungMien: [''],
+      tinhThanh: [''],
+      quanHuyen: [''],
+      phuongXa: [''],
     })
   }
 
@@ -139,7 +142,10 @@ export class DanhMucDonViComponent implements OnInit {
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
             vaiTro: res.data.vaiTro,
-            vungMien : res.data.vungMien
+            vungMien : res.data.vungMien,
+            tinhThanh: res.data.tinhThanh,
+            quanHuyen: res.data.quanHuyen,
+            phuongXa: res.data.phuongXa,
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);

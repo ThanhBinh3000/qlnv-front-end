@@ -1,30 +1,44 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!showFromTH">
     <div class="btn-group" *ngIf="!isViewOnModal">
-        <button type="button" class="btn btn-sub" (click)="quayLai()">
+        <button type="button" class="btn btn-sub" (click)="goBack()">
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
         <ng-container *ngIf="userService.isCuc()">
             <button
-                *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+                *ngIf=" loaiVthhInput.startsWith('02') ?  
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC) :
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
                 type="button" class="btn btn-sub do" (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+                *ngIf=" loaiVthhInput.startsWith('02') ?  
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
                 type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
+            <button *ngIf=" loaiVthhInput.startsWith('02') ? 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                 || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)) :
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                 || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
-            <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC  ) "
+            <button *ngIf=" loaiVthhInput.startsWith('02') ? 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)) :
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
                 type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -343,7 +357,8 @@
                                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất trực tiếp
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN'
+                                    <span style="color: blue">{{formData.value.tongSoLuong | number
+                                        : '1.0-1' : 'vi_VN'
                                         }} {{formData.value.dviTinh}}</span>
                                 </nz-form-control>
                             </nz-form-item>
@@ -390,7 +405,8 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="5">{{item.tenDvi}}</td>
-                                <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td style="color: black ;font-weight: bold;">{{item.soLuongChiCuc | number : '1.0-1' :
+                                    'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

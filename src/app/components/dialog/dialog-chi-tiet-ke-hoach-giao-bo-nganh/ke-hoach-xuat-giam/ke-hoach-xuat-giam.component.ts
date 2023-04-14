@@ -63,7 +63,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         this.tongSoVT = item.tongSo;
       }
       if (!item.isSum) {
-        this.listTongGiaTriBnKhac[item.maBn] = {tongSo : item.tongSo};
+        this.listTongGiaTriBnKhac[item.maBn] = {tongSo: item.tongSo};
       }
     }
   }
@@ -107,6 +107,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     if (this.rowItem.loaiVthh && this.rowItem.soLuong != null) {
       if (!this.dataTable) {
         this.dataTable = [];
+      }
+      if ((this.rowItem.loaiVthh && !this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh).length > 0) || (this.rowItem.loaiVthh && this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh).length > 0)) {
+        this.notification.error(MESSAGE.ERROR, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+        return;
       }
       this.dataTable = [...this.dataTable, this.rowItem]
       this.rowItem = new ThongTinQuyetDinh();

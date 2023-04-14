@@ -205,7 +205,7 @@
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"
                *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_THEM'))&&
                 !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_DUYET'))&&
                 userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_THPA_XEM')">
               <i class="fa fa-eye"></i>
@@ -273,20 +273,20 @@
   <app-thong-tin-tong-hop-phuong-an [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
   </app-thong-tin-tong-hop-phuong-an>
 </div>
-<div>
-  <nz-modal class="scroll-nz-modal" [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
-            [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
-    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-      <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
-                                                    [isViewOnModal]="true"
-                                                    (showListEvent)="showList()">
-      </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
-    </ng-container>
-    <div *nzModalFooter>
-      <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
-        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-        Đóng
-      </button>
-    </div>
-  </nz-modal>
-</div>
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
+  <ng-container *nzModalContent>
+    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
+                                                  [isViewOnModal]="true"
+                                                  (showListEvent)="showList()">
+    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalQdPd()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+

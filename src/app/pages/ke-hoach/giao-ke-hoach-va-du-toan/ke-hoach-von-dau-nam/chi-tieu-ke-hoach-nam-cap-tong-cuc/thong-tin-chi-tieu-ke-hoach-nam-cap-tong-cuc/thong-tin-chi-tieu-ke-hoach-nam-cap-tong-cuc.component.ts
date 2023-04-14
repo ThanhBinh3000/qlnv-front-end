@@ -50,6 +50,7 @@ import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import {STATUS} from "../../../../../../constants/status";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
+import {QuyetDinhTtcpService} from "../../../../../../services/quyetDinhTtcp.service";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -81,6 +82,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     xuatTrongNamMuoi: 0,
     tonKhoCuoiNam: 0,
   };
+  sumTotalKhDuTruLuongThuc: any = {};
   tab = TAB_SELECTED;
   yearNow: number = 0;
   thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam =
@@ -143,7 +145,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuNhapEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuXuatEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuConEditNhapShow: any[] = []
-  dataVatTuConEditXuatShow: any[] = []
+  dataVatTuConEditXuatShow: any[] = [];
+  dataQdTtcpGiaoBTC: any;
 
   //
 
@@ -163,13 +166,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private uploadFileService: UploadFileService,
     public userService: UserService,
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
     public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.initForm();
   }
 
   ngOnInit(): void {
-    console.log(this.showListEvent,'showListEvent');
+    console.log(this.showListEvent, 'showListEvent');
     this.yearNow = dayjs().get('year');
     for (let i = 0; i < 5; i++) {
       this.listNam.push({
@@ -202,6 +206,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         namKeHoach: dayjs().get('year')
       });
       this.findCanCuByYear(this.yearNow);
+      this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
 
@@ -754,8 +759,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .loadThongTinChiTieuKeHoachNam(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+
           this.thongTinChiTieuKeHoachNam = res.data;
-          console.log(res.data);
           // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
@@ -819,7 +824,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             }).value();
           this.dataVatTuXuat.forEach(s => this.expandSetVatTuXuat.add(s.maDvi));
           this.dataVatTuXuatEdit = cloneDeep(this.dataVatTuXuat);
-
           // this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
             this.formData.controls['ngayKy'].setValidators([Validators.required])
@@ -843,6 +847,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             soQD: this.formData.get('soQd').value?.split('/')[0],
           });
+          this.sumRowDetailMuoi();
+          this.sumRowDetailLuongThuc();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -876,6 +882,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  sumDataKh(key) {
+    if (this.dsKeHoachLuongThucClone.length > 0) {
+      return this.dsKeHoachLuongThucClone.reduce((a, b) => a + (b[key] || 0), 0);
+    }
+  }
+
   reduceRowData(
     indexTable: number,
     indexCell: number,
@@ -887,7 +899,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     const listTable = document
       .getElementById(idTable)
       ?.getElementsByTagName('table');
-
     if (listTable && listTable.length >= indexTable) {
       const table = listTable[indexTable];
       for (let i = indexRow; i < table.rows.length - 1; i++) {
@@ -1012,6 +1023,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.thongTinChiTieuKeHoachNam.khLuongThuc,
         );
         this.loadData();
+        this.sumRowDetailLuongThuc();
       },
     });
   }
@@ -1038,10 +1050,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dsMuoiClone = cloneDeep(
           this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
         );
-        this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-        this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-        this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-        this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+        this.sumRowDetailMuoi()
         this.loadData();
       },
     });
@@ -1683,22 +1692,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
     this.findCanCuByYear(this.yearNow);
-    if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
-        luongThuc.tkdnGao[0].nam = this.yearNow - 1;
-        luongThuc.tkdnGao[1].nam = this.yearNow - 2;
-        luongThuc.tkdnGao[2].nam = this.yearNow - 3;
-        luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
-        luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
-        luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
-        luongThuc.xtnGao[0].nam = this.yearNow - 1;
-        luongThuc.xtnGao[1].nam = this.yearNow - 2;
-        luongThuc.xtnGao[2].nam = this.yearNow - 3;
-        luongThuc.xtnThoc[0].nam = this.yearNow - 1;
-        luongThuc.xtnThoc[1].nam = this.yearNow - 2;
-        luongThuc.xtnThoc[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
+    //   console.log(this.thongTinChiTieuKeHoachNam?.khLuongThuc, 'ddddddd');
+    //   this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
+    //     luongThuc.tkdnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnThoc[2].nam = this.yearNow - 3;
+    //   });
+    // }
+    this.loadQdTtcpGiaoBoNganh(this.yearNow);
     // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
     //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
     //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
@@ -1741,6 +1752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
       this.dsKeHoachLuongThucClone[i],
     );
+    this.sumRowDetailLuongThuc();
     this.cdr.detectChanges();
   }
 
@@ -2018,6 +2030,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  async loadQdTtcpGiaoBoNganh(nam) {
+    const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
+    if (res.msg == MESSAGE.SUCCESS) {
+      // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
+      this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+    }
+  }
+
   calculatorntnTongQuyThocCreate(): string {
     this.keHoachLuongThucCreate.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnThoc +
@@ -2187,7 +2207,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.tkdnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2,tkdnGao3];
+    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2, tkdnGao3];
     this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnTongSoQuyThoc;
     this.keHoachLuongThucDialog.ntnThoc = +this.keHoachLuongThucCreate.ntnThoc;
@@ -2238,7 +2258,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.xtnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2,xtnGao3];
+    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2, xtnGao3];
     this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.tkcnTongSoQuyThoc;
     this.keHoachLuongThucDialog.tkcnTongThoc =
@@ -2263,6 +2283,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
     this.loadData();
+    this.sumRowDetailLuongThuc();
   }
 
   changeDonViMuoi() {
@@ -2343,10 +2364,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachMuoiCreate.tenDonVi = this.tenDonViCuc;
     }
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
-    this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-    this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-    this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
+    this.sumRowDetailMuoi()
     this.loadData();
   }
 
@@ -2508,12 +2526,44 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
       this.dsMuoiClone[i],
     );
+    this.sumRowDetailMuoi();
+    this.cdr.detectChanges();
+  }
+
+  sumRowDetailMuoi() {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
     this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
-    this.cdr.detectChanges();
   }
+
+  sumRowDetailLuongThuc() {
+    this.sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[2]?.soLuong ? b.xtnGao[2].soLuong : 0, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongGao, 0);
+  }
+
 
   cancelEditMuoi(index: number) {
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);

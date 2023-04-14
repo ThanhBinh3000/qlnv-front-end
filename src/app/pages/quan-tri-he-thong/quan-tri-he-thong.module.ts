@@ -10,6 +10,8 @@ import { QuanTriHeThongNewRoutingModule } from './quan-tri-he-thong-routing.modu
 import { QuanTriHeThongNewComponent } from './quan-tri-he-thong.component';
 import { QuanTriThamSoComponent } from './quan-tri-tham-so/quan-tri-tham-so.component';
 import {ThemMoiQtriThamSoComponent} from "./quan-tri-tham-so/them-moi-qtri-tham-so/them-moi-qtri-tham-so.component";
+import { ThongKeTruyCapComponent } from './thong-ke-truy-cap/thong-ke-truy-cap.component';
+import {NgApexchartsModule} from "ng-apexcharts";
 
 @NgModule({
   declarations: [
@@ -18,9 +20,10 @@ import {ThemMoiQtriThamSoComponent} from "./quan-tri-tham-so/them-moi-qtri-tham-
     QuanLyQuyenComponent,
     KiemSoatQuyenTruyCapComponent,
     QuanTriThamSoComponent,
-    ThemMoiQtriThamSoComponent
+    ThemMoiQtriThamSoComponent,
+    ThongKeTruyCapComponent
   ],
-  imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
+    imports: [CommonModule, QuanTriHeThongNewRoutingModule, ComponentsModule, MainModule, NzTreeViewModule, NgApexchartsModule],
 
 })
 export class QuanTriHeThongNewModule { }

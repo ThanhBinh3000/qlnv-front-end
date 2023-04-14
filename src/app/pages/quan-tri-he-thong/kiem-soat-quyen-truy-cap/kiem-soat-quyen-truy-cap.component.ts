@@ -40,16 +40,25 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
       ip: [''],
       system: [''],
       ngayHd: [''],
+      tuNgay: [''],
+      denNgay: [''],
     });
     this.search();
     this.filterTable = {};
   }
 
   async ngOnInit() {
-
+    this.filter();
   }
 
 
+  filter() {
+    if (this.formData.value.ngayHd && this.formData.value.ngayHd.length > 0) {
+      this.formData.value.tuNgay = this.formData.value.ngayHd[0];
+      this.formData.value.denNgay = this.formData.value.ngayHd[1];
+    }
+    this.search();
+  }
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();

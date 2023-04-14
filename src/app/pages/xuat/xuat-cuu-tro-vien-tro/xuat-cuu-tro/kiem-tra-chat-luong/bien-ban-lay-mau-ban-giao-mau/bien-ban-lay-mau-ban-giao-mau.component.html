@@ -185,7 +185,7 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>{{i + 1}}</td>
-                            <td><a class="text-blue" *ngIf="item.soQdGiaoNvXh!=null"
+                            <td><a nz-button nzType="link" *ngIf="item.soQdGiaoNvXh!=null"
                                     (click)="openQdGnvModal(item.idQdGiaoNvXh)">
                                     {{ item.soQdGiaoNvXh}}</a>
                             </td>

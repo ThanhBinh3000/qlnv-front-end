@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isViewOnModal">
   <div class="btn-group">
     <button class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -228,27 +228,26 @@
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="24">
-              <div nz-col [nzSpan]="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">
-                    File đính kèm biên bản lấy mẫu/bàn giao mẫu đã ký
-                  </nz-form-label>
-                  <div class="list-file">
-                    <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
-                  </div>
-                </nz-form-item>
-              </div>
-              <div nz-col [nzSpan]="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true">
-                    Căn cứ pháp lý
-                  </nz-form-label>
-                  <div class="list-file">
-                    <file-list [disabled]="isDisabled()" [data]="canCuPhapLy"></file-list>
-                  </div>
-                </nz-form-item>
-              </div>
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  File đính kèm biên bản lấy mẫu/bàn giao mẫu đã ký
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                </div>
+              </nz-form-item>
             </div>
+            <div nz-col [nzSpan]="24">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                  Căn cứ pháp lý
+                </nz-form-label>
+                <div class="list-file">
+                  <file-list [disabled]="isDisabled()" [data]="canCuPhapLy"></file-list>
+                </div>
+              </nz-form-item>
+            </div>
+
           </div>
         </form>
       </nz-collapse-panel>
