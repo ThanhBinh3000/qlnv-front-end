@@ -123,14 +123,15 @@
       <tr>
         <td class="text-center"></td>
         <td class="text-center"><b>Tổng số</b></td>
-        <td class="text-right">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="text-right bold" style="">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
       </tr>
       <tr *ngFor="let data of dataTableAllBn; let idx = index">
         <td class="text-center">{{ data.stt }}</td>
         <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
         <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
         <td *ngIf="!data.isSum" class="text-right">
-          <input currencyMask (change)="onInputNumberBNChange()"  (keydown)="onInputNumberBNChange()" (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
+          <input currencyMask class="money-input" (change)="onInputNumberBNChange()" (keydown)="onInputNumberBNChange()"
+                 (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
         </td>
         <td *ngIf="data.isSum" class="text-right">{{totalBtcKh  | number : '1.0-1' : 'vi_VN'}}</td>
       </tr>
