@@ -112,15 +112,17 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzSpan="4"  *ngIf="levelNode == 1">
+      <div nz-col nzSpan="24"  *ngIf="levelNode == 1">
+        <nz-form-item>
         <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-select  nzMode="multiple"  nzAllowClear
                      formControlName="tinhThanh">
-            <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.soCv"
-                       [nzLabel]="option.soCv"></nz-option>
+            <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.ma"
+                       [nzLabel]="option.ten"></nz-option>
           </nz-select>
         </nz-form-control>
+        </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
         <nz-form-item>

@@ -117,6 +117,7 @@
                 <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="16"></div>
             <div nz-col [nzSpan]="24" *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Vùng miền
@@ -130,6 +131,56 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
+            <div nz-col nzSpan="24"  *ngIf="detailDonVi.value.capDvi == 2">
+              <nz-form-item>
+                <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear
+                              formControlName="tinhThanh">
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.ma"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Tỉnh, thành</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear (ngModelChange)="changeTinhThanh($event)"
+                              formControlName="tinhThanh">
+                    <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.ma"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Quận, huyện</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear (ngModelChange)="changeQuanHuyen($event)"
+                              formControlName="quanHuyen">
+                    <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.ma"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="8"  *ngIf="detailDonVi.value.capDvi == 3">
+              <nz-form-item>
+                <nz-form-label>Phường, xã</nz-form-label>
+                <nz-form-control>
+                  <nz-select  [nzDisabled]="!isEditData"  nzMode="multiple"  nzAllowClear
+                              formControlName="phuongXa">
+                    <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.ma"
+                               [nzLabel]="option.ten"></nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
                 <nz-form-label></nz-form-label>
