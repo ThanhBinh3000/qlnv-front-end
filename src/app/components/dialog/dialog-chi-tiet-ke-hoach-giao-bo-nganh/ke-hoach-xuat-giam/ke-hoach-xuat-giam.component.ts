@@ -5,6 +5,8 @@ import {Globals} from './../../../../shared/globals';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
+import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT, AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -47,6 +49,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dsDonViTinh = [];
   dsKeHoachNam = [];
   listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -125,7 +128,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   clearData() {
-
+    this.rowItem = new ThongTinQuyetDinh();
   }
 
   huyEdit(idx: number): void {
