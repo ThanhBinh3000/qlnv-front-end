@@ -16,6 +16,7 @@ import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from './../../../../../../../../shared/globals';
 import { STATUS } from 'src/app/constants/status';
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -38,6 +39,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   hasError = new EventEmitter<boolean>();
   lastIndex = 0;
   STATUS = STATUS;
+  amount = AMOUNT_ONE_DECIMAL;
+
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,

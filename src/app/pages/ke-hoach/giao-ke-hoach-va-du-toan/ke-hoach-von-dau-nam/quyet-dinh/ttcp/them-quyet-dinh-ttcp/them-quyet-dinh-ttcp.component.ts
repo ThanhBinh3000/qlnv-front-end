@@ -293,8 +293,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.listToanBoNganh = this.dataTableAllBn.filter(item => item.isSum == false);
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res;
-    // console.log(body);
-    // return;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);
     } else {
@@ -313,7 +311,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        this.idInput = res.data.id;
+        this.getDataDetail(this.idInput);
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

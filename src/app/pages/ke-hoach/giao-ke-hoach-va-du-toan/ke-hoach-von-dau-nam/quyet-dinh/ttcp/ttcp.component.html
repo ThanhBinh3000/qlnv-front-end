@@ -164,7 +164,7 @@
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style="text-align: left; white-space: nowrap;">
             <a (click)="viewDetail(data.id, true)"
-               *ngIf="(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">
+               *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a

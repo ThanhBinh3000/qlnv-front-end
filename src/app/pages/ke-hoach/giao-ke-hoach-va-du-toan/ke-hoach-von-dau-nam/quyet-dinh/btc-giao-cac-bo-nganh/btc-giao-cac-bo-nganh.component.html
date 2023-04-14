@@ -61,7 +61,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách quyết định của Bộ Tài Chính giao các Bộ ngành</h3>
+      <h3 class="text-uppercase">Danh sách quyết định của Bộ Tài Chính giao các Bộ ngành</h3>
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -182,7 +182,7 @@
             <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>
             <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
             <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" style="text-align: left; white-space: nowrap;">
-              <a *ngIf="(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_XEM')"
+              <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_XEM')"
                 (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>

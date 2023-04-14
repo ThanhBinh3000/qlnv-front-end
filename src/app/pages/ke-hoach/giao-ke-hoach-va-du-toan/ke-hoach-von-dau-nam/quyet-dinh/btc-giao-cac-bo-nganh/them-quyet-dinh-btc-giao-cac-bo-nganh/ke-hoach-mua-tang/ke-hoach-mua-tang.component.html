@@ -22,9 +22,10 @@
       </td>
       <td>
         <nz-input-group>
-          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">
-          </nz-input-number>
+          <input class="money-input"  currencyMask [(ngModel)]="rowItem.sluongDtoan"  [options]="amount"/>
+<!--          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"-->
+<!--                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">-->
+<!--          </nz-input-number>-->
         </nz-input-group>
       </td>
       <td style="text-align: center;">
@@ -65,12 +66,9 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [nzStep]="0.1" [(ngModel)]="dataEdit[idx].data.sluongDtoan"
-                             [nzMin]="0">
-            </nz-input-number>
+            <input class="money-input"  currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan"  [options]="amount"/>
           </nz-input-group>
         </td>
-
         <td class="text-center">
           <a (click)="luuEdit(idx)" class="save">
             <i class="fa fa-save"></i>
