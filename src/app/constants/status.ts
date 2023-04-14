@@ -120,3 +120,9 @@ export enum CHUC_NANG {
 }
 
 
+export enum TRANG_THAI_QUY_CHUAN_TIEU_CHUAN {
+  CON_HIEU_LUC = "01",
+  HET_HIEU_LUC = "00",
+}
+
+

@@ -139,6 +139,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
 
   async loadDetail(idInput: number) {
+    console.log(idInput, "idInput");
     if (idInput > 0) {
       await this.phieuKiemNghiemChatLuongService.getDetail(idInput)
         .then((res) => {

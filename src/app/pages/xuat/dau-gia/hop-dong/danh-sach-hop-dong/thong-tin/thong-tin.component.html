@@ -80,7 +80,7 @@
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <nz-select nzMode="multiple" formControlName="listMaDviTsan" (ngModelChange)="selectMaDviTsan()">
-                        <nz-option *ngFor="let item of listDviTsan" [nzValue]="item.maDviTsan"
+                        <nz-option *ngFor="let item of listDviTsan" [nzValue]="item.maDviTsan" [nzDisabled]="item.disable"
                           [nzLabel]="item.maDviTsan">
                         </nz-option>
                       </nz-select>
