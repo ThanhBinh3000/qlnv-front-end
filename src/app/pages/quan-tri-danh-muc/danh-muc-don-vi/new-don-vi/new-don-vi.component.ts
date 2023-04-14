@@ -58,7 +58,7 @@ export class NewDonViComponent implements OnInit {
       type: [null],
       ghiChu: [''],
       vungMien: [''],
-      tinhThanh: [''],
+      tinhThanh: [],
       quanHuyen: [''],
       phuongXa: [''],
     })
@@ -79,17 +79,30 @@ export class NewDonViComponent implements OnInit {
 
 
  async loadDsKhuVuc() {
-   this.listTinhThanh = [];
-   this.listTinhThanh = [];
-   this.listTinhThanh = [];
-   let res = await this.danhMucService.danhMucChungGetAll('DM_DIA_DANH_HC');
+   let res = await this.danhMucService.loadDsDiaDanh();
    if (res.msg == MESSAGE.SUCCESS) {
      let listKv = res.data;
      if (listKv && listKv.length > 0) {
-       this.listTinhThanh = listKv.filter()
+       this.listTinhThanh = listKv.filter(item => item.capDiaDanh === 1);
      }
    }
  }
+
+  changeTinhThanh(event) {
+    if (event) {
+      if (this.listTinhThanh && this.listTinhThanh.length > 0) {
+        this.listQuanHuyen = this.listTinhThanh.filter(item => item.maCha == event && item.capDiaDanh === 2)
+      }
+    }
+  }
+
+  changeQuanHuyen(event) {
+    if (event) {
+      if (this.listQuanHuyen && this.listQuanHuyen.length > 0) {
+        this.listPhuongXa = this.listQuanHuyen.filter(item => item.maCha == event && item.capDiaDanh === 3)
+      }
+    }
+  }
 
   handleCancel(): void {
     this.modal.destroy();
@@ -104,6 +117,9 @@ export class NewDonViComponent implements OnInit {
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
     body.maDvi = body.maDviCha + body.maDvi
+    if (this.levelNode == 1) {
+      body.tinhThanh = body.tinhThanh ? body.tinhThanh.toString() : null;
+    }
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
