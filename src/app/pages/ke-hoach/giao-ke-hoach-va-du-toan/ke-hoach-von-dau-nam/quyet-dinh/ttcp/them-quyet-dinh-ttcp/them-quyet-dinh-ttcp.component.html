@@ -130,7 +130,7 @@
         <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
         <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
         <td *ngIf="!data.isSum" class="text-right">
-          <input currencyMask (change)="onInputNumberBNChange()"  (keypress)="onInputNumberBNChange()" (keydown)="onInputNumberBNChange()" (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
+          <input currencyMask (change)="onInputNumberBNChange()"  (keydown)="onInputNumberBNChange()" (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
         </td>
         <td *ngIf="data.isSum" class="text-right">{{totalBtcKh  | number : '1.0-1' : 'vi_VN'}}</td>
       </tr>

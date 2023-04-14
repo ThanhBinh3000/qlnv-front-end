@@ -565,8 +565,7 @@
     <!-- END TABLE LƯƠNG THỰC  -->
 
     <!-- START TABLE VẬT TƯ  -->
-    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
-      nzBordered>
+    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listOfData" class="nowrap pd-10" nzBordered>
       <thead>
         <tr>
           <th style="width: 2%;"></th>
@@ -622,8 +621,8 @@
                 <td>{{cuc.tenDvi}}</td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-left">{{item.dviTinh }}</td>
                 <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
@@ -680,7 +679,7 @@
           </ng-container>
         </ng-container>
       </tbody>
-      <tr *ngIf="listDataGroup.length > 0">
+      <tr *ngIf="listOfData.length > 0">
         <td></td>
         <td></td>
         <td colspan="4" class="first-last-row-table background-last-row text-left blue-text">Tổng</td>

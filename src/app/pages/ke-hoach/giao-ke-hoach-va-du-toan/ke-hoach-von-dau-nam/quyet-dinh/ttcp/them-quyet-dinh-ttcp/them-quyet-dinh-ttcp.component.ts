@@ -41,7 +41,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
   options = {
-    allowZero: true,
+    allowZero: false,
     allowNegative: true,
     precision: 1,
     prefix: '',
@@ -49,7 +49,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     decimal: ',',
     align: "right",
     nullable: false,
-    inputMode: CurrencyMaskInputMode.FINANCIAL
+    inputMode: CurrencyMaskInputMode.NATURAL
   }
 
   constructor(

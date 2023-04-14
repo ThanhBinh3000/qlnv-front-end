@@ -431,6 +431,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         });
       });
       this.buildTableView();
+    } else {
+      this.dataTable = [];
     }
   }
 

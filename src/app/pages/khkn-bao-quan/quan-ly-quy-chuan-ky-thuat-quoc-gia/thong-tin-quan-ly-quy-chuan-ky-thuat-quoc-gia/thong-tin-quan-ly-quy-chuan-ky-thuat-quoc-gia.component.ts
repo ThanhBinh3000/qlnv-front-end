@@ -15,7 +15,6 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { Base2Component } from './../../../../components/base2/base2.component';
-import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -149,6 +148,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         this.listVanBanId = String(data.idVanBanThayThe);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
+        this.dataTable.sort((a, b) => a.thuTuHt - b.thuTuHt);
         this.dataTable.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
@@ -211,7 +211,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     this.showListEvent.emit();
   }
 
-  addAllCloai() : any[] {
+  addAllCloai(): any[] {
     let arr = [];
     if (this.listCloaiVthh && this.listCloaiVthh.length > 0) {
       console.log(this.listCloaiVthh);
@@ -243,7 +243,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.spinner.hide();
       return;
     }
-    if (this.listOfTagOptions.length == 0 ) {
+    if (this.listOfTagOptions.length == 0) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa.')
       this.spinner.hide();
       return;
@@ -266,11 +266,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       res = await this.khCnQuyChuanKyThuat.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.id = res.data.id
+      this.formData.patchValue({
+        id: res.data.id,
+        trangThai: res.data.trangThai
+      })
       if (isGuiDuyet) {
-        this.formData.patchValue({
-          id: res.data.id,
-          trangThai: res.data.trangThai
-        })
         await this.guiDuyet();
       } else {
         if (this.idInput > 0) {
@@ -503,7 +504,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         if (this.rowItem.tenChiTieu) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
-          item.stt = this.dataTable.length + 1;
+          // item.stt = this.dataTable.length + 1;
           item.edit = false;
           if (this.checkExitsData(this.rowItem, this.dataTable)) {
             this.notification.error(MESSAGE.ERROR, "Vui lòng không nhập trùng tên chỉ tiêu")
@@ -523,9 +524,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         if (this.rowItem.tenChiTieu && this.rowItem.cloaiVthh != null) {
           this.sortTableId();
           let item = cloneDeep(this.rowItem);
-          console.log(item,3333333);
-          item.stt = this.dataTable.length + 1;
-          item.loaiVthh = item.cloaiVthh ?  item.cloaiVthh.substring(0, item.cloaiVthh.length - 2) : null;
+          console.log(item, 3333333);
+          // item.stt = this.dataTable.length + 1;
+          item.loaiVthh = item.cloaiVthh ? item.cloaiVthh.substring(0, item.cloaiVthh.length - 2) : null;
           item.edit = false;
           this.dataTable = [
             ...this.dataTable,

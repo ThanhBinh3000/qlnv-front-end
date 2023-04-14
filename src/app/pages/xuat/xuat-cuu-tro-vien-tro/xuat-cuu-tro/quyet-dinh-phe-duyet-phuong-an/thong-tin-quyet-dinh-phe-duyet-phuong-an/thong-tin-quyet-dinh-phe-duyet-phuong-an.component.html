@@ -191,7 +191,7 @@
             <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
               <td>{{i + 1}}</td>
               <td>{{item.tenDviDx}}</td>
-              <td><a class="text-blue" (click)="openDxPaModal(item.idDx)"> {{item.soDx}}</a></td>
+              <td><a nz-button nzType="link" (click)="openDxPaModal(item.idDx)"> {{item.soDx}}</a></td>
               <td>{{item.ngayPduyetDx}}</td>
               <td>{{item.trichYeuDx}}</td>
               <td>{{item.tongSoLuongDx|number: '1.0-1' : 'vi_VN'}}</td>

@@ -465,21 +465,19 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       } else {
         this.danhsachDx = data.children;
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
-        console.log("1", this.danhsachDxCache)
+        console.log("1", this.danhsachDx)
         for (const item of this.danhsachDxCache) {
           await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              debugger
               item.children = res.data.dsGtDtlList;
             }
           })
         }
-        console.log("2", this.danhsachDxCache)
       }
       this.showFirstRow(event, this.danhsachDx[0]);
     };
   }
-  l
+
   openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
