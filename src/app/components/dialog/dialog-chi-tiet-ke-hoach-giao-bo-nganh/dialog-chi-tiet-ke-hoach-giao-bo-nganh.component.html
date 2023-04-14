@@ -5,7 +5,7 @@
     </nz-radio-group>
   </div>
   <div nz-col nzSpan="24">
-    <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="8" class="form-item" style="padding-right: 15px;">
+    <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="24" class="form-item" style="padding-right: 15px;">
       <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
       <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
         <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">

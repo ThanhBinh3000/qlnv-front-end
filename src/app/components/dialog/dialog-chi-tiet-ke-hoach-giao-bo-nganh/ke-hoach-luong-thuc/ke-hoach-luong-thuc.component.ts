@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 import {MESSAGE} from "../../../../constants/message";
 import {Globals} from './../../../../shared/globals';
+import {AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -41,7 +42,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoTon: number = 0;
   ltThocDuTru: number = 0;
   ltGaoDuTru: number = 0;
-
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
               public globals: Globals) {

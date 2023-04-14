@@ -36,6 +36,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   showFromTT: boolean;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  selected: boolean = false;
 
   @Output()
   dataTableChange = new EventEmitter<any>();
@@ -85,6 +86,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     try {
       this.spinner.show();
       await Promise.all([
+        this.onExpandChange(0, true),
         this.loadDetail(this.idInput),
         this.initForm(),
         this.loadDataComboBox(),
@@ -119,17 +121,25 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     })
   }
 
+  async showFirstRow($event, dataToChuc: any) {
+    await this.selectRow($event, dataToChuc);
+  }
+
   async loadDetail(id: number) {
     if (id > 0) {
       await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
           this.dataTable = dataDtl.children
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.showFirstRow(event, this.dataTable[0].children);
+          }
           this.formData.patchValue({
             idDtl: id,
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayKthuc: dataDtl.ngayKthuc,
+            thoiHanBan: dataDtl.thoiHanBan,
             ghiChu: dataDtl.ghiChu,
             soQdPd: dataDtl.xhQdPdKhBttHdr.soQdPd,
             trangThai: dataDtl.trangThai,
@@ -178,7 +188,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
-        this.idInput = data.id;
+        this.idInput;
         this.hoanThanhCapNhat();
       } else {
         // this.goBack();
@@ -188,6 +198,15 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   hoanThanhCapNhat() {
+    if (this.radioValue == 'Chào giá') {
+      if (this.listOfData.length == 0) {
+        this.notification.error(
+          MESSAGE.ERROR,
+          'Thông tin tổ chức cá nhân không dược để trống',
+        );
+        return;
+      }
+    }
     let trangThai = STATUS.HOAN_THANH_CAP_NHAT;
     let mesg = 'Văn bản sẵn sàng hoàn thành cập nhập ?'
     this.approve(this.idInput, trangThai, mesg);
@@ -345,20 +364,34 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  selectRow($event, item) {
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
-    this.listOfData = item.children;
-    this.showFromTT = true;
-    this.formData.patchValue({
-      idDviDtl: item.id,
-    })
-    this.emitDataTable()
-    this.updateEditCache()
+  async selectRow($event, item) {
+    await this.spinner.show();
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow');
+      this.listOfData = item.children;
+      this.showFromTT = true;
+      this.formData.patchValue({
+        idDviDtl: item.id,
+      })
+      this.emitDataTable()
+      this.updateEditCache()
+      await this.spinner.hide();
+    } else {
+      this.selected = true
+      this.listOfData = item[0].children;
+      this.showFromTT = true;
+      this.formData.patchValue({
+        idDviDtl: item.id,
+      })
+      this.emitDataTable()
+      this.updateEditCache()
+      await this.spinner.hide();
+    }
   }
 
   setValidator(isGuiDuyet?) {
-
     if (isGuiDuyet) {
       this.formData.controls["soQdPd"].setValidators([Validators.required]);
       this.formData.controls["maDvi"].setValidators([Validators.required]);

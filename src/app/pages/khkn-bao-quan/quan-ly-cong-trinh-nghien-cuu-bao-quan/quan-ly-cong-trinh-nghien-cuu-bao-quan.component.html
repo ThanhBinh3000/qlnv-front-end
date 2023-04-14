@@ -59,18 +59,18 @@
     <div class="group-button">
       <h3>Danh sách công trình nghiên cứu </h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XOA') && userService.isTongCuc()" type="button"
-          class="btn btn-do" (click)="deleteSelect()">
+        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XOA')" type="button" class="btn btn-do"
+          (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_EXP') && userService.isTongCuc()" type="button"
-          class="btn btn-sub" (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_EXP')" type="button" class="btn btn-sub"
+          (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') && userService.isTongCuc()" type="button"
-          class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)">
+        <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') " type="button" class="btn btn-sub xanh"
+          (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -92,7 +92,7 @@
             <th rowspan="3">Thời gian thực hiện từ</th>
             <th rowspan="3">Thời gian thực hiện Đến</th>
             <th rowspan="3">Trạng thái</th>
-            <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
+            <th rowspan="3">Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -120,28 +120,28 @@
               </nz-input-group>
 
             </td>
-            <th>
+            <td>
               <nz-input-group>
                 <nz-date-picker nzFormat="MM/yyyy" nzMode="month" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyTu"
                   (ngModelChange)="filterInTable('ngayKyTu', convertDateToString(filterTable.ngayKyTu))">
                 </nz-date-picker>
               </nz-input-group>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <nz-date-picker nzFormat="MM/yyyy" nzMode="month" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKyDen"
                   (ngModelChange)="filterInTable('ngayKyDen', convertDateToString(filterTable.ngayKyDen))">
                 </nz-date-picker>
               </nz-input-group>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                   (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                   <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-input-group>
-            </th>
+            </td>
             <td></td>
           </tr>
           <tr *ngFor="let data of basicTable.data; let i = index">
@@ -157,17 +157,6 @@
             <td>{{ data.ngayKyDen | date: 'MM/YYYY'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai == STATUS.DA_NGHIEM_THU">
-                <i class="fa fa-eye"></i>
-              </a>
-              <a (click)="redirectToChiTiet(false,data.id)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a (click)="xoaItem(data)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU)">
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-            <td class="text-left">
               <a *ngIf=" (userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XEM') && (data.trangThai == STATUS.DA_NGHIEM_THU))
                 ||(!userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XEM') && data.trangThai == STATUS.DANG_THUC_HIEN)
                 ||(!userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') && data.trangThai == STATUS.DANG_THUC_HIEN)
@@ -175,15 +164,15 @@
                 (click)="redirectToChiTiet(true,data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') && data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()"
+              <a *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_THEM') && data.trangThai == STATUS.DU_THAO) "
                 (click)="redirectToChiTiet(false,data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_DUYET') && data.trangThai == STATUS.DANG_THUC_HIEN)&& userService.isTongCuc()"
+              <a *ngIf="(userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_DUYET') && data.trangThai == STATUS.DANG_THUC_HIEN)"
                 (click)="redirectToChiTiet(true,data.id)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XOA') && userService.isTongCuc()"
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_XOA') "
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>

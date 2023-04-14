@@ -16,6 +16,7 @@ import {HelperService} from 'src/app/services/helper.service';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {CurrencyMaskInputMode} from 'ngx-currency'
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
 
 
 @Component({
@@ -40,17 +41,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   dataTableAllBn: any[] = [];
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
-  options = {
-    allowZero: false,
-    allowNegative: true,
-    precision: 1,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: false,
-    inputMode: CurrencyMaskInputMode.NATURAL
-  }
+  options = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private readonly fb: FormBuilder,
