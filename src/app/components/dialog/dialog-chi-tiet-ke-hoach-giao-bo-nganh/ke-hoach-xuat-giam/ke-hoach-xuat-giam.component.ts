@@ -4,6 +4,7 @@ import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {Globals} from './../../../../shared/globals';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
+import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -37,7 +38,9 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   tongSoVT: number = 0;
   tongSoLT: number = 0;
-
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
@@ -136,6 +139,26 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
     this.emitDataTable();
+  }
+
+  async changePageIndex(event) {
+    try {
+      this.page = event;
+      // await this.search();
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    try {
+      this.pageSize = event;
+      // await this.search();
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   updateEditCache(): void {
