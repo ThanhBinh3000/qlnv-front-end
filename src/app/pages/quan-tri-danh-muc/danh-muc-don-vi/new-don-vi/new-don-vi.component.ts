@@ -8,6 +8,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NzTreeComponent} from 'ng-zorro-antd/tree';
 import {DonviService} from 'src/app/services/donvi.service';
 import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
+import { DanhMucService } from "../../../../services/danhmuc.service";
 
 
 @Component({
@@ -33,12 +34,16 @@ export class NewDonViComponent implements OnInit {
 
   dataDetail: any;
   radioValue: any;
+  listTinhThanh: any[] = [];
+  listQuanHuyen: any[] = [];
+  listPhuongXa: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
+    private danhMucService : DanhMucService,
     private modal: NzModalRef
   ) {
     this.formDonVi = this.fb.group({
@@ -53,6 +58,9 @@ export class NewDonViComponent implements OnInit {
       type: [null],
       ghiChu: [''],
       vungMien: [''],
+      tinhThanh: [''],
+      quanHuyen: [''],
+      phuongXa: [''],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
@@ -66,12 +74,22 @@ export class NewDonViComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadDsKhuVuc()
   }
 
 
-  enumToSelectList() {
-
-  }
+ async loadDsKhuVuc() {
+   this.listTinhThanh = [];
+   this.listTinhThanh = [];
+   this.listTinhThanh = [];
+   let res = await this.danhMucService.danhMucChungGetAll('DM_DIA_DANH_HC');
+   if (res.msg == MESSAGE.SUCCESS) {
+     let listKv = res.data;
+     if (listKv && listKv.length > 0) {
+       this.listTinhThanh = listKv.filter()
+     }
+   }
+ }
 
   handleCancel(): void {
     this.modal.destroy();

@@ -266,11 +266,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       res = await this.khCnQuyChuanKyThuat.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
+      this.id = res.data.id
+      this.formData.patchValue({
+        id: res.data.id,
+        trangThai: res.data.trangThai
+      })
       if (isGuiDuyet) {
-        this.formData.patchValue({
-          id: res.data.id,
-          trangThai: res.data.trangThai
-        })
         await this.guiDuyet();
       } else {
         if (this.idInput > 0) {
