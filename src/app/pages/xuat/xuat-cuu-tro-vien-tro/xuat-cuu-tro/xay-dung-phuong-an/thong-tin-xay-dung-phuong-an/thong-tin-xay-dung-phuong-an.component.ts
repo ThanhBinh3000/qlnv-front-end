@@ -769,7 +769,12 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else if (errorSlChiCuc) {
       this.notification.error(MESSAGE.ERROR, 'SL hàng xuất thực tế vượt quá hàng trong kho hiện tại ' + errorSlChiCuc);
     } else {
-      this.formData.value.soDx = this.formData.value.soDx + this.maHauTo;
+      this.formData.patchValue({
+        soDx: this.formData.value.soDx + this.maHauTo,
+        tongSoLuong: this.tongSoLuong,
+        thanhTien: this.tongThanhTien,
+        soLuongXuatCap: this.tongSoLuongXuatCap
+      })
       let result = await this.createUpdate(this.formData.value);
       if (result) {
         this.idInput = result.id;
