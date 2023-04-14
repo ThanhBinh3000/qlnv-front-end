@@ -11,7 +11,7 @@ import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { displayNumber, exchangeMoney } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sortByIndex, sumNumber } from 'src/app/Utility/func';
 
 export class ItemData {
   id: string;
@@ -60,6 +60,7 @@ export class PhuLucPhanBoComponent implements OnInit {
   formDetail: any;
   isSynthetic: any;
   amount = AMOUNT;
+  total: ItemData = new ItemData();
   constructor(
     private modal: NzModalService,
     private _modalRef: NzModalRef,
@@ -80,7 +81,6 @@ export class PhuLucPhanBoComponent implements OnInit {
   async initialization() {
     this.spinner.show();
     this.maDvi = this.dataInfo.maDvi;
-    console.log(this.dataInfo);
     // lấy danh sách đơn vị
     await this.danhMuc.dMDonVi().toPromise().then(
       (data) => {
@@ -101,7 +101,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     this.isSynthetic = this.dataInfo?.isSynthetic;
     this.statusBtnOk = this.dataInfo?.statusBtnOk;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
- 
+
     this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
     if (this.isSynthetic && this.isSynthetic == true) {
       let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.maDvi);
@@ -114,17 +114,21 @@ export class PhuLucPhanBoComponent implements OnInit {
     } else {
       this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
     }
-    if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+    console.log(this.dataInfo);
+
+    if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
       this.dataInfo.extraData.forEach(item => {
         if (item.maNdung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-          if (index != -1) {
-            this.lstCtietBcao[index].lstCtietDvis = item?.lstCtietDvis;
-          }
-          this.sum(this.lstCtietBcao[index].stt)
+          // if (index != -1) {
+          this.lstCtietBcao[index].lstCtietDvis = item?.lstCtietDvis;
+          // }
+          // this.sum(this.lstCtietBcao[index].stt)
         }
       })
     }
+
+    /**
     // if (this.dataInfo.data.trangThai == "3") {
     //   if (this.isSynthetic || this.isSynthetic == false) {
     //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
@@ -184,12 +188,13 @@ export class PhuLucPhanBoComponent implements OnInit {
     //   })
     //   this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
     // }
+    */
 
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
+    // this.tinhTong();
+    console.log(this.lstCtietBcao);
 
-
-    // console.log(lstCtietTemp);
-    console.log("this.lstCtietBcao: ", this.lstCtietBcao);
-    this.tinhTong();
+    this.getTotal();
     this.getStatusButton();
     this.updateEditCache();
     this.spinner.hide();
@@ -478,6 +483,23 @@ export class PhuLucPhanBoComponent implements OnInit {
     // this.getTotal()
   };
 
+  getTotal() {
+    this.total = new ItemData();
+    this.lstCtietBcao.forEach(item => {
+      const level = item.stt.split('.').length - 2;
+      if (level == 0) {
+        this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
+        this.total.dtoanGiao = sumNumber([this.total.dtoanGiao, item.dtoanGiao]);
+        // this.total.tong = sumNumber([this.total.tong, item.tong]);
+        // this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
+        // this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
+        // this.total.tongDtoanTrongNam = sumNumber([this.total.tongDtoanTrongNam, item.tongDtoanTrongNam]);
+        // this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
+        // this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
+      }
+    })
+  }
+
   tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -500,14 +522,14 @@ export class PhuLucPhanBoComponent implements OnInit {
   };
 
   // tính tổng
-  tinhTong() {
-    this.lstCtietBcao.forEach(item => {
-      const sttItem = item.stt
-      const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
-      this.lstCtietBcao[index].dtoanGiao = 0
-      this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-        this.lstCtietBcao[index].dtoanGiao += Number(item.soTranChi);
-      })
-    })
-  };
+  // tinhTong() {
+  //   this.lstCtietBcao.forEach(item => {
+  //     const sttItem = item.stt
+  //     const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
+  //     this.lstCtietBcao[index].dtoanGiao = 0
+  //     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
+  //       this.lstCtietBcao[index].dtoanGiao += Number(item.soTranChi);
+  //     })
+  //   })
+  // };
 }

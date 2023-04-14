@@ -546,7 +546,7 @@ export class AddBaoCaoComponent implements OnInit {
             lstCtietDvis: [
               {
                 id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
+                maDviNhan: this.baoCao.maDvi,
                 soTranChi: soTranChi
               }
             ],
@@ -565,7 +565,7 @@ export class AddBaoCaoComponent implements OnInit {
             lstCtietDvis: [
               {
                 id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
+                maDviNhan: this.baoCao.maDvi,
                 soTranChi: tongPl1N
               }
             ],
@@ -584,7 +584,7 @@ export class AddBaoCaoComponent implements OnInit {
             lstCtietDvis: [
               {
                 id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
+                maDviNhan: this.baoCao.maDvi,
                 soTranChi: tongPl1X
               }
             ],
@@ -603,7 +603,7 @@ export class AddBaoCaoComponent implements OnInit {
             lstCtietDvis: [
               {
                 id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
+                maDviNhan: this.baoCao.maDvi,
                 soTranChi: tongPl3
               }
             ],
@@ -622,7 +622,7 @@ export class AddBaoCaoComponent implements OnInit {
             lstCtietDvis: [
               {
                 id: uuid.v4() + "FE",
-                maDviNhan: this.userInfo.MA_DVI,
+                maDviNhan: this.baoCao.maDvi,
                 soTranChi: tongPl2
               }
             ],
@@ -649,7 +649,7 @@ export class AddBaoCaoComponent implements OnInit {
     modalAppendix.afterClose.toPromise().then(async (res) => {
       if (res) {
         console.log("res: ", res);
-        
+
         //gan lai thong tin sau khi bieu mau duoc luu
         const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
         this.baoCao.lstCtiets[index] = res.formDetail;
@@ -905,6 +905,7 @@ export class AddBaoCaoComponent implements OnInit {
   };
 
   back() {
+    console.log(this.data)
     if (this.data?.preData) {
       this.dataChange.emit(this.data?.preData)
     } else {

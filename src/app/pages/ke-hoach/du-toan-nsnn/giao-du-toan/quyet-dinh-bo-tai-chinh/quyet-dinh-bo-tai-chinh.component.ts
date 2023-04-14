@@ -27,6 +27,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     ngayTaoDen: null,
     maPa: "",
     trangThai: Utils.TT_BC_1,
+    maLoaiDan:[3]
   };
 
   filterTable: any = {
@@ -80,6 +81,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     this.searchFilter.ngayTaoTu = null;
     this.searchFilter.ngayTaoDen = null;
     this.searchFilter.maPa = null;
+    this.searchFilter.maLoaiDan = [3];
     this.search();
   };
 

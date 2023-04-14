@@ -155,26 +155,57 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
-    await this.danhMucService.dMDonVi().toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.donVis = data.data;
-          // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
-        } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-
+    // await this.danhMucService.dMDonVi().toPromise().then(
+    //   data => {
+    //     if (data.statusCode == 0) {
+    //       this.donVis = data.data;
+    //       // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+    //     }
+    //   },
+    //   err => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // );
     if (this.id) {
       this.getDetailReport();
     }
+    await this.getChildUnit();
     this.sortByIndex()
     this.spinner.hide();
-  }
+  };
+
+  async getChildUnit() {
+		this.spinner.show();
+		const request = {
+			maDviCha: this.maDviTao,
+			trangThai: '01',
+		}
+		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+			data => {
+				if (data.statusCode == 0) {
+					this.lstDvi = data.data;
+					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					console.log(this.lstDvi);
+					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+						this.lstDvi.push(
+						  {
+							tenDvi: this.userInfo.TEN_DVI,
+							maDvi: this.userInfo.MA_DVI
+						  }
+						)
+					  }
+				} else {
+					this.notification.error(MESSAGE.ERROR, data?.msg);
+				}
+			},
+			(err) => {
+				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+			}
+		)
+		this.spinner.hide();
+	}
 
   statusClass() {
     if (Utils.statusSave.includes(this.isStatus)) {
@@ -238,7 +269,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDviNhan;
           this.tenDvi = this.donVis.find(e => e.maDvi == this.maDviTao)?.tenDvi
-          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDviTao);
+          // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDviTao);
           // this.isStatus = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
           this.isStatus = data.data.trangThai
           this.maDviTien = data.data.maDviTien

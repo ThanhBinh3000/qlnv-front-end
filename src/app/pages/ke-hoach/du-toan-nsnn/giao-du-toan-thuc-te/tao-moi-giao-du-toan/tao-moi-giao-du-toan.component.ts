@@ -237,7 +237,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.spinner.show();
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
-
+		console.log(this.data);
+		
 		// lấy mã đơn vị tạo PA
 		this.maDonViTao = this.userInfo?.MA_DVI;
 
@@ -285,6 +286,14 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			}
 		}
 		await this.getChildUnit();
+		// if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+		// 	this.lstDvi.push(
+		// 	  {
+		// 		tenDvi: this.userInfo.TEN_DVI,
+		// 		maDvi: this.userInfo.MA_DVI
+		// 	  }
+		// 	)
+		//   }
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -321,6 +330,16 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+					console.log(this.lstDvi);
+					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+						this.lstDvi.push(
+						  {
+							tenDvi: this.userInfo.TEN_DVI,
+							maDvi: this.userInfo.MA_DVI
+						  }
+						)
+					  }
+					this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -371,6 +390,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					this.maDviTien = data.data.maDviTien;
 					this.checkTrangThaiGiao = data.data.trangThaiGiao;
 					// this.lstDvi = [];
+					console.log(this.lstDvi);
+					
 					this.namPa = data.data.namPa;
 					this.namDtoan = data.data.namDtoan;
 					this.trangThaiBanGhi = data.data.trangThai;
@@ -793,7 +814,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		} else {
 			this.status = true;
 		}
-		if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2") {
+		if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2" ) {
 			this.statusGiaoToanBo = false;
 		} else {
 			this.statusGiaoToanBo = true;
@@ -801,7 +822,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 
-		const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+		const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
 		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
@@ -935,7 +956,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// lấy tên đơn vị
 	getUnitName(maDvi: string) {
-		return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+		return this.lstDvi.find((item) => item.maDvi == maDvi)?.tenDvi;
 	}
 
 	// lấy thông tin trạng thái PA
@@ -1248,7 +1269,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// lấy tên đơn vị trực thuộc
 	getUnitNameDviTT(maDviTT: string) {
-		return this.donVis.find(e => e.maDvi == maDviTT)?.tenDvi;
+		return this.lstDvi.find(e => e.maDvi == maDviTT)?.tenDvi;
 	}
 
 	// hiển thị trạng thái báo cáo của đơn vị trực thuộc

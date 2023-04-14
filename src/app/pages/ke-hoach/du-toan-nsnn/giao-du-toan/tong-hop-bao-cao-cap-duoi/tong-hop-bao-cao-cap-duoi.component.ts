@@ -249,6 +249,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maBcao = null
     this.trangThai = null;
+    this.searchFilter.maLoaiDan = [3];
     this.onSubmit();
   }
 

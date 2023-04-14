@@ -89,6 +89,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
   fileDetail: NzUploadFile;
   // khac
   statusBtnNew: boolean;
+  statusBtnCreateReport: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   isStatus: any;
@@ -153,6 +154,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     localStorage.setItem("preTab", "dsGiaoTuCapTren")
     this.id = this.data.id;
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo)
     this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     await this.danhMucService.dMDonVi().toPromise().then(
@@ -244,6 +246,15 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           this.maDviTien = data.data.maDviTien
           if (data.data.trangThai == '1' || this.userInfo.CAP_DVI == '3') {
             this.statusBtnNew = true;
+          } else {
+            if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
+              this.statusBtnNew = true;
+            } else {
+              this.statusBtnNew = false;
+            }
+          }
+          if (this.userInfo.CAP_DVI != '3' && (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
+            this.statusBtnCreateReport = false;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -511,7 +522,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.lstCtietBcao.forEach(item => {
       lstCtietBcaoTemp.push({
         ...item,
-        dtoanGiao: item.soTien,
+        dtoanGiao: 0,
         nguonNsnn: item.nguonNsnn,
         nguonKhac: item.nguonKhac,
         tongCong: item.soTien,
