@@ -82,6 +82,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     xuatTrongNamMuoi: 0,
     tonKhoCuoiNam: 0,
   };
+  sumTotalKhDuTruLuongThuc: any = {};
   tab = TAB_SELECTED;
   yearNow: number = 0;
   thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam =
@@ -846,6 +847,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             soQD: this.formData.get('soQd').value?.split('/')[0],
           });
+          this.sumRowDetailMuoi();
+          this.sumRowDetailLuongThuc();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -879,6 +882,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  sumDataKh(key) {
+    if (this.dsKeHoachLuongThucClone.length > 0) {
+      return this.dsKeHoachLuongThucClone.reduce((a, b) => a + (b[key] || 0), 0);
+    }
+  }
+
   reduceRowData(
     indexTable: number,
     indexCell: number,
@@ -890,7 +899,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     const listTable = document
       .getElementById(idTable)
       ?.getElementsByTagName('table');
-
     if (listTable && listTable.length >= indexTable) {
       const table = listTable[indexTable];
       for (let i = indexRow; i < table.rows.length - 1; i++) {
@@ -1015,6 +1023,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.thongTinChiTieuKeHoachNam.khLuongThuc,
         );
         this.loadData();
+        this.sumRowDetailLuongThuc();
       },
     });
   }
@@ -1041,10 +1050,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dsMuoiClone = cloneDeep(
           this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
         );
-        this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-        this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-        this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-        this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+        this.sumRowDetailMuoi()
         this.loadData();
       },
     });
@@ -1746,6 +1752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
       this.dsKeHoachLuongThucClone[i],
     );
+    this.sumRowDetailLuongThuc();
     this.cdr.detectChanges();
   }
 
@@ -2276,6 +2283,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
     this.loadData();
+    this.sumRowDetailLuongThuc();
   }
 
   changeDonViMuoi() {
@@ -2356,10 +2364,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachMuoiCreate.tenDonVi = this.tenDonViCuc;
     }
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
-    this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-    this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-    this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
+    this.sumRowDetailMuoi()
     this.loadData();
   }
 
@@ -2521,12 +2526,44 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
       this.dsMuoiClone[i],
     );
+    this.sumRowDetailMuoi();
+    this.cdr.detectChanges();
+  }
+
+  sumRowDetailMuoi() {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
     this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
-    this.cdr.detectChanges();
   }
+
+  sumRowDetailLuongThuc() {
+    this.sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[2]?.soLuong ? b.xtnGao[2].soLuong : 0, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongGao, 0);
+  }
+
 
   cancelEditMuoi(index: number) {
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);

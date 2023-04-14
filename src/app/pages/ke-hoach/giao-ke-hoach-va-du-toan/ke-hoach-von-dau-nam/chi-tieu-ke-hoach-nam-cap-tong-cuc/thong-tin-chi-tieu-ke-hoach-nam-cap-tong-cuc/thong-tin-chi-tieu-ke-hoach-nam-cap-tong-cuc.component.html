@@ -524,100 +524,100 @@
           <tr *ngIf="thongTinChiTieuKeHoachNam?.khLuongThuc?.length > 0">
             <th nzLeft></th>
             <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongThoc ? sumTotalKhDuTruLuongThuc.tkdnTongThoc : 0)  |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 6, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 7, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongGao ? sumTotalKhDuTruLuongThuc.tkdnTongGao : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 8, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam1 : 0)  |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 9, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam2 : 0)|
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 10, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam3 : 0)|
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 11, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 12, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnThoc ? sumTotalKhDuTruLuongThuc.ntnThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 13, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnGao ? sumTotalKhDuTruLuongThuc.ntnGao : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 14, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 15, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongThoc ? sumTotalKhDuTruLuongThuc.xtnTongThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 16, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{  (sumTotalKhDuTruLuongThuc.xtnThoc_nam1 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam1 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 17, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam2 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam2 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 18, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam3 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam3 : 0)|
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 19, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongGao ? sumTotalKhDuTruLuongThuc.xtnTongGao : 0)|
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 20, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam1 ? sumTotalKhDuTruLuongThuc.xtnGao_nam1 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 21, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam2 ? sumTotalKhDuTruLuongThuc.xtnGao_nam2 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 22, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam3 ? sumTotalKhDuTruLuongThuc.xtnGao_nam3 : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 23, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 24, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ? sumTotalKhDuTruLuongThuc.tkcnTongThoc : 0) |
               number: '1.0-1'}}
             </th>
-            <th class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 25, 5,
-              ',', 'table-luong-thuc') : 0 |
+            <th
+              class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao : 0)  |
               number: '1.0-1'}}
             </th>
             <!-- <td class="background-last-row"></td> -->
