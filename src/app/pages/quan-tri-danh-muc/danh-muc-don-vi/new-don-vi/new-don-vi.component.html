@@ -99,7 +99,7 @@
           <label [nzDisabled]="levelNode == 3" nz-checkbox formControlName="type">Là phòng ban</label>
         </nz-form-item>
       </div>
-      <div nz-col [nzSpan]="24">
+      <div nz-col [nzSpan]="24" *ngIf="levelNode == 1">
         <nz-form-item>
           <nz-form-label [nzNoColon]="true"> Vùng miền
           </nz-form-label>
@@ -111,6 +111,16 @@
             </nz-radio-group>
           </nz-form-control>
         </nz-form-item>
+      </div>
+      <div nz-col nzSpan="4"  *ngIf="levelNode == 1">
+        <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select  nzMode="multiple"  nzAllowClear
+                     formControlName="tinhThanh">
+            <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.soCv"
+                       [nzLabel]="option.soCv"></nz-option>
+          </nz-select>
+        </nz-form-control>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
         <nz-form-item>

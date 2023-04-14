@@ -21,13 +21,13 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && userService.isCuc()) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
+        *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
         type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && userService.isCuc()) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
+        *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
                       type="button" class="btn btn-sub ml-2"
               (click)="approve(idInput,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt quyết định này?')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>

@@ -117,7 +117,7 @@
                 <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động</label>
               </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="24">
+            <div nz-col [nzSpan]="24" *ngIf="detailDonVi.value.capDvi == 2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Vùng miền
                 </nz-form-label>
