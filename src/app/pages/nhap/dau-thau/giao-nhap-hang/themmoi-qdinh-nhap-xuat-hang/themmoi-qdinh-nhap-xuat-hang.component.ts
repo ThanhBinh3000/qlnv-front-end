@@ -82,6 +82,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   listNhaKho: any[] = [];
   listNganKho: any[] = [];
   listNganLo: any[] = [];
+  fileDinhKem: any[] = [];
 
   constructor(
     private router: Router,
