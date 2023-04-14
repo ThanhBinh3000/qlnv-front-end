@@ -168,11 +168,11 @@
                                         <td></td>
                                         <td>{{dataBb.tenTrangThai}}</td>
                                         <td nzRight>
-                                            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
+                                            <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XEM')"
                                                 (click)="redirectToChiTiet(true, dataBb.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a *ngIf="dataBb.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
+                                            <a *ngIf="(dataBb.trangThai == STATUS.DU_THAO || dataBb.trangThai == STATUS.TU_CHOI_KTVBQ) && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')"
                                                 (click)="redirectToChiTiet(false, dataBb.id)">
                                                 <i class="fa fa-pencil"></i>
                                             </a>
