@@ -59,6 +59,18 @@ export class ThongKeTruyCapComponent extends Base2Component implements OnInit {
       tuNgay: [''],
       denNgay: [''],
     });
+    this.chartOptions = {
+      chart: {
+        height: 350,
+        type: "area"
+      }
+    };
+    this.chartOptionsSystem = {
+      chart: {
+        height: 350,
+        type: "bar"
+      }
+    };
     this.search();
     this.filterTable = {};
   }
