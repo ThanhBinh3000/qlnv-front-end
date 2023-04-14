@@ -356,6 +356,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
           this.disableInputComponent.noiDung = true;
           this.disableInputComponent.maDviCuc = true;
+          this.disableInputComponent.soLuongXuatCuc = true;
         }
       }
       //cuc
