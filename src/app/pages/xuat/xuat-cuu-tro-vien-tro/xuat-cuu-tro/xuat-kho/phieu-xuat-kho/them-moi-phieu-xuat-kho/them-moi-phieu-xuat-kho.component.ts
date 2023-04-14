@@ -275,6 +275,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          idPhieuKnCl: data.id,
           soPhieuKnCl: data.soPhieu,
           ktvBaoQuan: data.nguoiKn,
           ngayKn: data.ngayKnMau,
