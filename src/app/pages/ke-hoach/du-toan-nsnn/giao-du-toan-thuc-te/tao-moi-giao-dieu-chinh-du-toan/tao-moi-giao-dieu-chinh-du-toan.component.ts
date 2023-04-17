@@ -113,6 +113,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 	lstFiles: any[] = []; //list file show ra màn hình
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
 	donVis: any[] = []; // list đơn vị
+	donVis1: any[] = []; // list đơn vị
 	trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
@@ -245,6 +246,18 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
 
+
+		await this.danhMuc.dMDonVi().toPromise().then(
+			(data) => {
+				if (data.statusCode === 0) {
+					this.donVis1 = data?.data;
+					this.capDvi = this.donVis1.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+				}
+			}
+		);
+
 		// set năm tạo PA
 		this.namPa = this.newDate.getFullYear();
 		await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
@@ -324,13 +337,13 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
 					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 						this.lstDvi.push(
-						  {
-							tenDvi: this.userInfo.TEN_DVI,
-							maDvi: this.userInfo.MA_DVI
-						  }
+							{
+								tenDvi: this.userInfo.TEN_DVI,
+								maDvi: this.userInfo.MA_DVI
+							}
 						)
-					  }
-					  this.donVis = this.lstDvi
+					}
+					this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}
@@ -808,7 +821,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
 
 
-		const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
+		const dVi = this.donVis1.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
 		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;

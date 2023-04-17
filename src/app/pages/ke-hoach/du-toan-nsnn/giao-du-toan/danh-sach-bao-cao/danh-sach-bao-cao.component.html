@@ -70,6 +70,7 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th width="60px" class="text-center">STT</th>
+          <th>Mã phương án cấp trên giao</th>
           <th>Mã báo cáo</th>
           <th>Ngày tạo</th>
           <th>Năm báo cáo</th>
@@ -149,6 +150,9 @@
           </td>
           <td class="text-center">
             {{ (i + 1) + (pages.page - 1)*pages.size }}
+          </td>
+          <td>
+            {{ data.maPaCha }}
           </td>
           <td>
             {{ data.maBcao }}
