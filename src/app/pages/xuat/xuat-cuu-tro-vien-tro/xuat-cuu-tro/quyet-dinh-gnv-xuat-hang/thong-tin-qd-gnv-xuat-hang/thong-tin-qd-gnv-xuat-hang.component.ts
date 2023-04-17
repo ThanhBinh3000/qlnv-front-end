@@ -192,6 +192,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
               donViTinh: rowChiCuc.donViTinh,
               tenCloaiVthh: rowChiCuc.tenCloaiVthh,
               tonKhoChiCuc: rowChiCuc.tonKhoChiCuc,
+              tenTrangThai: rowChiCuc.tenTrangThai,
               noiDung: rowChiCuc.noiDung,
               childData: v
             };

@@ -381,7 +381,7 @@
 
                             <td>1</td>
                             <td>
-                                {{formData.value.tenCloaiVthh}}
+                                {{formData.value.tenCloaiVthh == null ? formData.value.tenLoaiVthh : ''}}
                             </td>
                             <td> <nz-form-item>
                                     <nz-form-control [nzErrorTip]="error">
