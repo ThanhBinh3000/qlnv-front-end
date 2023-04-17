@@ -35,14 +35,14 @@ export const LUU_KHO_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'theodoibaoquan',
     hasTab: false,
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: `${LUU_KHO_MAIN_ROUTE}/bao-cao`,
-    dropdown: 'bao-cao',
-    idHover: 'baocao',
-    hasTab: false,
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: `${LUU_KHO_MAIN_ROUTE}/bao-cao`,
+  //   dropdown: 'bao-cao',
+  //   idHover: 'baocao',
+  //   hasTab: false,
+  // },
 ];
 export const DANH_MUC_LEVEL = {
   TONG_CUC: '1',
