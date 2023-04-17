@@ -3,7 +3,7 @@ import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Globals} from "../../../shared/globals";
-import {MangLuoiKhoService} from "../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {MangLuoiKhoService} from "../../../services/qlnv-kho/mangLuoiKho.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {HelperService} from "../../../services/helper.service";
 import {MESSAGE} from "../../../constants/message";

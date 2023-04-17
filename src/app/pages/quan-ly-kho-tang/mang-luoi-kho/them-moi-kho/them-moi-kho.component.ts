@@ -12,7 +12,7 @@ import {UserLogin} from "../../../../models/userlogin";
 import {UserService} from "../../../../services/user.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DanhMucService} from "../../../../services/danhmuc.service";
-import {MangLuoiKhoService} from "../../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {MangLuoiKhoService} from "../../../../services/qlnv-kho/mangLuoiKho.service";
 import {Globals} from "../../../../shared/globals";
 
 

@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {
   CongViec
