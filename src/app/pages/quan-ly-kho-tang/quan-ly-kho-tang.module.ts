@@ -69,7 +69,6 @@ import {
 import {
   QuyetDinhScLonTcdtComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/quyet-dinh-sc-lon-tcdt.component";
-import {KeHoachSuaChuaLonComponent} from "./ke-hoach/ke-hoach-sc-hang-nam/ke-hoach-sua-chua-lon.component";
 import {
   ThemMoiScLonComponent
 } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/them-moi-sc-lon.component';
@@ -158,7 +157,6 @@ import {
     DeXuatKhScLonComponent,
     QuyetDinhScLonBtcComponent,
     QuyetDinhScLonTcdtComponent,
-    KeHoachSuaChuaLonComponent,
     ThemMoiScLonComponent,
     ThemMoiScLonComponent,
     ThemMoiQdScBtcComponent,
