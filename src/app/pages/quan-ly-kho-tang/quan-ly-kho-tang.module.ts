@@ -125,6 +125,9 @@ import { PhuLucHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-
 import {
   ThemMoiThongBaoScLonComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/qd-thong-bao-sua-chua-lon/them-moi-thong-bao-sc-lon/them-moi-thong-bao-sc-lon.component";
+import {
+  KeHoachSuaChuaThuongXuyenComponent
+} from "./ke-hoach/ke-hoach-sua-chua-thuong-xuyen/ke-hoach-sua-chua-thuong-xuyen.component";
 
 
 @NgModule({
@@ -187,7 +190,8 @@ import {
     ThongTinHopDongComponent,
     ThemMoiHopDongComponent,
     PhuLucHopDongComponent,
-    ThemMoiThongBaoScLonComponent
+    ThemMoiThongBaoScLonComponent,
+    KeHoachSuaChuaThuongXuyenComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
