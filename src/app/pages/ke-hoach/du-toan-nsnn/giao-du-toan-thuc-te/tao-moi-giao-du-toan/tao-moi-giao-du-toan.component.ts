@@ -99,6 +99,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	namDtoan: number; // năm dự toán
 	checkTrangThaiGiao: string; // trạng thái giao
 	qdGiaoDuToan: ItemSoQd;
+	maDviCha: string;
 
 	//===================================================================================
 
@@ -112,6 +113,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	lstFiles: any[] = []; //list file show ra màn hình
 	listIdFilesDelete: any[] = []; // list id file khi xóa file
 	donVis: any[] = []; // list đơn vị
+	donVis1: any[] = []; // list đơn vị
 	trangThais: any[] = TRANG_THAI_TIM_KIEM; // danh sách trạng thái
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
@@ -238,12 +240,24 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
 		console.log(this.data);
-		
+
 		// lấy mã đơn vị tạo PA
 		this.maDonViTao = this.userInfo?.MA_DVI;
 
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
+		console.log(this.userInfo);
+
+		await this.danhMuc.dMDonVi().toPromise().then(
+			(data) => {
+				if (data.statusCode === 0) {
+					this.donVis1 = data?.data;
+					this.capDvi = this.donVis1.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+				} else {
+					this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
+				}
+			}
+		);
 
 		// set năm tạo PA
 		this.namPa = this.newDate.getFullYear();
@@ -331,14 +345,14 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
 					console.log(this.lstDvi);
-					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+					if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 						this.lstDvi.push(
-						  {
-							tenDvi: this.userInfo.TEN_DVI,
-							maDvi: this.userInfo.MA_DVI
-						  }
+							{
+								tenDvi: this.userInfo.TEN_DVI,
+								maDvi: this.userInfo.MA_DVI
+							}
 						)
-					  }
+					}
 					this.donVis = this.lstDvi
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -391,7 +405,9 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					this.checkTrangThaiGiao = data.data.trangThaiGiao;
 					// this.lstDvi = [];
 					console.log(this.lstDvi);
-					
+					this.maDviCha = data.data.maDvi.slice(0, (data.data.maDvi.length - 2));
+					console.log(this.maDviCha);
+
 					this.namPa = data.data.namPa;
 					this.namDtoan = data.data.namDtoan;
 					this.trangThaiBanGhi = data.data.trangThai;
@@ -814,19 +830,21 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		} else {
 			this.status = true;
 		}
-		if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2" ) {
+		if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2") {
 			this.statusGiaoToanBo = false;
 		} else {
 			this.statusGiaoToanBo = true;
 		}
 
 
+		console.log(this.lstDvi);
 
-		const dVi = this.lstDvi.find(e => e.maDvi == this.maDonViTao);
+		const dVi = this.donVis1.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;
 		if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
 			checkParent = true;
 		}
+		// const isParent = this.userInfo.MA_DVI == this.maDviCha;
 		const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
 		this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);

@@ -247,13 +247,14 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           if (data.data.trangThai == '1' || this.userInfo.CAP_DVI == '3') {
             this.statusBtnNew = true;
           } else {
-            if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
+            if ((this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
               this.statusBtnNew = true;
+              this.statusBtnCreateReport = false;
             } else {
               this.statusBtnNew = false;
             }
           }
-          if (this.userInfo.CAP_DVI != '3' && (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
+          if ((this.userInfo.CAP_DVI != '3' && this.userInfo.DON_VI.tenVietTat.includes("CNTT")) || (this.userInfo.CAP_DVI != '3' && this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
             this.statusBtnCreateReport = false;
           }
         } else {
