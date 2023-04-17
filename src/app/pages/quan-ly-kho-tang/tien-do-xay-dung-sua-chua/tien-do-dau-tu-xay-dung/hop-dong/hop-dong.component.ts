@@ -6,9 +6,9 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import {HopdongService} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/hopdong.service";
+import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
 
 @Component({
   selector: 'app-hop-dong',
