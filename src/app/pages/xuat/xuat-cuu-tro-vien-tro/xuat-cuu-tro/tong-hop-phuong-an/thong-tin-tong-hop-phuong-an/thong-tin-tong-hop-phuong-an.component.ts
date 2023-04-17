@@ -123,8 +123,8 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         maTongHop: [''],
         ngayThop: [''],
         noiDungThop: [''],
-        loaiNhapXuat: [''],
-        loaiVthh: [''],
+        loaiNhapXuat: ['',[Validators.required]],
+        loaiVthh: ['',[Validators.required]],
         cloaiVthh: [''],
         trangThai: [''],
         idQdPd: [''],
@@ -493,6 +493,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
         console.log(e)
       } finally {
         await this.spinner.hide();
+        this.formData.controls['loaiNhapXuat'].setValidators([Validators.required]);
         this.formData.controls['tenDvi'].setValidators([Validators.required]);
         this.formData.controls['ngayThop'].setValidators([Validators.required]);
         this.formData.controls['noiDungThop'].setValidators([Validators.required]);

@@ -160,7 +160,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-select formControlName="loaiNhapXuat" (ngModelChange)="changeLoaiHinhNhapXuat($event)" [nzDisabled]="isView">
+              <nz-select formControlName="loaiNhapXuat" (ngModelChange)="changeLoaiHinhNhapXuat($event)"
+                         [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -259,7 +260,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Nội dung xuất cứu trợ, viện trợ</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Địa phương nhận cứu trợ, viện trợ</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <textarea rows="3" class="search__input" nz-input formControlName="noiDungDx"
                         [readOnly]="isView"></textarea>
@@ -412,7 +413,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Nội dung xuất cứu trợ, viện trợ</th>
+            <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
             <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
             <th [colspan]="3">Cục DTNN KV</th>
             <th [colspan]="2">Chi cục DTNN</th>
@@ -545,7 +546,7 @@
           <tr>
             <th [rowspan]="2"></th>
             <th [rowspan]="2" style="width: 35px">STT</th>
-            <th [rowspan]="2">Nội dung xuất cứu trợ, viện trợ</th>
+            <th [rowspan]="2">Địa phương nhận cứu trợ, viện trợ</th>
             <th [rowspan]="2">Tổng SL đề xuất CT, VT ({{formData.value.donViTinh}})</th>
             <th [colspan]="2">Chi cục DTNN</th>
             <th [colspan]="2">Chủng loại hàng hóa</th>
@@ -670,16 +671,20 @@
     <div class="modal-card">
       <nz-card nzTitle="Thông tin giao xuất cứu trợ, viện trợ">
         <nz-form-item>
-          <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nội dung xuất cứu trợ, viện trợ
+          <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ
           </nz-form-label>
           <nz-form-control [nzErrorTip]="'Vui lòng nhập nội dung cứu trợ'"
                            [nzValidateStatus]="checkVld('inputNoiDung')">
-            <input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto"
+            <nz-select nzAllowClear [(ngModel)]="phuongAnRow.noiDung"
+                       [nzDisabled]="disableInputComponent.noiDung" nzPlaceHolder="Chọn địa danh" nzShowSearch>
+              <nz-option *ngFor="let p of listDiaDanh" [nzLabel]="p.ten" [nzValue]="p.ten"></nz-option>
+            </nz-select>
+            <!--<input nz-input [(ngModel)]="phuongAnRow.noiDung" [nzAutocomplete]="auto"
                    [disabled]="disableInputComponent.noiDung">
             <nz-autocomplete #auto>
               <nz-auto-option *ngFor="let option of listNoiDung" [nzValue]="option">{{ option }}
               </nz-auto-option>
-            </nz-autocomplete>
+            </nz-autocomplete>-->
           </nz-form-control>
         </nz-form-item>
         <nz-form-item *ngIf="userService.isTongCuc()">
@@ -687,7 +692,7 @@
           <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'" [nzValidateStatus]="checkVld('inputMaDviCuc')">
             <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
                        [nzDisabled]="disableInputComponent.maDviCuc" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
-              <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+              <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -727,7 +732,8 @@
               <div nz-col [nzSpan]="16">
                 <nz-select nzAllowClear [(ngModel)]="phuongAnRow.cloaiVthh" (ngModelChange)="changeCloaiVthh($event)"
                            nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
-                  <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+                  <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzLabel]="p.ten" [nzValue]="p.ma"
+                             [nzDisabled]="p.disable"></nz-option>
                 </nz-select>
               </div>
               <div nz-col [nzSpan]="8">
@@ -789,7 +795,7 @@
     <!--    <form nz-form>-->
     <div class="modal-card">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Nội dung xuất cứu trợ, viện trợ</nz-form-label>
+        <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Địa phương nhận cứu trợ, viện trợ</nz-form-label>
         <nz-form-control>
           <input nz-input [(ngModel)]="phuongAnRow.noiDungEdit">
         </nz-form-control>

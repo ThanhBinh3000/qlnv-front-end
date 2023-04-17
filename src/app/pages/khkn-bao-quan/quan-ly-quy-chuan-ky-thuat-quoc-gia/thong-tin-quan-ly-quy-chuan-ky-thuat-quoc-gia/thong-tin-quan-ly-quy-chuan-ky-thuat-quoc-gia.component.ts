@@ -147,7 +147,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         this.listVanBanId = String(data.idVanBanThayThe);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
-        this.dataTable.sort((a, b) => a.thuTuHt - b.thuTuHt);
+        this.dataTable.sort((a, b) => {
+          if (a.thuTuHt !== b.thuTuHt) {
+            return a.thuTuHt - b.thuTuHt;
+          } else {
+            return a.cloaiVthh.localeCompare(b.cloaiVthh);
+          }
+        });
+
         this.dataTable.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
