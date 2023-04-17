@@ -69,7 +69,6 @@ import {
 import {
   QuyetDinhScLonTcdtComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/quyet-dinh-sc-lon-tcdt/quyet-dinh-sc-lon-tcdt.component";
-import {KeHoachSuaChuaLonComponent} from "./ke-hoach/ke-hoach-sc-hang-nam/ke-hoach-sua-chua-lon.component";
 import {
   ThemMoiScLonComponent
 } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/them-moi-sc-lon.component';
@@ -126,6 +125,9 @@ import { PhuLucHopDongComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-
 import {
   ThemMoiThongBaoScLonComponent
 } from "./ke-hoach/ke-hoach-sua-chua-hang-nam/qd-thong-bao-sua-chua-lon/them-moi-thong-bao-sc-lon/them-moi-thong-bao-sc-lon.component";
+import {
+  KeHoachSuaChuaThuongXuyenComponent
+} from "./ke-hoach/ke-hoach-sua-chua-thuong-xuyen/ke-hoach-sua-chua-thuong-xuyen.component";
 
 
 @NgModule({
@@ -158,7 +160,6 @@ import {
     DeXuatKhScLonComponent,
     QuyetDinhScLonBtcComponent,
     QuyetDinhScLonTcdtComponent,
-    KeHoachSuaChuaLonComponent,
     ThemMoiScLonComponent,
     ThemMoiScLonComponent,
     ThemMoiQdScBtcComponent,
@@ -189,7 +190,8 @@ import {
     ThongTinHopDongComponent,
     ThemMoiHopDongComponent,
     PhuLucHopDongComponent,
-    ThemMoiThongBaoScLonComponent
+    ThemMoiThongBaoScLonComponent,
+    KeHoachSuaChuaThuongXuyenComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
