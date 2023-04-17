@@ -16,20 +16,21 @@ import { saveAs } from 'file-saver';
 import { ChiTietThongTinBanTrucTiepChaoGia, FileDinhKem } from 'src/app/models/DeXuatKeHoachBanTrucTiep';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Validators } from '@angular/forms';
-
 @Component({
   selector: 'app-them-qd-pd-ket-qua-btt',
   templateUrl: './them-qd-pd-ket-qua-btt.component.html',
   styleUrls: ['./them-qd-pd-ket-qua-btt.component.scss']
 })
+
 export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string;
   @Input() idInput: number;
+  @Input() isViewOnModal: boolean;
 
   maTrinh: String;
   listOfData: any[] = [];
   showFromTT: boolean;
-  @Input() isViewOnModal: boolean;
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   fileCanCu: any[] = [];
@@ -50,6 +51,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
+
     this.formData = this.fb.group({
       id: [],
       idPdKhDtl: [],
@@ -60,23 +62,23 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       ngayKy: [''],
       soQdPd: [''],
       trichYeu: [''],
-      maDvi: [],
-      tenDvi: [],
-      diaDiemChaoGia: [],
-      ngayMkho: [],
-      ngayKthuc: [],
-      loaiVthh: [],
-      tenLoaiVthh: [],
-      cloaiVthh: [],
-      tenCloaiVthh: [],
-      moTaHangHoa: [],
-      ghiChu: [],
-      pthucBanTrucTiep: [],
+      maDvi: [''],
+      tenDvi: [''],
+      diaDiemChaoGia: [''],
+      ngayMkho: [''],
+      ngayKthuc: [''],
+      loaiVthh: [''],
+      tenLoaiVthh: [''],
+      cloaiVthh: [''],
+      tenCloaiVthh: [''],
+      moTaHangHoa: [''],
+      ghiChu: [''],
+      pthucBanTrucTiep: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
-      trangThai: ['00'],
+      trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      lyDoTuChoi: [null],
+      lyDoTuChoi: [''],
     });
   }
 
@@ -220,7 +222,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       listTb = res.data.content;
     }
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách thông tin chào giá',
+      nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -290,12 +292,12 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
 
     })
   }
+
   cancelEdit(index: number): void {
     this.listOfData[index].edit = false
     this.formData.patchValue({
 
     })
-
   }
 
   downloadFile(item: FileDinhKem) {

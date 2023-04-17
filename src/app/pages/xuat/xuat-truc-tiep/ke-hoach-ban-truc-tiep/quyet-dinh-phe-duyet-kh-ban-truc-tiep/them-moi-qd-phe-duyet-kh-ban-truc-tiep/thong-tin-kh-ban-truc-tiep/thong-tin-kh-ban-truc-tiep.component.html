@@ -80,17 +80,6 @@
                             </nz-select>
                         </nz-form-control>
                     </nz-form-item>
-                    <!-- <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <input nz-input readonly formControlName="pthucTtoan" />
-                                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma"
-                                    [nzLabel]="p.giaTri">
-                                </nz-option>
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item> -->
                 </div>
                 <div nz-col [nzSpan]="6" *ngIf="isCache">
                     <nz-form-item>
@@ -132,7 +121,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="24" *ngIf="isCache">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán trực tiếp </nz-form-label>
@@ -165,7 +153,7 @@
     </nz-collapse-panel>
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
-    <nz-collapse-panel [nzHeader]="'Danh mục đơn vị tài sản bán trực tiếp'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN BÁN TRỰC TIẾP'" [nzActive]="true">
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
@@ -212,14 +200,12 @@
                             <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right" *ngIf="!isView">
-
                             </td>
                         </tr>
                     </ng-container>
                 </ng-container>
             </tbody>
         </nz-table>
-
     </nz-collapse-panel>
 </nz-collapse>
 <ng-template #error let-control>
