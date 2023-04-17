@@ -1,15 +1,14 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab('01')"
-        *ngIf="!userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
+        >
       Đề xuất kế hoạch sửa chữa thường xuyên
     </li>
     <li nz-menu-item (click)="selectTab('02')"
-        *ngIf="userService.isTongCuc && !userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
+        *ngIf="userService.isTongCuc">
       Tổng hợp KH sửa chữa thường xuyên
     </li>
-    <li nz-menu-item (click)="selectTab('03')"
-        *ngIf="!userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
+    <li nz-menu-item (click)="selectTab('03')">
       Quyết định phê duyệt kế hoạch, danh mục
     </li>
   </ul>
