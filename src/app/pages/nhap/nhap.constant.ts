@@ -46,13 +46,13 @@ export const NHAP_ROUTE_LIST: Array<any> = [
     hasTab: true,
     code:'NHDTQG_PTMTT'
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: `/${NHAP_MAIN_ROUTE}/bao-cao`,
-    dropdown: 'bao-cao',
-    idHover: 'bao-cao',
-    hasTab: false,
-    code:'NHDTQG_PTMTT'
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: `/${NHAP_MAIN_ROUTE}/bao-cao`,
+  //   dropdown: 'bao-cao',
+  //   idHover: 'bao-cao',
+  //   hasTab: false,
+  //   code:'NHDTQG_PTMTT'
+  // },
 ];

@@ -34,12 +34,12 @@ export const QUAN_LY_KHO_TANG_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'dauthau',
     hasTab: false,
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: '',
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
-    hasTab: false,
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: '',
+  //   dropdown: 'dau-thau',
+  //   idHover: 'dauthau',
+  //   hasTab: false,
+  // },
 ];

@@ -4,8 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { OldResponseData, ResponseData } from '../../../../../interfaces/response';
 import {
-  ThongTinDeXuatKeHoachLuaChonNhaThau,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
+  ThongTinDeXuatKeHoachLuaChonNhaThau
 } from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { BaseService } from '../../../../base.service';
 
@@ -33,7 +32,7 @@ export class DxuatKhLcntService extends BaseService {
   }
 
   getGiaBanToiDa(cloaiVthh: string, maDvi: string, namKhoach: string) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/lcnt/gia-ban-toi-da/${cloaiVthh}/${maDvi}/${namKhoach}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-da/${cloaiVthh}/${maDvi}/${namKhoach}`;
     return this.httpClient.get<any>(url).toPromise();
   }
 }
