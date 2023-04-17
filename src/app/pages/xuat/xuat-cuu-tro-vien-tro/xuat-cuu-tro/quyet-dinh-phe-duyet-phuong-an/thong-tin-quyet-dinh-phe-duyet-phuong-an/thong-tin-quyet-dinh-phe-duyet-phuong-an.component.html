@@ -88,7 +88,33 @@
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="12">
-            <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
+
+            <nz-form-item>
+
+              <nz-form-control [nzErrorTip]="error">
+                <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
+                  <nz-form-item>
+                    <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
+                        <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true" />
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
+                  <nz-form-item>
+                    <label nz-radio nzValue="TTr">Chọn Số công văn/đề xuất</label>
+                    <nz-form-control [nzErrorTip]="error">
+                      <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
+                        <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                      </nz-input-group>
+                    </nz-form-control>
+                  </nz-form-item>
+                </nz-radio-group>
+              </nz-form-control>
+            </nz-form-item>
+
+
+            <!--<nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item>
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
@@ -105,7 +131,7 @@
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
-            </nz-radio-group>
+            </nz-radio-group>-->
           </div>
           <div nz-col [nzSpan]="6">
             <nz-form-item class="form-item">
@@ -423,7 +449,7 @@
                         <nz-form-label [nzNoColon]="true">
                           SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                         </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error" (ngModelChange)="tinhXuatCap()">
+                        <nz-form-control [nzErrorTip]="error" >
                           <span class="text-danger">{{formData.value.soLuongXuaCap>0?(formData.value.soLuongXuaCap|
                             number: '1.0-1' : 'vi_VN'):''}}
                             {{formData.value.donViTinh}}</span>

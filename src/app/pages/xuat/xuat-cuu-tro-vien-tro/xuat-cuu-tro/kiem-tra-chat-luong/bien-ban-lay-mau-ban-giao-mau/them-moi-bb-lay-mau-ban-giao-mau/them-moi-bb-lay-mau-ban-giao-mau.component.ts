@@ -173,7 +173,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      trangThaiXh: STATUS.CHUA_THUC_HIEN,
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -217,13 +218,13 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       tenLoaiVthh: data.tenLoaiVthh,
 
     });
-    this.listBienBan(data.soQd)
     let dataChiCuc = data.noiDungCuuTro.find(item =>
       item.maDviChiCuc == this.userInfo.MA_DVI
     );
     if (dataChiCuc) {
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
     }
+    this.listBienBan(data.soQd)
     await this.spinner.hide();
   }
 
@@ -235,20 +236,18 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     let res = await this.bienBanLayMauBanGiaoMauService.search(body)
     const data = res.data;
     this.bienBan = data.content;
-    console.log(this.bienBan, "this.bienBan");
-    console.log(this.listDiaDiemNhap, "this.listDiaDiemNhap");
-    const diffList = [
+    const listDd = [
       ...this.listDiaDiemNhap.filter((e) => {
         return !this.bienBan.some((bb) => {
           if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
             return e.maLoKho === bb.maLoKho;
           } else {
-            return e.maDiemKho === bb.maDiemKho;
+            return e.maNganKho === bb.maNganKho;
           }
         });
       }),
     ];
-    this.listDiaDiemNhap = diffList;
+    this.listDiaDiemNhap = listDd;
   }
 
   openDialogDdiemNhapHang() {
@@ -271,7 +270,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   }
 
   async bindingDataDdNhap(data) {
-    console.log(data, 6666);
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,

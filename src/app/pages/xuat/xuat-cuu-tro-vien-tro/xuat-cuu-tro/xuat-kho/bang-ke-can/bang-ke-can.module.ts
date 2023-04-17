@@ -9,7 +9,7 @@ import {NzPipesModule} from "ng-zorro-antd/pipes";
 
 
 @NgModule({
-  declarations: [
+ /* declarations: [
     ChiTietBangKeCanComponent
   ],
   exports: [
@@ -21,6 +21,6 @@ import {NzPipesModule} from "ng-zorro-antd/pipes";
     DirectivesModule,
     NzStatisticModule,
     NzPipesModule
-  ]
+  ]*/
 })
 export class BangKeCanModule { }
