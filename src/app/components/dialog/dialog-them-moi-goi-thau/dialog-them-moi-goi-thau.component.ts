@@ -62,6 +62,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listGoiThau = [];
   disabledGoiThau: boolean = false;
   dataAll: any[] = [];
+  trangThai: any;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -218,6 +219,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         await this.onChangeCloaiVthh(dataDetail.cloaiVthh)
       } else if (dataDetail.loaiVthh) {
         await this.onChangeCloaiVthh(dataDetail.loaiVthh)
+      }
+      if (this.trangThai != STATUS.DU_THAO) {
+        this.formGoiThau.get('donGiaVat').setValue(dataDetail.donGiaVat)
       }
       this.dataTable = dataDetail.children;
       for (let i = 0; i < dataDetail.children.length; i++) {
