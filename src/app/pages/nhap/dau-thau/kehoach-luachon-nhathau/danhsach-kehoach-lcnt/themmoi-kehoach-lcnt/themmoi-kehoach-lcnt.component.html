@@ -174,7 +174,8 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ giao chỉ tiêu/QĐ điều chỉnh chỉ tiêu KH năm
+            </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open">
                 <input [readonly]="true" nz-input formControlName="soQd" readonly="true" />
@@ -215,7 +216,7 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Tiêu chuẩn chất lượng </nz-form-label>
+            <nz-form-label [nzNoColon]="true">Tiêu chuẩn chất lượng </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tchuanCluong" [readonly]="true" />
             </nz-form-control>
@@ -332,7 +333,7 @@
         </div>
         <div nz-col [nzSpan]="6" *ngIf="this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực dự án (ngày) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện dự án (ngày) </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                 [nzStep]="1" [nzSize]="'small'"
@@ -597,7 +598,7 @@
             <td></td>
             <td></td>
             <td class="text-right">{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-left">{{item.dviTinh }}</td>
+            <td class="text-left"></td>
             <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right">{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
@@ -624,7 +625,7 @@
                 <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{cuc.soLuongDaMua | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-left">{{item.dviTinh }}</td>
+                <td class="text-left"></td>
                 <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
@@ -664,7 +665,7 @@
                       <td></td>
                       <td></td>
                       <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td></td>
+                      <td>{{item.dviTinh}}</td>
                       <td class="text-right">{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="text-right">{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="text-right">{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
