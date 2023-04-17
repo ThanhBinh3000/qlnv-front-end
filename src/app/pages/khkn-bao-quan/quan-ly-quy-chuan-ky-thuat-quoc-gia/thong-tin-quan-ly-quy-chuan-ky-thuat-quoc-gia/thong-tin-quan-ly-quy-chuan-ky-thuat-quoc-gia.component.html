@@ -54,19 +54,7 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <div nz-row [nzGutter]="8">
-                    <nz-col nzSpan="16">
-                      <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soVanBan" [nzMin]="1"
-                                       [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
-                      </nz-input-number>
-                    </nz-col>
-                    <nz-col nzSpan="8">
-                      <nz-select class="bold" [nzDisabled]="isView" formControlName="maVb">
-                        <nz-option *ngFor="let ma of listMaSo" nzValue="{{ma.maVb}}" nzLabel="{{ma.maVb}}">
-                        </nz-option>
-                      </nz-select>
-                    </nz-col>
-                  </div>
+                  <input type="text" nz-input formControlName="soVanBan" [readonly]="isView">
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -102,7 +90,7 @@
                 Ngày hết hiệu lực
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày hiệu lực" nzDisabled
+                <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày hết hiệu lực" nzDisabled
                                 formControlName="ngayHetHieuLuc">
                 </nz-date-picker>
               </nz-form-control>
@@ -140,7 +128,8 @@
               <nz-form-label [nzNoColon]="true">
                 Loại vật tư hàng hóa
               </nz-form-label>
-              <nz-select [nzDisabled]="listVanBanId > 0 || isView || dataTable.length > 0" nzMode="tags" nzPlaceHolder=""
+              <nz-select [nzDisabled]="listVanBanId > 0 || isView || dataTable.length > 0" nzMode="tags"
+                         nzPlaceHolder=""
                          [(ngModel)]="listOfTagOptions" (ngModelChange)="changeListOfTagOptions($event, true)"
                          [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenHangHoa"
@@ -163,7 +152,7 @@
           <div nz-col nzSpan="5">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
-                Thời gian lưu kho tối đa
+                Thời gian lưu kho tối đa (tháng)
               </nz-form-label>
               <input nz-input [readonly]="isView" formControlName="thoiGianLuuKhoToiDa"
                      placeholder="Thời gian lưu kho tối đa" />
@@ -203,7 +192,8 @@
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mg-t-10">
           <div>
             <span class=" font-weight-bold">Áp dụng cho toàn bộ chủng loại</span>
-            <nz-radio-group class="pd-10" [nzDisabled]=" this.dataTable.length > 0 || isView"  formControlName="apDungCloaiVthh" (ngModelChange)="onChangeLoaiVthh()" >
+            <nz-radio-group class="pd-10" [nzDisabled]=" this.dataTable.length > 0 || isView"
+                            formControlName="apDungCloaiVthh" (ngModelChange)="onChangeLoaiVthh()">
               <label nz-radio [nzValue]="true"> Có </label>
               <label nz-radio [nzValue]="false"> Không </label>
             </nz-radio-group>

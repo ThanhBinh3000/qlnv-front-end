@@ -119,7 +119,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
-      tchuanCluong: [null, [Validators.required]],
+      tchuanCluong: [null],
       tenDuAn: [null, [Validators.required]],
       loaiHdong: [null, [Validators.required]],
       hthucLcnt: [null, [Validators.required]],
@@ -410,6 +410,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
       return;
     }
+    let listGoiThau = [];
+    this.listOfData.forEach(item => {
+      listGoiThau.push(item.goiThau)
+    })
+    let setListGoiThau = new Set(listGoiThau);
+    listGoiThau = [...setListGoiThau]
+    let isReadOnly = false;
+    if (data != null) {
+      isReadOnly = true;
+    }
     const modal = this.modal.create({
       nzTitle: 'Địa điểm nhập hàng',
       nzContent: DialogThemMoiGoiThauComponent,
@@ -419,7 +429,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzClassName: 'dialog-vat-tu',
       nzComponentParams: {
+        trangThai: this.formData.get('trangThai').value,
         data: data,
+        dataAll: this.listOfData,
+        listGoiThau: listGoiThau,
+        isReadOnly: isReadOnly,
+        dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
         dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
         namKeHoach: this.formData.value.namKhoach,
@@ -427,9 +442,14 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     });
     modal.afterClose.subscribe((res) => {
       if (res) {
-        if (index >= 0) {
-          this.listOfData[index] = res;
-        } else {
+        let isUpdate = false;
+        for (let i = 0; index < this.listOfData.length; i++) {
+          if (this.listOfData[i].goiThau == res.goiThau) {
+            this.listOfData[i] = res;
+            isUpdate = true;
+          }
+        }
+        if (!isUpdate) {
           this.listOfData.push(res);
         }
         let tongMucDt: number = 0;
@@ -483,7 +503,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         cloaiVthh: this.formData.get('cloaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKhoach: this.formData.get('namKhoach').value,
-        donGiaVat: this.formData.value.donGiaVat
+        donGiaVat: this.formData.get('donGiaVat').value
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -516,10 +536,27 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     });
 
   }
-  deleteRowLt(i: number, goiThau: string) {
+  deleteRowLt(i: number, goiThau: string, z?: number) {
     for (let index = 0; index < this.listOfData.length; index++) {
       if (this.listOfData[index].goiThau == goiThau) {
-        this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+        if (z) {
+          for (let v = 0; v < this.listOfData[index].children.length; v++) {
+            if (this.listOfData[index].children[v].idx == i) {
+              this.listOfData[index].children[v].children.splice(z, 1)
+              if (this.listOfData[index].children[v].children.length == 0) {
+                this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+                if (this.listOfData[index].children.length == 0) {
+                  this.listOfData.splice(index, 1)
+                }
+              }
+            }
+          }
+        } else {
+          this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+          if (this.listOfData[index].children.length == 0) {
+            this.listOfData.splice(index, 1)
+          }
+        }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListDataLuongThuc()
       }
@@ -650,7 +687,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     this.formData.controls["nguonVon"].setValidators([Validators.required]);
     this.formData.controls["tgianNhang"].setValidators([Validators.required]);
     this.formData.controls["tgianThien"].setValidators([Validators.required]);
-    this.formData.controls["tchuanCluong"].setValidators([Validators.required]);
   }
 
   clearValidatorLuuDuThao() {
