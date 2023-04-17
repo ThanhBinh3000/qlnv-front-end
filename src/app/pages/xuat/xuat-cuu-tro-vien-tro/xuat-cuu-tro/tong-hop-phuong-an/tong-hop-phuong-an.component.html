@@ -273,8 +273,7 @@
   <app-thong-tin-tong-hop-phuong-an [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
   </app-thong-tin-tong-hop-phuong-an>
 </div>
-
-<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+<nz-modal #tessss [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
           [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent>
     <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"

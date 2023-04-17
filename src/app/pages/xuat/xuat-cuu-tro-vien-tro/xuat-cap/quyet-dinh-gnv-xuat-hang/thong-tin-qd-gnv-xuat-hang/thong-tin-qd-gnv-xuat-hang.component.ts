@@ -505,6 +505,8 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
     if (index != -1) {
       table.splice(index, 1, this.noiDungRow);
+    } else if (!table[0].maDiemKho) {
+      table.splice(0, 1, this.noiDungRow);
     } else {
       table = [...table, this.noiDungRow]
     }

@@ -56,14 +56,13 @@
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button
-        *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT"
-        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.DANG_THUC_HIEN)">
+      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH " type="button" class="btn btn-sub xanh-nhat"
+        (click)="saveDdiemNhap(STATUS.CHUA_THUC_HIEN)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
       <button type="button" class="btn btn-main"
-        *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh != STATUS.HOAN_THANH_CAP_NHAT)"
+        *ngIf="(formData.value.trangThai === STATUS.BAN_HANH && formData.value.trangThaiXh === null)"
         (click)="saveDdiemNhap()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -241,7 +240,7 @@
               <th [colspan]="3">Thông tin lô kho</th>
               <th [colspan]="2">SL xuất CT, VT</th>
               <th [rowspan]="2">Trạng thái</th>
-              <th [rowspan]="2" *ngIf="userService.isChiCuc()">Hành động</th>
+              <th [rowspan]="2" *ngIf="userService.isChiCuc() && formData.value.trangThaiXh === null">Hành động</th>
             </tr>
             <tr>
               <th>Tên chủng loại hàng hóa</th>
@@ -273,7 +272,7 @@
                 <td class="bold">{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="bold">{{formData.value.donViTinh}}</td>
                 <td></td>
-                <td *ngIf="userService.isChiCuc()">
+                <td *ngIf="userService.isChiCuc() && formData.value.trangThaiXh === null">
                 </td>
               </tr>
               <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -293,8 +292,8 @@
                     <td></td>
                     <td class="text-blue">{{lv1.soLuongXuatChiCuc |number : '1.0-1' : 'vi_VN'}}</td>
                     <td></td>
-                    <td>{{lv1.tenTrangThaiXh}}</td>
-                    <td *ngIf="userService.isChiCuc()">
+                    <td>{{lv1.tenTrangThai}}</td>
+                    <td *ngIf="userService.isChiCuc() && formData.value.trangThaiXh === null">
                       <ng-container>
                         <a (click)="showModal(lv1)">
                           <i class="fa fa-plus"></i>
@@ -320,7 +319,7 @@
                         <td>{{lv2.soLuongGiao | number : '1.0-1' : 'vi_VN'}}</td>
                         <td></td>
                         <td></td>
-                        <td *ngIf="userService.isChiCuc()">
+                        <td *ngIf="userService.isChiCuc() && formData.value.trangThaiXh === null">
                           <ng-container>
                             <a>
                               <i class="fa fa-edit" (click)="suaPhuongAn(lv2)"></i>
