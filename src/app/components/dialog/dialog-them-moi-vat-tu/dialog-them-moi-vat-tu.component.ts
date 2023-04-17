@@ -35,7 +35,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   formattedThanhTienDx: string = '0';
   formattedThanhTien: string = '0';
   formattedSoLuong: string = '0';
-  formattedDonGiaVat: string = '0';
+  formattedDonGiaVat: string = '';
   expandSet = new Set<number>();
   tenCloaiVthh: string;
   namKhoach: string;
