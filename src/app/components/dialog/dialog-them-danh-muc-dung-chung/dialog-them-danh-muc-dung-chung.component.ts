@@ -42,7 +42,7 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       giaTri: [null, [Validators.required]],
       thuTuHienThi: [null],
       phanLoai: [],
-      apDung: [[]],
+      apDung: [null],
       ghiChu: [null]
     });
   }
@@ -79,12 +79,8 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let body = this.formData.value;
-    if (!body.apDung || body.apDung.length == 0) {
-      body.apDung = this.listApDungCn ? this.listApDungCn.map(item => item.ma).toString() : null
-    } else {
+    let body = this.formData.value
       body.apDung = body.apDung ? body.apDung.toString() : null;
-    }
     let res;
     if (this.dataEdit != null) {
       res = await this.dmService.update(body);

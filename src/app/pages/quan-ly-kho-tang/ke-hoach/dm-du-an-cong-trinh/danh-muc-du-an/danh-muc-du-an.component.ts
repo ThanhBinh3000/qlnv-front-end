@@ -1,26 +1,23 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {saveAs} from 'file-saver';
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {DanhMucKhoService} from "../../../../../services/danh-muc-kho.service";
-import {STATUS} from "../../../../../constants/status";
+import { Component, OnInit } from "@angular/core";
+import dayjs from "dayjs";
+import { cloneDeep } from "lodash";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { PAGE_SIZE_DEFAULT } from "src/app/constants/config";
+import { MESSAGE } from "src/app/constants/message";
+import { UserLogin } from "src/app/models/userlogin";
+import { UserService } from "src/app/services/user.service";
+import { Globals } from "src/app/shared/globals";
+import { saveAs } from "file-saver";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { DanhMucKhoService } from "../../../../../services/danh-muc-kho.service";
+import { STATUS } from "../../../../../constants/status";
 import {
   DialogDanhMucKhoComponent
 } from "../../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
-import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
-import {DonviService} from "../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
+import { DonviService } from "../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-danh-muc-du-an',
@@ -52,7 +49,10 @@ export class DanhMucDuAnComponent implements OnInit {
     tgHoanThanh: ''
   };
 
-  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"}, {"ma": "29", "giaTri": "Hoàn thành"}];
+  listTrangThai = [{"ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện"},
+    {"ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện"},
+    {"ma": STATUS.DA_HOAN_THANH, "giaTri": "Đã hoàn thành"}
+  ];
 
   allChecked = false;
   indeterminate = false;
@@ -60,6 +60,8 @@ export class DanhMucDuAnComponent implements OnInit {
   dsKhoi: any[] = [];
   dataTable: any[] = [];
   danhSachCuc: any[] = [];
+  dsChiCuc: any[] = [];
+  dsDiemKho: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -83,13 +85,34 @@ export class DanhMucDuAnComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       this.loadDsNam();
       await this.search();
-      await this.loadDsKhoi();
-      await this.loadDanhSachCuc();
+      if (this.userService.isCuc()) {
+        await this.loadDsKhoi();
+        await this.loadDanhSachCuc();
+        await this.loadDsChiCuc();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsChiCuc() {
+    let res = await this.dviService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.dsChiCuc = res.data
+      this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
+    }
+  }
+
+   async changeChiCuc(event: any) {
+    if (event) {
+      let res = await this.dviService.layTatCaDonViByLevel(4);
+      if (res && res.data) {
+        this.dsDiemKho = res.data
+        this.dsDiemKho = this.dsDiemKho.filter(item => item.type != "PB" && item.maDvi.startsWith(event))
+      }
     }
   }
 
@@ -133,7 +156,7 @@ export class DanhMucDuAnComponent implements OnInit {
       "diaDiem": this.searchFilter.diaDiem,
       "khoi": this.searchFilter.khoi,
       "paggingReq": {
-        "limit": 10,
+        "limit": this.pageSize,
         "page": this.page - 1
       },
       "soQd": this.searchFilter.soQd,
@@ -337,17 +360,19 @@ export class DanhMucDuAnComponent implements OnInit {
       "tmdtDuKien": this.rowItem.tmdtDuKien,
       "tmdtDuyet": this.rowItem.tmdtDuyet,
       "tongSoLuyKe": this.rowItem.tongSoLuyKe,
-      "trangThai": STATUS.DU_THAO,
-      "maDvi": this.userInfo.MA_DVI
+      "trangThai": STATUS.CHUA_THUC_HIEN,
+      "maDvi": this.userInfo.MA_DVI,
+      "maDiemKho": this.rowItem.maDiemKho,
+      "maChiCuc": this.rowItem.maChiCuc,
     }
     let res;
-    if (id && id>0) {
-       res = await this.danhMucKhoService.create(body);
+    if (id && id > 0) {
+       res = await this.danhMucKhoService.update(body);
     } else {
        res = await this.danhMucKhoService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if(id && id>0) {
+      if(id && id > 0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -366,7 +391,8 @@ export class DanhMucDuAnComponent implements OnInit {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong ,rowItem.tgHoanThanh, rowItem.tmdtDuKien, rowItem.nstwDuKien
+      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong ,rowItem.tgHoanThanh, rowItem.tmdtDuKien, rowItem.nstwDuKien, rowItem.maDiemKho
+      , rowItem.maChiCuc
     )
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
@@ -413,7 +439,10 @@ export class DanhMucKho {
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
-
+  maChiCuc : string;
+  tenChiCuc : string;
+  maDiemKho : string;
+  tenDiemKho : string;
   giaiDoan: any
   tgKcHt: any
   tuNam: number;

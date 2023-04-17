@@ -43,6 +43,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   listFileDinhKem: any[] = [];
   listDmKho: any[] = [];
   listLoaiDuAn: any[] = [];
+  listKhoi: any[] = [];
 
 
 
@@ -391,6 +392,17 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
   }
 
+  async getDsKhoi() {
+    let res = await this.danhMucService.danhMucChungGetAll("KHOI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
+    }
+  }
+
+  // themMoiItemCha() {
+  //   this.da
+  // }
+
 
   themMoiItem() {
     if (!this.dataTable) {
@@ -405,6 +417,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     this.rowItem = new DanhMucKho();
     this.updateEditCache()
   }
+
   clearData() {
     this.rowItem = new DanhMucKho();
   }
