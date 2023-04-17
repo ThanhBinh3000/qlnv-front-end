@@ -12,14 +12,14 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-tktc-tdt',
