@@ -429,6 +429,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       nzFooter: null,
       nzClassName: 'dialog-vat-tu',
       nzComponentParams: {
+        trangThai: this.formData.get('trangThai').value,
         data: data,
         dataAll: this.listOfData,
         listGoiThau: listGoiThau,
@@ -502,7 +503,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         cloaiVthh: this.formData.get('cloaiVthh').value,
         tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         namKhoach: this.formData.get('namKhoach').value,
-        donGiaVat: this.formData.value.donGiaVat
+        donGiaVat: this.formData.get('donGiaVat').value
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -535,12 +536,26 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     });
 
   }
-  deleteRowLt(i: number, goiThau: string) {
+  deleteRowLt(i: number, goiThau: string, z?: number) {
     for (let index = 0; index < this.listOfData.length; index++) {
       if (this.listOfData[index].goiThau == goiThau) {
-        this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
-        if (this.listOfData[index].children.length == 0) {
-          this.listOfData.splice(index, 1)
+        if (z) {
+          for (let v = 0; v < this.listOfData[index].children.length; v++) {
+            if (this.listOfData[index].children[v].idx == i) {
+              this.listOfData[index].children[v].children.splice(z, 1)
+              if (this.listOfData[index].children[v].children.length == 0) {
+                this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+                if (this.listOfData[index].children.length == 0) {
+                  this.listOfData.splice(index, 1)
+                }
+              }
+            }
+          }
+        } else {
+          this.listOfData[index].children = this.listOfData[index].children.filter((d, index) => d.idx !== i);
+          if (this.listOfData[index].children.length == 0) {
+            this.listOfData.splice(index, 1)
+          }
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListDataLuongThuc()

@@ -149,4 +149,9 @@ export class DanhMucService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  danhMucChungTheoPhanHe(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach-theo-phan-he`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
 }

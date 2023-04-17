@@ -302,7 +302,7 @@
                       </ng-container>
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                  <ng-container *ngIf="expandSetString.has(item.idVirtual) && lv1.childData[0].tenDiemKho">
                     <tr *ngFor="let lv2 of lv1.childData,let i2=index">
                       <ng-container>
                         <td></td>
