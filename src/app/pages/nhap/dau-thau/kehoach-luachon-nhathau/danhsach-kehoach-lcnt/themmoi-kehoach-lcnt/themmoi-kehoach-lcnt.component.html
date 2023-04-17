@@ -440,7 +440,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'}}</span>
@@ -449,7 +449,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
             </nz-form-control>
@@ -491,6 +491,7 @@
           <th style="width: 2%;">STT</th>
           <th>Chi cục</th>
           <th>Tên gói thầu</th>
+          <th>Điểm kho</th>
           <th>Địa điểm nhập kho</th>
           <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
           <th>SL theo KH năm đã được duyệt</th>
@@ -507,7 +508,7 @@
         <ng-container *ngFor="let item of listDataGroup , let i = index">
           <tr>
             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td colspan="3">{{item.tenDvi}}</td>
+            <td colspan="4">{{item.tenDvi}}</td>
             <td class="text-right red-text">{{item.soLuongTheoChiTieu| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right red-text">{{item.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right bold-700">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
@@ -519,22 +520,21 @@
             <td></td>
             <td *ngIf="userService.isCuc() && !isView"></td>
           </tr>
-          <ng-container>
-            <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
+          <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">
+            <tr>
               <td></td>
               <td></td>
               <td>{{dtGoiThau.goiThau}}</td>
-              <td>{{dtGoiThau.diaDiemNhap}}</td>
               <td></td>
               <td></td>
-              <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{dtGoiThau.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-              <td class="text-right">{{(dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh) + (dtGoiThau.soLuong *
-                dtGoiThau.donGiaTamTinh *
-                formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td class="text-right" *ngIf="userService.isCuc() && !isView">
                 <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                   <i class="fa fa-pencil"></i>
@@ -544,6 +544,33 @@
                 </a>
               </td>
             </tr>
+            <ng-container *ngFor="let diemKho of item.dataChild[y].children, let z = index">
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{diemKho.tenDvi}}</td>
+                <td>{{diemKho.diaDiemNhap}}</td>
+                <td></td>
+                <td></td>
+                <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{(diemKho.soLuong * dtGoiThau.donGiaTamTinh) + (diemKho.soLuong *
+                  dtGoiThau.donGiaTamTinh *
+                  formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" *ngIf="userService.isCuc() && !isView">
+                  <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a *ngIf="!isDisbleForm()" (click)="deleteRowLt(dtGoiThau.idx, dtGoiThau.goiThau, z)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
           </ng-container>
         </ng-container>
       </tbody>
@@ -552,6 +579,7 @@
         <td></td>
         <td></td>
         <td class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
+        <td></td>
         <td></td>
         <td></td>
         <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' : 'vi_VN' }}</td>

@@ -50,22 +50,24 @@ export class NewDonViComponent implements OnInit {
     this.formDonVi = this.fb.group({
       maDviCha: [''],
       tenDvi: ['', Validators.required],
-      maDvi: ['', Validators.required],
+      maDvi: ['', Validators.required, Validators.pattern],
       diaChi: [''],
       tenVietTat: [''],
       sdt: [''],
       fax: [''],
-      trangThai: [true],
+      trangThai: [false],
       type: [null],
       ghiChu: [''],
       vungMien: [''],
-      tinhThanh: [],
-      quanHuyen: [''],
-      phuongXa: [''],
+      tinhThanhList: [],
+      tinhThanh: [""],
+      quanHuyen: [""],
+      phuongXa: [""]
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
-      this.levelNode = node.level
+      this.levelNode = node && node.level ? node.level : null
+      this.resetFormData()
       if (this.levelNode == 3) {
         this.formDonVi.patchValue({
           type : true
@@ -73,6 +75,24 @@ export class NewDonViComponent implements OnInit {
       }
     });
   }
+  resetFormData() {
+    this.formDonVi.patchValue({
+      tenDvi: [''],
+      maDvi: [''],
+      diaChi: [''],
+      tenVietTat: [''],
+      sdt: [''],
+      fax: [''],
+      trangThai: [false],
+      type: [false],
+      ghiChu: [''],
+      vungMien: [''],
+      tinhThanh: [],
+      quanHuyen: [],
+      phuongXa: []
+    })
+  }
+
 
   ngOnInit(): void {
     this.loadDsKhuVuc()
@@ -109,7 +129,40 @@ export class NewDonViComponent implements OnInit {
     this.modal.destroy();
   }
 
+  setValidators() {
+    if (this.levelNode == 1 ) {
+      this.formDonVi.controls["tinhThanhList"].setValidators([Validators.required]);
+      this.formDonVi.controls["tinhThanh"].clearValidators();
+      this.formDonVi.controls["quanHuyen"].clearValidators();
+      this.formDonVi.controls["phuongXa"].clearValidators();
+    } else if (this.levelNode == 2) {
+      this.formDonVi.controls["tinhThanhList"].clearValidators();
+      this.formDonVi.controls["tinhThanh"].setValidators([Validators.required]);
+      this.formDonVi.controls["quanHuyen"].setValidators([Validators.required]);
+      this.formDonVi.controls["phuongXa"].setValidators([Validators.required]);
+    } else {
+      this.formDonVi.controls["tinhThanhList"].clearValidators();
+      this.formDonVi.controls["tinhThanh"].clearValidators();
+      this.formDonVi.controls["quanHuyen"].clearValidators();
+      this.formDonVi.controls["phuongXa"].clearValidators();
+    }
+  }
+
+  convertListDiaDanh() : any[] {
+    let arr = [];
+    if (this.levelNode == 1) {
+      arr = this.formDonVi.value.tinhThanhList
+    }
+    if (this.levelNode == 2 ) {
+      arr.push(this.formDonVi.value.tinhThanh);
+      arr.push(this.formDonVi.value.quanHuyen);
+      arr.push(this.formDonVi.value.phuongXa);
+    }
+      return arr;
+  }
+
   add() {
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formDonVi);
     if (this.formDonVi.invalid) {
       return;
@@ -118,9 +171,7 @@ export class NewDonViComponent implements OnInit {
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
     body.maDvi = body.maDviCha + body.maDvi
-    if (this.levelNode == 1) {
-      body.tinhThanh = body.tinhThanh ? body.tinhThanh.toString() : null;
-    }
+    body.listIdDiaDanh = this.convertListDiaDanh();
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);

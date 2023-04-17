@@ -115,7 +115,7 @@
       </div>
       <div nz-col nzSpan="24"  *ngIf="levelNode == 1">
         <nz-form-item>
-        <nz-form-label>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
+        <nz-form-label nzRequired>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-select  nzMode="multiple"  nzAllowClear
                      formControlName="tinhThanh">
@@ -127,8 +127,8 @@
       </div>
       <div nz-col nzSpan="8" *ngIf="levelNode == 2">
         <nz-form-item>
-          <nz-form-label>Tỉnh, thành</nz-form-label>
-          <nz-form-control>
+          <nz-form-label nzRequired>Tỉnh, thành</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
             <nz-select   nzAllowClear (ngModelChange)="changeTinhThanh($event)" nzShowSearch
                         formControlName="tinhThanh">
               <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
@@ -139,8 +139,8 @@
       </div>
       <div nz-col nzSpan="8" *ngIf="levelNode == 2">
         <nz-form-item>
-          <nz-form-label>Quận, huyện</nz-form-label>
-          <nz-form-control>
+          <nz-form-label nzRequired>Quận, huyện</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
             <nz-select  nzAllowClear (ngModelChange)="changeQuanHuyen($event)" nzShowSearch
                         formControlName="quanHuyen">
               <nz-option *ngFor="let option of listQuanHuyen" [nzValue]="option.id"
@@ -151,8 +151,8 @@
       </div>
       <div nz-col nzSpan="8" *ngIf="levelNode == 2">
         <nz-form-item>
-          <nz-form-label>Phường, xã</nz-form-label>
-          <nz-form-control>
+          <nz-form-label nzRequired>Phường, xã</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
             <nz-select  nzAllowClear formControlName="phuongXa" nzShowSearch>
               <nz-option *ngFor="let option of listPhuongXa" [nzValue]="option.id"
                          [nzLabel]="option.ten"></nz-option>
