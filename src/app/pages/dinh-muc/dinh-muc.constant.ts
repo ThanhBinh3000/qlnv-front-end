@@ -42,13 +42,13 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
         idHover: 'hop-dong',
         hasTab: false,
     },
-    {
-        icon: 'htvbdh_tcdt_baocao2',
-        title: 'Báo cáo',
-        url: `/${MAIN_ROUTE_DINH_MUC}/bao-cao`,
-        dropdown: 'bao-cao',
-        idHover: 'bao-cao',
-        hasTab: false,
-        children: []
-    },
+    // {
+    //     icon: 'htvbdh_tcdt_baocao2',
+    //     title: 'Báo cáo',
+    //     url: `/${MAIN_ROUTE_DINH_MUC}/bao-cao`,
+    //     dropdown: 'bao-cao',
+    //     idHover: 'bao-cao',
+    //     hasTab: false,
+    //     children: []
+    // },
 ];

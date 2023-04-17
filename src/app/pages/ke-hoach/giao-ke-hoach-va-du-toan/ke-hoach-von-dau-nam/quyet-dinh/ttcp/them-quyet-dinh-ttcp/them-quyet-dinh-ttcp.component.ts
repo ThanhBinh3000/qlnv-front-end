@@ -16,6 +16,7 @@ import {HelperService} from 'src/app/services/helper.service';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {CurrencyMaskInputMode} from 'ngx-currency'
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
 
 
 @Component({
@@ -40,17 +41,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   dataTableAllBn: any[] = [];
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
-  options = {
-    allowZero: false,
-    allowNegative: true,
-    precision: 1,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: false,
-    inputMode: CurrencyMaskInputMode.NATURAL
-  }
+  options = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -302,8 +293,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.listToanBoNganh = this.dataTableAllBn.filter(item => item.isSum == false);
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res;
-    // console.log(body);
-    // return;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);
     } else {
@@ -322,7 +311,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        this.idInput = res.data.id;
+        this.getDataDetail(this.idInput);
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

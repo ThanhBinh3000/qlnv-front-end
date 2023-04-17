@@ -50,12 +50,12 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'dauthau',
     hasTab: false,
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo',
-    url: `/bao-cao`,
-    dropdown: 'bao-cao',
-    idHover: 'bao-cao',
-    hasTab: false,
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo',
+  //   url: `/bao-cao`,
+  //   dropdown: 'bao-cao',
+  //   idHover: 'bao-cao',
+  //   hasTab: false,
+  // },
 ];

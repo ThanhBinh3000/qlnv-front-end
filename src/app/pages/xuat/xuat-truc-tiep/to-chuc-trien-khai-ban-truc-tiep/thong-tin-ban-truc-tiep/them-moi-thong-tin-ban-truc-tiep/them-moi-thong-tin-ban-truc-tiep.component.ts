@@ -383,7 +383,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.listOfData = item[0].children;
       this.showFromTT = true;
       this.formData.patchValue({
-        idDviDtl: item.id,
+        idDviDtl: item[0].id,
       })
       this.emitDataTable()
       this.updateEditCache()

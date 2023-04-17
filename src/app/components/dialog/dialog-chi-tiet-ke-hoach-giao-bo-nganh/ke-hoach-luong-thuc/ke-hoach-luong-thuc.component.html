@@ -33,9 +33,10 @@
     <td>Thóc</td>
     <td style="text-align: right;">
       <div>
-        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocXuat"
-                         text-align="right">
-        </nz-input-number>
+        <input  class="money-input"  currencyMask [(ngModel)]="ltThocXuat"  [options]="amount"/>
+<!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocXuat"-->
+<!--                         text-align="right">-->
+<!--        </nz-input-number>-->
       </div>
     </td>
   </tr>
@@ -44,9 +45,10 @@
     <td>Gạo</td>
     <td style="text-align: right;">
       <div>
-        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltGaoXuat"
-                         text-align="right">
-        </nz-input-number>
+        <input  class="money-input"  currencyMask [(ngModel)]="ltGaoXuat"  [options]="amount"/>
+<!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltGaoXuat"-->
+<!--                         text-align="right">-->
+<!--        </nz-input-number>-->
       </div>
     </td>
   </tr>
@@ -60,9 +62,10 @@
     <td>Thóc</td>
     <td style="text-align: right;">
       <div>
-        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocMua"
-                         text-align="right">
-        </nz-input-number>
+        <input  class="money-input"  currencyMask [(ngModel)]="ltThocMua"  [options]="amount"/>
+<!--        <nz-input-number [disabled]="isView" [nzMin]="0" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="ltThocMua"-->
+<!--                         text-align="right">-->
+<!--        </nz-input-number>-->
       </div>
     </td>
   </tr>
@@ -71,9 +74,10 @@
     <td>Gạo</td>
     <td>
       <div>
-        <nz-input-number style="text-align: right;" [disabled]="isView" [nzMin]="0" [nzStep]="0.1"
-                         [nzSize]="'small'" [(ngModel)]="ltGaoMua">
-        </nz-input-number>
+        <input  class="money-input"  currencyMask [(ngModel)]="ltGaoMua"  [options]="amount"/>
+<!--        <nz-input-number style="text-align: right;" [disabled]="isView" [nzMin]="0" [nzStep]="0.1"-->
+<!--                         [nzSize]="'small'" [(ngModel)]="ltGaoMua">-->
+<!--        </nz-input-number>-->
       </div>
 
     </td>
