@@ -128,6 +128,9 @@ import {
 import {
   KeHoachSuaChuaThuongXuyenComponent
 } from "./ke-hoach/ke-hoach-sua-chua-thuong-xuyen/ke-hoach-sua-chua-thuong-xuyen.component";
+import { TongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen.component';
+import { QuyetDinhPheDuyetKeHoachDanhMucComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/quyet-dinh-phe-duyet-ke-hoach-danh-muc.component';
+import { DeXuatKeHoachSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen.component';
 
 
 @NgModule({
@@ -191,7 +194,10 @@ import {
     ThemMoiHopDongComponent,
     PhuLucHopDongComponent,
     ThemMoiThongBaoScLonComponent,
-    KeHoachSuaChuaThuongXuyenComponent
+    KeHoachSuaChuaThuongXuyenComponent,
+    TongHopKhSuaChuaThuongXuyenComponent,
+    QuyetDinhPheDuyetKeHoachDanhMucComponent,
+    DeXuatKeHoachSuaChuaThuongXuyenComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
