@@ -295,6 +295,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -457,7 +458,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       if (data.loaiVthh.startsWith("02")) {
         this.danhsachDx = data.children;
         this.danhsachDx.forEach(element => {
-          tongMucDt += element.soLuong * element.donGiaVat;
+          tongMucDt += element.soLuong * element.donGiaTamTinh;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt
@@ -474,9 +475,27 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           })
         }
       }
+      console.log("11", this.danhsachDx)
       this.showFirstRow(event, this.danhsachDx[0]);
     };
   }
+
+
+  // sumThanhTien() {
+  //   var sum = 0;
+  //   var sumSl = 0;
+  //   this.danhsachDx.forEach(item => {
+  //     item.dataChild.forEach(res => {
+  //         sum += (res.donGiaTamTinh != null ?
+  //           res.donGiaTamTinh * res.soLuong : (res.donGiaVat != null ? res.donGiaVat *
+  //             res.soLuong : (res.donGia != null ? res.donGia * res.soLuong : 0)));
+  //         sumSl += res.soLuong;
+  //     })
+  //     item.soLuong += sumSl
+  //   })
+  //   this.formData.get('tongMucDtDx').setValue(sum);
+  //   this.formData.get('soLuong').setValue(sumSl);
+  // }
 
   openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
@@ -595,7 +614,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         if (dataRes.loaiVthh.startsWith("02")) {
           this.danhsachDx = dataRes.dsGtDtlList;
           this.danhsachDx.forEach(element => {
-            tongMucDt += element.soLuong * element.donGiaVat;
+            tongMucDt += element.soLuong * element.donGiaTamTinh;
           });
         } else {
           dataRes.idDxHdr = data.id;
@@ -667,6 +686,22 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].soLuong = $event;
   }
 
+  setNewDonGiaTamTinh($event) {
+    this.danhsachDx[this.index].tongTien = $event;
+  }
+
+  setNewDate($event) {
+    console.log($event)
+    // this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
+    // this.formData.get('tgianMthau').setValue($event.tgianBdauTchuc);
+    // this.formData.get('tgianDthau').setValue($event.tgianDthau);
+    // this.formData.get('tgianNhang').setValue($event.tgianNhang);
+    this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
+    this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
+    this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
+    this.danhsachDx[this.index].tgianNhang = $event.tgianNhang;
+  }
+
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -703,7 +738,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         }
         let tongMucDt: number = 0;
         this.danhsachDx.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia;
+          tongMucDt = tongMucDt + item.soLuong * item.donGiaTamTinh;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
