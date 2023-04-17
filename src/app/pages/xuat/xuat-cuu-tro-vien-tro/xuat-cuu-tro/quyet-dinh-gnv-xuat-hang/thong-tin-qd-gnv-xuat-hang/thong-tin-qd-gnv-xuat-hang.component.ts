@@ -110,7 +110,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       donViTinh: [],
       thanhTien: [],
       tenDvi: [],
-      soLuong: [0],
+      soLuong: [],
       canCu: [new Array<FileDinhKem>()],
       fileDinhKem: [new Array<FileDinhKem>()],
       tenLoaiVthh: [],
