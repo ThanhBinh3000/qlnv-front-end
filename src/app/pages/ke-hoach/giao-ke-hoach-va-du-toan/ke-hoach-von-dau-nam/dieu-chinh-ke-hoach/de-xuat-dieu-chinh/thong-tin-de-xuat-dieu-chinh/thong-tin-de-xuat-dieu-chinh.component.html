@@ -17,12 +17,12 @@
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
                 *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP && !userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê duyệt</span>
+          <span>Duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
                 *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC && !userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_LDCUC')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Phê duyệt</span>
+          <span>Duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
            *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP ) && !userService.isTongCuc() && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP'))">
