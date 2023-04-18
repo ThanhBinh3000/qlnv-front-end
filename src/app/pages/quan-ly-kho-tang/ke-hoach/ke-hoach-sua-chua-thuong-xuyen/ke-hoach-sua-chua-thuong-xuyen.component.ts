@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Globals} from "../../../../shared/globals";
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-ke-hoach-sua-chua-thuong-xuyen',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KeHoachSuaChuaThuongXuyenComponent implements OnInit {
 
-  constructor() { }
+  tabSelected: string = "01";
+
+  constructor(
+    public globals: Globals,
+    public userService: UserService
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 
 }

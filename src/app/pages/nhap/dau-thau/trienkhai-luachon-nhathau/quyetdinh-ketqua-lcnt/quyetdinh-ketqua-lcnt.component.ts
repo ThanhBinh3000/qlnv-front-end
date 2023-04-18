@@ -85,6 +85,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  idQdKq: number = 0;
+  openQdKqKhlcnt = false;
 
   STATUS = STATUS
 
@@ -456,4 +458,16 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       }
     });
   }
+
+
+  openQdKqKhlcntModal(id?: number) {
+    this.idQdKq = id;
+    this.openQdKqKhlcnt = true;
+  }
+
+  closeQdKqKhlcntModal() {
+    this.idQdKq = null;
+    this.openQdKqKhlcnt = false;
+  }
+
 }

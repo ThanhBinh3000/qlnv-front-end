@@ -17,13 +17,15 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-
+import { STATUS } from 'src/app/constants/status';
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
   templateUrl: './them-moi-tong-hop-kh-ban-truc-tiep.component.html',
   styleUrls: ['./them-moi-tong-hop-kh-ban-truc-tiep.component.scss']
 })
+
 export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string
   @Input() id: number;
   @Input() isViewOnModal: boolean;
@@ -46,6 +48,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
+
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
@@ -56,23 +59,23 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         ngayPduyet: [null, [Validators.required]],
       }
     );
+
     this.formData = this.fb.group({
       id: [],
       idTh: [],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
+      loaiVthh: ['', [Validators.required]],
+      cloaiVthh: ['', [Validators.required]],
       namKh: [, [Validators.required]],
       ngayDuyetTu: ['', [Validators.required]],
       ngayDuyetDen: ['', [Validators.required]],
-      ngayThop: [, [Validators.required]],
+      ngayThop: ['', [Validators.required]],
       noiDungThop: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       tenCloaiVthh: ['', [Validators.required]],
-      trangThai: [''],
+      trangThai: [STATUS.CHUA_TAO_QD],
       tenTrangThai: ['Chưa Tạo QĐ'],
       soQdCc: [''],
       tchuanCluong: [''],
-
     })
   }
 
@@ -110,7 +113,6 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       else {
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-
       }
     }
   }
@@ -134,7 +136,6 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       }
       delete body.ngayDx;
       let res = await this.tongHopKhBanTrucTiepService.tonghop(body);
-
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("XH_THOP_DX_KH_MTT_SEQ");
@@ -169,8 +170,6 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-
-
   isDisable(): boolean {
     if (this.formData.value.id) {
       return true;
@@ -187,7 +186,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   selectHangHoa() {
     let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'DANH SÁCH HÀNG HÓA',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -6,11 +6,11 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kqlcnt',
