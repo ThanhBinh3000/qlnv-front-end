@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -8,18 +7,20 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.html',
   styleUrls: ['./quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.scss']
 })
+
 export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string;
   idDxKh: number = 0;
   isViewDxKh: boolean = false;
   idThop: number = 0;
   isViewThop: boolean = false;
+
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -34,6 +35,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
+
     this.formData = this.fb.group({
       namKh: null,
       soQdPd: null,
@@ -44,6 +46,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       soTrHdr: null,
       lastest: 0
     })
+
     this.filterTable = {
       namKh: '',
       soQdPd: '',

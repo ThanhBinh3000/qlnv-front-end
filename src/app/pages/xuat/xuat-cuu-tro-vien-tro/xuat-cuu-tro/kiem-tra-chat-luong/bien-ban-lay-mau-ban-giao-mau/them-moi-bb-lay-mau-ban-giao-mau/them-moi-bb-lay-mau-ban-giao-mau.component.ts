@@ -174,7 +174,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     let body = {
       trangThai: STATUS.BAN_HANH,
       loaiVthh: this.loaiVthh,
-      trangThaiXh: STATUS.CHUA_THUC_HIEN,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -248,6 +248,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       }),
     ];
     this.listDiaDiemNhap = listDd;
+    console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
   }
 
   openDialogDdiemNhapHang() {

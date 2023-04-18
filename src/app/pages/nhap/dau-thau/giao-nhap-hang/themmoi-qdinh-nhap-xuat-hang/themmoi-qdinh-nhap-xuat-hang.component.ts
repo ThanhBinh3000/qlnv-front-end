@@ -121,6 +121,8 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       tenCloaiVthh: [''],
       ldoTuchoi: [''],
       trangThaiChiCuc: [],
+      loaiHinhNx: 'Mua đấu thầu',
+      kieuNx: 'Nhập mua'
     });
   }
 
