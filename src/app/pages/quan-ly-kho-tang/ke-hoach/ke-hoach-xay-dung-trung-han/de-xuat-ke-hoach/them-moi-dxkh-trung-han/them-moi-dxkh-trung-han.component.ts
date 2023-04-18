@@ -9,6 +9,8 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
+import {chain} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import {UserLogin} from "../../../../../../models/userlogin";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DxXdTrungHanService} from "../../../../../../services/dx-xd-trung-han.service";
@@ -16,6 +18,7 @@ import {STATUS} from "../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
 import {DanhMucKho} from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
+import { DialogThemMoiDxkhthComponent } from "./dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 @Component({
   selector: 'app-them-moi-dxkh-trung-han',
@@ -31,12 +34,14 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   formData: FormGroup
   maQd: string;
+  expandSet = new Set<number>();
 
   STATUS = STATUS
   dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
+  rowItemCha: DanhMucKho = new DanhMucKho();
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listNam: any[] = [];
   userInfo: UserLogin
@@ -81,14 +86,31 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.DON_VI.tenVietTat + "-TCKT";
     this.loadDsNam();
-    await this.getAllDmKho();
     await this.getAllLoaiDuAn();
+    await this.getDsKhoi();
     if (this.idInput > 0) {
       await this.getDataDetail(this.idInput)
     } else {
       this.formData.patchValue({
         tenDvi: this.userInfo.TEN_DVI
       })
+    }
+  }
+
+  expandAll() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      })
+    }
+  }
+
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
     }
   }
 
@@ -101,13 +123,20 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
   }
 
-  checkExitsData(item, dataItem): boolean {
+  checkExitsData(item, dataItem, type? : any): boolean {
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDuAn == item.maDuAn) {
-          rs = true;
-          return;
+        if (type) {
+          if (it.maDuAn == item.maDuAn) {
+            rs = true;
+            return;
+          } else {
+            if (it.khoi == item.khoi) {
+              rs = true
+              return;
+            }
+          }
         }
       })
     }
@@ -134,7 +163,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
-          this.updateEditCache()
         } catch (e) {
           console.log('error', e);
         }
@@ -167,7 +195,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     body.chiTietsReq = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI
     body.fileDinhKems = this.listFileDinhKem;
-    body.tmdt = this.calcTong('1') ?  this.calcTong('1') : 0;
+
     let res
     if (this.idInput > 0) {
       res = await this.dxTrungHanService.update(body);
@@ -371,17 +399,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           item.tgKcHt = item.tgKhoiCong +' - ' + item.tgHoanThanh
         })
       }
-      this.updateEditCache()
-    }
-  }
-
-  async getAllDmKho() {
-    let res = await this.dmKhoService.getAllDmKho('DMK');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmKho = res.data
-      if (this.listDmKho && this.listDmKho.length > 0) {
-        this.listDmKho = this.listDmKho.filter(item => item.trangThai = '00')
-      }
     }
   }
 
@@ -404,94 +421,49 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   // }
 
 
-  themMoiItem() {
-    if (!this.dataTable) {
-      this.dataTable = [];
-    }
-    if(this.checkExitsData(this.rowItem, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
-      return;
-    }
-    this.rowItem.maDvi = this.userInfo.MA_DVI
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new DanhMucKho();
-    this.updateEditCache()
-  }
-
-  clearData() {
-    this.rowItem = new DanhMucKho();
-  }
-
-  huyEdit(idx: number): void {
-    this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
-      edit: false,
-    };
-  }
-
-  luuEdit(index: number): void {
-    if (this.checkExitsData(this.dataEdit[index].data, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
-      return;
-    }
-    Object.assign(this.dataTable[index], this.dataEdit[index].data);
-    this.dataEdit[index].edit = false;
-  }
-
-  updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        }
+  themMoiItem(data : any, type :string, idx : number, list?:any) {
+    if (!this.isViewDetail) {
+      let modalQD = this.modal.create({
+        nzTitle: type == 'them' ? 'Thêm mới chi tiết kế hoạch ' : 'Chỉnh sửa chi tiết kế hoạch',
+        nzContent: DialogThemMoiDxkhthComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '1000px',
+        nzStyle: { top: '200px' },
+        nzFooter: null,
+        nzComponentParams: {
+          dataInput: data,
+          type: type
+        },
       });
+      modalQD.afterClose.subscribe(async (detail) => {
+        if (detail) {
+          if (!data.dataChild) {
+            data.dataChild = []
+          }
+          if (!data.idVirtual) {
+            data.idVirtual = uuidv4();
+          }
+          if (type == 'them') {
+            data.dataChild.push(detail)
+          } else {
+            if (list) {
+              Object.assign(list.dataChild[idx], detail);
+            }
+          }
+          this.expandAll()
+        }
+      })
     }
   }
 
-  calcTong(type) {
-    let sum;
-    if (this.dataTable && this.dataTable.length > 0) {
-       sum = this.dataTable.reduce((prev, cur) => {
-        switch (type) {
-          case '1' : {
-            prev += cur.tmdtDuKien;
-            break;
-          }
-          case '2' : {
-            prev += cur.nstwDuKien;
-            break;
-          }
-          case '3' : {
-            prev += cur.khVonTongSo;
-            break;
-          }
-          case '4' : {
-            prev += cur.khVonNstw;
-            break;
-          }
-          case '5' : {
-            prev += cur.ncKhTongSo;
-            break;
-          }
-          case '6' : {
-            prev += cur.ncKhNstw;
-            break;
-          }
-        }
-        return prev;
-      }, 0);
+  themItemcha() {
+    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Không được chọn trùng danh mục khối')
+      return;
     }
-      return sum;
-    }
-
-  changeDmucDuAn(event: any) {
-    if (event) {
-      let result = this.listDmKho.filter(item => item.maDuAn == event)
-      if (result && result.length > 0) {
-        this.rowItem = result[0];
-        this.rowItem.tgKcHt = this.rowItem.tgKhoiCong + ' - ' + this.rowItem.tgHoanThanh
-      }
-    }
+    this.rowItemCha.idVirtual = uuidv4();
+    this.dataTable.push(this.rowItemCha);
+    this.rowItemCha = new DanhMucKho();
   }
 }

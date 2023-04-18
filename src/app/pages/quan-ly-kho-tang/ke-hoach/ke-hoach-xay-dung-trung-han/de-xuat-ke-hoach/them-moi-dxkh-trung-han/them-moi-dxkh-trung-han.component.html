@@ -160,22 +160,22 @@
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
     </span>
     </div>
-    <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered [nzData]="dataTable" [nzScroll]="dataTable && dataTable.length ? { x: '2500px'} : null">
+    <nz-table  nzBordered class="nowrap pd-10"
+              [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
       <thead>
       <tr>
-        <th class="text-center" nzWidth="45px" rowSpan="2">STT</th>
-        <th class="text-center" nzWidth="120px" rowSpan="2">Khối</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Danh mục dự án</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Địa điểm xây dựng</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Loại dự án</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Thời gian KC-HT</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Khối</th>
-        <th class="text-center" nzWidth="" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-        <th class="text-center" nzWidth="" colSpan="2">TMĐT</th>
-        <th class="text-center" nzWidth="" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-        <th class="text-center" nzWidth="" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-        <th class="text-center" *ngIf="!isViewDetail" nzWidth="90px" rowSpan="2" nzRight>Hành động</th>
+        <th class="text-center" width="2%" rowSpan="2">STT</th>
+        <th class="text-center" width="8%%" rowSpan="2">Danh mục khối</th>
+        <th class="text-center" width="8%%" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="8%%" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="7%%" rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" width="5%" rowSpan="2">Khối</th>
+        <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="13%" colSpan="2">TMĐT</th>
+        <th class="text-center" width="13%" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
         <th class="text-center">Tổng số</th>
@@ -188,8 +188,8 @@
       <tr>
         <th></th>
         <th>
-          <nz-select nzAllowClear  >
-            <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+          <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi"  >
+            <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
             </nz-option>
           </nz-select>
         </th>
@@ -205,13 +205,38 @@
         <th></th>
         <th></th>
         <th></th>
-        <th class="text-center" *ngIf="!isViewDetail">
-          <a (click)="themMoiItem()">
+        <th class="text-center" *ngIf="!isViewDetail" nzRight>
+          <a (click)="themItemcha()">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
         </th>
       </tr>
       </thead>
+    <tbody>
+    <ng-container *ngFor="let data of dataTable , let idx = index">
+      <tr>
+        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+        <td class="ont-weight-bold">{{data.khoi}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="text-center" *ngIf="!isViewDetail" nzRight>
+          <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
+            <i class="icon htvbdh_dau-cong"></i>
+          </a>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
     </nz-table>
   </nz-card>
 </div>

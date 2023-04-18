@@ -435,6 +435,7 @@ export class DanhMucDuAnComponent implements OnInit {
 
 export class DanhMucKho {
   id: number;
+  idVirtual : any
   maDuAn: string;
   tenDuAn: string;
   diaDiem: string;
