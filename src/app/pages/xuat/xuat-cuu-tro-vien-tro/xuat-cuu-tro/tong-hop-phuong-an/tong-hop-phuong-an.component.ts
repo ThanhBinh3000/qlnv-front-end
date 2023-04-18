@@ -55,7 +55,7 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, tongHopPhuongAnCuuTroService);
     this.vldTrangThai = cuuTroVienTroComponent;
     this.formData = this.fb.group({
-      nam: dayjs().get('year'),
+      nam: null,
       soDx: null,
       tenDvi: null,
       maDvi: null,

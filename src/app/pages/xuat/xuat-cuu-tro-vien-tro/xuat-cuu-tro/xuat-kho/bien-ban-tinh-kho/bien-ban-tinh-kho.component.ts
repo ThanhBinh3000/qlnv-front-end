@@ -74,7 +74,10 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
-
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
+  idBangKe: number = 0;
+  openBangKe = false;
 
   ngOnInit(): void {
     try {
@@ -161,7 +164,6 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children");
     this.expandAll()
 
   }
@@ -186,5 +188,25 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
+  }
+
+  openPhieuXkModal(id: number) {
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
+  }
+
+  openBangKeModal(id: number) {
+    this.idBangKe = id;
+    this.openBangKe = true;
+  }
+
+  closeBangKeModal() {
+    this.idBangKe = null;
+    this.openBangKe = false;
   }
 }

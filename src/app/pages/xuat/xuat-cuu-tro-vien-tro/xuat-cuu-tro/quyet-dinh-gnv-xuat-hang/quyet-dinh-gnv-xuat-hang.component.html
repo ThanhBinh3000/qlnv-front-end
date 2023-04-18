@@ -176,9 +176,9 @@
             </td>
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.nam }}</td>
-            <td>{{ data.soQd }}</td>
+            <td><a  nz-button  nzType="link" (click)="openQdGnvModal(data.id)" >{{ data.soQd }}</a></td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soQdPd }}</td>
+            <td><a  nz-button  nzType="link" (click)="openQdPdModal(data.idQdPd)" >{{ data.soQdPd }}</a></td>
             <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.thoiGianGiaoNhan | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
@@ -246,3 +246,29 @@
     </app-thong-tin-qd-gnv-xuat-hang>
   </div>
 </ng-template>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPd" (nzOnCancel)="closeQdPdModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdPdModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-thong-tin-qd-gnv-xuat-hang [id]="id" (showListEvent)="showList()" [isView]="true" [loaiVthh]="loaiVthh">
+    </app-thong-tin-qd-gnv-xuat-hang>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeQdGnvModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

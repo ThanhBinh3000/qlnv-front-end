@@ -4,39 +4,35 @@
       <i class="icon htvbdh_arrow-left2"></i>
       <span>Quay lại</span>
     </button>
-    <ng-container *ngIf="userService.isCuc()">
+    <ng-container *ngIf="userService.isCuc() && !isDetail()">
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail() "
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
         (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub do"
-        *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC ) "
-        (click)="tuChoi()">
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP')) 
+        || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC )  "
-        (click)="save(true)">
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP')) 
+      || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC'))) " (click)="save(true)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-      <!--       <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && !isDetail() &&  typeVthh != '02'" type="button" -->
-      <!--         class="btn btn-sub xanh-nhat" (click)="save(true)"> -->
-      <!--         <i class="icon htvbdh_chuyenvanthu"></i> -->
-      <!--         <span>Ban hành</span> -->
-      <!--       </button> -->
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
         type="
           button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </ng-container>
-    <ng-container *ngIf="userService.isChiCuc() && formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
+    <ng-container
+      *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
       <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
         (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
         <i class="icon htvbdh_duyet"></i>
@@ -192,13 +188,13 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
-            <input nz-input [readonly]="true" formControlName="donViTinh" />
+            <input nz-input [readonly]="true" formControlName="loaiHinhNx" />
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
-            <input nz-input [readonly]="true" formControlName="donViTinh" />
+            <input nz-input [readonly]="true" formControlName="kieuNx" />
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
@@ -336,6 +332,7 @@
             <td></td>
             <td></td>
             <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td *ngIf="userService.isChiCuc()" style="text-align: center;">
