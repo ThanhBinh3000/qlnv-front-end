@@ -48,15 +48,14 @@
       </button>
       <button (click)="save()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
         || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
-        class="btn btn-main" type="
-          button">
+        class="btn btn-main" type="button">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
     </ng-container>
     <!--    chi cuc-->
     <ng-container *ngIf="userService.isChiCuc()">
-      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH " type="button" class="btn btn-sub xanh-nhat"
+      <button *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.trangThaiXh === null" type="button" class="btn btn-sub xanh-nhat"
         (click)="saveDdiemNhap(STATUS.CHUA_THUC_HIEN)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>

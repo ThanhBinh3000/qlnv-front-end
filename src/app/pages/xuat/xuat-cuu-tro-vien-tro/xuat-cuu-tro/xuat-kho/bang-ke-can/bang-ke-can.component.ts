@@ -17,6 +17,8 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {CuuTroVienTroComponent} from "../../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-bang-ke-can',
@@ -25,7 +27,8 @@ import {
 })
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: CuuTroVienTroComponent;
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -34,7 +37,8 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   isView = false;
   expandSetString = new Set<string>();
   dataView: any = [];
-
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -43,16 +47,23 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent,
     private bangKeCanCtvtService: BangKeCanCtvtService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       id: [0],
       nam: dayjs().get('year'),
       soQdGiaoNvXh: [],
       soBangKe: [],
       thoiGianGiaoNhan: [],
+      thoiGianGiaoNhanTu: [],
+      thoiGianGiaoNhanDen: [],
       ngayQdGiaoNvXh: [],
+      ngayXuat: [],
+      ngayXuatTu: [],
+      ngayXuatDen: [],
       maDiemKho: [],
       maNhaKho: [],
       maNganKho: [],
@@ -66,6 +77,33 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     })
   }
 
+  disabledStartNgayQd = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.thoiGianGiaoNhanDen) {
+      return startValue.getTime() >= this.formData.value.thoiGianGiaoNhanDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayQd = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.thoiGianGiaoNhanTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.thoiGianGiaoNhanTu.getTime();
+  };
+
+  disabledStartNgayXk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayXuatDen) {
+      return startValue.getTime() >= this.formData.value.ngayXuatDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayXk = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayXuatTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
+  };
   async ngOnInit() {
     try {
       this.initData()
@@ -194,8 +232,24 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     this.isView = isView;
   }
-
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = b;
+    // this.isViewDetail = isView ?? false;
+  }
   async deleteRow(lv2: any) {
     await this.delete(lv2);
+  }
+
+  openPhieuXkModal(id: number) {
+    console.log(id, 'id');
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
   }
 }

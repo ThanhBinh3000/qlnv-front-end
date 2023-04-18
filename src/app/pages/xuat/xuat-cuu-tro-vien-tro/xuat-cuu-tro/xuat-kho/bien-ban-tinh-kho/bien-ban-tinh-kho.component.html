@@ -78,7 +78,7 @@
                         <th width="">Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
-                    <tr class="search-table">
+                   <!-- <tr class="search-table">
                         <th></th>
                         <th></th>
                         <th>
@@ -181,7 +181,7 @@
 
                         </th>
                         <th></th>
-                    </tr>
+                    </tr>-->
                 </thead>
                 <tbody>
 
@@ -190,10 +190,10 @@
                             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
-                            <td>{{i + 1}}</td>
-                            <td>{{ item.soQdGiaoNvXh }}</td>
-                            <td>{{ item.nam }}</td>
-                            <td>{{ item.ngayQdGiaoNvXh }}</td>
+                            <td class="bold">{{i + 1}}</td>
+                            <td class="bold">{{ item.soQdGiaoNvXh }}</td>
+                            <td class="bold">{{ item.nam }}</td>
+                            <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -213,11 +213,11 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{lv1.soBbTinhKho}}</td>
-                                    <td>{{lv1.ngayBatDauXuat}}</td>
-                                    <td>{{lv1.ngayKetThucXuat}}</td>
-                                    <td>{{lv1.tenDiemKho}}</td>
-                                    <td>{{lv1.tenLoKho}}</td>
+                                    <td class="bold">{{lv1.soBbTinhKho}}</td>
+                                    <td class="bold">{{lv1.ngayBatDauXuat | date: 'dd/MM/YYYY' }}</td>
+                                    <td class="bold">{{lv1.ngayKetThucXuat | date: 'dd/MM/YYYY' }}</td>
+                                    <td class="bold">{{lv1.tenDiemKho}}</td>
+                                    <td class="bold">{{lv1.tenLoKho}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -253,9 +253,9 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{lv2.soPhieuXuatKho}}</td>
+                                            <td><a *ngIf="lv2.soPhieuXuatKho" nz-button  nzType="link" (click)="openPhieuXkModal(lv2.idPhieuXuatKho)" >{{lv2.soPhieuXuatKho}}</a></td>
                                             <td>{{lv2.ngayXuatKho}}</td>
-                                            <td>{{lv2.soBkCanHang}}</td>
+                                            <td> <a *ngIf="lv2.soBkCanHang"  nz-button  nzType="link" (click)="openBangKeModal(lv2.idBkCanHang)" >{{lv2.soBkCanHang}}</a></td>
                                             <td></td>
                                             <td class="text-left">
 
@@ -293,3 +293,27 @@
         (showListEvent)="showList()">
     </app-them-moi-bien-ban-tinh-kho>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-them-moi-phieu-xuat-kho>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closePhieuXkModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-chi-tiet-bang-ke-can>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeBangKeModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
