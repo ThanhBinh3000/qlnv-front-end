@@ -364,7 +364,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }}
+                  <span style="color: blue">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }}
                     {{formData.value.dviTinh}}</span>
                 </nz-form-control>
               </nz-form-item>
@@ -373,7 +373,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienKdiem | number : '1.0-1' : 'vi_VN'}}
+                  <span style="color: blue">{{formData.value.tongTienGiaKhoiDiemDx | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -382,7 +382,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienKdienDonGia | number : '1.0-1' : 'vi_VN'}}
+                  <span style="color: blue">{{formData.value.tongTienGiaKdTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -391,7 +391,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienDatTruoc | number : '1.0-1' : 'vi_VN'}} (vnd)</span>
+                  <span style="color: blue">{{formData.value.tongKhoanTienDatTruocDx | number : '1.0-1' : 'vi_VN'}}
+                    (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -399,7 +400,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green">{{formData.value.tongTienDatTruocDonGia | number : '1.0-1' : 'vi_VN'}}
+                  <span style="color: blue">{{formData.value.tongKhoanTienDtTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -431,32 +432,25 @@
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
               <th nzWidth="50px">Hành động</th>
             </tr>
-            <!-- <tr>
-              <th colspan="8"></th>
-              <th>(1)</th>
-              <th></th>
-              <th>(2)</th>
-              <th>(3) = (1) * (2)</th>
-              <th class="wrap">(4) - tự động lấy từ giá cụ thể được duyệt</th>
-              <th>(5) = (1) * (4)</th>
-              <th class="wrap">= (3) * % khoản tiền đặt trước</th>
-              <th class="wrap">= (5) * % khoản tiền đặt trước</th>
-              <th></th>
-            </tr> -->
           </thead>
           <tbody>
             <ng-container *ngFor="let item of dataTable , let i = index">
               <tr>
                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                 <td colspan="5">{{item.tenDvi}}</td>
-                <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td style="color: black ;font-weight: bold;">{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{item.tienDtruocDxChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.tienDtruocDdChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td style="color: black ;font-weight: bold;">{{item.soTienDatTruocChiCuc | number : '1.0-1'
+                  :
+                  'vi_VN'}}
+                </td>
+                <td style="color: black ;font-weight: bold;">{{item.tongTienDatTruocDuocDuyet | number : '1.0-1' :
+                  'vi_VN'}}
+                </td>
                 <td>
                   <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                     <i class="fa fa-pencil"></i>

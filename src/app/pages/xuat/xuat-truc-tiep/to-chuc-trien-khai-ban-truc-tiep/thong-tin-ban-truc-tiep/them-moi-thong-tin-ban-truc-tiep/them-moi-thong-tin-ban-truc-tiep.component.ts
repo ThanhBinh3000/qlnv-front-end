@@ -21,14 +21,15 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./them-moi-thong-tin-ban-truc-tiep.component.scss']
 })
 export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implements OnInit {
-  //base init
   @Input() loaiVthh: String;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() pthucBanTrucTiep: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-  dataDetail: any[] = [];
+  @Output()
+  dataTableChange = new EventEmitter<any>();
+
   radioValue: string = 'Chào giá';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
@@ -38,8 +39,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   listKieuNx: any[] = [];
   selected: boolean = false;
 
-  @Output()
-  dataTableChange = new EventEmitter<any>();
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,13 +51,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
+
     this.formData = this.fb.group(
       {
         id: [],
         idDviDtl: [],
         idDtl: [],
         namKh: [],
-        soQdPd: [],
+        soQdPd: [''],
         maDvi: [''],
         tenDvi: [''],
         pthucBanTrucTiep: [''],
@@ -79,6 +80,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       }
     );
   }
+
   rowItem: ChiTietThongTinBanTrucTiepChaoGia = new ChiTietThongTinBanTrucTiepChaoGia();
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
 
@@ -309,7 +311,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type?: any) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
@@ -431,5 +432,4 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["thoiHanBan"].clearValidators();
     }
   }
-
 }
