@@ -14,6 +14,7 @@ import {MESSAGE} from 'src/app/constants/message';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {FILETYPE} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -27,6 +28,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   taiLieuDinhKemList: any[] = [];
+  listCcPhapLy: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
   dsBoNganhTtcp: any[] = [];
@@ -38,6 +40,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   luanPhienList: any[] = []
   hasError: boolean = false;
   dataTable: any[] = [];
+  listFile: any[] = []
 
   constructor(
     private readonly fb: FormBuilder,
@@ -93,7 +96,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         trichYeu: data.trichYeu,
         idTtcpBoNganh: data.idTtcpBoNganh,
       })
-      this.taiLieuDinhKemList = data.fileDinhkems;
+      // this.taiLieuDinhKemList = data.fileDinhkems;
+      data.fileDinhkems.forEach(item => {
+        if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+          this.taiLieuDinhKemList.push(item)
+        } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+          this.listCcPhapLy.push(item)
+        }
+      })
       this.muaTangList = data.muaTangList ? data.muaTangList : [];
       this.xuatGiamList = data.xuatGiamList ? data.xuatGiamList : [];
       this.xuatBanList = data.xuatBanList ? data.xuatBanList : [];
@@ -214,6 +224,22 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.fileDinhKems = this.taiLieuDinhKemList;
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems= this.listFile;
+    }
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;
     body.xuatBanList = this.xuatBanList;
