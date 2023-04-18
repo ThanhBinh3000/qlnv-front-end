@@ -296,14 +296,14 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     this.editingSoLuong = parseInt(value.replaceAll('.', ''));
   }
 
-  editRow(res: any, idx: number) {
+  editRow(res: any) {
     this.isEditing = true;
     this.editingSoLuong = res.soLuong;
   }
 
 
-  onBlur(dtGoiThau: any) {
-    dtGoiThau.soLuong = this.editingSoLuong;
+  onBlur(res: any) {
+    res.soLuong = this.editingSoLuong;
     this.isEditing = false;
     this.sumThanhTien();
   }
