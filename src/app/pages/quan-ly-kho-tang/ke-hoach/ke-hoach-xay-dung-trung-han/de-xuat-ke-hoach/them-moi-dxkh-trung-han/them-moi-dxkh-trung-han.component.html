@@ -160,7 +160,7 @@
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
     </span>
     </div>
-    <nz-table  nzBordered class="nowrap pd-10"
+    <nz-table  nzBordered class="pd-10"
               [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
       <thead>
       <tr>
@@ -209,6 +209,7 @@
           <a (click)="themItemcha()">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
+
         </th>
       </tr>
       </thead>
@@ -233,8 +234,38 @@
           <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
+          <a (click)="deleteItemCha(idx)">
+            <i class="fa fa-trash-o do"></i>
+          </a>
         </td>
       </tr>
+      <ng-container *ngIf="expandSet.has(data.idVirtual)">
+        <tr *ngFor="let item of data.dataChild, let y = index">
+          <td>{{y+1}}</td>
+          <td></td>
+          <td>{{item.tenDuAn}}</td>
+          <td>{{item.diaDiem}}</td>
+          <td>{{item.loaiDuAn}}</td>
+          <td>{{item.tgKcHt}}</td>
+          <td>{{item.khoi}}</td>
+          <td>{{ item.soQdPd }}</td>
+          <td class="text-center">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
+          <td class="text-center" nzRight *ngIf="!isViewDetail">
+            <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a (click)="deleteItem(idx, y)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+
     </ng-container>
     </tbody>
     </nz-table>

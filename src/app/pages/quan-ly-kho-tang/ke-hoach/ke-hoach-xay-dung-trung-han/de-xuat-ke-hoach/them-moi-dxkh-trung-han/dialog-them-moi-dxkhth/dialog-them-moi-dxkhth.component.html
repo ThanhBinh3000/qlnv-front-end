@@ -3,35 +3,66 @@
     <div nz-row [nzGutter]="24">
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzRequired nzNoColon="true">VP Cục, Chi cục</nz-form-label>
-          <nz-select nzAllowClear [(ngModel)]="item.maDvi" (ngModelChange)="changeDvi($event)">
-            <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi"></nz-option>
+          <nz-form-label nzRequired nzNoColon="true">Danh mục dự án</nz-form-label>
+          <nz-select nzAllowClear [(ngModel)]="item.maDuAn"  (ngModelChange)="changeDmucDuAn($event)">
+            <nz-option *ngFor="let item of listDmKho" [nzLabel]="item.tenDuAn" [nzValue]="item.maDuAn">
+            </nz-option>
           </nz-select>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Tên tài sản</nz-form-label>
-          <nz-form-control >
-            <input nz-input disabled [(ngModel)]="item.tenTaiSan">
+          <nz-form-label nzNoColon="true">Địa điểm xây dựng</nz-form-label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="item.diaDiem" readonly />
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Đơn vị tính</nz-form-label>
-          <nz-form-control >
-            <input nz-input [(ngModel)]="item.donViTinh" readonly>
-          </nz-form-control>
+          <nz-form-label nzRequired nzNoColon="true">Loại dự án</nz-form-label>
+          <nz-select [(ngModel)]="item.loaiDuAn" nzAllowClear>
+            <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
+            </nz-option>
+          </nz-select>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Số lượng hiện có</nz-form-label>
-          <nz-form-control >
+          <nz-form-label nzNoColon="true">Thời gian khởi công - hoàn thành</nz-form-label>
+          <nz-input-group>
+            <input nz-input [(ngModel)]="item.tgKcHt" readonly />
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Khối</nz-form-label>
+          <nz-form-control>
             <nz-input-group>
-              <nz-input-number nzDisabled type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.slHienCo" [nzMin]="0"
-                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              <input nz-input [(ngModel)]="item.khoi" readonly />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzNoColon="true">Số QĐ phê duyệt/điều chỉnh TMĐT</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input [(ngModel)]="item.soQdPd" readonly />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label  nzNoColon="true">Tổng mức đầu tư (Tổng số)</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <nz-input-number type="text" nz-input [nzSize]="'small'" nzDisabled [(ngModel)]="item.tmdtDuKien" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -39,11 +70,12 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Số lượng sẽ nhập thêm</nz-form-label>
-          <nz-form-control >
+          <nz-form-label  nzNoColon="true">Tổng mức đầu tư (vốn NSTW) </nz-form-label>
+          <nz-form-control>
             <nz-input-group>
-              <nz-input-number nzDisabled type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.slNhapThem" [nzMin]="0"
-                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              <nz-input-number type="text" nz-input [nzSize]="'small'" nzDisabled [(ngModel)]="item.nstwDuKien" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -51,23 +83,12 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Tổng cộng</nz-form-label>
-          <nz-form-control >
+          <nz-form-label  nzNoColon="true">Lũy kế vốn đã bố trí đến ngày 31/12</nz-form-label>
+          <nz-form-control>
             <nz-input-group>
-              <nz-input-number nzDisabled type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.tongCong" [nzMin]="0"
-                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="6">
-        <nz-form-item >
-          <nz-form-label nzRequired nzNoColon="true">Số lượng phân bổ</nz-form-label>
-          <nz-form-control >
-            <nz-input-group>
-              <nz-input-number  type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.soLuong" [nzMin]="0"
-                                [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+              <nz-input-number type="text" nz-input [nzSize]="'small'" nzDisabled [(ngModel)]="item.khVonTongSo" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </nz-form-control>
@@ -75,9 +96,40 @@
       </div>
       <div nz-col nzSpan="6">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Ghi chú</nz-form-label>
-          <nz-form-control >
-            <input nz-input [(ngModel)]="item.ghiChu" >
+          <nz-form-label  nzNoColon="true">Tổng mức đầu tư (vốn NSTW) </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <nz-input-number type="text" nz-input [nzSize]="'small'" nzDisabled [(ngModel)]="item.khVonNstw" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Lũy kế vốn đã bố trí đến ngày 31/12</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <nz-input-number type="text" nz-input [nzSize]="'small'"  [(ngModel)]="item.ncKhTongSo" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="6">
+        <nz-form-item>
+          <nz-form-label nzRequired nzNoColon="true">Tổng mức đầu tư (vốn NSTW) </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <nz-input-number type="text" nz-input [nzSize]="'small'"  [(ngModel)]="item.ncKhNstw" [nzMin]="0"
+                               [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </div>
