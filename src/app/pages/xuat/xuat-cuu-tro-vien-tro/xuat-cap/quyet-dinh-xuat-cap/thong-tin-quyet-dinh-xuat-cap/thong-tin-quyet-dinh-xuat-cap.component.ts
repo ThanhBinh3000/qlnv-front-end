@@ -1,28 +1,28 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "../../../../../../services/donvi.service";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
+import {Component, Input, OnInit} from "@angular/core";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
-import { STATUS } from "../../../../../../constants/status";
-import { FileDinhKem } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { MESSAGE } from "../../../../../../constants/message";
-import { chain,cloneDeep } from "lodash";
+import {Validators} from "@angular/forms";
+import {STATUS} from "../../../../../../constants/status";
+import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {MESSAGE} from "../../../../../../constants/message";
+import {chain, cloneDeep} from "lodash";
 import * as uuid from "uuid";
-import { v4 as uuidv4 } from "uuid";
-import { Base2Component } from "../../../../../../components/base2/base2.component";
-import { QuanLyHangTrongKhoService } from "../../../../../../services/quanLyHangTrongKho.service";
+import {v4 as uuidv4} from "uuid";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
 import {
   QuyetDinhXuatCapService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/quyet-dinh-xuat-cap.service";
-import { LOAI_HANG_DTQG } from "../../../../../../constants/config";
+import {LOAI_HANG_DTQG} from "../../../../../../constants/config";
 import {
   QuyetDinhPdDtl
 } from "../../quyet-dinh-phuong-an/thong-tin-quyet-dinh-phuong-an/thong-tin-quyet-dinh-phuong-an.component";
@@ -57,13 +57,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   listSoLuong: any;
   isVisibleSuaNoiDung = false;
   listQdPaChuyenXc: any[] = [];
-  quyetDinhPdDtl: any[]= [new Array<QuyetDinhPdDtl>()];
+  quyetDinhPdDtl: any[] = [new Array<QuyetDinhPdDtl>()];
   deXuatSelected: any = []
   quyetDinhPdDtlCache: any[] = [];
   quyetDinhPdDx: Array<any> = [];
   deXuatPhuongAn: any[] = [];
   tenLoaiVthh: string = null;
   loaiNhapXuat: string = null;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -115,7 +116,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
-      await this.loadChiTiet(this.idInput);
       await Promise.all([
         this.loadDsLoaiHinhNhapXuat(),
         this.loadDsKieuNhapXuat(),
@@ -123,6 +123,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         this.loadDsChungLoaiHangHoa(),
         this.loadDsQdPaChuyenXuatCap()
       ]);
+      await this.loadChiTiet(this.idInput);
+
     } catch (e) {
       console.log("error: ", e);
       await this.spinner.hide();
@@ -133,13 +135,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
 
   async changePhuongAn(event) {
     await this.spinner.show();
-    if (event != null) {
+    if (event) {
       let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
       this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
+
       this.deXuatPhuongAnCache = data.data.quyetDinhPdDtl[0].quyetDinhPdDx;
       this.tenLoaiVthh = data.data.tenLoaiVthh;
       this.loaiNhapXuat = data.data.loaiNhapXuat;
-      this.buildTableView()
+      this.buildTableView();
     }
     await this.spinner.hide();
   }
@@ -204,19 +207,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
 
-  async saveAndSend() {
-    this.formData.patchValue({
-      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
-    });
-    if (this.userService.isTongCuc()) {
-      await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, "Bạn có muốn gửi duyệt ?");
-    } else {
-      await this.createUpdate(this.formData.value);
-      await this.approve(this.idInput, STATUS.CHO_DUYET_TP, "Bạn có muốn gửi duyệt ?");
-    }
-  }
-
   quayLai() {
     this.showListEvent.emit();
   }
@@ -255,21 +245,28 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
 
-  async selectRow(item) {
-    this.phuongAnView.forEach(i => i.selected = false);
-    item.selected = true;
-    this.formData.value.quyetDinhPdDtl.forEach(i => {
-      i.selected = false
-    });
-    this.deXuatSelected.selected = true;
-    let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
-    dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
-    let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
-    dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
-    this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
-    this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
-    await this.buildTableView();
+  async selectRow(item?: any) {
+    try {
+      await this.spinner.show();
+      if (item) {
+        this.deXuatSelected = item;
+      }
+      this.formData.value.quyetDinhPdDtl.forEach(i => {
+        i.selected = false
+      });
+      this.deXuatSelected.selected = true;
 
+      //let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+      let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
+      //dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
+      dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
+      //this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
+      this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
+      await this.buildTableView();
+    } catch (e) {
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   expandAll() {
@@ -495,7 +492,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   async loadDsChungLoaiHangHoa() {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: LOAI_HANG_DTQG.GAO });
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: LOAI_HANG_DTQG.GAO});
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listChungLoaiHangHoa = res.data;

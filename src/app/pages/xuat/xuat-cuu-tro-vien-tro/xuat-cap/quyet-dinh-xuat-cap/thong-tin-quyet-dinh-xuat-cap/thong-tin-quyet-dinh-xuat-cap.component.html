@@ -6,12 +6,36 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-       formData.value.trangThai == STATUS.TU_CHOI_LDV ||
-        formData.value.trangThai == STATUS.TU_CHOI_LDC ||
-         formData.value.trangThai == STATUS.TU_CHOI_TP)&& userService.isCuc()"
-      type="button" class="btn btn-sub" (click)="saveAndSend()">
+       formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
+      type="button" class="btn btn-sub"
+      (click)="saveAndSend(this.formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
+    </button>
+
+    <button (click)="reject(idInput,STATUS.TU_CHOI_LDTC)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+            class="btn btn-sub" type="button">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button (click)="reject(idInput,STATUS.TU_CHOI_LDV)"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+            class="btn btn-sub" type="button">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button (click)="approve(idInput,STATUS.BAN_HANH,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+            class="btn btn-sub" type="button">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
+            *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+            class="btn btn-sub" type="button">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
     </button>
     <button
       *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP)"
@@ -66,7 +90,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'"
+                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                                   [nzSize]="'small'"
                                    [nzDisabled]="isView">
                   </nz-input-number>
                 </nz-input-group>
@@ -103,7 +128,8 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"></nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="qdPaXuatCapId" [nzDisabled]="isView" (ngModelChange)="changePhuongAn($event)">
+                <nz-select formControlName="qdPaXuatCapId" [nzDisabled]="isView"
+                           (ngModelChange)="changePhuongAn($event)">
                   <nz-option *ngFor="let p of listQdPaChuyenXc" [nzValue]="p.id" [nzLabel]="p.soQd">
                   </nz-option>
                 </nz-select>
@@ -139,12 +165,12 @@
             <nz-form-control [nzErrorTip]="error">
               <div class="list-file">
                 <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input />
+                  <input type="text" nz-input/>
                 </nz-input-group>
                 <ng-template #suffixTemplateInfo>
                   <div class="icon-file-dinh-kem">
                     <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
+                    <input class="input-file" (change)="getNameFile($event)" type="file"/>
                   </div>
                 </ng-template>
               </div>
@@ -219,7 +245,7 @@
                         <nz-form-item>
                           <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                           <nz-form-control nz-col [nzSpan]="24">
-                            <input [readonly]="true" nz-input [(ngModel)]="tenLoaiVthh" />
+                            <input [readonly]="true" nz-input [(ngModel)]="tenLoaiVthh"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -227,7 +253,7 @@
                         <nz-form-item>
                           <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hình nhập xuất</nz-form-label>
                           <nz-form-control nz-col [nzSpan]="24">
-                            <input [readonly]="true" nz-input  [(ngModel)]="loaiNhapXuat" />
+                            <input [readonly]="true" nz-input [(ngModel)]="loaiNhapXuat"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -235,7 +261,7 @@
                         <nz-form-item>
                           <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Kiểu nhập xuất</nz-form-label>
                           <nz-form-control nz-col [nzSpan]="24">
-                            <input [readonly]="true" nz-input name="kieuNhapXuat" />
+                            <input [readonly]="true" nz-input name="kieuNhapXuat"/>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -398,7 +424,7 @@
                       <nz-form-item>
                         <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
-                          <input [readonly]="true" nz-input formControlName="tenLoaiVthh" />
+                          <input [readonly]="true" nz-input formControlName="tenLoaiVthh"/>
                         </nz-form-control>
                       </nz-form-item>
                     </div>
@@ -623,7 +649,7 @@
                   <nz-form-item>
                     <nz-form-label nz-col [nzSpan]="24" [nzNoColon]="true">Loại hàng hóa</nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24">
-                      <input [readonly]="true" nz-input formControlName="tenLoaiVthh" />
+                      <input [readonly]="true" nz-input formControlName="tenLoaiVthh"/>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -666,7 +692,7 @@
                     </nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-statistic
-                      [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                        [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -863,7 +889,8 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Tổng SL xuất CT, VT giao Cục (kg)</nz-form-label>
               <nz-form-control>
-                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="999999999999"
+                                 [nzStep]="1"
                                  [nzSize]="'small'">
                 </nz-input-number>
               </nz-form-control>
@@ -926,7 +953,8 @@
             <nz-form-item>
               <nz-form-label [nzXs]="7">Đơn giá</nz-form-label>
               <nz-form-control>
-                <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                <nz-input-number [(ngModel)]="phuongAnRow.donGiaKhongVat" [nzMin]="1" [nzMax]="999999999999"
+                                 [nzStep]="1"
                                  [nzSize]="'small'">
                 </nz-input-number>
               </nz-form-control>
