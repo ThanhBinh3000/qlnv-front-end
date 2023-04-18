@@ -179,4 +179,8 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+  async showList() {
+    this.isDetail = false;
+    await this.search();
+  }
 }

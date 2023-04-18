@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail; else templateThemmoi" class="luong-thuc__danh-sach">
     <div class="bg-trang">
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
@@ -83,18 +83,20 @@
         <div class="group-button">
             <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')">
+                <!-- <button type="button" class="btn btn-do" (click)="deleteMulti()"
+                    *ngIf="userService.isAccessPermisson('')">
+                    <i class="fa fa-trash-o do"></i>
+                    <span>Xóa</span>
+                </button> -->
+                <button type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData('xay-dung-phuong-an-ctvt.xlsx')"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_EXP')">
+                <button type="button" class="btn btn-sub" (click)="exportData('xay-dung-phuong-an-ctvt.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_CUC') || userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_VU')">
+                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -201,44 +203,6 @@
                     </tr>
                 </tbody>
             </nz-table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            ..0
             <div class="tab-content tab-menu" id="myTabContent">
                 <div class="tab-pane fade show active justify-content-between">
                     <div class="trai">
@@ -259,7 +223,7 @@
         </nz-card>
     </div>
 </div>
-<!-- <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-xay-dung-phuong-an [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
-    </app-thong-tin-xay-dung-phuong-an>
-  </div> -->
+<ng-template #templateThemmoi>
+    <app-chi-tiet-ke-hoach-dcnb [idInput]="selectedId" [isView]="isView"
+        (showListEvent)="showList()"></app-chi-tiet-ke-hoach-dcnb>
+</ng-template>

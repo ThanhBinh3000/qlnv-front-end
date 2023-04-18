@@ -1,32 +1,32 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
-import {UserLogin} from "../../../../models/userlogin";
-import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan} from "../../../../models/KeHoachBanDauGia";
-import {DatePipe} from "@angular/common";
-import {DiaDiemNhapKho} from "../../../../models/CuuTro";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, Validators } from "@angular/forms";
+import { UserLogin } from "../../../../models/userlogin";
+import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "../../../../models/KeHoachBanDauGia";
+import { DatePipe } from "@angular/common";
+import { DiaDiemNhapKho } from "../../../../models/CuuTro";
 import {
   ModalInput
 } from "../../../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/xay-dung-phuong-an/thong-tin-xay-dung-phuong-an/thong-tin-xay-dung-phuong-an.component";
-import {Base2Component} from "../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {DeXuatKeHoachBanDauGiaService} from "../../../../services/deXuatKeHoachBanDauGia.service";
-import {DonviService} from "../../../../services/donvi.service";
-import {TinhTrangKhoHienThoiService} from "../../../../services/tinhTrangKhoHienThoi.service";
-import {DanhMucTieuChuanService} from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { Base2Component } from "../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhMucService } from "../../../../services/danhmuc.service";
+import { DeXuatKeHoachBanDauGiaService } from "../../../../services/deXuatKeHoachBanDauGia.service";
+import { DonviService } from "../../../../services/donvi.service";
+import { TinhTrangKhoHienThoiService } from "../../../../services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
+import { QuanLyHangTrongKhoService } from "../../../../services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
-import {FileDinhKem} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {MESSAGE} from "../../../../constants/message";
-import {STATUS} from "src/app/constants/status";
-import {chain, cloneDeep} from 'lodash';
+import { FileDinhKem } from "../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "../../../../constants/message";
+import { STATUS } from "src/app/constants/status";
+import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
 
 @Component({
@@ -83,7 +83,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   idDxuatDtlSelect = 0;
   rowDxuatDtlSelect: any;
   tongSoLuongDtl: number;
-  dsDonVi: any;
   expandSetString = new Set<string>();
   tableView = [];
   tableRow: any = {};
@@ -100,19 +99,33 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   errorInputComponent: any[] = [];
   disableInputComponent: ModalInput = new ModalInput();
 
+  dsDonVi: any;
+  dsDonViNhan: any[] = [];
+
+  dataChiCuc: any = [];
+
+  khoChiCucNhan: any = {};
+  listChiCucNhan: any[] = [];
+  listDiemKhoBq: any[] = [];
+  listNhaKhoBq: any[] = [];
+  listNganKhoBq: any[] = [];
+  listLoKhoBq: any[] = [];
+
+  duToanChiPhi: number = 0;
+
   constructor(httpClient: HttpClient,
-              storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService,
-              private danhMucService: DanhMucService,
-              private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
-              private donViService: DonviService,
-              private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-              private dmTieuChuanService: DanhMucTieuChuanService,
-              private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-              private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-              private cdr: ChangeDetectorRef,) {
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
+    private donViService: DonviService,
+    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private dmTieuChuanService: DanhMucTieuChuanService,
+    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    private cdr: ChangeDetectorRef,) {
     super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -124,7 +137,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       {
         id: [0],
         nam: [dayjs().get("year")],
-        maDvi: [''],
+        maDvi: ['', [Validators.required]],
+        maDviCuc: ['', [Validators.required]],
+        maDviChiCucNhan: ['', [Validators.required]],
+        ngayDieuChuyen: ['', [Validators.required]],
         loaiNhapXuat: [''],
         kieuNhapXuat: ['Xuất không thu tiền'],
         soDx: ['',],
@@ -153,13 +169,24 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         donViTinh: [''],
         soLuongXuatCap: [''],
         tenTrangThai: ['Dự Thảo'],
-        canCu: [new Array<FileDinhKem>()],
         deXuatPhuongAn: [new Array()],
-        type: ['CHI_CUC']
+
+        canCu: [new Array<FileDinhKem>()],
+        lyDoDc: [''],
+        type: ['CHI_CUC'],
+
+        diemKhoBq: ['', [Validators.required]],
+        nhaKhoBq: ['', [Validators.required]],
+        nganKhoBq: ['', [Validators.required]],
+        loKhoBq: ['', [Validators.required]],
+        slDieuChuyen: ['', [Validators.required]],
+        duToanChiPhi: ['', [Validators.required]]
+
       }
     );
     this.userInfo = this.userService.getUserLogin();
     this.maHauTo = '/' + this.userInfo.MA_TCKT;
+    this.dataChiCuc = [{ maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI }]
   }
 
   async ngOnInit() {
@@ -170,7 +197,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         this.loadDsLoaiHinhNhapXuat(),
         this.loadDsKieuNhapXuat(),
         this.loadDsVthh(),
-        this.loadDsDonVi(),
+        this.loadDsCuc(),
+        this.loadDsChiCuc(),
         this.phuongAnRow.tonKhoChiCuc = 0,
         this.phuongAnRow.tonKhoCloaiVthh = 0,
       ])
@@ -178,6 +206,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       await this.loadDetail(this.idInput)
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
       this.spinner.hide();
+      console.log("formData", this.formData.value)
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
       this.spinner.hide();
@@ -208,7 +237,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDsDonVi() {
+  async loadDsCuc() {
     let body = {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI.substring(0, 4),
@@ -216,7 +245,25 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+      this.dsDonVi = Array.isArray(res.data) ? res.data : [];
+      this.dsDonViNhan = Array.isArray(res.data) ? res.data.filter(f => {
+        return f.maDvi !== this.userInfo.MA_DVI.substring(0, 6)
+      }) : [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async loadDsChiCuc() {
+    let body = {
+      trangThai: "01",
+      maDviCha: this.userInfo.MA_DVI.substring(0, 6),
+      type: "DV"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
+        return f.maDvi !== this.userInfo.MA_DVI
+      }) : [];
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -243,7 +290,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
-        tenDvi: this.userInfo.TEN_DVI
+        tenDvi: this.userInfo.TEN_DVI,
+        maDviCuc: this.userInfo.MA_DVI?.slice(0, -2)
       });
       this.tongThanhTien = 0;
       this.tongSoLuong = 0;
@@ -252,7 +300,70 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
 
   }
+  async getListDiemKho(maDvi) {
+    if (maDvi) {
+      try {
+        let body = {
+          maDviCha: maDvi,
+          trangThai: '01',
+        }
+        const res = await this.donViService.getTreeAll(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data && res.data.length > 0) {
+            res.data.forEach(element => {
+              if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKhoBq = [
+                  ...this.listDiemKhoBq,
+                  ...element.children
+                ]
+              }
+            });
+          }
+        };
+        console.log("res", res)
 
+      } catch (error) {
+        console.log('error: ', error);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        this.spinner.hide();
+      }
+    }
+  }
+  changeDiemKho = (val) => {
+    this.listNhaKhoBq = []
+    this.listNganKhoBq = [];
+    this.listLoKhoBq = []
+    this.formData.patchValue({ nhaKhoBq: "", nganKhoBq: "", loKhoBq: "" });
+    if (val) {
+      this.listNhaKhoBq = Array.isArray(this.listDiemKhoBq) ? this.listDiemKhoBq.find(f => f.maDvi === val)?.children : [];
+    }
+  }
+  changeNhaKho = (val) => {
+    this.listNganKhoBq = [];
+    this.listLoKhoBq = []
+    this.formData.patchValue({ nganKhoBq: "", loKhoBq: "" });
+    this.listNganKhoBq = Array.isArray(this.listNhaKhoBq) ? this.listNhaKhoBq.find(f => f.maDvi === val)?.children : [];
+  }
+  changeNganKho = (val) => {
+    this.listLoKhoBq = []
+    this.formData.patchValue({ loKhoBq: "" });
+    this.listLoKhoBq = Array.isArray(this.listNganKhoBq) ? this.listNganKhoBq.find(f => f.maDvi === val)?.children : [];
+  }
+  changeLoKho = (val) => {
+    this.getChiTietTonKho(val)
+  }
+  async getChiTietTonKho(maDvi) {
+    if (!maDvi) return;
+    try {
+      const body = {
+        maDvi
+      }
+      const res = await this.quanLyHangTrongKhoService.getTrangThaiHienThoiKho(body)
+    } catch (error) {
+
+    }
+  }
   expandAll() {
     this.phuongAnView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
@@ -270,19 +381,28 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   quayLai() {
     this.showListEvent.emit();
   }
-
+  changeDonViNhan(value) {
+    this.listDiemKhoBq = [];
+    this.listNhaKhoBq = [];
+    this.listNganKhoBq = [];
+    this.listLoKhoBq = [];
+    this.formData.patchValue({ diemKhoBq: "", nhaKhoBq: "", nganKhoBq: "", loKhoBq: "" });
+    this.getListDiemKho(value)
+  }
   changeLoaiHinhNhapXuat(event: any) {
     let loaiHinh = this.listLoaiHinhNhapXuat.find(s => s.ma == event);
     if (loaiHinh) {
-      this.formData.patchValue({kieuNhapXuat: loaiHinh.ghiChu.split('-')[0]})
+      this.formData.patchValue({ kieuNhapXuat: loaiHinh.ghiChu.split('-')[0] })
     }
   }
-
+  handleChangeLoaiDC(event: any) {
+    this.formData.patchValue({ maDviCuc: "", maDviCucNhan: "" })
+  }
   async changeHangHoa(event: any) {
     if (event) {
-      this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh})
+      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -306,7 +426,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
               });
               console.log(this.formData.value)
             } else {
-              this.formData.patchValue({tonKho: 0});
+              this.formData.patchValue({ tonKho: 0 });
             }
           }
         });
@@ -461,23 +581,23 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           let rs = chain(value)
             .groupBy("tenCuc")
             .map((v, k) => {
-                let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-                let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
-                let rowCuc = v.find(s => s.tenCuc === k);
-                if (this.userService.isCuc()) {
-                  rowCuc.tonKhoCuc = this.formData.value.tonKho;
-                }
-                return {
-                  idVirtual: uuid.v4(),
-                  tenCuc: k,
-                  soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                  soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                  thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
-                  tenCloaiVthh: rowCuc.tenCloaiVthh,
-                  tonKhoCuc: rowCuc.tonKhoCuc,
-                  childData: v
-                }
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              if (this.userService.isCuc()) {
+                rowCuc.tonKhoCuc = this.formData.value.tonKho;
               }
+              return {
+                idVirtual: uuid.v4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
+                tenCloaiVthh: rowCuc.tenCloaiVthh,
+                tonKhoCuc: rowCuc.tonKhoCuc,
+                childData: v
+              }
+            }
             ).value();
           let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
           let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -527,23 +647,23 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           let rs = chain(value)
             .groupBy("tenChiCuc")
             .map((v, k) => {
-                let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-                let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
-                let rowCuc = v.find(s => s.tenChiCuc === k);
-                if (this.userService.isCuc()) {
-                  rowCuc.tonKhoCuc = cloneDeep(this.formData.value.tonKho);
-                }
-                return {
-                  idVirtual: uuid.v4(),
-                  tenCuc: k,
-                  soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-                  soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-                  thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
-                  tenCloaiVthh: rowCuc.tenCloaiVthh,
-                  tonKhoCuc: rowCuc.tonKhoChiCuc,
-                  childData: v
-                }
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+              let rowCuc = v.find(s => s.tenChiCuc === k);
+              if (this.userService.isCuc()) {
+                rowCuc.tonKhoCuc = cloneDeep(this.formData.value.tonKho);
               }
+              return {
+                idVirtual: uuid.v4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
+                tenCloaiVthh: rowCuc.tenCloaiVthh,
+                tonKhoCuc: rowCuc.tonKhoChiCuc,
+                childData: v
+              }
+            }
             ).value();
           let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
           let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -608,6 +728,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         type: "DV"
       };
       let res = await this.donViService.getDonViTheoMaCha(body);
+      console.log("list", res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;
       } else {
@@ -835,6 +956,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.formData.controls["soDx"].setValidators([Validators.required]);
     this.formData.controls["loaiNhapXuat"].setValidators([Validators.required]);
     this.formData.controls["trichYeu"].setValidators([Validators.required]);
-  }
+  };
 
 }
