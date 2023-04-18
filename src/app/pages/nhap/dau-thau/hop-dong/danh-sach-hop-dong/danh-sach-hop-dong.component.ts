@@ -423,7 +423,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     return result;
   }
 
-  openQdPdKhlcntModal(id:number) {
+  openQdPdKhlcntModal(id: number) {
     this.qdPdKhlcntId = id;
     this.openQdPdKhlcnt = true;
   }
@@ -432,7 +432,7 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     this.openQdPdKhlcnt = false;
   }
 
-  openQdPdKqlcntModal(id:number) {
+  openQdPdKqlcntModal(id: number) {
     this.qdPdKqlcntId = id;
     this.openQdPdKqlcnt = true;
   }
