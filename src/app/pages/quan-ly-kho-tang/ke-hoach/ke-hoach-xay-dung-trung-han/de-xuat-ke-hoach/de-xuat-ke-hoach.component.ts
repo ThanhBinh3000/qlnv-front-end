@@ -38,6 +38,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   STATUS = STATUS
 
   searchFilter = {
+    namKeHoach: '',
     soCongVan: '',
     maDvi: '',
     diaDiem: '',
@@ -50,6 +51,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   filterTable: any = {
     soCongVan: '',
     namKeHoach: '',
+    giaiDoan: '',
     tenDvi: '',
     ngayKy: '',
     soQdGoc: '',
@@ -221,6 +223,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      namKeHoach: '',
       soCongVan: '',
       maDvi: '',
       diaDiem: '',
@@ -301,7 +304,7 @@ export class DeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }

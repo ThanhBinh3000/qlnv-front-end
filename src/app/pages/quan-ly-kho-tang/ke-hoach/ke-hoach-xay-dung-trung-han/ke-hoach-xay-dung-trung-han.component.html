@@ -3,7 +3,7 @@
     <li nz-menu-item nzSelected (click)="selectTab('dxkh')">
       Đề xuất kế hoạch đầu tư trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('thkh')">
+    <li nz-menu-item (click)="selectTab('thkh')" *ngIf="userService.isTongCuc()">
       Tổng hợp phương án đề xuất kế hoạch đầu tư xây dựng trung hạn (5 năm)
     </li>
     <li nz-menu-item (click)="selectTab('qdpdkh')">

@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {NHAP_ROUTE_LIST} from "../khai-thac-bao-cao/khai-thac-bao-cao.constant";
-import {Router} from "@angular/router";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NHAP_ROUTE_LIST } from "../khai-thac-bao-cao/khai-thac-bao-cao.constant";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-khai-thac-bao-cao',
@@ -11,7 +11,7 @@ export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
-  defaultUrl: string = '/bao-cao-theo-ttqd'
+  defaultUrl: string = ''
 
   constructor(private router: Router,) {
   }
@@ -74,6 +74,7 @@ export class KhaiThacBaoCaoComponent implements OnInit, AfterViewInit {
   }
 
   redirect(url: string) {
+    this.routerUrl = url;
     this.router.navigate([this.defaultUrl + url]);
   }
 }
