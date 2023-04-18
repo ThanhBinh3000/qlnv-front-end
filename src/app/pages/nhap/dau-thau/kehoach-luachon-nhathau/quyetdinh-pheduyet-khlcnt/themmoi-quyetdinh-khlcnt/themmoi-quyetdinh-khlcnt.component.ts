@@ -175,6 +175,34 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  isValidate(data: any) {
+    let shouldStop = false; // Biến cờ để đánh dấu có nên dừng các vòng lặp hay không
+    data.forEach(item => {
+      item.children.forEach(res => {
+        res.children.forEach(elm => {
+          elm.children.forEach(i => {
+            if (i.soLuong > res.soLuong) {
+              this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
+              shouldStop = true; // Đặt biến cờ shouldStop thành true để đánh dấu nên dừng các vòng lặp
+              return; // Sử dụng return để thoát khỏi vòng lặp forEach hiện tại
+            }
+          });
+          if (shouldStop) {
+            return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+          }
+        });
+        if (shouldStop) {
+          return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+        }
+      });
+      if (shouldStop) {
+        return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+      }
+    });
+    return !shouldStop; // Trả về giá trị đúng nếu không có bất kỳ lỗi nào, ngược lại trả về giá trị sai
+  }
+
+
   isDetailPermission() {
     if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
       return true;
@@ -312,6 +340,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
+    if (await !this.isValidate(body.children)) {
+      await this.spinner.hide();
+      return;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
