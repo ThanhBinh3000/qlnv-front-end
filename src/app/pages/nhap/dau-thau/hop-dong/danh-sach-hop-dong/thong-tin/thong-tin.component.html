@@ -304,6 +304,14 @@
                     </div>
                     <div nz-col [nzSpan]="6">
                         <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Fax" formControlName="fax" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <input [readonly]="isDisableForm()" nz-input placeholder="Số tài khoản"
@@ -311,9 +319,23 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="12">
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Mở tại"
+                                    formControlName="moTai" />
+                            </nz-form-control>
+                        </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Thông tin giấy ủy quyền"
+                                    formControlName="giayUyQuyen" />
+                            </nz-form-control>
+                        </nz-form-item>
                     </div>
                 </div>
             </form>
