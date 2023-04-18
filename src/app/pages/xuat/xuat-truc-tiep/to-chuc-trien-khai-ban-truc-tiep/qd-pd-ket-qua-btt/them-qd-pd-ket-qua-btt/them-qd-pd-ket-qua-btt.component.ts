@@ -209,7 +209,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       maDvi: this.userInfo.MA_DVI,
-      pthucBanTrucTiep: 'Chào giá',
+      pthucBanTrucTiep: ['Chào giá'],
       typeSoQdKq: 0,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
