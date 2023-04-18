@@ -17,14 +17,21 @@
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="header">
-      <div class="header-text">
-        <div class="title-chi-tieu">
+  <div class="header header-green-background mb-2">
+    <div class="header-text">
+      <div class="title-chi-tieu">
           <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
             {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
           </span>
-          <span>Quyết định của BTC giao bộ ngành</span>
+        <span>Quyết định của BTC giao bộ ngành</span>
+      </div>
+    </div>
+  </div>
+  <nz-card class="mt16 flex-card p-lr16">
+    <div class="header header-green-background mt-2">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <h3 class="text-uppercase">Thông tin chung</h3>
         </div>
       </div>
     </div>
@@ -74,7 +81,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="13">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -100,34 +107,62 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [isViewDetail]="isView" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm quyết định của BTC giao các
+              Bộ/Ngành
+            </nz-form-label>
             <div class="list-file">
               <file-list [disabled]="isView" [data]="taiLieuDinhKemList"></file-list>
             </div>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24" class="mt-2">
+          <div class="header header-green-background mt-2">
+            <div class="header-text">
+              <div class="title-chi-tieu">
+                <h3 class="text-uppercase">Chi tiết nội dung quyết định</h3>
+              </div>
+            </div>
+          </div>
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Tổng giá trị chi DTQG theo QĐ của TTCP</nz-form-label>
+            <nz-form-control>
+              <span class="text-blue">{{tongGiaTri | number}} (triệu đồng)</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
-  <nz-tabset nzType="card">
-    <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
-      <div class="mt-2">
+  <div nz-col [nzSpan]="24" class="mt-2">
+    <div class="mt-2">
         <span class="text-right">
-          <h2 style="font-size: 100%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+          <h2 style="font-size: 100%;color: red">Đơn vị: Triệu đồng</h2>
         </span>
-      </div>
-      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri"
-                             (hasError)="takeError($event)" [trangThai]="formData.value.trangThai">
-      </app-ke-hoach-mua-tang>
+    </div>
+    <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri"
+                           (hasError)="takeError($event)" [trangThai]="formData.value.trangThai">
+    </app-ke-hoach-mua-tang>
+  </div>
+  <!--  <nz-tabset nzType="card">-->
+  <!--    <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">-->
+  <!--      -->
+  <!--    </nz-tab>-->
+  <!-- <nz-tab [nzTitle]="'Xuất giảm'">
+      <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
     </nz-tab>
-    <!-- <nz-tab [nzTitle]="'Xuất giảm'">
-        <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
-      </nz-tab>
-      <nz-tab [nzTitle]="'Xuất bán'">
-        <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
-      </nz-tab>
-      <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-        <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
-      </nz-tab> -->
-  </nz-tabset>
+    <nz-tab [nzTitle]="'Xuất bán'">
+      <app-ke-hoach-mua-tang [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
+    </nz-tab>
+    <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
+      <app-ke-hoach-mua-tang [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
+    </nz-tab> -->
+  <!--  </nz-tabset>-->
 </div>

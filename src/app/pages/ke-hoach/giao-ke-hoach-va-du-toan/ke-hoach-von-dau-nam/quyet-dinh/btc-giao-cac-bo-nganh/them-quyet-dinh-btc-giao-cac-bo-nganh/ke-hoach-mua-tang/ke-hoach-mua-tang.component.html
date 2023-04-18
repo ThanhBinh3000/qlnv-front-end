@@ -3,7 +3,8 @@
     <thead>
     <tr>
       <th class="text-center" width="40px">STT</th>
-      <th>Nội dung</th>
+      <th>Nội dung dự toán</th>
+      <th width="20%">Nguồn chi</th>
       <th width="10%">Dự toán</th>
       <th *ngIf="trangThai != STATUS.BAN_HANH" width="7%" class="text-center">Hành động</th>
     </tr>
@@ -20,12 +21,13 @@
           </nz-select>
         </nz-input-group>
       </td>
+      <td>{{rowItem.tenNguonChi}}</td>
       <td>
         <nz-input-group>
-          <input class="money-input"  currencyMask [(ngModel)]="rowItem.sluongDtoan"  [options]="amount"/>
-<!--          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"-->
-<!--                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">-->
-<!--          </nz-input-number>-->
+          <input class="money-input" currencyMask [(ngModel)]="rowItem.sluongDtoan" [options]="amount"/>
+          <!--          <nz-input-number nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"-->
+          <!--                           [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="isView">-->
+          <!--          </nz-input-number>-->
         </nz-input-group>
       </td>
       <td style="text-align: center;">
@@ -43,6 +45,7 @@
       <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
         <td>{{ idx + 1 }}</td>
         <td>{{ data.tenLoaiChi }}</td>
+        <td>{{ data.tenNguonChi }}</td>
         <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
         <td style="text-align: center;">
           <a (click)="editItem(idx)" *ngIf="!isView">
@@ -64,9 +67,10 @@
             </nz-select>
           </nz-input-group>
         </td>
+        <td>{{dataEdit[idx].data.tenNguonChi}}</td>
         <td>
           <nz-input-group>
-            <input class="money-input"  currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan"  [options]="amount"/>
+            <input class="money-input" currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan" [options]="amount"/>
           </nz-input-group>
         </td>
         <td class="text-center">
@@ -80,16 +84,17 @@
     </tr>
     </tbody>
     <tfoot>
-    <tr>
-      <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
+    <tr class="text-blue">
+      <td style="text-align: right; font-weight: 700" colspan="2">Tổng</td>
+      <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
       <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
       <td></td>
     </tr>
-    <tr>
-      <td style="text-align: right; font-weight: 700" colspan="2">Tổng kế hoạch chi DTQG theo QĐ của TTCP</td>
-      <td class="xanh">{{tongGiaTri | number : '1.0-1' : 'vi_VN' }}</td>
-      <td></td>
-    </tr>
+    <!--    <tr>-->
+    <!--      <td style="text-align: right; font-weight: 700" colspan="2">Tổng kế hoạch chi DTQG theo QĐ của TTCP</td>-->
+    <!--      <td class="xanh">{{tongGiaTri | number : '1.0-1' : 'vi_VN' }}</td>-->
+    <!--      <td></td>-->
+    <!--    </tr>-->
     </tfoot>
   </nz-table>
 </div>

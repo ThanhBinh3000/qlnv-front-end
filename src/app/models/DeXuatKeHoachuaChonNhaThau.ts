@@ -155,6 +155,8 @@ export class KeHoachMuaXuat {
   sluongDtoan: number;
   loaiChi: string;
   tenLoaiChi: string;
+  nguonChi :string;
+  tenNguonChi :string;
 }
 
 export class DanhMucMucPhi {
