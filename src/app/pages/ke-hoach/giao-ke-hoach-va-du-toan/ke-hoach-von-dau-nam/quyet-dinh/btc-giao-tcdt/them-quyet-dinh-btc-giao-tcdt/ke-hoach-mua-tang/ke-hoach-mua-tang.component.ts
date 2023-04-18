@@ -7,6 +7,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from 'src/app/shared/globals';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { STATUS } from 'src/app/constants/status';
+import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -28,6 +29,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dsChungLoaiHangHoa = [];
   dsChungLoaiHangHoaTable = [];
+  amount = AMOUNT_ONE_DECIMAL;
+  amount_no_decimal = AMOUNT_NO_DECIMAL;
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
 
   constructor(

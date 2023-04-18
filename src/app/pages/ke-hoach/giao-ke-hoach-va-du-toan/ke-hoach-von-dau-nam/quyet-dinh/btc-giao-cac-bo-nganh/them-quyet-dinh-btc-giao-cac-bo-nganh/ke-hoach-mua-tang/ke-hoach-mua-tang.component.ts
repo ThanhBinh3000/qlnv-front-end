@@ -119,6 +119,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
         this.dataTable.splice(this.lastIndex - 1, 1);
         this.notification.error(MESSAGE.ERROR, "Dự toán chi DTQG không được lớn hơn kế hoạch chỉ tiêu của Thủ tướng chính phủ");
+        return;
       }
       this.rowItem = new KeHoachMuaXuat();
     } else {
