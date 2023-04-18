@@ -1,23 +1,23 @@
 import {Component, OnInit} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
+import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
-  QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
-import {Base2Component} from "../../../../../../components/base2/base2.component";
+  QuyetdinhpheduyetduandtxdService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 import {
-  QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+  DeXuatScThuongXuyenService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
 
 @Component({
-  selector: 'app-quyet-dinh-phe-duyet-kqlcnt',
-  templateUrl: './quyet-dinh-phe-duyet-kqlcnt.component.html',
-  styleUrls: ['./quyet-dinh-phe-duyet-kqlcnt.component.scss']
+  selector: 'app-de-xuat-ke-hoach-sua-chua-thuong-xuyen',
+  templateUrl: './de-xuat-ke-hoach-sua-chua-thuong-xuyen.component.html',
+  styleUrls: ['./de-xuat-ke-hoach-sua-chua-thuong-xuyen.component.scss']
 })
-export class QuyetDinhPheDuyetKqlcntComponent extends Base2Component implements OnInit {
+export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -32,22 +32,21 @@ export class QuyetDinhPheDuyetKqlcntComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService
+    deXuatScThuongXuyenService: DeXuatScThuongXuyenService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKqLcntService)
+    super(httpClient, storageService, notification, spinner, modal, deXuatScThuongXuyenService)
     super.ngOnInit()
     this.filterTable = {};
   }
 
   async ngOnInit() {
     this.formData = this.fb.group({
-      soQd: [''],
-      tenDuAn: [''],
-      chuDauTu: [''],
-      soQdPdKhlcnt: [''],
+      namKh: [''],
+      soCv: [''],
+      tenCongTrinh: [''],
+      diaDiem: [''],
       trangThai: [''],
       ngayKy: [''],
-      trichYeu: [''],
     });
     this.filter();
   }

@@ -8,7 +8,7 @@ import {Base2Component} from "../../../../../components/base2/base2.component";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-du-an-dtxd',

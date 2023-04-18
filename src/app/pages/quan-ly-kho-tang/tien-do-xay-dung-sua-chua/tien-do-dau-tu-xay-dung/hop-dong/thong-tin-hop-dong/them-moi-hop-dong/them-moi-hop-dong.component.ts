@@ -11,13 +11,13 @@ import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from 'dayjs';
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {FILETYPE} from "../../../../../../../constants/fileType";
-import {HopdongService} from "../../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/hopdong.service";
+import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
 import {
   CongViec
 } from "../../../quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component";

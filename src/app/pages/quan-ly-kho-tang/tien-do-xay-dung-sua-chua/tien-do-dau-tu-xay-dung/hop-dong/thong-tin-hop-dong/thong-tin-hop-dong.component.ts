@@ -8,11 +8,11 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/hopdong.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 

@@ -13,6 +13,7 @@ import {
   DialogThemMoiVatTuComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
+import dayjs from 'dayjs';
 
 
 @Component({
@@ -24,6 +25,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
+  @Output() donGiaTamTinhOut = new EventEmitter<number>();
+  @Output() objectChange = new EventEmitter<number>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
@@ -38,7 +41,10 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   listDataCuc: any[] = [];
   listDataChiCuc: any[] = [];
   listData: any[] = [];
-
+  tgianBdauTchucChange: Date | null = null;
+  tgianNhangChange: Date | null = null;
+  tgianDthauChange: Date | null = null;
+  tgianMthauChange: Date | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -104,6 +110,10 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           this.listOfData = this.dataInput.children;
         }
         if (res.msg == MESSAGE.SUCCESS) {
+          this.tgianBdauTchucChange = res.data.tgianBdauTchuc
+          this.tgianDthauChange = res.data.tgianDthau
+          this.tgianMthauChange = res.data.tgianMthau
+          this.tgianNhangChange = res.data.tgianNhang
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
           this.formData.patchValue({
@@ -131,6 +141,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
     await this.spinner.hide()
   }
+
 
   // convertListData() {
   //   this.listDataChiCuc = [];
@@ -176,6 +187,28 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       .value()
   }
 
+  onDateChanged(value: any, type: any) {
+    debugger
+    if (type == 'tgianBdauTchuc') {
+      this.formData.get('tgianBdauTchuc').setValue(value);
+    } else if (type == 'tgianMthau') {
+      this.formData.get('tgianMthau').setValue(value);
+    } else if (type == 'tgianDthau') {
+      this.formData.get('tgianDthau').setValue(value);
+    } else if (type == 'tgianNhang') {
+      this.formData.get('tgianNhang').setValue(value);
+    }
+    this.objectChange.emit(this.formData.value)
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
   convertListDataLuongThuc() {
     let listChild = [];
     this.listOfData.forEach(item => {
@@ -191,10 +224,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         dataChild: value
       })).value()
     console.log(this.listDataGroup)
-  }
-
-  getMaGoiThauById() {
-
+    this.sumThanhTien()
   }
 
   async ngOnInit() {
@@ -266,15 +296,35 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     this.editingSoLuong = parseInt(value.replaceAll('.', ''));
   }
 
-  editRow(dtGoiThau: any, idx: number) {
+  editRow(res: any) {
     this.isEditing = true;
-    this.editingSoLuong = dtGoiThau.soLuong;
+    this.editingSoLuong = res.soLuong;
   }
 
 
-  onBlur(dtGoiThau: any) {
-    dtGoiThau.soLuong = this.editingSoLuong;
+  onBlur(res: any) {
+    res.soLuong = this.editingSoLuong;
     this.isEditing = false;
+    this.sumThanhTien();
+  }
+
+  sumThanhTien() {
+    var sum = 0;
+    var sumSl = 0;
+    this.listDataGroup.forEach(item => {
+      item.dataChild.forEach(res => {
+        res.children.forEach(data => {
+          sum += (res.donGiaTamTinh != null ?
+            res.donGiaTamTinh * data.soLuong : (res.donGiaVat != null ? res.donGiaVat *
+              data.soLuong : (res.donGia != null ? res.donGia * data.soLuong : 0)));
+          sumSl += data.soLuong;
+        })
+      })
+    })
+    this.formData.get('tongMucDtDx').setValue(sum);
+    this.formData.get('soLuong').setValue(sumSl);
+    this.soLuongChange.emit(sumSl);
+    this.donGiaTamTinhOut.emit(this.formData.get('tongMucDtDx').value)
   }
 
 

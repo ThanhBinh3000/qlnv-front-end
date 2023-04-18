@@ -20,7 +20,7 @@ import {STATUS} from "../../../../../../constants/status";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {iterator} from "rxjs/internal-compatibility";
 import {OldResponseData} from "../../../../../../interfaces/response";
-import {MangLuoiKhoService} from "../../../../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {MangLuoiKhoService} from "../../../../../../services/qlnv-kho/mangLuoiKho.service";
 
 
 @Component({
