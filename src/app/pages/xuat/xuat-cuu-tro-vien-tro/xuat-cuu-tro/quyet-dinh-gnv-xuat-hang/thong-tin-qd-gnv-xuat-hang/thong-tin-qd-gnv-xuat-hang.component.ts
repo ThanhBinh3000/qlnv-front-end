@@ -147,7 +147,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
-            this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
+            if (this.formData.value.soQd){
+              this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
+            }
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -299,8 +301,12 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.formData.patchValue({
       soQdPd: item.soQd,
       ngayKyQdPa: item.ngayKy,
-      soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD,
     })
+    if(this.formData.value.soQd){
+      this.formData.patchValue({
+        soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD
+      })
+    }
   }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
@@ -329,7 +335,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async save() {
     this.saveSoQdPa();
+    this.formData.disable()
     let rs = await this.createUpdate(this.formData.value);
+    this.formData.enable()
     if (rs) {
       this.goBack();
     }
