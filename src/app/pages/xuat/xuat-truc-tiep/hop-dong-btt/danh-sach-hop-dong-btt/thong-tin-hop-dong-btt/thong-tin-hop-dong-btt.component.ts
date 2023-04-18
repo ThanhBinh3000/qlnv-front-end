@@ -42,7 +42,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   dataTablePhuLuc: any[] = [];
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
-
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
   maHopDongSuffix: string = '';
   objHopDongHdr: any = {};
   constructor(
@@ -69,50 +70,51 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         ngayMkho: [''],
         soQdPd: [''],
         maDviTsan: [''],
+        loaiHinhNx: [''],
+        kieuNx: [''],
+        soHd: [''],
+        tenHd: [''],
+        ngayHluc: [''],
+        ghiChuNgayHluc: [''],
+
+        loaiHdong: [''],
+        tenLoaiHdong: [''],
+        ghiChuLoaiHdong: [''],
+        tgianThienHd: [''],
+        thoiGianDuKien: [''],
+        tgianGnhanTu: [''],
+        tgianGnhanDen: [''],
+        ghiChuTgianGnhan: [''],
+        noiDungHdong: [''],
+        dkienHanTtoan: [''],
+
+        maDvi: [''],
+        tenDvi: [''],
+        diaChi: [''],
+        mst: [''],
+        tenNguoiDdien: [''],
+        chucVu: [''],
+        sdt: [''],
+        fax: [''],
+        stk: [''],
+        moTai: [''],
+        ttinGiayUyQuyen: [''],
+
         idDviMua: [],
-
-
-        soHd: ['', [Validators.required]],
-        tenHd: ['', [Validators.required]],
-        ngayHluc: ['', [Validators.required]],
-        ghiChuNgayHluc: [null],
-
-        loaiHdong: ['', [Validators.required]],
-        ghiChuLoaiHdong: [],
-        tgianThienHd: ['', [Validators.required]],
-        thoiGianDuKien: ['', [Validators.required]],
-        tgianGnhanTu: [],
-        tgianGnhanDen: [],
-        ghiChuTgianGnhan: [],
-        noiDungHdong: ['', [Validators.required]],
-        dkienHanTtoan: ['', [Validators.required]],
-
-        maDvi: [],
-        tenDvi: ['', [Validators.required]],
-        diaChi: ['', [Validators.required]],
-        mst: ['', [Validators.required]],
-        tenNguoiDdien: ['', [Validators.required]],
-        chucVu: ['', [Validators.required]],
-        sdt: ['', [Validators.required]],
-        fax: ['', [Validators.required]],
-        stk: ['', [Validators.required]],
-        moLai: ['', [Validators.required]],
-        ttinGiayUyQuyen: ['', [Validators.required]],
-
         tenDviMua: [''],
         diaChiDviMua: [],
-        mstDviMua: ['', [Validators.required]],
-        tenNguoiDdienDviMua: ['', [Validators.required]],
-        chucVuDviMua: ['', [Validators.required]],
+        mstDviMua: [''],
+        tenNguoiDdienDviMua: [''],
+        chucVuDviMua: [''],
         sdtDviMua: [''],
-        faxDviMua: ['', [Validators.required]],
-        stkDviMua: ['', [Validators.required]],
-        moLaiDviMua: ['', [Validators.required]],
+        faxDviMua: [''],
+        stkDviMua: [''],
+        moLaiDviMua: [''],
 
-        loaiVthh: ['', [Validators.required]],
-        tenLoaiVthh: ['', [Validators.required]],
-        cloaiVthh: ['', [Validators.required]],
-        tenCloaiVthh: ['', [Validators.required]],
+        loaiVthh: [''],
+        tenLoaiVthh: [''],
+        cloaiVthh: [''],
+        tenCloaiVthh: [''],
         moTaHangHoa: [''],
         dviTinh: [''],
         soLuong: [],
@@ -125,10 +127,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         donGiaGomThue: [],
         donGiaKhongVat: [],
         slUyQuyenChiCucKh: [],
-        pthucBanTrucTiep: [''],
         trangThai: STATUS.DU_THAO,
         tenTrangThai: ['Dự thảo'],
-        fileName: [],
         listMaDviTsan: [],
         trichYeu: [],
       }
@@ -141,14 +141,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     await Promise.all([
       this.loadDataComboBox()
     ]);
-    if (this.userService.isChiCuc()) {
-      if (this.idKqBtt) {
-        this.onChangeQdPdBtt(this.idKqBtt);
-      }
-    } else {
-      if (this.idKqBtt) {
-        this.onChangeKqBTT(this.idKqBtt);
-      }
+    if (this.idKqBtt) {
+      this.onChangeKqBTT(this.idKqBtt);
     }
     if (this.id) {
       await this.loadChiTiet(this.id);
@@ -156,6 +150,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       this.initForm();
     }
   }
+
   initForm() {
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
@@ -165,7 +160,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async loadDataComboBox() {
-    // hợp đồng
     this.listLoaiHopDong = [];
     let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
@@ -223,9 +217,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       let body = {
         loaiVthh: this.loaiVthh,
         namKh: this.formData.value.namHd,
-        pthucBanTrucTiep: "Chào giá",
         maDvi: this.userInfo.MA_DVI,
-        // trangThaiHd: STATUS.CHUA_THUC_HIEN || STATUS.DANG_THUC_HIEN,
+
       };
 
       let res = await this.qdPdKetQuaBttService.search(body)
@@ -274,7 +267,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
-              pthucBanTrucTiep: dataKq.pthucBanTrucTiep,
               trichYeu: dataKq.trichYeu,
               dviTinh: "kg",
               tongSoLuongQdKh: dataThongTin.tongSoLuong
@@ -285,38 +277,36 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async openDialogQdPdKhBtt() {
-    if (this.userService.isChiCuc()) {
-      this.spinner.show()
-      let listQdKh: any[] = [];
-      let body = {
-        loaiVthh: this.loaiVthh,
-        namKh: this.formData.value.namHd,
-        maChiCuc: this.userInfo.MA_DVI,
-      };
-      let res = await this.qdPdKetQuaBttService.search(body)
-      if (res.data) {
-        listQdKh = res.data?.content;
-      }
-      this.spinner.hide();
-      const modalQD = this.modal.create({
-        nzTitle: 'Thông tin Kết quả chào giá',
-        nzContent: DialogTableSelectionComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataHeader: ['Số QĐ phê duyệt Kh bán trục tiếp', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-          dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh'],
-          dataTable: listQdKh
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.onChangeQdPdBtt(data.id);
-        }
-      });
+    this.spinner.show()
+    let listQdKh: any[] = [];
+    let body = {
+      loaiVthh: this.loaiVthh,
+      namKh: this.formData.value.namHd,
+      maChiCuc: this.userInfo.MA_DVI,
+    };
+    let res = await this.qdPdKetQuaBttService.search(body)
+    if (res.data) {
+      listQdKh = res.data?.content;
     }
+    this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin Kết quả chào giá',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHeader: ['Số QĐ phê duyệt Kh bán trục tiếp', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+        dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataTable: listQdKh
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.onChangeQdPdBtt(data.id);
+      }
+    });
   }
 
   async onChangeQdPdBtt(id) {
@@ -434,24 +424,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  getNameFileQD($event: any) {
-    if ($event.target.files) {
-      const itemFile = {
-        name: $event.target.files[0].name,
-        file: $event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          let fileDinhKemQd = new FileDinhKem();
-          fileDinhKemQd.fileName = resUpload.filename;
-          fileDinhKemQd.fileSize = resUpload.size;
-          fileDinhKemQd.fileUrl = resUpload.url;
-          fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
-        });
-    }
-  }
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
@@ -459,57 +431,23 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
 
   setListDviTsan(inputTable) {
-    let soLuongBtt = 0
-    let donGiaBtt = 0
-    if (this.userService.isChiCuc()) {
-      this.listDviTsan = [];
-      inputTable.forEach((s) => {
-        soLuongBtt += s.tongSoLuong
-        donGiaBtt += s.tongDonGia
-        this.formData.patchValue({
-          soLuong: soLuongBtt,
-          donGiaKhongVat: donGiaBtt,
-          thanhTien: soLuongBtt * donGiaBtt
-        });
-        s.children.forEach((item) => {
-          if (item.maDvi == this.userInfo.MA_DVI) {
-            let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
-            item.dataDviTsan = dataGroup;
-            item.dataDviTsan.forEach(x => {
-              if (x.maDviTsan) {
-                x.tenDvi = item.tenDvi
-                x.maDvi = item.maDvi
-                x.soLuongChiCuc = item.soLuongChiCuc
-                x.diaChi = item.diaChi
-                x.donGiaVat = item.donGiaVat
-                this.formData.patchValue({
-                  slUyQuyenChiCucKh: item.soLuongChiCuc,
-                });
-                this.listDviTsan = [...this.listDviTsan, x];
-              }
-            })
-          }
-        })
+    this.listDviTsan = [];
+    inputTable.forEach((item) => {
+      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+      item.dataDviTsan = dataGroup;
+      item.dataDviTsan.forEach(x => {
+        if (x.maDviTsan) {
+          x.tenDvi = item.tenDvi
+          x.maDvi = item.maDvi
+          x.diaChi = item.diaChi
+          x.donGiaVat = item.donGiaVat
+          x.children.forEach(s => {
+            x.soLuongChiCuc = s.soLuong;
+          })
+          this.listDviTsan = [...this.listDviTsan, x];
+        }
       })
-    } else {
-      this.listDviTsan = [];
-      inputTable.forEach((item) => {
-        let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
-        item.dataDviTsan = dataGroup;
-        item.dataDviTsan.forEach(x => {
-          if (x.maDviTsan) {
-            x.tenDvi = item.tenDvi
-            x.maDvi = item.maDvi
-            x.diaChi = item.diaChi
-            x.donGiaVat = item.donGiaVat
-            x.children.forEach(s => {
-              x.soLuongChiCuc = s.soLuong;
-            })
-            this.listDviTsan = [...this.listDviTsan, x];
-          }
-        })
-      })
-    }
+    })
   }
 
   selectMaDviTsan() {

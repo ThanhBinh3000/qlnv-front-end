@@ -56,6 +56,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       maDviChiCuc: null,
       tenDvi: null,
       loaiVthh: null,
+      trangThai: null,
       lastest: 1
     })
 
@@ -102,6 +103,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isTongCuc() ? this.STATUS.HOAN_THANH_CAP_NHAT : null,
       lastest: 1
     })
   }
