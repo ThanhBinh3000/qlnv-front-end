@@ -1,5 +1,6 @@
 import { Component, DoCheck, EventEmitter, Input, IterableDiffers, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Globals } from 'src/app/shared/globals';
+import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-nhap-xuat-lt',
@@ -14,7 +15,8 @@ export class KeHoachNhapXuatLtComponent implements OnInit {
   keHoachNhapXuatChange = new EventEmitter<any>();
   @Input()
   isView: boolean = false;
-
+  amount = AMOUNT_ONE_DECIMAL;
+  amount_no_decimal = AMOUNT_NO_DECIMAL;
   constructor(
     public globals: Globals,
   ) {
