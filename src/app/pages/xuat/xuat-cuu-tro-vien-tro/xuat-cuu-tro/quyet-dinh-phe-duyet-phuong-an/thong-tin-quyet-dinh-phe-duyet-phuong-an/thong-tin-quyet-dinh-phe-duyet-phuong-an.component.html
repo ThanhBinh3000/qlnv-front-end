@@ -92,8 +92,8 @@
             <nz-form-item>
 
               <nz-form-control [nzErrorTip]="error">
-                <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
-                  <nz-form-item>
+                <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small" class="rdo-input" formControlName="type">
+                <nz-form-item>
                     <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">

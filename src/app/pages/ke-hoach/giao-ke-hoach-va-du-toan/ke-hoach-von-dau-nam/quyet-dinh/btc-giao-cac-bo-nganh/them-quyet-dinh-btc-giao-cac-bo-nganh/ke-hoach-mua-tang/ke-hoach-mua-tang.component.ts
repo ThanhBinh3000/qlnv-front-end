@@ -9,13 +9,13 @@ import {
   OnChanges,
   SimpleChanges
 } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { Globals } from './../../../../../../../../shared/globals';
-import { STATUS } from 'src/app/constants/status';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Globals} from './../../../../../../../../shared/globals';
+import {STATUS} from 'src/app/constants/status';
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../../../Utility/utils";
 
 @Component({
@@ -34,6 +34,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input() tongGiaTri: number;
   rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
   dsNoiDung = [];
+  dsNguonVon = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
   @Output()
   hasError = new EventEmitter<boolean>();
@@ -56,6 +57,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     this.getListDmLoaiChi();
+    this.getListNguonVon();
   }
 
   initData() {
@@ -66,6 +68,13 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     let res = await this.danhMucService.danhMucChungGetAll("DM_ND_DT");
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsNoiDung = res.data;
+    }
+  }
+
+  async getListNguonVon() {
+    let res = await this.danhMucService.danhMucChungGetAll("NGUON_VON");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsNguonVon = res.data;
     }
   }
 
@@ -124,14 +133,14 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false,
     };
   }
 
   luuEdit(index: number): void {
     this.hasError.emit(false);
-    let beforeData = { ...this.dataTable[index] };
+    let beforeData = {...this.dataTable[index]};
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.emitDataTable();
     // Validate tổng dự toán
@@ -155,7 +164,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         }
         this.dataEdit[i] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
         i++
         // Validate tổng dự toán
@@ -164,15 +173,26 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeNoiDung(loaiChi, typeData?) {
-    const dataNd = this.dsNoiDung.filter(d => d.ma == loaiChi)
+  async onChangeNoiDung(loaiChi, typeData?) {
+    const dataNd = this.dsNoiDung.find(d => d.ma == loaiChi)
     if (typeData) {
-      if (dataNd.length > 0) {
-        typeData.tenLoaiChi = dataNd[0].giaTri;
-      }
+      typeData.tenLoaiChi = dataNd ? dataNd.giaTri : null;
+    } else {
+      this.rowItem.tenLoaiChi = dataNd ? dataNd.giaTri : null;
     }
-    if (dataNd.length > 0) {
-      this.rowItem.tenLoaiChi = dataNd[0].giaTri;
+    //Lấy nguồn chi
+    let maNguonChi = dataNd ? dataNd.ghiChu : null;
+    if (maNguonChi) {
+      let nguonVon = this.dsNguonVon.find(item => item.ma == maNguonChi);
+      if (nguonVon) {
+        if (typeData) {
+          typeData.nguonChi = maNguonChi;
+          typeData.tenNguonChi = nguonVon ? nguonVon.giaTri : null;
+        } else {
+          this.rowItem.nguonChi = maNguonChi;
+          this.rowItem.tenNguonChi = nguonVon ? nguonVon.giaTri : null;
+        }
+      }
     }
   }
 

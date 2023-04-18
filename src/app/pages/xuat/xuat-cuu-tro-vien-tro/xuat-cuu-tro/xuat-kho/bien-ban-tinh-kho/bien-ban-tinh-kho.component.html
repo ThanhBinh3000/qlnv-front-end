@@ -225,7 +225,7 @@
                                   <td class="text-left">
                                     <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&
                                             !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA) &&
-                                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_PKNCL_XEM')">
+                                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_XEM')">
                                       <i class="fa fa-eye"></i>
                                     </a>
                                     <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBTK_THEM'))"
