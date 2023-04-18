@@ -46,7 +46,6 @@
                 </button>
             </div>
         </nz-card>
-
         <div class="group-button">
             <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
@@ -67,7 +66,6 @@
                 </button>
             </div>
         </div>
-
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
@@ -205,7 +203,7 @@
     <app-them-moi-tong-hop-kh-ban-truc-tiep [id]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
     </app-them-moi-tong-hop-kh-ban-truc-tiep>
 </div>
-
+<!-- Xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
         <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
