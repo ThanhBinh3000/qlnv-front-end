@@ -74,7 +74,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input formControlName="tenDvi" class="search__input" readonly="true" nz-input/>
+                <input formControlName="tenDvi" class="search__input" readonly="true" nz-input />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -85,17 +85,17 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <input nz-input formControlName="soCongVan"  [readonly]="isViewDetail" >
+                <input nz-input formControlName="soCongVan" [readonly]="isViewDetail">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="11">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" >Trích yếu
+            <nz-form-label [nzNoColon]="true">Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input/>
+              <input [readOnly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -111,24 +111,24 @@
             </nz-form-label>
             <div nz-row>
               <div nz-col nzSpan="11">
-                <nz-form-control [nzErrorTip]="error" >
-                <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear
-                           formControlName="namBatDau">
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                  </nz-option>
-                </nz-select>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear
+                             formControlName="namBatDau">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
               </div>
               <div nz-col nzSpan="2" class="text-center">
                 <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
               </div>
               <div nz-col nzSpan="11">
-                <nz-form-control [nzErrorTip]="error" >
-                <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm kết thúc" nzSpan="2" nzAllowClear
-                           formControlName="namKetThuc">
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                  </nz-option>
-                </nz-select>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-select [nzDisabled]="isViewDetail" nzPlaceHolder="Năm kết thúc" nzSpan="2" nzAllowClear
+                             formControlName="namKetThuc">
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                    </nz-option>
+                  </nz-select>
                 </nz-form-control>
               </div>
             </div>
@@ -160,8 +160,9 @@
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
     </span>
     </div>
-    <nz-table  nzBordered class="pd-10"
-              [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+    <nz-table nzBordered class="pd-10"
+              [nzFrontPagination]="false" [nzShowPagination]="false"
+              [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
       <thead>
       <tr>
         <th class="text-center" width="2%" rowSpan="2">STT</th>
@@ -188,7 +189,7 @@
       <tr>
         <th></th>
         <th>
-          <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi"  >
+          <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi">
             <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
             </nz-option>
           </nz-select>
@@ -213,61 +214,80 @@
         </th>
       </tr>
       </thead>
-    <tbody>
-    <ng-container *ngFor="let data of dataTable , let idx = index">
-      <tr>
-        <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-        <td class="ont-weight-bold">{{data.khoi}}</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td class="text-center" *ngIf="!isViewDetail" nzRight>
-          <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
-            <i class="icon htvbdh_dau-cong"></i>
-          </a>
-          <a (click)="deleteItemCha(idx)">
-            <i class="fa fa-trash-o do"></i>
-          </a>
-        </td>
-      </tr>
-      <ng-container *ngIf="expandSet.has(data.idVirtual)">
-        <tr *ngFor="let item of data.dataChild, let y = index">
-          <td>{{y+1}}</td>
+      <tbody>
+      <ng-container *ngFor="let data of dataTable , let idx = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+          <td class="ont-weight-bold">{{data.khoi}}</td>
           <td></td>
-          <td>{{item.tenDuAn}}</td>
-          <td>{{item.diaDiem}}</td>
-          <td>{{item.loaiDuAn}}</td>
-          <td>{{item.tgKcHt}}</td>
-          <td>{{item.khoi}}</td>
-          <td>{{ item.soQdPd }}</td>
-          <td class="text-center">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-          <td class="text-center" nzRight *ngIf="!isViewDetail">
-            <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
-              <i class="fa fa-pencil"></i>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonNstw') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
+            <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
+              <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="deleteItem(idx, y)">
+            <a (click)="deleteItemCha(idx)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
         </tr>
+        <ng-container *ngIf="expandSet.has(data.idVirtual)">
+          <tr *ngFor="let item of data.dataChild, let y = index">
+            <td>{{y + 1}}</td>
+            <td></td>
+            <td>{{item.tenDuAn}}</td>
+            <td>{{item.diaDiem}}</td>
+            <td>{{item.loaiDuAn}}</td>
+            <td>{{item.tgKcHt}}</td>
+            <td>{{item.khoi}}</td>
+            <td>{{ item.soQdPd }}</td>
+            <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
+            <td class="text-center" nzRight *ngIf="!isViewDetail">
+              <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteItem(idx, y)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
       </ng-container>
+      </tbody>
+      <tfoot>
+      <tr>
+        <td></td>
+        <td></td>
+        <td  class="font-weight-bold" style="color: blue">Tổng</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td  *ngIf="!isViewDetail" nzRight>
+      </tr>
 
-    </ng-container>
-    </tbody>
+      </tfoot>
     </nz-table>
   </nz-card>
 </div>
