@@ -526,7 +526,7 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.soLuong * data.donGiaVat | number: '1.0-1' }}</td>
+              <td>{{ data.tongTien | number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>
@@ -543,7 +543,8 @@
           <nz-card class="mg-t-10 flex-card p-lr16 ">
             <app-thongtin-dexuat [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
               [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop"
-              (soLuongChange)="setNewSoLuong($event)">
+              (soLuongChange)="setNewSoLuong($event)" (donGiaTamTinhOut)="setNewDonGiaTamTinh($event)"
+              (objectChange)="setNewDate($event)">
             </app-thongtin-dexuat>
           </nz-card>
         </div>

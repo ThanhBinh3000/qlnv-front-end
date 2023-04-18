@@ -7,11 +7,11 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../../services/quan-ly-kho-tang/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-tktc-tdt',

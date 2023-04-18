@@ -12,7 +12,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {chain} from 'lodash';
 import * as uuid from "uuid";
 import {NgxSpinnerService} from 'ngx-spinner';
-import {MangLuoiKhoService} from 'src/app/services/quan-ly-kho-tang/mangLuoiKho.service';
+import {MangLuoiKhoService} from 'src/app/services/qlnv-kho/mangLuoiKho.service';
 import {Globals} from 'src/app/shared/globals';
 import dayjs from 'dayjs';
 import {DanhMucService} from 'src/app/services/danhmuc.service';

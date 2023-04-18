@@ -68,8 +68,8 @@
         [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
-            <th></th>
             <th width="60px" class="text-center">STT</th>
+            <th></th>
             <th width="">Số QĐ giao nhiệm vụ XH</th>
             <th width="">Năm KH</th>
             <th width="">Thời hạn XH trước ngày</th>
@@ -82,7 +82,7 @@
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
-          <tr class="search-table">
+          <!-- <tr class="search-table">
             <th></th>
             <th></th>
             <th>
@@ -161,15 +161,15 @@
 
             </th>
             <th></th>
-          </tr>
+          </tr> -->
         </thead>
         <tbody>
 
           <ng-container *ngFor="let item of basicTable.data, let i = index;">
             <tr>
+              <td class="bold">{{i + 1}}</td>
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
-              <td class="bold">{{i + 1}}</td>
               <td class="bold">{{ item.soQdGiaoNvXh }}</td>
               <td class="bold">{{ item.nam }}</td>
               <td class="bold">{{ item.ngayQdGiaoNvXh }}</td>

@@ -175,6 +175,34 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
+  isValidate(data: any) {
+    let shouldStop = false; // Biến cờ để đánh dấu có nên dừng các vòng lặp hay không
+    data.forEach(item => {
+      item.children.forEach(res => {
+        res.children.forEach(elm => {
+          elm.children.forEach(i => {
+            if (i.soLuong > res.soLuong) {
+              this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
+              shouldStop = true; // Đặt biến cờ shouldStop thành true để đánh dấu nên dừng các vòng lặp
+              return; // Sử dụng return để thoát khỏi vòng lặp forEach hiện tại
+            }
+          });
+          if (shouldStop) {
+            return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+          }
+        });
+        if (shouldStop) {
+          return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+        }
+      });
+      if (shouldStop) {
+        return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+      }
+    });
+    return !shouldStop; // Trả về giá trị đúng nếu không có bất kỳ lỗi nào, ngược lại trả về giá trị sai
+  }
+
+
   isDetailPermission() {
     if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
       return true;
@@ -295,6 +323,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
@@ -311,6 +340,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
+    if (await !this.isValidate(body.children)) {
+      await this.spinner.hide();
+      return;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
@@ -457,7 +490,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       if (data.loaiVthh.startsWith("02")) {
         this.danhsachDx = data.children;
         this.danhsachDx.forEach(element => {
-          tongMucDt += element.soLuong * element.donGiaVat;
+          tongMucDt += element.soLuong * element.donGiaTamTinh;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt
@@ -474,9 +507,27 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           })
         }
       }
+      console.log("11", this.danhsachDx)
       this.showFirstRow(event, this.danhsachDx[0]);
     };
   }
+
+
+  // sumThanhTien() {
+  //   var sum = 0;
+  //   var sumSl = 0;
+  //   this.danhsachDx.forEach(item => {
+  //     item.dataChild.forEach(res => {
+  //         sum += (res.donGiaTamTinh != null ?
+  //           res.donGiaTamTinh * res.soLuong : (res.donGiaVat != null ? res.donGiaVat *
+  //             res.soLuong : (res.donGia != null ? res.donGia * res.soLuong : 0)));
+  //         sumSl += res.soLuong;
+  //     })
+  //     item.soLuong += sumSl
+  //   })
+  //   this.formData.get('tongMucDtDx').setValue(sum);
+  //   this.formData.get('soLuong').setValue(sumSl);
+  // }
 
   openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
@@ -595,7 +646,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         if (dataRes.loaiVthh.startsWith("02")) {
           this.danhsachDx = dataRes.dsGtDtlList;
           this.danhsachDx.forEach(element => {
-            tongMucDt += element.soLuong * element.donGiaVat;
+            tongMucDt += element.soLuong * element.donGiaTamTinh;
           });
         } else {
           dataRes.idDxHdr = data.id;
@@ -667,6 +718,22 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].soLuong = $event;
   }
 
+  setNewDonGiaTamTinh($event) {
+    this.danhsachDx[this.index].tongTien = $event;
+  }
+
+  setNewDate($event) {
+    console.log($event)
+    // this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
+    // this.formData.get('tgianMthau').setValue($event.tgianBdauTchuc);
+    // this.formData.get('tgianDthau').setValue($event.tgianDthau);
+    // this.formData.get('tgianNhang').setValue($event.tgianNhang);
+    this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
+    this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
+    this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
+    this.danhsachDx[this.index].tgianNhang = $event.tgianNhang;
+  }
+
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -703,7 +770,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         }
         let tongMucDt: number = 0;
         this.danhsachDx.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia;
+          tongMucDt = tongMucDt + item.soLuong * item.donGiaTamTinh;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,

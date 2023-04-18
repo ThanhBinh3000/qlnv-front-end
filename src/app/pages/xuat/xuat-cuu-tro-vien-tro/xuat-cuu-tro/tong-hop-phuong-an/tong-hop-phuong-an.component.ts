@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import dayjs from 'dayjs';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -48,7 +48,9 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
-    private cuuTroVienTroComponent: CuuTroVienTroComponent
+    private cuuTroVienTroComponent: CuuTroVienTroComponent,
+    private el: ElementRef,
+    private cdr: ChangeDetectorRef
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopPhuongAnCuuTroService);
     this.vldTrangThai = cuuTroVienTroComponent;
