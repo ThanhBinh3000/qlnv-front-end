@@ -286,11 +286,11 @@
                 </div>
                 <div nz-col nzSpan="4">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
+                        <nz-form-label nzRequired [nzNoColon]="true">
                             SL thực tế còn lại khi xuất kho lần cuối
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-input-number nzDisabled="isView" formControlName="slThucTeCon"
+                            <nz-input-number [nzDisabled]="isView" formControlName="slThucTeCon"
                                 (ngModelChange)="slChenhLech()" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
                                 [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" readonly>

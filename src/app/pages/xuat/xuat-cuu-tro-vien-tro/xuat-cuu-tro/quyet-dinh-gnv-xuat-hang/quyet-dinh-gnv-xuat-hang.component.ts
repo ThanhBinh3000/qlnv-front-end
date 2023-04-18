@@ -43,6 +43,10 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
   ];
+  idQdPd: number = 0;
+  openQdPd = false;
+  id: number = 0;
+  openQdGnv = false;
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -119,5 +123,23 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       console.log(e)
     }
     await this.spinner.hide();
+  }
+
+  openQdPdModal(id: any) {
+    this.idQdPd = id;
+    this.openQdPd = true;
+  }
+  closeQdPdModal() {
+    this.idQdPd = null;
+    this.openQdPd = false;
+  }
+  openQdGnvModal(id: any) {
+    console.log(id,'55')
+    this.id = id;
+    this.openQdGnv = true;
+  }
+  closeQdGnvModal() {
+    this.id = null;
+    this.openQdGnv = false;
   }
 }
