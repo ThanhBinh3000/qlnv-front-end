@@ -123,25 +123,27 @@
             </div>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24" class="mt-2">
-          <div class="header header-green-background mt-2">
-            <div class="header-text">
-              <div class="title-chi-tieu">
-                <h3 class="text-uppercase">Chi tiết nội dung quyết định</h3>
-              </div>
-            </div>
-          </div>
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Tổng giá trị chi DTQG theo QĐ của TTCP</nz-form-label>
-            <nz-form-control>
-              <span class="text-blue">{{tongGiaTri | number}} (triệu đồng)</span>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
       </div>
     </form>
   </nz-card>
-  <div nz-col [nzSpan]="24" class="mt-2">
+  <nz-card class="mt16 flex-card p-lr16 mt-2">
+    <div nz-col [nzSpan]="24" class="mt-2">
+      <div class="header header-green-background mt-2">
+        <div class="header-text">
+          <div class="title-chi-tieu">
+            <h3 class="text-uppercase">Chi tiết nội dung quyết định</h3>
+          </div>
+        </div>
+      </div>
+      <div nz-col [nzSpan]="4" class="mt-2">
+        <nz-form-item class="form-item">
+          <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Tổng giá trị chi DTQG theo QĐ của TTCP</nz-form-label>
+          <nz-form-control>
+            <span class="text-blue">{{tongGiaTri | number}} (triệu đồng)</span>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
     <div class="mt-2">
         <span class="text-right">
           <h2 style="font-size: 100%;color: red">Đơn vị: Triệu đồng</h2>
@@ -150,7 +152,7 @@
     <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri"
                            (hasError)="takeError($event)" [trangThai]="formData.value.trangThai">
     </app-ke-hoach-mua-tang>
-  </div>
+  </nz-card>
   <!--  <nz-tabset nzType="card">-->
   <!--    <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">-->
   <!--      -->
