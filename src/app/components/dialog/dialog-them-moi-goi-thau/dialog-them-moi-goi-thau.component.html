@@ -6,8 +6,8 @@
           <nz-form-label nzRequired [nzSpan]="24" [nzNoColon]="true"> Tên gói thầu </nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <input nz-input formControlName="goiThau" [nzAutocomplete]="auto" [disabled]="isReadOnly"
-              [readonly]="isReadOnly" (blur)="changeGoiThau()">
-            <nz-autocomplete #auto>
+              [readonly]="isReadOnly">
+            <nz-autocomplete #auto (selectionChange)="changeGoiThau($event)">
               <nz-auto-option *ngFor="let option of listGoiThau" [nzValue]="option">{{
                 option }}
               </nz-auto-option>

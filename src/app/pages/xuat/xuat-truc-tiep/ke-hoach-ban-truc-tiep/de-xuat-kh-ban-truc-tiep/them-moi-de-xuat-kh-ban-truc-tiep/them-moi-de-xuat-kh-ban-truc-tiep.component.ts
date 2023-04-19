@@ -20,25 +20,23 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
-import { chain } from 'lodash'
 @Component({
   selector: 'app-them-moi-de-xuat-kh-ban-truc-tiep',
   templateUrl: './them-moi-de-xuat-kh-ban-truc-tiep.component.html',
   styleUrls: ['./them-moi-de-xuat-kh-ban-truc-tiep.component.scss']
 })
+
 export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
-
-  tabVthh: any[] = [];
   @Input()
   idInput: number;
   @Input()
   showFromTH: boolean;
+  @Input()
+  isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() isViewOnModal: boolean;
-
 
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
@@ -59,6 +57,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
+
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
@@ -81,10 +80,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       thoiGianDuKien: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [,],
-      tgianTtoan: [''],
+      tgianTtoan: [],
       tgianTtoanGhiChu: [''],
       pthucTtoan: [''],
-      tgianGnhan: [''],
+      tgianGnhan: [],
       tgianGnhanGhiChu: [null],
       pthucGnhan: [''],
       thongBaoKh: [''],
@@ -98,9 +97,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       donGiaVat: [],
       tongDonGia: [],
       slDviTsan: [],
-      typeVthh: [''],
+      typeVthh: [],
       dviTinh: [''],
-      idSoQdCtieu: [''],
+      idSoQdCtieu: [],
     });
   }
 
@@ -206,7 +205,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'DANH SÁCH HÀNG HÓA',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -279,7 +278,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -397,7 +396,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-
   async guiDuyet() {
     if (this.dataTable.length == 0) {
       this.notification.error(
@@ -429,7 +427,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     }
     this.approve(this.idInput, trangThai, msg);
   }
-
 
   tuChoi() {
     let trangThai = '';
@@ -485,8 +482,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      // this.formData.controls["tgianDkienTu"].setValidators([Validators.required]);
-      // this.formData.controls["tgianDkienDen"].setValidators([Validators.required]);
       this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
       this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
       this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
@@ -504,13 +499,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["thoiGianDuKien"].clearValidators();
-      // this.formData.controls["tgianDkienTu"].clearValidators();
-      // this.formData.controls["tgianDkienDen"].clearValidators();
       this.formData.controls["tgianTtoan"].clearValidators();
       this.formData.controls["pthucTtoan"].clearValidators();
       this.formData.controls["tgianGnhan"].clearValidators();
       this.formData.controls["pthucGnhan"].clearValidators();
-
     }
   }
 }

@@ -222,7 +222,7 @@
             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
 
             <td>
-              <a *ngIf="data.soQdPd && data.idSoQdPd" nz-button nzType="link" nzBlock
+              <a *ngIf="data.soQdPd && data.idSoQdPd" style="color: blue ;font-weight: bold;"
                 (click)="openModalQdPd(data.idSoQdPd)">{{
                 data.soQdPd}}</a>
             </td>
@@ -233,14 +233,14 @@
             <td>{{ data.slDviTsan}}</td>
             <td>{{ data.slHdDaKy}}</td>
             <td>
-              <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" nz-button nzType="link" nzBlock
+              <a *ngIf="data.soQdCtieu && data.idSoQdCtieu" style="color: blue ;font-weight: bold;"
                 (click)="openModalChiTieu(data.idSoQdCtieu)">{{
                 data.soQdCtieu}}</a>
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc()">
               <span *ngIf="!data.idThop">{{data.tenTrangThaiTh}}</span>
-              <a *ngIf="data.idThop" nz-button nzType="link" nzBlock (click)="openModalTh(data.idThop)">{{
+              <a *ngIf="data.idThop" style="color: blue ;font-weight: bold;" (click)="openModalTh(data.idThop)">{{
                 data.idThop}}</a>
             </td>
             <td class="text-left">

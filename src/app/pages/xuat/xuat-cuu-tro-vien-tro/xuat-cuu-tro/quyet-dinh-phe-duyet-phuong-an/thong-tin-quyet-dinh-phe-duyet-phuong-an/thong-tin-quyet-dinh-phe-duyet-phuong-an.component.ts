@@ -401,6 +401,15 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
   }
 
+  disableSelect() {
+    if (this.formData.value.id) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {

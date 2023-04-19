@@ -23,6 +23,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   formData: FormGroup;
   thongtinPhanLo: DanhSachPhanLo;
   loaiVthh: any;
+  cloaiVthh: any;
+  tenCloaiVthh: string;
   dataChiTieu: any;
   dviTinh: any;
   dataEdit: any;
@@ -33,7 +35,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   userInfo: UserLogin;
   listDiemKhoEdit: any[] = [];
   khoanTienDatTruoc: number;
-  namKh: number;
+  namKh: any;
+  giaToiDa: any;
   donGiaVat: number;
 
   listChiCuc: any[] = [];
@@ -59,8 +62,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       soLuongChiCuc: [null],
-      tienDtruocDxChiCuc: [null],
-      tienDtruocDdChiCuc: [null],
+      donGiaChiCuc: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
       diaChi: [null],
@@ -76,10 +78,18 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.initForm();
     this.updateEditCache();
     this.disableChiCuc();
+    this.getGiaToiThieu();
+  }
+
+  async getGiaToiThieu() {
+    let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.cloaiVthh, this.userInfo.MA_DVI, this.namKh);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.giaToiDa = res.data;
+    }
   }
 
   save() {
-    if (this.validateSoLuong()) {
+    if (this.validateSoLuong(true)) {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
@@ -102,7 +112,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.thongtinPhanLo = new DanhSachPhanLo();
     this.formData.patchValue({
-      donGiaVat: this.donGiaVat,
       dviTinh: this.dviTinh,
       loaiVthh: this.loaiVthh,
     })
@@ -212,13 +221,18 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.listNhaKho = diemKho.children;
       this.thongtinPhanLo.tenDiemKho = diemKho.tenDvi;
       this.thongtinPhanLo.diaDiemKho = diemKho.diaChi;
-      this.thongtinPhanLo.donGiaVat = this.donGiaVat;
-      this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
-      this.thongtinPhanLo.dviTinh = this.dviTinh
-      this.thongtinPhanLo.maNhaKho = null;
-      this.thongtinPhanLo.maNganKho = null;
-      this.thongtinPhanLo.maLoKho = null;
+      this.formDataPatchValue();
     }
+  }
+
+  formDataPatchValue() {
+    this.thongtinPhanLo.donGiaVat = this.donGiaVat;
+    this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
+    this.thongtinPhanLo.tenCloaiVthh = this.tenCloaiVthh
+    this.thongtinPhanLo.dviTinh = this.dviTinh
+    this.thongtinPhanLo.maNhaKho = null;
+    this.thongtinPhanLo.maNganKho = null;
+    this.thongtinPhanLo.maLoKho = null;
   }
 
   changeNhaKho(index?) {
@@ -281,13 +295,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   addDiemKho() {
-    if (this.validateDiemKho() && this.validateSoLuong(true)) {
-      this.thongtinPhanLo.donGiaVat = this.donGiaVat;
+    if (this.validateDiemKho() && this.validateSoLuong(true) && this.validateGiaDeXuat()) {
       this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
       this.listOfData = [...this.listOfData, this.thongtinPhanLo];
       this.thongtinPhanLo = new DanhSachPhanLo();
       this.formData.patchValue({
         soLuongChiCuc: this.calcTong('soLuong'),
+        donGiaChiCuc: this.calcTong('donGiaDeXuat'),
       })
       this.updateEditCache();
       this.disableChiCuc();
@@ -335,13 +349,23 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       return false
     }
     if (soLuong > soLuongConLai) {
-      console.log(soLuong, 111)
-      console.log(soLuongConLai, 222)
       this.notification.error(MESSAGE.ERROR, " Số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
       return false
     }
     if (tongSoLuong > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, " Tổng số lượng đã vượt quá chỉ tiêu. Xin vui lòng nhập lại ")
+      return false
+    } else {
+      return true;
+    }
+  }
+
+  validateGiaDeXuat() {
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải >= giá bán tối thiểu.');
+      return;
+    } else if (this.thongtinPhanLo.donGiaDeXuat >= this.giaToiDa) {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")
       return false
     } else {
       return true;
@@ -356,26 +380,29 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   startEdit(index: number): void {
-    this.thongtinPhanLo.donGiaVat = this.donGiaVat;
-    this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
-    this.listOfData[index].edit = true
+    if (this.validateSoLuong(true) && this.validateGiaDeXuat()) {
+      this.thongtinPhanLo.khoanTienDatTruoc = this.khoanTienDatTruoc;
+      this.listOfData[index].edit = true
+    }
 
   }
 
   cancelEdit(index: number): void {
-    if (this.validateSoLuong()) {
+    if (this.validateSoLuong(true) && this.validateGiaDeXuat()) {
       this.listOfData[index].edit = false
       this.formData.patchValue({
         soLuongChiCuc: this.calcTong('soLuong'),
+        donGiaChiCuc: this.calcTong('donGiaDeXuat'),
       })
     }
   }
 
   saveEdit(index: number): void {
-    if (this.validateSoLuong()) {
+    if (this.validateSoLuong(true) && this.validateGiaDeXuat()) {
       this.listOfData[index].edit = false
       this.formData.patchValue({
         soLuongChiCuc: this.calcTong('soLuong'),
+        donGiaChiCuc: this.calcTong('donGiaDeXuat'),
       })
     }
 

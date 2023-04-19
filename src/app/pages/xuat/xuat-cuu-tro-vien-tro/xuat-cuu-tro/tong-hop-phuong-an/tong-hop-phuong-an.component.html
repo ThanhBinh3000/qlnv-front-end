@@ -5,7 +5,7 @@
         <div nz-row [nzGutter]="20">
           <div nz-col nzSpan="3">
             <label> Năm kế hoạch </label>
-            <nz-select formControlName="nam">
+            <nz-select formControlName="nam" [nzAllowClear]>
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
@@ -273,10 +273,10 @@
   <app-thong-tin-tong-hop-phuong-an [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
   </app-thong-tin-tong-hop-phuong-an>
 </div>
-<nz-modal #tessss [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
           [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent>
-    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
+    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
                                                   [isViewOnModal]="true"
                                                   (showListEvent)="showList()">
     </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>

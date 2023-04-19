@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
-import {CHUC_NANG, STATUS} from "../../../../constants/status";
+import {STATUS} from "../../../../constants/status";
 import {cloneDeep} from 'lodash';
 
 @Component({
@@ -41,6 +41,7 @@ export class CuuTroVienTroComponent implements OnInit {
         STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
         STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
         STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
+        STATUS.BAN_HANH,
       ],
       SUA: [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       XOA: [STATUS.DU_THAO],
@@ -57,6 +58,7 @@ export class CuuTroVienTroComponent implements OnInit {
         STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
         STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
         STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
+        STATUS.BAN_HANH,
       ],
       SUA_NO: [],
       XOA_NO: [],

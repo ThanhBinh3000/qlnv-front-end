@@ -40,8 +40,8 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: [''],
-      loaiVthh: [''],
+      namKh: null,
+      loaiVthh: null,
       ngayCgiaTu: null,
       ngayCgiaDen: null,
     });
@@ -128,5 +128,4 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     this.idQdPdKh = null;
     this.isViewQdPdKh = false;
   }
-
 }

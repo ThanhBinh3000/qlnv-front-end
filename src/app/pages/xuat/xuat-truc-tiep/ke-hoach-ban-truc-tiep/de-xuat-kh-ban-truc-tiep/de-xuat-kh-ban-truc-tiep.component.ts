@@ -14,6 +14,7 @@ import { DonviService } from 'src/app/services/donvi.service';
   templateUrl: './de-xuat-kh-ban-truc-tiep.component.html',
   styleUrls: ['./de-xuat-kh-ban-truc-tiep.component.scss']
 })
+
 export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
@@ -42,6 +43,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
     { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
   ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -52,20 +54,21 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
+
     this.formData = this.fb.group({
-      namKh: [],
-      soDxuat: [],
-      maDvi: [],
-      tenDvi: [],
-      trichYeu: [],
-      ngayTaoTu: [],
-      ngayTaoDen: [],
-      ngayDuyetTu: [],
-      ngayDuyetDen: [],
-      ngayKyQdTu: [],
-      ngayKyQdDen: [],
-      loaiVthh: [],
-      trangThai: [],
+      namKh: null,
+      soDxuat: null,
+      maDvi: null,
+      tenDvi: null,
+      trichYeu: null,
+      ngayTaoTu: null,
+      ngayTaoDen: null,
+      ngayDuyetTu: null,
+      ngayDuyetDen: null,
+      ngayKyQdTu: null,
+      ngayKyQdDen: null,
+      loaiVthh: null,
+      trangThai: null,
     });
 
     this.filterTable = {
@@ -84,7 +87,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       tenCloaiVthh: '',
       soQdCtieu: '',
       tenTrangThai: '',
-      tenTrangThaiTh: this.listTrangThaiTh
+      tenTrangThaiTh: '',
     };
   }
 
