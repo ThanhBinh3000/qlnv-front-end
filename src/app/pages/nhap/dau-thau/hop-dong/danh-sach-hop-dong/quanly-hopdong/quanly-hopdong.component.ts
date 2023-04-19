@@ -159,7 +159,7 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    if (this.dataTable.length > 0 && this.dataTable[0].hopdong != undefined) {
+    if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {
       this.idHopDong = this.dataTable[0].hopDong.id;
     } else {
       this.idHopDong = null;
@@ -202,7 +202,7 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    if (this.dataTable.length > 0 && this.dataTable[0].hopdong != undefined) {
+    if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {
       this.idHopDong = this.dataTable[0].hopDong.id;
     } else {
       this.idHopDong = null;
