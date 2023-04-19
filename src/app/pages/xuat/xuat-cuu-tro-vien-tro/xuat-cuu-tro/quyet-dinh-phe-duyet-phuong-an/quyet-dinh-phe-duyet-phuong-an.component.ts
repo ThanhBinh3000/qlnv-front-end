@@ -49,9 +49,9 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
       ngayDx: null,
       ngayDxTu: null,
       ngayDxDen: null,
-      ngayKetThuc: null,
-      ngayKetThucTu: null,
-      ngayKetThucDen: null,
+      ngayKetThucDx: null,
+      ngayKetThucDxTu: null,
+      ngayKetThucDxDen: null,
       type: null
     })
     this.filterTable = {
@@ -96,17 +96,17 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   };
 
   disabledStartNgayKt = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayKetThucDen) {
-      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+    if (startValue && this.formData.value.ngayKetThucDxDen) {
+      return startValue.getTime() > this.formData.value.ngayKetThucDxDen.getTime();
     }
     return false;
   };
 
   disabledEndNgayKt = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKetThucTu) {
+    if (!endValue || !this.formData.value.ngayKetThucDxTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayKetThucDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKetThucDxTu.getTime();
   };
   async ngOnInit() {
     try {

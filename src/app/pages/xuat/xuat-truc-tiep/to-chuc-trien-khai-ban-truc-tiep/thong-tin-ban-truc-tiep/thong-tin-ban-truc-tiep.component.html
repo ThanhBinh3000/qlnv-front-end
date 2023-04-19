@@ -51,7 +51,8 @@
         <div class="group-button">
             <h3 class="text-uppercase"> THÔNG TIN TRIỂN KHAI KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()"
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx')"
                     *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>

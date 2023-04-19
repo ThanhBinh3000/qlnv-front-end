@@ -230,10 +230,12 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   }
 
   clearFilter() {
+    this.nam = null;
     this.ngayKy = null;
     this.soHd = null;
+    this.tuNgayKy = null;
+    this.denNgayKy = null;
     this.tenHd = null;
-    this.nhaCungCap = null;
     this.search();
   }
 
