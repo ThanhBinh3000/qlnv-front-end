@@ -9,6 +9,22 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'ke-hoach-dieu-chuyen',
     hasTab: false,
   },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Tổng hợp kế hoạch điều chuyển',
+    url: `/tong-hop-dieu-chuyen-tai-cuc`,
+    dropdown: 'tong-hop-dieu-chuyen-tai-cuc',
+    idHover: 'tong-hop-dieu-chuyen-tai-cuc',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Tổng hợp kế hoạch điều chuyển',
+    url: `/tong-hop-dieu-chuyen-tong-cuc`,
+    dropdown: 'tong-hop-dieu-chuyen-tai-tong-cuc',
+    idHover: 'tong-hop-dieu-chuyen-tai-tong-cuc',
+    hasTab: false,
+  },
   /*{
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
