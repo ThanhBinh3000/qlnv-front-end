@@ -190,7 +190,7 @@
             <a (click)="redirectDetail(data.id, true)" *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                             !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
                             userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM'))||
-(vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
+                            (vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
                             !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
                             userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM'))">
               <i class="fa fa-eye"></i>
