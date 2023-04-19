@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { GiaoXuatHangComponent } from './giao-xuat-hang.component';
 import { CreateGiaoXh } from './crup-giao-xh/create-giao-xh.component';
 import { TableGiaoXh } from './table-giao-xh/table-giao-xh.component';
+import { HopDongModule } from '../hop-dong/hop-dong.module';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { TableGiaoXh } from './table-giao-xh/table-giao-xh.component';
         CommonModule,
         ComponentsModule,
         DirectivesModule,
+        HopDongModule,
     ],
     exports: [
         GiaoXuatHangComponent,

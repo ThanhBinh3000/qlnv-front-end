@@ -14,7 +14,7 @@ export class TongHopKhTrungHanService extends BaseService{
   }
 
   tongHop(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-tx-trung-han/tong-hop/danh-sach-dx`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-xd-trung-han/tong-hop/danh-sach-dx`;
     return this.httpClient.post(url, body).toPromise();
   }
 }

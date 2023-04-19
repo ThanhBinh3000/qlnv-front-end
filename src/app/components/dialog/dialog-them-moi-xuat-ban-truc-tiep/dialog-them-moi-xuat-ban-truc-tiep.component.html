@@ -172,26 +172,29 @@
                     </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                    <td>
+                    <th>
                         <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho()">
-                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi"
+                                [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         <nz-select [(ngModel)]="data.maNhaKho" (ngModelChange)="changeNhaKho()">
-                            <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.maDvi"
+                                [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         <nz-select [(ngModel)]="data.maNganKho" (ngModelChange)="changeNganKho()">
-                            <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            <nz-option *ngFor="let p of listNganKho" [nzValue]="p.maDvi"
+                                [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
+                    </th>
+                    <th>
                         <nz-select [(ngModel)]="data.maLoKho" (ngModelChange)="changeLoKho()">
-                            <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            <nz-option *ngFor="let p of listLoKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
-                    </td>
+                    </th>
                     <td>
                         <input nz-input [(ngModel)]="data.tenCloaiVthh" class="w-150" [disabled]="true" />
                     </td>
