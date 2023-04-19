@@ -21,6 +21,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
   @Input() sum: number
+  @Input() dataTable: any
   item: DanhMucKho = new DanhMucKho();
   listDmKho: any[] = []
   listLoaiDuAn: any[] = []
@@ -39,6 +40,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.dataTable,123);
     this.getAllDmKho();
     this.getAllLoaiDuAn();
     this.getDetail()
@@ -49,6 +51,11 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     let msgRequired = this.required(this.item);
     if (msgRequired) {
       this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.spinner.hide();
+      return;
+    }
+    if (this.checkExitsData(this.item, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
       this.spinner.hide();
       return;
     }
@@ -71,6 +78,19 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       msgRequired = "Không được để trống loại dự án";
     }
     return msgRequired;
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.maDuAn == item.maDuAn) {
+          rs = true;
+          return;
+        }
+      });
+    }
+    return rs;
   }
 
 

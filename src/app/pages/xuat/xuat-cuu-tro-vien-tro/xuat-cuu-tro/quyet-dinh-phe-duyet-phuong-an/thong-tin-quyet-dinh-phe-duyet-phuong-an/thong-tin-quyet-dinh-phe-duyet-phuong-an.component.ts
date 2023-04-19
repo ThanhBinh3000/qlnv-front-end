@@ -336,9 +336,22 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     await this.spinner.hide()
   }
 
+  async saveAndSend(status: string, message: string, sucessMessage: string) {
+    const body = this.formData.value;
+    const type = body.type;
+    const fieldsToClear = type === 'TH' ? ['idDx', 'soDx', 'ngayDx'] : ['idTongHop', 'maTongHop', 'ngayThop'];
+    fieldsToClear.forEach(field => {
+      this.formData.controls[field].clearValidators();
+    });
+    body.canCu = this.canCu;
+    body.fileDinhKem = this.fileDinhKem;
+    body.soQd = this.formData.value.soQd ? this.formData.value.soQd + '/' + this.maQd : undefined;
+    await super.saveAndSend(body, status, message, sucessMessage);
+  }
+
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    this.setValidator(isGuiDuyet)
+    this.setValidator();
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
@@ -348,22 +361,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
     body.canCu = this.canCu;
     body.fileDinhKem = this.fileDinhKem;
+    if (!isGuiDuyet){}
     let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idSelected = data.id;
-        this.guiDuyet();
-      } else {
-        this.quayLai();
-      }
-    }
-    await this.spinner.hide();
-  }
 
-  async guiDuyet() {
-    let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Văn bản sẵn sàng ban hành ?'
-    this.approve(this.idSelected, trangThai, mesg);
+    await this.spinner.hide();
   }
 
   quayLai() {
@@ -376,21 +377,19 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     });
   }
 
-  setValidator(isGuiDuyet?) {
-    if (this.formData.get('type').value == 'TH') {
-      this.formData.controls["idTongHop"].setValidators([Validators.required]);
-      this.formData.controls["maTongHop"].setValidators([Validators.required]);
-      this.formData.controls["idDx"].clearValidators();
-      this.formData.controls["soDx"].clearValidators();
-      this.formData.controls["ngayDx"].clearValidators();
-    }
-    if (this.formData.get('type').value == 'TTr') {
-      this.formData.controls["idTongHop"].clearValidators();
-      this.formData.controls["maTongHop"].clearValidators();
-      this.formData.controls["ngayThop"].clearValidators();
-      this.formData.controls["idDx"].setValidators([Validators.required]);
-      this.formData.controls["soDx"].setValidators([Validators.required]);
-    }
+  setValidator() {
+    const type = this.formData.get('type').value;
+    const isTH = type === 'TH';
+
+    this.formData.controls['idTongHop'][isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['maTongHop'][isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['ngayThop'][isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['idDx'][!isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['soDx'][!isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['ngayDx'][!isTH ? 'setValidators' : 'clearValidators']([Validators.required]);
+    this.formData.controls['soQd'].clearValidators();
+    this.formData.controls['ngayKy'].clearValidators();
+    this.formData.controls['ngayHluc'].clearValidators();
   }
 
   isDisabled() {
