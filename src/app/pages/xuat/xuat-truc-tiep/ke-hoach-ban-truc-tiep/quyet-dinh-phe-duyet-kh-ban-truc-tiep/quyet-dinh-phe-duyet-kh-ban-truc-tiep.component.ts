@@ -44,6 +44,7 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       ngayKyQdTu: null,
       ngayKyQdDen: null,
       soTrHdr: null,
+      trangThai: null,
       lastest: 0
     })
 
@@ -79,7 +80,8 @@ export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component impl
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      lastest: 0
+      lastest: 0,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 

@@ -4,7 +4,7 @@
             <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
         </span>
     </div>
-    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-table [nzFrontPagination]="false" nzBordered [nzShowPagination]="false">
         <thead>
             <tr>
                 <th>STT</th>
@@ -34,16 +34,18 @@
                 <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>{{ (keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc)/1000 | number : '0.0-1' :
@@ -69,16 +71,18 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
@@ -92,16 +96,18 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
@@ -145,16 +151,18 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
@@ -167,16 +175,18 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" currencyMask [disabled]="!isView" [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
@@ -189,16 +199,18 @@
                 <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [options]="amount_no_decimal"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
                 <td>
@@ -213,9 +225,10 @@
                 <td></td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
             </tr>
@@ -227,9 +240,10 @@
                 <td></td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
-                        </nz-input-number>
+                      <input class="money-input" [disabled]="!isView" currencyMask [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [options]="amount"/>
+<!--                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="0"-->
+<!--                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">-->
+<!--                        </nz-input-number>-->
                     </div>
                 </td>
             </tr>

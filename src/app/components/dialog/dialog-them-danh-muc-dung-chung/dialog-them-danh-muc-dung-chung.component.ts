@@ -1,18 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { Globals } from 'src/app/shared/globals';
+import { Component, OnInit } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { MESSAGE } from "src/app/constants/message";
+import { Globals } from "src/app/shared/globals";
 import { HelperService } from "../../../services/helper.service";
 import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
 import { Router } from "@angular/router";
 
 @Component({
-  selector: 'dialog-them-danh-muc-dung-chung',
-  templateUrl: './dialog-them-danh-muc-dung-chung.component.html',
-  styleUrls: ['./dialog-them-danh-muc-dung-chung.component.scss'],
+  selector: "dialog-them-danh-muc-dung-chung",
+  templateUrl: "./dialog-them-danh-muc-dung-chung.component.html",
+  styleUrls: ["./dialog-them-danh-muc-dung-chung.component.scss"]
 })
 export class DialogThemDanhMucDungChungComponent implements OnInit {
   dataEdit: any;
@@ -38,11 +38,11 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       loai: [null, [Validators.required]],
       ma: [null, [Validators.required]],
       maCha: [null],
-      trangThai: ['01',[Validators.required]],
+      trangThai: ["01", [Validators.required]],
       giaTri: [null, [Validators.required]],
-      thuTuHienThi : [null],
-      phanLoai : [],
-      apDung : [null, [Validators.required]],
+      thuTuHienThi: [null],
+      phanLoai: [],
+      apDung: [null],
       ghiChu: [null]
     });
   }
@@ -51,9 +51,12 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     await Promise.all([
       this.getDmList(),
       this.getListApDungCn()
-    ])
-    // this.bindingData(this.dataEdit);
-    this.helperService.bidingDataInFormGroup(this.formData,this.dataEdit);
+    ]);
+    if (this.dataEdit && this.dataEdit.apDung) {
+      this.dataEdit.apDung = this.dataEdit.apDung.split(",");
+    }
+    await this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
+
   }
 
   // bindingData(dataEdit) {
@@ -76,8 +79,9 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let body = this.formData.value;
-    let res
+    let body = this.formData.value
+      body.apDung = body.apDung ? body.apDung.toString() : null;
+    let res;
     if (this.dataEdit != null) {
       res = await this.dmService.update(body);
     } else {

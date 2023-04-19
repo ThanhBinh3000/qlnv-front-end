@@ -32,6 +32,7 @@ import {
   DxuatKhLcntService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -723,15 +724,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   setNewDate($event) {
+    let pipe = new DatePipe('en-US');
     console.log($event)
-    // this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
-    // this.formData.get('tgianMthau').setValue($event.tgianBdauTchuc);
-    // this.formData.get('tgianDthau').setValue($event.tgianDthau);
-    // this.formData.get('tgianNhang').setValue($event.tgianNhang);
-    this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
-    this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
-    this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
-    this.danhsachDx[this.index].tgianNhang = $event.tgianNhang;
+    this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
+    this.formData.get('tgianMthau').setValue(pipe.transform($event.tgianMthau, 'yyyy-MM-dd HH:mm'));
+    this.formData.get('tgianDthau').setValue(pipe.transform($event.tgianDthau, 'yyyy-MM-dd HH:mm'));
+    this.formData.get('tgianNhang').setValue($event.tgianNhang);
+    // this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
+    // this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
+    // this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
+    // this.danhsachDx[this.index].tgianNhang = $event.tgianNhang;
   }
 
   expandSet = new Set<number>();
