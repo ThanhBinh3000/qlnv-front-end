@@ -276,7 +276,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        this.formData.patchValue({
+          id:res.data.id
+        })
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
