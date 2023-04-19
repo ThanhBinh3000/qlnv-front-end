@@ -183,7 +183,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     redirectDetail(id, b: boolean) {
         this.selectedId = id;
         this.isDetail = true;
-        this.isView = b;
+        this.isAddNew = b;
         // this.isViewDetail = isView ?? false;
     }
     async showList() {
@@ -199,8 +199,10 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     };
     viewDetail(id: number, isViewDetail: boolean) {
         this.idSelected = id;
+        this.isDetail = true;
         this.isViewDetail = isViewDetail;
-        this.isAddNew = true;
+        this.isEdit = !isViewDetail;
+        // this.isAddNew = true;
     };
     xoaItem(item: any) {
         this.modal.confirm({
@@ -235,4 +237,5 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             },
         });
     }
+
 }

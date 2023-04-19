@@ -388,9 +388,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     }
 
 
-    selectRow(item) {
-        // this.phuongAnView.forEach(i => i.selected = false);
-        // item.selected = true;
+    async selectRow(item: any) {
+        if (this.dataTableDsDCCuc.length > 0) {
+            this.dataTableDsDCCuc.forEach(i => i.selected = false);
+            item.selected = true;
+            //   this.idHopDong = cloneDeep(item.id);
+            //   this.isView = true;
+        }
     }
 
 
@@ -438,5 +442,4 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         this.formData.controls["loaiNhapXuat"].setValidators([Validators.required]);
         this.formData.controls["trichYeu"].setValidators([Validators.required]);
     };
-
 }

@@ -1,10 +1,39 @@
-.bottom-right-btn {
-    width: 100%;
-    display: flex;
-    justify-content: end;
-    margin-top: 16px
-}
+ @import '../../../../../assets/scss/default.scss';
+ @import '../../../../../assets/scss/common/tab.scss';
 
-.tong-hop-dc .btn.btn-sub {
-    margin-right: 10px
-}
+ ::ng-deep {
+     .bottom-right-btn {
+         width: 100%;
+         display: flex;
+         justify-content: end;
+         margin-top: 16px
+     }
+
+     .tong-hop-dc .btn.btn-sub {
+         margin-right: 10px
+     }
+
+     #id-btn-main {
+         background: $maincolor;
+         padding: 0 10px;
+         border-radius: 0px;
+         border-color: #e3f9f9;
+         margin-left: 6px;
+         color: #ffffff;
+
+         &:hover {
+             color: #353a64;
+             background: #fff;
+             border-color: #4e5484 !important;
+         }
+
+         i {
+             font-size: 10px;
+             margin-right: 4px;
+         }
+     }
+
+     .bg-selected td {
+         background-color: #ebedff;
+     }
+ }
