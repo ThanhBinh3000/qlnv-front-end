@@ -139,7 +139,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           "maBn": item.maDvi,
           "tenBn": item.tenDvi,
           "isSum": item.maDvi == '01' ? true : false,
-          "tongSo": 0
+          "tongSo": null
         };
         this.dataTableAllBn.push(obj);
         if (item.maDvi == '01') {
@@ -158,14 +158,14 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       "maBn": maCha,
       "tenBn": "   Lương thực",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     }, {
       "stt": 3,
       "maCha": maCha,
       "maBn": maCha,
       "tenBn": "   Vật tư, thiết bị",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     })
   }
 
