@@ -16,17 +16,20 @@ import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog
   styleUrls: ['./thong-tin-kh-ban-truc-tiep.component.scss']
 })
 export class ThongTinKhBanTrucTiepComponent implements OnChanges {
+
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+
   formData: FormGroup
   dataTable: any[] = [];
   listNguonVon: any[] = [];
   dataChiTieu: any;
   listPhuongThucThanhToan: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
@@ -41,21 +44,20 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
       id: [],
       maDvi: [''],
       tenDvi: [''],
-      tgianBdauTchuc: [],
-      tgianDkienTu: [null,],
-      tgianDkienDen: [null,],
-      tgianTtoan: [null,],
-      tgianTtoanGhiChu: [null,],
-      pthucTtoan: [null,],
-      tgianGnhan: [null,],
-      tgianGnhanGhiChu: [null,],
-      pthucGnhan: [null,],
-      thongBaoKh: [null,],
-      tongSoLuong: [null,],
-      diaChi: [],
-      namKh: [dayjs().get('year'),],
-      soDxuat: [null,],
-      thoiGianDuKien: [],
+      tgianBdauTchuc: [''],
+      tgianDkienTu: [''],
+      tgianDkienDen: [''],
+      tgianTtoan: [],
+      tgianTtoanGhiChu: [''],
+      pthucTtoan: [''],
+      tgianGnhan: [],
+      tgianGnhanGhiChu: [''],
+      pthucGnhan: [''],
+      thongBaoKh: [''],
+      tongSoLuong: [''],
+      diaChi: [''],
+      soDxuat: [''],
+      thoiGianDuKien: [''],
       donGiaVat: []
     });
   }
@@ -88,7 +90,7 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
+      nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
       nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -145,5 +147,4 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   isDisable() {
     return false;
   }
-
 }

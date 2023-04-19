@@ -6,7 +6,7 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_BANHANH')"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+      type="button" class="btn btn-sub xanh-nhat" (click)="saveAndSend(STATUS.BAN_HANH,'Bạn có muốn ban hành ?','Bạn đã ban hành thành công!')">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -92,8 +92,8 @@
             <nz-form-item>
 
               <nz-form-control [nzErrorTip]="error">
-                <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
-                  <nz-form-item>
+                <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small" class="rdo-input" formControlName="type">
+                <nz-form-item>
                     <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
@@ -646,7 +646,7 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openDxPa" (nzOnCancel)="closeDxPaModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-xay-dung-phuong-an [idInput]="dxPaId" [loaiVthhInput]="loaiVthh" [isViewOnModal]="true">
+    <app-thong-tin-xay-dung-phuong-an [idInput]="dxPaId" [loaiVthhInput]="loaiVthh" [isView]="true">
     </app-thong-tin-xay-dung-phuong-an>
   </ng-container>
   <div *nzModalFooter>

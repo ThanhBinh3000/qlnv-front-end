@@ -20,13 +20,14 @@ import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-truc-tiep',
   templateUrl: './them-moi-qd-phe-duyet-kh-ban-truc-tiep.component.html',
   styleUrls: ['./them-moi-qd-phe-duyet-kh-ban-truc-tiep.component.scss']
 })
+
 export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
@@ -37,15 +38,11 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
 
   fileDinhKems: any[] = []
   maQd: string = null;
-  fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
-
   danhsachDx: any[] = [];
-
   dataInput: any;
   dataInputCache: any;
-
   isTongHop: boolean
   selected: boolean = false;
   listLoaiHinhNx: any[] = [];
@@ -63,15 +60,16 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
+
     this.formData = this.fb.group({
-      id: [null],
+      id: [],
       namKh: [dayjs().get('year'), Validators.required],
       soQdPd: ['',],
       ngayKyQd: ['',],
       ngayHluc: ['',],
-      idThHdr: [''],
+      idThHdr: [],
       soTrHdr: [''],
-      idTrHdr: [''],
+      idTrHdr: [],
       trichYeu: [''],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
@@ -118,17 +116,12 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     return false;
   }
 
-  deleteSelect() {
-  }
-
   async ngOnInit() {
     await this.spinner.show();
     try {
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
-      } else {
-        this.initForm();
       }
       await Promise.all([
         this.loadDataComboBox(),
@@ -158,12 +151,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     if (resKieuNx.msg == MESSAGE.SUCCESS) {
       this.listKieuNx = resKieuNx.data
     }
-  }
-
-  initForm() {
-    // this.formData.patchValue({
-    //   nam: dayjs().get('year'),
-    // })
   }
 
   async showFirstRow($event, dataDxBtt: any) {
@@ -254,7 +241,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán trực tiếp',
+      nzTitle: 'DANH SÁCH TỔNG HỢP KẾ HOẠCH BÁN TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -317,7 +304,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
           this.dataInput = null;
           this.dataInputCache = null;
         }
-
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -346,9 +332,8 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.listToTrinh = resToTrinh.data.content;
     }
     await this.spinner.hide();
-
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch bán trực tiếp',
+      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN TRỰC TIẾP',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -443,7 +428,6 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
       this.index = 0;
       await this.spinner.hide();
     }
-
   }
 
   isDisabled() {

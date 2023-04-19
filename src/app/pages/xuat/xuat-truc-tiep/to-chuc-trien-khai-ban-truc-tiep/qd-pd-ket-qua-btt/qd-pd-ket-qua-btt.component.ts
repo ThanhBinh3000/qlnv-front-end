@@ -40,10 +40,11 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: [''],
-      loaiVthh: [''],
+      namKh: null,
+      loaiVthh: null,
       ngayCgiaTu: null,
       ngayCgiaDen: null,
+      trangThai: null,
     });
     this.filterTable = {
       soQdKq: '',
@@ -72,30 +73,11 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  export() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        this.qdPdKetQuaBttService
-          .export(this.formData.value)
-          .subscribe((blob) =>
-            saveAs(blob, 'Danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
   thimKiem() {
     this.formData.patchValue({
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      trangThai: this.userService.isTongCuc() ? this.STATUS.BAN_HANH : null,
     })
   }
 
@@ -128,5 +110,4 @@ export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
     this.idQdPdKh = null;
     this.isViewQdPdKh = false;
   }
-
 }

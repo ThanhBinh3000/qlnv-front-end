@@ -260,11 +260,6 @@
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && !vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))||
-                      (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) && !vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC'))"
-               (click)="redirectDetail(data.id, true)">
-              <i class="icon htvbdh_tcdt_pheduyet"></i>
-            </a>
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"
               (click)="delete(data)">

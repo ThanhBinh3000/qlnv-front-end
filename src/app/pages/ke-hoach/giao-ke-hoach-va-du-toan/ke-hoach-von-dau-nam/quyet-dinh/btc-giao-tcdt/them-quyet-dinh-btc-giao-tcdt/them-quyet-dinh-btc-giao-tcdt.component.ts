@@ -1,19 +1,20 @@
-import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, ViewChild } from '@angular/core';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, ViewChild} from '@angular/core';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import * as dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { Globals } from 'src/app/shared/globals';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { HelperService } from 'src/app/services/helper.service';
-import { UserService } from 'src/app/services/user.service';
-import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { KeHoachNhapXuatLtComponent } from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
-import { STATUS } from "../../../../../../../constants/status";
+import {UserLogin} from 'src/app/models/userlogin';
+import {Globals} from 'src/app/shared/globals';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {HelperService} from 'src/app/services/helper.service';
+import {UserService} from 'src/app/services/user.service';
+import {QuyetDinhBtcTcdtService} from 'src/app/services/quyetDinhBtcTcdt.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {KeHoachNhapXuatLtComponent} from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
+import {STATUS} from "../../../../../../../constants/status";
+import {FILETYPE} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -51,8 +52,9 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   taiLieuDinhKemList: any[] = [];
+  listCcPhapLy: any[] = [];
   dsNam: any[] = [];
-
+  listFile: any[] = []
   muaTangList: any[] = []
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
@@ -61,6 +63,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
   iterableDiffer: any;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -118,7 +121,14 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu
       })
-      this.taiLieuDinhKemList = data.fileDinhkems;
+      // this.taiLieuDinhKemList = data.fileDinhkems;
+      data.fileDinhkems.forEach(item => {
+        if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+          this.taiLieuDinhKemList.push(item)
+        } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+          this.listCcPhapLy.push(item)
+        }
+      })
       this.keHoachNhapXuat = data.keHoachNhapXuat;
       this.muaTangList = data.muaTangList;
       this.xuatGiamList = data.xuatGiamList;
@@ -169,7 +179,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
   quayLai() {
     this.onClose.emit();
@@ -223,7 +234,23 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    // body.fileDinhKems = this.taiLieuDinhKemList;
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems = this.listFile;
+    }
     body.soQd = body.soQd + this.maQd;
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;
@@ -249,7 +276,10 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        this.formData.patchValue({
+          id:res.data.id
+        })
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -257,11 +287,14 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     this.spinner.hide();
   }
 
-  exportData() { }
+  exportData() {
+  }
 
-  xoaKeHoach() { }
+  xoaKeHoach() {
+  }
 
-  themKeHoach() { }
+  themKeHoach() {
+  }
 }
 
 

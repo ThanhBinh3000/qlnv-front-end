@@ -11,6 +11,7 @@ import {cloneDeep} from 'lodash';
 import {saveAs} from 'file-saver';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-btc-giao-cac-bo-nganh',
@@ -27,6 +28,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   indeterminate = false;
   muaTangList: any[] = [];
   dsNam: string[] = [];
+  STATUS = STATUS;
   searchInTable = {
     soQd: '',
     namQd: dayjs().get('year'),

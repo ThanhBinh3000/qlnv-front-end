@@ -166,7 +166,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
   async loadSoQuyetDinh() {
     let body = {
-      trangThai: STATUS.BAN_HANH,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
       loaiVthh: this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);

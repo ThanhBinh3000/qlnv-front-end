@@ -35,7 +35,6 @@
             </button>
         </div>
     </nz-card>
-
     <div class="group-button">
         <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
         <div class="buttons">
@@ -43,7 +42,8 @@
                 <i class="fa fa-trash-o do"></i>
                 <span>Xoá</span>
             </button>
-            <button type="button" (click)="export()" class="btn btn-sub">
+            <button type="button" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx')"
+                class="btn btn-sub">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
             </button>
@@ -53,7 +53,6 @@
             </button>
         </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
@@ -184,7 +183,6 @@
     <app-them-qd-pd-ket-qua-btt [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
     </app-them-qd-pd-ket-qua-btt>
 </div>
-
 <!--xem -->
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">

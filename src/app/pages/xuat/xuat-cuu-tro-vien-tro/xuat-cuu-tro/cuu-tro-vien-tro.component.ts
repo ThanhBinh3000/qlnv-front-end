@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
-import {CHUC_NANG, STATUS} from "../../../../constants/status";
+import {STATUS} from "../../../../constants/status";
 import {cloneDeep} from 'lodash';
 
 @Component({
@@ -36,14 +36,18 @@ export class CuuTroVienTroComponent implements OnInit {
 
   checkStatusPermission(data: any, action: any) {
     let mapQuyen = {
-      XEM: [STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
-        STATUS.DA_TAO_CBV,STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
+      XEM: [
+        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,
+        STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
+        STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
         STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
         STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
         STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
+        STATUS.BAN_HANH,
       ],
-      SUA: [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
+      SUA: [STATUS.DU_THAO, STATUS.TU_CHOI_TP, STATUS.TU_CHOI_LDTC, STATUS.TU_CHOI_LDV, STATUS.TU_CHOI_LDC, STATUS.TU_CHOI_LDCC],
       XOA: [STATUS.DU_THAO],
+      DUYET_LDTC: [STATUS.CHO_DUYET_LDTC],
       DUYET_TP: [STATUS.CHO_DUYET_TP],
       DUYET_LDV: [STATUS.CHO_DUYET_LDV],
       DUYET_LDC: [STATUS.CHO_DUYET_LDC],
@@ -52,14 +56,18 @@ export class CuuTroVienTroComponent implements OnInit {
       DUYET_KT: [STATUS.CHO_DUYET_KT],
       TAO_QD: [STATUS.DA_DUYET_LDV],
 
-      XEM_NO: [STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
+      XEM_NO: [
+        STATUS.CHO_DUYET_LDTC, STATUS.DA_DUYET_LDTC, STATUS.TU_CHOI_LDTC,
+        STATUS.DU_THAO, STATUS.CHO_DUYET_TP, STATUS.TU_CHOI_TP,
         STATUS.CHO_DUYET_LDC, STATUS.TU_CHOI_LDC, STATUS.DA_DUYET_LDC,
         STATUS.DA_TAO_CBV, STATUS.CHO_DUYET_LDV, STATUS.TU_CHOI_LDV, STATUS.DA_DUYET_LDV,
         STATUS.CHO_DUYET_LDCC, STATUS.DA_DUYET_LDCC, STATUS.TU_CHOI_LDCC,
         STATUS.CHO_DUYET_KTVBQ, STATUS.TU_CHOI_KTVBQ, STATUS.CHO_DUYET_KT, STATUS.TU_CHOI_KT,
+        STATUS.BAN_HANH,
       ],
       SUA_NO: [],
       XOA_NO: [],
+      DUYET_LDTC_NO: [STATUS.CHO_DUYET_LDTC],
       DUYET_TP_NO: [STATUS.CHO_DUYET_TP],
       DUYET_LDV_NO: [STATUS.CHO_DUYET_LDV],
       DUYET_LDC_NO: [STATUS.CHO_DUYET_LDC],
@@ -67,7 +75,7 @@ export class CuuTroVienTroComponent implements OnInit {
       DUYET_KTVBQ_NO: [STATUS.CHO_DUYET_KTVBQ],
       DUYET_KT_NO: [STATUS.CHO_DUYET_KT],
       TAO_QD_NO: []
-    }
+    };
     let actionTmp = cloneDeep(action);
     if (data.maDvi !== this.userService.getUserLogin().MA_PHONG_BAN) {
       actionTmp = actionTmp + "_NO";

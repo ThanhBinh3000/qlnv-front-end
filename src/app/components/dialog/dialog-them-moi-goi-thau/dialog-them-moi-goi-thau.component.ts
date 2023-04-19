@@ -433,9 +433,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
   }
 
-  async changeGoiThau() {
+  async changeGoiThau(event?: any) {
     this.dataAll.forEach(item => {
-      if (item.goiThau == this.formGoiThau.get('goiThau').value) {
+      if (item.goiThau == event.nzValue) {
         this.data = item;
       }
     })
