@@ -223,7 +223,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    // body.fileDinhKems = this.taiLieuDinhKemList;
     this.listFile = [];
     if (this.taiLieuDinhKemList.length > 0) {
       this.taiLieuDinhKemList.forEach(item => {

@@ -479,6 +479,18 @@ export const QUATITY = {
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
+export const AMOUNT_NO_DECIMAL = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 0,
+  prefix: '',
+  thousands: ',',
+  decimal: '.',
+  align: "right",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 export const AMOUNT_ONE_DECIMAL = {
   allowZero: true,
   allowNegative: false,
