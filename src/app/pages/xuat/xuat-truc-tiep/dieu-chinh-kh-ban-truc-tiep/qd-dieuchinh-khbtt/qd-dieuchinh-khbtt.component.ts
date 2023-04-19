@@ -38,13 +38,12 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
     this.formData = this.fb.group({
       namKh: null,
+      soQdDc: null,
       ngayKyDcTu: null,
       ngayKyDcDen: null,
-      soQdDc: null,
-      soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
-      soTrHdr: null,
+      trangThai: null,
     })
 
     this.filterTable = {
@@ -77,7 +76,8 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
 
   timKiem() {
     this.formData.patchValue({
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 

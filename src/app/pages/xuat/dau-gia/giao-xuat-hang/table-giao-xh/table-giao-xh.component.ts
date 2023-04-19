@@ -22,6 +22,9 @@ export class TableGiaoXh extends Base2Component implements OnInit {
   listVthh: any[] = [];
   isView = false;
 
+  idHd: number = 0;
+  isViewHd: boolean = false;
+
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -98,6 +101,16 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  openModalHd(id: number) {
+    this.idHd = id;
+    this.isViewHd = true;
+  }
+
+  closeModalHd() {
+    this.idHd = null;
+    this.isViewHd = false;
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {
