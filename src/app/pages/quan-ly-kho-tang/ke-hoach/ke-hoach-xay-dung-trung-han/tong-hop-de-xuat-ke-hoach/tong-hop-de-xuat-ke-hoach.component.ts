@@ -39,23 +39,27 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   STATUS = STATUS
 
   searchFilter = {
+    namKeHoach : '',
     maTongHop: '',
-    dmucDuAn: '',
+    tenDuAn: '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
     diaDiem: '',
-    loaiDuAn: '' ,
-    ngayTongHop: '',
+    ngayTao: '',
     namBatDau: '',
     namKetThuc: '',
+    trangThai  :'',
   };
 
   filterTable: any = {
-    maTongHop : '',
-    ngayTongHop : '',
+    namKeHoach : '',
+    giaiDoan : '',
+    id : '',
+    ngayTao : '',
     maToTrinh : '',
     soQuyetDinh : '',
-    giaiDoan : '',
     noiDung : '',
-    tenTrangThai : '',
+    trangThai : '',
   };
 
   allChecked = false;
@@ -76,6 +80,15 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
   ) { }
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
+  ];
 
   async ngOnInit() {
     this.spinner.show();
@@ -111,15 +124,18 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
+      namKeHoach : this.searchFilter.namKeHoach,
       diaDiem: this.searchFilter.diaDiem,
-      dmucDuAn: this.searchFilter.dmucDuAn,
-      loaiDuAn: this.searchFilter.loaiDuAn,
+      tenDuAn: this.searchFilter.tenDuAn,
       maTongHop: this.searchFilter.maTongHop,
-      ngayKyTu: this.searchFilter.ngayTongHop[0],
-      ngayKyDen: this.searchFilter.ngayTongHop[1],
+      ngayTongHopTu: this.searchFilter.ngayTao[0],
+      ngayTongHopDen: this.searchFilter.ngayTao[1],
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      maDvi : this.userInfo.MA_DVI,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh : this.searchFilter.tgHoanThanh,
+      trangThai : this.searchFilter.trangThai,
+      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -273,29 +289,36 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.giaiDoan = item.namBatDau+ '-' +item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['ngayTao'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
   async clearFilterTable() {
-    this.filterTable = {
+    this.searchFilter = {
+      namKeHoach : '',
       maTongHop: '',
-      dmucDuAn: '',
+      tenDuAn: '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
       diaDiem: '',
-      loaiDuAn: '' ,
-      tgKcHt: '',
-      ngayTongHop: '',
+      ngayTao: '',
       namBatDau: '',
-      namKetThuc: ''
+      namKetThuc: '',
+      trangThai  :'',
     };
     await this.search();
   }
@@ -340,6 +363,14 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }
 
