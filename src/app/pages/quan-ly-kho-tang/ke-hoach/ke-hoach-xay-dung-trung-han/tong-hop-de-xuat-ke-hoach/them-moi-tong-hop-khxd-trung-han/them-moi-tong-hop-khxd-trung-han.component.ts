@@ -9,10 +9,10 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
-import {LkTheKhoCt} from "../../../../../../models/LkTheKhoCt";
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import {TongHopKhTrungHanService} from "../../../../../../services/tong-hop-kh-trung-han.service";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
@@ -30,11 +30,13 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  expandSet = new Set<number>();
   userInfo : UserLogin
   formData: FormGroup
   formTongHop: FormGroup
+  listDx: any[] = []
   dataTable: any[] = []
+  dataTableReq: any[] = []
   dataTableDx: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -45,6 +47,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   fileDinhKems: any[] = [];
   listLoaiDuAn: any[] = [];
   STATUS = STATUS
+  maTt: string;
+  soQd : string;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -59,12 +63,15 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      loaiDuAn: [null, [Validators.required]],
-      namBatDau: [null, [Validators.required]],
-      namKetThuc: [null, [Validators.required]],
+      namBatDau: [null],
+      namKetThuc: [null],
       ngayTongHop: [null],
+      tgTongHop: [null],
+      namKeHoach: [''],
       noiDung: [null],
       maToTrinh: [null],
+      soQuyetDinh: [null],
+      ngayKyQd: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       lyDo: [],
@@ -74,11 +81,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       namBatDau : [],
       namKetThuc : [],
       loaiDuAn : [],
+      tgTongHop : [],
     })
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
+    this.maTt = '/TTr-TCDT';
+    this.soQd = '/QĐ-TCDT';
     this.loadDsNam();
     await this.getDataDetail(this.idInput)
     await this.getAllLoaiDuAn();
@@ -128,7 +138,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  addValidate() {
+  setValidators() {
     this.formData.controls["ngayTongHop"].setValidators([Validators.required]);
     this.formData.controls["noiDung"].setValidators([Validators.required]);
     this.formData.controls["maToTrinh"].setValidators([Validators.required]);
@@ -137,20 +147,17 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
-    this.addValidate();
+    this.setValidators();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
     }
-    if (this.formData.value.namBatDau > this.formData.value.namKetThuc) {
-      this.notification.error(MESSAGE.ERROR, "Năm bắt đàu không được lớn hơn năm kết thúc!")
-      this.spinner.hide();
-      return
-    }
     let body = this.formData.value;
-    body.ctiets = this.dataTableDx;
+    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : null;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : null;
+    body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.maDvi = this.userInfo.MA_DVI;
     let res
@@ -335,23 +342,23 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
 
   async tongHop() {
     this.spinner.show();
-    let idTh = await this.userService.getId("KT_KH_TH_TRUNGHAN_SEQ");
-    if (!idTh) {
-      this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
-      this.spinner.hide();
-      return;
-    }
+    this.formTongHop.patchValue({
+      tgTongHop : Date.now()
+    })
     let body = this.formData.value;
     let res = await this.tongHopDxXdTh.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      this.formData.patchValue({
+        namKeHoach : this.formTongHop.value.namKeHoach,
+        tgTongHop : this.formTongHop.value.tgTongHop,
+        namBatDau : this.formTongHop.value.namBatDau,
+        namKetThuc : this.formTongHop.value.namKetThuc
+      })
       let list = res.data;
       if (list && list.length != 0) {
         this.isTongHop = true;
-        this.dataTable = list;
-        this.dataTableDx = list;
-        this.formData.patchValue({
-          id : idTh
-        })
+        this.listDx= list;
+        this.dataTableReq= list;
       } else  {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!")
         this.spinner.hide();
@@ -398,6 +405,71 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       }, 0);
     }
     return sum;
+  }
+
+  selectRow(item: any) {
+    if (!item.selected) {
+      this.listDx.forEach(item => {
+        item.selected = false
+      })
+      item.selected = true;
+      if (item.chiTiets && item.chiTiets.length > 0) {
+        this.dataTableDx = item.chiTiets;
+        this.dataTableDx = this.convertListData(this.dataTableDx)
+        this.expandAll(this.dataTableDx);
+      }
+    }
+  }
+
+  expandAll(table : any[]) {
+    if (table && table.length > 0) {
+      table.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      });
+    }
+  }
+
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  convertListData(table : any[]) {
+    if (table && table.length > 0) {
+      table = chain(table).groupBy("khoi").map((value, key) => ({
+          khoi: key,
+          dataChild: value,
+          idVirtual: uuidv4()
+        })
+      ).value();
+    }
+    return table;
+  }
+
+  sumSoLuong(data: any, row: string, table : any[], type?: any) {
+    let sl = 0;
+    if (!type) {
+      if (data && data.dataChild && data.dataChild.length > 0) {
+        const sum = data.dataChild.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
+      }
+    } else {
+      if (table && table.length > 0) {
+        let sum = 0;
+        table.forEach(item => {
+          sum +=  this.sumSoLuong(item, row, table)
+        })
+        sl = sum;
+      }
+    }
+    return sl;
   }
 
 }
