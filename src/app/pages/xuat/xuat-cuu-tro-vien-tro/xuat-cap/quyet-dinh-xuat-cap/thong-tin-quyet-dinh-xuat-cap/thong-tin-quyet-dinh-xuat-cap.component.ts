@@ -15,7 +15,6 @@ import {STATUS} from "../../../../../../constants/status";
 import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {MESSAGE} from "../../../../../../constants/message";
 import {chain, cloneDeep} from "lodash";
-import * as uuid from "uuid";
 import {v4 as uuidv4} from "uuid";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
@@ -139,19 +138,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     await this.spinner.hide();
   }
 
-  async changePhuongAn(event) {
-    await this.spinner.show();
-    if (event) {
-      let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
-      this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
-
-      this.deXuatPhuongAnCache = data.data.quyetDinhPdDtl[0].quyetDinhPdDx;
-      this.tenLoaiVthh = data.data.tenLoaiVthh;
-      this.loaiNhapXuat = data.data.loaiNhapXuat;
-      this.buildTableView();
-    }
-    await this.spinner.hide();
-  }
 
   async loadDsQdPaChuyenXuatCap() {
     let body = {
@@ -172,7 +158,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
-            this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+            this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuidv4);
             if (res.data.isChonPhuongAn == true) {
               this.isChecked = true;
               this.isChonPhuongAn = true;
@@ -251,6 +237,20 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
 
+  async changePhuongAn(event) {
+    await this.spinner.show();
+    if (event) {
+      let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
+      this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
+
+      this.quyetDinhPdDtlCache = data.data.quyetDinhPdDtl;
+      this.tenLoaiVthh = data.data.tenLoaiVthh;
+      this.loaiNhapXuat = data.data.loaiNhapXuat;
+      this.buildTableView();
+    }
+    await this.spinner.hide();
+  }
+
   async selectRow(item?: any) {
     try {
       await this.spinner.show();
@@ -261,12 +261,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         i.selected = false
       });
       this.deXuatSelected.selected = true;
-
-      //let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
+      let dataEdit = this.formData.value.quyetDinhPdDtl.find(s => s.idDx === this.deXuatSelected.idDx);
       let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
-      //dataEdit.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
-      dataCache.quyetDinhPdDx.forEach(s => s.idVirtual = uuidv4());
-      //this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
+      this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
       this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
       await this.buildTableView();
     } catch (e) {
@@ -357,7 +354,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.errorInputComponent.push("inputChiCuc");
       return;
     }
-    this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuid.v4();
+    this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuidv4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
     this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.cloaiVthh)?.ten;
     let index = this.formData.value.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
@@ -394,7 +391,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   buildTableView() {
-    let dataViewCache = chain(this.deXuatPhuongAnCache)
+    this.phuongAnViewCache = chain(this.deXuatPhuongAnCache)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
@@ -423,9 +420,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           childData: rs
         };
       }).value();
-    this.phuongAnViewCache = dataViewCache;
-    console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), "raw");
-    let dataView = chain(this.formData.value.deXuatPhuongAn)
+    this.phuongAnView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
@@ -435,7 +430,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
               let rowCuc = v.find(s => s.tenCuc === k);
               console.log(rowCuc, "rowCuc");
               return {
-                idVirtual: uuid.v4(),
+                idVirtual: uuidv4(),
                 tenCuc: k,
                 soLuongXuatCuc: rowCuc.soLuongXuatCuc,
                 soLuongXuatCucThucTe: soLuongXuatCucThucTe,
@@ -448,16 +443,17 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
         return {
-          idVirtual: uuid.v4(),
+          idVirtual: uuidv4(),
           noiDung: key,
           soLuongXuat: soLuongXuat,
           soLuongXuatThucTe: soLuongXuatThucTe,
           childData: rs
         };
       }).value();
-    this.phuongAnView = dataView;
     this.expandAll();
-
+    console.log(this.phuongAnView,'this.phuongAnView');
+    console.log(this.phuongAnViewCache,'this.phuongAnViewCache');
+    console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), "raw");
     //
     if (this.formData.value.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
@@ -642,6 +638,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
   redirectDetail(id, b: boolean) {
     this.idSelected = id;
     this.isDetail = true;
