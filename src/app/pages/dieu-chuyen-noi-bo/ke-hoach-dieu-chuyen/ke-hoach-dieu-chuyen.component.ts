@@ -15,6 +15,7 @@ import {DonviService} from 'src/app/services/donvi.service';
 import {CHUC_NANG} from 'src/app/constants/status';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {Validators} from "@angular/forms";
+import {KeHoachDieuChuyenService} from "./ke-hoach-dieu-chuyen.service";
 
 @Component({
   selector: 'app-ke-hoach-dieu-chuyen',
@@ -49,26 +50,22 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private keHoachDieuChuyenService: KeHoachDieuChuyenService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
+    super(httpClient, storageService, notification, spinner, modal, keHoachDieuChuyenService);
     this.formData = this.fb.group({
       nam: [dayjs().get("year"), [Validators.required]],
       loaiDc: null,
       tenDvi: null,
       maDvi: null,
-      ngayLapKh: null,
       ngayLapKhTu: null,
       ngayLapKhDen: null,
-      ngayDuyetLdc: null,
       ngayDuyetLdcTu: null,
       ngayDuyetLdcDen: null,
       soDxuat: null,
-      nguonChi: null,
       loaiVthh: null,
       cloaiVthh: null,
-      trichYeu: null,
-      type: null
+      trichYeu: null
     })
     this.filterTable = {
       nam: '',
@@ -178,7 +175,6 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     this.selectedId = id;
     this.isDetail = true;
     this.isView = b;
-    // this.isViewDetail = isView ?? false;
   }
 
   async showList() {
@@ -188,5 +184,13 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
 
   xoa(data: any) {
 
+  }
+
+  checkAllowEdit(data: any): boolean {
+    return true;
+  }
+
+  checkAllowDelete(data: any): boolean {
+    return true;
   }
 }
