@@ -551,24 +551,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let item of dataTable , let i = index">
-                                <tr>
-                                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                                    <td colspan="3">{{item.tenDvi}}</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <ng-container *ngIf="expandSet.has(i)">
-                                    <tr *ngFor="let dtGoiThau of item.children, let y = index">
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{dtGoiThau.tenDiemKho}}</td>
-                                        <td>{{dtGoiThau.diaDiemNhap}}</td>
-                                        <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                        <td>{{dtGoiThau.soLuong * formData.value.donGia * 1000 | number : '1.0-1' :
-                                            'vi_VN'}}
+                            <ng-container *ngFor="let cuc of dataTable , let i = index">
+                                <ng-container *ngFor="let chiCuc of cuc.children , let y = index">
+                                    <tr>
+                                        <td [nzExpand]="expandSet.has(y)" (nzExpandChange)="onExpandChange(y, $event)">
                                         </td>
+                                        <td colspan="3">{{chiCuc.tenDvi}}</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
+                                    <ng-container *ngIf="expandSet.has(y)">
+                                        <tr *ngFor="let diemKho of chiCuc.children, let z = index">
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{diemKho.tenDvi}}</td>
+                                            <td>{{diemKho.diaDiemNhap}}</td>
+                                            <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                            <td>{{diemKho.soLuong * formData.value.donGia * 1000 | number : '1.0-1' :
+                                                'vi_VN'}}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
                         </tbody>
