@@ -62,7 +62,7 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
 
   userInfo: UserLogin;
   userdetail: any = {};
-  selectedId: number = 0;
+
   isVatTu: boolean = false;
   isView = false;
 
@@ -97,7 +97,7 @@ export class QuyetDinhXuatCapComponent extends Base2Component implements OnInit 
   }
 
   redirectDetail(id, b: boolean) {
-    this.selectedId = id;
+    this.idSelected = id;
     this.isDetail = true;
     this.isView = b;
   }
