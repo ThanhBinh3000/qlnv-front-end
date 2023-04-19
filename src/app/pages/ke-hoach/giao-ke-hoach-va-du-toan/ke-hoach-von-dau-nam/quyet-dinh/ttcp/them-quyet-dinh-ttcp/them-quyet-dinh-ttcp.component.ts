@@ -7,6 +7,7 @@ import {
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from 'src/app/constants/message';
+import {groupBy, mapValues} from 'lodash';
 import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -139,7 +140,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           "maBn": item.maDvi,
           "tenBn": item.tenDvi,
           "isSum": item.maDvi == '01' ? true : false,
-          "tongSo": 0
+          "tongSo": null
         };
         this.dataTableAllBn.push(obj);
         if (item.maDvi == '01') {
@@ -158,14 +159,14 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       "maBn": maCha,
       "tenBn": "   Lương thực",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     }, {
       "stt": 3,
       "maCha": maCha,
       "maBn": maCha,
       "tenBn": "   Vật tư, thiết bị",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     })
   }
 
@@ -346,6 +347,12 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.dataTable.push(data);
         }
+        const result = mapValues(groupBy(this.dataTableAllBn, 'maBn'), (itemsByCategory: any[]) =>
+          itemsByCategory.reduce((sum, item) => sum + item.tongSo, 0)
+        );
+        this.dataTable.forEach(item => {
+          item.tongTien = result && result[item.maBoNganh] ? result[item.maBoNganh] : 0;
+        })
       }
     });
 

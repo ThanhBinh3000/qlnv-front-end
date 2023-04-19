@@ -83,7 +83,15 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ pháp lý</nz-form-label>
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [isViewDetail]="!isView" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm quyết định của BTC giao TCDT </nz-form-label>
             <div class="list-file">
               <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
             </div>

@@ -4,9 +4,9 @@
       <i class="icon htvbdh_arrow-left2"></i>
       <span>Quay lại</span>
     </button>
-    <ng-container *ngIf="userService.isCuc() && !isDetail()">
+    <ng-container *ngIf="userService.isCuc()">
       <button type="button" class="btn btn-sub xanh-nhat"
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
         (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
@@ -24,7 +24,7 @@
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC )"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
         type="
           button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
@@ -213,7 +213,7 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list [isViewDetail]="isDisableForm()" [data]="fileDinhKem"></file-list>
+              <file-list [isViewDetail]="isDisableForm()" [data]="listCanCu"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -249,7 +249,8 @@
         <th class="text-center" *ngIf="userService.isChiCuc()">Trạng thái</th>
         <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái NH</th>
         <th class="text-center" *ngIf="!userService.isChiCuc()">Trạng thái phân bổ</th>
-        <th *ngIf="userService.isChiCuc()" nzWidth="80px" class="text-center"></th>
+        <th *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')" nzWidth="80px" class="text-center">Hành
+          động</th>
       </tr>
     </thead>
     <tbody>
@@ -270,10 +271,11 @@
           <td *ngIf="userService.isChiCuc()">{{ item.tenTrangThai }}</td>
           <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
           <td *ngIf="!userService.isChiCuc()">{{ item.tenTrangThai }}</td>
-          <td *ngIf="userService.isChiCuc()"></td>
+          <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"></td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">
-          <tr *ngIf="userService.isChiCuc() && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
+          <tr
+            *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO') && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
             <td></td>
             <td></td>
             <td></td>
@@ -334,8 +336,7 @@
             <td>{{ ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
-            <td></td>
-            <td *ngIf="userService.isChiCuc()" style="text-align: center;">
+            <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')" style="text-align: center;">
               <a>
                 <i class="fa fa-pencil"></i>
               </a>
@@ -345,9 +346,13 @@
             </td>
           </tr>
           <tr *ngIf="item.children?.length > 0 && this.userService.isChiCuc()">
-            <td style="text-align: right; font-weight: 700" colspan="7">Tổng số</td>
+            <td style="text-align: right; font-weight: 700" colspan="8">Tổng số</td>
+            <td></td>
+            <td></td>
             <td>{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
+            <td></td>
+            <td *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')"></td>
           </tr>
         </ng-container>
       </ng-container>
