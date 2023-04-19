@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from "dayjs";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -7,7 +6,6 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { isEmpty } from 'lodash';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -44,7 +42,6 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
     this.formData = this.fb.group({
@@ -56,6 +53,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
       maDviChiCuc: null,
       tenDvi: null,
       loaiVthh: null,
+      trangThai: null,
       lastest: 1
     })
 
@@ -102,6 +100,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isTongCuc() ? this.STATUS.HOAN_THANH_CAP_NHAT : null,
       lastest: 1
     })
   }
