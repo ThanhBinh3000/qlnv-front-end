@@ -7,6 +7,7 @@ import {
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from 'src/app/constants/message';
+import {groupBy, mapValues} from 'lodash';
 import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -346,6 +347,12 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.dataTable.push(data);
         }
+        const result = mapValues(groupBy(this.dataTableAllBn, 'maBn'), (itemsByCategory: any[]) =>
+          itemsByCategory.reduce((sum, item) => sum + item.tongSo, 0)
+        );
+        this.dataTable.forEach(item => {
+          item.tongTien = result && result[item.maBoNganh] ? result[item.maBoNganh] : 0;
+        })
       }
     });
 
