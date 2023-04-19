@@ -191,7 +191,11 @@
             <td>{{data.nam}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soHd }}</td>
+            <td>
+              <a *ngIf="data.soHd && data.idHd" style="color: blue ;font-weight: bold;"
+                (click)="openModalHd(data.idHd)">{{
+                data.soHd}}</a>
+            </td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tgianGnhan | date: 'dd/MM/YYYY'}}</td>
@@ -257,3 +261,16 @@
   <app-create-giao-xh [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()" [isDetail]="isDetail">
   </app-create-giao-xh>
 </div>
+
+<nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewHd" (nzOnCancel)="closeModalHd()">
+  <ng-container *nzModalContent class="modal__content">
+    <app-thong-tin [id]="idHd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    </app-thong-tin>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeModalHd()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

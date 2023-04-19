@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -44,6 +45,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
@@ -80,6 +82,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       await Promise.all([
         this.loadChiTiet(),
       ]);
+      this.loadDanhMucHang()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -206,6 +209,21 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         });
       }
     });
+  }
+
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach((element) => {
+          if (element.ma == this.loaiVthh) {
+            this.formTraCuu.patchValue({
+              tenLoaiVthh: element.giaTri,
+            })
+          }
+        });
+      }
+    }
   }
 
   taoQdinh() {
