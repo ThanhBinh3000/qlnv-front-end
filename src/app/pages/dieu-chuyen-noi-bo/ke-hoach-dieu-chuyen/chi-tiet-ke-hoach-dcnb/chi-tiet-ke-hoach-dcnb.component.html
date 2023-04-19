@@ -205,9 +205,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Chi cục đề xuất điều chuyển</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-form-control nz-col [nzSpan]="24">
-                <nz-select nzAllowClear [nzDisabled]="true" nzShowSearch formControlName="maDvi">
-                  <nz-option *ngFor="let p of dataChiCuc" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-                </nz-select>
+                <input nz-input formControlName="tenDvi" [readOnly]="true"/>
               </nz-form-control>
             </nz-form-control>
           </nz-form-item>
@@ -431,7 +429,7 @@
                 </td>
                 <td>
                   <nz-form-item>
-                    <nz-select [(ngModel)]="item.ptGiaoHang" [nzDisabled]="isView" (ngModelChange)="changePtGiaoHang($event,item)">
+                    <nz-select [(ngModel)]="item.pthucGiaoHang" [nzDisabled]="isView" (ngModelChange)="changePtGiaoHang($event,item)">
                       <nz-option *ngFor="let p of listPtGiaoHang" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                       </nz-option>
                     </nz-select>
@@ -439,7 +437,7 @@
                 </td>
                 <td>
                   <nz-form-item>
-                    <nz-select [(ngModel)]="item.ptNhanHang" [nzDisabled]="isView" (ngModelChange)="changePtNhanHang($event,item)">
+                    <nz-select [(ngModel)]="item.pthucNhanHang" [nzDisabled]="isView" (ngModelChange)="changePtNhanHang($event,item)">
                       <nz-option *ngFor="let p of listPtNhanHang" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                       </nz-option>
                     </nz-select>

@@ -119,7 +119,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     this.formData = this.fb.group(
       {
-        id: [0],
+        id: [undefined],
         nam: [dayjs().get("year"), [Validators.required]],
         maDvi: ['', [Validators.required]],
         maDviCuc: ['', [Validators.required]],
@@ -145,7 +145,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     );
     this.formDataChiTiet = this.fb.group(
       {
-        id: [0],
+        id: [undefined],
         idVirtual: [''],
         maChiCucNhan: ['', [Validators.required]],
         tenChiCucNhan: ['', [Validators.required]],
@@ -225,6 +225,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     let resDonVi = await this.donViService.getDonVi({str: this.userInfo.MA_DVI?.slice(0, -2)});
     if (resDonVi.msg == MESSAGE.SUCCESS) {
       this.dsDonVi = [resDonVi.data];
+      if(this.dsDonVi){
+        let tenDviCuc = this.dsDonVi.find(item => item.maDvi ===  this.formData.value.maDviCuc);
+        if(tenDviCuc){
+          this.formData.controls['tenDviCuc'].patchValue({tenDviCuc: tenDviCuc.tenDvi});
+        }
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -251,10 +257,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       await this.keHoachDieuChuyenService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            res.data.soDx = res.data.soDx.split("/")[0];
+            debugger
             this.formData.patchValue(res.data);
             this.formData.value.danhSachHangHoa.forEach(s => s.idVirtual = uuid.v4());
-            await this.changeHangHoa(res.data.loaiVthh)
+            this.tableEdit = res.data.phuongAnDieuChuyen;
+            // await this.changeHangHoa(res.data.loaiVthh)
             this.buildTableView();
           }
         })
@@ -345,12 +352,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.getListNganKhoBq(value);
   }
   changeNganKho = (value) => {
-    let temNganKho = (this.listNganKhoBq ? this.listNganKhoBq : []).find(item => item.maDvi === value);
+    let tenNganKho = (this.listNganKhoBq ? this.listNganKhoBq : []).find(item => item.maDvi === value);
     this.listLoKhoBq = []
     this.formDataChiTiet.patchValue({
       maLoKho: "",
       tenLoKho: "",
-      temNganKho: temNganKho ? temNganKho.tenDvi : ""
+      tenNganKho: tenNganKho ? tenNganKho.tenDvi : ""
     });
     this.getListLoKhoBq(value);
   }
@@ -439,7 +446,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   handleChangeLoaiDC(event: any) {
     if ("CUC" === event) {
       this.formData.patchValue({
-        maDviCuc: this.userInfo.MA_DVI?.slice(0, -2),
         maCucNhan: "",
         danhSachHangHoa: [],
         canCu: []
@@ -449,7 +455,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       this.listChiCucNhan = [];
     } else {
       this.formData.patchValue({
-        maDviCuc: "",
         maCucNhan: "",
         danhSachHangHoa: [],
         canCu: []
@@ -628,9 +633,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   async save() {
-    //this.setValidForm();
-    debugger
-    let result = await this.createUpdate(this.formData.value);
+    const body = {
+      ...this.formData.value,
+      phuongAnDieuChuyen: this.tableEdit
+    }
+    let result = await this.createUpdate(body);
     if (result) {
       this.quayLai();
     }
@@ -887,18 +894,18 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   changeHinhThucDvCcDvVanChuyen(value: any, item:any) {
-    let hinhThucDvCcDvVanChuyen = (this.listHinhThucDvCcDvVanChuyen ? this.listHinhThucDvCcDvVanChuyen : []).find(item => item.ma === value);
-    item.tenHinhThucDvCcDvVanChuyen = hinhThucDvCcDvVanChuyen.giaTri;
+    let tenHinhThucDvCcDvVanChuyen = (this.listHinhThucDvCcDvVanChuyen ? this.listHinhThucDvCcDvVanChuyen : []).find(item => item.ma === value);
+    item.tenHinhThucDvCcDvVanChuyen = tenHinhThucDvCcDvVanChuyen.giaTri;
   }
 
   changePtGiaoHang(value: any, item:any) {
-    let ptGiaoHang = (this.listPtGiaoHang ? this.listPtGiaoHang : []).find(item => item.ma === value);
-    item.tenPtGiaoHang = ptGiaoHang.giaTri;
+    let tenPthucGiaoHang = (this.listPtGiaoHang ? this.listPtGiaoHang : []).find(item => item.ma === value);
+    item.tenPthucGiaoHang = tenPthucGiaoHang.giaTri;
   }
 
   changePtNhanHang(value: any, item:any) {
-    let ptNhanHang = (this.listPtNhanHang ? this.listPtNhanHang : []).find(item => item.ma === value);
-    item.tenPtNhanHang = ptNhanHang.giaTri;
+    let tenPthucNhanHang = (this.listPtNhanHang ? this.listPtNhanHang : []).find(item => item.ma === value);
+    item.tenPthucNhanHang = tenPthucNhanHang.giaTri;
   }
 
   changeNguonChi(value: any, item:any) {
