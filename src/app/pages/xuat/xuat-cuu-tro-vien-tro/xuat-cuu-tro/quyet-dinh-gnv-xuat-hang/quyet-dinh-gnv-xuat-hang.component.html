@@ -187,12 +187,12 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>{{ data.tenTrangThaiXh }}</td>
           <td class="text-left">
-            <a (click)="redirectDetail(data.id, true)" *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                            !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
-                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM'))||
-                            (vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
-                            !vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) &&
-                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM'))">
+            <a (click)="redirectDetail(data.id, true)"
+               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_CUC'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_TP'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_DUYET_LDC')) &&
+                userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
@@ -200,8 +200,8 @@
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && !vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP'))
-               ||(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDCC) && !vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC'))"
+            <a *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_TP) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_TP'))
+               ||(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_DUYET_LDCUC'))"
                (click)="redirectDetail(data.id, true)">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
