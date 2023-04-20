@@ -35,8 +35,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soCongVan: '',
-    phuongAnTc: '',
+    namKeHoach  :'',
+    soQuyetDinh: '',
     trichYeu: '',
     ngayKyBtc: '',
     trangThai: ''
@@ -206,8 +206,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soCongVan: '',
-      phuongAnTc: '',
+      namKeHoach  :'',
+      soQuyetDinh: '',
       trichYeu: '',
       ngayKyBtc: '',
       trangThai: ''

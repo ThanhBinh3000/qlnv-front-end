@@ -95,11 +95,15 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
 
   async getAllDmKho() {
-    let res = await this.dmKhoService.getAllDmKho('DMK');
+    let body = {
+      "type" : "DMK",
+      "maDvi" : this.userInfo.MA_DVI
+    }
+    let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
       if (this.listDmKho && this.listDmKho.length > 0) {
-        this.listDmKho = this.listDmKho.filter(item => item.trangThai == STATUS.CHUA_THUC_HIEN && item.khoi == this.dataInput.khoi)
+        this.listDmKho = this.listDmKho.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi)
       }
     }
   }

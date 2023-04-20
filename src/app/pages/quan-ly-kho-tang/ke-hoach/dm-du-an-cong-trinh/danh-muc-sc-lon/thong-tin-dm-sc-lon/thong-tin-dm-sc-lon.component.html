@@ -81,7 +81,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error" >
               <nz-form-label nzRequired  [nzNoColon]="true">Dự toán (đ)</nz-form-label>
-              <nz-input-number [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'" [nzMin]="0" formControlName="duToan">
+              <nz-input-number [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzFormatter]="globals.formatter" [nzSize]="'small'" [nzMin]="0" formControlName="duToan">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
