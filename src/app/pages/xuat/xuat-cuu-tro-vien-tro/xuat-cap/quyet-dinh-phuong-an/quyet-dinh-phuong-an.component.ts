@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {Component, EventEmitter, Input, OnInit, Output} from "@angular/core";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
@@ -29,7 +29,7 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  @Output() eventTaoQd: EventEmitter<any> = new EventEmitter<any>();
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -140,5 +140,7 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
-
+  taoQuyetDinh(data) {
+    this.eventTaoQd.emit(data);
+  }
 }

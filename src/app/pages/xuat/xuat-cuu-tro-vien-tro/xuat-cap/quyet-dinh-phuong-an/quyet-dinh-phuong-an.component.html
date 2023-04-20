@@ -146,8 +146,14 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectDetail(data.id, true)">
+            <a *ngIf="data.soQdPd && data.maThop"
+              (click)="redirectDetail(data.id, true)">
               <i class="fa fa-eye"></i>
+            </a>
+            <a
+              *ngIf="!data.soQdPd && !data.maThop"
+              (click)="taoQuyetDinh(data)">
+              <i class="icon htvbdh_soanthao"></i>
             </a>
           </td>
         </tr>
