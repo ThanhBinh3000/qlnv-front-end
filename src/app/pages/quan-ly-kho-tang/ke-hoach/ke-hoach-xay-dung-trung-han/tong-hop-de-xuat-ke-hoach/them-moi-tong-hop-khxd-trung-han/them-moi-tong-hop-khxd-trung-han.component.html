@@ -251,7 +251,7 @@
               <td>{{item.tenDvi}}</td>
               <td>{{item.soCongVan}}</td>
               <td>{{item.ngayDuyet|date:globals.dateFormat}}</td>
-              <td>{{item.tmdt}}</td>
+              <td class="text-right">{{item.tmdt | number : '1.0-1' : 'vi-VN'}}</td>
               <td>{{item.namBatDau + ' - ' + item.namKetThuc}}</td>
               <td>{{item.trichYeu}}</td>
             </tr>
