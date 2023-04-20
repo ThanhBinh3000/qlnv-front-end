@@ -29,17 +29,20 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   @Input()
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
+  listLoaiDc: any [] = [
+    {ma: 'CHI_CUC', giaTri: 'Giữa 2 chi cục trong cùng 1 cục'},
+    {ma: 'CUC', giaTri: 'Giữa 2 cục DTNN KV'}
+  ];
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
-    {ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ'},
+    {ma: this.STATUS.CHODUYET_TBP_TVQT, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.TUCHOI_TBP_TVQT, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDCC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDCC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Cục'}
   ];
 
   constructor(
@@ -60,8 +63,8 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       maDvi: null,
       ngayLapKhTu: null,
       ngayLapKhDen: null,
-      ngayDuyetLdcTu: null,
-      ngayDuyetLdcDen: null,
+      ngayDuyetLdccTu: null,
+      ngayDuyetLdccDen: null,
       soDxuat: null,
       loaiVthh: null,
       cloaiVthh: null,
@@ -71,7 +74,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       nam: '',
       soDxuat: '',
       ngayLapKh: '',
-      ngayDuyetLdc: '',
+      ngayDuyetLdcc: '',
       loaiDc: '',
       maDvi: '',
       tenDvi: '',
@@ -102,18 +105,18 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
   };
 
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
+  disabledStartNgayDuyetLdcc = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDuyetLdccDen) {
+      return startValue.getTime() > this.formData.value.ngayDuyetLdccDen.getTime();
     }
     return false;
   };
 
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
+  disabledEndNgayDuyetLdcc = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDuyetLdccTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayDuyetLdccDen.getTime();
   };
 
   async ngOnInit() {
@@ -171,10 +174,17 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     await this.search();
   }
 
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
+  redirectDetail(data, b: boolean) {
+    if(data){
+      this.selectedId = data.id;
+    }else {
+      this.selectedId = 0;
+    }
     this.isDetail = true;
     this.isView = b;
+    if(data.trangThai != this.STATUS.DU_THAO || data.trangThai != this.STATUS.TUCHOI_TBP_TVQT || data.trangThai != this.STATUS.TU_CHOI_LDCC){
+      this.isView = true;
+    }
   }
 
   async showList() {
@@ -187,10 +197,10 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   checkAllowEdit(data: any): boolean {
-    return true;
+    return data.trangThai != this.STATUS.DA_DUYET_LDCC;
   }
 
   checkAllowDelete(data: any): boolean {
-    return true;
+    return data.trangThai == this.STATUS.DU_THAO;
   }
 }

@@ -11,7 +11,11 @@
           </div>
           <div nz-col nzSpan="10">
             <label class="search__label">Loại điều chuyển</label>
-            <input nz-input formControlName="loaiDc"/>
+            <nz-select nzAllowClear formControlName="loaiDc" nzPlaceHolder="Chọn loại điều chuyển"
+                       nzShowSearch>
+              <nz-option *ngFor="let p of listLoaiDc" [nzValue]="p.ma"
+                         [nzLabel]="p.giaTri"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Ngày lập KH điều chuyển</label>
@@ -28,16 +32,16 @@
             </div>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Ngày duyệt LĐ Cục</label>
+            <label class="search__label">Ngày duyệt LĐ Chi Cục</label>
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledStartNgayDuyetLdc" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayDuyetLdcTu" nzPlaceHolder="Ngày bắt đầu">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayDuyetLdcc" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayDuyetLdccTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledEndNgayDuyetLdc" nzFormat="dd/MM/yyyy"
-                                formControlName="ngayDuyetLdcDen" nzPlaceHolder="Ngày kết thúc">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayDuyetLdcc" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayDuyetLdccDen" nzPlaceHolder="Ngày kết thúc">
                 </nz-date-picker>
               </div>
             </div>
@@ -91,7 +95,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
+        <button type="button" class="btn btn-main" (click)="redirectDetail(null,false)">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -148,8 +152,8 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayDuyetLdc"
-                              (ngModelChange)="filterInTable('ngayDuyetLdc', convertDateToString(filterTable.ngayDuyetLdc))">
+              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayDuyetLdcc"
+                              (ngModelChange)="filterInTable('ngayDuyetLdcc', convertDateToString(filterTable.ngayDuyetLdcc))">
               </nz-date-picker>
             </nz-input-group>
           </th>
@@ -187,16 +191,16 @@
           <td>{{ data.nam }}</td>
           <td>{{ data.soDxuat }}</td>
           <td>{{ data.ngayLapKh | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.ngayDuyetLdc| date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.loaiDc }}</td>
+          <td>{{ data.ngayDuyetLdcc| date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.tenLoaiDc }}</td>
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a *ngIf="!checkAllowEdit(data)">
-              <i class="icon htvbdh_eye" *ngIf="!isView" (click)="redirectDetail(data.id,true)"></i>
+              <i class="icon htvbdh_eye" *ngIf="!isView" (click)="redirectDetail(data,true)"></i>
             </a>
             <a  *ngIf="checkAllowEdit(data)">
-              <i class="fa fa-edit" *ngIf="!isView" (click)="redirectDetail(data.id,false)"></i>
+              <i class="fa fa-edit" *ngIf="!isView" (click)="redirectDetail(data,false)"></i>
             </a>
             <a *ngIf="checkAllowDelete(data)">
               <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
