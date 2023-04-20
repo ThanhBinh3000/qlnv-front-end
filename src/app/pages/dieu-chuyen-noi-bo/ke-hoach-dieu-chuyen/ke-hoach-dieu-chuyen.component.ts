@@ -175,14 +175,15 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   redirectDetail(data, b: boolean) {
-    if(data){
+    if (data) {
       this.selectedId = data.id;
-    }else {
+    } else {
       this.selectedId = 0;
     }
     this.isDetail = true;
     this.isView = b;
-    if(data.trangThai != this.STATUS.DU_THAO || data.trangThai != this.STATUS.TUCHOI_TBP_TVQT || data.trangThai != this.STATUS.TU_CHOI_LDCC){
+    if (!(data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.TU_CHOI_LDCC
+      || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT)) {
       this.isView = true;
     }
   }

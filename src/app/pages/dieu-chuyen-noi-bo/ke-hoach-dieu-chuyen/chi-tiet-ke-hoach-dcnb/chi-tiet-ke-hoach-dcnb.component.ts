@@ -80,6 +80,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   isVisible = false;
   isAddDiemKho = false;
   isVisibleSuaChiCuc = false;
+  isNhanDieuChuyen = false;
   listNoiDung = []
   tongThanhTien: any;
   tongSoLuong: any;
@@ -172,7 +173,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         tenCloaiVthh: ['', [Validators.required]],
         donViTinh: ['', [Validators.required]],
         tenDonViTinh: ['', [Validators.required]],
-        tonKho: [0, [Validators.required]]
+        tonKho: [0, [Validators.required]],
+        hdrId: [undefined]
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -266,6 +268,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
             this.formData.patchValue(res.data);
             this.formData.value.danhSachHangHoa.forEach(s => s.idVirtual = uuid.v4());
             this.tableEdit = res.data.phuongAnDieuChuyen;
+            if (this.formData.value.type == 'NDC'){
+              this.isNhanDieuChuyen = true;
+            }else {
+              this.isNhanDieuChuyen = false;
+            }
             this.loadDsChiCuc(this.formData.value.maCucNhan);
             this.buildTableView();
           }
@@ -668,21 +675,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       let result = await this.save(false);
       if (result) {
         this.idInput = result.id;
-        await this.approve(this.idInput, STATUS.CHODUYET_TBP_TVQT, message);
-      }
-    }
-  }
+        if(this.formData.value.type == 'DC'){
+          await this.approve(this.idInput, STATUS.CHODUYET_TBP_TVQT, message);
+        }else if(this.formData.value.type == 'NDC'){
+          await this.approve(this.idInput, STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT, message);
+        }
 
-  async saveAndChangeStatus(status: string, message: string, sucessMessage: string) {
-    this.setValidForm();
-    if (!this.formData.value.danhSachHangHoa || (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length === 0)) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền thông tin hàng DTQG cần điều chuyển! ');
-      return;
-    } else {
-      let result = await this.save(false);
-      if (result) {
-        this.idInput = result.id;
-        await this.approve(this.idInput, status, message, null, sucessMessage);
       }
     }
   }
@@ -705,6 +703,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       danhSachHangHoa: danhSachHangHoa
     })
     this.buildTableView();
+    this.buildTableEdit();
   }
 
   getC3List(data, idVirtual) {
@@ -743,7 +742,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   async suaHangHoa(data: any) {
     this.showModal();
     this.isEditDetail = true;
-    this.formDataChiTiet.setValue(data);
+    this.formDataChiTiet.patchValue(data);
     this.getListNhaKhoBq(data.maDiemKho);
     this.getListNganKhoBq(data.maNhaKho);
     this.getListLoKhoBq(data.maNganKho);
