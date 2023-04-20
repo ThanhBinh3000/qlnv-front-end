@@ -78,14 +78,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.initForm();
     this.updateEditCache();
     this.disableChiCuc();
-    this.getGiaToiThieu();
-  }
-
-  async getGiaToiThieu() {
-    let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.cloaiVthh, this.userInfo.MA_DVI, this.namKh);
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
-    }
   }
 
   save() {
@@ -188,12 +180,20 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (chiCuc.soLuongXuat) {
-        this.formData.patchValue({
-          tenDvi: res.data.tenDvi,
-          diaChi: res.data.diaChi,
-          slKeHoachDd: soLuongDaLenKh.data,
-          slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU || LOAI_HANG_DTQG.MUOI) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
-        })
+        if (LOAI_HANG_DTQG.MUOI) {
+          this.formData.patchValue({
+            tenDvi: res.data.tenDvi,
+            diaChi: res.data.diaChi,
+            slKeHoachDd: soLuongDaLenKh.data,
+            slChiTieu: chiCuc?.soLuongXuat,
+          })
+        } else
+          this.formData.patchValue({
+            tenDvi: res.data.tenDvi,
+            diaChi: res.data.diaChi,
+            slKeHoachDd: soLuongDaLenKh.data,
+            slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
+          })
       }
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongtinPhanLo = new DanhSachPhanLo();
@@ -361,10 +361,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateGiaDeXuat() {
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải >= giá bán tối thiểu.');
-      return;
-    } else if (this.thongtinPhanLo.donGiaDeXuat >= this.giaToiDa) {
+    if (this.thongtinPhanLo.donGiaDeXuat >= this.giaToiDa) {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")
       return false
     } else {
