@@ -61,7 +61,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH KẾ HOẠCH BÁN ĐẤU GIÁ</h3>
+      <h3> DANH SÁCH KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
       <div class="buttons">
         <button
           *ngIf="loaiVthh.startsWith('02') ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA') "
@@ -332,7 +332,6 @@
   <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="idSelected" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
   </app-them-de-xuat-ke-hoach-ban-dau-gia>
 </div>
-
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -345,7 +344,6 @@
     </button>
   </div>
 </nz-modal>
-
 <nz-modal [nzWidth]="'90%'" [(nzVisible)]="isViewThop" (nzOnCancel)="closeModalTh()">
   <ng-container *nzModalContent class="modal__content">
     <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="idThop" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
@@ -358,7 +356,6 @@
     </button>
   </div>
 </nz-modal>
-
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModalChiTieu()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="idChiTieu" [isViewDetail]="true"
