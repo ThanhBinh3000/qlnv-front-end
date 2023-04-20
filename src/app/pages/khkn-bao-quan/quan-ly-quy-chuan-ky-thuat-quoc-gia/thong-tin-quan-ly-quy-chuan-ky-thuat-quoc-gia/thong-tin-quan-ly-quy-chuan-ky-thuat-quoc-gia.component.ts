@@ -42,6 +42,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   listCloaiVthh: any[] = [];
+  listAllCloaiVthh: any[] = [];
+  listCloaiVthhReq: any[] = [];
   listOfCloaiVthh: any[] = [];
   isEdit: boolean = false;
   rowItem: QuyChunKyThuatQuocGia = new QuyChunKyThuatQuocGia;
@@ -214,23 +216,43 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     this.showListEvent.emit();
   }
 
-  addAllCloai(): any[] {
+  async addAllCloai() {
+    let ls = [];
+    for (let item of this.listOfTagOptions) {
+      let body = {
+        "str": item
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          ls = [...ls, res.data];
+        } else {
+          let list = this.listOfOption.filter(data => data.maHangHoa == item);
+          if (list && list.length > 0) {
+            let hangHoa = list[0];
+            hangHoa.ma = hangHoa.maHangHoa
+            hangHoa.cap = 2
+            ls = [...ls, hangHoa]
+          }
+        }
+        this.listAllCloaiVthh = ls.flat();
+      }
+    }
     let arr = [];
-    if (this.listCloaiVthh && this.listCloaiVthh.length > 0) {
-      console.log(this.listCloaiVthh);
-      this.listCloaiVthh.forEach(item => {
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach(itemQc => {
-            this.itemQuyChuan = cloneDeep(itemQc);
-            this.itemQuyChuan.cloaiVthh = item.ma;
-            this.itemQuyChuan.loaiVthh = item.ma ? item.ma.substring(0, item.ma.length - 2) : null;
-            arr.push(this.itemQuyChuan);
-            this.itemQuyChuan = new QuyChunKyThuatQuocGia();
-          });
+    if (this.listAllCloaiVthh && this.listAllCloaiVthh.length > 0) {
+      this.listAllCloaiVthh.forEach(item => {
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(itemQc => {
+              this.itemQuyChuan = cloneDeep(itemQc);
+              this.itemQuyChuan.cloaiVthh = item.cap == 3 ? item.ma : null
+              this.itemQuyChuan.loaiVthh = item.cap == 3  ? item.ma.substring(0, item.ma.length - 2) : item.ma;
+              arr.push(this.itemQuyChuan);
+              this.itemQuyChuan = new QuyChunKyThuatQuocGia();
+            });
         }
       });
     }
-    return arr;
+    this.listCloaiVthhReq = arr;
   }
 
   async save(isGuiDuyet?) {
@@ -253,7 +275,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
     let body = this.formData.value;
     if (this.formData.value.apDungCloaiVthh == true) {
-      body.tieuChuanKyThuat = this.addAllCloai();
+      await this.addAllCloai();
+      body.tieuChuanKyThuat = this.listCloaiVthhReq;
     } else {
       body.tieuChuanKyThuat = this.dataTable;
     }
@@ -261,7 +284,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     body.loaiVthh = this.listOfTagOptions.join(",");
     body.listTenLoaiVthh = this.listLoaiVthh.join(",");
     body.apDungTai = this.userInfo.MA_DVI.substring(0, 2);
-    let res = null;
+    let res;
     if (this.id > 0) {
       res = await this.khCnQuyChuanKyThuat.update(body);
     } else {
