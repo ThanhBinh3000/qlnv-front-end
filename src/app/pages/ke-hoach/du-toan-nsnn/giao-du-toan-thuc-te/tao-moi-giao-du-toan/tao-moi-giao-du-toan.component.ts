@@ -239,14 +239,12 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.spinner.show();
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
-		console.log(this.data);
 
 		// lấy mã đơn vị tạo PA
 		this.maDonViTao = this.userInfo?.MA_DVI;
-
+		// await this.getChildUnit();
 		// lấy role người dùng
 		this.userInfo = this.userService.getUserLogin();
-		console.log(this.userInfo);
 
 		await this.danhMuc.dMDonVi().toPromise().then(
 			(data) => {
@@ -300,6 +298,16 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			}
 		}
 		await this.getChildUnit();
+		console.log(this.donVis1.find(e => e.maDvi == this.maDvi));
+
+		if (this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) {
+			this.lstDvi.push(
+				{
+					maDvi: this.maDvi,
+					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+				}
+			)
+		}
 		// if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 		// 	this.lstDvi.push(
 		// 	  {
@@ -308,6 +316,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		// 	  }
 		// 	)
 		//   }
+		console.log(this.lstCtietBcao)
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -344,7 +353,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				if (data.statusCode == 0) {
 					this.lstDvi = data.data;
 					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-					console.log(this.lstDvi);
 					if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 						this.lstDvi.push(
 							{
@@ -404,10 +412,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 					this.maDviTien = data.data.maDviTien;
 					this.checkTrangThaiGiao = data.data.trangThaiGiao;
 					// this.lstDvi = [];
-					console.log(this.lstDvi);
 					this.maDviCha = data.data.maDvi.slice(0, (data.data.maDvi.length - 2));
-					console.log(this.maDviCha);
-
+					this.maDvi = data.data.maDvi
 					this.namPa = data.data.namPa;
 					this.namDtoan = data.data.namDtoan;
 					this.trangThaiBanGhi = data.data.trangThai;
@@ -855,7 +861,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
+		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd && this.trangThaiBanGhi !== "7") {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;

@@ -13,7 +13,7 @@ export class GiaoDuToanChiService extends BaseService {
     super(httpClient, 'quanLyVonPhi', '');
   }
   urlTest = 'http://localhost:9159';
-  urlDefault =  environment.SERVICE_API + '/qlnv-khoachphi';
+  urlDefault = environment.SERVICE_API + '/qlnv-khoachphi';
 
 
   //search list bao cao giao du toan chi
