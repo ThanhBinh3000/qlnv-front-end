@@ -89,10 +89,7 @@
             </nz-collapse-panel>
         </nz-collapse>
     </nz-card>
-    <!--  End Thông tin tổng hợp-->
-
     <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="isTongHop">
-        <!--  Start Thông tin chung-->
         <nz-collapse nzAccordion>
             <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
                 <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -164,8 +161,8 @@
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.slDviTsan}}</td>
-                            <td>{{ data.tongTienKdienDonGia | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{ data.tongTienDatTruocDonGia | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.tongTienGiaKhoiDiemDx | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.tongKhoanTienDatTruocDx | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
                             <td>
                                 <a>
@@ -182,8 +179,6 @@
         </nz-collapse>
 
     </nz-card>
-    <!--  Start Thông tin đề xuất-->
-    <!--  End Thông tin đề xuất-->
 </div>
 <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>

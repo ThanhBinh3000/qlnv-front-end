@@ -207,13 +207,13 @@
                     <thead>
                         <tr>
                             <th>STT</th>
-                            <th>Gói thầu</th>
                             <th>Số hợp đồng</th>
                             <th>Tên hợp đồng</th>
                             <th>Ngày ký hợp đồng</th>
-                            <th>Số lượng</th>
-                            <th>Đơn giá VAT</th>
-                            <th>Thành tiền</th>
+                            <th>Gói thầu</th>
+                            <th>Số lượng (kg)</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền đã bao gồm thuế VAT (đ)</th>
                             <th>Trạng thái HĐ</th>
                             <th>Số QĐ giao NV NH</th>
                             <th>Trạng thái NH</th>
@@ -223,13 +223,14 @@
                     <tbody class="table-body">
                         <tr *ngFor="let data of basicTable.data,let i = index" class="table-row">
                             <td>{{ i + 1}}</td>
-                            <td>{{data.goiThau}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
                             <td>{{data.hopDong?.tenHd}}</td>
                             <td>{{data.hopDong?.ngayKy}}</td>
-                            <td>{{data.hopDong?.soLuong}}</td>
-                            <td>{{data.hopDong?.donGia}}</td>
-                            <td>{{data.hopDong?.soLuong}}</td>
+                            <td>{{data.goiThau}}</td>
+                            <td class="text-right">{{data.hopDong?.soLuong | number :'1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{data.hopDong?.donGia | number :'1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{data.hopDong?.donGia * data.hopDong?.soLuong | number :'1.0-1' :
+                                'vi_VN' }}</td>
                             <td>{{data.hopDong?.tenTrangThai}}</td>
                             <td></td>
                             <td></td>
@@ -247,6 +248,18 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tr *ngIf="basicTable.data.length > 0">
+                        <td colspan="6" class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
+                        <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' :
+                            'vi_VN' }}</td>
+                        <td></td>
+                        <td class="background-last-row text-right blue-text">{{ calcTongThanhTien() | number : '1.0-1' :
+                            'vi_VN' }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </nz-table>
             </nz-card>
             <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">

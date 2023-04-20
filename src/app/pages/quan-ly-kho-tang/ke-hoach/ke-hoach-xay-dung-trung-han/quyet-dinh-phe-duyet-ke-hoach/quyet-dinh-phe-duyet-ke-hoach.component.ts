@@ -35,19 +35,20 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soCongVan: '',
-    phuongAnTc: '',
+    namKeHoach  :'',
+    soQuyetDinh: '',
     trichYeu: '',
     ngayKyBtc: '',
     trangThai: ''
   };
 
   filterTable: any = {
-    soCongVan: '',
+    namKeHoach: '',
+    giaiDoan : '' ,
+    soQuyetDinh: '',
     ngayKyBtc: '',
     trichYeu: '',
     phuongAnTc: '',
-    namKeHoach: '',
     tenTrangThai: '',
   };
 
@@ -99,16 +100,17 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      // soQuyetDinh : this.searchFilter.soQd,
-      // soCongVan : this.searchFilter.soCongVan,
-      // trichYeu : this.searchFilter.trichYeu,
-      // ngayKyTu : this.searchFilter.ngayKy[0],
-      // ngayKyDen : this.searchFilter.ngayKy[1],
+      namKeHoach : this.searchFilter.namKeHoach,
+      soQuyetDinh : this.searchFilter.soQuyetDinh,
+      trichYeu : this.searchFilter.trichYeu,
+      ngayKyTu : this.searchFilter.ngayKyBtc[0],
+      ngayKyDen : this.searchFilter.ngayKyBtc[1],
+      trangThai : this.searchFilter.trangThai,
+      maDvi : this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -206,8 +208,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soCongVan: '',
-      phuongAnTc: '',
+      namKeHoach  :'',
+      soQuyetDinh: '',
       trichYeu: '',
       ngayKyBtc: '',
       trangThai: ''
@@ -246,6 +248,49 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     });
   }
 
+  deleteMulti() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhService.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -254,7 +299,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
         this.quyetDinhService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'quyet-dinh-phe-duyet-trung-han.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -273,9 +318,15 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['ngayKyBtc'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
@@ -285,17 +336,12 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
-    };
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }
 

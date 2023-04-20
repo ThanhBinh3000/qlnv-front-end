@@ -15,6 +15,8 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {KeHoachNhapXuatLtComponent} from './ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
 import {STATUS} from "../../../../../../../constants/status";
 import {FILETYPE} from "../../../../../../../constants/fileType";
+import {QuyetDinhTtcpService} from "../../../../../../../services/quyetDinhTtcp.service";
+import {chain, cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-tcdt',
@@ -50,7 +52,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     tongTienVonNsnn: 0,
     tongTienVonTx: 0,
   }
-
+  dataQdTtcpGiaoBTC: any;
   taiLieuDinhKemList: any[] = [];
   listCcPhapLy: any[] = [];
   dsNam: any[] = [];
@@ -59,7 +61,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
   luanPhienList: any = []
-
+  yearSelected: number;
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
   iterableDiffer: any;
@@ -74,6 +76,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     public userService: UserService,
     private helperService: HelperService,
     private danhMucService: DanhMucService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
   ) {
     this.formData = this.fb.group(
       {
@@ -89,24 +92,45 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.spinner.show();
-    await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
-      this.loadDsNam(),
-      // this.maQd = '/' + this.userInfo.MA_QD,
-      this.getDataDetail(this.idInput),
-      this.loadDanhMucHang()
-    ])
-    this.spinner.hide();
+    await this.spinner.show();
+    this.userInfo = this.userService.getUserLogin(),
+      await Promise.all([
+        this.userInfo = this.userService.getUserLogin(),
+        this.loadDsNam(),
+        // this.maQd = '/' + this.userInfo.MA_QD,
+        this.getDataDetail(this.idInput),
+        this.loadDanhMucHang(),
+      ])
+    if (this.idInput == 0) {
+      console.log('vao day')
+      await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'))
+    }
+    await this.spinner.hide();
   }
 
   async loadDanhMucHang() {
     await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
+        const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+        dataVatTu.forEach(item => {
+          this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+        })
       }
     })
+  }
+
+  async loadQdTtcpGiaoBoNganh(nam) {
+    const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
+    if (res.msg == MESSAGE.SUCCESS) {
+      // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
+      this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+      this.muaTangList = cloneDeep(this.dataQdTtcpGiaoBTC?.muaTangList ? this.dataQdTtcpGiaoBTC.muaTangList : []);
+      this.xuatGiamList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatGiamList ? this.dataQdTtcpGiaoBTC.xuatGiamList : []);
+      this.xuatBanList = cloneDeep(this.dataQdTtcpGiaoBTC?.xuatBanList ? this.dataQdTtcpGiaoBTC.xuatBanList : []);
+      this.luanPhienList = cloneDeep(this.dataQdTtcpGiaoBTC?.luanPhienList ? this.dataQdTtcpGiaoBTC.luanPhienList : []);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async getDataDetail(id) {
@@ -143,6 +167,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
       });
+    }
+  }
+
+  changeNam() {
+    this.yearSelected = this.formData.get('namQd').value;
+    if (!this.idInput) {
+      this.loadQdTtcpGiaoBoNganh(this.yearSelected);
     }
   }
 
@@ -225,16 +256,13 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.keHoachNhapXuatLtComponent.emitData();
-
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.spinner.hide();
       return;
     }
     let body = this.formData.value;
-    // body.fileDinhKems = this.taiLieuDinhKemList;
     this.listFile = [];
     if (this.taiLieuDinhKemList.length > 0) {
       this.taiLieuDinhKemList.forEach(item => {
@@ -252,10 +280,14 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       body.fileDinhKems = this.listFile;
     }
     body.soQd = body.soQd + this.maQd;
-    body.muaTangList = this.muaTangList;
-    body.xuatGiamList = this.xuatGiamList;
-    body.xuatBanList = this.xuatBanList;
-    body.luanPhienList = this.luanPhienList;
+    // body.muaTangList = this.muaTangList;
+    // body.xuatGiamList = this.xuatGiamList;
+    // body.xuatBanList = this.xuatBanList;
+    // body.luanPhienList = this.luanPhienList;
+    body.muaTangList = this.conVertTreeToList(this.muaTangList);
+    body.xuatGiamList = this.conVertTreeToList(this.xuatGiamList);
+    body.xuatBanList = this.conVertTreeToList(this.xuatBanList);
+    body.luanPhienList = this.conVertTreeToList(this.luanPhienList);
     body.keHoachNhapXuat = this.keHoachNhapXuat;
     let res
     if (this.idInput > 0) {
@@ -277,7 +309,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
         this.formData.patchValue({
-          id:res.data.id
+          id: res.data.id
         })
         // this.quayLai();
       }
@@ -285,6 +317,21 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+
+  conVertTreeToList(data) {
+    let arr = [];
+    data.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          arr.push(data);
+        });
+      } else {
+        arr.push(item);
+      }
+    });
+    return arr;
   }
 
   exportData() {

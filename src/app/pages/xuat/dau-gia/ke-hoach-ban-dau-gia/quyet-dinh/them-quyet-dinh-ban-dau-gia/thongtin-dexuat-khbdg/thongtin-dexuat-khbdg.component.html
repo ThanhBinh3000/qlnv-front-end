@@ -146,7 +146,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Kg</span>
+              <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Kg</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -154,7 +154,8 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng tiền khởi điểm theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongTienKdienDonGia |number: '1.0-1'}} (vnd)</span>
+              <span style="color: blue" nzDisabled>{{formData.value.tongTienGiaKhoiDiemDx |number: '1.0-1'}}
+                (vnd)</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -162,7 +163,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green" nzDisabled>{{formData.value.tongTienDatTruocDonGia |number: '1.0-1'}}
+              <span style="color: blue" nzDisabled>{{formData.value.tongKhoanTienDatTruocDx |number: '1.0-1'}}
                 (vnd)</span>
             </nz-form-control>
           </nz-form-item>
@@ -172,7 +173,7 @@
   </nz-collapse-panel>
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
-  <nz-collapse-panel [nzHeader]="'Danh mục đơn vị tài sản bán đấu giá'" [nzActive]="true">
+  <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN ĐẤU GIÁ'" [nzActive]="true">
     <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
       <thead>
         <tr>
@@ -194,11 +195,11 @@
           <tr>
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td colspan="4">{{item.tenDvi}}</td>
-            <td>{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td style="color: black ;font-weight: bold;">{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td></td>
-            <td>{{item.tienDtruocDdChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+            <td></td>
             <td>
               <a *ngIf="!isView" (click)="themMoiBangPhanLoTaiSan(item,i)">
                 <i class="fa fa-pencil"></i>
@@ -226,7 +227,6 @@
         </ng-container>
       </tbody>
     </nz-table>
-
   </nz-collapse-panel>
 </nz-collapse>
 <ng-template #error let-control>
