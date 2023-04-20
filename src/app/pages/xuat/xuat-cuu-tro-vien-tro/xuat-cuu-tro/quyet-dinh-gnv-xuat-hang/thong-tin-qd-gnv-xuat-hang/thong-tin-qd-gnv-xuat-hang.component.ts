@@ -20,12 +20,8 @@ import {STATUS} from "src/app/constants/status";
 import * as uuid from "uuid";
 import {DonviService} from "src/app/services/donvi.service";
 import {Validators} from '@angular/forms';
-import {
-  ItemSoQd
-} from './../../../../../ke-hoach/du-toan-nsnn/giao-du-toan-thuc-te/tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
-import {async} from '@angular/core/testing';
 import {FileDinhKem} from 'src/app/models/DeXuatKeHoachBanTrucTiep';
-import {filter} from 'rxjs/operators';
+
 
 /*export class noiDungCuuTro {
   idVirtual: number;
@@ -95,7 +91,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       maDvi: [],
       ngayKy: [],
       idQdPd: [, [Validators.required]],
-      soQdPd: [''],
+      soQdPd: [, [Validators.required]],
       ngayKyQdPa: [''],
       soBbHaoDoi: [],
       soBbTinhKho: [],
@@ -115,7 +111,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenDvi: [],
       soLuong: [],
       canCu: [new Array<FileDinhKem>()],
-      fileDinhKem: [new Array<FileDinhKem>()],
+      fileDinhKem: [new Array<FileDinhKem>() ],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
@@ -232,12 +228,13 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     if (id && this.flagInit) {
       try {
         this.spinner.show();
+        this.chiTiet=[];
         this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               let noiDungCuuTro1 = []
               if (this.userInfo.CAP_DVI === "2") {
-                noiDungCuuTro1 = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI));
+                noiDungCuuTro1 = cloneDeep(res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI)));
               } else if (this.userInfo.CAP_DVI === "3") {
                 noiDungCuuTro1 = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
               }
@@ -315,7 +312,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
-    await this.saveSoQdPa();
+    if(this.formData.value.idQdPd){
+      await this.saveSoQdPa();
+    }
     await super.saveAndSend(this.formData.value, status, message, sucessMessage);
     /*if (this.formData.value.id > 0) {
       let data = this.formData.value;
@@ -527,21 +526,27 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async saveDdiemNhap(statusSave?) {
     this.spinner.show();
-    this.formData.value.noiDungCuuTro.forEach(item => {
-      item.trangThai = statusSave
-    })
-    this.formData.value.trangThaiXh = statusSave;
-    let body = this.formData.value
-
+    let body = this.formData.value;
+    if (body.noiDungCuuTro.some(s => s.maDiemKho == null)) {
+      this.notification.error(MESSAGE.ERROR, "Chưa phân bổ đến kho");
+      this.spinner.hide();
+      return;
+    }
+    body.noiDungCuuTro.forEach(item => {
+      item.trangThai = statusSave;
+    });
+    body.trangThaiXh = statusSave;
     let res = await this.quyetDinhGiaoNvCuuTroService.updateDdiemNhap(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       this.redirectQdNhapXuat();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
     }
+    this.spinner.hide();
   }
+
+
 
   redirectQdNhapXuat() {
     this.showListEvent.emit();
@@ -609,6 +614,8 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     console.log(item);
     this.isVisible = true;
     this.noiDungRow.noiDung = item.noiDung;
+    this.noiDungRow.cloaiVthh = item.cloaiVthh;
+    this.noiDungRow.tenCloaiVthh = item.tenCloaiVthh;
     this.noiDungRow.maDviChiCuc = this.userInfo.MA_DVI;
     this.noiDungRow.idVirtual = item.idVirtual ? item.idVirtual : uuid.v4();
     this.noiDungRow.tenChiCuc = this.userInfo.TEN_DVI;
