@@ -92,39 +92,41 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      const data = res.data;
-      this.formData.patchValue({
-        id: data.id,
-        namQd: data.namQd,
-        ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
-        trangThai: data.trangThai,
-        trichYeu: data.trichYeu,
-      });
-      this.dataTable = data.listBoNganh;
-      if (data.listChiTangToanBoNganh.length > 0) {
-        for (let item of data.listChiTangToanBoNganh) {
-          var obj = {
-            "stt": item.stt,
-            "maCha": item.maBn == '01' ? item.maBn : null,
-            "maBn": item.maBn,
-            "tenBn": item.tenBn,
-            "isSum": false,
-            "tongSo": item.tongSo
-          };
-          this.dataTableAllBn.push(obj);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.formData.patchValue({
+          id: data.id,
+          namQd: data.namQd,
+          ngayQd: data.ngayQd,
+          soQd: data.soQd.split('/')[0],
+          trangThai: data.trangThai,
+          trichYeu: data.trichYeu,
+        });
+        this.dataTable = data.listBoNganh;
+        if (data.listChiTangToanBoNganh.length > 0) {
+          for (let item of data.listChiTangToanBoNganh) {
+            var obj = {
+              "stt": item.stt,
+              "maCha": item.maBn == '01' ? item.maBn : null,
+              "maBn": item.maBn,
+              "tenBn": item.tenBn,
+              "isSum": false,
+              "tongSo": item.tongSo
+            };
+            this.dataTableAllBn.push(obj);
+          }
+          this.dataTableAllBn.unshift({
+            "stt": 1,
+            "maCha": null,
+            "maBn": null,
+            "tenBn": "Bộ Tài Chính",
+            "isSum": true,
+            "tongSo": 0
+          })
+          this.onInputNumberBNChange();
         }
-        this.dataTableAllBn.unshift({
-          "stt": 1,
-          "maCha": null,
-          "maBn": null,
-          "tenBn": "Bộ Tài Chính",
-          "isSum": true,
-          "tongSo": 0
-        })
-        this.onInputNumberBNChange();
+        this.taiLieuDinhKemList = data.fileDinhkems;
       }
-      this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 

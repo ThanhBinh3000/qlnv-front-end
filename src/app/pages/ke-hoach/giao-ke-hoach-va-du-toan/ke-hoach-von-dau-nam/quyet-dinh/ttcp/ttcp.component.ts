@@ -399,9 +399,11 @@ export class TtcpComponent implements OnInit {
   async getDetailRow(id) {
     if (id) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      this.listBoNganh = res.data.listBoNganh;
-      this.namDataSelect = res.data.namQd
-      this.rowSelected = id;
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listBoNganh = res.data.listBoNganh ? res.data.listBoNganh : [];
+        this.namDataSelect = res.data.namQd
+        this.rowSelected = id;
+      }
     }
   }
 
