@@ -72,6 +72,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     tableRow: any = {};
     isVisible = false;
     isVisibleSuaNoiDung = false;
+    isViewKeHoachDC: boolean = false;
+    idKeHoachDC: any = null;
     listNoiDung = [];
     errorInputComponent: any[] = [];
     disableInputComponent: ModalInput = new ModalInput();
@@ -453,8 +455,17 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             return item.childData ? this.flattenTree(item.childData) : item;
         });
     }
+    openModalKeHoachDC(id: any) {
+        if (id) {
+            this.idKeHoachDC = id;
+            this.isViewKeHoachDC = true;
+        }
 
-
+    }
+    closeModalKeHoachDC() {
+        this.idKeHoachDC = null;
+        this.isViewKeHoachDC = false;
+    }
     setValidator(isGuiDuyet?) {
         if (this.formData.get('type').value == 'TH') {
             this.formData.controls["idTongHop"].setValidators([Validators.required]);

@@ -82,6 +82,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     isTongHop: boolean = false;
     yeuCauSuccess: boolean = false;
 
+    idKeHoachDC: any = null;
+    isViewKeHoachDC: boolean = false;
+
     dataTable: any[] = [
         {
             id: 1,
@@ -470,5 +473,16 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             this.formData.controls["idDx"].setValidators([Validators.required]);
             this.formData.controls["soDx"].setValidators([Validators.required]);
         }
+    }
+    closeModalKeHoachDC() {
+        this.idKeHoachDC = null;
+        this.isViewKeHoachDC = false;
+    }
+    openModalKeHoachDC(id: any) {
+        if (id) {
+            this.idKeHoachDC = id;
+            this.isViewKeHoachDC = true;
+        }
+
     }
 }

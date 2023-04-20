@@ -54,7 +54,9 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     dataTableAll: any[] = [
         { id: 1, nam: 2022 }, { id: 2, nam: 2023 }
     ]
-    dataTable: any[] = cloneDeep(this.dataTableAll)
+    dataTable: any[] = cloneDeep(this.dataTableAll);
+
+    listCuc: any[] = [];
 
     constructor(
         httpClient: HttpClient,

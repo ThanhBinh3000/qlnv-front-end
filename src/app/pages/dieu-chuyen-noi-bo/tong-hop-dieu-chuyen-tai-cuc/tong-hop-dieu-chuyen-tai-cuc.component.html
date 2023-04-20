@@ -9,6 +9,12 @@
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
+                    <div nz-col nzSpan="6" class="mt-16">
+                        <label class="search__label">Cục DTNN KV</label>
+                        <nz-select formControlName="maDvi">
+                            <nz-option *ngFor="let p of listCuc" [nzValue]="p.value" [nzLabel]="p.giaTri"></nz-option>
+                        </nz-select>
+                    </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Mã tổng hợp</label>
                         <input nz-input formControlName="maTongHop" />
@@ -86,7 +92,7 @@
                         <th width="90px">Hành động</th>
                     </tr>
                     <tr class="search-table">
-                        <th></th>
+                        <th *ngIf="!viewOnly"></th>
                         <th></th>
                         <th>
                             <nz-input-group>

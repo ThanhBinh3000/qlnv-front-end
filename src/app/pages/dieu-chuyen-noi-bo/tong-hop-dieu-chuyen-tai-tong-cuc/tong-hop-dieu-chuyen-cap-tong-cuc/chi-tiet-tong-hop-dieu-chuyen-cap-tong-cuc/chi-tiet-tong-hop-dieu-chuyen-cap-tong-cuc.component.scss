@@ -5,7 +5,11 @@
     width: 100%;
     display: flex;
     justify-content: end;
-    margin-top: 16px
+    margin-bottom: 12px;
+
+    .btn.mr-12 {
+        margin-right: 12px;
+    }
 }
 
 .tong-hop-dc .btn.btn-sub {
