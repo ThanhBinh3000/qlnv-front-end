@@ -46,6 +46,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   dataChiTieu: any;
   donGiaVat: number = 0;
   maTrinh: string = '';
+  giaToiDa: any;
 
   constructor(
     httpClient: HttpClient,
@@ -168,6 +169,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
         await this.calculatorTableHdr(data);
+        this.getGiaToiThieu();
       }
     }
   }
@@ -216,7 +218,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   selectHangHoa() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'DANH SÁCH HÀNG HÓA',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -273,52 +275,73 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           });
         }
       }
+      this.getGiaToiThieu();
     });
   }
 
+  async getGiaToiThieu() {
+    let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.formData.get('cloaiVthh').value, this.userInfo.MA_DVI, this.formData.get('namKh').value);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.giaToiDa = res.data;
+      console.log(this.giaToiDa, 999)
+    }
+  }
+
+  validateGiaGiaToiDa() {
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá mua tối đa bạn mới thêm được địa điểm nhập kho vì giá mua đề xuất ở đây nhập vào phải >= giá bán tối thiểu.');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
-    $event.stopPropagation();
-    if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
-      return;
-    }
-    if (!this.formData.get('khoanTienDatTruoc').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
-      return;
-    }
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm giao nhận hàng',
-      nzContent: DialogThemDiaDiemPhanLoComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '2500px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataEdit: data,
-        dataChiTieu: this.dataChiTieu,
-        loaiVthh: this.formData.get('loaiVthh').value,
-        cloaiVthh: this.formData.get('cloaiVthh').value,
-        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
-        namKh: this.formData.get('namKh').value,
-        dviTinh: this.formData.get('dviTinh').value,
-        donGiaVat: this.donGiaVat
-      },
-    });
-    modalGT.afterClose.subscribe((data) => {
-      if (!data) {
+    if (this.validateGiaGiaToiDa()) {
+      $event.stopPropagation();
+      if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
         return;
       }
-      if (index >= 0) {
-        this.dataTable[index] = data;
-      } else {
-        if (!this.validateAddDiaDiem(data)) {
-          return
-        }
-        this.dataTable.push(data);
+      if (!this.formData.get('khoanTienDatTruoc').value) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
+        return;
       }
-      this.calculatorTable();
-    });
+      const modalGT = this.modal.create({
+        nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
+        nzContent: DialogThemDiaDiemPhanLoComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '2500px',
+        nzFooter: null,
+        nzComponentParams: {
+          dataEdit: data,
+          dataChiTieu: this.dataChiTieu,
+          loaiVthh: this.formData.get('loaiVthh').value,
+          cloaiVthh: this.formData.get('cloaiVthh').value,
+          tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
+          khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
+          namKh: this.formData.get('namKh').value,
+          dviTinh: this.formData.get('dviTinh').value,
+          donGiaVat: this.donGiaVat,
+          giaToiDa: this.giaToiDa,
+        },
+      });
+      modalGT.afterClose.subscribe((data) => {
+        if (!data) {
+          return;
+        }
+        if (index >= 0) {
+          this.dataTable[index] = data;
+        } else {
+          if (!this.validateAddDiaDiem(data)) {
+            return
+          }
+          this.dataTable.push(data);
+        }
+        this.calculatorTable();
+      });
+    }
   };
 
   validateAddDiaDiem(dataAdd): boolean {

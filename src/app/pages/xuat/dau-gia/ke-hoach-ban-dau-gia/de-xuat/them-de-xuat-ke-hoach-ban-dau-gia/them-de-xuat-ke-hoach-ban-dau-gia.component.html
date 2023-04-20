@@ -64,7 +64,6 @@
     </ng-container> -->
   </div>
 </nz-affix>
-
 <div class="bg-trang">
   <div class="header header-green-background" *ngIf="!showFromTH">
     <div class="header-text">
@@ -77,14 +76,11 @@
       </div>
     </div>
   </div>
-
   <nz-alert class="mg-t-10"
     *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
     nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
-
   <nz-card class="mt16 flex-card p-lr16">
-    <!-- //Thông tin chung -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -321,7 +317,7 @@
             </div>
             <div nz-col nzSpan="7">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                   <input placeholder="" nz-input formControlName="pthucGnhan" [readonly]="isDisable()" />
                 </nz-form-control>
@@ -341,8 +337,6 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
-
-    <!-- // Danh mục đơn vị tài sản đấu giá -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN BÁN ĐẤU GIÁ'" [nzActive]="true" [nzExtra]="extraTpl">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -494,8 +488,6 @@
         <span>Thêm</span>
       </button>
     </ng-template>
-
-    <!-- // Địa điểm giao nhận hàng -->
     <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM GIAO NHẬN HÀNG'" [nzActive]="true">
         <nz-table #ttChungDDGiaoNhan class="nowrap pd-10" [nzFrontPagination]="false" [nzShowPagination]="false"
@@ -515,7 +507,6 @@
               <td>{{ item.diaChi }}</td>
               <td>{{ item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
-
           </tbody>
           <tfoot>
             <tr *ngIf="dataTable.length > 0">
@@ -541,7 +532,6 @@
     </form>
   </nz-card>
 </div>
-
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
