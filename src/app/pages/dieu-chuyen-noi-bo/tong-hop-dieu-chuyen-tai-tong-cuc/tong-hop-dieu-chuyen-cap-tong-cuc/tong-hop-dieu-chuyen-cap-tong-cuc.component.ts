@@ -15,14 +15,14 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { TongHopDieuChuyenService } from './tong-hop-dieu-chuyen-tai-cuc.service';
+import { TongHopDieuChuyenService } from './../../tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.service';
 
 @Component({
-    selector: 'app-tong-hop-dieu-chuyen-tai-cuc',
-    templateUrl: './tong-hop-dieu-chuyen-tai-cuc.component.html',
-    styleUrls: ['./tong-hop-dieu-chuyen-tai-cuc.component.scss']
+    selector: 'app-tong-hop-dieu-chuyen-cap-tong-cuc',
+    templateUrl: './tong-hop-dieu-chuyen-cap-tong-cuc.component.html',
+    styleUrls: ['./tong-hop-dieu-chuyen-cap-tong-cuc.component.scss']
 })
-export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
+export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnInit {
 
     @Input()
     loaiVthh: string;
@@ -75,6 +75,8 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             ngayTongHop: [''],
             ngayTongHopTu: [''],
             ngayTongHopDen: [''],
+            loaiHangHoa: [''],
+            chungLoaiHangHoa: [''],
             noiDungTongHop: ['']
         })
         this.filterTable = {
@@ -97,6 +99,40 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     isVatTu: boolean = false;
     isView = false;
 
+    async ngOnInit() {
+        try {
+            this.initData()
+            this.timKiem();
+            this.loadDsVthh();
+        } catch (e) {
+            console.log('error: ', e)
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+            this.spinner.hide();
+        }
+    }
+    async loadDsVthh() {
+        let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.listHangHoaAll = res.data;
+            this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+        }
+    }
+    async changeHangHoa(event: any) {
+        if (event) {
+            this.formData.patchValue({ chungLoaiHangHoa: "" });
+            this.listChungLoaiHangHoa = []
+
+            let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+            if (res.msg == MESSAGE.SUCCESS) {
+                if (res.data) {
+                    this.listChungLoaiHangHoa = res.data;
+                }
+            } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+        }
+    }
     disabledStartNgayLapKh = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLapKhDen) {
             return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
@@ -126,18 +162,6 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
     };
 
-    async ngOnInit() {
-        try {
-            this.initData()
-            await this.timKiem();
-            await this.spinner.hide();
-
-        } catch (e) {
-            console.log('error: ', e)
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-    }
 
     async initData() {
         this.userInfo = this.userService.getUserLogin();

@@ -3,17 +3,17 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="20">
-                    <div nz-col nzSpan="3" class="mt-16">
+                    <div nz-col nzSpan="2" class="mt-16">
                         <label class="search__label"> Năm kế hoạch </label>
                         <nz-select formControlName="nam">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="4" class="mt-16">
+                    <div nz-col nzSpan="2" class="mt-16">
                         <label class="search__label">Mã tổng hợp</label>
                         <input nz-input formControlName="maTongHop" />
                     </div>
-                    <div nz-col nzSpan="6" class="mt-16">
+                    <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Loại điều chuyển </label>
                         <nz-select formControlName="loaiDieuChuyen">
                             <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.value"
@@ -24,7 +24,20 @@
                         <label class="search__label">Ngày tổng hợp</label>
                         <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
-                    <div nz-col nzSpan="7" class="mt-16">
+                    <div nz-col nzSpan="6" class="mt-16">
+                        <label class="search__label">Loại hàng hóa </label>
+                        <nz-select formControlName="loaiHangHoa" (ngModelChange)="changeHangHoa($event)" nzShowSearch>
+                            <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-col nzSpan="6" class="mt-16">
+                        <label class="search__label">Chủng loại hàng hóa </label>
+                        <nz-select formControlName="chungLoaiHangHoa" nzShowSearch>
+                            <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma"
+                                [nzLabel]="p.ten"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-col nzSpan="24" class="mt-16">
                         <label class="search__label">Nội dung tổng hợp</label>
                         <input nz-input formControlName="noiDungTongHop" />
                     </div>
@@ -51,7 +64,7 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button> -->
-                <button type="button" class="btn btn-do" (click)="deleteMulti()" *ngIf="!viewOnly">
+                <button type="button" class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
@@ -59,7 +72,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)" *ngIf="!viewOnly">
+                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tổng hợp</span>
                 </button>
@@ -72,7 +85,7 @@
                 [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
-                        <th width="45px" *ngIf="!viewOnly">
+                        <th width="45px">
                             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                                 [nzIndeterminate]="indeterminate"></label>
                         </th>
@@ -145,7 +158,7 @@
                 <tbody>
                     <!-- <tr *ngFor="let data of basicTable.data; let i = index"> -->
                     <tr *ngFor="let data of dataTable; let i = index">
-                        <th width="45px" *ngIf="!viewOnly">
+                        <th width="45px">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                                 [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
                         </th>
@@ -161,12 +174,11 @@
                                 *ngIf="(!(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)) || (userService.isTongCuc())">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="!viewOnly && (data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP) && (checkRole(data.trangThai)) "
+                            <a *ngIf="(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP) && (checkRole(data.trangThai)) "
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="!viewOnly && (data.trangThai == '00') && (checkRole(data.trangThai))"
-                                (click)="delete(data)">
+                            <a *ngIf="(data.trangThai == '00') && (checkRole(data.trangThai))" (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
@@ -194,7 +206,7 @@
     </div>
 </div>
 <ng-template #templateThemmoi>
-    <app-chi-tiet-tong-hop-dieu-chuyen-tai-cuc [idInput]="selectedId" [isView]="isView" [isEdit]="isEdit"
-        [isViewDetail]="viewOnly ||isViewDetail" [isAddNew]="isAddNew"
-        (showListEvent)="showList()"></app-chi-tiet-tong-hop-dieu-chuyen-tai-cuc>
+    <app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc [idInput]="selectedId" [isView]="isView" [isEdit]="isEdit"
+        [isViewDetail]="isViewDetail" [isAddNew]="isAddNew"
+        (showListEvent)="showList()"></app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc>
 </ng-template>

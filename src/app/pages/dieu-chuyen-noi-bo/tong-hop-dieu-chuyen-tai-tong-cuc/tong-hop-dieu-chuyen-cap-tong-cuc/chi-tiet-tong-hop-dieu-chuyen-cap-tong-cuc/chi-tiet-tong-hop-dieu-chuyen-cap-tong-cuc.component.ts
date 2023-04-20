@@ -1,40 +1,40 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, Validators } from "@angular/forms";
-import { UserLogin } from "../../../../models/userlogin";
-import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "../../../../models/KeHoachBanDauGia";
+import { UserLogin } from "../../../../../models/userlogin";
+import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "../../../../../models/KeHoachBanDauGia";
 import { DatePipe } from "@angular/common";
-import { DiaDiemNhapKho } from "../../../../models/CuuTro";
+import { DiaDiemNhapKho } from "../../../../../models/CuuTro";
 import {
     ModalInput
-} from "../../../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/xay-dung-phuong-an/thong-tin-xay-dung-phuong-an/thong-tin-xay-dung-phuong-an.component";
-import { Base2Component } from "../../../../components/base2/base2.component";
+} from "../../../../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/xay-dung-phuong-an/thong-tin-xay-dung-phuong-an/thong-tin-xay-dung-phuong-an.component";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../services/storage.service";
+import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "../../../../services/danhmuc.service";
-import { DeXuatKeHoachBanDauGiaService } from "../../../../services/deXuatKeHoachBanDauGia.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { TinhTrangKhoHienThoiService } from "../../../../services/tinhTrangKhoHienThoi.service";
-import { DanhMucTieuChuanService } from "../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { DeXuatKeHoachBanDauGiaService } from "../../../../../services/deXuatKeHoachBanDauGia.service";
+import { DonviService } from "../../../../../services/donvi.service";
+import { TinhTrangKhoHienThoiService } from "../../../../../services/tinhTrangKhoHienThoi.service";
+import { DanhMucTieuChuanService } from "../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
     DeXuatPhuongAnCuuTroService
-} from "../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { QuanLyHangTrongKhoService } from "../../../../services/quanLyHangTrongKho.service";
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
+import { QuanLyHangTrongKhoService } from "../../../../../services/quanLyHangTrongKho.service";
 import * as dayjs from "dayjs";
-import { FileDinhKem } from "../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { MESSAGE } from "../../../../constants/message";
+import { FileDinhKem } from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "../../../../../constants/message";
 import { STATUS } from "src/app/constants/status";
 import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
 @Component({
-    selector: 'app-chi-tiet-tong-hop-dieu-chuyen-tai-cuc',
-    templateUrl: './chi-tiet-tong-hop-tai-cuc.component.html',
-    styleUrls: ['./chi-tiet-tong-hop-tai-cuc.component.scss']
+    selector: 'app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc',
+    templateUrl: './chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component.html',
+    styleUrls: ['./chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component.scss']
 })
-export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
+export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implements OnInit {
     @Input() loaiVthhInput: string;
     @Input() idInput: number;
     @Input() isView: boolean;
@@ -285,7 +285,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
                 canCu: [new Array<FileDinhKem>()],
                 lyDoDc: [''],
-                type: ['TC'],
+                type: ['CHI_CUC'],
                 thoiGianTongHop: [''],
 
                 maTongHop: [''],
