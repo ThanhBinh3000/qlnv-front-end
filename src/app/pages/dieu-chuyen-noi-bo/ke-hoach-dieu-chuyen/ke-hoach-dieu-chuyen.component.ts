@@ -198,7 +198,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   checkAllowEdit(data: any): boolean {
-    return data.trangThai != this.STATUS.DA_DUYET_LDCC;
+    return !(data.trangThai == this.STATUS.DA_DUYET_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC);
   }
 
   checkAllowDelete(data: any): boolean {

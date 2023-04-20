@@ -670,7 +670,7 @@
             <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="7" nzRequired class="dcnb-label">Sl điều chuyển
             </nz-form-label>
             <nz-form-control>
-              <nz-input-number formControlName="soLuongDc" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+              <nz-input-number [nzDisabled]="isView" formControlName="soLuongDc" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
                                [nzMax]="formDataChiTiet.value.tonKho"
                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
@@ -681,7 +681,7 @@
               đồng)
             </nz-form-label>
             <nz-form-control>
-              <nz-input-number formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+              <nz-input-number [nzDisabled]="isView" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
                                [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-form-control>
@@ -700,7 +700,7 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn chi cục nhận điều chuyển'"
                                  [nzValidateStatus]="checkVld('maChiCucNhan')">
-                  <nz-select nzAllowClear [nzDisabled]="isView || isEditDetail || isAddDiemKho" nzShowSearch
+                  <nz-select nzAllowClear [nzDisabled]="isView || isEditDetail || isAddDiemKho || isNhanDieuChuyen" nzShowSearch
                              formControlName="maChiCucNhan"
                              (ngModelChange)="changeDonViNhan($event)">
                     <nz-option *ngFor="let p of listChiCucNhan" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
@@ -716,7 +716,7 @@
                 <nz-form-control nz-col [nzErrorTip]="'Vui lòng nhập thời gian dự kiến điều chuyển'"
                                  [nzValidateStatus]="checkVld('thoiGianDkDc')">
                   <nz-date-picker class="search__input" formControlName="thoiGianDkDc"
-                                  [nzDisabled]="isView || isEditDetail || isAddDiemKho"
+                                  [nzDisabled]="isView || isEditDetail || isAddDiemKho || isNhanDieuChuyen"
                                   nzFormat="dd/MM/yyyy">
                   </nz-date-picker>
                 </nz-form-control>
@@ -731,7 +731,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Điểm kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn điểm kho'" [nzValidateStatus]="checkVld('maDiemKho')">
-                  <nz-select nzAllowClear [nzDisabled]="isView" nzShowSearch formControlName="maDiemKho"
+                  <nz-select nzAllowClear [nzDisabled]="isView || isNhanDieuChuyen" nzShowSearch formControlName="maDiemKho"
                              (ngModelChange)="changeDiemKho($event)">
                     <nz-option *ngFor="let p of listDiemKhoBq" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
@@ -741,7 +741,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Nhà kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn nhà kho'" [nzValidateStatus]="checkVld('maNhaKho')">
-                  <nz-select nzAllowClear [nzDisabled]="isView" nzShowSearch formControlName="maNhaKho"
+                  <nz-select nzAllowClear [nzDisabled]="isView || isNhanDieuChuyen" nzShowSearch formControlName="maNhaKho"
                              (ngModelChange)="changeNhaKho($event)">
                     <nz-option *ngFor="let p of listNhaKhoBq" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
@@ -751,7 +751,7 @@
               <nz-form-item *ngIf="formDataChiTiet.value.coLoKho">
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Ngăn kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn ngăn kho'" [nzValidateStatus]="checkVld('maNganKho')">
-                  <nz-select nzAllowClear [nzDisabled]="isView" nzShowSearch formControlName="maNganKho"
+                  <nz-select nzAllowClear [nzDisabled]="isView || isNhanDieuChuyen" nzShowSearch formControlName="maNganKho"
                              (ngModelChange)="changeNganKho($event)">
                     <nz-option *ngFor="let p of listNganKhoBq" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
@@ -761,7 +761,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Lô kho</nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn lô kho'" [nzValidateStatus]="checkVld('maLoKho')">
-                  <nz-select nzAllowClear [nzDisabled]="isView" nzShowSearch formControlName="maLoKho"
+                  <nz-select nzAllowClear [nzDisabled]="isView || isNhanDieuChuyen" nzShowSearch formControlName="maLoKho"
                              (ngModelChange)="changeLoKho($event)">
                     <nz-option *ngFor="let p of listLoKhoBq" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                   </nz-select>
@@ -786,7 +786,7 @@
                 <nz-form-label [nzNoColon]="true" nz-col [nzSpan]="8" nzRequired class="dcnb-label">Sl điều chuyển
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-input-number formControlName="soLuongDc" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
+                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen"  formControlName="soLuongDc" [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'"
                                    [nzMax]="formDataChiTiet.value.tonKho"
                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
@@ -797,7 +797,7 @@
                   đồng)
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-input-number formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
                                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
                 </nz-form-control>
