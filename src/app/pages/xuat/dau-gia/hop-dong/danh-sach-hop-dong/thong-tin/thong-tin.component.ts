@@ -1,19 +1,19 @@
-import {Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges} from '@angular/core';
-import {Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {saveAs} from 'file-saver';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { saveAs } from 'file-saver';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import {
   QdPdKetQuaBanDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
@@ -23,11 +23,11 @@ import {
 import {
   ThongTinDauGiaService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import {chain, cloneDeep} from 'lodash';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { chain, cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
-import {STATUS} from 'src/app/constants/status';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin',
@@ -40,6 +40,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() loaiVthh: string;
   @Input() idKqBdg: number;
   @Input() isQuanLy: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isView: boolean;
@@ -314,7 +315,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
               moTaHangHoa: dataThongTin.moTaHangHoa
             });
             this.listDviLquan = dataThongTin.listNguoiTgia;
-            this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == dataThongTin.loaiVthh)?.maDviTinh})
+            this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == dataThongTin.loaiVthh)?.maDviTinh })
           }
         })
     }

@@ -67,6 +67,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   deXuatPhuongAn: any[] = [];
   tenLoaiVthh: string = null;
   loaiNhapXuat: string = null;
+  kieuNhapXuat: string = null;
   disableInputComponent: ModalInput = new ModalInput();
 
   constructor(
@@ -122,7 +123,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.maQd = this.userInfo.MA_QD;
       await Promise.all([
         this.loadDsLoaiHinhNhapXuat(),
-        this.loadDsKieuNhapXuat(),
+        //this.loadDsKieuNhapXuat(),
         this.loadDsDonVi(),
         this.loadDsChungLoaiHangHoa(),
         this.loadDsQdPaChuyenXuatCap(),
@@ -175,7 +176,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     } else {
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
-        tenDvi: this.userInfo.TEN_DVI
+        tenDvi: this.userInfo.TEN_DVI,
+        loaiNhapXuat: this.listLoaiHinhNhapXuat[0].giaTri,
+        kieuNhapXuat: this.listLoaiHinhNhapXuat[0].ghiChu,
       });
       this.listThanhTien = [0];
       this.listSoLuong = [0];
@@ -206,16 +209,16 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CAP');
     }
   }
 
-  async loadDsKieuNhapXuat() {
-    let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung == "XUAT_CTVT");
-    }
-  }
+  // async loadDsKieuNhapXuat() {
+  //   let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listKieuNhapXuat = res.data.filter(item => item.apDung == "XUAT_CTVT");
+  //   }
+  // }
 
   getNameFile(event?: any, item?: FileDinhKem) {
     const element = event.currentTarget as HTMLInputElement;
@@ -241,12 +244,14 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     await this.spinner.show();
     if (event) {
       let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
-      this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl;
-
+      this.formData.value.quyetDinhPdDtl = data.data.quyetDinhPdDtl
       this.quyetDinhPdDtlCache = data.data.quyetDinhPdDtl;
+
       this.tenLoaiVthh = data.data.tenLoaiVthh;
       this.loaiNhapXuat = data.data.loaiNhapXuat;
-      this.buildTableView();
+      this.kieuNhapXuat = data.data.kieuNhapXuat;
+      await this.selectRow(this.formData.value.quyetDinhPdDtl[0])
+      //this.buildTableView();
     }
     await this.spinner.hide();
   }
@@ -451,8 +456,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         };
       }).value();
     this.expandAll();
-    console.log(this.phuongAnView,'this.phuongAnView');
-    console.log(this.phuongAnViewCache,'this.phuongAnViewCache');
+    console.log(this.phuongAnView, 'this.phuongAnView');
+    console.log(this.phuongAnViewCache, 'this.phuongAnViewCache');
     console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), "raw");
     //
     if (this.formData.value.deXuatPhuongAn.length !== 0) {

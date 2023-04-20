@@ -231,12 +231,20 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     });
   }
 
-  isDisabled() {
+  isDisable() {
     let trangThai = this.formData.value.trangThai;
     if (trangThai == STATUS.CHO_DUYET_LDCC || trangThai == STATUS.DA_DUYET_LDCC) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
     }
   }
 
