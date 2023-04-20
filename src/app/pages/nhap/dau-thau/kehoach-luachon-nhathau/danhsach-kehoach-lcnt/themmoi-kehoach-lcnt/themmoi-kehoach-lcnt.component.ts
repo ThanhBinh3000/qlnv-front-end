@@ -810,7 +810,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           }
           let res = await this.dauThauService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.LUU_VA_GUI_DUYET_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DUYET_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -862,7 +862,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
-              MESSAGE.LUU_VA_GUI_DUYET_SUCCESS,
+              MESSAGE.DUYET_SUCCESS,
             );
             this.quayLai();
           } else {
