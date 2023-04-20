@@ -133,6 +133,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         soDxuat: [''],
         ngayLapKh: [''],
         maCucNhan: [''],
+        tenCucNhan: [''],
         trichYeu: ['',],
         trangThai: [STATUS.DU_THAO],
         idQdPd: [''],
@@ -556,7 +557,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   handleOk(): void {
-    debugger
+
     if ((!this.formDataChiTiet.value.cloaiVthh || !this.formDataChiTiet.value.loaiVthh) && !this.isNhanDieuChuyen) {
       this.notification.error(MESSAGE.ERROR, "Chưa có thông tin hàng hóa!");
       return;
@@ -650,30 +651,33 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 .map((vs, ks) => {
                     let maLoKho = vs.find(s => s.maLoKho === ks);
                     let khoNhan = vs.filter(item => item.maDiemKhoNhan != undefined);
-
+                    let rsss = chain(khoNhan)
+                      .groupBy("maNhaKhoNhan")
+                      .map((vss, kss) => {
+                          let maNhaKhoNhan = vss.find(s => s.maNhaKhoNhan === kss);
+                          return {
+                            ...maNhaKhoNhan,
+                            idVirtual: maNhaKhoNhan ? maNhaKhoNhan.idVirtual ? maNhaKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
+                            childData: vss
+                          }
+                        }
+                      ).value();
                     return {
+                      ...maLoKho,
                       idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
-                      maChiCucNhan: maLoKho ? maLoKho.maChiCucNhan : "",
-                      tenChiCucNhan: maLoKho ? maLoKho.tenChiCucNhan : "",
-                      thoiGianDkDc: maLoKho ? maLoKho.thoiGianDkDc : "",
-                      maDiemKho: maLoKho ? maLoKho.maDiemKho : "",
-                      tenDiemKho: maLoKho ? maLoKho.tenDiemKho : "",
-                      maNhaKho: maLoKho ? maLoKho.maNhaKho : "",
-                      tenNhaKho: maLoKho ? maLoKho.tenNhaKho : "",
-                      maNganKho: maLoKho ? maLoKho.maNganKho : "",
-                      tenNganKho: maLoKho ? maLoKho.tenNganKho : "",
-                      maLoKho: maLoKho ? maLoKho.maLoKho : "",
-                      tenLoKho: maLoKho ? maLoKho.tenLoKho : "",
-                      loaiVthh: maLoKho ? maLoKho.loaiVthh : "",
-                      tenLoaiVthh: maLoKho ? maLoKho.tenLoaiVthh : "",
-                      cloaiVthh: maLoKho ? maLoKho.cloaiVthh : "",
-                      tenCloaiVthh: maLoKho ? maLoKho.tenCloaiVthh : "",
-                      donViTinh: maLoKho ? maLoKho.donViTinh : "",
-                      tenDonViTinh: maLoKho ? maLoKho.tenDonViTinh : "",
-                      tonKho: maLoKho ? maLoKho.tonKho : "",
-                      soLuongDc: maLoKho ? maLoKho.soLuongDc : "",
-                      duToanKphi: maLoKho ? maLoKho.duToanKphi : "",
-                      childData: khoNhan
+                      maDiemKhoNhan: "",
+                      tenDiemKhoNhan: "",
+                      maNhaKhoNhan: "",
+                      tenNhaKhoNhan: "",
+                      maNganKhoNhan: "",
+                      tenNganKhoNhan: "",
+                      coLoKhoNhan: true,
+                      maLoKhoNhan: "",
+                      tenLoKhoNhan: "",
+                      soLuongPhanBo: 0,
+                      tichLuongKd: 0,
+                      slDcConLai: 0,
+                      childData: rsss
                     }
                   }
                 ).value();
@@ -681,9 +685,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
               let rowDiemKho = v.find(s => s.maDiemKho === k);
 
               return {
+                ...rowDiemKho,
                 idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
-                maDiemKho: k,
-                tenDiemKho: rowDiemKho ? rowDiemKho.tenDiemKho : "",
                 duToanKphi: duToanKphi,
                 childData: rss
               }
@@ -693,10 +696,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         let duToanKphi = rs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
         let rowChiCuc = value.find(s => s.maChiCucNhan === key);
         return {
+          ...rowChiCuc,
           idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
-          maChiCucNhan: rowChiCuc ? rowChiCuc.maChiCucNhan : "",
-          tenChiCucNhan: rowChiCuc ? rowChiCuc.tenChiCucNhan : "",
-          thoiGianDkDc: rowChiCuc ? rowChiCuc.thoiGianDkDc : "",
           duToanKphi: duToanKphi,
           childData: rs
         };
@@ -1117,5 +1118,25 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
   changeSoLuongPhanBo(value: any) {
     this.formDataChiTiet.controls['slDcConLai'].setValue(this.formDataChiTiet.value.soLuongDc - value);
+  }
+  async addDiemKhoNham(data: any) {
+    data.idVirtual = undefined;
+    data.id = undefined;
+    this.showModal();
+    this.isEditDetail = true;
+    if (!data.slDcConLai) {
+      data.slDcConLai = data.soLuongDc;
+    }
+    this.formDataChiTiet.patchValue(data);
+    this.getListNhaKhoBq(data.maDiemKho);
+    this.getListNganKhoBq(data.maNhaKho);
+    this.getListLoKhoBq(data.maNganKho);
+
+    await Promise.all([
+      this.getListDiemKhoNhanBq(data.maChiCucNhan),
+      this.getListNhaKhoNhanBq(data.maDiemKhoNhan),
+      this.getListNganKhoNhanBq(data.maNhaKhoNhan),
+      this.getListLoKhoNhanBq(data.maNganKhoNhan)
+    ])
   }
 }

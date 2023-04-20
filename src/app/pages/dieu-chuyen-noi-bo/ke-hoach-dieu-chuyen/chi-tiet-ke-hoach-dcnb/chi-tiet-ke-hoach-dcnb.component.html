@@ -402,7 +402,7 @@
                         </td>
                         <td *ngIf="isNhanDieuChuyen">
                           <a>
-                            <i class="fa fa-plus" *ngIf="!isView" (click)="suaHangHoa(lv2)"></i>
+                            <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNham(lv2)"></i>
                           </a>
                         </td>
                       </tr>
@@ -421,16 +421,16 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{lv3.tenDiemKhoNhan}}</td>
-                            <td>{{lv3.tenNhaKhoNhan}}</td>
-                            <td>{{lv3.tenNganKhoNhan}}</td>
-                            <td>{{lv3.tenLoKhoNhan}}</td>
-                            <td>{{lv3.tichLuongKd}}</td>
-                            <td>{{lv3.soLuongPhanBo}}</td>
+                            <td><strong>{{lv3.tenDiemKhoNhan}}</strong></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td *ngIf="!isNhanDieuChuyen"></td>
                             <td *ngIf="isNhanDieuChuyen">
                               <a>
-                                <i class="fa fa-edit" *ngIf="!isView" (click)="suaHangHoa(lv3)"></i>
+                                <i class="fa fa-plus" *ngIf="!isView" (click)="addDiemKhoNham(lv2)"></i>
                               </a>
                               <a>
                                 <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
@@ -438,6 +438,40 @@
                               </a>
                             </td>
                           </tr>
+                          <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                            <ng-container *ngFor="let lv4 of lv3.childData,let i4=index">
+                              <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{lv4.tenNhaKhoNhan}}</td>
+                                <td>{{lv4.tenNganKhoNhan}}</td>
+                                <td>{{lv4.tenLoKhoNhan}}</td>
+                                <td>{{lv4.tichLuongKd}}</td>
+                                <td>{{lv4.soLuongPhanBo}}</td>
+                                <td *ngIf="!isNhanDieuChuyen"></td>
+                                <td *ngIf="isNhanDieuChuyen">
+                                  <a>
+                                    <i class="fa fa-edit" *ngIf="!isView" (click)="suaHangHoa(lv4)"></i>
+                                  </a>
+                                  <a>
+                                    <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+                                       nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoaHangHoa(lv4)"></i>
+                                  </a>
+                                </td>
+                              </tr>
+                            </ng-container>
+                          </ng-container>
                         </ng-container>
                       </ng-container>
                     </ng-container>
