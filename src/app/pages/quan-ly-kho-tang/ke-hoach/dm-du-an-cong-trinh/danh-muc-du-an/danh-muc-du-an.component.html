@@ -1,18 +1,18 @@
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
     <div nz-row [nzGutter]="24">
-      <div nz-col nzSpan="3">
+      <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
         <label class="search__label">Số QĐ phê duyệt</label>
         <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQd"/>
       </div>
-      <div nz-col nzSpan="3">
+      <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
         <label class="search__label">Khối</label>
         <nz-select  nzAllowClear [(ngModel)]="searchFilter.khoi">
           <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </div>
-      <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
+      <div nz-col nzSpan="6" *ngIf="!userService.isCuc()">
         <label class="search__label">Đơn vị</label>
         <nz-select  nzAllowClear [(ngModel)]="searchFilter.maDvi">
           <nz-option *ngFor="let p of danhSachCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
@@ -73,18 +73,20 @@
     </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered>
+    <nz-table #basicTable nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered  [nzData]="dataTable" [nzScroll]="dataTable && dataTable.length ? { x: '2500px'} : null">
       <thead>
       <tr>
-        <th class="text-left" nzWidth = "20px">STT</th>
-        <th class="text-left" nzWidth = "20px" *ngIf="userService.isTongCuc()">Đơn vị</th>
-        <th class="text-left" nzWidth = "40px">Mã dự án</th>
-        <th class="text-left" nzWidth = "60px">Tên dự án</th>
-        <th class="text-left" nzWidth = "60px">Địa điểm xây dựng</th>
-        <th class="text-left" nzWidth = "">Khối</th>
-        <th class="text-left" nzWidth = "">Thời gian <br> khởi công</th>
-        <th class="text-left" nzWidth = "">Thời gian <br> hoàn thành</th>
+        <th class="text-center" nzWidth = "40px">STT</th>
+        <th class="text-left" nzWidth = "120px" *ngIf="!userService.isCuc()">Đơn vị</th>
+        <th class="text-left" nzWidth = "100px">Mã dự án</th>
+        <th class="text-left" nzWidth = "120px">Tên dự án</th>
+        <th class="text-left" nzWidth = "150px">Địa điểm xây dựng</th>
+        <th class="text-left" nzWidth = "150px">Khối</th>
+        <th class="text-left" nzWidth = "200px">Thuộc Chi cục</th>
+        <th class="text-left" nzWidth = "200px">Điểm kho</th>
+        <th class="text-center" nzWidth = "">Thời gian <br> khởi công</th>
+        <th class="text-center" nzWidth = "">Thời gian <br> hoàn thành</th>
         <th class="text-left" nzWidth = "">Tổng số <br> TMĐT dự kiến</th>
         <th class="text-left" nzWidth = "">TMĐT vốn <br> NSTW dự kiến</th>
         <th class="text-left" nzWidth = "">Số QĐ phê duyệt</th>
@@ -93,7 +95,7 @@
         <th class="text-left" nzWidth = "">Tổng lũy kế <br> vốn đã bố trí</th>
         <th class="text-left" nzWidth = "">Lũy kế vốn <br>NSTW đã bố trí</th>
         <th class="text-left" nzWidth = "">Trạng thái</th>
-        <th class="text-left" nzWidth = "40px" nzRight>Hành động</th>
+        <th class="text-left" nzWidth = "120px" nzRight>Hành động</th>
       </tr>
       </thead>
       <tbody>
@@ -117,8 +119,26 @@
         <td>
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.khoi">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-option nzDisabled nzHide></nz-option>
               <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.maChiCuc" nzShowSearch nzAllowClear (ngModelChange)="changeChiCuc($event)">
+              <nz-option nzDisabled nzHide></nz-option>
+              <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-select [(ngModel)]="rowItem.maDiemKho" nzShowSearch nzAllowClear>
+              <nz-option  nzDisabled nzHide></nz-option>
+              <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
               </nz-option>
             </nz-select>
           </nz-input-group>
@@ -179,29 +199,31 @@
       <tr *ngFor="let data of basicTable.data; let i = index">
         <ng-container *ngIf="!dataEdit[i].edit; else editTemplate">
         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-        <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
+        <td *ngIf="!userService.isCuc()">{{ data.tenDvi }}</td>
         <td>{{ data.maDuAn }}</td>
         <td>{{ data.tenDuAn}}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.khoi }}</td>
+        <td>{{ data.tenChiCuc }}</td>
+        <td>{{ data.tenDiemKho }}</td>
         <td>{{data.tgKhoiCong}}</td>
-        <td>{{data.tgHoanThanh}}</td>
-        <td>{{ data.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-center">{{data.tgHoanThanh}}</td>
+        <td class="text-center">{{ data.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.soQdPd }}</td>
-        <td>{{ data.tmdtDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.tongSoLuyKe | number : '1.0-1' : 'vi_VN' }}</td>
-        <td>{{ data.luyKeNstw | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tmdtDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.tongSoLuyKe | number : '1.0-1' : 'vi_VN' }}</td>
+        <td class="text-right">{{ data.luyKeNstw | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-left" nzRight>
-          <a (click)="openDialog(data.id)" *ngIf="data.trangThai == STATUS.BAN_HANH">
+          <a (click)="openDialog(data.id)">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="startEdit(i)" >
+          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc()" (click)="startEdit(i)" >
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="xoaItem(data.id)">
+          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc()" (click)="xoaItem(data.id)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
@@ -228,6 +250,24 @@
                 <nz-select [(ngModel)]="dataEdit[i].data.khoi">
                   <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                   <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select [(ngModel)]="dataEdit[i].data.maChiCuc" nzAllowClear nzShowSearch (ngModelChange)="changeChiCuc($event)">
+                  <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                  <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select [(ngModel)]="dataEdit[i].data.maDiemKho" nzAllowClear nzShowSearch >
+                  <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                  <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
@@ -298,7 +338,7 @@
                          (nzPageIndexChange)="changePageIndex($event)"
                          (nzPageSizeChange)="changePageSize($event)">
             <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
             </ng-template>
           </nz-pagination>
           <!-- end phân trang  -->

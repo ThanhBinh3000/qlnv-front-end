@@ -158,8 +158,8 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     let check = false;
     if (this.detail.loaiHangHoa) {
       let arr = this.detail.loaiHangHoa.split(",");
+      console.log(arr,2222)
       if (arr && arr.length > 0) {
-        console.log(arr)
         arr.forEach(item => {
           if (this.formData.value.loaiVthh == item) {
             check =true

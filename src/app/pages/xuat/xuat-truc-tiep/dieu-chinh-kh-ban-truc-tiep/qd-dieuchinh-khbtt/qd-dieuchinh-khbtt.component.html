@@ -52,7 +52,8 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()"
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-dieu-chinh-ke-hoach-ban-truc-tiep.xslx')"
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>

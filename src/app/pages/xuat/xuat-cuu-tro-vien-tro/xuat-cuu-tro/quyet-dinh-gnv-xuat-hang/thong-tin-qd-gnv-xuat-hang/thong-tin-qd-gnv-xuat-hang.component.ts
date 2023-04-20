@@ -72,6 +72,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   listNoiDung: any;
   listChungLoaiHangHoa: any[] = [];
   statusForm: any = [];
+  chiTiet: any = [];
   soLuong: any;
   thanhTien: any;
   donViTinh: any;
@@ -147,7 +148,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
-            this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
+            if (this.formData.value.soQd){
+              this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
+            }
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -232,21 +235,25 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              let noiDungCuuTro = []
+              let noiDungCuuTro1 = []
               if (this.userInfo.CAP_DVI === "2") {
-                noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI));
+                noiDungCuuTro1 = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI));
               } else if (this.userInfo.CAP_DVI === "3") {
-                noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
+                noiDungCuuTro1 = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
               }
-              let nd = noiDungCuuTro[0].quyetDinhPdDx;
-              this.formData.patchValue({
-                loaiVthh: res.data.loaiVthh,
-                tenLoaiVthh: res.data.tenLoaiVthh,
-                donViTinh: res.data.donViTinh,
-                noiDungCuuTro: nd,
-                soLuong: nd.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
-                thanhTien: nd.reduce((prev, cur) => prev + cur.thanhTien, 0),
-              });
+              if (noiDungCuuTro1) {
+                noiDungCuuTro1.forEach(s => {
+                  this.chiTiet = [...this.chiTiet,...s.quyetDinhPdDx];
+                });
+                this.formData.patchValue({
+                  loaiVthh: res.data.loaiVthh,
+                  tenLoaiVthh: res.data.tenLoaiVthh,
+                  donViTinh: res.data.donViTinh,
+                  noiDungCuuTro: this.chiTiet,
+                  soLuong: this.chiTiet.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
+                  thanhTien: this.chiTiet.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                });
+              }
               this.selectHangHoa(res.data.loaiVthh);
               this.buildTableView()
             }
@@ -299,8 +306,12 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.formData.patchValue({
       soQdPd: item.soQd,
       ngayKyQdPa: item.ngayKy,
-      soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD,
     })
+    if(this.formData.value.soQd){
+      this.formData.patchValue({
+        soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD
+      })
+    }
   }
 
   async saveAndSend(status: string, message: string, sucessMessage: string) {
@@ -329,7 +340,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async save() {
     this.saveSoQdPa();
+    this.formData.disable()
     let rs = await this.createUpdate(this.formData.value);
+    this.formData.enable()
     if (rs) {
       this.goBack();
     }

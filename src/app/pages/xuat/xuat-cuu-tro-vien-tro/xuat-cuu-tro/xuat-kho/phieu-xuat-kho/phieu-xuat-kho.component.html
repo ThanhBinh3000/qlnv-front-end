@@ -213,7 +213,7 @@
                       <td></td>
                       <td class="bold">{{lv2.soPhieuXuatKho}}</td>
                       <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                      <td><a *ngIf="item.soQdGiaoNvXh!=null"
+                      <td><a *ngIf="item.soPhieuKnCl" nzType="link"
                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a> </td>
                       <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
                       <td>{{lv2.tenTrangThai}}</td>

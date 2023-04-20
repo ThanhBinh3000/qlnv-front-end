@@ -21,14 +21,15 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./them-moi-thong-tin-ban-truc-tiep.component.scss']
 })
 export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implements OnInit {
-  //base init
   @Input() loaiVthh: String;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Input() pthucBanTrucTiep: string;
   @Output()
   showListEvent = new EventEmitter<any>();
-  dataDetail: any[] = [];
+  @Output()
+  dataTableChange = new EventEmitter<any>();
+
   radioValue: string = 'Chào giá';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
@@ -37,9 +38,11 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   selected: boolean = false;
+  soLuongDeXuat: number;
+  donGiaDeXuat: number;
 
-  @Output()
-  dataTableChange = new EventEmitter<any>();
+
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -51,13 +54,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
   ) {
     super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
+
     this.formData = this.fb.group(
       {
         id: [],
         idDviDtl: [],
         idDtl: [],
         namKh: [],
-        soQdPd: [],
+        soQdPd: [''],
         maDvi: [''],
         tenDvi: [''],
         pthucBanTrucTiep: [''],
@@ -79,6 +83,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       }
     );
   }
+
   rowItem: ChiTietThongTinBanTrucTiepChaoGia = new ChiTietThongTinBanTrucTiepChaoGia();
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinBanTrucTiepChaoGia } } = {};
 
@@ -213,14 +218,16 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   addRow(): void {
-    if (!this.listOfData) {
-      this.listOfData = [];
-    }
-    if (this.validateThongTinDviChaoGia()) {
-      this.listOfData = [...this.listOfData, this.rowItem];
-      this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
-      this.emitDataTable();
-      this.updateEditCache()
+    if (this.validateSoLuong()) {
+      if (!this.listOfData) {
+        this.listOfData = [];
+      }
+      if (this.validateThongTinDviChaoGia()) {
+        this.listOfData = [...this.listOfData, this.rowItem];
+        this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
+        this.emitDataTable();
+        this.updateEditCache()
+      }
     }
   }
 
@@ -231,7 +238,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return false
     }
-
   }
 
   clearItemRow() {
@@ -286,10 +292,25 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   saveEdit(idx: number): void {
-    Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
-    this.dataEdit[idx].edit = false;
+    if (this.validateSoLuong()) {
+      Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
+      this.dataEdit[idx].edit = false;
+    }
   }
 
+  validateSoLuong() {
+    console.log(this.rowItem.donGia, 999)
+    console.log(this.rowItem.soLuong, 888)
+    if (this.rowItem.soLuong > this.soLuongDeXuat) {
+      this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+      return;
+    } else if (this.rowItem.donGia > this.donGiaDeXuat) {
+      this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDeXuat + "đ) vui lòng nhập lại")
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   expandSet2 = new Set<number>();
   onExpandChange2(id: number, checked: boolean): void {
@@ -308,7 +329,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.expandSet3.delete(id);
     }
   }
-
 
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type?: any) {
     const element = event.currentTarget as HTMLInputElement;
@@ -377,6 +397,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       })
       this.emitDataTable()
       this.updateEditCache()
+      this.soLuongDeXuat = item.soLuong
+      this.donGiaDeXuat = item.donGiaDeXuat
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -387,6 +409,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       })
       this.emitDataTable()
       this.updateEditCache()
+      this.soLuongDeXuat = item[0].soLuong
+      this.donGiaDeXuat = item[0].donGiaDeXuat
       await this.spinner.hide();
     }
   }
@@ -431,5 +455,4 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["thoiHanBan"].clearValidators();
     }
   }
-
 }

@@ -44,6 +44,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
   dataChiTieu: any;
+  donGiaVat: number = 0;
   maTrinh: string = '';
 
   constructor(
@@ -91,18 +92,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       thongBao: [''],
       khoanTienDatTruoc: [],
       tongSoLuong: [],
-      tongTienKdiem: [],
-      tongTienKdienDonGia: [],
-      tongTienDatTruoc: [],
-      tongTienDatTruocDonGia: [],
+      tongTienGiaKhoiDiemDx: [],
+      tongKhoanTienDatTruocDx: [],
       ghiChu: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
-      donGiaVat: [],
-      tongDonGia: [],
+      tongDonGiaDx: [],
       dviTinh: [''],
-      typeVthh: [''],
+      tongTienGiaKdTheoDgiaDd: [],
+      tongKhoanTienDtTheoDgiaDd: [],
     });
   }
 
@@ -128,7 +127,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_DG');
     }
@@ -169,9 +167,19 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
+        await this.calculatorTableHdr(data);
       }
     }
   }
+
+  async calculatorTableHdr(dataTable) {
+    dataTable.children.forEach((item) => {
+      item.children.forEach((child) => {
+        item.soTienDatTruocChiCuc += child.soLuong * child.donGiaDeXuat * dataTable.khoanTienDatTruoc / 100
+      })
+    })
+  }
+
 
   initForm() {
     if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
@@ -253,14 +261,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           cloaiVthh: this.formData.value.cloaiVthh,
           trangThai: STATUS.BAN_HANH,
           maDvi: this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU) ? "0101" : this.formData.value.maDvi
-          // maDvi: this.formData.value.maDvi
         }
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
-          this.formData.patchValue({
-            donGiaVat: data.giaQdVat
-          })
+          this.donGiaVat = data.giaQd
         }
         if (res.statusCode == API_STATUS_CODE.SUCCESS) {
           this.formData.patchValue({
@@ -292,10 +297,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        cloaiVthh: this.formData.get('cloaiVthh').value,
+        tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
-        donGiaVat: this.formData.get('donGiaVat').value,
         dviTinh: this.formData.get('dviTinh').value,
+        donGiaVat: this.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((data) => {
@@ -325,26 +332,21 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongTienKdiem: number = 0;
-    let tongTienKdienDonGia: number = 0;
-    let tongDonGia: number = 0;
+    let tongDonGiaDx: number = 0;
+    let tongTienGiaKdTheoDgiaDd: number = 0;
+    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
-      item.children.forEach(child => {
-        item.tienDtruocDxChiCuc += child.soLuong * child.donGiaDeXuat;
-        item.tienDtruocDdChiCuc += child.soLuong * child.donGiaVat;
-        tongDonGia += child.donGiaDeXuat;
-      })
+      tongDonGiaDx += item.donGiaChiCuc;
       tongSoLuong += item.soLuongChiCuc;
-      tongTienKdiem += item.tienDtruocDxChiCuc;
-      tongTienKdienDonGia += item.tienDtruocDdChiCuc;
+      tongTienGiaKdTheoDgiaDd = tongSoLuong * this.donGiaVat
+      tongKhoanTienDtTheoDgiaDd = tongSoLuong * this.donGiaVat * this.formData.value.khoanTienDatTruoc / 100
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienKdiem: tongTienKdiem,
-      tongTienKdienDonGia: tongTienKdienDonGia,
-      tongTienDatTruoc: tongTienKdiem * this.formData.value.khoanTienDatTruoc / 100,
-      tongTienDatTruocDonGia: tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100,
-      tongDonGia: tongDonGia,
+      tongTienGiaKhoiDiemDx: tongSoLuong * tongDonGiaDx,
+      tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
+      tongKhoanTienDatTruocDx: tongSoLuong * tongDonGiaDx * this.formData.value.khoanTienDatTruoc / 100,
+      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd
     });
   }
 
@@ -399,8 +401,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
-
-
       this.formData.patchValue({
         soQdCtieu: res2.data.soQuyetDinh,
         idSoQdCtieu: res2.data.id

@@ -38,6 +38,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   STATUS = STATUS
 
   searchFilter = {
+    namKeHoach: '',
     soCongVan: '',
     maDvi: '',
     diaDiem: '',
@@ -50,6 +51,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   filterTable: any = {
     soCongVan: '',
     namKeHoach: '',
+    giaiDoan: '',
     tenDvi: '',
     ngayKy: '',
     soQdGoc: '',
@@ -67,6 +69,16 @@ export class DeXuatKeHoachComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐC' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐC' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐC' },
+    { ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt - Cán bộ Vụ' },
+    { ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối - Cán bộ Vụ' }
+  ];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -221,6 +233,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      namKeHoach: '',
       soCongVan: '',
       maDvi: '',
       diaDiem: '',
@@ -301,15 +314,20 @@ export class DeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -367,5 +385,14 @@ export class DeXuatKeHoachComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }

@@ -147,6 +147,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listChiCuc.forEach(item => {
           item.maDvi = item.maDonVi
           item.tenDonVi = item.tenDonvi
+          item.diaDiemNhap = item.diaDiemNhap
           item.soLuongNhap = this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.ntnGao : item.ntnThoc
         })
       }
@@ -154,6 +155,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listChiCuc = this.dataChiTieu.khMuoiDuTru.filter(item => item.nhapTrongNam > 0);
         this.listChiCuc.forEach(item => {
           item.maDvi = item.maDonVi
+          item.tenDonVi = item.tenDonvi
+          item.diaDiemNhap = item.diaDiemNhap
           item.soLuongNhap = item.nhapTrongNam
         })
       }
@@ -219,19 +222,19 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
-  changeGoiThau() {
+  changeGoiThau(event?: any) {
     let data = [];
     this.dataEdit = [];
     this.listOfData = [];
-    if (this.formData.get('goiThau') && this.formData.get('goiThau').value != null && this.formData.get('goiThau').value != '') {
+    if (event.nzValue != '') {
       this.dataAll.forEach(item => {
-        if (item.goiThau == this.formData.get('goiThau').value) {
+        if (item.goiThau == event.nzValue) {
           data.push(item)
         }
       })
       this.dataEdit = data;
       this.formDataPatchValue();
-      this.selectedGoiThau = this.formData.get('goiThau').value;
+      this.selectedGoiThau = event.nzValue;
     }
   }
 
@@ -253,7 +256,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         const item = {
           'value': res.data.child[i].maDiemkho,
           'text': res.data.child[i].tenDiemkho,
-          'diaDiemNhap': res.data.child[i].diaDiemNhap,
+          'diaDiemNhap': res.data.child[i].diaChi,
         };
         this.listDiemKho.push(item);
       }

@@ -304,6 +304,14 @@
                     </div>
                     <div nz-col [nzSpan]="6">
                         <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Fax" formControlName="fax" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <input [readonly]="isDisableForm()" nz-input placeholder="Số tài khoản"
@@ -311,9 +319,23 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="12">
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Mở tại"
+                                    formControlName="moTai" />
+                            </nz-form-control>
+                        </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Thông tin giấy ủy quyền"
+                                    formControlName="giayUyQuyen" />
+                            </nz-form-control>
+                        </nz-form-item>
                     </div>
                 </div>
             </form>
@@ -529,24 +551,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let item of dataTable , let i = index">
-                                <tr>
-                                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                                    <td colspan="3">{{item.tenDvi}}</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <ng-container *ngIf="expandSet.has(i)">
-                                    <tr *ngFor="let dtGoiThau of item.children, let y = index">
-                                        <td></td>
-                                        <td></td>
-                                        <td>{{dtGoiThau.tenDiemKho}}</td>
-                                        <td>{{dtGoiThau.diaDiemNhap}}</td>
-                                        <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                        <td>{{dtGoiThau.soLuong * formData.value.donGia * 1000 | number : '1.0-1' :
-                                            'vi_VN'}}
+                            <ng-container *ngFor="let cuc of dataTable , let i = index">
+                                <ng-container *ngFor="let chiCuc of cuc.children , let y = index">
+                                    <tr>
+                                        <td [nzExpand]="expandSet.has(y)" (nzExpandChange)="onExpandChange(y, $event)">
                                         </td>
+                                        <td colspan="3">{{chiCuc.tenDvi}}</td>
+                                        <td></td>
+                                        <td></td>
                                     </tr>
+                                    <ng-container *ngIf="expandSet.has(y)">
+                                        <tr *ngFor="let diemKho of chiCuc.children, let z = index">
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{diemKho.tenDvi}}</td>
+                                            <td>{{diemKho.diaDiemNhap}}</td>
+                                            <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                            <td>{{diemKho.soLuong * formData.value.donGia * 1000 | number : '1.0-1' :
+                                                'vi_VN'}}
+                                            </td>
+                                        </tr>
+                                    </ng-container>
                                 </ng-container>
                             </ng-container>
                         </tbody>

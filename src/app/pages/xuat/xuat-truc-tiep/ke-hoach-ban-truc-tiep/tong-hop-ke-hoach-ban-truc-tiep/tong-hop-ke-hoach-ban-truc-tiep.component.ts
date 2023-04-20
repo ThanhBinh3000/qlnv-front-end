@@ -1,21 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import * as dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { saveAs } from 'file-saver';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-
 @Component({
   selector: 'app-tong-hop-ke-hoach-ban-truc-tiep',
   templateUrl: './tong-hop-ke-hoach-ban-truc-tiep.component.html',
   styleUrls: ['./tong-hop-ke-hoach-ban-truc-tiep.component.scss']
 })
+
 export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string;
   @Input()
   listVthh: any[] = [];
@@ -28,6 +27,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã Dự Thảo QĐ' },
     { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã Ban Hành QĐ' },
   ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -37,15 +37,16 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
+
     this.formData = this.fb.group({
-      namKh: '',
-      ngayThopTu: '',
-      ngayThopDen: '',
-      loaiVthh: '',
-      tenLoaiVthh: '',
-      cloaiVthh: '',
-      tenCloaiVthh: '',
-      noiDungThop: ''
+      namKh: null,
+      ngayThopTu: null,
+      ngayThopDen: null,
+      loaiVthh: null,
+      tenLoaiVthh: null,
+      cloaiVthh: null,
+      tenCloaiVthh: null,
+      noiDungThop: null,
     })
   }
 
@@ -72,6 +73,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   taoQdinh(id: number) {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
@@ -97,6 +99,7 @@ export class TongHopKeHoachBanTrucTiepComponent extends Base2Component implement
       loaiVthh: this.loaiVthh,
     })
   }
+
   clearFilter() {
     this.formData.reset();
     this.timKiem();

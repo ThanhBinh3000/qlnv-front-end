@@ -220,6 +220,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
       nam: this.formData.get('nam').value,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0

@@ -1,20 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import {
-  QuyetDinhGiaoNhapHangService
-} from "src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import { MESSAGE } from "src/app/constants/message";
+import {MESSAGE} from "src/app/constants/message";
 import dayjs from "dayjs";
+import {CHUC_NANG} from "../../../../../constants/status";
+import {CuuTroVienTroComponent} from "../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-quyet-dinh-gnv-xuat-hang',
@@ -26,32 +25,41 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   isDetail: boolean = false;
   selectedId: number = 0;
   isView = false;
-
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: CuuTroVienTroComponent;
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
   listTrangThaiXh: any[] = [
-    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
-    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
-    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' }
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
   ];
+  idQdPd: number = 0;
+  openQdPd = false;
+  id: number = 0;
+  openQdGnv = false;
+
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private danhMucService: DanhMucService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+              private danhMucService: DanhMucService,
+              private danhMucTieuChuanService: DanhMucTieuChuanService,
+              private cuuTroVienTroComponent: CuuTroVienTroComponent,
+  ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: [dayjs().get('year')],
       soQd: [''],
@@ -93,11 +101,11 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  redirectToChiTiet(id: number, isView: boolean) {
+  redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isView = isView;
+    this.isView = b;
+    // this.isViewDetail = isView ?? false;
   }
 
   async loadDsVthh() {
@@ -107,6 +115,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
+
   async timKiem() {
     await this.spinner.show();
     try {
@@ -119,5 +128,25 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       console.log(e)
     }
     await this.spinner.hide();
+  }
+
+  openQdPdModal(id: any) {
+    this.idQdPd = id;
+    this.openQdPd = true;
+  }
+
+  closeQdPdModal() {
+    this.idQdPd = null;
+    this.openQdPd = false;
+  }
+
+  openQdGnvModal(id: any) {
+    this.id = id;
+    this.openQdGnv = true;
+  }
+
+  closeQdGnvModal() {
+    this.id = null;
+    this.openQdGnv = false;
   }
 }
