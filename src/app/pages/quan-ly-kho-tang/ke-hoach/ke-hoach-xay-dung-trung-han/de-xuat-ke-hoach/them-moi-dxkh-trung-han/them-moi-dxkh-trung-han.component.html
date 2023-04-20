@@ -218,7 +218,7 @@
       <ng-container *ngFor="let data of dataTable , let idx = index">
         <tr>
           <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-          <td class="ont-weight-bold">{{data.khoi}}</td>
+          <td class="font-weight-bold">{{data.khoi}}</td>
           <td></td>
           <td></td>
           <td></td>
@@ -242,7 +242,7 @@
         </tr>
         <ng-container *ngIf="expandSet.has(data.idVirtual)">
           <tr *ngFor="let item of data.dataChild, let y = index">
-            <td>{{y + 1}}</td>
+            <td class="text-right font-weight-bold">{{y + 1}}</td>
             <td></td>
             <td>{{item.tenDuAn}}</td>
             <td>{{item.diaDiem}}</td>
@@ -272,19 +272,25 @@
       <tr>
         <td></td>
         <td></td>
-        <td  class="font-weight-bold" style="color: blue">Tổng</td>
+        <td class="font-weight-bold" style="color: blue">Tổng</td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td  *ngIf="!isViewDetail" nzRight>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'khVonTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'khVonNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td class="font-weight-bold text-right"
+            style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
+        <td *ngIf="!isViewDetail" nzRight>
       </tr>
 
       </tfoot>

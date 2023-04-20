@@ -94,7 +94,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   async getAllDmKho() {
-    let res = await this.dmKhoService.getAllDmKho('DMK');
+    let body = {
+      "type" : "DMK",
+      "maDvi" : this.userInfo.MA_DVI
+    }
+    let res = await this.dmKhoService.getAllDmKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmKho = res.data
     }

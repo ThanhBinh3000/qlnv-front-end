@@ -119,7 +119,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     await this.showDetail($event, data);
   }
 
-
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {

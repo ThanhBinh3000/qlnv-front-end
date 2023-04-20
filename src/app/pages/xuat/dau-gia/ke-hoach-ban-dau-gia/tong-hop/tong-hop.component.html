@@ -40,7 +40,6 @@
                 </button>
             </div>
         </nz-card>
-
         <div class="group-button">
             <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
             <div class="buttons">
@@ -61,7 +60,6 @@
                 </button>
             </div>
         </div>
-
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
@@ -148,7 +146,7 @@
                         <td>{{ data.noiDungThop }}</td>
                         <td>{{ data.namKh }}</td>
                         <td>
-                            <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link" nzBlock
+                            <a *ngIf="data.soQdPd && data.idQdPd" style="color: blue ;font-weight: bold;"
                                 (click)="openModalQdPd(data.idQdPd)">{{
                                 data.soQdPd}}</a>
                         </td>
