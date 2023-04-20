@@ -299,6 +299,14 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 			}
 		}
 		await this.getChildUnit();
+		if (this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) {
+			this.lstDvi.push(
+				{
+					maDvi: this.maDvi,
+					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+				}
+			)
+		}
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -394,6 +402,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 					this.maDviTien = data.data.maDviTien;
 					this.checkTrangThaiGiao = data.data.trangThaiGiao;
 					// this.lstDvi = [];
+					this.maDvi = data.data.maDvi
 					this.namPa = data.data.namPa;
 					this.namDtoan = data.data.namDtoan;
 					this.trangThaiBanGhi = data.data.trangThai;
@@ -836,7 +845,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
 		this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
+		if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd && this.trangThaiBanGhi !== "7") {
 			this.statusBtnGiao = false;
 		} else {
 			this.statusBtnGiao = true;
