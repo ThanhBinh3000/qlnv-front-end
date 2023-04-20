@@ -180,12 +180,20 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (chiCuc.soLuongXuat) {
-        this.formData.patchValue({
-          tenDvi: res.data.tenDvi,
-          diaChi: res.data.diaChi,
-          slKeHoachDd: soLuongDaLenKh.data,
-          slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU || LOAI_HANG_DTQG.MUOI) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
-        })
+        if (LOAI_HANG_DTQG.MUOI) {
+          this.formData.patchValue({
+            tenDvi: res.data.tenDvi,
+            diaChi: res.data.diaChi,
+            slKeHoachDd: soLuongDaLenKh.data,
+            slChiTieu: chiCuc?.soLuongXuat,
+          })
+        } else
+          this.formData.patchValue({
+            tenDvi: res.data.tenDvi,
+            diaChi: res.data.diaChi,
+            slKeHoachDd: soLuongDaLenKh.data,
+            slChiTieu: this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU) ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
+          })
       }
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
       this.thongtinPhanLo = new DanhSachPhanLo();
