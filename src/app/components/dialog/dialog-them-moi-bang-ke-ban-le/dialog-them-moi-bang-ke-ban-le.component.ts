@@ -12,9 +12,9 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { BangKeBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/bang-ke-btt.service';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { DialogTableSelectionComponent } from '../dialog-table-selection/dialog-table-selection.component';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import { STATUS } from 'src/app/constants/status';
+import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 
 @Component({
   selector: 'app-dialog-them-moi-bang-ke-ban-le',
@@ -35,8 +35,7 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     modal: NzModalService,
     private _modalRef: NzModalRef,
     private bangKeBttService: BangKeBttService,
-    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
-    private hopDongBttService: HopDongBttService,
+    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeBttService);
     this.formData = this.fb.group(
@@ -94,60 +93,61 @@ export class DialogThemMoiBangKeBanLeComponent extends Base2Component implements
     this.spinner.show()
     let listNvXh: any[] = [];
     let body = {
+      maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
-      namKh: this.formData.value.namKh,
-      maChiCuc: this.userInfo.MA_DVI
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      pthucBanTrucTiep: ['Bán lẻ'],
+      lastest: 1
     };
-    let res = await this.quyetDinhNvXuatBttService.search(body)
+    let res = await this.chaoGiaMuaLeUyQuyenService.search(body)
     if (res.data) {
       listNvXh = res.data?.content;
     }
-    console.log(listNvXh, 555)
     this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin quyết định giao NV xuất hàng',
+      nzTitle: 'THÔNG TIN QUYẾT ĐỊNH BÁN LẺ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Số quyết định NV xuất hàng', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataHeader: ['Số quyết định phê duyệt kế hoạch BDG', 'Tên loại hàng hóa', 'Tên chủng loại vật tư hàng háo'],
+        dataColumn: ['soQdPd', 'tenLoaiVthh', 'tenCloaiVthh'],
         dataTable: listNvXh
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.onChangeNvXh(data.id);
+        this.onChangeQdBanLe(data.id);
       }
     });
   }
 
-  async onChangeNvXh(id) {
-    if (id > 0) {
-      await this.quyetDinhNvXuatBttService.getDetail(id)
-        .then(async (resKq) => {
-          const dataNvXh = resKq.data;
-          let resTtin = await this.hopDongBttService.getDetail(dataNvXh.idHd);
-          if (resKq.data) {
-            const dataHopDong = resTtin.data;
-            this.formData.patchValue({
-              soQd: dataNvXh.soQd,
-              soLuong: dataNvXh.soLuong,
-              soLuongConLai: dataHopDong.soLuongQdChuaKy,
-              loaiVthh: dataNvXh.loaiVthh,
-              tenLoaiVthh: dataNvXh.tenLoaiVthh,
-              cloaiVthh: dataNvXh.cloaiVthh,
-              tenCloaiVthh: dataNvXh.tenCloaiVthh,
-              donGia: dataHopDong.donGia,
-              thanhTien: dataHopDong.donGia * dataNvXh.soLuong * 1000,
-              tenNguoiMua: dataHopDong.tenNguoiDdienDviMua,
-              diaChiNguoiMua: dataHopDong.diaChiDviMua,
-            });
-          }
-        })
-    }
+  async onChangeQdBanLe(id) {
+    // if (id > 0) {
+    //   await this.quyetDinhNvXuatBttService.getDetail(id)
+    //     .then(async (resKq) => {
+    //       const dataNvXh = resKq.data;
+    //       let resTtin = await this.hopDongBttService.getDetail(dataNvXh.idHd);
+    //       if (resKq.data) {
+    //         const dataHopDong = resTtin.data;
+    //         this.formData.patchValue({
+    //           soQd: dataNvXh.soQd,
+    //           soLuong: dataNvXh.soLuong,
+    //           soLuongConLai: dataHopDong.soLuongQdChuaKy,
+    //           loaiVthh: dataNvXh.loaiVthh,
+    //           tenLoaiVthh: dataNvXh.tenLoaiVthh,
+    //           cloaiVthh: dataNvXh.cloaiVthh,
+    //           tenCloaiVthh: dataNvXh.tenCloaiVthh,
+    //           donGia: dataHopDong.donGia,
+    //           thanhTien: dataHopDong.donGia * dataNvXh.soLuong * 1000,
+    //           tenNguoiMua: dataHopDong.tenNguoiDdienDviMua,
+    //           diaChiNguoiMua: dataHopDong.diaChiDviMua,
+    //         });
+    //       }
+    //     })
+    // }
   }
 
   async save() {

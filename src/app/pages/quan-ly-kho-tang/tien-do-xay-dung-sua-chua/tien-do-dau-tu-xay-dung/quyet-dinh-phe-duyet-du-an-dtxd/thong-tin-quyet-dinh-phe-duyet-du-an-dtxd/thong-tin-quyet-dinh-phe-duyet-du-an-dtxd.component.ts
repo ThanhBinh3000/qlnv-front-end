@@ -205,7 +205,6 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     if (this.formData.invalid) {
       return;
     }
-    debugger;
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }

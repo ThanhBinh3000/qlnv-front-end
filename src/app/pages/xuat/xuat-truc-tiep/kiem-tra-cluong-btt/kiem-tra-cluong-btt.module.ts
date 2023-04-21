@@ -11,6 +11,7 @@ import { ThemPhieuKtraCluongBttComponent } from './phieu-ktra-cluong-btt/them-ph
 import { HoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/ho-so-ky-thuat-btt.component';
 import { ThemMoiHoSoKyThuatBttComponent } from './ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt/them-moi-ho-so-ky-thuat-btt.component';
 import { GiaoNvXuatHangBttModule } from '../giao-nv-xuat-hang-btt/giao-nv-xuat-hang-btt.module';
+import { ThemDaiDienComponent } from './bien-ban-lay-mau-btt/them-moi-bien-ban-lay-mau-btt/them-dai-dien/them-dai-dien.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { GiaoNvXuatHangBttModule } from '../giao-nv-xuat-hang-btt/giao-nv-xuat-h
     ThemPhieuKtraCluongBttComponent,
     HoSoKyThuatBttComponent,
     ThemMoiHoSoKyThuatBttComponent,
+    ThemDaiDienComponent,
 
   ],
   imports: [

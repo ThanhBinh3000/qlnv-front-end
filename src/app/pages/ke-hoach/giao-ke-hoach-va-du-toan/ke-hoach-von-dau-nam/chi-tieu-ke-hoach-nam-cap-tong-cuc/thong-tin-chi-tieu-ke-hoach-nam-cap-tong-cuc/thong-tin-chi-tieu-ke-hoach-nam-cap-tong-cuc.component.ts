@@ -215,7 +215,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.formData.patchValue({
       canCu: null,
     })
-
     if (this.userService.isCuc()) {
       let res = await this.chiTieuKeHoachNamService.canCuCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -234,7 +233,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
+        console.log(res, 'cccccccccccccc')
         if (data) {
+          this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
           this.formData.patchValue({
             canCu: data.soQd
           })
@@ -1474,6 +1475,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       return;
     }
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hay ko ?
+    let checkFlag = this.soSanhCtBTCGiao('save');
+    if (!checkFlag) {
+      return;
+    }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
     }/${this.qdTCDT}` : null;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
@@ -1521,7 +1527,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return Object.assign(s1, s)
     }));
 
-    // console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
       for (let j = i + 1; j <= khVatTu.length - 1; j++) {
@@ -2035,6 +2040,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
       this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+      // if (this.userService.isTongCuc() && !this.id) {
+      //   this.formData.patchValue({
+      //     canCu: res.data.soQd
+      //   })
+      // }
     }
   }
 
@@ -2153,8 +2163,51 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       : '0';
   }
 
+  soSanhCtBTCGiao(action) {
+    let totalNtnThoc, totalNtnGao = 0;
+    let checkFlag = true;
+    if (action == 'add') {
+      totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+      totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+      if (totalNtnThoc || totalNtnGao) {
+        if (totalNtnThoc > this.dataQdTtcpGiaoBTC.ltThocMua) {
+          this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
+          checkFlag = false;
+          return;
+        }
+        if (totalNtnGao > this.dataQdTtcpGiaoBTC.ltGaoMua) {
+          this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
+          checkFlag = false;
+          return;
+        }
+      }
+    } else {
+      totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+      totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+      if (totalNtnThoc || totalNtnGao) {
+        if (totalNtnThoc < this.dataQdTtcpGiaoBTC.ltThocMua) {
+          this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
+          checkFlag = false;
+          return;
+        }
+        if (totalNtnGao < this.dataQdTtcpGiaoBTC.ltGaoMua) {
+          this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
+          checkFlag = false;
+          return;
+        }
+      }
+    }
+    return checkFlag;
+  }
+
+
   themMoiKHLT() {
     if (!this.isAddLuongThuc) {
+      return;
+    }
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hay ko ?
+    let checkFlag = this.soSanhCtBTCGiao('add');
+    if (!checkFlag) {
       return;
     }
     this.keHoachLuongThucDialog = new KeHoachLuongThuc();

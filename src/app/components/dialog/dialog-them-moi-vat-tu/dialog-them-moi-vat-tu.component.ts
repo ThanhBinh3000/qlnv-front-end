@@ -58,6 +58,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     private helperService: HelperService,
     private dxuatKhLcntService: DxuatKhLcntService,
     private notification: NzNotificationService,
+    private dmDonViService: DonviService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -82,6 +83,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listAllDiemKho: any[] = [];
+  listType = ["MLK", "DV"]
 
   async ngOnInit() {
     this.userInfo = await this.userService.getUserLogin();
@@ -201,14 +203,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   async updateListAllDiemKho() {
     for (let i = 0; i < this.listOfData.length; i++) {
-      const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(this.listOfData[i].maDvi);
+      let body = {
+        maDvi: this.listOfData[i].maDvi,
+        type: this.listType
+      }
+      const res = await this.donViService.layTatCaByMaDvi(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const listDiemKho = [];
-        for (let j = 0; j < res.data?.child.length; j++) {
+        for (let j = 0; j < res.data[0].children.length; j++) {
           const item = {
-            'value': res.data.child[j].maDiemkho,
-            'text': res.data.child[j].tenDiemkho,
-            'diaDiemNhap': res.data.child[j].diaDiemNhap,
+            'value': res.data[0].children[j].maDiemkho,
+            'text': res.data[0].children[j].tenDiemkho,
+            'diaDiemNhap': res.data[0].children[j].diaChi,
           };
           listDiemKho.push(item);
         }
@@ -238,25 +244,31 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
   }
 
+
   async onChangeChiCuc(event) {
     let body = {
+      maDvi: event,
+      type: this.listType
+    }
+    let body1 = {
       year: this.namKhoach,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
-    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body);
+    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body1);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
-    const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    const res = await this.donViService.layTatCaByMaDvi(body);
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.thongTinChiCuc.soLuongDaMua = soLuongDaLenKh.data;
       this.thongTinChiCuc.soLuongTheoChiTieu = chiCuc.soLuongNhap;
       this.thongTinChiCuc.tenDvi = chiCuc.tenDonVi;
-      for (let i = 0; i < res.data?.child.length; i++) {
+      debugger
+      for (let i = 0; i < res.data[0].children.length; i++) {
         const item = {
-          'value': res.data.child[i].maDiemkho,
-          'text': res.data.child[i].tenDiemkho,
-          'diaDiemNhap': res.data.child[i].diaChi,
+          'value': res.data[0].children[i].maDvi,
+          'text': res.data[0].children[i].tenDvi,
+          'diaDiemNhap': res.data[0].children[i].diaChi,
         };
         this.listDiemKho.push(item);
       }

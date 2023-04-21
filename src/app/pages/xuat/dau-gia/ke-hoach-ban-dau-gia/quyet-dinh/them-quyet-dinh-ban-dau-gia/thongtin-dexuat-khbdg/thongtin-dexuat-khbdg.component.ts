@@ -57,8 +57,8 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       thongBaoKh: [null,],
       khoanTienDatTruoc: [null,],
       tongSoLuong: [null,],
-      tongTienKdienDonGia: [null,],
-      tongTienDatTruocDonGia: [null],
+      tongTienGiaKhoiDiemDx: [null,],
+      tongKhoanTienDatTruocDx: [null],
       diaChi: [],
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
@@ -75,6 +75,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
+        console.log(this.dataInput.children, 999)
         await this.ptThanhToan(this.dataInput)
         this.calculatorTable();
       } else {
@@ -117,25 +118,24 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   calculatorTable() {
+    let soLuongChiCuc = 0;
     let tongSoLuong: number = 0;
-    let tongTienKdienDonGia: number = 0;
+    let tongDonGiaDx: number = 0;
 
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong;
       })
-      item.soLuong = soLuongChiCuc;
-      tongTienKdienDonGia += item.tienDtruocDdChiCuc;
+      item.soLuongChiCuc = soLuongChiCuc;
+      tongDonGiaDx += item.donGiaChiCuc;
+      tongSoLuong += item.soLuongChiCuc
+
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienKdienDonGia: tongTienKdienDonGia,
-      tongTienDatTruocDonGia: tongTienKdienDonGia + (tongTienKdienDonGia * this.formData.value.khoanTienDatTruoc / 100),
-
+      tongTienGiaKhoiDiemDx: tongSoLuong * tongDonGiaDx,
+      tongKhoanTienDatTruocDx: tongSoLuong * tongDonGiaDx * this.formData.value.khoanTienDatTruoc / 100,
     });
-    this.dataInput.soLuong = tongSoLuong * 1000
   }
 
   isDisable() {

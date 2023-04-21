@@ -56,7 +56,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayPduyet: [null, [Validators.required]],
+        ngayDuyetTu: [null, [Validators.required]],
+        ngayDuyetDen: [null],
       }
     );
     this.formData = this.fb.group({
@@ -119,7 +120,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     await this.showDetail($event, data);
   }
 
-
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
@@ -129,10 +129,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         return;
       }
       let body = this.formTraCuu.value;
-      if (body.ngayPduyet) {
-        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
-        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
-      }
       delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -160,6 +156,20 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+  };
 
   async save() {
     let body = this.formData.value;
