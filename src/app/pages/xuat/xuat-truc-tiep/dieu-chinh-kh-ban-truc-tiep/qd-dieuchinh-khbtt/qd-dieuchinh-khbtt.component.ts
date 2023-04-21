@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MESSAGE } from "../../../../../constants/message";
-import * as dayjs from "dayjs";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -17,6 +16,9 @@ import { QuyetDinhDcBanttService } from 'src/app/services/qlnv-hang/xuat-hang/ba
 })
 export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+
+  idQdPdGoc: number = 0;
+  isViewQdPdGoc: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -100,4 +102,14 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
     }
     return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
   };
+
+  openModalQdPdGoc(id: number) {
+    this.idQdPdGoc = id;
+    this.isViewQdPdGoc = true;
+  }
+
+  closeModalQdPdGoc() {
+    this.idQdPdGoc = null;
+    this.isViewQdPdGoc = false;
+  }
 }
