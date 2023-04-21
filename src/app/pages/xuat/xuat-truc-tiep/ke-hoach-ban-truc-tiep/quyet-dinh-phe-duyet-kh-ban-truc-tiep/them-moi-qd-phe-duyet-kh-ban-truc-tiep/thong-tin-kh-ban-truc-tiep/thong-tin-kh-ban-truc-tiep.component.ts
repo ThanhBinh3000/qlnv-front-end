@@ -1,13 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import dayjs from 'dayjs';
-import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 
 @Component({
@@ -33,8 +30,6 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
-    private danhMucService: DanhMucService,
-    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,

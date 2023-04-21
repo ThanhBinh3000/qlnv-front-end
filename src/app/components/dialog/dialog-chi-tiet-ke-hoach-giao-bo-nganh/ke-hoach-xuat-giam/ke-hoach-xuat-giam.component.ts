@@ -30,7 +30,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dataTableChange = new EventEmitter<any[]>();
 
   @Input()
-  tongGtri: number
+  tongGtri: number;
 
   @Output()
   tongGtriChange = new EventEmitter<number>();

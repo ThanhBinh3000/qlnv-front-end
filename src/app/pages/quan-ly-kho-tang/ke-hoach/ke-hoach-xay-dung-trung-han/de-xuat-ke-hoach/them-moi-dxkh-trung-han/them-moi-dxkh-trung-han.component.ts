@@ -33,22 +33,17 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
+  userInfo: UserLogin;
   maQd: string;
   expandSet = new Set<number>();
 
   STATUS = STATUS;
   dataTable: any[] = [];
   dataTableRes: any[] = [];
-  dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
   rowItemCha: DanhMucKho = new DanhMucKho();
-  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listNam: any[] = [];
-  userInfo: UserLogin;
   listFileDinhKem: any[] = [];
-  listDmKho: any[] = [];
-  listLoaiDuAn: any[] = [];
   listKhoi: any[] = [];
 
 
@@ -137,10 +132,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   quayLai() {
     this.showListEvent.emit();
-  }
-
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
   }
 
   xoaItem(index: number) {
@@ -421,7 +412,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzComponentParams: {
           dataTable : list && list.dataChild ? list.dataChild : []  ,
           dataInput: data,
-          type: type
+          type: type,
+          page : "DXTH"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -446,6 +438,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   themItemcha() {
+    if (!this.rowItemCha.khoi) {
+      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+      return;
+    }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
       return;
