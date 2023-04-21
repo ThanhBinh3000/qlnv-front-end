@@ -23,7 +23,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoXuatChange = new EventEmitter<number>();
 
   @Input()
-  ltThocXuat: number = 0
+  ltThocXuat: number = 0;
   @Output()
   ltThocXuatChange = new EventEmitter<number>();
 
