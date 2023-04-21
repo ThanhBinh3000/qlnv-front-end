@@ -6,13 +6,15 @@ import { ThemQuyetDinhBtcGiaoTcdtComponent } from './them-quyet-dinh-btc-giao-tc
 import { KeHoachMuaTangComponent } from './them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/ke-hoach-mua-tang.component';
 import { NgModule } from '@angular/core';
 import { KeHoachNhapXuatLtComponent } from './them-quyet-dinh-btc-giao-tcdt/ke-hoach-nhap-xuat-lt/ke-hoach-nhap-xuat-lt.component';
+import { ThemSuaMuaTangComponent } from './them-quyet-dinh-btc-giao-tcdt/ke-hoach-mua-tang/them-sua-mua-tang/them-sua-mua-tang.component';
 
 @NgModule({
   declarations: [
     BtcGiaoTcdtComponent,
     ThemQuyetDinhBtcGiaoTcdtComponent,
     KeHoachMuaTangComponent,
-    KeHoachNhapXuatLtComponent
+    KeHoachNhapXuatLtComponent,
+    ThemSuaMuaTangComponent
   ],
   imports: [CommonModule, ComponentsModule],
   exports: [BtcGiaoTcdtComponent],

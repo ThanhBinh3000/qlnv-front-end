@@ -256,6 +256,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
+          type : "QDTH",
           dsPhuongAn: this.listToTrinh
         }
       });
@@ -313,19 +314,20 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
             .groupBy("khoi")
             .map((v, k) => {
                 return {
-                  idVirtual:uuidv4(),
+                  idVirtual: uuidv4(),
                   khoi: k,
-                  dataChild: rs
+                  dataChild: v
                 };
               }
             ).value();
           return {
             idVirtual: uuidv4(),
             tenChiCuc: key,
-            dataChild: value
+            dataChild: rs
           };
         }).value();
     }
+    console.log(table, 123);
     return table;
   }
 
@@ -333,6 +335,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     if (table && table.length > 0) {
       table.forEach(s => {
         this.expandSet.add(s.idVirtual);
+        if (s.dataChild && s.dataChild.length > 0) {
+          s.dataChild.forEach(item => {
+            this.expandSet.add(item.idVirtual);
+          });
+        }
       });
     }
   }
@@ -346,30 +353,29 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     }
   }
 
-  sumSoLuong(data: any, row: string, table: any[], type?: any) {
+  sumSoLuong(tenChiCuc: string, row: string,  khoi: string) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
+    if (tenChiCuc && khoi) {
+      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi)
+      if (arr && arr.length > 0) {
+        const sum = arr.reduce((prev, cur) => {
           prev += cur[row];
           return prev;
         }, 0);
         sl = sum;
       }
     } else {
-      if (table && table.length > 0) {
-        let sum = 0;
-        table.forEach(item => {
-          sum += this.sumSoLuong(item, row, table);
-        });
-        sl = sum;
-      }
+      const sum = this.dataTableReq.reduce((prev, cur) => {
+        prev += cur[row];
+        return prev;
+      }, 0);
+      sl = sum
     }
     return sl;
   }
 
-  editRow(idx, y, item) {
-    this.isEdit = idx + "-" + y;
+  editRow(idx, y, y1, item) {
+    this.isEdit = idx + "-" + y + "-" + y1;
     this.ncKhTongSoEdit = item.ncKhTongSo;
     this.ncKhNstwEdit = item.ncKhNstw;
   }

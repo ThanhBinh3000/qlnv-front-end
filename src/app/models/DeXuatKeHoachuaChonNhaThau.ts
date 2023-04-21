@@ -1,4 +1,4 @@
-import { Validators } from "@angular/forms";
+import {Validators} from "@angular/forms";
 
 export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
@@ -35,6 +35,7 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   tongMucDt: number;
   tuNgayThHien: string;
 }
+
 export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   id: number;
   ldoTuchoi: string;
@@ -65,6 +66,7 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   children?: Array<FileDinhKem> = [];
   fileDinhKems?: Array<FileDinhKem> = [];
 }
+
 export class FileDinhKem {
   createDate: string;
   dataType: string;
@@ -123,6 +125,7 @@ export class DanhSachGoiThau {
   thanhTienDx?: number;
   thanhTienQd?: number;
 }
+
 export class CanCuXacDinh {
   id: number;
   idVirtual: number;
@@ -145,6 +148,7 @@ export class ThongTinQuyetDinh {
   soLuong: number;
   donGia: number;
   tongTien: number;
+  soLuongDuToan: number;
 }
 
 export class KeHoachMuaXuat {
@@ -155,8 +159,8 @@ export class KeHoachMuaXuat {
   sluongDtoan: number;
   loaiChi: string;
   tenLoaiChi: string;
-  nguonChi :string;
-  tenNguonChi :string;
+  nguonChi: string;
+  tenNguonChi: string;
 }
 
 export class DanhMucMucPhi {

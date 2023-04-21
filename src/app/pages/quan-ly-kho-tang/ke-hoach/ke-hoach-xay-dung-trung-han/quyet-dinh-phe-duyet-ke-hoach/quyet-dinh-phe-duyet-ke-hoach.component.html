@@ -12,13 +12,22 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="10">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="5">
           <label class="search__label">Ngày ký</label>
-          <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="1">
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayKyDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Trạng thái</label>
