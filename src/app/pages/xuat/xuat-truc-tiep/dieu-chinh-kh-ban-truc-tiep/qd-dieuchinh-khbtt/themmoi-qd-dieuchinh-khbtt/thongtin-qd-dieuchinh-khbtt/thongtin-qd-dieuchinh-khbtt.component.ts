@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
@@ -20,10 +19,8 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
-  @Output() dataChange = new EventEmitter<any>();
   @Input() isView;
   @Input() isCache: boolean = false;
-  @Input() isTongHop;
 
   formData: FormGroup
   listNguonVon: any[] = [];
@@ -42,56 +39,37 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     private modal: NzModalService,
     private notification: NzNotificationService,
   ) {
-
     this.formData = this.fb.group({
       id: [],
-      idDxHdr: [],
       maDvi: [''],
       tenDvi: [''],
+      tgianBdauTchuc: [''],
+      tgianDkienTu: [''],
+      tgianDkienDen: [''],
+      tgianTtoan: [],
+      tgianTtoanGhiChu: [''],
+      pthucTtoan: [''],
+      tgianGnhan: [],
+      tgianGnhanGhiChu: [''],
+      pthucGnhan: [''],
+      thongBaoKh: [''],
+      tongSoLuong: [''],
       diaChi: [''],
-      soDxuat: [null,],
-      ngayPduyet: [],
-      trichYeu: [null],
-      tenDuAn: [null],
-      tongSoLuong: [null,],
-      donGiaVat: [null,],
-      tgianBdauTchuc: [],
-      tgianDkienTu: [null,],
-      tgianDkienDen: [null,],
-      tgianTtoan: [null,],
-      tgianTtoanGhiChu: [null,],
-      pthucTtoan: [null,],
-      tgianGnhan: [null,],
-      tgianGnhanGhiChu: [null,],
-      pthucGnhan: [null,],
-      thongBaoKh: [null,],
-      children: []
+      soDxuat: [''],
+      thoiGianDuKien: [''],
+      donGiaVat: []
     });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
     await this.spinner.show()
     if (changes) {
-      console.log(this.dataInput, 111)
       if (this.dataInput) {
-        if (this.isCache) {
-          let res = await this.deXuatKhBanTrucTiepService.getDetail(this.dataInput.idDxHdr);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.formData.patchValue(res.data);
-            this.formData.patchValue({
-              tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
-            });
-          }
-        } else {
-          this.formData.patchValue(this.dataInput);
-          this.formData.patchValue({
-            children: this.dataInput.children,
-            tgianBdauTchuc: [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen]
-          })
-        }
-        for (let i = 0; i < this.formData.value.children.length; i++) {
-          this.expandSet.add(i);
-        }
+        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
+        this.formData.patchValue({
+          tgianBdauTchuc: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
+        })
+        this.dataTable = this.dataInput.children
         await this.ptThanhToan(this.dataInput)
       } else {
         this.formData.reset();
@@ -133,6 +111,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       }
       if (index >= 0) {
         this.dataTable[index] = data;
+        console.log(data, 999)
       }
       this.calculatorTable();
     });
@@ -153,11 +132,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     });
   }
 
-  changeFormData() {
-    if (this.formData.value.id) {
-      this.dataChange.emit(this.formData.value);
-    }
-  }
+
 
   async ptThanhToan(data) {
     if (data.pthucTtoan == '1') {
