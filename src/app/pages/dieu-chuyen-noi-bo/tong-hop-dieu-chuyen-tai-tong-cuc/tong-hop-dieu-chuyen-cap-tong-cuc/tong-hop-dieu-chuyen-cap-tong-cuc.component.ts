@@ -52,7 +52,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     isEdit: boolean = false;
 
     dataTableAll: any[] = [
-        { id: 1, nam: 2022 }, { id: 2, nam: 2023 }
+        { id: 1, namKeHoach: 2022 }, { id: 2, namKeHoach: 2023 }
     ]
     dataTable: any[] = cloneDeep(this.dataTableAll)
 
@@ -80,19 +80,23 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             // noiDungTongHop: ['']
             namKeHoach: [''],
             maTongHop: [''],
+            loaiDieuChuyen: [''],
             soDeXuat: [''],
-            maDvi: [''],
+            ngayTongHop: [''],
+            thTuNgay: [''],
+            thDenNgay: [''],
+            loaiHangHoa: [''],
+            chungLoaiHangHoa: [''],
             trichYeu: ['']
 
         })
         this.filterTable = {
-            nam: '',
+            namKeHoach: '',
             maTongHop: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
-            ngayTongHopTu: '',
-            ngayTongHopDen: '',
-            noiDungTongHop: '',
+            trichYeu: '',
+            soQdDC: '',
             tenTrangThai: '',
         };
     }
@@ -107,7 +111,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
 
     async ngOnInit() {
         try {
-            this.initData()
+            await this.initData()
             this.timKiem();
             this.loadDsVthh();
         } catch (e) {
@@ -180,8 +184,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     }
     async timKiem() {
         if (this.formData.value.ngayTongHop) {
-            this.formData.value.ngayTongHopTu = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.ngayTongHopDen = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
+            this.formData.value.thTuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
+            this.formData.value.thDenNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
         }
         await this.search();
     }

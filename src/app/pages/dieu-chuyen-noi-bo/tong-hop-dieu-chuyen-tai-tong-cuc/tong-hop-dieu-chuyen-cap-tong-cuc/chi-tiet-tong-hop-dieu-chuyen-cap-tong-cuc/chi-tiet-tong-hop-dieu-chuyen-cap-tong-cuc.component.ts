@@ -29,6 +29,7 @@ import { STATUS } from "src/app/constants/status";
 import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc',
     templateUrl: './chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component.html',
@@ -234,6 +235,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
+        private router: Router,
         private danhMucService: DanhMucService,
         private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
         private donViService: DonviService,
@@ -267,7 +269,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 ngayDx: [''],
                 ngayKetThuc: [''],
                 noiDungDx: [''],
-                trangThai: [STATUS.DU_THAO],
+                trangThai: [''],
                 idQdPd: [''],
                 soQdPd: [''],
                 tongSoLuong: [0],
@@ -282,7 +284,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 tenCloaiVthh: [''],
                 donViTinh: [''],
                 soLuongXuatCap: [''],
-                tenTrangThai: ['Dự Thảo'],
+                tenTrangThai: [''],
                 deXuatPhuongAn: [new Array()],
 
                 canCu: [new Array<FileDinhKem>()],
@@ -392,7 +394,6 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.showListEvent.emit();
     }
 
-
     async selectRow(item: any) {
         if (this.dataTableDsDCCuc.length > 0) {
             this.dataTableDsDCCuc.forEach(i => i.selected = false);
@@ -415,6 +416,22 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         // this.listChiCuc = []
         this.disableInputComponent = new ModalInput();
     }
+    async taoQuyetDinh() {
+        //save record-->redirect page tao quyet dinh
+        let id;
+        try {
+            id = await this.save(true);
+
+        } catch (error) {
+            console.log("error", error)
+        }
+        finally {
+            this.router.navigate([
+                '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+                id,
+            ]);
+        }
+    }
     async save(isGuiDuyet?) {
         await this.spinner.show();
         this.setValidator(isGuiDuyet)
@@ -424,15 +441,10 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         }
         body.fileDinhKems = this.fileDinhKem;
         let data = await this.createUpdate(body);
-        if (data) {
-            // if (isGuiDuyet) {
-            //     this.idInput = data.id;
-            //     this.guiDuyet();
-            // } else {
-            //     this.quayLai();
-            // }
-        }
         await this.spinner.hide();
+        if (data) {
+            return data.id
+        }
     }
     tongHop() {
         this.isTongHop = true;
@@ -441,15 +453,6 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
         // call api tổng hợp dữ liệu
     }
-    async saveAndSend(message: string) {
-        this.setValidator();
-
-    }
-
-    async saveAndChangeStatus(status: string, message: string, sucessMessage: string) {
-        this.setValidator();
-    }
-
     flattenTree(tree) {
         return tree.flatMap((item) => {
             return item.childData ? this.flattenTree(item.childData) : item;
@@ -466,7 +469,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.idKeHoachDC = null;
         this.isViewKeHoachDC = false;
     }
-    setValidator(isGuiDuyet?) {
+    setValidator(isTaoQD) {
+        if (!isTaoQD) return;
         if (this.formData.get('type').value == 'TH') {
             this.formData.controls["idTongHop"].setValidators([Validators.required]);
             this.formData.controls["maTongHop"].setValidators([Validators.required]);

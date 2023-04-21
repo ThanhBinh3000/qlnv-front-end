@@ -52,7 +52,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     isEdit: boolean = false;
 
     dataTableAll: any[] = [
-        { id: 1, nam: 2022 }, { id: 2, nam: 2023 }
+        { id: 1, namKeHoach: 2022 }, { id: 2, namKeHoach: 2023 }
     ]
     dataTable: any[] = cloneDeep(this.dataTableAll);
 
@@ -64,30 +64,33 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
-        private TongHopDieuChuyenService: TongHopDieuChuyenService,
+        private tongHopDieuChuyenService: TongHopDieuChuyenService,
         private donviService: DonviService,
         private danhMucService: DanhMucService,
         private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     ) {
-        super(httpClient, storageService, notification, spinner, modal, TongHopDieuChuyenService);
+        super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenService);
         this.formData = this.fb.group({
-            nam: [''],
+            namKeHoach: [''],
+            tenDvi: [''],
             maTongHop: [''],
             loaiDieuChuyen: [''],
             ngayTongHop: [''],
-            ngayTongHopTu: [''],
-            ngayTongHopDen: [''],
-            noiDungTongHop: ['']
+            thTuNgay: [''],
+            thDenNgay: [''],
+            trichYeu: [''],
+            trangThai: [''],
         })
         this.filterTable = {
-            nam: '',
+            namKeHoach: '',
+            tenDvi: '',
             maTongHop: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
-            ngayTongHopTu: '',
-            ngayTongHopDen: '',
-            noiDungTongHop: '',
-            tenTrangThai: '',
+            thTuNgay: '',
+            thDenNgay: '',
+            trichYeu: '',
+            trangThai: '',
         };
     }
 
@@ -130,14 +133,17 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
 
     async ngOnInit() {
         try {
-            this.initData()
-            await this.timKiem();
-            await this.spinner.hide();
-
+            if (this.userService.isTongCuc()) {
+                this.loadDsCuc()
+            }
+            await this.initData()
+            this.timKiem();
         } catch (e) {
             console.log('error: ', e)
-            this.spinner.hide();
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+        finally {
+            this.spinner.hide()
         }
     }
 
@@ -152,10 +158,23 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     }
     async timKiem() {
         if (this.formData.value.ngayTongHop) {
-            this.formData.value.ngayTongHopTu = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.ngayTongHopDen = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
+            this.formData.value.thTuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
+            this.formData.value.thDenNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
         }
         await this.search();
+    }
+    async loadDsCuc() {
+        let body = {
+            trangThai: "01",
+            maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+            type: "DV"
+        };
+        let res = await this.donviService.getDonViTheoMaCha(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.listCuc = Array.isArray(res.data) ? res.data : [];
+        } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+        }
     }
 
     redirectDetail(id, b: boolean) {

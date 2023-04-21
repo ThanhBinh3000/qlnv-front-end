@@ -37,6 +37,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
   @Input() loaiVthh: string;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() soQd: string;
   @Input() isViewOnModal: boolean;
 
   @Input() isView: boolean;
@@ -105,6 +106,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     }
+    if (this.soQd) {
+      await this.getDetail(0, this.soQd);
+    }
     await this.spinner.hide();
   }
 
@@ -115,23 +119,33 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     return false;
   }
 
-  async getDetail(id: number) {
-    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
-    console.log(res)
-    if (res.msg == MESSAGE.SUCCESS) {
-      const dataDetail = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-      this.formData.patchValue({
-        soQd: dataDetail.soQd?.split('/')[0],
-      })
-      if (dataDetail.children.length > 0) {
-        dataDetail.children.forEach(item => {
-          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
-            this.danhSachFileDinhKem.push(item)
-          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
-            this.danhSachFileCanCuPL.push(item)
-          }
+  async getDetail(id: number, soQd?: string) {
+    if (id > 0 || soQd) {
+      let res = null;
+      if (soQd) {
+        var body = this.formData.value
+        body.soQd = soQd
+        res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetailBySoQd(body);
+      }
+      if (id > 0) {
+        res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
+      }
+      console.log(res)
+      if (res.msg == MESSAGE.SUCCESS) {
+        const dataDetail = res.data;
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+        this.formData.patchValue({
+          soQd: dataDetail.soQd?.split('/')[0],
         })
+        if (dataDetail.children.length > 0) {
+          dataDetail.children.forEach(item => {
+            if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+              this.danhSachFileDinhKem.push(item)
+            } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+              this.danhSachFileCanCuPL.push(item)
+            }
+          })
+        }
       }
     }
   }
