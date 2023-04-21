@@ -1,10 +1,7 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
-import {KeHoachDieuChuyenComponent} from "./ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.component";
-import {DieuChuyenNoiBoComponent} from "./dieu-chuyen-noi-bo.component";
-import {
-  ChiTietKeHoachDcnbComponent
-} from "./ke-hoach-dieu-chuyen/chi-tiet-ke-hoach-dcnb/chi-tiet-ke-hoach-dcnb.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { KeHoachDieuChuyenComponent } from "./ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.component";
+import { DieuChuyenNoiBoComponent } from "./dieu-chuyen-noi-bo.component";
 
 const routes: Routes = [
   {
@@ -13,7 +10,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'chi-tiet-ke-hoach-dieu-chuyen',
+        redirectTo: 'quyet-dinh-dieu-chuyen',
         pathMatch: 'full',
       },
       {
@@ -21,8 +18,11 @@ const routes: Routes = [
         component: KeHoachDieuChuyenComponent,
       },
       {
-        path: 'chi-tiet-ke-hoach-dieu-chuyen',
-        component: ChiTietKeHoachDcnbComponent,
+        path: 'quyet-dinh-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module'
+          ).then((m) => m.QuyetDinhDieuChuyenModule),
       },
     ]
   }]

@@ -11,10 +11,10 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Kế hoạch điều chuyển123',
-    url: `/chi-tiet-ke-hoach-dieu-chuyen`,
-    dropdown: 'ke-hoach-dieu-chuyen',
-    idHover: 'ke-hoach-dieu-chuyen',
+    title: 'Quyết định điều chuyển',
+    url: `/quyet-dinh-dieu-chuyen`,
+    dropdown: 'quyet-dinh-dieu-chuyen',
+    idHover: 'quyet-dinh-dieu-chuyen',
     hasTab: false,
   },
   /*{
