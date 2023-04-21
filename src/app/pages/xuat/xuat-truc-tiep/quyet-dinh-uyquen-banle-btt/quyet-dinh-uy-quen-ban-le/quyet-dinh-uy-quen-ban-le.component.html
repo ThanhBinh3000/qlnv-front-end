@@ -176,7 +176,7 @@
                             [nzDisabled]="data.trangThai != '00'"></label>
                     </td>
                     <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
-                    <td>{{ data.xhQdPdKhBttHdr.soQdPd }}</td>
+                    <td>{{ data.soQdPd }}</td>
                     <td>
                         <a *ngIf="data.soDxuat && data.idDxHdr" style="color: blue ;font-weight: bold;"
                             (click)="openModalDxKh(data.idDxHdr)">{{

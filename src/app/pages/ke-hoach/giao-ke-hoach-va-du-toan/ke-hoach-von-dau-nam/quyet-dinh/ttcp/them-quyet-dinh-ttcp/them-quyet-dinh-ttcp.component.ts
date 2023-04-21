@@ -7,6 +7,7 @@ import {
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from 'src/app/constants/message';
+import {groupBy, mapValues} from 'lodash';
 import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -91,39 +92,41 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      const data = res.data;
-      this.formData.patchValue({
-        id: data.id,
-        namQd: data.namQd,
-        ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
-        trangThai: data.trangThai,
-        trichYeu: data.trichYeu,
-      });
-      this.dataTable = data.listBoNganh;
-      if (data.listChiTangToanBoNganh.length > 0) {
-        for (let item of data.listChiTangToanBoNganh) {
-          var obj = {
-            "stt": item.stt,
-            "maCha": item.maBn == '01' ? item.maBn : null,
-            "maBn": item.maBn,
-            "tenBn": item.tenBn,
-            "isSum": false,
-            "tongSo": item.tongSo
-          };
-          this.dataTableAllBn.push(obj);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.formData.patchValue({
+          id: data.id,
+          namQd: data.namQd,
+          ngayQd: data.ngayQd,
+          soQd: data.soQd.split('/')[0],
+          trangThai: data.trangThai,
+          trichYeu: data.trichYeu,
+        });
+        this.dataTable = data.listBoNganh;
+        if (data.listChiTangToanBoNganh.length > 0) {
+          for (let item of data.listChiTangToanBoNganh) {
+            var obj = {
+              "stt": item.stt,
+              "maCha": item.maBn == '01' ? item.maBn : null,
+              "maBn": item.maBn,
+              "tenBn": item.tenBn,
+              "isSum": false,
+              "tongSo": item.tongSo
+            };
+            this.dataTableAllBn.push(obj);
+          }
+          this.dataTableAllBn.unshift({
+            "stt": 1,
+            "maCha": null,
+            "maBn": null,
+            "tenBn": "Bộ Tài Chính",
+            "isSum": true,
+            "tongSo": 0
+          })
+          this.onInputNumberBNChange();
         }
-        this.dataTableAllBn.unshift({
-          "stt": 1,
-          "maCha": null,
-          "maBn": null,
-          "tenBn": "Bộ Tài Chính",
-          "isSum": true,
-          "tongSo": 0
-        })
-        this.onInputNumberBNChange();
+        this.taiLieuDinhKemList = data.fileDinhkems;
       }
-      this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 
@@ -139,7 +142,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           "maBn": item.maDvi,
           "tenBn": item.tenDvi,
           "isSum": item.maDvi == '01' ? true : false,
-          "tongSo": 0
+          "tongSo": null
         };
         this.dataTableAllBn.push(obj);
         if (item.maDvi == '01') {
@@ -158,14 +161,14 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       "maBn": maCha,
       "tenBn": "   Lương thực",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     }, {
       "stt": 3,
       "maCha": maCha,
       "maBn": maCha,
       "tenBn": "   Vật tư, thiết bị",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     })
   }
 
@@ -346,6 +349,12 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.dataTable.push(data);
         }
+        const result = mapValues(groupBy(this.dataTableAllBn, 'maBn'), (itemsByCategory: any[]) =>
+          itemsByCategory.reduce((sum, item) => sum + item.tongSo, 0)
+        );
+        this.dataTable.forEach(item => {
+          item.tongTien = result && result[item.maBoNganh] ? result[item.maBoNganh] : 0;
+        })
       }
     });
 

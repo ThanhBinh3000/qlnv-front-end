@@ -48,17 +48,18 @@
             <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_XOA')">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_EXP')">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-dieu-chinh-ke-hoach-ban-truc-tiep.xlsx')"
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="goDetail(null)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_THEM') && userService.isTongCuc()">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tạo quyết định</span>
                 </button>
@@ -157,22 +158,30 @@
                         <td>{{data.namKh}}</td>
                         <td>{{ data.soQdDc }}</td>
                         <td>{{ data.ngayKyDc | date: 'dd/MM/YYYY' }}</td>
-                        <td class="text-blue">{{ data.soQdGoc }}</td>
+                        <td>
+                            <a *ngIf="data.soQdGoc && data.idQdGoc" style="color: blue ;font-weight: bold;"
+                                (click)="openModalQdPdGoc(data.idQdGoc)">{{
+                                data.soQdGoc}}</a>
+                        </td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{data.tenLoaiVthh}}</td>
                         <td>{{data.tenCloaiVthh}}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id,'XHDTQG_PTDG_DCKHBDG_XEM')"
-                                *ngIf="data.trangThai == STATUS.BAN_HANH ">
+                            <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_XEM') && (data.trangThai == STATUS.BAN_HANH))"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
-                                 && userService.isTongCuc()" (click)="goDetail(data.id,'XHDTQG_PTDG_DCKHBDG_THEM')">
+                            <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_THEM') && data.trangThai == STATUS.DU_THAO)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_THEM') && data.trangThai == STATUS.TU_CHOI_LDV)"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
-                                (click)="delete(data,'XHDTQG_PTDG_DCKHBDG_XOA')">
+                            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_LDV" (click)="goDetail(data.id)">
+                                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                            </a>
+                            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_DCKHBTT_XOA')) "
+                                (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
@@ -203,3 +212,15 @@
     <app-themmoi-qd-dieuchinh-khbtt [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
     </app-themmoi-qd-dieuchinh-khbtt>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdGoc" (nzOnCancel)="closeModalQdPdGoc()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdGoc" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdPdGoc()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

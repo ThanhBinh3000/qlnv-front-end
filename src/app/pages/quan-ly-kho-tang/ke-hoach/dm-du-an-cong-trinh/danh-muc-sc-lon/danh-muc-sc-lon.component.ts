@@ -61,11 +61,11 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      console.log(this.userService.isCuc())
       if (this.userService.isTongCuc()) {
         this.loadDsCuc()
+      } else {
+        this.loadDsDiemKho()
       }
-      this.loadDsDiemKho()
       await this.filter()
       this.spinner.hide();
     } catch (e) {
@@ -108,6 +108,12 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     const dsTong = await this.dviService.layTatCaDonViByLevel(2);
     this.dsCuc = dsTong.data
     this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
+  }
+
+  async changeCuc(event) {
+    const dsTong = await this.dviService.layTatCaDonViByLevel(4);
+    this.dsKho = dsTong.data
+    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
   }
 
   async loadDsDiemKho() {

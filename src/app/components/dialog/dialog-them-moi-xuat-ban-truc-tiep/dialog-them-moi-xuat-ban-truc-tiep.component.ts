@@ -367,7 +367,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
 
   startEdit(index: number): void {
     this.listOfData[index].edit = true
-
   }
 
   cancelEdit(index: number): void {

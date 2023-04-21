@@ -20,6 +20,7 @@ import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/b
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -36,6 +37,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Output()
   showListEvent = new EventEmitter<any>();
 
+  fileDinhKems: any[] = []
   maQd: string = null;
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
@@ -45,6 +47,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   dataInputCache: any;
   isTongHop: boolean
   selected: boolean = false;
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -52,6 +56,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
@@ -78,6 +83,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       phanLoai: ['TH', [Validators.required]],
       soQdCc: [''],
       slDviTsan: [],
+      loaiHinhNx: [''],
+      kieuNx: [''],
     })
   }
 
@@ -119,10 +126,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
-      } else {
-        this.initForm();
       }
       await Promise.all([
+        this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
       if (this.idTh) {
@@ -136,10 +142,19 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide();
   }
 
-  initForm() {
-    // this.formData.patchValue({
-    //   nam: dayjs().get('year'),
-    // })
+  async loadDataComboBox() {
+    // loại hình nhập xuất
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_DG');
+    }
+    // kiểu nhập xuất
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
+    }
   }
 
   async showFirstRow($event, dataDxBdg: any) {
@@ -169,7 +184,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       body.soQdPd = this.formData.value.soQdPd + "/" + this.maQd;
     }
     body.children = this.danhsachDx;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKem = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
@@ -207,7 +223,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         this.showFirstRow(event, this.danhsachDx[0]);
       }
-      this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem = data.fileDinhKem;
+      this.fileDinhKems = data.fileDinhKems;
     }
     this.spinner.hide()
   }
@@ -220,6 +237,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
       nam: this.formData.get('nam').value,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -231,7 +249,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán đấu giá',
+      nzTitle: 'DANH SÁCH TỔNG HỢP ĐỀ XUẤT BÁN ĐẤU GIÁ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -271,6 +289,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
             tchuanCluong: data.tchuanCluong,
             soQdCc: data.soQdPd,
             slDviTsan: soLuongDviTsan,
+            loaiHinhNx: data.loaiHinhNx,
+            kieuNx: data.kieuNx,
             idThHdr: event,
             idTrHdr: null,
             soTrHdr: null,
@@ -324,7 +344,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch bán đấu giá',
+      nzTitle: 'DANH SÁCH ĐỀ XUẤT KẾ HOẠCH BÁN ĐẤU GIÁ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -378,6 +398,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           diaChi: data.diaChi,
           slDviTsan: dataRes.slDviTsan,
           maDvi: data.maDvi,
+          loaiHinhNx: data.loaiHinhNx,
+          kieuNx: data.kieuNx,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
@@ -419,27 +441,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       await this.spinner.hide();
     }
 
-  }
-
-  getNameFile(event?: any, item?: FileDinhKem) {
-    const element = event.currentTarget as HTMLInputElement;
-    const fileList: FileList | null = element.files;
-    if (fileList) {
-      const itemFile = {
-        name: fileList[0].name,
-        file: event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          const fileDinhKem = new FileDinhKem();
-          fileDinhKem.fileName = resUpload.filename;
-          this.formData.patchValue({
-          })
-          fileDinhKem.fileSize = resUpload.size;
-          fileDinhKem.fileUrl = resUpload.url;
-        });
-    }
   }
 
   isDisabled() {

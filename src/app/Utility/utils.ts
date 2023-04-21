@@ -484,10 +484,12 @@ export const AMOUNT_NO_DECIMAL = {
   allowNegative: false,
   precision: 0,
   prefix: '',
-  thousands: ',',
-  decimal: '.',
+  thousands: '.',
+  decimal: ',',
   align: "right",
   nullable: true,
+  min: 0,
+  max: 100000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -496,10 +498,12 @@ export const AMOUNT_ONE_DECIMAL = {
   allowNegative: false,
   precision: 1,
   prefix: '',
-  thousands: ',',
-  decimal: '.',
+  thousands: '.',
+  decimal: ',',
   align: "right",
   nullable: true,
+  min: 0,
+  max: 100000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -508,10 +512,12 @@ export const AMOUNT_TWO_DECIMAL = {
   allowNegative: false,
   precision: 2,
   prefix: '',
-  thousands: ',',
-  decimal: '.',
+  thousands: '.',
+  decimal: ',',
   align: "right",
   nullable: true,
+  min: 0,
+  max: 100000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -520,10 +526,12 @@ export const AMOUNT_THREE_DECIMAL = {
   allowNegative: false,
   precision: 3,
   prefix: '',
-  thousands: ',',
-  decimal: '.',
+  thousands: '.',
+  decimal: ',',
   align: "right",
   nullable: true,
+  min: 0,
+  max: 100000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 

@@ -17,6 +17,7 @@ import { DatePipe } from '@angular/common';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -44,6 +45,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
@@ -54,7 +56,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayPduyet: [null, [Validators.required]],
+        ngayDuyetTu: [null, [Validators.required]],
+        ngayDuyetDen: [null],
       }
     );
     this.formData = this.fb.group({
@@ -80,6 +83,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       await Promise.all([
         this.loadChiTiet(),
       ]);
+      this.loadDanhMucHang()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -116,7 +120,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     await this.showDetail($event, data);
   }
 
-
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
     try {
@@ -126,10 +129,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         return;
       }
       let body = this.formTraCuu.value;
-      if (body.ngayPduyet) {
-        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
-        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
-      }
       delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -157,6 +156,20 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+  };
 
   async save() {
     let body = this.formData.value;
@@ -206,6 +219,21 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         });
       }
     });
+  }
+
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach((element) => {
+          if (element.ma == this.loaiVthh) {
+            this.formTraCuu.patchValue({
+              tenLoaiVthh: element.giaTri,
+            })
+          }
+        });
+      }
+    }
   }
 
   taoQdinh() {

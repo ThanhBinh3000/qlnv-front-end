@@ -15,9 +15,9 @@ export class DanhMucKhoService extends BaseService{
     super(httpClient, 'danh-muc-kho', '/qlnv-kho');
   }
 
-  getAllDmKho(type): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach/${type}`;
-    return this._httpClient.get<OldResponseData>(url).toPromise();
+  getAllDmKho(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
 

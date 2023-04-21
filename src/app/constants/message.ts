@@ -30,6 +30,7 @@ export const MESSAGE = {
   TRINH_DUYET_SUCCESS: 'Trình duyệt thành công',
   THAO_TAC_SUCCESS: 'Thao tác thành công',
   LUU_VA_GUI_DUYET_SUCCESS: 'Bạn đã lưu và gửi duyệt thành công!',
+  DUYET_SUCCESS: 'Bạn duyệt thành công!',
   QD_TCDT: 'QD-TCDT',
   QD_BTC: 'QD-BTC',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',

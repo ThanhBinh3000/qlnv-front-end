@@ -17,7 +17,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'quyet-dinh-dieu-chuyen',
     hasTab: false,
   },
-  /*{
+  {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
     url: `/tong-hop-danh-sach-hang`,
@@ -29,8 +29,8 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     icon: 'htvbdh_tcdt_dieu_chuyen',
     title: 'Xuất hàng DTQG',
     url: '/xuat-hang-dtqg',
-    dropdown:'xuat-hang-dtqg',
-    idHover:'xuat-hang-dtqg',
+    dropdown: 'xuat-hang-dtqg',
+    idHover: 'xuat-hang-dtqg',
     hasTab: false,
   },
   {
@@ -52,9 +52,9 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_baocao2',
     title: 'Báo cáo kết quả sửa chữa hàng DTQG',
-    url:  '/bao-cao-ket-qua',
-    dropdown:  'bao-cao-ket-qua',
-    idHover:  'bao-cao-ket-qua',
+    url: '/bao-cao-ket-qua',
+    dropdown: 'bao-cao-ket-qua',
+    idHover: 'bao-cao-ket-qua',
     hasTab: false,
-  }*/
+  }
 ];

@@ -305,4 +305,23 @@ export class QuanlyHopdongComponent implements OnInit {
     });
   }
 
+  calcTongSl() {
+    if (this.dataTable) {
+      let sum = 0
+      this.dataTable.forEach(item => {
+        sum += item.hopDong.soLuong;
+      })
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.dataTable) {
+      let sum = 0
+      this.dataTable.forEach(item => {
+        sum += item.hopDong.soLuong * item.hopDong.donGia;
+      })
+      return sum;
+    }
+  }
 }
