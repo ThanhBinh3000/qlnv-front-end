@@ -142,7 +142,6 @@ export class TongHopComponent implements OnInit {
     }
   }
 
-  // Đang lỗi API phần GET
   async search() {
     this.spinner.show();
     let body = {
@@ -158,8 +157,6 @@ export class TongHopComponent implements OnInit {
         body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
     }
     let res = await this.TongHopDeNghiCapVonService.timKiem(body);
-    console.log(res);
-
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
