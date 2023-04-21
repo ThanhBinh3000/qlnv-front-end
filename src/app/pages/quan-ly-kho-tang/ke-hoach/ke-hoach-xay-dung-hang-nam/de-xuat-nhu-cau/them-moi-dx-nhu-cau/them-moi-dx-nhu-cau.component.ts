@@ -22,6 +22,7 @@ import {
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
+import dayjs from "dayjs";
 
 @Component({
   selector: "app-them-moi-dx-nhu-cau",
@@ -39,15 +40,12 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   rowItem: DanhMucKho = new DanhMucKho();
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listQdKhTh: any[] = [];
-  listDmKho: any[] = [];
-
   dataTable: any[] = [];
   dataTableRes: any[] = [];
   rowItemCha: DanhMucKho = new DanhMucKho();
   listNam: any[] = [];
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
-
   listLoaiDuAn: any[] = [];
 
   constructor(
@@ -68,7 +66,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       id: [null],
       maDvi: [null],
       tenDvi: [null],
-      namKeHoach: [null],
+      namKeHoach: [dayjs().get("year")],
       soCongVan: [null],
       soQdTrunghan: [null, Validators.required],
       trichYeu: [null],
@@ -148,7 +146,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     body.soCongVan = body.soCongVan + this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTable;
-    body.tmdt = this.sumSoLuong(null, 'tmdtDuKien' , true);
+    body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -230,8 +228,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         let sum = 0;
         this.dataTable.forEach(item => {
-          sum +=  this.sumSoLuong(item, row)
-        })
+          sum += this.sumSoLuong(item, row);
+        });
         sl = sum;
       }
     }
@@ -262,7 +260,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         nzStyle: { top: "200px" },
         nzFooter: null,
         nzComponentParams: {
-          dataTable : list && list.dataChild ? list.dataChild : []  ,
+          dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type
         }
@@ -308,6 +306,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   themItemcha() {
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
+      return;
+    }
+    if (!this.formData.value.soQdTrunghan) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn kế hoạch trung hạn");
       return;
     }
     this.rowItemCha.idVirtual = uuidv4();
@@ -369,11 +371,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     this.dataTableRes = arr;
   }
 
-  async updateDx(event) {
-
-  }
-
-  async openDialogToTrinh() {
+  openDialogToTrinh() {
     if (!this.isViewDetail) {
       const modal = this.modal.create({
         nzTitle: "Danh sách quyết định kế hoạch trung hạn",
@@ -383,17 +381,34 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
-          type : "DXNC",
+          type: "DXNC",
           dsPhuongAn: this.listQdKhTh
         }
       });
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            soQdTrungHan: data.soQuyetDinh
+            soQdTrunghan: data.soQuyetDinh
           });
+          await this.changeSoQdTrunghan(data.id)
         }
       });
+    }
+  }
+
+  convertListToTree() {
+    this.dataTable = chain(this.dataTableRes).groupBy("khoi")
+      .map((value, key) => ({ khoi: key, dataChild: value, idVirtual : uuidv4() }))
+      .value();
+  }
+
+  async changeSoQdTrunghan(id) {
+    let res = await this.qdTrungHanSv.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dataTable = [];
+      let detail = res.data;
+      this.dataTableRes = detail.ctRes?.ctietList;
+      this.convertListToTree() ;
     }
   }
 
