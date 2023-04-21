@@ -11,6 +11,7 @@ import { DanhMucKho } from "../../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-
 import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.service";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { STATUS } from "../../../../../../../constants/status";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-dialog-them-moi-dxkhth',
@@ -22,10 +23,12 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   @Input() type: string
   @Input() sum: number
   @Input() dataTable: any
+  @Input() page: string
   item: DanhMucKho = new DanhMucKho();
   listDmKho: any[] = []
   listLoaiDuAn: any[] = []
   userInfo: UserLogin
+  namKh : number
 
   constructor(
     private danhMucService: DanhMucService,
@@ -40,7 +43,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.dataTable,123);
+    this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
     this.getDetail()
@@ -54,7 +57,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.checkExitsData(this.item, this.dataTable)) {
+    if (this.checkExitsData(this.item, this.dataTable) && this.type == 'them') {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
       this.spinner.hide();
       return;
@@ -122,6 +125,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.khVonNstw = this.dataInput.khVonNstw;
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
+      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
     }
   }
 

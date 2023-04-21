@@ -38,7 +38,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     namKeHoach  :'',
     soQuyetDinh: '',
     trichYeu: '',
-    ngayKyBtc: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
     trangThai: ''
   };
 
@@ -103,8 +104,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       namKeHoach : this.searchFilter.namKeHoach,
       soQuyetDinh : this.searchFilter.soQuyetDinh,
       trichYeu : this.searchFilter.trichYeu,
-      ngayKyTu : this.searchFilter.ngayKyBtc[0],
-      ngayKyDen : this.searchFilter.ngayKyBtc[1],
+      ngayKyTu : this.searchFilter.ngayKyTu,
+      ngayKyDen : this.searchFilter.ngayKyDen,
       trangThai : this.searchFilter.trangThai,
       maDvi : this.userInfo.MA_DVI,
       paggingReq: {
@@ -211,7 +212,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       namKeHoach  :'',
       soQuyetDinh: '',
       trichYeu: '',
-      ngayKyBtc: '',
+      ngayKyTu: '',
+      ngayKyDen: '',
       trangThai: ''
     }
     this.search();

@@ -10,6 +10,8 @@ export class DialogQdXdTrungHanComponent implements OnInit {
 
   @Input() dsPhuongAn: any[] = [];
 
+  @Input() type  :string
+
 
   constructor(
     private _modalRef: NzModalRef,
