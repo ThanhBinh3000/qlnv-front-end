@@ -556,7 +556,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   handleOk(): void {
-    debugger
     if ((!this.formDataChiTiet.value.cloaiVthh || !this.formDataChiTiet.value.loaiVthh) && !this.isNhanDieuChuyen) {
       this.notification.error(MESSAGE.ERROR, "Chưa có thông tin hàng hóa!");
       return;
@@ -581,7 +580,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
             this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
             return;
           } else {
-            debugger
             this.formData.patchValue({
               danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
             })
