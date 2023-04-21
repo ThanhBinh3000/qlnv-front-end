@@ -43,7 +43,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   dataTable: any[] = [];
   dataTableRes: any[] = [];
   rowItemCha: DanhMucKho = new DanhMucKho();
-  listNam: any[] = [];
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -130,12 +129,25 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKem = data.fileDinhKems;
-      this.dataTable = data.ctiets;
+      this.dataTableRes = data.ctiets;
+      await this.convertListToTree();
     }
+  }
+
+  setValidators() {
+    this.formData.controls["soCongVan"].setValidators(Validators.required);
+    this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
+    this.formData.controls["trichYeu"].setValidators(Validators.required);
+    this.formData.controls["ngayKy"].setValidators(Validators.required);
+    this.formData.controls["namKeHoach"].setValidators(Validators.required);
   }
 
 
   async save(isOther: boolean) {
+    this.helperService.removeValidators(this.formData);
+    if (isOther || this.idInput > 0) {
+      this.setValidators();
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -145,7 +157,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     body.maDvi = this.userInfo.MA_DVI;
     body.soCongVan = body.soCongVan + this.maQd;
     body.fileDinhKems = this.fileDinhKem;
-    body.ctiets = this.dataTable;
+    body.ctiets = this.dataTableRes;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     let data = await this.createUpdate(body);
     if (data) {
@@ -188,7 +200,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         break;
       }
       case STATUS.DA_DUYET_LDC : {
-        trangThai = STATUS.DA_DUYET_LDV;
+        trangThai = STATUS.DA_DUYET_CBV;
         break;
       }
     }
@@ -207,7 +219,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         break;
       }
       case STATUS.DA_DUYET_LDC : {
-        trangThai = STATUS.TU_CHOI_LDV;
+        trangThai = STATUS.TU_CHOI_CBV;
         break;
       }
     }
@@ -262,7 +274,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         nzComponentParams: {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
-          type: type
+          type: type,
+          page : "DXNC"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -304,6 +317,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   themItemcha() {
+    if (!this.rowItemCha.khoi) {
+      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+      return;
+    }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
       return;
@@ -400,6 +417,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     this.dataTable = chain(this.dataTableRes).groupBy("khoi")
       .map((value, key) => ({ khoi: key, dataChild: value, idVirtual : uuidv4() }))
       .value();
+    this.expandAll();
   }
 
   async changeSoQdTrunghan(id) {
