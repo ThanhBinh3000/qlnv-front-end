@@ -46,7 +46,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
-  listDiemKho: any[] = [];
   titleStatus: string = '';
   titleButtonDuyet: string = '';
   iconButtonDuyet: string = '';
@@ -330,6 +329,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           if (res.data && res.data.length > 0) {
             res.data.forEach(element => {
               if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKhoBq = [];
                 this.listDiemKhoBq = [
                   ...this.listDiemKhoBq,
                   ...element.children
@@ -557,7 +557,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   handleOk(): void {
-
+    debugger
     if ((!this.formDataChiTiet.value.cloaiVthh || !this.formDataChiTiet.value.loaiVthh) && !this.isNhanDieuChuyen) {
       this.notification.error(MESSAGE.ERROR, "Chưa có thông tin hàng hóa!");
       return;
@@ -568,7 +568,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         // check lô kho xuất
         if (!this.isNhanDieuChuyen) {
           let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
-          if (maLoKho) {
+          if (maLoKho && !this.isEditDetail) {
             this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
             return;
           } else {
@@ -578,32 +578,31 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           }
         } else {
           let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
-          if (maLoKho) {
+          if (maLoKho && !this.isEditDetail) {
             this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
             return;
           } else {
+            debugger
             this.formData.patchValue({
               danhSachHangHoa: [...this.formData.value.danhSachHangHoa, this.formDataChiTiet.value]
             })
           }
         }
-
       } else {
         this.formData.patchValue({
           danhSachHangHoa: [this.formDataChiTiet.value]
         });
       }
-
     } else {
       if (!this.isNhanDieuChuyen) {
         let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKho == this.formDataChiTiet.value.maLoKho) && item.maChiCucNhan == this.formDataChiTiet.value.maChiCucNhan));
-        if (maLoKho) {
+        if (maLoKho && !this.isEditDetail) {
           this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
           return;
         }
       } else {
         let maLoKho = this.formData.value.danhSachHangHoa.find(item => ((item.maLoKhoNhan == this.formDataChiTiet.value.maLoKhoNhan) && item.maDiemKhoNhan == this.formDataChiTiet.value.maDiemKhoNhan));
-        if (maLoKho) {
+        if (maLoKho && !this.isEditDetail) {
           this.notification.error(MESSAGE.ERROR, "Vui lòng chọn lô kho khác!");
           return;
         }
@@ -620,6 +619,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.buildTableEdit();
     this.isVisible = false;
     this.isEditDetail = false;
+    this.isAddDiemKho = false;
     //clean
     this.formDataChiTiet.reset();
     this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
@@ -631,6 +631,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   handleCancel(): void {
     this.isVisible = false;
     this.isEditDetail = false;
+    this.isAddDiemKho = false;
     //clean
     this.formDataChiTiet.reset();
     this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
@@ -650,7 +651,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 .groupBy("maLoKho")
                 .map((vs, ks) => {
                     let maLoKho = vs.find(s => s.maLoKho === ks);
-                    let khoNhan = vs.filter(item => item.maDiemKhoNhan != undefined);
+                    let khoNhan = vs.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
                     let rsss = chain(khoNhan)
                       .groupBy("maNhaKhoNhan")
                       .map((vss, kss) => {
@@ -1003,9 +1004,32 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.isAddDiemKho = true;
     let data = cloneDeep(item);
     data.idVirtual = undefined;
+    data.id = undefined;
+    data.maNhaKho = undefined;
+    data.tenNhaKho = undefined;
+    data.maNganKho = undefined;
+    data.tenNganKho = undefined;
+    data.coLoKho = true;
+    data.maLoKho = undefined;
+    data.tenLoKho = undefined;
     data.soLuongDc = 0;
     data.duToanKphi = 0;
+    data.maDiemKhoNhan = undefined;
+    data.tenDiemKhoNhan = undefined;
+    data.maNhaKhoNhan = undefined;
+    data.tenNhaKhoNhan = undefined;
+    data.maNganKhoNhan = undefined;
+    data.tenNganKhoNhan = undefined;
+    data.coLoKhoNhan = undefined;
+    data.maLoKhoNhan = undefined;
+    data.tenLoKhoNhan = undefined;
+    data.soLuongPhanBo = undefined;
+    data.tichLuongKd = undefined;
+    data.slDcConLai = undefined;
     this.formDataChiTiet.patchValue(data);
+    this.getListNhaKhoBq(data.maDiemKho);
+    this.getListNganKhoBq(data.maNhaKho);
+    this.getListLoKhoBq(data.maNganKho);
     this.showModal();
   }
 
@@ -1119,7 +1143,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   changeSoLuongPhanBo(value: any) {
     this.formDataChiTiet.controls['slDcConLai'].setValue(this.formDataChiTiet.value.soLuongDc - value);
   }
-  async addDiemKhoNham(data: any) {
+
+  async addDiemKhoNhan(data: any) {
     data.idVirtual = undefined;
     data.id = undefined;
     this.showModal();
