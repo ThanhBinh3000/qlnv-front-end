@@ -256,6 +256,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
+          type : "QDTH",
           dsPhuongAn: this.listToTrinh
         }
       });

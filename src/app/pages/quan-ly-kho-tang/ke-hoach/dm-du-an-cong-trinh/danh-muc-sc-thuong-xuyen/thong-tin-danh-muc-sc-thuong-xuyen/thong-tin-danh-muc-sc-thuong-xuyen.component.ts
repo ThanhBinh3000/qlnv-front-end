@@ -55,6 +55,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       ngayQdPd: [null],
       giaTriPd: [null],
       trangThai: [null],
+      tmdt: [null],
       type: ["01"],
     });
   }
