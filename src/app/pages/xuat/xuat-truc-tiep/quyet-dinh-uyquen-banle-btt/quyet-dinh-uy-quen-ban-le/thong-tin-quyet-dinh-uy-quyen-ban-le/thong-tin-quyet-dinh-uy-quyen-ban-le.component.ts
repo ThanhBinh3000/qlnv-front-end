@@ -9,6 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { STATUS } from 'src/app/constants/status';
 import { DonviService } from 'src/app/services/donvi.service';
+import { DialogThemMoiBangKeBanLeComponent } from 'src/app/components/dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-uy-quyen-ban-le',
@@ -141,4 +142,30 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       return sum;
     }
   }
+
+  themMoiBangKeBanLe($event, data?: null, index?: number) {
+    const modalGT = this.modal.create({
+      nzContent: DialogThemMoiBangKeBanLeComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzStyle: { top: '200px' },
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzComponentParams: {
+        idInput: data,
+        loaiVthh: this.loaiVthh,
+      },
+    });
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
+        return;
+      }
+      if (index >= 0) {
+        this.dataTable[index] = data;
+      } else {
+        this.dataTable.push(data);
+      }
+    });
+  };
+
 }
