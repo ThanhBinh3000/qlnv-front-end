@@ -87,7 +87,7 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteMulti()">
+        <button type="button" class="btn btn-do"  *ngIf="userService.isChiCuc()" (click)="deleteMulti()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
@@ -95,7 +95,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectDetail(null,false)">
+        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="redirectDetail(null,false)">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -159,8 +159,13 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiDc"
-                     (input)="filterInTable('loaiDc',filterTable.loaiDc)" size="small"/>
+              <nz-input-group>
+                <nz-select nzAllowClear [(ngModel)]="filterTable.loaiDc"
+                           (ngModelChange)="filterInTable('loaiDc',filterTable.loaiDc)">
+                  <nz-option *ngFor="let p of listLoaiDc" [nzValue]="p.ma"
+                             [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
+              </nz-input-group>
             </nz-input-group>
           </th>
           <th>
@@ -195,16 +200,21 @@
           <td>{{ data.tenLoaiDc }}</td>
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class="text-left">
+          <td class="text-left" *ngIf="userService.isChiCuc()">
             <a *ngIf="!checkAllowEdit(data)">
-              <i class="icon htvbdh_eye" *ngIf="!isView" (click)="redirectDetail(data,true)"></i>
+              <i class="icon htvbdh_eye" (click)="redirectDetail(data,true)"></i>
             </a>
             <a  *ngIf="checkAllowEdit(data)">
-              <i class="fa fa-edit" *ngIf="!isView" (click)="redirectDetail(data,false)"></i>
+              <i class="fa fa-edit" (click)="redirectDetail(data,false)"></i>
             </a>
             <a *ngIf="checkAllowDelete(data)">
-              <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+              <i class="fa fa-trash-o do" nz-popconfirm nz-button
                  nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoa(data)"></i>
+            </a>
+          </td>
+          <td class="text-left" *ngIf="!userService.isChiCuc()">
+            <a>
+              <i class="icon htvbdh_eye" (click)="redirectDetail(data,true)"></i>
             </a>
           </td>
         </tr>

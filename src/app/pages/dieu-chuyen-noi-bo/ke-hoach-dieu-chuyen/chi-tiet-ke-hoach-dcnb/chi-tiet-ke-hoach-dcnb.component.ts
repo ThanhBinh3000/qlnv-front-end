@@ -1,11 +1,7 @@
 import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormGroup, Validators} from "@angular/forms";
 import {UserLogin} from "../../../../models/userlogin";
-import {DiaDiemGiaoNhan, KeHoachBanDauGia} from "../../../../models/KeHoachBanDauGia";
 import {DatePipe} from "@angular/common";
-import {
-  ModalInput
-} from "../../../xuat/xuat-cuu-tro-vien-tro/xuat-cuu-tro/xay-dung-phuong-an/thong-tin-xay-dung-phuong-an/thong-tin-xay-dung-phuong-an.component";
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
@@ -41,14 +37,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   showListEvent = new EventEmitter<any>();
 
   formData: FormGroup;
-  tongDuToanChiPhi: number = 0;
   formDataChiTiet: FormGroup;
+  tableForm: FormGroup;
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
-  titleStatus: string = '';
-  titleButtonDuyet: string = '';
-  iconButtonDuyet: string = '';
   styleStatus: string = 'du-thao-va-lanh-dao-duyet';
   tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
@@ -56,36 +49,20 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   listPtGiaoHang: any[];
   listPtNhanHang: any[];
   listNguonChi: any[];
-  listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   userInfo: UserLogin;
   expandSet = new Set<number>();
-  bangPhanBoList: Array<any> = [];
-  khBanDauGia: KeHoachBanDauGia = new KeHoachBanDauGia();
-  diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
-  listChungLoaiHangHoa: any[] = [];
-  listLoaiHopDong: any[] = [];
   STATUS = STATUS;
   datePipe = new DatePipe('en-US');
-  tongTien = 0;
-  diaDiemNhapKho: any[] = [];
   expandSetString = new Set<string>();
   tableView = [];
-  tableEdit = [];
   isEditDetail: boolean = false;
-  phuongAnView = [];
   isVisible = false;
   isAddDiemKho = false;
   isVisibleSuaChiCuc = false;
   isNhanDieuChuyen = false;
-  listNoiDung = []
-  tongThanhTien: any;
-  tongSoLuong: any;
-  tongSoLuongDeXuat: any;
-  tongSoLuongXuatCap: any;
   errorInputComponent: any[] = [];
-  disableInputComponent: ModalInput = new ModalInput();
   dsDonVi: any;
   dsDonViNhan: any[] = [];
   dataChiCuc: any = [];
@@ -196,8 +173,35 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         slDcConLai: [0, [Validators.required]]
       }
     );
+    this.tableForm = this.fb.group({
+      rows: this.fb.array([])
+    });
     this.userInfo = this.userService.getUserLogin();
     this.dataChiCuc = [{maDvi: this.userInfo.MA_DVI, tenDvi: this.userInfo.TEN_DVI}]
+  }
+
+  createRow(id, maChiCucNhan, tenChiCucNhan, hinhThucDvCcDvVanChuyen, tenHinhThucDvCcDvVanChuyen, pthucGiaoHang, tenPthucGiaoHang, pthucNhanHang, tenPthucNhanHang, nguonChi, tenNguonChi): FormGroup {
+    return this.fb.group({
+      id: [id],
+      maChiCucNhan: [maChiCucNhan, Validators.required],
+      tenChiCucNhan: [tenChiCucNhan, Validators.required],
+      hinhThucDvCcDvVanChuyen: [hinhThucDvCcDvVanChuyen, Validators.required],
+      tenHinhThucDvCcDvVanChuyen: [tenHinhThucDvCcDvVanChuyen, Validators.required],
+      pthucGiaoHang: [pthucGiaoHang, Validators.required],
+      tenPthucGiaoHang: [tenPthucGiaoHang, Validators.required],
+      pthucNhanHang: [pthucNhanHang, Validators.required],
+      tenPthucNhanHang: [tenPthucNhanHang, Validators.required],
+      nguonChi: [nguonChi, Validators.required],
+      tenNguonChi: [tenNguonChi, Validators.required]
+    });
+  }
+
+  get rows(): FormArray {
+    return this.tableForm.get('rows') as FormArray;
+  }
+
+  valueRow(index: number): any {
+    return this.tableForm.get('rows').value[index];
   }
 
   async ngOnInit() {
@@ -229,7 +233,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
       this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
   }
@@ -286,7 +289,13 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
             this.formData.patchValue(res.data);
             this.formData.value.danhSachHangHoa.forEach(s => s.idVirtual = uuid.v4());
-            this.tableEdit = res.data.phuongAnDieuChuyen;
+            if (res.data.phuongAnDieuChuyen) {
+              for (let pa of res.data.phuongAnDieuChuyen) {
+                this.rows.push(this.createRow(pa.id, pa.maChiCucNhan,
+                  pa.tenChiCucNhan, pa.hinhThucDvCcDvVanChuyen, pa.tenHinhThucDvCcDvVanChuyen,
+                  pa.pthucGiaoHang, pa.tenPthucGiaoHang, pa.pthucNhanHang, pa.tenPthucNhanHang, pa.nguonChi, pa.tenNguonChi));
+              }
+            }
             if (this.formData.value.type == 'NDC') {
               this.isNhanDieuChuyen = true;
             } else {
@@ -307,10 +316,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         tenDvi: this.userInfo.TEN_DVI,
         maDviCuc: this.userInfo.MA_DVI?.slice(0, -2)
       });
-      this.tongThanhTien = 0;
-      this.tongSoLuong = 0;
-      this.tongSoLuongDeXuat = 0;
-      this.tongSoLuongXuatCap = 0;
     }
 
   }
@@ -420,11 +425,18 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           }
         }
         if (!coLoKho) {
-          this.removeValidateLoKho("maLoKho");
-          this.removeValidateLoKho("tenLoKho");
+          this.removeValidateFormChiTiet("maLoKho");
+          this.removeValidateFormChiTiet("tenLoKho");
         } else {
-          this.addValidateLoKho("maLoKho");
-          this.addValidateLoKho("tenLoKho");
+          this.addValidateFormChiTiet("maLoKho");
+          this.addValidateFormChiTiet("tenLoKho");
+        }
+        if (!coLoKho) {
+          const body = {
+            maDvi: value,
+            tenLoKho: this.formDataChiTiet.value.tenNganKho
+          }
+          this.getChiTietTonKho(body);
         }
         this.listLoKhoBq = []
         this.formDataChiTiet.patchValue({
@@ -530,8 +542,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         canCu: []
       });
       this.tableView = [];
-      this.tableEdit = [];
+      this.rows.reset();
       this.listChiCucNhan = [];
+      this.addValidateFormData("maCucNhan");
     } else {
       this.formData.patchValue({
         tenLoaiDc: "Giữa 2 chi cục trong cùng 1 cục",
@@ -540,14 +553,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         canCu: []
       });
       this.tableView = [];
-      this.tableEdit = [];
+      this.rows.reset();
       this.listChiCucNhan = [];
+      this.removeValidateFormData("maCucNhan");
       this.loadDsChiCuc();
     }
   }
 
   selectRow(item) {
-    this.phuongAnView.forEach(i => i.selected = false);
     item.selected = true;
   }
 
@@ -560,6 +573,14 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.ERROR, "Chưa có thông tin hàng hóa!");
       return;
     }
+    if (!this.isNhanDieuChuyen) {
+      this.disableValidateFormChiTietHangHoaNDC();
+    }
+    this.helperService.markFormGroupTouched(this.formDataChiTiet);
+    if (this.formDataChiTiet.invalid) {
+      return;
+    }
+
     if (!this.formDataChiTiet.value.idVirtual) {
       this.formDataChiTiet.controls['idVirtual'].setValue(uuid.v4());
       if (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length > 0) {
@@ -622,7 +643,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
     this.errorInputComponent = [];
     this.listChiCuc = []
-    this.disableInputComponent = new ModalInput();
   }
 
   handleCancel(): void {
@@ -631,10 +651,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.isAddDiemKho = false;
     //clean
     this.formDataChiTiet.reset();
-    this.formDataChiTiet.patchValue({tonKho: 0, duToanKphi: 0, soLuongDc: 0});
+    this.formDataChiTiet.patchValue({coLoKho: true, tonKho: 0, duToanKphi: 0, soLuongDc: 0});
     this.errorInputComponent = [];
     this.listChiCuc = []
-    this.disableInputComponent = new ModalInput();
   }
 
   buildTableView() {
@@ -702,10 +721,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       }).value();
     this.tableView = dataView;
     this.expandAll()
-
-    if (this.formData.value.danhSachHangHoa.length !== 0) {
-      this.tongDuToanChiPhi = this.formData.value.danhSachHangHoa.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    }
   }
 
   buildTableEdit() {
@@ -713,7 +728,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       .groupBy("maChiCucNhan")
       .map((value, key) => {
         let rowChiCuc = value.find(s => s.maChiCucNhan === key);
-        let rowChiCucHt = this.tableEdit.find(s => s.maChiCucNhan === key);
+        let rowChiCucHt = this.rows.value.find(s => s.maChiCucNhan === key);
         if (rowChiCucHt) {
           return rowChiCucHt;
         }
@@ -724,15 +739,27 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           tenChiCucNhan: rowChiCuc.tenChiCucNhan
         };
       }).value();
-    this.tableEdit = dataView;
+    if (dataView) {
+      for (let pa of dataView) {
+        this.rows.push(this.createRow(pa.id, pa.maChiCucNhan,
+          pa.tenChiCucNhan, pa.hinhThucDvCcDvVanChuyen, pa.tenHinhThucDvCcDvVanChuyen,
+          pa.pthucGiaoHang, pa.tenPthucGiaoHang, pa.pthucNhanHang, pa.tenPthucNhanHang, pa.nguonChi, pa.tenNguonChi));
+      }
+    }
   }
 
   async save(isBack?) {
-
     const body = {
       ...this.formData.value,
-      phuongAnDieuChuyen: this.tableEdit
+      phuongAnDieuChuyen: this.rows.value
     }
+    for(let r of this.rows.controls){
+      this.helperService.markFormGroupTouched(r);
+      if (r.invalid) {
+        return;
+      }
+    }
+
     let result = await this.createUpdate(body);
     if (isBack === false) {
       return result;
@@ -912,9 +939,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   changeCucNhan(value: any) {
-    const tenCucNhan = this.dsDonViNhan.find(item => item.maDvi == value);
-    this.formData.controls['tenCucNhan'].setValue(tenCucNhan.tenDvi);
-    this.loadDsChiCuc(this.formData.value.maCucNhan);
+    if (value) {
+      const tenCucNhan = this.dsDonViNhan.find(item => item.maDvi == value);
+      this.formData.controls['tenCucNhan'].setValue(tenCucNhan.tenDvi);
+      this.loadDsChiCuc(this.formData.value.maCucNhan);
+    }
   }
 
   async getListHinhThucDvCcDvVanChuyen() {
@@ -977,24 +1006,24 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
-  changeHinhThucDvCcDvVanChuyen(value: any, item: any) {
+  changeHinhThucDvCcDvVanChuyen(value: any, rowControl: any) {
     let tenHinhThucDvCcDvVanChuyen = (this.listHinhThucDvCcDvVanChuyen ? this.listHinhThucDvCcDvVanChuyen : []).find(item => item.ma === value);
-    item.tenHinhThucDvCcDvVanChuyen = tenHinhThucDvCcDvVanChuyen.giaTri;
+    rowControl.controls['tenHinhThucDvCcDvVanChuyen'].setValue(tenHinhThucDvCcDvVanChuyen.giaTri);
   }
 
-  changePtGiaoHang(value: any, item: any) {
+  changePtGiaoHang(value: any, rowControl: any) {
     let tenPthucGiaoHang = (this.listPtGiaoHang ? this.listPtGiaoHang : []).find(item => item.ma === value);
-    item.tenPthucGiaoHang = tenPthucGiaoHang.giaTri;
+    rowControl.controls['tenPthucGiaoHang'].setValue(tenPthucGiaoHang.giaTri);
   }
 
-  changePtNhanHang(value: any, item: any) {
+  changePtNhanHang(value: any, rowControl: any) {
     let tenPthucNhanHang = (this.listPtNhanHang ? this.listPtNhanHang : []).find(item => item.ma === value);
-    item.tenPthucNhanHang = tenPthucNhanHang.giaTri;
+    rowControl.controls['tenPthucNhanHang'].setValue(tenPthucNhanHang.giaTri);
   }
 
-  changeNguonChi(value: any, item: any) {
-    let nguonChi = (this.listNguonChi ? this.listNguonChi : []).find(item => item.ma === value);
-    item.tenNguonChi = nguonChi.giaTri;
+  changeNguonChi(value: any, rowControl: any) {
+    let tenNguonChi = (this.listNguonChi ? this.listNguonChi : []).find(item => item.ma === value);
+    rowControl.controls['tenNguonChi'].setValue(tenNguonChi.giaTri);
   }
 
   addDiemKho(item: any) {
@@ -1079,11 +1108,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           }
         }
         if (!coLoKhoNhan) {
-          this.removeValidateLoKho("maLoKhoNhan");
-          this.removeValidateLoKho("tenLoKhoNhan");
+          this.removeValidateFormChiTiet("maLoKhoNhan");
+          this.removeValidateFormChiTiet("tenLoKhoNhan");
         } else {
-          this.addValidateLoKho("maLoKhoNhan");
-          this.addValidateLoKho("tenLoKhoNhan");
+          this.addValidateFormChiTiet("maLoKhoNhan");
+          this.addValidateFormChiTiet("tenLoKhoNhan");
         }
         this.listLoKhoNhanBq = []
         this.formDataChiTiet.patchValue({
@@ -1129,12 +1158,20 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
-  private removeValidateLoKho(value) {
+  private removeValidateFormChiTiet(value) {
     this.formDataChiTiet.controls[value].clearValidators();
   }
 
-  private addValidateLoKho(value) {
+  private addValidateFormChiTiet(value) {
     this.formDataChiTiet.controls[value].setValidators(Validators.required);
+  }
+
+  private removeValidateFormData(value) {
+    this.formData.controls[value].clearValidators();
+  }
+
+  private addValidateFormData(value) {
+    this.formData.controls[value].setValidators(Validators.required);
   }
 
   changeSoLuongPhanBo(value: any) {
@@ -1160,5 +1197,20 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       this.getListNganKhoNhanBq(data.maNhaKhoNhan),
       this.getListLoKhoNhanBq(data.maNganKhoNhan)
     ])
+  }
+
+  private disableValidateFormChiTietHangHoaNDC() {
+    this.removeValidateFormChiTiet("maDiemKhoNhan");
+    this.removeValidateFormChiTiet("tenDiemKhoNhan");
+    this.removeValidateFormChiTiet("maNhaKhoNhan");
+    this.removeValidateFormChiTiet("tenNhaKhoNhan");
+    this.removeValidateFormChiTiet("maLoKhoNhan");
+    this.removeValidateFormChiTiet("tenLoKhoNhan");
+    this.removeValidateFormChiTiet("maNganKhoNhan");
+    this.removeValidateFormChiTiet("tenNganKhoNhan");
+    this.removeValidateFormChiTiet("coLoKhoNhan");
+    this.removeValidateFormChiTiet("soLuongPhanBo");
+    this.removeValidateFormChiTiet("tichLuongKd");
+    this.removeValidateFormChiTiet("slDcConLai");
   }
 }
