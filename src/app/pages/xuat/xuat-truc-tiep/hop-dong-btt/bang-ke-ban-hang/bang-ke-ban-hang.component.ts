@@ -83,9 +83,7 @@ export class BangKeBanHangComponent extends Base2Component implements OnInit {
   }
 
   themMoiBangKeBanLe($event, data?: null, index?: number) {
-
     const modalGT = this.modal.create({
-      // nzTitle: 'THÊM BẢNG KÊ',
       nzContent: DialogThemMoiBangKeBanLeComponent,
       nzMaskClosable: false,
       nzClosable: false,

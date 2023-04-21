@@ -16,12 +16,10 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class BienBanLayMauBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
   idQdNv: number = 0;
   isViewQdNv: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  isTatCa: boolean = false;
   idQdGiaoNvXh: number = 0;
   children: any = [];
   expandSetString = new Set<string>();
@@ -44,6 +42,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
       ngayLayMauDen: null,
       maDvi: null,
       loaiVthh: null,
+      trangThai: null,
     })
 
     this.filterTable = {
@@ -83,7 +82,8 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
     })
   }
 
@@ -182,7 +182,4 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     this.idQdNv = null;
     this.isViewQdNv = false;
   }
-
-
-
 }
