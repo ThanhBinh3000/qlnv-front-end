@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
           <div nz-row>
             <div nz-col nzSpan="11">
@@ -63,9 +63,18 @@
             </nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày tổng hợp</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayTao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Ngày ký</label>
+          <div nz-row>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayTongHopTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="1">
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayTongHopDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="20">
           <label class="search__label">Địa điểm xây dựng</label>
