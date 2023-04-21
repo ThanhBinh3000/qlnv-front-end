@@ -412,7 +412,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzComponentParams: {
           dataTable : list && list.dataChild ? list.dataChild : []  ,
           dataInput: data,
-          type: type
+          type: type,
+          page : "DXTH"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -437,6 +438,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   themItemcha() {
+    if (!this.rowItemCha.khoi) {
+      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+      return;
+    }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
       return;

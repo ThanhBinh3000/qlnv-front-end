@@ -21,7 +21,7 @@
             <label class="search__label">Số công văn</label>
             <input class="search__input" placeholder="Nhập text" nz-input formControlName="soCongVan"/>
           </div>
-          <div nz-col [nzSpan]="userService.isCuc()? 8 : 4">
+          <div nz-col [nzSpan]="userService.isCuc()? 9 : 5">
             <label class="search__label">Địa điểm xây dựng</label>
             <input class="search__input" placeholder="Nhập text" nz-input formControlName="diaDiem"/>
           </div>
@@ -161,7 +161,7 @@
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
-          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>\
+          <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td *ngIf="!userService.isCuc()">{{ data.tenDvi }}</td>
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.soCongVan }}</td>

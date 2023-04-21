@@ -50,7 +50,8 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
       namKeHoach: [null],
       soCongVan: [null],
       diaDiem: [null],
-      ngayKy: [null],
+      ngayKyTu: [null],
+      ngayKyDen: [null],
       trangThai: [null]
     });
     this.filterTable = {};
@@ -71,18 +72,15 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   }
 
   async loadDviDeXuat() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: "01"
-    };
+    if (!this.userService.isCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: "01"
+      };
 
-    const dsTong = await this.dviService.layDonViTheoCapDo(body);
-    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
-    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB");
-    if (this.userService.isCuc()) {
-      this.formData.patchValue({
-        maDvi: this.userInfo.MA_DVI
-      });
+      const dsTong = await this.dviService.layDonViTheoCapDo(body);
+      this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+      this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB");
     }
   }
 
