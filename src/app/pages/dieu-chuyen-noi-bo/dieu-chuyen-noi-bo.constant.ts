@@ -11,14 +11,6 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Kế hoạch điều chuyển123',
-    url: `/chi-tiet-ke-hoach-dieu-chuyen`,
-    dropdown: 'ke-hoach-dieu-chuyen',
-    idHover: 'ke-hoach-dieu-chuyen',
-    hasTab: false,
-  },
-  /*{
-    icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
     url: `/tong-hop-danh-sach-hang`,
     dropdown: 'tong-hop-danh-sach-hang',
@@ -56,5 +48,5 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown:  'bao-cao-ket-qua',
     idHover:  'bao-cao-ket-qua',
     hasTab: false,
-  }*/
+  }
 ];
