@@ -252,10 +252,9 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     if (resDonVi.msg == MESSAGE.SUCCESS) {
       this.dsDonVi = [resDonVi.data];
       if (this.dsDonVi) {
-
-        let tenDviCuc = this.dsDonVi.find(item => item.maDvi === this.formData.value.maDviCuc);
+        let tenDviCuc = this.dsDonVi.find(item => item.maDvi === this.userInfo.MA_DVI?.slice(0, -2));
         if (tenDviCuc) {
-          this.formData.controls['tenDviCuc'].patchValue({tenDviCuc: tenDviCuc.tenDvi});
+          this.formData.controls['tenDviCuc'].setValue(tenDviCuc.tenDvi);
         }
       }
     } else {
@@ -266,7 +265,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   async loadDsChiCuc(value?) {
     let body = {
       trangThai: "01",
-      maDviCha: value ? value.maCucNhan ? value.maCucNhan : value.maDvi : this.userInfo.MA_DVI.substring(0, 6),
+      maDviCha: value ? value.maCucNhan ? value.maCucNhan : this.userInfo.MA_DVI.substring(0, 6) : this.userInfo.MA_DVI.substring(0, 6),
       type: "DV"
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
@@ -916,7 +915,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
   changeCucNhan(value: any) {
     const tenCucNhan = this.dsDonViNhan.find(item => item.maDvi == value);
-    this.formData.controls['tenCucNhan'].patchValue({"tenCucNhan": tenCucNhan.tenDvi});
+    this.formData.controls['tenCucNhan'].setValue(tenCucNhan.tenDvi);
     this.loadDsChiCuc(this.formData.value.maCucNhan);
   }
 
