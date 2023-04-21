@@ -54,17 +54,18 @@
             <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_XOA')">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub"
                     (click)="exportData('Danh-sach-quyet-dinh-giao-nhiem-vu-xuat-hang.xlsx')"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_EXP')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null)" *ngIf="userService.isCuc() ">
+                <button type="button" class="btn btn-main" (click)="goDetail(null)"
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tạo quyết định</span>
                 </button>
@@ -205,15 +206,32 @@
                         <td>{{ data.tenTrangThai }}</td>
                         <td>{{ data.tenTrangThaiXh }}</td>
                         <td class="text-left">
-                            <a *ngIf="data.trangThai == STATUS.BAN_HANH"
-                                (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
+                            <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_XEM') && (data.trangThai == STATUS.BAN_HANH))
+                             ||(!userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
+                             ||(!userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.DU_THAO)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_TP)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC)"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai != STATUS.BAN_HANH"
-                                (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
+                            <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.DU_THAO)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_THEM') && data.trangThai == STATUS.TU_CHOI_LDC)"
+                                (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+                            <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
+                             ||(userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)"
+                                (click)="goDetail(data.id)">
+                                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                            </a>
+                            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_QDGNVXH_XOA')) "
+                                (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

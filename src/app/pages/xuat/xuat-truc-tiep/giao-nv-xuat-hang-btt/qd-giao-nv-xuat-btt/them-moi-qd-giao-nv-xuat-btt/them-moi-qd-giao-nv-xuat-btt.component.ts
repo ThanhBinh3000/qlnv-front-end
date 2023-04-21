@@ -46,9 +46,9 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
     this.formData = this.fb.group({
       id: [null],
-      namKh: [dayjs().get('year'), Validators.required],
+      namKh: [dayjs().get('year')],
       soQd: ['',],
-      ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
       maDvi: [''],
       tenDvi: [''],
       ngayKy: ['',],
@@ -72,7 +72,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       trichYeu: [''],
       trangThaiXh: [''],
       tenTrangThaiXh: [''],
-      phanLoai: [''],
+      phanLoai: ['HD', [Validators.required]],
       idQdKqCg: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -83,15 +83,23 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   }
 
   setValidator(isGuiDuyet?) {
-    // if (isGuiDuyet) {
-    //   this.formData.controls["soQdPd"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-    // } else {
-    //   this.formData.controls["soQdPd"].clearValidators();
-    //   this.formData.controls["ngayKyQd"].clearValidators();
-    //   this.formData.controls["ngayHluc"].clearValidators();
-    // }
+    if (isGuiDuyet) {
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+    }
+    if (this.radioValue == 'HD' && isGuiDuyet) {
+      this.formData.controls["idHd"].setValidators([Validators.required]);
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["idQdPdKh"].clearValidators();
+      this.formData.controls["soQdPd"].clearValidators();
+    }
+    if (this.radioValue == 'QDDX' && isGuiDuyet) {
+      this.formData.controls["idHd"].clearValidators();
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["idQdPdKh"].setValidators([Validators.required]);
+      this.formData.controls["soQdPd"].setValidators([Validators.required]);
+    }
   }
 
   deleteSelect() {
@@ -220,8 +228,6 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-
-
       if (data) {
         await this.qdPdKetQuaBttService.getDetail(data.id).then(async (resKq) => {
           const dataKq = resKq.data;
@@ -234,10 +240,10 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
                   soQdPd: data.xhQdPdKhBttHdr.soQdPd,
                   idQdPdKh: data.xhQdPdKhBttHdr.id,
                   maDviTsan: data.maDviTsan,
-                  loaiVthh: data.loaiVthh,
-                  tenLoaiVthh: data.tenLoaiVthh,
-                  cloaiVthh: data.cloaiVthh,
-                  tenCloaiVthh: data.tenCloaiVthh,
+                  loaiVthh: data.xhQdPdKhBttHdr.loaiVthh,
+                  tenLoaiVthh: data.xhQdPdKhBttHdr.tenLoaiVthh,
+                  cloaiVthh: data.xhQdPdKhBttHdr.cloaiVthh,
+                  tenCloaiVthh: data.xhQdPdKhBttHdr.tenCloaiVthh,
                   moTaHangHoa: data.xhQdPdKhBttHdr.moTaHangHoa,
                   soLuong: data.tongSoLuong,
                   donGia: data.tongDonGia,
