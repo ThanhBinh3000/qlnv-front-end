@@ -220,7 +220,7 @@
         <td>{{idx + 1}}</td>
         <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
         <td class="font-weight-bold">{{data.tenVthh}}</td>
-        <td></td>
+        <td>{{data.tenCloaiVthh}}</td>
         <td class="font-weight-bold">{{data.dviTinh}}</td>
         <ng-container *ngIf="!data.dataChild || data.dataChild.length == 0">
           <td class="font-weight-bold">{{data.soLuong  | number : '1.0-1' : 'vi_VN'}}</td>
@@ -239,7 +239,7 @@
             <i class="fa fa-pencil"></i>
           </a>
           <a>
-            <i class="icon htvbdh_dau-cong" *ngIf="data.loaiVthh != '0401'"
+            <i class="icon htvbdh_dau-cong" *ngIf="data.loaiVthh != '0401'  && !data.cloaiVthh"
                (click)="themMoiMuaTang(data,'them',idx, dataTable[idx])"></i>
           </a>
         </td>

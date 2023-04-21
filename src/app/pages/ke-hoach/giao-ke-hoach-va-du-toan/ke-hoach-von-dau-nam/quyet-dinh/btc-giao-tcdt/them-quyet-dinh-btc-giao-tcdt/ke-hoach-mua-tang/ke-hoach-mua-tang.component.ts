@@ -58,7 +58,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.dataTable && this.dataTable.length > 0 && !this.dataTable[0].dataChild) {
+    if (this.dataTable && this.dataTable.length > 0 && !this.dataTable[0].idVirtual) {
       this.convertListData();
     }
   }
@@ -216,16 +216,14 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   themMoiMuaTang(data: any, type: string, index: number, list?: any) {
-    let sl = 0;
+    let sl = data.soLuong;
     if (data && data.dataChild && data.dataChild.length > 0) {
       sl = data.dataChild.reduce((accumulator, object) => {
         return accumulator + object.soLuong;
       }, 0);
-    } else {
-      sl = data.soLuong;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm chi tiết',
+      nzTitle: type == 'them' ? 'Thêm chi tiết' : 'Sửa chi tiết ',
       nzContent: ThemSuaMuaTangComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -259,7 +257,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
             Object.assign(this.dataTable[index], detail);
           }
         }
-        // this.convertListData();
         this.emitDataTable();
         this.expandAll();
       }

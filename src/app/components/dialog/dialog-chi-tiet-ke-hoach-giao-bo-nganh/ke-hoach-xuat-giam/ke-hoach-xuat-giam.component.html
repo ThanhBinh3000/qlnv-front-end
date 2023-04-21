@@ -83,7 +83,7 @@
         <td>{{ data.tenVthh }}</td>
         <td>{{ data.tenCloaiVthh }}</td>
         <td>{{ data.dviTinh }}</td>
-        <td>{{ data.soLuong |  number: '1.0-1'}}</td>
+        <td>{{ data.soLuong |  number : '1.0-1' : 'vi_VN'}}</td>
         <td>
           <a *ngIf="!isView" (click)="editItem(idx)">
             <i class=" fa fa-pencil"></i>
