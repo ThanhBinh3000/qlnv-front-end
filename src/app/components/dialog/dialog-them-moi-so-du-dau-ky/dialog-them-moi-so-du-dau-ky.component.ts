@@ -53,12 +53,11 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       slTon: ['', Validators.required],
       dviTinh: [''],
       thanhTien: [0],
-      isKhoiTao : [true]
+      isKhoiTao : [false]
     })
   }
 
   async ngOnInit() {
-    console.log(this.detail)
     await Promise.all([
       this.getAllLoaiVthh(),
       this.loadDsNam(),
@@ -98,11 +97,11 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     body.theTichKdLt = (body.theTichTkLt - this.formData.value.theTichSdLt) >=0 ? body.theTichKdLt - this.formData.value.theTichSdLt : 0
     body.theTichKdVt = (body.theTichTkVt - this.formData.value.theTichSdVt) >= 0 ? body.theTichTkVt - this.formData.value.theTichSdVt : 0
     body.loaiVthh = this.formData.value.loaiVthh
+    body.isKhoiTao = true;
     body.cloaiVthh = this.formData.value.cloaiVthh
     body.slTon = this.formData.value.slTon
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
-    body.isKhoiTao = this.formData.value.isKhoiTao
     body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {

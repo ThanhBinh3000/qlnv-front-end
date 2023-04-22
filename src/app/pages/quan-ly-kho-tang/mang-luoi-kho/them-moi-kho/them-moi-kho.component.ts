@@ -134,7 +134,7 @@ export class ThemMoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
-      isKhoiTao: [true],
+      isKhoiTao: [false],
       loaiHangHoa : []
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
@@ -231,7 +231,7 @@ export class ThemMoiKhoComponent implements OnInit {
       await this.khoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
-          if (dataNodeRes && dataNodeRes.maNgankho && dataNodeRes.coLoKho != '01') {
+          if (dataNodeRes && dataNodeRes.maNgankho && dataNodeRes.coLoKho == false) {
             this.notification.error(MESSAGE.ERROR, "Không thể thêm lô kho vào ngăn kho này!");
             this.levelNode = 0;
             return;
@@ -407,7 +407,6 @@ export class ThemMoiKhoComponent implements OnInit {
       body.tichLuongKdVt = body.tichLuongTkVt;
       body.theTichKdLt = body.theTichTkLt;
       body.theTichKdVt = body.theTichTkVt;
-      body.coLoKho = this.formKho.get('coLoKho').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
       body.nhakhoId = this.idReq;
       body.trangThai = this.formKho.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
       body.isKhoiTao = this.formKho.get('coLoKho').value ? false : true;
