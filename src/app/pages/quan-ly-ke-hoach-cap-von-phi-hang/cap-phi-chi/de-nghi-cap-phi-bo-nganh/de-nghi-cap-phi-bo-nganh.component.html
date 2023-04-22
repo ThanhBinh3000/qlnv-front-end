@@ -74,6 +74,62 @@
                         <th width="7.5%">Trạng thái</th>
                         <th width="7.5%">Hành động</th>
                     </tr>
+                    <tr class="search-table">
+                      <th></th>
+                      <th></th>
+                      <th>
+                        <nz-input-group>
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDeNghi"
+                                 (input)="filterInTable('soDeNghi',filterTable.soDeNghi, false)" size="small"/>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBoNganh"
+                                 (input)="filterInTable('tenBoNganh',filterTable.tenBoNganh, false)" size="small"/>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayDeNghi"
+                                        (ngModelChange)="filterInTable('ngayDeNghi',filterTable.ngayDeNghi, true)">
+                        </nz-date-picker>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.nam" [nzDisabled]="isView"
+                                     (ngModelChange)="filterInTable('nam',filterTable.nam, false)">
+                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                          </nz-select>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
+                                 (input)="filterInTable('tongTien',filterTable.tongTien, false)" size="small"/>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.kinhPhiDaCap"
+                                 (input)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap, false)" size="small"/>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ycCapThem"
+                                 (input)="filterInTable('ycCapThem',filterTable.ycCapThem, false)" size="small"/>
+                        </nz-input-group>
+                      </th>
+                      <th>
+                        <nz-input-group>
+                          <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai" [nzDisabled]="isView"
+                                     (ngModelChange)="filterInTable('trangThaiId',filterTable.trangThai, false)">
+                            <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                          </nz-select>
+                        </nz-input-group>
+                      </th>
+                      <th></th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let data of basicTable.data; let i = index">
@@ -95,14 +151,6 @@
                             <a *ngIf="!data.trangThaiId==globals.prop.NHAP_DU_THAO" (click)="viewDetail(data, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <!--<a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_SUA')"
-                                (click)="viewDetail(data, false)">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_XOA')"
-                                (click)="xoaItem(data)">
-                                <i class="fa fa-trash-o do"></i>
-                            </a>-->
                           <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc()"
                                 (click)="viewDetail(data, false)">
                                 <i class="fa fa-pencil"></i>

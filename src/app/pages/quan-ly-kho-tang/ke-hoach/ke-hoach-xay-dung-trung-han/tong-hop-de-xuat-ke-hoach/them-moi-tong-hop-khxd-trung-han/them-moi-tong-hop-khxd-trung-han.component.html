@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
+      <button type="button" class="btn btn-sub ml-2" (click)="quayLai()" *ngIf="!isViewQd">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>

@@ -59,7 +59,7 @@
           </nz-input-group> -->
 
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
+            <nz-form-label  [nzNoColon]="true"> Số đề nghị </nz-form-label>
             <nz-input-group nzAddOnAfter="{{titleSoDeNghi}}" nz-col [nzSpan]="24">
               <input nz-input formControlName="soDeNghi" [readonly]="isView" />
             </nz-input-group>
@@ -67,7 +67,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayDeNghi" [nzDisabled]="isView">

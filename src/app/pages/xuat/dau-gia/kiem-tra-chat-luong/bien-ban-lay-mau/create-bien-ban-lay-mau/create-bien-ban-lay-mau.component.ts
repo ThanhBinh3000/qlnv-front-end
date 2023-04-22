@@ -81,12 +81,12 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       moTaHangHoa: [''],
 
       idDdiemXh: [''],
-      maDiemKho: ['', [Validators.required]],
-      tenDiemKho: ['', [Validators.required]],
-      maNhaKho: ['', [Validators.required]],
-      tenNhaKho: ['', [Validators.required]],
-      maNganKho: ['', [Validators.required]],
-      tenNganKho: ['', [Validators.required]],
+      maDiemKho: [''],
+      tenDiemKho: [''],
+      maNhaKho: [''],
+      tenNhaKho: [''],
+      maNganKho: [''],
+      tenNganKho: [''],
       maLoKho: [''],
       tenLoKho: [''],
 
@@ -149,6 +149,17 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async bindingDataQd(id) {
+    this.formData.patchValue({
+      idDdiemXh: null,
+      maDiemKho: null,
+      tenDiemKho: null,
+      maNhaKho: null,
+      tenNhaKho: null,
+      maNganKho: null,
+      tenNganKho: null,
+      maLoKho: null,
+      tenLoKho: null,
+    });
     await this.spinner.show();
     let res = await this.quyetDinhGiaoNhiemVuXuatHangService.getDetail(id);
     if (res.data) {
