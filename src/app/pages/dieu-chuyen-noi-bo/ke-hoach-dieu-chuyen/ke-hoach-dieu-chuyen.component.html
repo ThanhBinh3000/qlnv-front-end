@@ -201,11 +201,17 @@
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" *ngIf="userService.isChiCuc()">
-            <a *ngIf="!checkAllowEdit(data) && userService.isAccessPermisson('DCNB_KHDC_XEM')">
+            <a *ngIf="checkAllowView(data)  && userService.isAccessPermisson('DCNB_KHDC_XEM')">
               <i class="icon htvbdh_eye" (click)="redirectDetail(data,true)"></i>
             </a>
             <a  *ngIf="checkAllowEdit(data) && userService.isAccessPermisson('DCNB_KHDC_THEM')">
               <i class="fa fa-edit" (click)="redirectDetail(data,false)"></i>
+            </a>
+            <a  *ngIf="checkApproveNdc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')">
+              <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
+            </a>
+            <a  *ngIf="checkApproveDc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')">
+              <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
             <a *ngIf="checkAllowDelete(data) && userService.isAccessPermisson('DCNB_KHDC_XOA')">
               <i class="fa fa-trash-o do" nz-popconfirm nz-button
