@@ -1,20 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {saveAs} from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
+import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {STATUS} from "../../../../constants/status";
 
 @Component({
@@ -32,17 +32,21 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     private donviService: DonviService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+  ) {
+  }
 
-  ) { }
   @Input()
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-  STATUS : STATUS;
+  STATUS: STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   listBoNganh: any[] = [];
-
+  listTrangThai: any[] = [
+    {ma: STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: STATUS.BAN_HANH, giaTri: 'Ban hành'},
+  ];
 
   yearNow: number = 0;
   searchFilter = {
@@ -94,6 +98,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
@@ -163,6 +168,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
   getListNam() {
     this.yearNow = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
@@ -389,17 +395,27 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string | Date) {
-    if (value instanceof Date) {
-      value = dayjs(value).format('YYYY-MM-DD');
-    }
+  // Tìm kiếm trong bảng
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
-      this.dataTable = this.dataTableAll.filter((item) =>
-        item[key]
-          ?.toString()
-          .toLowerCase()
-          .includes(value.toString().toLowerCase()),
-      );
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
+      }
+      this.dataTable = [...this.dataTable, ...temp];
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
