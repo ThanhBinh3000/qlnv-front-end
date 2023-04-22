@@ -262,6 +262,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
     this.rowItem.tenVatTuCha = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
     this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
+    console.log(this.listChungLoaiHangHoa,'2222')
   }
 
   changeChungLoaiHangHoa() {
