@@ -182,7 +182,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU|| this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
+    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
       return true;
     }
   }
@@ -487,13 +487,28 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   async changeDonVi() {
+    this.listDviThuHuong = [];
     if (this.formData.value.dviThongTri) {
-      let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
-        maBoNganh: this.formData.value.dviThongTri,
-        maTh: this.formData.value.soDnCapVon
-      });
-      if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.listDviThuHuong = res.data;
+      if (this.formData.value.dviThongTri == 'BTC') {
+        let item = {
+          "dvCungCapHang": "Tổng cục dự trữ nhà nước",
+          "nganHang": null,
+          "id": "BTC",
+          "soTaiKhoan": null
+        };
+        this.listDviThuHuong.push(item);
+        this.formData.patchValue({
+          "dviThuHuong": this.listDviThuHuong[0].id,
+        })
+        console.log(this.listDviThuHuong, 'this.listDviThuHuong');
+      } else {
+        let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
+          maBoNganh: this.formData.value.dviThongTri,
+          maTh: this.formData.value.soDnCapVon
+        });
+        if (res.msg == MESSAGE.SUCCESS && res.data) {
+          this.listDviThuHuong = res.data;
+        }
       }
     }
   }
