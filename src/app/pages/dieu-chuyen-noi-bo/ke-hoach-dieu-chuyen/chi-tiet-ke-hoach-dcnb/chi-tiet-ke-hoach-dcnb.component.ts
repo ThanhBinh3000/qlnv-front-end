@@ -200,6 +200,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     return this.tableForm.get('rows') as FormArray;
   }
 
+  rowControl(index: number): FormGroup {
+    return <FormGroup>this.rows.controls[index];
+  }
+
   valueRow(index: number): any {
     return this.tableForm.get('rows').value[index];
   }
@@ -542,7 +546,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         canCu: []
       });
       this.tableView = [];
-      this.rows.reset();
+      this.rows.clear();
       this.listChiCucNhan = [];
       this.addValidateFormData("maCucNhan");
     } else {
@@ -553,7 +557,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         canCu: []
       });
       this.tableView = [];
-      this.rows.reset();
+      this.rows.clear();
       this.listChiCucNhan = [];
       this.removeValidateFormData("maCucNhan");
       this.loadDsChiCuc();
@@ -729,6 +733,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       .map((value, key) => {
         let rowChiCuc = value.find(s => s.maChiCucNhan === key);
         let rowChiCucHt = this.rows.value.find(s => s.maChiCucNhan === key);
+
         if (rowChiCucHt) {
           return rowChiCucHt;
         }
@@ -740,6 +745,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         };
       }).value();
     if (dataView) {
+
+      this.rows.clear();
       for (let pa of dataView) {
         this.rows.push(this.createRow(pa.id, pa.maChiCucNhan,
           pa.tenChiCucNhan, pa.hinhThucDvCcDvVanChuyen, pa.tenHinhThucDvCcDvVanChuyen,
