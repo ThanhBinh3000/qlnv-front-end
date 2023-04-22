@@ -15,7 +15,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { TongHopDieuChuyenService } from './../../tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.service';
+import { TongHopDieuChuyenService } from './../tong-hop-dieu-chuyen-tai-tong-cuc.service';
 
 @Component({
     selector: 'app-tong-hop-dieu-chuyen-cap-tong-cuc',

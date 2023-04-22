@@ -81,154 +81,253 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     maHauTo: string;
     isTongHop: boolean = false;
     yeuCauSuccess: boolean = false;
+    capNhatAllSuccess: boolean = false;
 
     idKeHoachDC: any = null;
     isViewKeHoachDC: boolean = false;
+    tongDuToanChiPhi: number = 0;
 
-    dataTable: any[] = [
-        {
-            id: 1,
-            tenChiCuc: "Chi cục 1",
-            diemKho: "",
-            cap: 1,
-            key: "1",
-            children: [
-                {
-                    id: 1,
-                    cap: 2,
-                    diemKho: "DiemKho A",
-                    key: "1-1",
-                    dtKinhPhi: 10000000,
-                    children: [
-                        {
-                            id: 1,
-                            cap: 3,
-                            loKho: "Lo kho 1",
-                            key: "1-1-1",
-                            time: "30/03/2023",
-                            dtKinhPhi: 5000000,
-                            checked: false
-                        },
-                        {
-                            id: 2,
-                            cap: 3,
-                            loKho: "Lo kho 2",
-                            key: "1-1-2",
-                            time: "28/03/2023",
-                            dtKinhPhi: 5000000,
-                            checked: false
-                        }
-                    ]
-                }
+    tongHopData: any[] = [];
 
-            ]
-        },
+    data: any = {
+        id: 202,
+        ngaytao: null,
+        nguoiTaoId: null,
+        ngaySua: "20/04/2023 19:18:15",
+        nguoiSuaId: 1405,
+        maTongHop: "1",
+        soDeXuat: null,
+        ngayDXuat: null,
+        ngayTongHop: null,
+        trichYeu: "test2",
+        namKeHoach: null,
+        loaiDieuChuyen: "02",
+        thTuNgay: null,
+        thDenNgay: null,
+        trangThai: null,
+        ngayGDuyet: null,
+        nguoiGDuyetId: null,
+        ngayDuyetTp: null,
+        nguoiDuyetTpId: null,
+        ngayDuyetLdc: null,
+        nguoiDuyetLdcId: null,
+        lyDoTuChoi: null,
+        maDvi: "010102",
+        tenDvi: "Cục DTNNKV Vĩnh Phú",
+        tenTrangThai: null,
+        thKeHoachDieuChuyenNoiBoCucDtls: [
+            {
+                id: 2,
+                hdrId: 202,
+                maChiCucDxuat: "01010201",
+                tenChiCucDxuat: "Chi cục Dự trữ Nhà nước Việt Trì",
+                dcnbKeHoachDcHdrId: 162,
+                dcnbKeHoachDcDtlId: 342,
+                dcnbKeHoachDcDtlList: [
+                    {
+                        id: 342,
+                        parentId: 341,
+                        maChiCucNhan: "01010202",
+                        tenChiCucNhan: "Chi cục Dự trữ Nhà nước Phong Châu",
+                        thoiGianDkDc: "2023-04-06",
+                        loaiVthh: "0101",
+                        cloaiVthh: "010101",
+                        tenLoaiVthh: "Thóc tẻ",
+                        tenCloaiVthh: "Hạt rất dài",
+                        donViTinh: "0",
+                        tenDonViTinh: "kg",
+                        tonKho: 76767,
+                        soLuongDc: 1,
+                        duToanKphi: 1,
+                        tichLuongKd: 0,
+                        soLuongPhanBo: 0,
+                        slDcConLai: 0,
+                        coLoKho: true,
+                        maDiemKho: "0101020101",
+                        tenDiemKho: "Điểm kho Phủ Đức",
+                        maNhaKho: "010102010101",
+                        tenNhaKho: "Nhà kho A1",
+                        maNganKho: "01010201010101",
+                        tenNganKho: "Ngăn kho A1/1",
+                        maLoKho: "0101020101010104",
+                        tenLoKho: "Lô kho mới 01",
+                        maDiemKhoNhan: null,
+                        tenDiemKhoNhan: null,
+                        maNhaKhoNhan: null,
+                        tenNhaKhoNhan: null,
+                        maNganKhoNhan: null,
+                        tenNganKhoNhan: null,
+                        maLoKhoNhan: null,
+                        tenLoKhoNhan: null,
+                        coLoKhoNhan: true,
+                        hdrId: 162
+                    }
+                ]
+            },
+            {
+                id: 1,
+                hdrId: 202,
+                maChiCucDxuat: "01010203",
+                tenChiCucDxuat: "Chi cục Dự trữ Nhà nước Việt Trì",
+                dcnbKeHoachDcHdrId: 162,
+                dcnbKeHoachDcDtlId: 342,
+                dcnbKeHoachDcDtlList: [
+                    {
+                        id: 342,
+                        parentId: 341,
+                        maChiCucNhan: "01010202",
+                        tenChiCucNhan: "Chi cục Dự trữ Nhà nước Phong Châu",
+                        thoiGianDkDc: "2023-04-06",
+                        loaiVthh: "0101",
+                        cloaiVthh: "010101",
+                        tenLoaiVthh: "Thóc tẻ",
+                        tenCloaiVthh: "Hạt rất dài",
+                        donViTinh: "0",
+                        tenDonViTinh: "kg",
+                        tonKho: 76767,
+                        soLuongDc: 1,
+                        duToanKphi: 1,
+                        tichLuongKd: 0,
+                        soLuongPhanBo: 0,
+                        slDcConLai: 0,
+                        coLoKho: true,
+                        maDiemKho: "0101020301",
+                        tenDiemKho: "Điểm kho Phủ Đức",
+                        maNhaKho: "010102030101",
+                        tenNhaKho: "Nhà kho A1",
+                        maNganKho: "01010203010101",
+                        tenNganKho: "Ngăn kho A1/1",
+                        maLoKho: "0101020301010104",
+                        tenLoKho: "Lô kho mới 01",
+                        maDiemKhoNhan: null,
+                        tenDiemKhoNhan: null,
+                        maNhaKhoNhan: null,
+                        tenNhaKhoNhan: null,
+                        maNganKhoNhan: null,
+                        tenNganKhoNhan: null,
+                        maLoKhoNhan: null,
+                        tenLoKhoNhan: null,
+                        coLoKhoNhan: true,
+                        hdrId: 162
+                    }
+                ]
+            }
+        ],
+        thKeHoachDieuChuyenCucKhacCucDtls: [
+            {
+                id: 2,
+                maCucNhan: "010103",
+                tenCucNhan: "Cục DTNN KV A",
+                soDxuat: null,
+                ngayDxuat: null,
+                ngayGduyetTc: null,
+                tongDuToanKp: null,
+                trichYeu: null,
+                hdrId: 202,
+                dcnbKeHoachDcHdrId: 161,
+                maChiCucDxuat: "01010201",
+                tenChiCucDxuat: "Chi cục Dự trữ Nhà nước Việt Trì",
+                dcnbKeHoachDcDtlList: [
+                    {
+                        id: 341,
+                        parentId: null,
+                        maChiCucNhan: "01010202",
+                        tenChiCucNhan: "Chi cục Dự trữ Nhà nước Phong Châu",
+                        thoiGianDkDc: "2023-04-06",
+                        loaiVthh: "0101",
+                        cloaiVthh: "010101",
+                        tenLoaiVthh: "Thóc tẻ",
+                        tenCloaiVthh: "Hạt rất dài",
+                        donViTinh: "0",
+                        tenDonViTinh: "kg",
+                        tonKho: 76767,
+                        soLuongDc: 1,
+                        duToanKphi: 1,
+                        tichLuongKd: 0,
+                        soLuongPhanBo: 0,
+                        slDcConLai: 0,
+                        coLoKho: true,
+                        maDiemKho: "0101020101",
+                        tenDiemKho: "Điểm kho Phủ Đức",
+                        maNhaKho: "010102010101",
+                        tenNhaKho: "Nhà kho A1",
+                        maNganKho: "01010201010101",
+                        tenNganKho: "Ngăn kho A1/1",
+                        maLoKho: "0101020101010104",
+                        tenLoKho: "Lô kho mới 01",
+                        maDiemKhoNhan: null,
+                        tenDiemKhoNhan: null,
+                        maNhaKhoNhan: null,
+                        tenNhaKhoNhan: null,
+                        maNganKhoNhan: null,
+                        tenNganKhoNhan: null,
+                        maLoKhoNhan: null,
+                        tenLoKhoNhan: null,
+                        coLoKhoNhan: true,
+                        hdrId: 161
+                    }
+                ]
+            },
+            {
+                id: 3,
+                maCucNhan: "010104",
+                tenCucNhan: "Cục DTNN KV B",
+                soDxuat: null,
+                ngayDxuat: null,
+                ngayGduyetTc: null,
+                tongDuToanKp: null,
+                trichYeu: null,
+                hdrId: 202,
+                dcnbKeHoachDcHdrId: 161,
+                maChiCucDxuat: "01010202",
+                tenChiCucDxuat: "Chi cục Dự trữ Nhà nước Hoàng Liên Sơn",
+                dcnbKeHoachDcDtlList: [
+                    {
+                        id: 341,
+                        parentId: null,
+                        maChiCucNhan: "01010202",
+                        tenChiCucNhan: "Chi cục Dự trữ Nhà nước Phong Châu",
+                        thoiGianDkDc: "2023-04-06",
+                        loaiVthh: "0101",
+                        cloaiVthh: "010101",
+                        tenLoaiVthh: "Thóc tẻ",
+                        tenCloaiVthh: "Hạt rất dài",
+                        donViTinh: "0",
+                        tenDonViTinh: "kg",
+                        tonKho: 76767,
+                        soLuongDc: 1,
+                        duToanKphi: 1,
+                        tichLuongKd: 0,
+                        soLuongPhanBo: 0,
+                        slDcConLai: 0,
+                        coLoKho: true,
+                        maDiemKho: "0101020101",
+                        tenDiemKho: "Điểm kho Phủ Đức",
+                        maNhaKho: "010102010101",
+                        tenNhaKho: "Nhà kho A1",
+                        maNganKho: "01010201010101",
+                        tenNganKho: "Ngăn kho A1/1",
+                        maLoKho: "0101020101010104",
+                        tenLoKho: "Lô kho mới 01",
+                        maDiemKhoNhan: null,
+                        tenDiemKhoNhan: null,
+                        maNhaKhoNhan: null,
+                        tenNhaKhoNhan: null,
+                        maNganKhoNhan: null,
+                        tenNganKhoNhan: null,
+                        maLoKhoNhan: null,
+                        tenLoKhoNhan: null,
+                        coLoKhoNhan: true,
+                        hdrId: 161
+                    }
+                ]
+            }
+        ]
+    }
 
-        {
-            id: 2,
-            tenChiCuc: "Chi cục 2",
-            diemKho: "",
-            cap: 1,
-            key: "2",
-            children: [
-                {
-                    id: 1,
-                    cap: 2,
-                    diemKho: "DiemKho A",
-                    key: "2-1",
-                    children: [
-                        {
-                            id: 1,
-                            cap: 3,
-                            loKho: "Lo kho 1",
-                            key: "2-1-1",
-                            time: "12/02/2023",
-                            checked: false,
-                        },
-                        {
-                            id: 2,
-                            cap: 3,
-                            loKho: "Lo kho 2",
-                            key: "2-1-2",
-                            time: "15/02/2023",
-                            checked: false
-                        }
-                    ]
-                },
-                {
-                    id: 2,
-                    cap: 2,
-                    diemKho: "DiemKho B",
-                    key: "2-2",
-                    children: [
-                        {
-                            id: 3,
-                            cap: 3,
-                            loKho: "Lo kho 1",
-                            key: "2-2-2",
-                            time: "20/02/2023",
-                            checked: false
-                        },
-                    ]
-                }
-
-            ]
-        },
-        {
-            id: 3,
-            tenChiCuc: "Chi cục 3",
-            diemKho: "",
-            cap: 1,
-            key: "3",
-            children: []
-        }
-
-    ];
-    dataTableDsDCCuc: any[] = [
-        {
-            id: 1, ten: "Cục dự trữ khu vực A", soCongVan: "576/KH-CDTVP", ngayTrinhKy: "10/03/2023", tongKinhPhi: 10000000, trichYeu: ""
-        },
-        {
-            id: 1, ten: "Cục dự trữ khu vực B", soCongVan: "576/KH-CDTVP", ngayTrinhKy: "10/03/2023", tongKinhPhi: 10000000, trichYeu: ""
-        },
-        {
-            id: 1, ten: "Cục dự trữ khu vực C", soCongVan: "576/KH-CDTVP", ngayTrinhKy: "10/03/2023", tongKinhPhi: 10000000, trichYeu: ""
-        },
-        {
-            id: 1, ten: "Cục dự trữ khu vực D", soCongVan: "576/KH-CDTVP", ngayTrinhKy: "10/03/2023", tongKinhPhi: 10000000, trichYeu: ""
-        },
-    ];
-
-    dataTableChiCuc: any[] = [
-        {
-            id: 1, key: '1', tenChiCuc: "Chi cục A", children: [
-                {
-                    id: 1, key: '1-1', diemKho: 'Điểm kho A', loKho: 'Lô 1 - Ngăn A1/1', tenChiCucDen: "Chi cục G"
-                },
-                {
-                    id: 2, key: '1-2', diemKho: 'Điểm kho B', loKho: 'Lô 1 - Ngăn A2/1', tenChiCucDen: "Chi cục G"
-                },
-                {
-                    id: 3, key: '1-3', diemKho: 'Điểm kho C', loKho: 'Lô 1 - Ngăn A3/1', tenChiCucDen: "Chi cục G"
-                },
-            ]
-        },
-        {
-            id: 2, key: '2', tenChiCuc: "Chi cục A", children: [
-                {
-                    id: 4, key: '2-4', diemKho: 'Điểm kho D', loKho: 'Lô 2 - Ngăn B1/2', tenChiCucDen: "Chi cục G"
-                },
-                {
-                    id: 5, key: '2-5', diemKho: 'Điểm kho E', loKho: 'Lô 2 - Ngăn B2/2', tenChiCucDen: "Chi cục G"
-                },
-                {
-                    id: 6, key: '2-6', diemKho: 'Điểm kho F', loKho: 'Lô 2 - Ngăn B3/2', tenChiCucDen: "Chi cục G"
-                },
-            ]
-        },
-    ]
-    mapExpandDataTable: any = [];
-    mapExpanDataTableChiCuc: any = [];
+    dataTable2ChiCuc: any[];
+    dataTable2Cuc: any[];
+    dataCuc: any[];
 
     constructor(httpClient: HttpClient,
         storageService: StorageService,
@@ -268,7 +367,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                 ngayDx: [''],
                 ngayKetThuc: [''],
                 noiDungDx: [''],
-                trangThai: [STATUS.DU_THAO],
+                trangThai: [''],
                 idQdPd: [''],
                 soQdPd: [''],
                 tongSoLuong: [0],
@@ -283,12 +382,12 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                 tenCloaiVthh: [''],
                 donViTinh: [''],
                 soLuongXuatCap: [''],
-                tenTrangThai: ['Dự Thảo'],
+                tenTrangThai: [''],
                 deXuatPhuongAn: [new Array()],
 
                 canCu: [new Array<FileDinhKem>()],
                 lyDoDc: [''],
-                type: ['TC'],
+                type: ['ALL'],
                 thoiGianTongHop: [''],
 
                 maTongHop: [''],
@@ -303,8 +402,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     }
 
     async ngOnInit() {
-        this.mapExpandDataTable = this.mapExpanData(this.dataTable);
-        this.mapExpanDataTableChiCuc = this.mapExpanData(this.dataTableChiCuc)
+
         if (this.isEdit || this.isViewDetail) {
             this.isTongHop = true
         }
@@ -358,10 +456,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         }
         return children
     }
-    mapExpanData = (list: any[] = []) => {
+    mapExpanData = (list: any[] = [], key: string = "children") => {
         let result = list.map(f => {
-            if (Array.isArray(f.children) && f.children.length > 0) {
-                return { ...f, expand: true, children: this.mapExpanData(f.children) }
+            if (Array.isArray(f[key]) && f[key].length > 0) {
+                return { ...f, expand: true, [key]: this.mapExpanData(f[key], key) }
             }
             return { ...f }
         });
@@ -371,7 +469,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         this.isTongHop = false;
         this.formData.patchValue({ thoiGianTongHop: '' })
     }
-    yeuCauChiCucNhan = () => {
+    yeuCauChiCucNhan = ($event) => {
+        $event.stopPropagation();
         //call api yêu cầu chi cục xác định điểm nhập
         this.yeuCauSuccess = true;
     }
@@ -395,8 +494,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
 
     async selectRow(item: any) {
-        if (this.dataTableDsDCCuc.length > 0) {
-            this.dataTableDsDCCuc.forEach(i => i.selected = false);
+        if (this.dataCuc.length > 0) {
+            this.dataCuc.forEach(i => i.selected = false);
             item.selected = true;
             //   this.idHopDong = cloneDeep(item.id);
             //   this.isView = true;
@@ -435,12 +534,103 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         }
         await this.spinner.hide();
     }
-    tongHop() {
+    async tongHop() {
         this.isTongHop = true;
         this.yeuCauSuccess = false;
         const thoiGianTongHop = dayjs().format("YYYY-MM-DD HH:mm:ss")
         this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
+        // const data = await this.createUpdate({ loaiDieuChuyen: this.formData.value.loaiDieuChuyen });
+        // if (data) {
+        //     this.tongHopData = Array.isArray(data) ? data : [];
+        // }
+        this.tongHopData = cloneDeep(this.data);
+        this.convertTongHop(this.tongHopData)
+
         // call api tổng hợp dữ liệu
+    }
+    convertTongHop(data) {
+        const buildData2ChiCuc = this.buildTableView(data.thKeHoachDieuChuyenNoiBoCucDtls?.reduce((arr, cur) => {
+            return arr.concat(cur.dcnbKeHoachDcDtlList.map(f => ({ ...f, maChiCucDxuat: cur.maChiCucDxuat, tenChiCucDxuat: cur.tenChiCucDxuat })))
+        }, []));
+        this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
+        this.dataCuc = this.data.thKeHoachDieuChuyenCucKhacCucDtls.map(f => ({
+            maCucNhan: f.maCucNhan,
+            tenCucNhan: f.tenCucNhan,
+            id: f.id
+        }))
+        this.dataTable2Cuc = this.mapExpanData(data.thKeHoachDieuChuyenCucKhacCucDtls.map(f => ({ ...f, duToanKphi: f.dcnbKeHoachDcDtlList.reduce((sum, cur) => sum += cur.duToanKphi, 0) })), "dcnbKeHoachDcDtlList");
+        console.log(this.dataTable2Cuc, this.dataCuc, this.dataTable2ChiCuc)
+    }
+    buildTableView(data) {
+        let dataView = chain(data)
+            .groupBy("maChiCucDxuat")
+            .map((value, key) => {
+                let rs = chain(value)
+                    .groupBy("maDiemKho")
+                    .map((v, k) => {
+                        let rss = chain(v)
+                            .groupBy("maLoKho")
+                            .map((vs, ks) => {
+                                let maLoKho = vs.find(s => s.maLoKho === ks);
+                                let khoNhan = vs.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
+                                let rsss = chain(khoNhan)
+                                    .groupBy("maNhaKhoNhan")
+                                    .map((vss, kss) => {
+                                        let maNhaKhoNhan = vss.find(s => s.maNhaKhoNhan === kss);
+                                        return {
+                                            ...maNhaKhoNhan,
+                                            idVirtual: maNhaKhoNhan ? maNhaKhoNhan.idVirtual ? maNhaKhoNhan.idVirtual : uuid.v4() : uuid.v4(),
+                                            children: vss
+                                        }
+                                    }
+                                    ).value();
+                                return {
+                                    ...maLoKho,
+                                    idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                                    maDiemKhoNhan: "",
+                                    tenDiemKhoNhan: "",
+                                    maNhaKhoNhan: "",
+                                    tenNhaKhoNhan: "",
+                                    maNganKhoNhan: "",
+                                    tenNganKhoNhan: "",
+                                    coLoKhoNhan: true,
+                                    maLoKhoNhan: "",
+                                    tenLoKhoNhan: "",
+                                    soLuongPhanBo: 0,
+                                    tichLuongKd: 0,
+                                    slDcConLai: 0,
+                                    children: rsss
+                                }
+                            }
+                            ).value();
+                        let duToanKphi = v.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        let rowDiemKho = v.find(s => s.maDiemKho === k);
+
+                        return {
+                            ...rowDiemKho,
+                            idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
+                            duToanKphi: duToanKphi,
+                            children: rss
+                        }
+                    }
+                    ).value();
+
+                let duToanKphi = rs.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let rowChiCuc = value.find(s => s.maChiCucDxuat === key);
+                return {
+                    ...rowChiCuc,
+                    idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
+                    duToanKphi: duToanKphi,
+                    children: rs
+                };
+            }).value();
+        // this.tableView = dataView;
+        // this.expandAll()
+
+        if (data.length !== 0) {
+            this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+        }
+        return dataView
     }
     async saveAndSend(message: string) {
         this.setValidator();
