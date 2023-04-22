@@ -87,7 +87,9 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       vat: ['5'],
       ghiChu: ['',],
       trangThai: [''],
-      tenTrangThai: ['']
+      tenTrangThai: [''],
+      tenLoaiHinhNx: [''],
+      tenKieuNx: [''],
     });
   }
   idGoiThau: number = 0;
@@ -107,6 +109,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   formData: FormGroup
   dataTable: any[] = [];
   dataDetail: any;
+  sumDataSoLuong: any[] = [];
 
   danhsachDx: any[] = [];
   listOfData: any[] = [];
@@ -222,7 +225,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         soQdPdKhlcnt: data.soQd,
         trangThai: data.trangThaiDt,
         tenTrangThai: data.tenTrangThaiDt,
-        tenNguonVon: data.tenNguonVon,
+        tenNguonVon: data.children[0].dxuatKhLcntHdr.nguonVon,
         tenHthucLcnt: data.tenHthucLcnt,
         tenPthucLcnt: data.tenPthucLcnt,
         tenLoaiHdong: data.tenLoaiHdong,
@@ -232,7 +235,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenCloaiVthh: data.tenCloaiVthh,
         soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDvi: data.tenDvi,
-        tenDuAn: data.children[0].tenDuAn,
+        tenDuAn: data.children[0].dxuatKhLcntHdr.tenDuAn,
         tongMucDt: tongMucDt,
         tongMucDtGoiTrung: tongMucDtTrung,
         hthucLcnt: data.hthucLcnt,
@@ -248,7 +251,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tgianDthau: formatDate(data.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianMthau: formatDate(data.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianNhang: data.tgianNhang == null ? null : formatDate(data.tgianNhang, "dd/MM/yyyy", 'en-US'),
-
+        tenLoaiHinhNx: data.tenLoaiHinhNx,
+        tenKieuNx: data.tenKieuNx,
       })
       this.danhsachDx = data.children;
       console.log(this.danhsachDx)
@@ -298,6 +302,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tgianDthau: formatDate(data.dxuatKhLcntHdr.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianMthau: formatDate(data.dxuatKhLcntHdr.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
         tgianNhang: formatDate(data.dxuatKhLcntHdr.tgianNhang, "dd/MM/yyyy", 'en-US'),
+        tenLoaiHinhNx: data.dxuatKhLcntHdr.tenLoaiHinhNx,
+        tenKieuNx: data.dxuatKhLcntHdr.tenKieuNx,
       });
       this.formData.patchValue({
         trangThai: data.trangThai,
@@ -360,7 +366,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         return self.findIndex(v => v.id === value.id) === index;
       });
     });
-
+    console.log(this.listDataDetail)
   }
 
 
@@ -371,6 +377,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     } else {
       this.expandSet.delete(id);
     }
+  }
+
+  sumSluong(data: any) {
+    this.sumDataSoLuong = []
+    data.forEach(item => {
+      if (item.soLuong) {
+
+      }
+    })
   }
 
   async phuongThucDauThauGetAll() {

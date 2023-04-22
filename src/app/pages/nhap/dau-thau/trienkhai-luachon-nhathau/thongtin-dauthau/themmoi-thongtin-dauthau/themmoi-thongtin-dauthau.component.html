@@ -135,7 +135,8 @@
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT</nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
+                                    HSMT)</nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
                                         <input nz-input formControlName="tgianBdauTchuc" readonly />
@@ -201,7 +202,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col nzSpan="24">
+                        <div nz-col nzSpan="24" *ngIf="!loaiVthh.startsWith('02')">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                 <nz-form-control>
@@ -209,7 +210,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col nzSpan="24">
+                        <!-- <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Đơn giá VAT (đ/kg) </nz-form-label>
                                 <nz-form-control>
@@ -220,7 +221,7 @@
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
-                        </div>
+                        </div> -->
                         <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Thuế VAT (%) </nz-form-label>
@@ -269,6 +270,26 @@
                                 <nz-form-control>
                                     <nz-input-group>
                                         <input nz-input formControlName="tgianNhang" nzFormat="dd/MM/yyyy" readonly />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                                <nz-form-control>
+                                    <nz-input-group>
+                                        <input nz-input formControlName="tenLoaiHinhNx" readonly />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                                <nz-form-control>
+                                    <nz-input-group>
+                                        <input nz-input formControlName="tenKieuNx" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
