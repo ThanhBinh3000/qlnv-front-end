@@ -12,13 +12,22 @@
           <label class="search__label">Số quyết định</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="10">
           <label class="search__label">Trích yếu</label>
           <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="5">
           <label class="search__label">Ngày ký</label>
-          <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký từ" [(ngModel)]="searchFilter.ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+            <div nz-col nzSpan="1">
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-date-picker nzPlaceHolder="Ngày ký đến" [(ngModel)]="searchFilter.ngayKyDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Trạng thái</label>
@@ -144,7 +153,7 @@
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : null  }}</td>
           <td>{{ data.soQuyetDinh }}</td>
           <td>{{ data.ngayKyBtc | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.phuongAnTc }}</td>
+          <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.phuongAnTc }}</a></td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
@@ -190,3 +199,18 @@
                                [isViewDetail]="isViewDetail"></app-them-moi-qd-phe-duyet>
   </div>
 </ng-template>
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewTh" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent>
+    <app-them-moi-tong-hop-khxd-trung-han
+      [idInput]="idTongHop" (showListEvent)="showList()" [isViewQd]="true"
+      [isViewDetail]="isViewTh"
+    ></app-them-moi-tong-hop-khxd-trung-han>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

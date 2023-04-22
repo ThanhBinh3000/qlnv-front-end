@@ -59,16 +59,21 @@ export class ThemSuaMuaTangComponent implements OnInit {
   ngOnInit(): void {
     this.initFormDataDetail();
     if (this.actionType == 'them') {
+      let slDaThem = 0;
+      if (this.dataTable && this.dataTable.length > 0) {
+        slDaThem = this.dataTable.reduce((accumulator, object) => {
+          return accumulator + object.soLuongDuToan ? object.soLuongDuToan : object.soLuong;
+        }, 0);
+      }
       this.formItem.patchValue({
         tenVthh: this.itemInput.tenVthh,
-        soLuong: this.soLuong
+        soLuong: this.soLuong - slDaThem
       })
       this.onChangeLoaiVthh(this.formItem.value.tenVthh, 'them');
     } else {
       this.formItem.patchValue(this.itemInput);
-      this.onChangeLoaiVthh(this.formItem.value.tenVthh);
+      this.onChangeLoaiVthh(this.formItem.value.tenVthh, 'sua');
     }
-
   }
 
   initFormDataDetail() {
@@ -98,12 +103,15 @@ export class ThemSuaMuaTangComponent implements OnInit {
       let dsCloaiHangHoa = loaiVthh.child;
       this.dsChungLoaiHangHoa = dsCloaiHangHoa;
       //Loại những chủng loại đã được thêm cho item bố
+      let uniqueList = [];
       if (type && type == 'them') {
         if (this.itemInput && this.itemInput.dataChild && this.itemInput.dataChild.length > 0) {
-          const uniqueList = this.itemInput.dataChild.filter(item1 => !dsCloaiHangHoa.some(item2 => item1.cloaiVthh === item2.key));
+          uniqueList = this.itemInput.dataChild.filter(item1 => !dsCloaiHangHoa.some(item2 => item1.cloaiVthh === item2.key));
           uniqueList.push(...dsCloaiHangHoa.filter(item2 => !this.itemInput.dataChild.some(item1 => item1.cloaiVthh === item2.key)));
-          this.dsChungLoaiHangHoa = uniqueList;
+        } else {
+          uniqueList = dsCloaiHangHoa;
         }
+        this.dsChungLoaiHangHoa = uniqueList;
       }
     }
   }
@@ -113,6 +121,10 @@ export class ThemSuaMuaTangComponent implements OnInit {
     if (cloaiVthh) {
       this.formItem.patchValue({
         tenCloaiVthh: cloaiVthh.ten
+      })
+    } else {
+      this.formItem.patchValue({
+        tenCloaiVthh: null
       })
     }
   }
@@ -133,6 +145,9 @@ export class ThemSuaMuaTangComponent implements OnInit {
     if (this.actionType == 'them') {
       this.formItem.controls['cloaiVthh'].setValidators([Validators.required]);
       this.formItem.controls['tenCloaiVthh'].setValidators([Validators.required])
+      this.formItem.patchValue({
+        soLuong: this.formItem.value.soLuongDuToan
+      })
     } else {
       if (this.itemInput && !this.itemInput.dataChild && !this.itemInput.cloaiVthh) {
         this.formItem.controls['cloaiVthh'].setValidators(null);

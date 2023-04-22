@@ -86,7 +86,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="dviThongTri" [nzDisabled]="isView" (ngModelChange)="changeDonVi()">
+              <nz-select nzAllowClear formControlName="dviThongTri" [nzDisabled]="isView" (ngModelChange)="changeDonVi()">
                 <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
             </nz-form-control>
