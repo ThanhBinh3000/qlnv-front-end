@@ -471,11 +471,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   async changeMaTongHop() {
     let selected = this.formData.get('soDnCapVon').value;
     this.dsBoNganh = [];
-    /*this.formData.patchValue({
-      dviThongTri: null
-    })*/
     if (selected) {
-      let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
+      let res = await this.tongHopDeNghiCapVonService.loadChiTiet(selected);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let map = res.data.ct1s.map(s => s.maBn);
         if (map.includes('BTC')) {
@@ -500,7 +497,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.formData.patchValue({
           "dviThuHuong": this.listDviThuHuong[0].id,
         })
-        console.log(this.listDviThuHuong, 'this.listDviThuHuong');
       } else {
         let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
           maBoNganh: this.formData.value.dviThongTri,
