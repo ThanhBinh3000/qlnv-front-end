@@ -16,6 +16,7 @@ import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
+import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ke-hoach',
@@ -29,6 +30,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   STATUS = STATUS;
   selectedId: number = 0;
+  idTongHop: number = 0;
+  isViewTh : boolean;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
@@ -72,6 +75,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     public userService: UserService,
     private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
+    private tongHopTrungHanService: TongHopKhTrungHanService
   ) {
   }
 
@@ -344,6 +348,30 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       result = dayjs(event).format('DD/MM/YYYY').toString()
     }
     return result;
+  }
+
+  async openModalCttongHop(data : any) {
+    let body = {
+      namKeHoach : data.namKeHoach,
+      paggingReq: {
+        limit: 100,
+        page: this.page - 1,
+      }
+    };
+    let res = await this.tongHopTrungHanService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let listData = res.data.content;
+      let result = listData.filter(item => item.maToTrinh == data.phuongAnTc);
+      if (result && result.length > 0) {
+        this.idTongHop = result[0].id;
+        this.isViewTh = true;
+      }
+    }
+  }
+
+  closeDxPaModal() {
+    this.idTongHop = null;
+    this.isViewTh = false;
   }
 }
 

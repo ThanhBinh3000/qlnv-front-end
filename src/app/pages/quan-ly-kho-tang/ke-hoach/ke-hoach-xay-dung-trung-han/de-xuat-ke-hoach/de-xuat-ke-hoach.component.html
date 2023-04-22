@@ -187,7 +187,7 @@
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : '' }}</td>
           <td>{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
           <td>{{data.trichYeu}}</td>
-          <td>{{data.maTongHop}}</td>
+          <td> <a nz-button nzType="link" (click)="openModalCttongHop(data.maTongHop)">{{ data.maTongHop }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)">
@@ -232,3 +232,19 @@
                                  [isViewDetail]="isViewDetail"></app-them-moi-dxkh-trung-han>
   </div>
 </ng-template>
+
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewTh" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent>
+    <app-them-moi-tong-hop-khxd-trung-han
+      [idInput]="idTongHop" (showListEvent)="showList()" [isViewQd]="true"
+      [isViewDetail]="isViewTh"
+    ></app-them-moi-tong-hop-khxd-trung-han>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
