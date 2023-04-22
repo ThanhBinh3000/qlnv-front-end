@@ -43,6 +43,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() loaiVthh: string;
   @Input() idKqBdg: number;
   @Input() isQuanLy: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isView: boolean;
