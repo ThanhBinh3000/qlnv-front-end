@@ -584,7 +584,7 @@ export class ThongTinTonghopComponent implements OnInit {
         soDeNghi: null,
         maBoNganh: null,
         nam:this.formData.get('nam').value,
-        trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+        trangThai: STATUS.DA_HOAN_THANH,
         type: 'TH',
         loaiTh: nguonTongHopId,
         trangThaiTh: STATUS.CHUA_TONG_HOP,

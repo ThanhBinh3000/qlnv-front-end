@@ -101,6 +101,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
   idQdKq: number = 0;
   openQdKqKhlcnt = false;
   idQdPdKq: number = 0;
+  soQdPdKq: string;
   openQdPdKqKhlcnt = false;
 
   async ngOnInit() {
@@ -167,7 +168,6 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable);
       this.totalRecord = data.totalElements;
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {
@@ -447,13 +447,18 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     this.openQdKqKhlcnt = false;
   }
 
-  openQdPdKqKhlcntModal(id?: number) {
-    this.idQdPdKq = id;
+  openQdPdKqKhlcntModal(id?: number, soQd?: string) {
+    if (soQd) {
+      this.soQdPdKq = soQd
+    } else {
+      this.idQdPdKq = id;
+    }
     this.openQdPdKqKhlcnt = true;
   }
 
   closeQdPdKqKhlcntModal() {
     this.idQdPdKq = null;
+    this.soQdPdKq = null;
     this.openQdPdKqKhlcnt = false;
   }
 }

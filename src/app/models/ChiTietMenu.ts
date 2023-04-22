@@ -16,6 +16,8 @@ export class ChiTietMenu {
     dropdown: string;
     idHover: string;
     hasTab: boolean;
+    caps?: any [];
+    accessPermisson?: string;
     children?: Array<ChiTietMenuItem>;
 }
 

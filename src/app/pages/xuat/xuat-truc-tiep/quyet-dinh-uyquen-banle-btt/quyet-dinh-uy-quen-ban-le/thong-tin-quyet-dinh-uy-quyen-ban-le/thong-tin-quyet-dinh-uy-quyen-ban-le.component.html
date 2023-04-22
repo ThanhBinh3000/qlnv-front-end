@@ -8,7 +8,8 @@
             <i class=" icon htvbdh_dau-cong"></i>
             <span>Thêm Hợp đồng</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light" *ngIf=" radioValue == 'Bán lẻ'">
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="themMoiBangKeBanLe($event)"
+            *ngIf="radioValue == 'Bán lẻ'">
             <i class=" icon htvbdh_dau-cong"></i>
             <span>Thêm bảng kê</span>
         </button>

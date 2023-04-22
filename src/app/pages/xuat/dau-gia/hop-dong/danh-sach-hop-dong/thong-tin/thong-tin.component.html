@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isViewPhuLuc">
-  <nz-affix *ngIf="!isQuanLy" [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+  <nz-affix *ngIf="!isQuanLy && !isViewOnModal" [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
     <div class="btn-group">
       <button type="button" class="btn btn-sub" (click)="goBack()">
         <i class="fa fa-arrow-left"></i>

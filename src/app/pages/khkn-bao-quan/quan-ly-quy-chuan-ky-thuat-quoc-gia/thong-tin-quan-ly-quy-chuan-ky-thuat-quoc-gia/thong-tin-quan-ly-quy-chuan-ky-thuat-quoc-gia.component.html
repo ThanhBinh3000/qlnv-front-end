@@ -130,7 +130,7 @@
               </nz-form-label>
               <nz-select [nzDisabled]="listVanBanId > 0 || isView || dataTable.length > 0" nzMode="tags"
                          nzPlaceHolder=""
-                         [(ngModel)]="listOfTagOptions" (ngModelChange)="changeListOfTagOptions($event, true)"
+                         [(ngModel)]="listOfTagOptions" (ngModelChange)="changeListOfTagOptions($event)"
                          [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenHangHoa"
                            [nzValue]="option.maHangHoa">

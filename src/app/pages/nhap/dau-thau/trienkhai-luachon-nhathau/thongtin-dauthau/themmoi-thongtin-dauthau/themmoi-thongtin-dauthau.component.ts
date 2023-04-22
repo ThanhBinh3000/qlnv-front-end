@@ -207,6 +207,16 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
+      let tongMucDt = 0
+      let tongMucDtTrung = 0
+      let donGiaVat = 0;
+      data.children.forEach(item => {
+        if (item.trangThai == STATUS.THANH_CONG) {
+          tongMucDtTrung += item.soLuong * item.donGiaNhaThau
+          tongMucDt += item.soLuong * (item.donGiaTamTinh ? item.donGiaTamTinh : item.donGiaVat)
+          donGiaVat = item.donGiaVat
+        }
+      })
       this.formData.patchValue({
         namKhoach: data.namKhoach,
         soQdPdKhlcnt: data.soQd,
@@ -220,8 +230,29 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenLoaiVthh: data.tenLoaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
+        soQdPdKqLcnt: data.soQdPdKqLcnt,
+        tenDvi: data.tenDvi,
+        tenDuAn: data.children[0].tenDuAn,
+        tongMucDt: tongMucDt,
+        tongMucDtGoiTrung: tongMucDtTrung,
+        hthucLcnt: data.hthucLcnt,
+        pthucLcnt: data.pthucLcnt,
+        loaiHdong: data.loaiHdong,
+        gtriDthau: data.gtriDthau,
+        gtriHdong: data.gtriHdong,
+        donGiaVat: data.children[0].donGiaVat,
+        soLuong: data.children[0].soLuong,
+        soGthau: data.soGthau,
+        soGthauTrung: data.soGthauTrung,
+        tgianBdauTchuc: formatDate(data.tgianBdauTchuc, "dd/MM/yyyy", 'en-US'),
+        tgianDthau: formatDate(data.tgianDthau, "HH:mm dd/MM/yyyy", 'en-US'),
+        tgianMthau: formatDate(data.tgianMthau, "HH:mm dd/MM/yyyy", 'en-US'),
+        tgianNhang: data.tgianNhang == null ? null : formatDate(data.tgianNhang, "dd/MM/yyyy", 'en-US'),
+
       })
       this.danhsachDx = data.children;
+
+      this.showFirstRow(event, this.danhsachDx)
     }
   }
 
@@ -230,7 +261,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.donGiaVatObject = res.data
-      console.log("getDetailDtlCuc", res.data)
       let tongMucDtTrung = 0
       let tongMucDt = 0
       data.children.forEach(item => {
@@ -284,7 +314,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   async showFirstRow($event, dataGoiThau: any) {
     // for (let j = 0; dataGoiThau.length > 0 ; j++) {
     //   for (let k = 0; dataGoiThau[0].dataChild.length > 0; k++) {
-    await this.showDetail($event, dataGoiThau[0].dataChild[0]);
+    if (this.loaiVthh.startsWith('02')) {
+      await this.showDetail($event, dataGoiThau[0].children[0]);
+    } else {
+      await this.showDetail($event, dataGoiThau[0].dataChild[0]);
+    }
+
     // }
     // }
 
@@ -326,7 +361,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       });
     });
 
-    console.log("3", this.listDataDetail);
   }
 
 
@@ -462,17 +496,17 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   async showDetail($event, dataGoiThau: any) {
-    console.log(dataGoiThau);
     await this.spinner.show();
     this.listNthauNopHs = [];
     if ($event.type == 'click') {
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow')
       this.selected = false;
+      this.idGoiThau = dataGoiThau.id;
     } else {
       this.selected = true;
+      this.loaiVthh.startsWith('02') ? this.idGoiThau = dataGoiThau.idQdDtl : this.idGoiThau = dataGoiThau.id;
     }
-    this.idGoiThau = dataGoiThau.id;
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {
       this.itemRow.soLuong = dataGoiThau.soLuong;

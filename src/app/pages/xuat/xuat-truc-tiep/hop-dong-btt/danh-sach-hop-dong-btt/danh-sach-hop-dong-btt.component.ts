@@ -78,6 +78,7 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
         maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        trangThai: this.STATUS.BAN_HANH
       })
     } else {
       this.formData.patchValue({

@@ -96,7 +96,8 @@
           <tr>
             <th width="45px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate" nzDisabled="userService.isChiCuc()"></label>
+                [nzIndeterminate]="indeterminate"
+                [nzDisabled]="loaiVthh == '02' ? !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
             <th class="text-center" style="width: 7%;">Số kế hoạch/tờ trình</th>

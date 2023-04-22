@@ -33,22 +33,17 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
+  userInfo: UserLogin;
   maQd: string;
   expandSet = new Set<number>();
 
   STATUS = STATUS;
   dataTable: any[] = [];
   dataTableRes: any[] = [];
-  dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
   rowItemCha: DanhMucKho = new DanhMucKho();
-  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listNam: any[] = [];
-  userInfo: UserLogin;
   listFileDinhKem: any[] = [];
-  listDmKho: any[] = [];
-  listLoaiDuAn: any[] = [];
   listKhoi: any[] = [];
 
 
@@ -139,10 +134,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
-  }
-
   xoaItem(index: number) {
     this.modal.confirm({
       nzClosable: false,
@@ -173,7 +164,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
-    if (isGuiDuyet) {
+    if (isGuiDuyet || this.idInput > 0) {
       this.setValidators();
     }
     this.helperService.markFormGroupTouched(this.formData);
@@ -187,6 +178,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.chiTietsReq = this.dataTableRes;
     body.maDvi = this.userInfo.MA_DVI;
+    body.tmdt = this.sumSoLuong(null, 'tmdtDuKien' , true);
     body.fileDinhKems = this.listFileDinhKem;
     let res;
     if (this.idInput > 0) {
@@ -195,17 +187,21 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       res = await this.dxTrungHanService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      this.idInput = res.data.id
-      this.formData.patchValue({
-        id: res.data.id,
-        trangThai: res.data.trangThai
-      });
       if (isGuiDuyet) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        });
         this.guiDuyet();
       } else {
         if (this.idInput > 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
+          this.idInput = res.data.id
+          this.formData.patchValue({
+            id: res.data.id,
+            trangThai: res.data.trangThai
+          });
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
       }
@@ -414,8 +410,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzStyle: { top: "200px" },
         nzFooter: null,
         nzComponentParams: {
+          dataTable : list && list.dataChild ? list.dataChild : []  ,
           dataInput: data,
-          type: type
+          type: type,
+          page : "DXTH"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -440,6 +438,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   themItemcha() {
+    if (!this.rowItemCha.khoi) {
+      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+      return;
+    }
     if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
       return;
@@ -486,13 +488,21 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;
-    if (type) {
+    if (!type) {
       if (data && data.dataChild && data.dataChild.length > 0) {
         const sum = data.dataChild.reduce((prev, cur) => {
           prev += cur[row];
           return prev;
         }, 0);
-        return sum;
+        sl = sum;
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        let sum = 0;
+        this.dataTable.forEach(item => {
+           sum +=  this.sumSoLuong(item, row)
+        })
+        sl = sum;
       }
     }
     return sl;

@@ -219,6 +219,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     }
   }
 
+  isDisabledBb() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
   async initForm() {
     let id = await this.userService.getId('XH_PHIEU_KNGHIEM_CLUONG_SEQ')
     this.formData.patchValue({
@@ -292,20 +300,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     data.loaiDaiDien = type;
     let body = cloneDeep(data);
     this.dataTable.push(body);
-    // if (!this.listDaiDien) {
-    //   this.listDaiDien = [];
-    // }
-    // if (type) {
-    //   let item = {
-    //     bbLayMauId: null,
-    //     daiDien: null,
-    //     id: null,
-    //     idTemp: new Date().getTime(),
-    //     loaiDaiDien: type,
-    //   };
-    //   this.listDaiDien = [item, ...this.listDaiDien];
-    //   this.loadDaiDien();
-    // }
   }
 
   async save(isGuiDuyet?: boolean) {
@@ -321,7 +315,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         this.id = data.id
         this.pheDuyet(true);
       } else {
-        this.goBack();
+        // this.goBack();
       }
     }
   }
@@ -373,20 +367,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     })
   }
 
-  getNameFile(event?: any) {
-    // const element = event.currentTarget as HTMLInputElement;
-    // const fileList: FileList | null = element.files;
-    // if (fileList) {
-    //   this.nameFile = fileList[0].name;
-    // }
-    // this.formData.patchValue({
-    //   file: event.target.files[0] as File,
-    // });
-    // if (this.dataCanCuXacDinh) {
-    //   this.formTaiLieuClone.file = this.nameFile;
-    //   this.isSave = !isEqual(this.formTaiLieuClone, this.formTaiLieu);
-    // }
-  }
 
   cancelEdit(index: number): void {
     this.dataTable[index].edit = false;
