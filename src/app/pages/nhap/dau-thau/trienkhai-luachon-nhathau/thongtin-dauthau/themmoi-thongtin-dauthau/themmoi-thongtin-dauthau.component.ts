@@ -251,7 +251,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
       })
       this.danhsachDx = data.children;
-
+      console.log(this.danhsachDx)
       this.showFirstRow(event, this.danhsachDx)
     }
   }

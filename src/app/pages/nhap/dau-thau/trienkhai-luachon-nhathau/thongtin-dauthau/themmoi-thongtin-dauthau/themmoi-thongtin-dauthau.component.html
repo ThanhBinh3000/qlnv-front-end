@@ -419,7 +419,7 @@
                         <tr (click)="showDetail($event,item)" [ngClass]="{'bg-selected': this.selected && i == 0}">
                             <td></td>
                             <td>{{item.goiThau}}</td>
-                            <td>{{item.cloaiVthh}}</td>
+                            <td>{{item.tenCloaiVthh}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -435,10 +435,9 @@
                             <td class="text-right">{{item.soLuong * item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'
                                 }}
                             </td>
-                            <td class="text-right">{{(item.donGiaVat != null ? (item.donGiaNhaThau - item.donGiaVat)
-                                * item.soLuong :
-                                (item.donGiaTamTinh != null ? (item.donGiaNhaThau - item.donGiaTamTinh) *
-                                item.soLuong : 0)) | number:
+                            <td class="text-right">{{item.trangThai == 40 ? abs((item.donGiaVat != null ?
+                                (item.donGiaNhaThau - item.donGiaVat) * item.soLuong : (item.donGiaTamTinh != null ?
+                                (item.donGiaNhaThau - item.donGiaTamTinh) * item.soLuong : 0))) : 0 | number:
                                 '1.0-1' : 'vi_VN' }} </td>
                             <td>{{item.tenTrangThai}}</td>
                         </tr>
@@ -460,6 +459,11 @@
                                         :
                                         (item.donGiaTamTinh != null ? cuc.soLuong * item.donGiaTamTinh : 0) ) |
                                         number: '1.0-1' : 'vi_VN'}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 <ng-container>
                                     <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
@@ -481,6 +485,11 @@
                                                 (item.donGiaTamTinh != null ? chiCuc.soLuong * item.donGiaTamTinh :
                                                 0) ) | number : '1.0-1' : 'vi_VN'}}
                                             </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <ng-container>
                                             <tr *ngFor="let diemKho of chiCuc.children">
@@ -500,6 +509,11 @@
                                                     (item.donGiaTamTinh != null ? diemKho.soLuong *
                                                     item.donGiaTamTinh : 0) ) | number : '1.0-1' :
                                                     'vi_VN'}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
