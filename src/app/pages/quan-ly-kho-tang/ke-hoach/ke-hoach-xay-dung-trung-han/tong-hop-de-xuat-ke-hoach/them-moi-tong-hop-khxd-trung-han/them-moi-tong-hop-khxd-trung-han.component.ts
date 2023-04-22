@@ -26,6 +26,7 @@ import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialo
 })
 export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Input() isViewDetail: boolean;
+  @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
   @Output()
