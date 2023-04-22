@@ -47,7 +47,7 @@ export class PhuLucComponent extends Base2Component implements OnInit {
       {
         id: [],
         idHd: [],
-        namHd: [],
+        nam: [dayjs().get('year')],
         soHd: [],
         tenHd: [],
         ngayHluc: [],
@@ -72,9 +72,8 @@ export class PhuLucComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
-    this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
+    this.maHopDongSuffix = `/${this.formData.value.nam}/HĐMB`;
     if (this.idPhuLuc) {
-      console.log(this.idPhuLuc, "this.idPhuLuc");
       await this.loadChiTiet(this.idPhuLuc);
     } else {
       await Promise.all([
@@ -125,32 +124,35 @@ export class PhuLucComponent extends Base2Component implements OnInit {
         ngayHluc: this.objHopDongHdr.ngayHluc ?? null,
         thoiGianDuKien: (this.objHopDongHdr.tgianGnhanTu && this.objHopDongHdr.tgianGnhanDen) ? [this.objHopDongHdr.tgianGnhanTu, this.objHopDongHdr.tgianGnhanDen] : null,
         tgianThienHd: this.objHopDongHdr.tgianThienHd ?? null,
-        // trangThaiPhuLuc: this.objHopDongHdr.trangThaiPhuLuc ?? null,
-        // tenTrangThaiPhuLuc: this.objHopDongHdr.tenTrangThaiPhuLuc ?? null,
       });
-      this.objHopDongHdr.children.forEach(s => {
-        console.log(this.objHopDongHdr, 1111)
-        let row = {
-          // tenDviHd: s.tenDvi,
-          // diaChiHd: s.diaChi,
-          // tongSoLuongHd: s.tongSoLuong,
-          // donGiaVatHd: s.donGiaVat,
-          idHdDtl: s.id,
-          tenDviHd: s.tenDvi,
-          diaChiHd: s.diaChi,
-          soLuong: s.soLuong,
-          donGiaVat: s.donGiaVat,
-        }
-        this.dataTable = [...this.dataTable, row]
-      });
-
+      this.dataTable = [...this.dataTable, ...this.objHopDongHdr.children]
     }
   }
 
   async save(isOther: boolean) {
+    this.formData.disable();
+    let body = this.formData.value;
+    if (this.formData.get('thoiGianDuKien').value) {
+      body.tgianGnhanTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
+      body.tgianGnhanDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.get('thoiGianDuKienSauDc').value) {
+      body.ngayHlucSauDcTu = dayjs(this.formData.get('thoiGianDuKienSauDc').value[0]).format('YYYY-MM-DD');
+      body.ngayHlucSauDcDen = dayjs(this.formData.get('thoiGianDuKienSauDc').value[1]).format('YYYY-MM-DD')
+    }
+
+    body.soPhuLuc = this.formData.value.soPhuLuc ? this.formData.value.soPhuLuc + this.maHopDongSuffix : null;
+    body.phuLucDtl = this.dataTable;
+    body.fileDinhKems = this.fileDinhKem;
+    let data = await this.createUpdate(body);
+    this.formData.enable();
+    let id = data.id;
+    this.loadChiTiet(id);
+  }
+  async saveAndSend(status: string, message: string, sucessMessage: string) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.spinner.hide();
+      await this.spinner.hide();
       return;
     }
     let body = this.formData.value;
@@ -162,62 +164,25 @@ export class PhuLucComponent extends Base2Component implements OnInit {
       body.ngayHlucSauDcTu = dayjs(this.formData.get('thoiGianDuKienSauDc').value[0]).format('YYYY-MM-DD');
       body.ngayHlucSauDcDen = dayjs(this.formData.get('thoiGianDuKienSauDc').value[1]).format('YYYY-MM-DD')
     }
-    body.soPhuLuc = this.formData.value.soPhuLuc + this.maHopDongSuffix;
+
+    body.soPhuLuc = this.formData.value.soPhuLuc ? this.formData.value.soPhuLuc + this.maHopDongSuffix : null;
     body.phuLucDtl = this.dataTable;
     body.fileDinhKems = this.fileDinhKem;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.formData.patchValue({
-          id: data.id,
-          trangThaiPhuLuc: data.trangThaiPhuLuc
-        })
-        this.pheDuyet();
+    if (this.formData.value.id > 0) {
+      if (body) {
+        await this.approve(body.id, status, message, null, sucessMessage);
       } else {
-        if (this.idPhuLuc > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-        this.goBack();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      let data = await this.createUpdate(this.formData.value);
+      if (data) {
+        await this.approve(data.id, status, message, null, sucessMessage);
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       }
     }
-  }
 
-  pheDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn Ký?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: this.formData.get('id').value,
-            trangThaiPhuLuc: STATUS.DA_KY
-          };
-          let res = await this.hopDongXuatHangService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.THAO_TAC_SUCCESS,
-            );
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
   }
 
   isDisabled() {
