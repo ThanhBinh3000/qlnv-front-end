@@ -50,7 +50,7 @@ export class NewDonViComponent implements OnInit {
     this.formDonVi = this.fb.group({
       maDviCha: [''],
       tenDvi: ['', Validators.required],
-      maDvi: ['', Validators.required, Validators.pattern],
+      maDvi: ['', [Validators.required, Validators.pattern("[0-9]{2}")]],
       diaChi: [''],
       tenVietTat: [''],
       sdt: [''],
@@ -67,30 +67,12 @@ export class NewDonViComponent implements OnInit {
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       this.levelNode = node && node.level ? node.level : null
-      this.resetFormData()
       if (this.levelNode == 3) {
         this.formDonVi.patchValue({
           type : true
         })
       }
     });
-  }
-  resetFormData() {
-    this.formDonVi.patchValue({
-      tenDvi: [''],
-      maDvi: [''],
-      diaChi: [''],
-      tenVietTat: [''],
-      sdt: [''],
-      fax: [''],
-      trangThai: [false],
-      type: [false],
-      ghiChu: [''],
-      vungMien: [''],
-      tinhThanh: [],
-      quanHuyen: [],
-      phuongXa: []
-    })
   }
 
 
@@ -165,6 +147,7 @@ export class NewDonViComponent implements OnInit {
     this.setValidators();
     this.helperService.markFormGroupTouched(this.formDonVi);
     if (this.formDonVi.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       return;
     }
     let body = this.formDonVi.value;
