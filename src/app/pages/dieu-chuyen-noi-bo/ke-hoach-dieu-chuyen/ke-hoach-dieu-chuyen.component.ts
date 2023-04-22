@@ -167,7 +167,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
     }
-    await this.search();
+    await this.search('DCNB_KHDC_XEM');
   }
 
   redirectDetail(data, b: boolean) {
