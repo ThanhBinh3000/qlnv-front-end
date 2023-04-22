@@ -152,4 +152,16 @@ export class UserService extends BaseService {
     return null;
   }
 
+  haveAnyCap(caps: any) {
+    if(!caps){
+      return true;
+    }
+    let user = this.getUserLogin();
+    for (let c of caps) {
+      if (c == user.CAP_DVI) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

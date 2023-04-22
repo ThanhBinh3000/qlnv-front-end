@@ -290,10 +290,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       await this.keHoachDieuChuyenService.getDetail(idInput)
         .then(async (res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-
             this.formData.patchValue(res.data);
             this.formData.value.danhSachHangHoa.forEach(s => s.idVirtual = uuid.v4());
             if (res.data.phuongAnDieuChuyen) {
+              this.rows.clear();
               for (let pa of res.data.phuongAnDieuChuyen) {
                 this.rows.push(this.createRow(pa.id, pa.maChiCucNhan,
                   pa.tenChiCucNhan, pa.hinhThucDvCcDvVanChuyen, pa.tenHinhThucDvCcDvVanChuyen,
@@ -420,14 +420,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     this.getDetailMlkByKey(tenNganKho.maDvi, tenNganKho.capDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        let coLoKho = true;
-        if (res.data.object.coLoKho) {
-          if ("00" == res.data.object.coLoKho) {
-            coLoKho = false;
-          } else if ("01" == res.data.object.coLoKho) {
-            coLoKho = true;
-          }
-        }
+        let coLoKho = !!res.data.object.coLoKho;
         if (!coLoKho) {
           this.removeValidateFormChiTiet("maLoKho");
           this.removeValidateFormChiTiet("tenLoKho");
@@ -670,7 +663,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
               let rss = chain(v)
                 .groupBy("maLoKho")
                 .map((vs, ks) => {
-                    let maLoKho = vs.find(s => s.maLoKho === ks);
+                    let maLoKho = vs.find(s => (s.maLoKho == ks || ""+s.maLoKho == ks));
                     let khoNhan = vs.filter(item => !(item.maDiemKhoNhan == undefined || item.maDiemKhoNhan == ""));
                     let rsss = chain(khoNhan)
                       .groupBy("maNhaKhoNhan")
@@ -1104,16 +1097,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       return;
     }
     this.getDetailMlkByKey(tenNganKhoNhan.maDvi, tenNganKhoNhan.capDvi).then((res: OldResponseData) => {
-
       if (res.msg == MESSAGE.SUCCESS) {
-        let coLoKhoNhan = true;
-        if (res.data.object.coLoKho) {
-          if ("00" == res.data.object.coLoKho) {
-            coLoKhoNhan = false;
-          } else if ("01" == res.data.object.coLoKho) {
-            coLoKhoNhan = true;
-          }
-        }
+        let coLoKhoNhan = !!res.data.object.coLoKho;
         if (!coLoKhoNhan) {
           this.removeValidateFormChiTiet("maLoKhoNhan");
           this.removeValidateFormChiTiet("tenLoKhoNhan");
@@ -1141,7 +1126,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     if (value) {
       this.getDetailMlkByKey(value, tenLoKhoNhan.capDvi).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
-
           if (!this.formDataChiTiet.value.cloaiVthh.startsWith("02")) {
             this.formDataChiTiet.controls["tichLuongKd"].setValue(res.data.object.tichLuongKdLt);
           } else {

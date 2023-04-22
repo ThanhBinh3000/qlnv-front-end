@@ -167,7 +167,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
     }
-    await this.search();
+    await this.search('DCNB_KHDC_XEM');
   }
 
   redirectDetail(data, b: boolean) {
@@ -194,10 +194,22 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   checkAllowEdit(data: any): boolean {
-    return !(data.trangThai == this.STATUS.DA_DUYET_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC);
+    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC);
   }
 
   checkAllowDelete(data: any): boolean {
     return data.trangThai == this.STATUS.DU_THAO;
+  }
+
+  checkApproveDc(data: any) {
+    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC);
+  }
+
+  checkApproveNdc(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC);
+  }
+
+  checkAllowView(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC || data.trangThai == this.STATUS.DA_DUYET_LDCC);
   }
 }
