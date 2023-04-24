@@ -135,7 +135,8 @@
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT</nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
+                                    HSMT)</nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
                                         <input nz-input formControlName="tgianBdauTchuc" readonly />
@@ -201,7 +202,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col nzSpan="24">
+                        <div nz-col nzSpan="24" *ngIf="!loaiVthh.startsWith('02')">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                                 <nz-form-control>
@@ -209,7 +210,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col nzSpan="24">
+                        <!-- <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Đơn giá VAT (đ/kg) </nz-form-label>
                                 <nz-form-control>
@@ -220,7 +221,7 @@
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
-                        </div>
+                        </div> -->
                         <div nz-col nzSpan="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Thuế VAT (%) </nz-form-label>
@@ -269,6 +270,26 @@
                                 <nz-form-control>
                                     <nz-input-group>
                                         <input nz-input formControlName="tgianNhang" nzFormat="dd/MM/yyyy" readonly />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                                <nz-form-control>
+                                    <nz-input-group>
+                                        <input nz-input formControlName="tenLoaiHinhNx" readonly />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                                <nz-form-control>
+                                    <nz-input-group>
+                                        <input nz-input formControlName="tenKieuNx" readonly />
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -419,7 +440,7 @@
                         <tr (click)="showDetail($event,item)" [ngClass]="{'bg-selected': this.selected && i == 0}">
                             <td></td>
                             <td>{{item.goiThau}}</td>
-                            <td>{{item.cloaiVthh}}</td>
+                            <td>{{item.tenCloaiVthh}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -435,10 +456,9 @@
                             <td class="text-right">{{item.soLuong * item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'
                                 }}
                             </td>
-                            <td class="text-right">{{(item.donGiaVat != null ? (item.donGiaNhaThau - item.donGiaVat)
-                                * item.soLuong :
-                                (item.donGiaTamTinh != null ? (item.donGiaNhaThau - item.donGiaTamTinh) *
-                                item.soLuong : 0)) | number:
+                            <td class="text-right">{{item.trangThai == 40 ? abs((item.donGiaVat != null ?
+                                (item.donGiaNhaThau - item.donGiaVat) * item.soLuong : (item.donGiaTamTinh != null ?
+                                (item.donGiaNhaThau - item.donGiaTamTinh) * item.soLuong : 0))) : 0 | number:
                                 '1.0-1' : 'vi_VN' }} </td>
                             <td>{{item.tenTrangThai}}</td>
                         </tr>
@@ -460,6 +480,11 @@
                                         :
                                         (item.donGiaTamTinh != null ? cuc.soLuong * item.donGiaTamTinh : 0) ) |
                                         number: '1.0-1' : 'vi_VN'}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 <ng-container>
                                     <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
@@ -481,6 +506,11 @@
                                                 (item.donGiaTamTinh != null ? chiCuc.soLuong * item.donGiaTamTinh :
                                                 0) ) | number : '1.0-1' : 'vi_VN'}}
                                             </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <ng-container>
                                             <tr *ngFor="let diemKho of chiCuc.children">
@@ -500,6 +530,11 @@
                                                     (item.donGiaTamTinh != null ? diemKho.soLuong *
                                                     item.donGiaTamTinh : 0) ) | number : '1.0-1' :
                                                     'vi_VN'}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
