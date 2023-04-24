@@ -8,6 +8,8 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'ke-hoach-dieu-chuyen',
     idHover: 'ke-hoach-dieu-chuyen',
     hasTab: false,
+    caps: [1,2,3],
+    accessPermisson: 'DCNB_KHDC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',

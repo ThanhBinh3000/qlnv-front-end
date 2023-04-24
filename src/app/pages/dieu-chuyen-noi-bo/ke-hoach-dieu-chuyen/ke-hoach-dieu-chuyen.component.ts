@@ -5,9 +5,6 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
 import {Base2Component} from 'src/app/components/base2/base2.component';
@@ -38,11 +35,11 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   listChungLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.CHODUYET_TBP_TVQT, giaTri: 'Chờ duyệt - TP'},
-    {ma: this.STATUS.TUCHOI_TBP_TVQT, giaTri: 'Từ chối - TP'},
-    {ma: this.STATUS.CHO_DUYET_LDCC, giaTri: 'Chờ duyệt - LĐ Cục'},
-    {ma: this.STATUS.TU_CHOI_LDCC, giaTri: 'Từ chối - LĐ Cục'},
-    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Cục'}
+    {ma: this.STATUS.CHODUYET_TBP_TVQT, giaTri: 'Chờ duyệt - TBP TVQT'},
+    {ma: this.STATUS.TUCHOI_TBP_TVQT, giaTri: 'Từ chối - TBP TVQT'},
+    {ma: this.STATUS.CHO_DUYET_LDCC, giaTri: 'Chờ duyệt - LĐ Chi Cục'},
+    {ma: this.STATUS.TU_CHOI_LDCC, giaTri: 'Từ chối - LĐ Chi Cục'},
+    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Chi Cục'}
   ];
 
   constructor(
@@ -127,7 +124,6 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       await this.spinner.hide();
 
     } catch (e) {
-      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -171,7 +167,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
     }
-    await this.search();
+    await this.search('DCNB_KHDC_XEM');
   }
 
   redirectDetail(data, b: boolean) {
@@ -198,10 +194,22 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   checkAllowEdit(data: any): boolean {
-    return !(data.trangThai == this.STATUS.DA_DUYET_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC);
+    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC);
   }
 
   checkAllowDelete(data: any): boolean {
     return data.trangThai == this.STATUS.DU_THAO;
+  }
+
+  checkApproveDc(data: any) {
+    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC);
+  }
+
+  checkApproveNdc(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC);
+  }
+
+  checkAllowView(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC || data.trangThai == this.STATUS.DA_DUYET_LDCC);
   }
 }

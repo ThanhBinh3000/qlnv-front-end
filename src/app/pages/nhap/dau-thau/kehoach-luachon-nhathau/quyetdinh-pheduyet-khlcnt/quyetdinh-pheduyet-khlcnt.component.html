@@ -195,7 +195,7 @@
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
             <td></td>
-            <td *ngIf="loaiVthh != '02'">{{data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td *ngIf="loaiVthh != '02'">{{data.tgianNhang}}</td>
             <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">

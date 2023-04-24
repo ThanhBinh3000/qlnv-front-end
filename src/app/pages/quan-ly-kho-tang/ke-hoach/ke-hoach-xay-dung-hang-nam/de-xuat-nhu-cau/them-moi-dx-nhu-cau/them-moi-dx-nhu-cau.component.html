@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
       <span
-        [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV)  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span>ĐỀ XUẤT NHU CẦU XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</span>
@@ -22,14 +22,14 @@
       </button>
       <button
         *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
-        type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+        type="button" class="btn btn-sub ml-2" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
         *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
         type="button" class="btn btn-sub ml-2"
-        (click)="approve(idInput,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt quyết định này?')">
+        (click)="duyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -146,14 +146,11 @@
         <th class="text-center" width="5%" rowSpan="2">Khối</th>
         <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
         <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-        <th class="text-center" width="13%" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
         <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
         <th class="text-center" width="7%" rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm 2022</th>
         <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
-        <th class="text-center">Tổng số</th>
-        <th class="text-center">Trong đó vốn NSTW</th>
         <th class="text-center">Tổng số</th>
         <th class="text-center">Trong đó vốn NSTW</th>
         <th class="text-center">Tổng số</th>
@@ -167,8 +164,6 @@
             </nz-option>
           </nz-select>
         </th>
-        <th></th>
-        <th></th>
         <th></th>
         <th></th>
         <th></th>
@@ -201,8 +196,6 @@
           <td></td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonNstw') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
@@ -227,8 +220,6 @@
             <td>{{ item.soQdPd }}</td>
             <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
@@ -259,10 +250,6 @@
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'khVonTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'khVonNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
@@ -270,7 +257,6 @@
             style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td *ngIf="!isViewDetail" nzRight>
       </tr>
-
       </tfoot>
     </nz-table>
   </nz-card>

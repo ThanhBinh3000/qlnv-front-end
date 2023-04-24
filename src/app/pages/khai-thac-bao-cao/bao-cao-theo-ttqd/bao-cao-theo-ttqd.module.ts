@@ -46,6 +46,9 @@ import {
 import {
   TnSdHangDtqgXuatCtQpAnNhiemVuKhacDuocGiaoTrongKyComponent
 } from "./tn-sd-hang-dtqg-xuat-ct-qp-an-nhiem-vu-khac-duoc-giao-trong-ky/tn-sd-hang-dtqg-xuat-ct-qp-an-nhiem-vu-khac-duoc-giao-trong-ky.component";
+import {
+  CtNhapXuatTonKhoHangDtqgTt108Component
+} from "./ct-nhap-xuat-ton-kho-hang-dtqg-tt-108/ct-nhap-xuat-ton-kho-hang-dtqg-tt-108.component";
 
 
 @NgModule({
@@ -69,7 +72,8 @@ import {
     SlGiaTriHangDtqgXuatCapKhongThuTienTrongKyComponent,
     SlGiaTriHangDtqgXuatCapCtHtPvqpAnNinhNvKhacTrongKyComponent,
     SlGiaTriHangDtqgXuatVienTroTrongKyComponent,
-    TnSdHangDtqgXuatCtQpAnNhiemVuKhacDuocGiaoTrongKyComponent
+    TnSdHangDtqgXuatCtQpAnNhiemVuKhacDuocGiaoTrongKyComponent,
+    CtNhapXuatTonKhoHangDtqgTt108Component
   ],
   imports: [
     CommonModule,

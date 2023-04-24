@@ -370,9 +370,11 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
-  checkStatusSurplus() {
+  checkStatusSurplus() : boolean {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '00' && !this.detailDonVi.value.loaiVthh)) {
+    console.log(this.detailDonVi.value.coLoKho);
+    console.log(!this.detailDonVi.value.loaiVthh)
+    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == false && !this.detailDonVi.value.loaiVthh)) {
       check = true
     }
     return check;
@@ -432,7 +434,6 @@ export class MangLuoiKhoComponent implements OnInit {
         dviTinh: dataNode.dviTinh ? dataNode.dviTinh : null,
         ngayNhapDay: dataNode.ngayNhapDay ? dataNode.ngayNhapDay : null,
         loaikhoId: dataNode.loaikhoId,
-        coLoKho: dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false,
         trangThai : dataNode.trangThai == TrangThaiHoatDong.HOAT_DONG ? true : false,
         loaiHangHoa : dataNode.loaiHangHoa
       });
@@ -454,6 +455,7 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDiemkho: dataNode.tenDiemkho,
           tenTongKho: dataNode.tenTongKho,
           soLokho: dataNode.soLokho,
+          coLoKho : dataNode.coLoKho
         })
       }
       if (this.levelNode == 5) {
@@ -508,7 +510,7 @@ export class MangLuoiKhoComponent implements OnInit {
           soLokho: dataNode.soLokho,
         })
       }
-      this.checkLoKho = dataNode.coLoKho == '01' ? true : false;
+      this.checkLoKho = dataNode.coLoKho == true ? true : false;
       this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhkems : null
     }
     if (this.levelNode == 1) {
@@ -617,7 +619,6 @@ export class MangLuoiKhoComponent implements OnInit {
         }
         if (this.levelNode == 6) {
           body.isKhoiTao = this.detailDonVi.value.coLoKho == true ? false : true
-          body.coLoKho = this.detailDonVi.value.coLoKho == true ? "01" : "00"
           body.slTon = body.slTon ? body.slTon : 0
           type = 'ngan-kho';
         }

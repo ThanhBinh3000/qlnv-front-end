@@ -232,7 +232,7 @@
             <td *ngIf="formData.value.apDungCloaiVthh == false">
               <nz-input-group>
                 <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.cloaiVthh"
-                           (ngModelChange)="changeListOfTagOptions($event)" [ngModelOptions]="{standalone: true}">
+                           (ngModelChange)="changeListOfTagOptions($event, false)" [ngModelOptions]="{standalone: true}">
                   <nz-option *ngFor="let option of listCloaiVthh" [nzLabel]="option.title" [nzValue]="option.key">
                   </nz-option>
                 </nz-select>
@@ -334,7 +334,7 @@
               <td *ngIf="formData.value.apDungCloaiVthh == false">
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]="dataEdit[idx].data.cloaiVthh"
-                             (ngModelChange)="changeListOfTagOptions($event,dataEdit[idx].data)"
+                             (ngModelChange)="changeListOfTagOptions($event,false,dataEdit[idx].data)"
                              [ngModelOptions]="{standalone: true}">
                     <nz-option *ngFor="let option of listCloaiVthh" [nzLabel]="option.title" [nzValue]="option.key">
                     </nz-option>

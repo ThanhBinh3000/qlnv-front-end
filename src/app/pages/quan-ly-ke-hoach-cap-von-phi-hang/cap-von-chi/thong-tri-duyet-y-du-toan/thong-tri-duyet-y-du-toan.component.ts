@@ -1,20 +1,20 @@
-import { saveAs } from 'file-saver';
-import { Component, Input, OnInit } from '@angular/core';
+import {saveAs} from 'file-saver';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
-import { Globals } from 'src/app/shared/globals';
-import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {isEmpty} from 'lodash';
+import {Globals} from 'src/app/shared/globals';
+import {ThongTriDuyetYCapVonService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
 import {STATUS} from "../../../../constants/status";
 
 @Component({
@@ -31,7 +31,9 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     public userService: UserService,
     private donviService: DonviService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
+
   @Input()
   loaiVthh: string;
   @Input()
@@ -52,10 +54,19 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     soThongTri: '',
     nam: '',
     ngayLap: '',
-    lyDoChi: '',
+    tenDviThongTri: '',
     soDnCapVon: '',
     tenTrangThai: '',
   };
+  listTrangThai: any[] = [
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ vụ'},
+    {ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục'},
+    {ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục'},
+    {ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục'},
+  ];
   dataTableAll: any[] = [];
   listVthh: any[] = [];
   dataTable: any[] = [];
@@ -135,8 +146,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-      "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 0 ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+      "denNgay": this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 0 ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
       "nam": this.searchFilter.namKh,
       "soThongTri": this.searchFilter.soThongChi,
       "lyDoChi": this.searchFilter.lyDoChi,
@@ -266,8 +277,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-          "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+          "tuNgay": this.searchFilter.ngayKy && this.searchFilter.ngayKy.length ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+          "denNgay": this.searchFilter.ngayKy && this.searchFilter.ngayKy.length ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
           "nam": this.searchFilter.namKh,
           "soThongTri": this.searchFilter.soThongChi,
           "lyDoChi": this.searchFilter.lyDoChi,
@@ -341,14 +352,14 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (
-            item[key] &&
-            item[key]
-              .toString()
-              .toLowerCase()
-              .indexOf(value.toString().toLowerCase()) != -1
-          ) {
-            temp.push(item);
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayLap', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
@@ -356,6 +367,14 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
   clearFilterTable() {

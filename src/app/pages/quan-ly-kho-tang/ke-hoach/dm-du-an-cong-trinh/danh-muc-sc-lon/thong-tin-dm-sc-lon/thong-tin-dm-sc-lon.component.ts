@@ -23,6 +23,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
   dataDetail: any
   dsKho: any[] = [];
+  dsChiCuc: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
@@ -45,12 +46,16 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
+      soQd: [null],
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],
       maDiemKho: [null, Validators.required],
       tgThucHien: [null, Validators.required],
       tgHoanThanh: [null, Validators.required],
       tieuChuan: [null],
+      loaiCongTrinh: [null],
+      maChiCuc: [null],
+      tmdt: [null],
       lyDo: [null],
       tgSuaChua: [null],
       duToan: [null, Validators.required],
@@ -65,7 +70,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.loadDsDiemKho()
+      await this.loadDsChiCuc()
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -99,10 +104,16 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  async loadDsDiemKho() {
+  async changeChiCuc(event) {
     const dsTong = await this.dviService.layTatCaDonViByLevel(4);
     this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
+    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
+  }
+
+  async loadDsChiCuc() {
+    const dsTong = await this.dviService.layTatCaDonViByLevel(3);
+    this.dsChiCuc = dsTong.data
+    this.dsChiCuc = this.dsChiCuc.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
   }
 
   async handleOk(data: string) {
