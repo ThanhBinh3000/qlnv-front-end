@@ -64,7 +64,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   listToChucTrungDg: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  tongSoLuong: number ;
+  tongThanhTien: number ;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -361,6 +362,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
           let resTtin = await this.thongTinDauGiaService.getDetail(dataKq.maThongBao?.split('/')[0]);
           if (resKq.data) {
             const dataThongTin = resTtin.data;
+            console.log(dataThongTin,"dataThongTin")
             await this.loadDsHd(dataKq.soQdKq)
             await this.setListDviTsan(dataThongTin.children);
             this.formData.patchValue({
@@ -417,13 +419,18 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         return s1.maDviTsan.split(',').includes(s.maDviTsan) && s1.toChucTrungDg.includes(s.toChucCaNhan);
         })
       );
-    console.log(2)
 
 
   }
   maDviTsan(event) {
     if (event) {
       this.listDviTsanFilter = this.listDviTsan.filter(obj => obj.toChucCaNhan === event);
+      let thongTin= this.listDviLquan.find(f=>f.hoVaTen===event);
+      this.formData.patchValue({
+        tenNhaThau: thongTin.hoVaTen,
+        diaChiNhaThau: thongTin.diaChi,
+        mstNhaThau: thongTin.soCccd
+      })
     }
   }
 
@@ -440,7 +447,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(1)
   }
 
   // taiLieuDinhKem(type?: string) {
@@ -504,8 +510,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         // });
       });
       this.listMaDvts = listAll.flatMap(item => item.children);
-
-      console.log(this.listMaDvts,'listAll')
+      console.log(this.listMaDvts,"this.listMaDvts")
       await this.buildTableView();
     } else {
       this.dataTable = [];
@@ -524,21 +529,24 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       .map(async (value, key) => {
         let tenChiCuc = value.find(f => f.tenChiCuc === key);
         let tongSl = value.reduce((prev, cur) => prev + cur.soLuong, 0);
-        let newValue = await Promise.all(value.map(async s => {
-          let diaChi = await this.changeDiemKho(s.maDiemKho);
-          return {...s, diaChi};
-        }));
+        let thanhTien = value.reduce((prev, cur) => {
+          const curThanhTien = cur.soLuong * cur.donGiaVat;
+          return prev + curThanhTien;
+        }, 0);
         return {
           idVirtual: uuid.v4(),
           tenChiCuc: key,
           maDvi: tenChiCuc.maChiCuc,
-          children: newValue,
+          children: value,
           soLuong: tongSl,
-          donGiaVat: tenChiCuc.donGiaVat
+          thanhTien: thanhTien,
         };
       }).value();
     dataView = await Promise.all(dataView);
     this.dataTable = dataView;
+    this.tongSoLuong=this.dataTable.reduce((prev, cur) => prev + cur.soLuong, 0);
+    this.tongThanhTien=this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0);
+    console.log(this.dataTable,"this.dataTable")
     this.expandAll();
   }
 
