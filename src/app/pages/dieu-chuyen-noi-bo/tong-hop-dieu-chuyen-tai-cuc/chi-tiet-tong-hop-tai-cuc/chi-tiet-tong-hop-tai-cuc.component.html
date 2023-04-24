@@ -109,7 +109,7 @@
                     </div>
                 </div>
             </form>
-            <ng-container *ngIf="!yeuCauSuccess && !isViewDetail">
+            <ng-container *ngIf="!formData.value.trangThai && !isViewDetail">
                 <div class="bottom-right-btn">
                     <button type="button" class="btn btn-main mr-12" (click)="tongHop()">
                         <i class="icon htvbdh_tcdt_tao-qd"></i>
@@ -301,7 +301,7 @@
             </ng-template>
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'KẾ HOẠCH ĐIỀU CHUYỂN GIỮA 2 CHI CỤC TRONG CÙNG 1 CỤC'" [nzActive]="true"
-                    [nzExtra]="!yeuCauSuccess &&  extraTpl ">
+                    [nzExtra]="extraTpl ">
                     <!-- <nz-card class="mt-2px flex-card data-table card-border-content table-card"> -->
                     <div class="bg-trang">
                         <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTable2ChiCuc"
@@ -413,11 +413,11 @@
                                                         <td>{{c.tenDonViTinh}}</td>
                                                         <td class="text-right">{{c.tonKho|number: '1.0-1': 'vi_VN'}}
                                                         </td>
-                                                        <td class="text-right">{{c.slDieuChuyen|number: '1.0-1':
+                                                        <td class="text-right">{{c.soLuongDc|number: '1.0-1':
                                                             'vi_VN'}}</td>
                                                         <td class="text-right">{{c.duToanKphi|number: '1.0-1':
                                                             'vi_VN'}}</td>
-                                                        <td>{{c.time}}</td>
+                                                        <td>{{c.thoiGianDkDc}}</td>
                                                         <td>{{c.tenChiCucNhan}}</td>
                                                         <td>{{c.tenDiemKhoNhan}}</td>
                                                         <td>{{c.tenNhaKhoNhan}}</td>
@@ -474,7 +474,7 @@
                                         <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
                                                 item.soDeXuat }}</a></td>
                                         <td>{{ item.ngayTrinhKy }}</td>
-                                        <td>{{ item.tongDuToanChiPhi }}</td>
+                                        <td>{{ item.tongDuToanKp }}</td>
                                         <td>{{item.trichYeu}}</td>
                                     </tr>
                                 </ng-container>
@@ -510,7 +510,7 @@
                                 <ng-container *ngFor="let item of dataTable2Cuc , let i = index">
                                     <tr class="level-2">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td *ngIf="item.dcnbKeHoachDcDtlList.length>0; else tdNormal"
+                                        <td *ngIf="item.dcnbKeHoachDcDtls.length>0; else tdNormal"
                                             [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
                                         <td class="bold">{{ item.tenChiCucDxuat }}</td>
                                         <td colspan="6"></td>
@@ -521,7 +521,7 @@
                                         </ng-template>
                                     </tr>
                                     <ng-container *ngIf="item.expand">
-                                        <ng-container *ngFor="let bb of item.dcnbKeHoachDcDtlList, let y = index">
+                                        <ng-container *ngFor="let bb of item.dcnbKeHoachDcDtls, let y = index">
                                             <tr>
                                                 <td></td>
                                                 <td></td>

@@ -4,7 +4,7 @@
             <div class="header-text">
                 <div class="title-chi-tieu">
                     <span
-                        [ngClass]="formData.value.trangThai && ((formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do')">
+                        [ngClass]="formData.value.trangThai && formData.value.trangThai == STATUS.CHUA_TAO_QD ? 'status-xanh' : 'status-do'">
                         {{ formData.value.tenTrangThai }}
                     </span>
                     <span>Tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</span>
@@ -16,12 +16,12 @@
                     <span>Quay lại</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="taoQuyetDinh()"
-                    *ngIf="(isTongHop && !isViewDetail) && this.checkPermission(null) && (!formData.value.trangThai || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc()">
+                    *ngIf="(isTongHop && !isViewDetail) && this.checkPermission(null) && (formData.value.trangThai=='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc()">
                     <i class="icon htvbdh_soanthao"></i>
                     <span>Tạo quyết định</span>
                 </button>
                 <button
-                    *ngIf="(isTongHop && !isViewDetail) && isTongHop && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isTongCuc()"
+                    *ngIf="(isTongHop && !isViewDetail) && isTongHop && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc()"
                     nz-button type="button" class="modal__button--save" (click)="save(false)"
                     [disabled]="!yeuCauSuccess">
                     <i class="icon htvbdh_tcdt_save"></i>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </form>
-            <ng-container *ngIf="!yeuCauSuccess && !isViewDetail">
+            <ng-container *ngIf="!formData.value.trangThai && !isViewDetail">
                 <div class="bottom-right-btn">
                     <button type="button" class="btn btn-main mr-12" (click)="tongHop()">
                         <i class="icon htvbdh_tcdt_tao-qd"></i>
@@ -265,6 +265,35 @@
                     [nzActive]="true">
                     <!-- <nz-card class="mt-2px flex-card data-table card-border-content table-card"> -->
                     <div class="bg-trang">
+                        <div class="pd-10">
+                            <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataCuc"
+                                [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                                <thead>
+                                    <tr>
+                                        <th width="60px" class="text-center">STT</th>
+                                        <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
+                                        <th style="width: 10%">Số đề xuất/công văn</th>
+                                        <th style="width: 15%">Ngày trình duyệt tổng cục</th>
+                                        <th style="width: 17%">Tổng dự toán kinh phí(triệu đồng)</th>
+                                        <th>Trích yếu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let item of dataCuc, let i = index">
+                                        <tr [ngClass]="{'bg-selected': item.selected}" class="tr-cursor"
+                                            (click)="selectRow(item)">
+                                            <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                                            <td>{{ item.tenCucNhan }}</td>
+                                            <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
+                                                    item.soDeXuat }}</a></td>
+                                            <td>{{ item.ngayTrinhKy }}</td>
+                                            <td>{{ item.tongDuToanChiPhi }}</td>
+                                            <td>{{item.trichYeu}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </nz-table>
+                        </div>
                         <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTable2ChiCuc"
                             [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                             <thead>
@@ -302,10 +331,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <ng-container *ngFor="let item of basicTable.data , let i = index">
+                                <ng-container *ngFor="let item of dataTable2ChiCuc , let i = index">
                                     <tr class="level-2">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td *ngIf="item.children.length>0; else tdNormal" [nzExpand]="item.expand"
+                                        <td *ngIf="item.children?.length>0; else tdNormal" [nzExpand]="item.expand"
                                             (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
                                         </td>
                                         <td></td>
@@ -419,7 +448,8 @@
                             <thead>
                                 <tr>
                                     <th width="60px" class="text-center">STT</th>
-                                    <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
+                                    <th style="width: 17%">Cục DTNN KV xuất DC</th>
+                                    <th style="width: 17%">Cục DTNN KV nhận DC</th>
                                     <th style="width: 10%">Số đề xuất/công văn</th>
                                     <th style="width: 15%">Ngày trình duyệt tổng cục</th>
                                     <th style="width: 17%">Tổng dự toán kinh phí(triệu đồng)</th>
@@ -432,6 +462,7 @@
                                         (click)="selectRow(item)">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                                         <td>{{ item.tenCucNhan }}</td>
+                                        <td>{{item.tenCucXuat}}</td>
                                         <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
                                                 item.soDeXuat }}</a></td>
                                         <td>{{ item.ngayTrinhKy }}</td>
@@ -471,7 +502,7 @@
                                 <ng-container *ngFor="let item of dataTable2Cuc , let i = index">
                                     <tr class="level-2">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td *ngIf="item.dcnbKeHoachDcDtlList.length>0; else tdNormal"
+                                        <td *ngIf="item.dcnbKeHoachDcDtlList?.length>0; else tdNormal"
                                             [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
                                         <td class="bold">{{ item.tenChiCucDxuat }}</td>
                                         <td colspan="6"></td>

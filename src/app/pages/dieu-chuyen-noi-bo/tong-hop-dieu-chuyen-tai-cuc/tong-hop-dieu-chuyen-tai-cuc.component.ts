@@ -84,8 +84,8 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             maTongHop: [''],
             loaiDieuChuyen: [''],
             ngayTongHop: [''],
-            thTuNgay: [''],
-            thDenNgay: [''],
+            tuNgay: [''],
+            denNgay: [''],
             trichYeu: [''],
             trangThai: [''],
         })
@@ -160,8 +160,8 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     }
     async timKiem() {
         if (this.formData.value.ngayTongHop) {
-            this.formData.value.thTuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.thDenNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
+            this.formData.value.tuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
+            this.formData.value.denNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
         }
         await this.search();
     }
