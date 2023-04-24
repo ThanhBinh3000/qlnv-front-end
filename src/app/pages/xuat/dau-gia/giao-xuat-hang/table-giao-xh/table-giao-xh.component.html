@@ -198,8 +198,7 @@
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>
-              <a *ngIf="data.soHd && data.idHd" style="color: blue ;font-weight: bold;"
-                (click)="openModalHd(data.idHd)">{{
+              <a *ngIf="data.soHd && data.idHd" nz-button nzType="link" (click)="openModalHd(data.idHd)">{{
                 data.soHd}}</a>
             </td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>

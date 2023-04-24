@@ -95,20 +95,19 @@
                                     </nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group nzAddOnAfterIcon="folder-open" (click)="setListTccnChaoGia()">
-                                            <input [readonly]="true" nz-input formControlName="soQdKq" readonly />
+                                            <input [readonly]="true" nz-input formControlName="tenDviMua" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                             <div nz-col [nzSpan]="3">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
+                                    <nz-form-label nzRequired [nzNoColon]="true"> Mã đơn vị tài sản
+                                    </nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
-                                        <nz-input-group>
-                                            <nz-select nzMode="multiple" formControlName="listMaDviTsan"
-                                                [nzDisabled]="isDisabled()">
-
-                                            </nz-select> </nz-input-group>
+                                        <nz-input-group nzAddOnAfterIcon="folder-open">
+                                            <input [readonly]="true" nz-input formControlName="maDviTsan" readonly />
+                                        </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -508,7 +507,8 @@
                                     <nz-form-label [nzNoColon]="true"> Số lượng bán TT
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-green">{{formData.value.soLuong | number : '1.0-1' : 'vi_VN'
+                                        <span class="text-green">{{formData.value.soLuongBanTrucTiep | number : '1.0-1'
+                                            : 'vi_VN'
                                             }}</span>
                                     </nz-form-control>
                                 </nz-form-item>

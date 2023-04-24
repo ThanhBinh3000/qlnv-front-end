@@ -136,7 +136,7 @@
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.tenDvi }}</td>
                     <td>
-                        <a *ngIf="data.soQdPd && data.idPdKhHdr" style="color: blue ;font-weight: bold;"
+                        <a *ngIf="data.soQdPd && data.idPdKhHdr" nz-button nzType="link"
                             (click)="openModalQdPdKh(data.idPdKhHdr)">{{
                             data.soQdPd}}</a>
                     </td>
