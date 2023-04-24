@@ -593,10 +593,13 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
 
     if (index != -1) {
+      console.log(1)
       table.splice(index, 1, this.noiDungRow);
     } else if (!table[0].maDiemKho) {
-      table.splice(0, 1, this.noiDungRow);
+      console.log(2)
+      table.splice(0, table.length, this.noiDungRow);
     } else {
+      console.log(3)
       table = [...table, this.noiDungRow]
     }
     // table = table.filter(s => s.maDiemKho);
