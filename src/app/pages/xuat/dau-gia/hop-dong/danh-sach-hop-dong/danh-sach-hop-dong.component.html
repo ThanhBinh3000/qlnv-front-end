@@ -206,10 +206,10 @@
             <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DANG_THUC_HIEN">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="goDetail(data.id,null,true)">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DA_HOAN_THANH">
                 <i class="fa fa-eye"></i>
               </a>
             </td>

@@ -36,7 +36,7 @@
             <input placeholder="" nz-input formControlName="soBbLayMau" />
           </div>
           <div nz-col nzSpan="4">
-            <label>Số biên bản xuất dốc kho</label>
+            <label>Số biên bản tịnh kho</label>
             <input placeholder="" nz-input formControlName="soBbXuatDocKho" />
           </div>
         </div>
@@ -56,18 +56,18 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-phieu-kiem-nghiem-chat-luong.xlsx')">
+        <button type="button" class="btn btn-sub" (click)="exportData('Danh-sach-phieu-kiem-nghiem-chat-luong.xlsx')"
+          *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isCuc()"
-          (click)="redirectToChiTiet(false, null, null)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)"
+          *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
         <thead>
@@ -96,13 +96,12 @@
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td>
-                <a *ngIf="item.soQdGiaoNvXh && item.idQdGiaoNvXh" nz-button nzType="link" nzBlock
+                <a *ngIf="item.soQdGiaoNvXh && item.idQdGiaoNvXh" nz-button nzType="link"
                   (click)="openModalQdNv(item.idQdGiaoNvXh)">{{
                   item.soQdGiaoNvXh}}</a>
               </td>
-
               <td>{{item.nam}}</td>
-              <td>{{item.ngayQdGiaoNvXh}}</td>
+              <td>{{item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY'}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -136,7 +135,6 @@
                       <i class="fa fa-plus"></i>
                     </a>
                   </td>
-
                 </tr>
                 <ng-container *ngIf="expandSetString.has(item.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -153,7 +151,7 @@
                       <td>{{lv2.soPhieu}}</td>
                       <td>{{lv2.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                       <td>
-                        <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" nz-button nzType="link" nzBlock
+                        <a *ngIf="lv2.soBbLayMau && lv2.idBbLayMau" nz-button nzType="link"
                           (click)="openModalBienBan(lv2.idBbLayMau)">{{
                           lv2.soBbLayMau}}</a>
                       </td>
@@ -162,13 +160,32 @@
                       <td>{{lv2.ngayXuatDocKho}}</td>
                       <td>{{lv2.tenTrangThai}}</td>
                       <td class="text-left">
-                        <a *ngIf="lv2.trangThai == STATUS.DA_DUYET_LDC " (click)="redirectToChiTiet(lv2, null, null)">
+                        <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_XEM') && (lv2.trangThai == STATUS.DA_DUYET_LDC))
+                        ||(!userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.CHO_DUYET_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.TU_CHOI_TP)   
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.DU_THAO)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.TU_CHOI_LDC)
+                        ||(!userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDC)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.TU_CHOI_LDC)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.DU_THAO)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.TU_CHOI_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.TU_CHOI_LDC)"
+                          (click)="redirectToChiTiet(lv2, null, null)">
                           <i class="fa fa-eye"></i>
                         </a>
-                        <a *ngIf="lv2.trangThai != STATUS.DA_DUYET_LDC " (click)="redirectToChiTiet(lv2, false, null)">
+                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.DU_THAO)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.TU_CHOI_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDC)"
+                          (click)="redirectToChiTiet(lv2, false, null)">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a *ngIf="lv2.trangThai == STATUS.DU_THAO && this.userService.isCuc()" (click)="delete(lv2)">
+                        <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_TP') && lv2.trangThai == STATUS.CHO_DUYET_TP)
+                        ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_DUYET_LDCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDC)"
+                          (click)="redirectToChiTiet(lv2, false, null)">
+                          <i class="icon htvbdh_tcdt_pheduyet"></i>
+                        </a>
+                        <a *ngIf="(lv2.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_XOA')) "
+                          (click)="delete(lv2)">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>

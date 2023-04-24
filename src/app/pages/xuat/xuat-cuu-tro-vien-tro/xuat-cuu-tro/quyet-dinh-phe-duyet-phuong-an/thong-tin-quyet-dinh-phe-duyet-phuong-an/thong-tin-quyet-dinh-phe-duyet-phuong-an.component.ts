@@ -168,8 +168,18 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.firstInit = false;
 
       //tao de xuat tu trang tong hop
+      console.log(this.dataInit,'dataInit');
       if (Object.keys(this.dataInit).length > 0) {
-        await this.selectMaTongHop(this.dataInit.id);
+        //de xuat
+        if (this.dataInit.hasOwnProperty('maTongHop')) {
+          this.formData.patchValue({type: 'TTr'})
+          await this.selectMaDeXuat(this.dataInit.id);
+        }
+        //tong hop
+        else {
+          console.log('hahahaha')
+          await this.selectMaTongHop(this.dataInit.id);
+        }
         await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
         await this.buildTableView();
       }
@@ -242,7 +252,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
         //truong hop tao moi
 
+        console.log(this.firstInit,'firstInit')
         if (this.firstInit === false) {
+
           this.formData.patchValue({
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,

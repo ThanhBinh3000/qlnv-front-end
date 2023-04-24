@@ -87,7 +87,7 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>
-                                <a *ngIf="item.soQd && item.idQd" style="color: blue ;font-weight: bold;"
+                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link"
                                     (click)="openModalQdNv(item.idQd)">{{
                                     item.soQd}}</a>
                             </td>
