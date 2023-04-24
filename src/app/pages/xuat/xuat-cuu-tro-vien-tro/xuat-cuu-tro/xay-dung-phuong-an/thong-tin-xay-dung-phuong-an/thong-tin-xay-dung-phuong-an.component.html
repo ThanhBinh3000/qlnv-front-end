@@ -4,35 +4,6 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <!--<button
-      *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()) ||
-      (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
-      (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
-      type="button" class="btn btn-sub" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span>Từ chối</span>
-    </button>
-
-    <button *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()) ||
-      (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
-      (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
-            type="button" class="btn btn-sub" (click)="duyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc())
-      || (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isDetailPermission()"
-      type="button" class="btn btn-sub" (click)="luuGuiDuyet()">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button
-      *ngIf="formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC)&& userService.isCuc())  && isDetailPermission()"
-      type="button" class="btn btn-sub" (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Gửi duyệt</span>
-    </button>-->
     <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
             class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDV)">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -689,11 +660,26 @@
         </nz-form-item>
         <nz-form-item *ngIf="userService.isTongCuc()">
           <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Cục DTNN</nz-form-label>
+<!--          <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'" [nzValidateStatus]="checkVld('inputMaDviCuc')">-->
+<!--            <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"-->
+<!--                       [nzDisabled]="disableInputComponent.maDviCuc" nzPlaceHolder="Chọn đơn vị" nzShowSearch>-->
+<!--              <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>-->
+<!--            </nz-select>-->
+<!--          </nz-form-control>-->
           <nz-form-control [nzErrorTip]="'Vui lòng nhập đơn vị'" [nzValidateStatus]="checkVld('inputMaDviCuc')">
-            <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
-                       [nzDisabled]="disableInputComponent.maDviCuc" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
-              <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
-            </nz-select>
+            <div nz-row [nzGutter]="48">
+              <div nz-col [nzSpan]="16">
+                <nz-select nzAllowClear [(ngModel)]="phuongAnRow.maDviCuc" (ngModelChange)="changeCuc($event)"
+                           [nzDisabled]="disableInputComponent.maDviCuc" nzPlaceHolder="Chọn đơn vị" nzShowSearch>
+                  <nz-option *ngFor="let p of listDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
+                </nz-select>
+              </div>
+              <div nz-col [nzSpan]="8">
+                <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
+                  style="color: #001CFF">{{phuongAnRow.tonKhoCuc|number : '1.0-1' : 'vi_VN'}}</span></p>
+              </div>
+            </div>
+
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
