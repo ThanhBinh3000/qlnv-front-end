@@ -100,7 +100,6 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
       .groupBy("soQd")
       .map((value, key) => {
@@ -113,19 +112,20 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
               idVirtual: uuidv4(),
               maDiemKho: k,
               tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              tenLoKho: rowLv2.tenLoKho,
-              maLoKho: rowLv2.maLoKho,
-              soBienBan: rowLv2.soBienBan,
-              ngayLayMau: rowLv2.ngayLayMau,
-              soBbTinhKho: rowLv2.soBbTinhKho,
-              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              soBbHaoDoi: rowLv2.soBbHaoDoi,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
+              // maNhaKho: rowLv2.maNhaKho,
+              // tenNhaKho: rowLv2.tenNhaKho,
+              // maNganKho: rowLv2.maNganKho,
+              // tenNganKho: rowLv2.tenNganKho,
+              // tenLoKho: rowLv2.tenLoKho,
+              // maLoKho: rowLv2.maLoKho,
+              // soPhieu: rowLv2.soPhieu,
+              // soBienBan: rowLv2.soBienBan,
+              // ngayLayMau: rowLv2.ngayLayMau,
+              // soBbTinhKho: rowLv2.soBbTinhKho,
+              // ngayXuatDocKho: rowLv2.ngayXuatDocKho,
+              // soBbHaoDoi: rowLv2.soBbHaoDoi,
+              // trangThai: rowLv2.trangThai,
+              // tenTrangThai: rowLv2.tenTrangThai,
               childData: v
             }
           }
