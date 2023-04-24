@@ -44,6 +44,8 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
       maDviDx: null,
       soQd: null,
       soDx: null,
+      soXc: null,
+      idXc: null,
       tenDvi: null,
       maDvi: null,
       ngayKetThucDx: null,

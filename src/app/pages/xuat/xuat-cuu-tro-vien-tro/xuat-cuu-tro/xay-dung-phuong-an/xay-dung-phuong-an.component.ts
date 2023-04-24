@@ -133,7 +133,6 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       await this.timKiem();
-      this.formData.patchValue({type: 'dx'})
       await this.spinner.hide();
 
     } catch (e) {

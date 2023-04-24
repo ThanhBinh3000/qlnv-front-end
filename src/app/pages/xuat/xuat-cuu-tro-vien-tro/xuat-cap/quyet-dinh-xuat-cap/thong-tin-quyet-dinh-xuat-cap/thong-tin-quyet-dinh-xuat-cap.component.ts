@@ -61,7 +61,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   isVisibleSuaNoiDung = false;
   listQdPaChuyenXc: any[] = [];
   quyetDinhPdDtl: any[] = [new Array<QuyetDinhPdDtl>()];
-  deXuatSelected: any = []
+  deXuatSelected: any = QuyetDinhPdDtl
   quyetDinhPdDtlCache: any[] = [];
   quyetDinhPdDx: Array<any> = [];
   deXuatPhuongAn: any[] = [];
@@ -113,6 +113,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         deXuatPhuongAn: [new Array()],
         qdPaXuatCapId: [],
         quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+        checkXuatGao: []
       }
     );
   }
@@ -156,13 +157,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
             this.formData.patchValue(res.data);
             this.formData.patchValue({
               soQd: res.data.soQd?.split('/')[0],
+              checkXuatGao: Boolean(res.data.qdPaXuatCapId)
             })
             this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuidv4);
-            if (res.data.isChonPhuongAn == true) {
-              this.isChecked = true;
-              this.isChonPhuongAn = true;
-              this.changePhuongAn(res.data.qdPaXuatCapId);
-            }
+            this.changePhuongAn(res.data.qdPaXuatCapId);
             this.buildTableView();
           }
         })
@@ -233,17 +231,19 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
         quyetDinhPdDtl: data.data.quyetDinhPdDtl
       })
       this.quyetDinhPdDtlCache = data.data.quyetDinhPdDtl;
-
       this.tenLoaiVthh = data.data.tenLoaiVthh;
       this.loaiNhapXuat = data.data.loaiNhapXuat;
       this.kieuNhapXuat = data.data.kieuNhapXuat;
-      await this.selectRow(this.formData.value.quyetDinhPdDtl[0])
+      this.tongSoLuongDxuat = this.quyetDinhPdDtlCache.reduce((prev, cur) => prev + cur.tongSoLuongDx, 0)
+      await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
+
       //this.buildTableView();
     }
     await this.spinner.hide();
   }
 
   async selectRow(item?: any) {
+    console.log(item, 'itemmmmmmm')
     try {
       await this.spinner.show();
       if (item) {
@@ -257,6 +257,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
       this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
       this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
+      this.deXuatSelected.soLuongXuatChiCuc = this.deXuatSelected.quyetDinhPdDx.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0)
       await this.buildTableView();
     } catch (e) {
     } finally {
@@ -296,14 +297,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     }
   }
 
-  async changeCuc(event: any) {
+  async changeCuc(event?: any) {
+    //clean
+    await Promise.all([
+      this.changeChiCuc(),
+    ]);
     if (event) {
-      //clean
-      await Promise.all([
-        this.changeChiCuc(null),
-        this.changeCloaiVthh(null),
-      ]);
-
       let existRow = cloneDeep(this.formData.value.deXuatPhuongAn)
         .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
       if (existRow) {
@@ -337,6 +336,11 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
 
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } else {
+      this.phuongAnRow = {
+        ...this.phuongAnRow,
+        tonKhoCuc: 0,
       }
     }
   }
@@ -486,11 +490,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     this.phuongAnRow = {};
   }
 
-  async changeChiCuc(event: any) {
+  async changeChiCuc(event?: any) {
+    //clean
+    await Promise.all([
+      this.changeCloaiVthh(),
+    ]);
     if (event) {
-      //clean
-      await this.changeCloaiVthh(null);
-
       let data = this.listChiCuc.find(s => s.maDvi == event);
       this.phuongAnRow.tenChiCuc = data.tenDvi;
       let body = {
@@ -509,16 +514,13 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.phuongAnRow = {
         ...this.phuongAnRow,
         maDviChiCuc: null,
-        cloaiVthh: null,
         tonKhoChiCuc: 0,
-        tonKhoCloaiVthh: 0,
       }
     }
   }
 
 
-  async changeCloaiVthh(event: any) {
-
+  async changeCloaiVthh(event?: any) {
     if (event) {
       let body = {
         maDvi: this.phuongAnRow.maDviChiCuc,
@@ -596,6 +598,24 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     this.phuongAnViewCache = null;
   }
 
+  changeCheckXuatGao($event) {
+    if (!$event) {
+      this.formData.patchValue({
+        qdPaXuatCapId: null,
+        deXuatPhuongAn: []
+      });
+      this.deXuatPhuongAnCache = null;
+      this.buildTableView();
+    }
+
+    // this.isChecked = !this.isChecked
+    // this.isChonPhuongAn = !this.isChonPhuongAn;
+    // this.formData.get('qdPaXuatCapId').setValue(null);
+    //
+    // this.deXuatPhuongAnCache = null;
+    // this.phuongAnViewCache = null;
+  }
+
 
   redirectDetail(id, b: boolean) {
     this.idSelected = id;
@@ -616,14 +636,22 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   async loadDsQdPaChuyenXuatCap() {
-    let body = {
-      trangThai: this.globals.prop.NHAP_BAN_HANH,
-      loaiVthh: LOAI_HANG_DTQG.GAO,
-      xuatCap: true
-    };
-    await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDsQdPaChuyenXc(body).then((response) => {
+    await this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+      trangThai: STATUS.BAN_HANH,
+      nam: this.formData.value.nam,
+      xuatCap: true,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: this.page - 1,
+      },
+    }).then((response) => {
       if (response.msg == MESSAGE.SUCCESS) {
-        this.listQdPaChuyenXc = response.data;
+        if (this.idInput) {
+          this.listQdPaChuyenXc = response.data.content;
+        } else {
+          this.listQdPaChuyenXc = response.data.content.filter(s => !s.idXc);
+        }
+
       }
     });
   }
