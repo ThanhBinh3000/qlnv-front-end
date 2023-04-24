@@ -6,6 +6,7 @@ import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
+import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
@@ -26,6 +27,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { chain, cloneDeep } from 'lodash';
 import { STATUS } from "src/app/constants/status";
+import { ThongTinHangCanDieuChuyenComponent } from "../thong-tin-hang-can-dieu-chuyen/thong-tin-hang-can-dieu-chuyen.component";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -288,6 +290,45 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
     }
   }
 
+  async add() {
+    // if (this.formData.get('type').value != 'TH') {
+    //   return;
+    // }
+    await this.spinner.show();
+    let bodyTh = {
+      trangThai: STATUS.DA_DUYET_LDV,
+      nam: this.formData.get('nam').value,
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0
+      },
+    }
+    let resTh = await this.tongHopPhuongAnCuuTroService.search(bodyTh);
+    if (resTh.msg == MESSAGE.SUCCESS) {
+      this.listDanhSachTongHop = resTh.data.content;
+    }
+    await this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
+      nzContent: ThongTinHangCanDieuChuyenComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listDanhSachTongHop,
+        dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
+        dataColumn: ['id', 'noiDungThop']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        await this.selectMaTongHop(data.id);
+
+      }
+    });
+  }
+
   async loadChiTiet(id: number) {
     await this.spinner.show()
     if (id) {
@@ -428,9 +469,9 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
 
   async openDialogTh() {
-    if (this.formData.get('type').value != 'TH') {
-      return;
-    }
+    // if (this.formData.get('type').value != 'TH') {
+    //   return;
+    // }
     await this.spinner.show();
     let bodyTh = {
       trangThai: STATUS.DA_DUYET_LDV,

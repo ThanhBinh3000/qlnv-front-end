@@ -8,12 +8,15 @@ import { MainModule } from "../../../layout/main/main.module";
 import { DirectivesModule } from "../../../directives/directives.module";
 import { NzStatisticModule } from "ng-zorro-antd/statistic";
 import { NzPipesModule } from "ng-zorro-antd/pipes";
+import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
 import { ThongTinQuyetDinhDieuChuyenComponent } from "./thong-tin-quyet-dinh-dieu-chuyen/thong-tin-quyet-dinh-dieu-chuyen.component";
+import { ThongTinHangCanDieuChuyenComponent } from "./thong-tin-hang-can-dieu-chuyen/thong-tin-hang-can-dieu-chuyen.component";
 
 @NgModule({
   declarations: [
     QuyetDinhDieuChuyenComponent,
-    ThongTinQuyetDinhDieuChuyenComponent
+    ThongTinQuyetDinhDieuChuyenComponent,
+    ThongTinHangCanDieuChuyenComponent
   ],
   imports: [
     CommonModule,
@@ -21,12 +24,14 @@ import { ThongTinQuyetDinhDieuChuyenComponent } from "./thong-tin-quyet-dinh-die
     DirectivesModule,
     NzStatisticModule,
     NzPipesModule,
+    NzCardModule,
     MainModule,
     ComponentsModule,
   ],
   exports: [
     QuyetDinhDieuChuyenComponent,
-    ThongTinQuyetDinhDieuChuyenComponent
+    ThongTinQuyetDinhDieuChuyenComponent,
+    ThongTinHangCanDieuChuyenComponent
   ]
 })
 export class QuyetDinhDieuChuyenModule {

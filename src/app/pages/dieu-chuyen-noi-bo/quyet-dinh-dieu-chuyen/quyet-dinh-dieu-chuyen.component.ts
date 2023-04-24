@@ -148,16 +148,26 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     if (this.isChiCuc()) this.tabSelected = 1;
   }
 
+  isShowDS() {
+    if (this.isChiCuc()) return true
+
+    if (this.tabSelected == 0 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+      return true
+    else if (this.tabSelected == 1 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+      return true
+    else return false
+  }
+
   isTongCuc() {
-    return false//this.userService.isTongCuc()
+    return this.userService.isTongCuc()
   }
 
   isCuc() {
-    return true//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   isChiCuc() {
-    return false//this.userService.isChiCuc()
+    return this.userService.isChiCuc()
   }
 
   selectTab(tab: number) {
