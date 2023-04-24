@@ -82,14 +82,16 @@
         <th class="text-left" nzWidth = "100px">Mã dự án</th>
         <th class="text-left" nzWidth = "120px">Tên dự án</th>
         <th class="text-left" nzWidth = "150px">Địa điểm xây dựng</th>
-        <th class="text-left" nzWidth = "150px">Khối</th>
+        <th class="text-left" nzWidth = "150px">Khối dự án, công trình</th>
         <th class="text-left" nzWidth = "200px">Thuộc Chi cục</th>
         <th class="text-left" nzWidth = "200px">Điểm kho</th>
         <th class="text-center" nzWidth = "">Thời gian <br> khởi công</th>
         <th class="text-center" nzWidth = "">Thời gian <br> hoàn thành</th>
         <th class="text-left" nzWidth = "">Tổng số <br> TMĐT dự kiến</th>
         <th class="text-left" nzWidth = "">TMĐT vốn <br> NSTW dự kiến</th>
-        <th class="text-left" nzWidth = "">Số QĐ phê duyệt</th>
+        <th class="text-left" nzWidth = "">Số QĐ PD TMĐT</th>
+        <th class="text-left" nzWidth = "">Số QĐ diều chỉnh TMĐT</th>
+        <th class="text-left" nzWidth = "">Số QĐ PD DA ĐTXD</th>
         <th class="text-left" nzWidth = "">Tổng số TMĐT <br> được duyệt</th>
         <th class="text-left" nzWidth = "">Tổng số TMĐT <br> NSTW được duyệt</th>
         <th class="text-left" nzWidth = "">Tổng lũy kế <br> vốn đã bố trí</th>
@@ -164,6 +166,16 @@
         </td>
         <td class="text-center">
           <nz-input-group>
+            <input nz-input readonly [(ngModel)]="rowItem.soQdDcPd"/>
+          </nz-input-group>
+        </td>
+        <td class="text-center">
+          <nz-input-group>
+            <input nz-input readonly [(ngModel)]="rowItem.soQdPdDtxd"/>
+          </nz-input-group>
+        </td>
+        <td class="text-center">
+          <nz-input-group>
             <input nz-input [(ngModel)]="rowItem.tmdtDuyet" readonly/>
           </nz-input-group>
         </td>
@@ -211,6 +223,8 @@
         <td class="text-center">{{ data.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.soQdPd }}</td>
+        <td>{{ data.soQdDcPd }}</td>
+        <td>{{ data.soQdPdDtxd }}</td>
         <td class="text-right">{{ data.tmdtDuyet | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
         <td class="text-right">{{ data.tongSoLuyKe | number : '1.0-1' : 'vi_VN' }}</td>
@@ -289,6 +303,16 @@
             <td class="text-center">
               <nz-input-group>
                 <input nz-input readonly [(ngModel)]="dataEdit[i].data.soQdPd"/>
+              </nz-input-group>
+            </td>
+            <td class="text-center">
+              <nz-input-group>
+                <input nz-input readonly [(ngModel)]="dataEdit[i].data.soQdDcPd"/>
+              </nz-input-group>
+            </td>
+            <td class="text-center">
+              <nz-input-group>
+                <input nz-input readonly [(ngModel)]="dataEdit[i].data.soQdPdDtxd"/>
               </nz-input-group>
             </td>
             <td class="text-center">

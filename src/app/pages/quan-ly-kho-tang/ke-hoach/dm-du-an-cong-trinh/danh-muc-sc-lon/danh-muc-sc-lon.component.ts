@@ -127,7 +127,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       nzContent: ThongTinDmScLonComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: {top: '150px'},
+      nzStyle: {top: '100px'},
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {

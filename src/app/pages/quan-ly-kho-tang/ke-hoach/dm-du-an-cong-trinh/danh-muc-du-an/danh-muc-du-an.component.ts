@@ -453,6 +453,8 @@ export class DanhMucKho {
   tmdtDuKien: number;
   nstwDuKien: number;
   soQdPd: string;
+  soQdDcPd: string;
+  soQdPdDtxd: string;
   tmdtDuyet: number;
   nstwDuyet: number;
   tongSoLuyKe: number;
