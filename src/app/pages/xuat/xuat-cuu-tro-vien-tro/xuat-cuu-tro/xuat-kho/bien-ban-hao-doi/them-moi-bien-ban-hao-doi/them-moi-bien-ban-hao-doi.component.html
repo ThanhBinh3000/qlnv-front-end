@@ -11,7 +11,7 @@
             <span>Lưu và gửi duyệt</span>
 
         </button>
-        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() "
+        <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC')"
             (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
