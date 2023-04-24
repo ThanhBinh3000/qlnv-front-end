@@ -13,6 +13,7 @@ import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 import dayjs from "dayjs";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-danh-muc-sc-thuong-xuyen',
@@ -60,7 +61,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
-      trangThai: [null],
+      trangThai: [STATUS.CHUA_THUC_HIEN],
       type: ["01"],
     });
   }
@@ -84,11 +85,12 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   async getDetail(id) {
     this.spinner.show();
     try {
-      let res = await this.danhMucService.getDetail(id);
+      let res = await this.danhMucSc.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.fileDinhKem = data.fileDinhKems;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -116,7 +118,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
 
   async loadDsLoaiCongTrinh() {
     this.listLoaiCongTrinh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CONG_TRINH_SCL');
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CT_SUA_CHUA_KT');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiCongTrinh = res.data;
     }

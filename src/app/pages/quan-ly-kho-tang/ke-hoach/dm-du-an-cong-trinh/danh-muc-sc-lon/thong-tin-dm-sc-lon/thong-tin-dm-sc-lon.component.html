@@ -30,7 +30,10 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Loại công trình</nz-form-label>
-              <input [readonly]="isViewDetail" formControlName="loaiCongTrinh" class="search__input" nz-input />
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="loaiCongTrinh">
+                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -100,7 +103,7 @@
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
               <nz-input-group>
                 <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="isViewDetail" formControlName="tmdt"
-                                 [nzMin]="0" [nzStep]="0.1">
+                                 [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -130,7 +133,9 @@
             <nz-form-label nzRequired [nzNoColon]="true">Ngày quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <input [readonly]="isViewDetail" formControlName="ngayQd" class="search__input" nz-input />
+                <nz-date-picker class="search__input" [nzDisabled]="isViewDetail"
+                                formControlName="ngayQdPd" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -145,7 +150,6 @@
             </div>
           </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
           <div nz-col nzSpan="8">
             <nz-form-item>
               <nz-form-control>
@@ -169,7 +173,6 @@
                 <input [readonly]="true" formControlName="giaTriPd" class="text-body" nz-input />
               </nz-form-control>
             </nz-form-item>
-          </div>
         </div>
       </div>
     </form>

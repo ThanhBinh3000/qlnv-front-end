@@ -63,7 +63,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Năm thực hiện sửa chữa</nz-form-label>
-              <nz-select nzAllowClear formControlName="tgThucHien">
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="tgThucHien">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
