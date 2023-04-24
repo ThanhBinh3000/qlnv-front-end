@@ -23,6 +23,8 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   isViewDetail: boolean;
   dataDetail: any
   dsKho: any[] = [];
+  dsChiCuc: any[] = [];
+  listLoaiCongTrinh: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
@@ -35,27 +37,30 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private danhMucService: DanhMucSuaChuaService,
+    private danhMucService: DanhMucService,
+    private danhMucSc: DanhMucSuaChuaService,
     private danhMucSv: DanhMucService,
     private _modalRef: NzModalRef,
     private dviService: DonviService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, danhMucService);
+    super(httpClient, storageService, notification, spinner, modal, danhMucSc);
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],
+      loaiCongTrinh: [null, Validators.required],
+      maChiCuc: [null, Validators.required],
       maDiemKho: [null, Validators.required],
       tgThucHien: [null, Validators.required],
-      lyDo: [null],
-      duToan: [null, Validators.required],
+      lyDo: [null, Validators.required],
+      tmdt: [null, Validators.required],
+      keHoachCaiTao: [null, Validators.required],
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
       trangThai: [null],
-      tmdt: [null],
       type: ["01"],
     });
   }
@@ -63,7 +68,8 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.loadDsDiemKho()
+       this.loadDsChiCuc()
+       this.loadDsLoaiCongTrinh()
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -96,10 +102,24 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     }
   }
 
-  async loadDsDiemKho() {
+  async changeChiCuc(event) {
     const dsTong = await this.dviService.layTatCaDonViByLevel(4);
     this.dsKho = dsTong.data
-    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
+    this.dsKho = this.dsKho.filter(item => item.maDvi.startsWith(event) && item.type != 'PB')
+  }
+
+  async loadDsChiCuc() {
+    const dsTong = await this.dviService.layTatCaDonViByLevel(3);
+    this.dsChiCuc = dsTong.data
+    this.dsChiCuc = this.dsChiCuc.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
+  }
+
+  async loadDsLoaiCongTrinh() {
+    this.listLoaiCongTrinh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CONG_TRINH_SCL');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiCongTrinh = res.data;
+    }
   }
 
   async handleOk(data: string) {
@@ -109,7 +129,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     }
     let body = this.formData.value
     body.maDvi = this.userInfo.MA_DVI
-    body.tgThucHien = body.tgThucHien ? dayjs(body.tgThucHien).get('year') : null
+    body.fileDinhKems = this.fileDinhKem
     let res = await this.createUpdate(body);
     if (res) {
       this._modalRef.close(data);

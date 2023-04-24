@@ -3,14 +3,14 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span></span>
-        <span>CÔNG TRÌNH SỬA CHỮA LỚN</span>
+        <span>CÔNG TRÌNH SỬA CHỮA THƯỜNG XUYÊN</span>
       </div>
     </div>
   </div>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Mã công trình</nz-form-label>
@@ -18,7 +18,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tên công trình</nz-form-label>
@@ -26,7 +26,29 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Loại công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="loaiCongTrinh">
+                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Thuộc chi cục</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maChiCuc" (ngModelChange)="changeChiCuc($event)">
+              <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+              </nz-option>
+            </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="18">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Điểm kho</nz-form-label>
@@ -37,12 +59,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true">Năm thực hiện</nz-form-label>
-              <nz-date-picker [nzDisabled]="isViewDetail" nzPlaceHolder="Nhập năm" formControlName="tgThucHien"
-                              nzMode="year"></nz-date-picker>
+              <nz-form-label nzRequired [nzNoColon]="true">Năm thực hiện sửa chữa</nz-form-label>
+              <nz-select nzAllowClear formControlName="tgThucHien">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -58,9 +82,19 @@
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true">Dự toán (đ)</nz-form-label>
-              <nz-input-number [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'"
-                               formControlName="duToan">
+              <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt (đ)</nz-form-label>
+              <nz-input-number [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                               formControlName="tmdt">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Kế hoạch cải tạo, sửa chữa thuường xuyên kho tàng (đ)</nz-form-label>
+              <nz-input-number [nzFormatter]="globals.formatter" [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'"
+                               formControlName="keHoachCaiTao">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -68,63 +102,54 @@
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt báo cáo KTKT</nz-form-label>
-              <input [readonly]="true" formControlName="soQdPheDuyet" class="search__input" nz-input/>
+              <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
+              <input [readonly]="isViewDetail" formControlName="soQdPheDuyet" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">NGày QĐ phê duyệt báo cáo KTKT</nz-form-label>
-              <nz-date-picker [nzDisabled]="true" nzFormat="dd/MM/YYYY" formControlName="ngayQdPd"
+              <nz-form-label [nzNoColon]="true">Ngày QĐ phê duyệt tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
+              <nz-date-picker [nzDisabled]="isViewDetail" nzFormat="dd/MM/YYYY" formControlName="ngayQdPd"
                               nzPlaceHolder="Nhập ngày">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm quyết định
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Tổng mức đầu tư</nz-form-label>
-              <input [readonly]="true" formControlName="tmdt" class="search__input" nz-input/>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Lỹ kế kế hoạch vốn được duyệt (đ)</nz-form-label>
+              <nz-form-label [nzNoColon]="true">Số QĐ PD quyết toán</nz-form-label>
               <span style="color: blue">1.000.000.000</span>
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-    </form>
-    <nz-table #basicTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
-              [nzData]="dataTable">
-      <thead>
-      <tr>
-        <th nzWidth="40px">STT</th>
-        <th nzWidth="80px">Năm</th>
-        <th>Số QĐ phê duyệt</th>
-        <th nzWidth="150px">Kế hoạch vốn (đ)</th>
-      </tr>
-      </thead>
-      <tbody>
 
-      </tbody>
-    </nz-table>
-    <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label nzRequired [nzNoColon]="true">Trạng thái</nz-form-label>
-              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="trangThai">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                </nz-option>
-              </nz-select>
+              <nz-form-label [nzNoColon]="true">Ngày QĐ PD quyết toán</nz-form-label>
+              <span style="color: blue">1.000.000.000</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Giá trị quyết toán được phê duyệt</nz-form-label>
+              <span style="color: blue">1.000.000.000</span>
             </nz-form-control>
           </nz-form-item>
         </div>
