@@ -15,11 +15,8 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import dayjs from 'dayjs';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { STATUS } from 'src/app/constants/status';
-import { ItemDaiDien } from 'src/app/pages/nhap/dau-thau/kiem-tra-chat-luong/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
-import { cloneDeep } from 'lodash';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { BienBanLayMauBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/ktra-cluong-btt/bien-ban-lay-mau-btt.service';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
   selector: 'app-them-moi-bien-ban-lay-mau-btt',

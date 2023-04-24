@@ -146,7 +146,7 @@
                         <td>{{ data.noiDungThop }}</td>
                         <td>{{ data.namKh }}</td>
                         <td>
-                            <a *ngIf="data.soQdPd && data.idQdPd" style="color: blue ;font-weight: bold;"
+                            <a *ngIf="data.soQdPd && data.idQdPd" nz-button nzType="link"
                                 (click)="openModalQdPd(data.idQdPd)">{{
                                 data.soQdPd}}</a>
                         </td>
