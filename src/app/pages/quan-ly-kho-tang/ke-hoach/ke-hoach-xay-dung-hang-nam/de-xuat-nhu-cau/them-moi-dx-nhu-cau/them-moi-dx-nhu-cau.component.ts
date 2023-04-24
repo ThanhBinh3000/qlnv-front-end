@@ -177,7 +177,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
           }
         }
         await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
-        this.goBack();
       } else {
         this.idInput = data.id;
         this.formData.patchValue({
