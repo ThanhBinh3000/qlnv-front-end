@@ -224,7 +224,6 @@
                      (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>
             </nz-input-group>
           </th>
-          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -259,6 +258,11 @@
               *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_THEM_VU'))"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
+            </a>
+            <a
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.TAO_QD)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && !data.soQdPd && !data.maThop"
+              (click)="taoQuyetDinh(data)">
+              <i class="icon htvbdh_soanthao"></i>
             </a>
             <a
               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XDPA_XOA')"

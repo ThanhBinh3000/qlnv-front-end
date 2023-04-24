@@ -111,7 +111,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenDvi: [],
       soLuong: [],
       canCu: [new Array<FileDinhKem>()],
-      fileDinhKem: [new Array<FileDinhKem>() ],
+      fileDinhKem: [new Array<FileDinhKem>(), [Validators.required]],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
@@ -144,7 +144,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             //phan quyen du lieu
             this.formData.patchValue(res.data);
-            if (this.formData.value.soQd){
+            if (this.formData.value.soQd) {
               this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
             }
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
@@ -228,7 +228,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     if (id && this.flagInit) {
       try {
         this.spinner.show();
-        this.chiTiet=[];
+        this.chiTiet = [];
         this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
@@ -240,7 +240,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
               }
               if (noiDungCuuTro1) {
                 noiDungCuuTro1.forEach(s => {
-                  this.chiTiet = [...this.chiTiet,...s.quyetDinhPdDx];
+                  this.chiTiet = [...this.chiTiet, ...s.quyetDinhPdDx];
                 });
                 this.formData.patchValue({
                   loaiVthh: res.data.loaiVthh,
@@ -298,47 +298,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     });
   }
 
-  async saveSoQdPa() {
-    let item = this.dsQdPd.find(item => item.id == this.formData.value.idQdPd)
-    this.formData.patchValue({
-      soQdPd: item.soQd,
-      ngayKyQdPa: item.ngayKy,
-    })
-    if(this.formData.value.soQd){
-      this.formData.patchValue({
-        soQd: this.formData.value.soQd + "/" + this.userInfo.MA_QD
-      })
-    }
-  }
-
-  async saveAndSend(status: string, message: string, sucessMessage: string) {
-    if(this.formData.value.idQdPd){
-      await this.saveSoQdPa();
-    }
-    await super.saveAndSend(this.formData.value, status, message, sucessMessage);
-    /*if (this.formData.value.id > 0) {
-      let data = this.formData.value;
-      this.saveSoQdPa();
-      await this.quyetDinhGiaoNvCuuTroService.update(this.formData.value)
-      if (data) {
-        await this.approve(data.id, status, message, null, sucessMessage);
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.saveSoQdPa();
-      let data = await this.createUpdate(this.formData.value);
-      if (data) {
-        await this.approve(data.id, status, message, null, sucessMessage);
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    }*/
-
-  }
-
   async save() {
-    this.saveSoQdPa();
     this.formData.disable()
     let rs = await this.createUpdate(this.formData.value);
     this.formData.enable()
@@ -547,7 +507,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
 
-
   redirectQdNhapXuat() {
     this.showListEvent.emit();
   }
@@ -593,10 +552,13 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
 
     if (index != -1) {
+      console.log(1)
       table.splice(index, 1, this.noiDungRow);
     } else if (!table[0].maDiemKho) {
-      table.splice(0, 1, this.noiDungRow);
+      console.log(2)
+      table.splice(0, table.length, this.noiDungRow);
     } else {
+      console.log(3)
       table = [...table, this.noiDungRow]
     }
     // table = table.filter(s => s.maDiemKho);

@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import { v4 as uuidv4 } from 'uuid';
+
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
   templateUrl: './quan-ly-phieu-kiem-nghiem-chat-luong.component.html',
@@ -44,6 +45,8 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
       ngayKnghiemDen: null,
       soBbLayMau: null,
       soBbXuatDocKho: null,
+      maChiCuc: null,
+      maDvi: null
     })
 
     this.filterTable = {
@@ -84,7 +87,8 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
     })
   }
 
@@ -109,7 +113,6 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
@@ -122,21 +125,21 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
               idVirtual: uuidv4(),
               maDiemKho: k,
               tenDiemKho: rowLv2.tenDiemKho,
-              maNhaKho: rowLv2.maNhaKho,
-              tenNhaKho: rowLv2.tenNhaKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              tenLoKho: rowLv2.tenLoKho,
-              maLoKho: rowLv2.maLoKho,
-              soPhieu: rowLv2.soPhieu,
-              ngayKnghiem: rowLv2.ngayKnghiem,
-              idBbLayMau: rowLv2.idBbLayMau,
-              soBbLayMau: rowLv2.soBbLayMau,
-              ngayLayMau: rowLv2.ngayLayMau,
-              soBbXuatDocKho: rowLv2.soBbXuatDocKho,
-              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
+              // maNhaKho: rowLv2.maNhaKho,
+              // tenNhaKho: rowLv2.tenNhaKho,
+              // maNganKho: rowLv2.maNganKho,
+              // tenNganKho: rowLv2.tenNganKho,
+              // tenLoKho: rowLv2.tenLoKho,
+              // maLoKho: rowLv2.maLoKho,
+              // soPhieu: rowLv2.soPhieu,
+              // ngayKnghiem: rowLv2.ngayKnghiem,
+              // idBbLayMau: rowLv2.idBbLayMau,
+              // soBbLayMau: rowLv2.soBbLayMau,
+              // ngayLayMau: rowLv2.ngayLayMau,
+              // soBbXuatDocKho: rowLv2.soBbXuatDocKho,
+              // ngayXuatDocKho: rowLv2.ngayXuatDocKho,
+              // trangThai: rowLv2.trangThai,
+              // tenTrangThai: rowLv2.tenTrangThai,
               childData: v
             }
           }

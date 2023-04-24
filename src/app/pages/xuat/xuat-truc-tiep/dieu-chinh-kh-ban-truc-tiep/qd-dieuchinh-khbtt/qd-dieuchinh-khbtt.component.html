@@ -159,7 +159,7 @@
                         <td>{{ data.soQdDc }}</td>
                         <td>{{ data.ngayKyDc | date: 'dd/MM/YYYY' }}</td>
                         <td>
-                            <a *ngIf="data.soQdGoc && data.idQdGoc" style="color: blue ;font-weight: bold;"
+                            <a *ngIf="data.soQdGoc && data.idQdGoc" nz-button nzType="link"
                                 (click)="openModalQdPdGoc(data.idQdGoc)">{{
                                 data.soQdGoc}}</a>
                         </td>

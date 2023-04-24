@@ -17,6 +17,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -47,23 +48,23 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     super(httpClient, storageService, notification, spinner, modal, xhPhieuKnghiemCluongService);
     this.formData = this.fb.group({
       id: [],
-      nam: [dayjs().get('year'), [Validators.required]],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
+      nam: [dayjs().get('year')],
+      maDvi: [''],
+      tenDvi: [''],
       maQhns: [''],
       idBbLayMau: [],
       soBbLayMau: ['', [Validators.required]],
-      soQdGiaoNvXh: ['', [Validators.required]],
+      soQdGiaoNvXh: [''],
       ngayQdGiaoNvXh: [''],
-      idQdGiaoNvXh: ['', [Validators.required]],
-      soPhieu: ['', [Validators.required]],
-      idDdiemXh: [''],
-      maDiemKho: ['', [Validators.required]],
-      tenDiemKho: ['', [Validators.required]],
-      maNhaKho: ['', [Validators.required]],
-      tenNhaKho: ['', [Validators.required]],
-      maNganKho: ['', [Validators.required]],
-      tenNganKho: ['', [Validators.required]],
+      idQdGiaoNvXh: [],
+      soPhieu: [''],
+      idDdiemXh: [],
+      maDiemKho: [''],
+      tenDiemKho: [''],
+      maNhaKho: [''],
+      tenNhaKho: [''],
+      maNganKho: [''],
+      tenNganKho: [''],
       maLoKho: [''],
       tenLoKho: [''],
       loaiVthh: [''],
@@ -71,9 +72,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      hthucBquan: ['', [Validators.required]],
-      ngayLayMau: ['', [Validators.required]],
-      ngayKnghiem: ['', [Validators.required]],
+      hthucBquan: [''],
+      ngayLayMau: [''],
+      ngayKnghiem: [''],
       ketQua: [''],
       ketLuan: [''],
       trangThai: [STATUS.DU_THAO],
@@ -137,7 +138,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async bindingBienBanLM(id) {
     await this.spinner.show();
     let res = await this.bienBanLayMauXhService.getDetail(id);
-    console.log(res);
     if (res.data) {
       const data = res.data;
       this.formData.patchValue({
@@ -288,11 +288,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     ];
   }
 
-
-  async changeLoaiHangHoa(id: any) {
-
-  }
-
   itemRow: ItemDaiDien = new ItemDaiDien();
   itemRow2: ItemDaiDien = new ItemDaiDien();
 
@@ -303,23 +298,25 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async save(isGuiDuyet?: boolean) {
-    let body = this.formData.value;
-    body.children = this.dataTable;
-    body.fileDinhKems = this.fileDinhKem;
-    body.children.forEach(e => {
-      e.chiSoNhap = e.chiSoXuat
-    });
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.id = data.id
-        this.pheDuyet(true);
-      } else {
-        // this.goBack();
+    this.setValidator(isGuiDuyet);
+    if (this.validateNgay()) {
+      let body = this.formData.value;
+      body.children = this.dataTable;
+      body.fileDinhKems = this.fileDinhKem;
+      body.children.forEach(e => {
+        e.chiSoNhap = e.chiSoXuat
+      });
+      let data = await this.createUpdate(body);
+      if (data) {
+        if (isGuiDuyet) {
+          this.id = data.id
+          this.pheDuyet(true);
+        } else {
+          // this.goBack();
+        }
       }
     }
   }
-
 
   pheDuyet(isPheDuyet) {
     let trangThai = ''
@@ -367,7 +364,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     })
   }
 
-
   cancelEdit(index: number): void {
     this.dataTable[index].edit = false;
   }
@@ -376,9 +372,9 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     this.dataTable[index].edit = false;
   }
 
-  editRow(index: number) {
-    this.dataTable[index].edit = true;
-  }
+  // editRow(index: number) {
+  //   this.dataTable[index].edit = true;
+  // }
 
   deleteRow(index: any) {
     this.modal.confirm({
@@ -391,7 +387,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
+          this.dataTable[index].ketQuaKiemTra = null;
+          this.dataTable[index].danhGia = null
         } catch (e) {
           console.log('error', e);
         }
@@ -399,5 +396,64 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     });
   }
 
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["nam"].setValidators([Validators.required]);
+      this.formData.controls["maDvi"].setValidators([Validators.required]);
+      this.formData.controls["tenDvi"].setValidators([Validators.required]);
+      this.formData.controls["soQdGiaoNvXh"].setValidators([Validators.required]);
+      this.formData.controls["soPhieu"].setValidators([Validators.required]);
+      this.formData.controls["ngayTao"].setValidators([Validators.required]);
+      this.formData.controls["maDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["maNhaKho"].setValidators([Validators.required]);
+      this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
+      this.formData.controls["maNganKho"].setValidators([Validators.required]);
+      this.formData.controls["tenNganKho"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["hthucBquan"].setValidators([Validators.required]);
+      this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
+      this.formData.controls["ngayKnghiem"].setValidators([Validators.required]);
+      this.formData.controls["ketQua"].setValidators([Validators.required]);
+      this.formData.controls["ketLuan"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["maDvi"].clearValidators();
+      this.formData.controls["tenDvi"].clearValidators();
+      this.formData.controls["soQdGiaoNvXh"].clearValidators();
+      this.formData.controls["soPhieu"].clearValidators();
+      this.formData.controls["ngayTao"].clearValidators();
+      this.formData.controls["maDiemKho"].clearValidators();
+      this.formData.controls["tenDiemKho"].clearValidators();
+      this.formData.controls["maNhaKho"].clearValidators();
+      this.formData.controls["tenNhaKho"].clearValidators();
+      this.formData.controls["maNganKho"].clearValidators();
+      this.formData.controls["tenNganKho"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["tenLoaiVthh"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["hthucBquan"].clearValidators();
+      this.formData.controls["ngayLayMau"].clearValidators();
+      this.formData.controls["ngayKnghiem"].clearValidators();
+      this.formData.controls["ketQua"].clearValidators();
+      this.formData.controls["ketLuan"].clearValidators();
+    }
+  }
 
+  validateNgay() {
+    let pipe = new DatePipe('en-US');
+    let ngayLayMau = new Date(pipe.transform(this.formData.value.ngayLayMau, 'yyyy-MM-dd'));
+    let ngayKnghiem = new Date(pipe.transform(this.formData.value.ngayKnghiem, 'yyyy-MM-dd'));
+    if (this.formData.value.ngayLayMau) {
+      if (ngayLayMau > ngayKnghiem) {
+        this.notification.error(MESSAGE.ERROR, "Này kiểm nghiệm không được phép vượt quá ngày lấy mẫu");
+        return false
+      }
+    }
+    return true;
+  }
 }

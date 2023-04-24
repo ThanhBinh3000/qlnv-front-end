@@ -108,6 +108,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     let res = await this.qdTrungHanSv.getListQd();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdKhTh = res.data;
+      if (this.listQdKhTh && this.listQdKhTh.length > 0) {
+        this.listQdKhTh = this.listQdKhTh.filter(item => item.trangThaiQd == "00")
+      }
     }
   }
 
@@ -177,7 +180,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
           }
         }
         await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
-        this.goBack();
       } else {
         this.idInput = data.id;
         this.formData.patchValue({
@@ -314,24 +316,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     } else {
       this.expandSet.delete(id);
     }
-  }
-
-  themItemcha() {
-    if (!this.rowItemCha.khoi) {
-      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-      return;
-    }
-    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-      return;
-    }
-    if (!this.formData.value.soQdTrunghan) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn kế hoạch trung hạn");
-      return;
-    }
-    this.rowItemCha.idVirtual = uuidv4();
-    this.dataTable.push(this.rowItemCha);
-    this.rowItemCha = new DanhMucKho();
   }
 
   deleteItemCha(idx) {
