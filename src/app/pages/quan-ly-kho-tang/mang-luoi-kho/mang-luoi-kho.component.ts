@@ -370,7 +370,7 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
-  checkStatusSurplus() {
+  checkStatusSurplus() : boolean {
     let check = false;
     if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == false && !this.detailDonVi.value.loaiVthh)) {
       check = true
@@ -453,6 +453,7 @@ export class MangLuoiKhoComponent implements OnInit {
           tenDiemkho: dataNode.tenDiemkho,
           tenTongKho: dataNode.tenTongKho,
           soLokho: dataNode.soLokho,
+          coLoKho : dataNode.coLoKho
         })
       }
       if (this.levelNode == 5) {
