@@ -102,14 +102,14 @@ export class PhuLuc02Component implements OnInit {
     })
     await this.getDinhMuc();
     this.lstCtietBcao.forEach(item => {
-      if (!item.tenDanhMuc) {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-        item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-        item.namDtDmuc = dinhMuc?.tongDmuc;
-        item.maDviTinh = dinhMuc?.donViTinh;
-        item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
-        item.namDtSluong = item.namDtSluong
-      }
+      // if (!item.tenDanhMuc) {
+      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
+      item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+      item.namDtDmuc = dinhMuc?.tongDmuc;
+      item.maDviTinh = dinhMuc?.donViTinh;
+      item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
+      item.namDtSluong = item.namDtSluong
+      // }
     })
     console.log(this.lstCtietBcao);
     // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);

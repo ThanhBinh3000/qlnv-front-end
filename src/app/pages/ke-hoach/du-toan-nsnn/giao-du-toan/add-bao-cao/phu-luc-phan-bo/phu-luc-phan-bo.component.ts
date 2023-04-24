@@ -259,6 +259,7 @@ export class PhuLucPhanBoComponent implements OnInit {
     }
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.sum(this.lstCtietBcao[index].stt);
+    this.getTotal();
     this.updateEditCache();
   }
 

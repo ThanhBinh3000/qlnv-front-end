@@ -152,8 +152,10 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     this.spinner.show();
     localStorage.setItem("preTab", "dsGiaoTuCapTren")
     this.id = this.data.id;
+    await this.userService.getUserLogin();
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo?.MA_DVI;
+    console.log(this.userInfo)
     //lay danh sach danh muc
     // await this.danhMucService.dMDonVi().toPromise().then(
     //   data => {
@@ -177,35 +179,35 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
   };
 
   async getChildUnit() {
-		this.spinner.show();
-		const request = {
-			maDviCha: this.maDviTao,
-			trangThai: '01',
-		}
-		await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
-			data => {
-				if (data.statusCode == 0) {
-					this.lstDvi = data.data;
-					this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
-					console.log(this.lstDvi);
-					if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-						this.lstDvi.push(
-						  {
-							tenDvi: this.userInfo.TEN_DVI,
-							maDvi: this.userInfo.MA_DVI
-						  }
-						)
-					  }
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		)
-		this.spinner.hide();
-	}
+    this.spinner.show();
+    const request = {
+      maDviCha: this.maDviTao,
+      trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.lstDvi = data.data;
+          this.lstDvi = this.lstDvi.filter(e => e.tenVietTat && (e.tenVietTat.includes("CDT") || e.tenVietTat.includes("CNTT") || e.tenVietTat.includes("_VP")))
+          console.log(this.lstDvi);
+          // if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.isStatus == "2") {
+          //   this.lstDvi.push(
+          //     {
+          //       tenDvi: this.userInfo.TEN_DVI,
+          //       maDvi: this.userInfo.MA_DVI
+          //     }
+          //   )
+          // }
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    )
+    this.spinner.hide();
+  }
 
   statusClass() {
     if (Utils.statusSave.includes(this.isStatus)) {
@@ -450,6 +452,14 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
         soTranChi: 0,
       })
     })
+
+    if ((this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) && this.isStatus == "2") {
+      listCtietDvi.push({
+        id: uuid.v4() + 'FE',
+        maDviNhan: this.userInfo.MA_DVI,
+        soTranChi: 0,
+      })
+    }
 
     const lstCtietBcaoTemp: any[] = [];
     // gui du lieu trinh duyet len server

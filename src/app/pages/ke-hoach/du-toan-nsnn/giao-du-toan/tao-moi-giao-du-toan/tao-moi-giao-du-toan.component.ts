@@ -252,7 +252,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    
+
     // check trường hợp tạo mới/ cập nhật/ tổng hợp
     if (this.id) {
       // call chi tiết bản ghi khi có id
@@ -271,7 +271,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       this.idPaBTC = this.data?.idPaBTC;
       this.namPa = this.data?.namPa;
       this.trangThaiBanGhi = this.data?.trangThai;
-      
+
       if (!this.maPa) {
         this.location.back();
       }
@@ -285,6 +285,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     this.updateEditCache();
     this.getStatusButton();
+    console.log(this.data);
+    console.log(this.lstDvi);
     this.spinner.hide();
   };
 
@@ -996,7 +998,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
   // call api giao số liệu trong cột được chọn
   giaoSoTranChi(maDviNhan: any) {
-    
+
     const lstGiao: any[] = [];
     if (maDviNhan) {
       const lstCtiet: any[] = [];
