@@ -256,6 +256,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       let nhakho = this.listNhaKho.filter(item => item.maDvi == this.thongtinPhanLo.maNhaKho)[0];
       this.listNganKho = nhakho.children;
       this.thongtinPhanLo.tenNhaKho = nhakho.tenDvi;
+      this.thongtinPhanLo.maNganKho = null;
+      this.thongtinPhanLo.maLoKho = null;
     }
   }
 
@@ -278,7 +280,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongtinPhanLo.maNganKho)[0];
       this.listLoKho = nganKho.children;
       this.thongtinPhanLo.tenNganKho = nganKho.tenDvi;
-
+      this.thongtinPhanLo.maLoKho = null;
     }
   }
 
@@ -361,7 +363,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateGiaDeXuat() {
-    if (this.thongtinPhanLo.donGiaDeXuat >= this.giaToiDa) {
+    if (this.thongtinPhanLo.donGiaDeXuat <= this.giaToiDa) {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")
       return false
     } else {

@@ -34,8 +34,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Output()
   showListEvent = new EventEmitter<any>();
   listLoaiHopDong: any[] = [];
-  listDviTsan: any[] = [];
-  listDviLquan: any[] = [];
   dataTablePhuLuc: any[] = [];
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
@@ -45,7 +43,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   objHopDongHdr: any = {};
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
-  listHdDaKy = [];
+
+  ListTccnChaoGia: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -63,12 +62,12 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     this.formData = this.fb.group(
       {
         id: [],
-        idQdKq: [],
         namHd: [dayjs().get('year')],
+        idQdKq: [],
         soQdKq: [''],
         ngayKyQdKq: [''],
-        ngayKyQdPd: [''],
         ngayMkho: [''],
+        ngayKyQdPd: [''],
         soQdPd: [''],
         maDviTsan: [''],
         loaiHinhNx: [''],
@@ -77,21 +76,19 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         tenHd: [''],
         ngayHluc: [''],
         ghiChuNgayHluc: [''],
-
         loaiHdong: [''],
         tenLoaiHdong: [''],
         ghiChuLoaiHdong: [''],
-        tgianThienHd: [''],
+        tgianThienHd: [],
         thoiGianDuKien: [''],
         tgianGnhanTu: [''],
         tgianGnhanDen: [''],
         ghiChuTgianGnhan: [''],
         noiDungHdong: [''],
         dkienHanTtoan: [''],
-
         maDvi: [''],
         tenDvi: [''],
-        diaChi: [''],
+        diaChiDvi: [''],
         mst: [''],
         tenNguoiDdien: [''],
         chucVu: [''],
@@ -100,10 +97,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         stk: [''],
         moTai: [''],
         ttinGiayUyQuyen: [''],
-
         idDviMua: [],
         tenDviMua: [''],
-        diaChiDviMua: [],
+        diaChiDviMua: [''],
         mstDviMua: [''],
         tenNguoiDdienDviMua: [''],
         chucVuDviMua: [''],
@@ -111,27 +107,21 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         faxDviMua: [''],
         stkDviMua: [''],
         moTaiDviMua: [''],
-
         loaiVthh: [''],
         tenLoaiVthh: [''],
         cloaiVthh: [''],
         tenCloaiVthh: [''],
         moTaHangHoa: [''],
-        dviTinh: [''],
-        soLuong: [],
+        donViTinh: [''],
+        soLuongBanTrucTiep: [],
         thanhTien: [],
         ghiChu: [''],
-        tongSoLuongQdKh: [],
-        tongSoLuongQdKhDaky: [],
-        tongSoLuongQdKhChuaky: [],
-        donGia: [],
-        donGiaGomThue: [],
-        donGiaKhongVat: [],
-        slUyQuyenChiCucKh: [],
+        tongSlXuatBanQdKh: [],
+        tongSlBanttQdkhDakyHd: [],
+        tongSlBanttQdkhChuakyHd: [],
         trangThai: STATUS.DU_THAO,
         tenTrangThai: ['Dự thảo'],
         listMaDviTsan: [],
-        trichYeu: [],
       }
     );
   }
@@ -192,20 +182,20 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadDsHd() {
-    let body = {
-      soQdKq: this.formData.value.soQdKq,
-      trangThai: STATUS.DA_KY,
-      loaiVthh: this.loaiVthh,
-    }
-    let res = await this.hopDongBttService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listHdDaKy = data.content;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
+  // async loadDsHd() {
+  //   let body = {
+  //     soQdKq: this.formData.value.soQdKq,
+  //     trangThai: STATUS.DA_KY,
+  //     loaiVthh: this.loaiVthh,
+  //   }
+  //   let res = await this.hopDongBttService.search(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     let data = res.data;
+  //     this.listHdDaKy = data.content;
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   async loadChiTiet(id) {
     let data = await this.detail(id);
@@ -283,10 +273,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.qdPdKetQuaBttService.getDetail(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          let resTtin = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataKq.idPdKhDtl);
           if (resKq.data) {
-            const dataThongTin = resTtin.data;
-            this.setListDviTsan(dataKq.children);
+            this.ListTccnChaoGia.push(dataKq.children)
             this.formData.patchValue({
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
@@ -301,7 +289,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
               trichYeu: dataKq.trichYeu,
-              tongSoLuongQdKh: dataThongTin.tongSoLuong
             });
             this.formData.patchValue({
               dviTinh: this.listHangHoaAll.find(s => s.ma == dataKq.loaiVthh,)?.maDviTinh
@@ -309,6 +296,35 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           }
         })
     }
+  }
+
+  setListTccnChaoGia() {
+    let listCntc: any[] = [];
+    this.ListTccnChaoGia.forEach((item) => {
+      item.children.forEach((child) => {
+        listCntc = child.children
+      })
+    })
+    this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHeader: ['Số QĐ PD KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['tochucCanhan', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataTable: listCntc
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.onChangeKqBTT(data.id);
+      }
+    });
+
   }
 
   async deletePhuLuc(data) {
@@ -408,74 +424,74 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
 
-  setListDviTsan(inputTable) {
-    this.listDviTsan = [];
-    inputTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
-      item.dataDviTsan = dataGroup;
-      item.dataDviTsan.forEach(x => {
-        if (x.maDviTsan) {
-          x.tenDvi = item.tenDvi
-          x.maDvi = item.maDvi
-          x.diaChi = item.diaChi
-          x.donGiaVat = item.donGiaVat
-          x.children.forEach(s => {
-            x.soLuongChiCuc = s.soLuong;
-          })
-          this.listDviTsan = [...this.listDviTsan, x];
-        }
-      })
-    })
-  }
+  // setListDviTsan(inputTable) {
+  //   this.listDviTsan = [];
+  //   inputTable.forEach((item) => {
+  //     let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
+  //     item.dataDviTsan = dataGroup;
+  //     item.dataDviTsan.forEach(x => {
+  //       if (x.maDviTsan) {
+  //         x.tenDvi = item.tenDvi
+  //         x.maDvi = item.maDvi
+  //         x.diaChi = item.diaChi
+  //         x.donGiaVat = item.donGiaVat
+  //         x.children.forEach(s => {
+  //           x.soLuongChiCuc = s.soLuong;
+  //         })
+  //         this.listDviTsan = [...this.listDviTsan, x];
+  //       }
+  //     })
+  //   })
+  // }
 
-  selectMaDviTsan() {
-    if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-      this.listDviLquan = []
-      this.dataTable = [];
-      let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
-      let as = [];
-      listAll.forEach(s => {
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach(y => {
-            /// Check nếu cùng 1 mã đơn vị thì sẽ push chung vào 1 children của mã đơn vị ấy
-            if (y.maDvi == s.maDvi) {
-              y.children = [...y.children, ...s.children]
-            } else {
-              this.dataTable = [...this.dataTable, s]
-            }
-          })
-        } else {
-          this.dataTable = [...this.dataTable, s]
-        }
-        s.children.forEach(s1 => as = [...as, s1])
-      });
-      as.forEach(s => {
-        s.children.forEach(s1 => {
-          if (s1.luaChon == true) {
-            this.listDviLquan.push(s1);
-          }
-        })
-      })
-    }
-  }
+  // selectMaDviTsan() {
+  //   if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
+  //     this.listDviLquan = []
+  //     this.dataTable = [];
+  //     let listAll = this.listDviTsan.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+  //     let as = [];
+  //     listAll.forEach(s => {
+  //       if (this.dataTable && this.dataTable.length > 0) {
+  //         this.dataTable.forEach(y => {
+  //           /// Check nếu cùng 1 mã đơn vị thì sẽ push chung vào 1 children của mã đơn vị ấy
+  //           if (y.maDvi == s.maDvi) {
+  //             y.children = [...y.children, ...s.children]
+  //           } else {
+  //             this.dataTable = [...this.dataTable, s]
+  //           }
+  //         })
+  //       } else {
+  //         this.dataTable = [...this.dataTable, s]
+  //       }
+  //       s.children.forEach(s1 => as = [...as, s1])
+  //     });
+  //     as.forEach(s => {
+  //       s.children.forEach(s1 => {
+  //         if (s1.luaChon == true) {
+  //           this.listDviLquan.push(s1);
+  //         }
+  //       })
+  //     })
+  //   }
+  // }
 
-  changeDviCungCap($event: any) {
-    let dViCc = this.listDviLquan.find(s => s.id === $event);
-    if (dViCc) {
-      this.formData.patchValue({
-        idDviMua: dViCc.id,
-        tenDviMua: dViCc.tochucCanhan,
-        diaChiDviMua: dViCc.diaDiemChaoGia,
-        mstDviMua: dViCc.mst,
-        soLuong: dViCc.soLuong,
-        donGia: dViCc.donGia,
-        donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
-        sdtDviMua: dViCc.sdt,
-        thanhTien: dViCc.soLuong * dViCc.donGia,
-        tongSoLuongQdKhChuaky: this.formData.value.tongSoLuongQdKh - dViCc.soLuong
-      })
-    }
-  }
+  // changeDviCungCap($event: any) {
+  //   let dViCc = this.listDviLquan.find(s => s.id === $event);
+  //   if (dViCc) {
+  //     this.formData.patchValue({
+  //       idDviMua: dViCc.id,
+  //       tenDviMua: dViCc.tochucCanhan,
+  //       diaChiDviMua: dViCc.diaDiemChaoGia,
+  //       mstDviMua: dViCc.mst,
+  //       soLuong: dViCc.soLuong,
+  //       donGia: dViCc.donGia,
+  //       donGiaGomThue: dViCc.donGia + (dViCc.donGia * dViCc.thueGtgt / 100),
+  //       sdtDviMua: dViCc.sdt,
+  //       thanhTien: dViCc.soLuong * dViCc.donGia,
+  //       tongSoLuongQdKhChuaky: this.formData.value.tongSoLuongQdKh - dViCc.soLuong
+  //     })
+  //   }
+  // }
 
 }
 
