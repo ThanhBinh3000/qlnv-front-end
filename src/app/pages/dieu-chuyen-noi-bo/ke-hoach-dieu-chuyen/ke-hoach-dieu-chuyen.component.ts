@@ -1,20 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import {
-  DeXuatPhuongAnCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
-import { CHUC_NANG, STATUS } from 'src/app/constants/status';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {DonviService} from 'src/app/services/donvi.service';
+import {CHUC_NANG} from 'src/app/constants/status';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {Validators} from "@angular/forms";
+import {KeHoachDieuChuyenService} from "./ke-hoach-dieu-chuyen.service";
 
 @Component({
   selector: 'app-ke-hoach-dieu-chuyen',
@@ -28,17 +26,20 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   @Input()
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
+  listLoaiDc: any [] = [
+    {ma: 'CHI_CUC', giaTri: 'Giữa 2 chi cục trong cùng 1 cục'},
+    {ma: 'CUC', giaTri: 'Giữa 2 cục DTNN KV'}
+  ];
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
   listChungLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-    { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHODUYET_TBP_TVQT, giaTri: 'Chờ duyệt - TBP TVQT'},
+    {ma: this.STATUS.TUCHOI_TBP_TVQT, giaTri: 'Từ chối - TBP TVQT'},
+    {ma: this.STATUS.CHO_DUYET_LDCC, giaTri: 'Chờ duyệt - LĐ Chi Cục'},
+    {ma: this.STATUS.TU_CHOI_LDCC, giaTri: 'Từ chối - LĐ Chi Cục'},
+    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Chi Cục'}
   ];
 
   constructor(
@@ -49,32 +50,28 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private keHoachDieuChuyenService: KeHoachDieuChuyenService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
+    super(httpClient, storageService, notification, spinner, modal, keHoachDieuChuyenService);
     this.formData = this.fb.group({
-      nam: null,
+      nam: [dayjs().get("year"), [Validators.required]],
       loaiDc: null,
       tenDvi: null,
       maDvi: null,
-      ngayLapKh: null,
       ngayLapKhTu: null,
       ngayLapKhDen: null,
-      ngayDuyetLdc: null,
-      ngayDuyetLdcTu: null,
-      ngayDuyetLdcDen: null,
+      ngayDuyetLdccTu: null,
+      ngayDuyetLdccDen: null,
       soDxuat: null,
-      nguonChi: null,
       loaiVthh: null,
       cloaiVthh: null,
-      trichYeu: null,
-      type: null
+      trichYeu: null
     })
     this.filterTable = {
       nam: '',
       soDxuat: '',
       ngayLapKh: '',
-      ngayDuyetLdc: '',
+      ngayDuyetLdcc: '',
       loaiDc: '',
       maDvi: '',
       tenDvi: '',
@@ -105,18 +102,18 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
   };
 
-  disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDuyetLdcDen) {
-      return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
+  disabledStartNgayDuyetLdcc = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDuyetLdccDen) {
+      return startValue.getTime() > this.formData.value.ngayDuyetLdccDen.getTime();
     }
     return false;
   };
 
-  disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
+  disabledEndNgayDuyetLdcc = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDuyetLdccTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
+    return endValue.getTime() <= this.formData.value.ngayDuyetLdccDen.getTime();
   };
 
   async ngOnInit() {
@@ -127,7 +124,6 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       await this.spinner.hide();
 
     } catch (e) {
-      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -146,11 +142,12 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
   }
+
   async changeHangHoa(event: any) {
     if (event) {
-      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+      this.formData.patchValue({donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh})
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.listChungLoaiHangHoa = res.data;
@@ -170,13 +167,49 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
       this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
     }
+    await this.search('DCNB_KHDC_XEM');
+  }
+
+  redirectDetail(data, b: boolean) {
+    this.isDetail = true;
+    this.isView = b;
+    if (data) {
+      this.selectedId = data.id;
+      if (!(data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.TU_CHOI_LDCC
+        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT)) {
+        this.isView = true;
+      }
+    } else {
+      this.selectedId = 0;
+    }
+  }
+
+  async showList() {
+    this.isDetail = false;
     await this.search();
   }
 
-  redirectDetail(id, b: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isView = b;
-    // this.isViewDetail = isView ?? false;
+  xoa(data: any) {
+
+  }
+
+  checkAllowEdit(data: any): boolean {
+    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC);
+  }
+
+  checkAllowDelete(data: any): boolean {
+    return data.trangThai == this.STATUS.DU_THAO;
+  }
+
+  checkApproveDc(data: any) {
+    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC);
+  }
+
+  checkApproveNdc(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC);
+  }
+
+  checkAllowView(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC || data.trangThai == this.STATUS.DA_DUYET_LDCC);
   }
 }

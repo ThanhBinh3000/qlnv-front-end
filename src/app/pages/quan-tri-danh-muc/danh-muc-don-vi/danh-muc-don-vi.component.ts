@@ -137,6 +137,12 @@ export class DanhMucDonViComponent implements OnInit {
   }
 
   async getDetailDiaDanh(data: any) {
+    this.detailDonVi.patchValue({
+      tinhThanhList : [],
+      tinhThanh : null,
+      quanHuyen : null,
+      phuongXa : null,
+    })
     if (data && data.diaDanhList && data.diaDanhList.length > 0) {
       let result = data.diaDanhList;
       if (result && result.length > 0) {

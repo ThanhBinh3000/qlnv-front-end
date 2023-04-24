@@ -139,7 +139,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(",");
-        this.changeListOfTagOptions(data.loaiVthh);
+        this.changeListOfTagOptions(data.loaiVthh, false);
         let lss = [];
         for (let item of this.listOfTagOptions) {
           lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
@@ -444,10 +444,10 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     }
   }
 
-  async changeListOfTagOptions(cloaiVtt, typeData?) {
+  async changeListOfTagOptions(cloaiVtt, showPopup : boolean, typeData?) {
     let lss = [];
     let ls = [];
-    if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh)) && typeData) {
+    if (this.listAll.some(s1 => cloaiVtt.includes(s1.loaiVthh)) && showPopup && !typeData) {
       this.modal.confirm({
         nzClosable: false,
         nzTitle: "Xác nhận",
@@ -483,13 +483,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
         this.listLoaiVthh = lss;
         const data = this.listCloaiVthh.filter(d => d.key);
-        // if (typeData) {
-        //   if (data.length > 0) {
-        //     typeData.tenCloaiVthh = data[0].title;
-        //   }
-        // }
         if (data.length > 0) {
-          this.rowItem.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
+          if (typeData) {
+            typeData.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
+          } else {
+            this.rowItem.tenCloaiVthh = this.listCloaiVthh.find(d => +d.key == cloaiVtt)?.title;
+          }
         }
         // this.rowItem.tenCloaiVthh = data[0].title;
       }

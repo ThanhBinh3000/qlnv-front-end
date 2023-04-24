@@ -1,6 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Router} from "@angular/router";
-import {ROUTE_LIST} from "./dieu-chuyen-noi-bo.constant";
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Router } from "@angular/router";
+import { ROUTE_LIST } from "./dieu-chuyen-noi-bo.constant";
+import {UserService} from "../../services/user.service";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../services/storage.service";
 
 
 @Component({
@@ -10,13 +13,16 @@ import {ROUTE_LIST} from "./dieu-chuyen-noi-bo.constant";
 })
 export class DieuChuyenNoiBoComponent implements OnInit {
   @ViewChild('myTab') myTab: ElementRef;
-  routes = ROUTE_LIST;
+  routes: any[] = ROUTE_LIST;
   routerUrl: string = "";
   defaultUrl: string = '/dieu-chuyen-noi-bo'
-
+  userService: UserService;
   constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
     private router: Router,
   ) {
+    this.userService = new UserService(httpClient, storageService);
   }
 
   ngOnInit(): void {

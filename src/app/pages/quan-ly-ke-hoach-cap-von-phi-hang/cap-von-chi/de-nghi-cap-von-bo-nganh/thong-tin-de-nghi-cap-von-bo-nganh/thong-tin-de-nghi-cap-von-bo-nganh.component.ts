@@ -174,8 +174,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.formData = this.fb.group({
       nam: [this.khBanDauGia ? this.khBanDauGia.nam : null, [Validators.required],],
       boNganh: [this.khBanDauGia ? this.khBanDauGia.maBoNganh : null, [Validators.required],],
-      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null, [Validators.required],],
-      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : new Date(), [Validators.required],],
+      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null],
+      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : null],
       ghiChu: [this.khBanDauGia ? this.khBanDauGia.ghiChu : null],
 
     });
@@ -262,6 +262,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
     this.rowItem.tenVatTuCha = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
     this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
+    console.log(this.listChungLoaiHangHoa,'2222')
   }
 
   changeChungLoaiHangHoa() {
@@ -380,6 +381,15 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   async save(isHoanThanh?: boolean) {
+    if (isHoanThanh) {
+      this.formData.controls['soDeNghi'].setValidators(Validators.required);
+      this.formData.controls['ngayDeNghi'].setValidators(Validators.required);
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+        return;
+      }
+    }
     // this.helperService.markFormGroupTouched(this.formData);
     // if (this.formData.invalid) {
     //   this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -393,7 +403,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         "ghiChu": this.formData.value.ghiChu,
         "maBoNganh": this.formData.value.boNganh,
         "nam": this.formData.value.nam,
-        "ngayDeNghi": dayjs(this.formData.value.ngayDeNghi).format("YYYY-MM-DD"),
+        "ngayDeNghi": this.formData.value.ngayDeNghi ? dayjs(this.formData.value.ngayDeNghi).format("YYYY-MM-DD") : null,
         "soDeNghi": this.formData.value.soDeNghi,
         "id": this.idInput,
       }
@@ -447,7 +457,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         try {
           let body = {
             id: id ? id : this.idInput,
-            trangThaiId: STATUS.HOAN_THANH_CAP_NHAT,
+            trangThaiId: STATUS.DA_HOAN_THANH,
           };
           let res = await this.deNghiCapVonBoNganhService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
