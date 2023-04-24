@@ -257,14 +257,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       if (res.msg == MESSAGE.SUCCESS) {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          if (res) {
-            this.goBack();
-          }
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          if (res) {
-            this.goBack();
-          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
