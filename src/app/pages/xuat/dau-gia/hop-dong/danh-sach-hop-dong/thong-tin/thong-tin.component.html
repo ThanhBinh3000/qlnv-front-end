@@ -95,7 +95,8 @@
                   <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <nz-select nzMode="multiple" formControlName="listMaDviTsan" (ngModelChange)="selectMaDviTsan($event)" [nzDisabled]="isView">
+                      <nz-select nzMode="multiple" formControlName="listMaDviTsan"
+                                 (ngModelChange)="selectMaDviTsan($event)" [nzDisabled]="isView">
                         <nz-option *ngFor="let item of listDviTsanFilter" [nzValue]="item.maDviTsan"
                                    [nzDisabled]="item.disable"
                                    [nzLabel]="item.maDviTsan">
@@ -540,10 +541,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>{{data.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
               </tr>
               <ng-container *ngIf="expandSet.has(i)">
                 <tr *ngFor="let ddNhap of data.children, let y = index">
@@ -560,6 +561,17 @@
               </ng-container>
             </ng-container>
             </tbody>
+            <tfoot>
+            <ng-container>
+              <tr>
+                <td colspan="5"></td>
+                <td>{{tongSoLuong}}</td>
+                <td></td>
+                <td></td>
+                <td>{{tongThanhTien}}</td>
+              </tr>
+            </ng-container>
+            </tfoot>
           </nz-table>
         </nz-collapse-panel>
       </nz-collapse>
