@@ -29,6 +29,7 @@ import { STATUS } from "src/app/constants/status";
 import { chain, cloneDeep } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
+import { TongHopDieuChuyenService } from '../tong-hop-dieu-chuyen-tai-cuc.service';
 @Component({
     selector: 'app-chi-tiet-tong-hop-dieu-chuyen-tai-cuc',
     templateUrl: './chi-tiet-tong-hop-tai-cuc.component.html',
@@ -52,19 +53,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     titleStatus: string = '';
     titleButtonDuyet: string = '';
     iconButtonDuyet: string = '';
-    styleStatus: string = 'du-thao-va-lanh-dao-duyet';
-    tabSelected: string = 'thongTinChung';
-    listNam: any[] = [];
-    listHangHoaAll: any[] = [];
-    listLoaiHangHoa: any[] = [];
     errorInputRequired: string = 'Dữ liệu không được để trống.';
     userInfo: UserLogin;
     expandSet = new Set<number>();
-    bangPhanBoList: Array<any> = [];
-    khBanDauGia: KeHoachBanDauGia = new KeHoachBanDauGia();
-    diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
-    diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
-    phanLoTaiSanList: Array<PhanLoTaiSan> = [];
     STATUS = STATUS;
     datePipe = new DatePipe('en-US');
     expandSetString = new Set<string>();
@@ -341,60 +332,31 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         private dmTieuChuanService: DanhMucTieuChuanService,
         private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
         private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+        private tongHopDieuChuyenService: TongHopDieuChuyenService,
         private cdr: ChangeDetectorRef,) {
-        super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
-        for (let i = 0; i < 10; i++) {
-            this.listNam.push({
-                value: dayjs().get('year') + i,
-                text: dayjs().get('year') + i,
-            });
-        }
+        super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenService);
         this.formData = this.fb.group(
             {
-                id: [0],
-                nam: [dayjs().get("year")],
-                maDvi: ['', [Validators.required]],
-                maDviCuc: ['', [Validators.required]],
-                maDviChiCucNhan: ['', [Validators.required]],
-                ngayDieuChuyen: ['', [Validators.required]],
-                loaiNhapXuat: [''],
-                kieuNhapXuat: ['Xuất không thu tiền'],
-                soDx: ['',],
-                loaiVthh: ['', [Validators.required]],
-                cloaiVthh: [''],
-                tenVthh: [''],
-                tonKho: [0],
-                ngayDx: [''],
-                ngayKetThuc: [''],
-                noiDungDx: [''],
+                id: [''],
                 trangThai: [''],
                 idQdPd: [''],
                 soQdPd: [''],
-                tongSoLuong: [0],
-                thanhTien: [0],
                 ngayGduyet: [''],
                 nguoiGduyetId: [''],
                 ngayPduyet: [''],
                 nguoiPduyetId: [''],
                 lyDoTuChoi: [''],
-                tenDvi: [''],
-                tenLoaiVthh: [''],
-                tenCloaiVthh: [''],
-                donViTinh: [''],
-                soLuongXuatCap: [''],
                 tenTrangThai: [''],
-                deXuatPhuongAn: [new Array()],
-
-                canCu: [new Array<FileDinhKem>()],
-                lyDoDc: [''],
-                type: ['ALL'],
-                thoiGianTongHop: [''],
 
                 maTongHop: [''],
                 soCongVan: [''],
                 ngayTaoDeXuat: [dayjs().format('YYYY-MM-DD')],
                 trichYeu: [''],
-                ngayTrinhTc: ['']
+                ngayTrinhTc: [''],
+
+                namKeHoach: [dayjs().get('year'), Validators.required],
+                loaiDieuChuyen: ['ALL', Validators.required],
+                thoiGianTongHop: ['']
             }
         );
         this.userInfo = this.userService.getUserLogin();
@@ -405,14 +367,16 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
         if (this.isEdit || this.isViewDetail) {
             this.isTongHop = true
-        }
+        };
+        await this.initData();
         try {
             this.spinner.show();
             //this.loadDonVi();
             await Promise.all([
             ])
 
-            await this.loadDetail(this.idInput)
+            // await this.loadDetail(this.idInput)
+            await this.detail(this.formData.value.id)
             // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
             this.spinner.hide();
         } catch (e) {
@@ -421,35 +385,38 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         } finally {
             this.spinner.hide();
         }
-    }
+    };
+    async initData() {
+        this.formData.controls["id"].setValue(this.idInput)
+    };
 
 
-    async loadDetail(idInput: number) {
-        if (idInput > 0) {
-            await this.deXuatPhuongAnCuuTroService.getDetail(idInput)
-                .then(async (res) => {
-                    if (res.msg == MESSAGE.SUCCESS) {
-                        this.maHauTo = '/' + res.data.soDx.split("/")[1];
-                        res.data.soDx = res.data.soDx.split("/")[0];
-                        this.formData.patchValue(res.data);
-                        this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
-                        // this.buildTableView();
-                    }
-                })
-                .catch((e) => {
-                    console.log('error: ', e);
-                    this.spinner.hide();
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                });
-        } else {
-            this.formData.patchValue({
-                maDvi: this.userInfo.MA_DVI,
-                tenDvi: this.userInfo.TEN_DVI,
-                maDviCuc: this.userInfo.MA_DVI?.slice(0, -2)
-            });
-        }
+    // async loadDetail(idInput: number) {
+    //     if (idInput > 0) {
+    //         await this.tongHopDieuChuyenService.getDetail(idInput)
+    //             .then(async (res) => {
+    //                 if (res.msg == MESSAGE.SUCCESS) {
+    //                     this.maHauTo = '/' + res.data.soDx.split("/")[1];
+    //                     res.data.soDx = res.data.soDx.split("/")[0];
+    //                     this.formData.patchValue(res.data);
+    //                     this.formData.value.deXuatPhuongAn.forEach(s => s.idVirtual = uuid.v4());
+    //                     // this.buildTableView();
+    //                 }
+    //             })
+    //             .catch((e) => {
+    //                 console.log('error: ', e);
+    //                 this.spinner.hide();
+    //                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //             });
+    //     } else {
+    //         this.formData.patchValue({
+    //             maDvi: this.userInfo.MA_DVI,
+    //             tenDvi: this.userInfo.TEN_DVI,
+    //             maDviCuc: this.userInfo.MA_DVI?.slice(0, -2)
+    //         });
+    //     }
 
-    }
+    // }
     setExpand(parantExpand: boolean = false, children: any = []): void {
         if (parantExpand) {
             return children.map(f => ({ ...f, expand: false }))
@@ -472,6 +439,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     yeuCauChiCucNhan = ($event) => {
         $event.stopPropagation();
         //call api yêu cầu chi cục xác định điểm nhập
+        this.formData.controls["trangThai"].setValue("00");
+        this.formData.controls["tenTrangThai"].setValue("Dự thảo")
         this.yeuCauSuccess = true;
     }
     expandAll() {
@@ -515,7 +484,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         // this.listChiCuc = []
         this.disableInputComponent = new ModalInput();
     }
-    async save(isGuiDuyet?) {
+    async save(isGuiDuyet: boolean) {
         await this.spinner.show();
         this.setValidator(isGuiDuyet)
         let body = this.formData.value;
@@ -525,28 +494,36 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         body.fileDinhKems = this.fileDinhKem;
         let data = await this.createUpdate(body);
         if (data) {
-            // if (isGuiDuyet) {
-            //     this.idInput = data.id;
-            //     this.guiDuyet();
-            // } else {
-            //     this.quayLai();
-            // }
+            if (isGuiDuyet) {
+                this.idInput = data.id;
+                this.approve(data.id, STATUS.CHO_DUYET_TP, "Bạn có chắc chắn muốn gửi duyệt?");
+            } else {
+                this.quayLai();
+            }
         }
         await this.spinner.hide();
     }
     async tongHop() {
-        this.isTongHop = true;
         this.yeuCauSuccess = false;
-        const thoiGianTongHop = dayjs().format("YYYY-MM-DD HH:mm:ss")
-        this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
         // const data = await this.createUpdate({ loaiDieuChuyen: this.formData.value.loaiDieuChuyen });
         // if (data) {
         //     this.tongHopData = Array.isArray(data) ? data : [];
         // }
-        this.tongHopData = cloneDeep(this.data);
-        this.convertTongHop(this.tongHopData)
+        this.setValidator(false);
+        if (this.formData.valid) {
+            this.isTongHop = true;
+            const thoiGianTongHop = dayjs().format("YYYY-MM-DD HH:mm:ss");
+            this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
+            // call api tổng hợp dữ liệu;
+            this.tongHopData = cloneDeep(this.data);
+            this.convertTongHop(this.tongHopData)
+        } else {
+            Object.values(this.formData.controls).forEach(control => {
+                control.markAsDirty();
+                control.updateValueAndValidity({ onlySelf: true });
+            });
+        }
 
-        // call api tổng hợp dữ liệu
     }
     convertTongHop(data) {
         const buildData2ChiCuc = this.buildTableView(data.thKeHoachDieuChuyenNoiBoCucDtls?.reduce((arr, cur) => {
@@ -559,7 +536,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             id: f.id
         }))
         this.dataTable2Cuc = this.mapExpanData(data.thKeHoachDieuChuyenCucKhacCucDtls.map(f => ({ ...f, duToanKphi: f.dcnbKeHoachDcDtlList.reduce((sum, cur) => sum += cur.duToanKphi, 0) })), "dcnbKeHoachDcDtlList");
-        console.log(this.dataTable2Cuc, this.dataCuc, this.dataTable2ChiCuc)
     }
     buildTableView(data) {
         let dataView = chain(data)
@@ -632,36 +608,15 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         }
         return dataView
     }
-    async saveAndSend(message: string) {
-        this.setValidator();
 
-    }
-
-    async saveAndChangeStatus(status: string, message: string, sucessMessage: string) {
-        this.setValidator();
-    }
-
-    flattenTree(tree) {
-        return tree.flatMap((item) => {
-            return item.childData ? this.flattenTree(item.childData) : item;
-        });
-    }
-
-
-    setValidator(isGuiDuyet?) {
-        if (this.formData.get('type').value == 'TH') {
-            this.formData.controls["idTongHop"].setValidators([Validators.required]);
-            this.formData.controls["maTongHop"].setValidators([Validators.required]);
-            this.formData.controls["idDx"].clearValidators();
-            this.formData.controls["soDx"].clearValidators();
-            this.formData.controls["ngayDx"].clearValidators();
+    setValidator(isGuiDuyet) {
+        if (isGuiDuyet) {
+            this.formData.controls["soCongVan"].setValidators([Validators.required]);
+            this.formData.controls["trichYeu"].setValidators([Validators.required]);
         }
-        if (this.formData.get('type').value == 'TTr') {
-            this.formData.controls["idTongHop"].clearValidators();
-            this.formData.controls["maTongHop"].clearValidators();
-            this.formData.controls["ngayThop"].clearValidators();
-            this.formData.controls["idDx"].setValidators([Validators.required]);
-            this.formData.controls["soDx"].setValidators([Validators.required]);
+        else {
+            this.formData.controls["soCongVan"].clearValidators();
+            this.formData.controls["trichYeu"].clearValidators();
         }
     }
     closeModalKeHoachDC() {

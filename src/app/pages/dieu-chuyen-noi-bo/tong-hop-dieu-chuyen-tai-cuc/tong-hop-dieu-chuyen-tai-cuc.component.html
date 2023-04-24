@@ -5,7 +5,7 @@
                 <div nz-row [nzGutter]="20">
                     <div nz-col nzSpan="2" class="mt-16">
                         <label class="search__label"> Năm kế hoạch </label>
-                        <nz-select formControlName="nam">
+                        <nz-select formControlName="namKeHoach">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
@@ -32,7 +32,7 @@
                     </div>
                     <div nz-col nzSpan="9" class="mt-16">
                         <label class="search__label">Nội dung tổng hợp</label>
-                        <input nz-input formControlName="noiDungTongHop" />
+                        <input nz-input formControlName="trichYeu" />
                     </div>
                 </div>
             </form>
@@ -65,7 +65,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
+                <button type="button" class="btn btn-main" (click)="redirectDetail(0,true)"
                     *ngIf="!viewOnly && this.checkPermission(null)">
                     <i class=" icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tổng hợp</span>

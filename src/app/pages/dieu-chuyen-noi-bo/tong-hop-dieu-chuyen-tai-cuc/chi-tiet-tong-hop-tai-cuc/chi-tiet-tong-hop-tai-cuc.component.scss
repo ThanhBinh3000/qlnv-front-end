@@ -36,6 +36,18 @@
      }
  }
 
+ .break {
+     white-space: break-spaces !important;
+ }
+
+ .max-w-90 {
+     max-width: 90px !important;
+ }
+
+ .min-w-90 {
+     min-width: 90px !important;
+ }
+
  .bg-selected td {
      background-color: #ebedff;
  }

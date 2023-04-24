@@ -16,6 +16,7 @@ import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TongHopDieuChuyenService } from './tong-hop-dieu-chuyen-tai-cuc.service';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-tong-hop-dieu-chuyen-tai-cuc',
@@ -30,6 +31,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     loaiVthhCache: string;
     @Input()
     viewOnly: boolean;
+    formData: FormGroup;
     CHUC_NANG = CHUC_NANG;
     listLoaiHangHoa: any[] = [];
     listHangHoaAll: any[] = [];
@@ -41,11 +43,11 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
         { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
         { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-        { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
     ];
     listLoaiDieuChuyen: any[] = [
-        { value: 1, giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
-        { value: 2, giaTri: "Giữa 2 cục DTNN KV" },
+        { value: "ALL", giaTri: "Tất cả" },
+        { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
+        { value: "CUC", giaTri: "Giữa 2 cục DTNN KV" },
     ];
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
@@ -58,6 +60,12 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
 
     listCuc: any[] = [];
 
+    dsDonvi: any[] = [];
+    userInfo: UserLogin;
+    userdetail: any = {};
+    selectedId: number = 0;
+    isVatTu: boolean = false;
+    isView = false;
     constructor(
         httpClient: HttpClient,
         storageService: StorageService,
@@ -72,7 +80,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenService);
         this.formData = this.fb.group({
             namKeHoach: [''],
-            tenDvi: [''],
+            maDvi: [''],
             maTongHop: [''],
             loaiDieuChuyen: [''],
             ngayTongHop: [''],
@@ -95,12 +103,6 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     }
 
 
-    dsDonvi: any[] = [];
-    userInfo: UserLogin;
-    userdetail: any = {};
-    selectedId: number = 0;
-    isVatTu: boolean = false;
-    isView = false;
 
     disabledStartNgayLapKh = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLapKhDen) {
@@ -199,11 +201,11 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         return check;
     };
     viewDetail(id: number, isViewDetail: boolean) {
-        this.idSelected = id;
+        this.selectedId = id;
         this.isDetail = true;
         this.isViewDetail = isViewDetail;
         this.isEdit = !isViewDetail;
-        // this.isAddNew = true;
+        this.isAddNew = false;
     };
     xoaItem(item: any) {
         this.modal.confirm({
