@@ -98,9 +98,13 @@
           <th class="text-left">Hành động</th>
           <td width="400px" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
             <div class="container">
-              <div class="header">
-                <h3 class="text-right">Bộ</h3>
-                <h3 class="text-left">Dự toán (Triệu đồng) </h3>
+              <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="12" class="text-right mt-1">
+                  <h3>Bộ</h3>
+                </div>
+                <div nz-col [nzSpan]="12" class="text-left mt-1">
+                  <h3>Dự toán (Triệu đồng)</h3>
+                </div>
               </div>
               <div class="content">
                 <div class="content-item" *ngIf="dataDetailSelected.muaLuongThuc > 0">
