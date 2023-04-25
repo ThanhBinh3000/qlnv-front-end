@@ -150,7 +150,8 @@
               <td></td>
               <td></td>
               <td>
-                <nz-select [(ngModel)]="thongTinChiCuc.maDvi" (ngModelChange)="onChangeChiCuc($event,dataCuc.maDvi)">
+                <nz-select [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].maDvi"
+                  (ngModelChange)="onChangeChiCuc($event,dataCuc.maDvi)">
                   <nz-option *ngFor="let p of listChiCucMap[dataCuc.maDvi]" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                   </nz-option>
                 </nz-select>
@@ -159,8 +160,9 @@
               <td></td>
               <td></td>
               <td>
-                <nz-input-number [(ngModel)]="thongTinChiCuc.soLuong" class="text-right" nz-input [nzMin]="1"
-                  [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                <nz-input-number [(ngModel)]="thongTinChiCuc[dataCuc.maDvi].soLuong" class="text-right" nz-input
+                  [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser">
                 </nz-input-number>
               </td>
               <td></td>
@@ -169,7 +171,7 @@
                 <a (click)="addChiCuc(i,dataCuc.maDvi)">
                   <i class="icon htvbdh_dau-cong xanhla"></i>
                 </a>
-                <a (click)="clearChiCuc()">
+                <a (click)="clearChiCuc(dataCuc.maDvi)">
                   <i class="fa fa-refresh"></i>
                 </a>
               </td>
@@ -197,7 +199,7 @@
                   <td></td>
                   <td></td>
                   <td>
-                    <nz-select [(ngModel)]="thongTinDiemKho.maDvi">
+                    <nz-select [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].maDvi">
                       <nz-option *ngFor="let p of listDiemKhoMap[dataChiCuc.maDvi]" [nzValue]="p.maDvi"
                         [nzLabel]="p.tenDvi">
                       </nz-option>
@@ -206,8 +208,9 @@
                   <td></td>
                   <td></td>
                   <td>
-                    <nz-input-number [(ngModel)]="thongTinDiemKho.soLuong" class="text-right" nz-input [nzMin]="1"
-                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    <nz-input-number [(ngModel)]="thongTinDiemKho[dataChiCuc.maDvi].soLuong" class="text-right" nz-input
+                      [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                      [nzParser]="globals.parser">
                     </nz-input-number>
                   </td>
                   <td></td>
@@ -216,7 +219,7 @@
                     <a (click)="addDiemKho(i,y,dataChiCuc.maDvi)">
                       <i class="icon htvbdh_dau-cong xanhla"></i>
                     </a>
-                    <a (click)="clearDiemKho()">
+                    <a (click)="clearDiemKho(dataChiCuc.maDvi)">
                       <i class="fa fa-refresh"></i>
                     </a>
                   </td>
