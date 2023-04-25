@@ -59,7 +59,7 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+      <nz-table #basicTable nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
                 [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null"
                 [nzData]="dataTable">
         <thead>
