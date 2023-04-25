@@ -73,7 +73,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       loaiDuAn: [null],
       namBatDau: [null],
       namKetThuc: [null],
-      ngayTao: [null],
+      ngayTaoTt: [null],
       tgTongHop: [null],
       namKeHoach: [dayjs().get("year")],
       noiDung: [null],
@@ -120,7 +120,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         id: data.id,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
-        ngayTao: data.ngayTao,
+        ngayTaoTt: data.ngayTaoTt,
         ngayKyQd: data.ngayKyQd,
         noiDung: data.noiDung,
         maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
@@ -144,7 +144,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       }
     } else {
       this.formData.patchValue({
-        ngayTao : Date.now()
+        ngayTaoTt : new Date()
       })
     }
   }

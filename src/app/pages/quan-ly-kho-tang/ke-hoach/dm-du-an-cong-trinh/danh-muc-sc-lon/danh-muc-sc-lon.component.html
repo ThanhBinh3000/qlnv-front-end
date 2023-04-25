@@ -101,8 +101,9 @@
       </div>
     </div>
     <nz-card class="mt16 flex-card p-lr16">
-      <nz-table nzBordered class="pd-10"
-                [nzFrontPagination]="false" [nzShowPagination]="false" >
+      <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered [nzData]="dataTable"
+                [nzScroll]="dataTable && dataTable.length ? { x: '2500px'} : null">
         <thead>
         <tr>
           <th nzWidth="40px">
@@ -124,7 +125,7 @@
           <th class="text-center" >Ngày QĐ phê duyệt <br> quyết toán</th>
           <th class="text-center" >Giá trị QĐ phê duyệt <br> quyết toán</th>
           <th class="text-center" >Trạng thái</th>
-          <th class="text-center" nzWidth="120px" nzRight>Hành động</th>
+          <th class="text-center" nzRight>Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
