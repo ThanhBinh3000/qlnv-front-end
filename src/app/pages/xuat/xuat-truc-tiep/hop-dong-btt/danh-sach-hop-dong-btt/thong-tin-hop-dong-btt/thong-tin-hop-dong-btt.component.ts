@@ -114,6 +114,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         moTaHangHoa: [''],
         donViTinh: [''],
         soLuongBanTrucTiep: [],
+        donGiaBanTrucTiep: [],
         thanhTien: [],
         ghiChu: [''],
         tongSlXuatBanQdKh: [],
@@ -297,9 +298,13 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   setListTccnChaoGia() {
     this.spinner.hide();
     let letDataTocChuc = []
-    this.listHdDaKy.forEach(s => {
-      letDataTocChuc = this.listTccnChaoGia.filter(s1 => s1.id != s.idDviMua)
-    })
+    if (this.listHdDaKy && this.listHdDaKy.length > 0) {
+      this.listHdDaKy.forEach(s => {
+        letDataTocChuc = this.listTccnChaoGia.filter(s1 => s1.id != s.idDviMua)
+      })
+    } else {
+      letDataTocChuc = this.listTccnChaoGia
+    }
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN TÊN TỔ CHỨC CÁ NHÂN CHÀO GIÁ',
       nzContent: DialogTableSelectionComponent,
@@ -327,6 +332,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
                 mstDviMua: dataToChuc.mst,
                 sdtDviMua: dataToChuc.sdt,
                 soLuongBanTrucTiep: dataToChuc.soLuong,
+                donGiaBanTrucTiep: dataToChuc.donGia,
                 thanhTien: dataToChuc.soLuong * dataToChuc.donGia,
                 tongSlXuatBanQdKh: dataToChuc.xhKqBttDdiem.soLuong,
                 tongSlBanttQdkhDakyHd: 0,
