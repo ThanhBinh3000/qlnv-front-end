@@ -13,10 +13,16 @@
             <label class="search__label">Số quyết định</label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQd" />
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Loại hành hóa</label>
+          <div nz-col nzSpan="4" *ngIf="!loaiVthh.startsWith('02')">
+            <label class="search__label">Loại hàng hóa</label>
             <nz-select formControlName="loaiVthh">
               <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="4" *ngIf="loaiVthh.startsWith('02')">
+            <label class="search__label">Loại hàng hóa</label>
+            <nz-select formControlName="loaiVthh">
+              <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="10">
@@ -85,7 +91,7 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center">Số hợp đồng</th>
-            <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+            <th class="text-center" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
             <th class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
             <th class="text-center" style="width: 12%;">Thời gian giao nhận hàng</th>
             <th class="text-center" style="width: 12%;">Trích yếu quyết định</th>
@@ -125,7 +131,7 @@
                   (input)="filterInTable('soHd',filterTable.soHd)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="loaiVthh.startsWith('02')">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
@@ -192,11 +198,10 @@
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>
-              <a *ngIf="data.soHd && data.idHd" style="color: blue ;font-weight: bold;"
-                (click)="openModalHd(data.idHd)">{{
+              <a *ngIf="data.soHd && data.idHd" nz-button nzType="link" (click)="openModalHd(data.idHd)">{{
                 data.soHd}}</a>
             </td>
-            <td>{{ data.tenLoaiVthh }}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tgianGnhan | date: 'dd/MM/YYYY'}}</td>
             <td>{{ data.trichYeu }}</td>

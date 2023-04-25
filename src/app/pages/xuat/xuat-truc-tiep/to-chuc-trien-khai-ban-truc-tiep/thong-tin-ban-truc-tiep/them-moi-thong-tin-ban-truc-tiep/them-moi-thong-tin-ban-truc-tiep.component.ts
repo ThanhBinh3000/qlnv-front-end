@@ -218,7 +218,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   addRow(): void {
-    if (this.validateSoLuong()) {
+    if (this.validateSoLuong(true)) {
       if (!this.listOfData) {
         this.listOfData = [];
       }
@@ -292,21 +292,30 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   saveEdit(idx: number): void {
-    if (this.validateSoLuong()) {
+    if (this.validateSoLuong(true)) {
       Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
       this.dataEdit[idx].edit = false;
     }
   }
+  validateSoLuong(isAdd?) {
+    let tongSoLuong = 0
+    if (isAdd) {
+      tongSoLuong += this.rowItem.soLuong;
 
-  validateSoLuong() {
-    console.log(this.rowItem.donGia, 999)
-    console.log(this.rowItem.soLuong, 888)
+    }
+    this.listOfData.forEach(item => {
+      tongSoLuong += item.soLuong
+
+    })
     if (this.rowItem.soLuong > this.soLuongDeXuat) {
       this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
       return;
+    } else if (tongSoLuong > this.soLuongDeXuat) {
+      this.notification.error(MESSAGE.ERROR, "Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDeXuat + "đ) vui lòng nhập lại")
+      return;
     } else if (this.rowItem.donGia > this.donGiaDeXuat) {
       this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDeXuat + "đ) vui lòng nhập lại")
-      return false;
+      return;
     } else {
       return true;
     }

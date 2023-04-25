@@ -183,13 +183,12 @@
                         <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>
-                            <a *ngIf="data.soTrHdr && data.idTrHdr" style="color: blue ;font-weight: bold;"
+                            <a *ngIf="data.soTrHdr && data.idTrHdr" nz-button nzType="link"
                                 (click)="openModalDxKh(data.idTrHdr)">{{
                                 data.soTrHdr}}</a>
                         </td>
                         <td *ngIf="userService.isTongCuc()">
-                            <a *ngIf="data.idThHdr" style="color: blue ;font-weight: bold;"
-                                (click)="openModalTh(data.idThHdr)">{{
+                            <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModalTh(data.idThHdr)">{{
                                 data.idThHdr}}</a>
                         </td>
                         <td>{{data.tenLoaiVthh}}</td>

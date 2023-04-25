@@ -11,7 +11,7 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Đơn vị đề xuất</label>
-            <nz-select formControlName="maDvi">
+            <nz-select formControlName="maDvi" nzAllowClear>
               <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
           </div>
@@ -197,7 +197,7 @@
               data.soQdPd}}</a>
           </td>
           <td>{{ data.ngayKyQd | date: globals.dateFormat }}</td>
-          <td>{{ data.tenLoaiVthh }}</td>
+          <td>{{ data.tenVthh }}</td>
           <td>{{ data.tongSlCtVt|number: globals.numberFormat }}</td>
           <td>{{ data.tongSlXuatCap|number: globals.numberFormat }}</td>
           <td>{{ data.noiDungThop }}</td>
@@ -274,9 +274,11 @@
   </app-thong-tin-tong-hop-phuong-an>
 </div>
 <nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true"
           [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent>
-    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [isView]="isView" [dataInit]="dataInit"
+    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [isView]="isView"
+                                                  [dataInit]="dataInit"
                                                   [isViewOnModal]="true"
                                                   (showListEvent)="showList()">
     </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>

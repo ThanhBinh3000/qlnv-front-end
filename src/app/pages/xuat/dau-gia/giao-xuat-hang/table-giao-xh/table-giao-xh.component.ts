@@ -10,6 +10,8 @@ import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import { STATUS } from 'src/app/constants/status';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-table-giao-xh',
@@ -24,6 +26,8 @@ export class TableGiaoXh extends Base2Component implements OnInit {
 
   idHd: number = 0;
   isViewHd: boolean = false;
+  listHangHoaAll: any[] = [];
+  listLoaiHangHoa: any[] = [];
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -46,6 +50,7 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
@@ -95,6 +100,9 @@ export class TableGiaoXh extends Base2Component implements OnInit {
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       trangThai: this.userService.isChiCuc() ? STATUS.BAN_HANH : null,
     })
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.loadDsVthh();
+    }
   }
 
   clearFilter() {
@@ -126,4 +134,12 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
   };
+
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHangHoaAll = res.data;
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    }
+  }
 }
