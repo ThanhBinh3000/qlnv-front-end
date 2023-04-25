@@ -208,37 +208,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         this.isAddNew = false;
     };
     xoaItem(item: any) {
-        this.modal.confirm({
-            nzClosable: false,
-            nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc chắn muốn xóa?',
-            nzOkText: 'Đồng ý',
-            nzCancelText: 'Không',
-            nzOkDanger: true,
-            nzWidth: 310,
-            nzOnOk: () => {
-                this.spinner.show();
-                try {
-                    // this.deXuatPAGService.delete({ id: item.id }).then((res) => {
-                    //     if (res.msg == MESSAGE.SUCCESS) {
-                    //         this.notification.success(
-                    //             MESSAGE.SUCCESS,
-                    //             MESSAGE.DELETE_SUCCESS,
-                    //         );
-                    //         this.search();
-                    //         this.getCount.emit();
-                    //     } else {
-                    //         this.notification.error(MESSAGE.ERROR, res.msg);
-                    //     }
-                    //     this.spinner.hide();
-                    // });
-                } catch (e) {
-                    console.log('error: ', e);
-                    this.spinner.hide();
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                }
-            },
-        });
+        this.delete(item)
     }
 
 }

@@ -175,12 +175,12 @@
                             <a (click)="viewDetail(data.id, true)" *ngIf="this.checkPermission(null)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && !checkRole(data.trangThai) "
+                            <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai) "
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && !checkRole(data.trangThai)"
-                                (click)="delete(data)">
+                            <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai)"
+                                (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

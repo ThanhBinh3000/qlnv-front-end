@@ -5,7 +5,8 @@
                 <div class="title-chi-tieu">
                     <span
                         [ngClass]="formData.value.trangThai && ((formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do')">
-                        {{ formData.value.tenTrangThai }}
+                        <!-- {{ formData.value.tenTrangThai }} -->
+                        {{listTenTrangThai[formData.value.trangThai]}}
                     </span>
                     <span>Tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</span>
                 </div>
@@ -45,8 +46,7 @@
                  formData.value.trangThai == STATUS.TU_CHOI_LDV ||
                   formData.value.trangThai == STATUS.TU_CHOI_LDC ||
                    formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc()"
-                    [disabled]="!capNhatAllSuccess" type="button" class="btn btn-sub" [disabled]="capNhatAllSuccess"
-                    (click)="save(true)">
+                    [disabled]="!capNhatAllSuccess" type="button" class="btn btn-sub" (click)="save(true)">
                     <i class="icon htvbdh_tcdt_guiduyet"></i>
                     <span>Lưu và gửi duyệt</span>
                 </button>
@@ -90,7 +90,7 @@
                             <nz-form-control nzErrorTip="Vui lòng chọn loại điều chuyển">
                                 <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup" nzRequired
                                     (ngModelChange)="handleChangeLoaiDC($event)" [nzDisabled]="isViewDetail">
-                                    <label nz-radio nzValue="ALL">Tất cả</label>
+                                    <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
                                     <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
                                     <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
                                 </nz-radio-group>
@@ -294,7 +294,7 @@
         <nz-card class="flex-card p-lr16">
             <ng-template #extraTpl>
                 <button type="button" id="id-btn-main" class="btn btn-main" (click)=" yeuCauChiCucNhan($event)"
-                    *ngIf="!isViewDetail">
+                    *ngIf="!isViewDetail && !capNhatAllSuccess">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Y/c Chi cục xác định điểm nhập ĐC</span>
                 </button>
@@ -333,8 +333,6 @@
                                     <th class="text-center">Dự toán kinh phí (triệu đồng)</th>
                                     <th>Chi cục</th>
                                     <th class="text-center">Điểm kho</th>
-                                    <th class="text-center">Nhà kho</th>
-                                    <th class="text-center">Ngăn kho</th>
                                     <th class="text-center">Lô kho</th>
                                     <th class="text-center">Tích lượng khả dụng</th>
                                     <th class="text-center">Sl nhập ĐC</th>
@@ -356,9 +354,8 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td class="text-right">{{item.duToanKphi}}</td>
-                                        <td></td>
-                                        <td></td>
+                                        <td class="text-right">{{item.duToanKphi|number: '1.0-1':
+                                            'vi_VN'}}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -379,8 +376,6 @@
                                                 </td>
                                                 <td></td>
                                                 <td class="bold">{{ bb.tenDiemKho }}</td>
-                                                <td></td>
-                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -417,19 +412,80 @@
                                                             'vi_VN'}}</td>
                                                         <td class="text-right">{{c.duToanKphi|number: '1.0-1':
                                                             'vi_VN'}}</td>
-                                                        <td>{{c.thoiGianDkDc}}</td>
+                                                        <!-- <td>{{c.thoiGianDkDc}}</td>
                                                         <td>{{c.tenChiCucNhan}}</td>
                                                         <td>{{c.tenDiemKhoNhan}}</td>
                                                         <td>{{c.tenNhaKhoNhan}}</td>
                                                         <td>{{c.tenNganKhoNhan}}</td>
                                                         <td>{{c.tenLoKhoNhan}}</td>
                                                         <td>{{c.tichLuongKd}}</td>
-                                                        <td>{{c.soLuongPhanBo}}</td>
-                                                        <td class="text-center">
-                                                            <label nz-checkbox [(ngModel)]="c.yeuCauXacDinhDiemNhap"
-                                                                nzDisabled="true"></label>
-                                                        </td>
+                                                        <td>{{c.soLuongPhanBo}}</td> -->
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
+                                                    <ng-container *ngFor="let d of c.children, let y = index">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                            (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                        </td> -->
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>{{d.thoiGianDkDc}}</td>
+                                                            <td>{{d.tenChiCucNhan}}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="text-center">
+                                                                <label nz-checkbox [(ngModel)]="c.yeuCauXacDinhDiemNhap"
+                                                                    nzDisabled="true"></label>
+                                                            </td>
+                                                        </tr>
+                                                        <ng-container *ngFor="let e of d.children, let y = index">
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                                (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                            </td> -->
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>{{e.tenDiemKhoNhan}}</td>
+                                                                <td>{{e.tenLoKhoNhan + " - " + e.tenNganKhoNhan + " - "
+                                                                    + e.tenNhaKhoNhan}}</td>
+                                                                <td>{{c.tichLuongKd|number: '1.0-1':
+                                                                    'vi_VN'}}</td>
+                                                                <td>{{c.soLuongPhanBo|number: '1.0-1':
+                                                                    'vi_VN'}}</td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </ng-container>
                                                 </ng-container>
                                             </ng-container>
                                         </ng-container>
@@ -510,7 +566,7 @@
                                 <ng-container *ngFor="let item of dataTable2Cuc , let i = index">
                                     <tr class="level-2">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td *ngIf="item.dcnbKeHoachDcDtls.length>0; else tdNormal"
+                                        <td *ngIf="item.dcnbKeHoachDcDtls?.length>0|| item.dcnbKeHoachDcDtlList.length>0; else tdNormal"
                                             [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
                                         <td class="bold">{{ item.tenChiCucDxuat }}</td>
                                         <td colspan="6"></td>
@@ -521,7 +577,8 @@
                                         </ng-template>
                                     </tr>
                                     <ng-container *ngIf="item.expand">
-                                        <ng-container *ngFor="let bb of item.dcnbKeHoachDcDtls, let y = index">
+                                        <ng-container
+                                            *ngFor="let bb of (item.dcnbKeHoachDcDtls || item.dcnbKeHoachDcDtlList), let y = index">
                                             <tr>
                                                 <td></td>
                                                 <td></td>
