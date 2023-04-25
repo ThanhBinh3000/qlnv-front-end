@@ -89,8 +89,8 @@
             <th>Số gói thầu đã trượt</th>
             <th>Thời hạn nhập kho</th>
             <th>Phương thức LCNT</th>
-            <!-- <th>Loại hàng hóa</th> -->
-            <th>Chủng loại hàng hóa</th>
+            <th>Loại hàng hóa</th>
+            <!-- <th>Chủng loại hàng hóa</th> -->
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -161,18 +161,18 @@
                   (input)="filterInTable('tenPthucLcnt',filterTable.tenPthucLcnt)" size="small" />
               </nz-input-group>
             </th>
-            <!-- <th>
+            <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
               </nz-input-group>
-            </th> -->
-            <th>
+            </th>
+            <!-- <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
               </nz-input-group>
-            </th>
+            </th> -->
             <th>
               <nz-input-group>
                 <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
@@ -200,7 +200,7 @@
             </td>
             <td>
               <a style="color: blue; font-weight: bold;"
-                (click)="openQdKqKhlcntModal(data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.id : data.children[0].idQdHdr)">
+                (click)="openQdKqKhlcntModal(data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.id : data.id)">
                 {{ data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : data.soQd }}
               </a>
             </td>
@@ -222,8 +222,8 @@
               | date: 'dd/MM/YYYY' }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.tgianNhang }}</td>
             <td>{{ data.hhQdKhlcntHdr?.tenPthucLcnt ? data.hhQdKhlcntHdr?.tenPthucLcnt : data.tenPthucLcnt }}</td>
-            <!-- <td>{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh : data.tenLoaiVthh }}</td> -->
-            <td>{{ data.hhQdKhlcntHdr?.tenCloaiVthh ? data.hhQdKhlcntHdr?.tenCloaiVthh : data.tenCloaiVthh}}</td>
+            <td>{{ data.hhQdKhlcntHdr?.tenLoaiVthh ? data.hhQdKhlcntHdr?.tenLoaiVthh : data.tenLoaiVthh }}</td>
+            <!-- <td>{{ data.hhQdKhlcntHdr?.tenCloaiVthh ? data.hhQdKhlcntHdr?.tenCloaiVthh : data.tenCloaiVthh}}</td> -->
             <td>{{ loaiVthh.startsWith('02') ? data.tenTrangThaiDt : data.tenTrangThai }}</td>
             <td class="text-left">
               <!--              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT || data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT || data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT ) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"-->
