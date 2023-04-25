@@ -31,7 +31,7 @@ export class ThongTinHangCanDieuChuyenComponent implements OnInit {
     private _modalRef: NzModalRef,
   ) {
     this.formData = this.fb.group({
-
+      // ngayPduyet: [],
     }
     );
   }

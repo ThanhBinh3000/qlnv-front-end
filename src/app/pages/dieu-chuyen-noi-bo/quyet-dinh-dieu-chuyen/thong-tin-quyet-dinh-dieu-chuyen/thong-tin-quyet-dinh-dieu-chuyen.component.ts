@@ -291,22 +291,19 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
 
   async add() {
-    // if (this.formData.get('type').value != 'TH') {
-    //   return;
-    // }
     await this.spinner.show();
-    let bodyTh = {
-      trangThai: STATUS.DA_DUYET_LDV,
-      nam: this.formData.get('nam').value,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      },
-    }
-    let resTh = await this.tongHopPhuongAnCuuTroService.search(bodyTh);
-    if (resTh.msg == MESSAGE.SUCCESS) {
-      this.listDanhSachTongHop = resTh.data.content;
-    }
+    // let bodyTh = {
+    //   trangThai: STATUS.DA_DUYET_LDV,
+    //   nam: this.formData.get('nam').value,
+    //   paggingReq: {
+    //     limit: this.globals.prop.MAX_INTERGER,
+    //     page: 0
+    //   },
+    // }
+    // let resTh = await this.tongHopPhuongAnCuuTroService.search(bodyTh);
+    // if (resTh.msg == MESSAGE.SUCCESS) {
+    //   this.listDanhSachTongHop = resTh.data.content;
+    // }
     await this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
@@ -316,9 +313,9 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
-        dataColumn: ['id', 'noiDungThop']
+        // dataTable: this.listDanhSachTongHop,
+        // dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
+        // dataColumn: ['id', 'noiDungThop']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
