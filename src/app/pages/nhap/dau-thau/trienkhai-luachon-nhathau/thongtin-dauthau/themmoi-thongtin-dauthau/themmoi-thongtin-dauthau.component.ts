@@ -214,11 +214,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       let tongMucDtTrung = 0
       let donGiaVat = 0;
       data.children.forEach(item => {
-        if (item.trangThai == STATUS.THANH_CONG) {
-          tongMucDtTrung += item.soLuong * item.donGiaNhaThau
-          tongMucDt += item.soLuong * (item.donGiaTamTinh ? item.donGiaTamTinh : item.donGiaVat)
-          donGiaVat = item.donGiaVat
-        }
+        // if (item.trangThai == STATUS.THANH_CONG) {
+        tongMucDtTrung += item.soLuong * item.donGiaNhaThau
+        tongMucDt += item.soLuong * (item.donGiaTamTinh ? item.donGiaTamTinh : item.donGiaVat)
+        donGiaVat = item.donGiaVat
+        // }
       })
       this.formData.patchValue({
         namKhoach: data.namKhoach,
@@ -524,10 +524,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.itemRow.soLuong = dataGoiThau.soLuong;
+      // this.itemRow.soLuong = dataGoiThau.soLuong;
       this.listNthauNopHs = res.data;
       this.listNthauNopHs.forEach(item => {
         item.edit = false;
+        this.itemRow.soLuong = item.soLuong;
       })
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

@@ -177,30 +177,30 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   isValidate(data: any) {
-    let shouldStop = false; // Biến cờ để đánh dấu có nên dừng các vòng lặp hay không
+    let shouldStop = false;
     data.forEach(item => {
       item.children.forEach(res => {
         res.children.forEach(elm => {
           elm.children.forEach(i => {
             if (i.soLuong > res.soLuong) {
               this.notification.error(MESSAGE.ERROR, "Số lượng của Điểm kho không được lớn hơn số lượng gói thầu");
-              shouldStop = true; // Đặt biến cờ shouldStop thành true để đánh dấu nên dừng các vòng lặp
-              return; // Sử dụng return để thoát khỏi vòng lặp forEach hiện tại
+              shouldStop = true;
+              return;
             }
           });
           if (shouldStop) {
-            return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+            return;
           }
         });
         if (shouldStop) {
-          return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+          return;
         }
       });
       if (shouldStop) {
-        return; // Nếu shouldStop là true, thoát khỏi vòng lặp forEach hiện tại
+        return;
       }
     });
-    return !shouldStop; // Trả về giá trị đúng nếu không có bất kỳ lỗi nào, ngược lại trả về giá trị sai
+    return !shouldStop;
   }
 
 
@@ -474,6 +474,38 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
+  // convertListDataVT() {
+  //   let listChild = [];
+  //   this.listOfData.forEach(item => {
+  //     item.children.forEach(i => {
+  //       i.goiThau = item.goiThau
+  //       listChild.push(i)
+  //     })
+  //   })
+  //   this.helperService.setIndexArray(listChild);
+  //   this.listDataGroup = chain(listChild).groupBy('tenDvi').map((value, key) => (
+  //     {
+  //       tenDvi: key,
+  //       soLuongTheoChiTieu: value[0].soLuongTheoChiTieu,
+  //       soLuong: null,
+  //       sumThanhTienTamTinh: null,
+  //       soLuongDaMua: value[0].soLuongDaMua,
+  //       dataChild: value
+  //     })).value()
+  //   this.listDataGroup.forEach(item => {
+  //     let sluong = 0;
+  //     let sumThanhTienTamTinh = 0;
+  //     item.dataChild.forEach(i => {
+  //       sluong = sluong + i.soLuong
+  //       sumThanhTienTamTinh = sumThanhTienTamTinh + i.soLuong * (i.donGiaTamTinh ? i.donGiaTamTinh : i.donGia)
+  //     })
+  //     item.soLuong = sluong;
+  //     item.sumThanhTienTamTinh = sumThanhTienTamTinh;
+  //   })
+  //   console.log(this.listDataGroup)
+  //   this.sumThanhTien()
+  // }
+
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(id);
@@ -481,8 +513,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listDanhSachTongHop = [];
       const data = res.data;
       this.listFileDinhKem = data.fileDinhKems;
-      console.log(data)
-      console.log(this.idInput)
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],

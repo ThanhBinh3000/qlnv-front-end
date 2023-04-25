@@ -365,6 +365,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
       tenCloaiVthh: '',
       thanhGiaGoiThau: '',
       tenTrangThai: '',
+      tgianThien: ''
     }
   }
 
@@ -374,11 +375,11 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien'].includes(key)) {
+          if (['ngayKy', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
-          } else if (['soQd', 'soQdPdKqLcnt', 'tenPthucLcnt', 'soQdPdKqLcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'ngayKyQdPduyetKqlcntHdr', 'tgianNhangDxuatKhLcntHdr'].includes(key)) {
+          } else if (!this.loaiVthh.startsWith('02') && ['soQd', 'soQdPdKqLcnt', 'tenPthucLcnt', 'soQdPdKqLcnt', 'tenLoaiVthh', 'tenCloaiVthh', 'ngayKyQdPduyetKqlcntHdr', 'tgianNhangDxuatKhLcntHdr'].includes(key)) {
             if (item['hhQdKhlcntHdr'] != null) {
 
               if (item['hhQdKhlcntHdr'][key] && item['hhQdKhlcntHdr'][key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
@@ -397,6 +398,10 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
               if (key != 'soQd' && key == 'ngayKyQdPduyetKqlcntHdr' && item['hhQdPduyetKqlcntHdr'].ngayKy && dayjs(item['hhQdPduyetKqlcntHdr'].ngayKy).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
                 temp.push(item)
               }
+            } else {
+              if (key == 'ngayKyQdPduyetKqlcntHdr' && item['ngayPduyet'] && dayjs(item['ngayPduyet']).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+                temp.push(item)
+              }
             }
 
             if (item['dxuatKhLcntHdr'] != null) {
@@ -408,9 +413,9 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
             if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
             }
-            if (key == 'soTrHdr' && item['soTrHdr'] && item['soTrHdr'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            if (!this.loaiVthh.startsWith('02') && key == 'soTrHdr' && item['soTrHdr'] && item['soTrHdr'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
-            } else if (key == 'soTrHdr' && item['soDxuat'] && item['soDxuat'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            } else if (!this.loaiVthh.startsWith('02') && key == 'soTrHdr' && item['soDxuat'] && item['soDxuat'].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item)
             }
           }

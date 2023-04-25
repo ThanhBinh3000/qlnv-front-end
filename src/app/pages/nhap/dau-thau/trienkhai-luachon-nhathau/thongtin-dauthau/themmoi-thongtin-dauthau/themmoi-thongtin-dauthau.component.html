@@ -595,7 +595,7 @@
                             </th>
                             <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.lyDo" /></th>
                             <th *ngIf="!isShowFromKq">
-                                <a disabled="isView" (click)="isView ? '' : addRow()" [class.disabled]="!itemRow">
+                                <a (click)="isView ? '' : addRow()" [class.disabled]="!itemRow">
                                     <i class="fa fa-plus"></i>
                                 </a>
                                 <!--                                <a (click)="clearItemRow()">-->
