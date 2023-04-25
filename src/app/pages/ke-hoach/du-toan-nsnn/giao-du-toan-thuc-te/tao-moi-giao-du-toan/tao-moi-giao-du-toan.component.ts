@@ -118,7 +118,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	listFile: File[] = []; // list file chua ten va id de hien tai o input
 	lstDviChon: any[] = []; //danh sach don vi chua duoc chon
 	soLaMa: any[] = LA_MA; // danh sách ký tự la mã
-
+	isDvi = true;
 	// khác
 	editMoneyUnit = false;
 	// phục vụ nút edit
@@ -237,8 +237,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	async initialization() {
 
 		this.spinner.show();
-		console.log("this.data: ", this.data);
-		
+
+
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
 
@@ -300,25 +300,20 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 			}
 		}
 		await this.getChildUnit();
-		console.log(this.donVis1.find(e => e.maDvi == this.maDvi));
 
-		// if (this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) {
-		// 	this.lstDvi.push(
-		// 		{
-		// 			maDvi: this.maDvi,
-		// 			tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
-		// 		}
-		// 	)
-		// }
 
-		// if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
-		// 	this.lstDvi.push(
-		// 	  {
-		// 		tenDvi: this.userInfo.TEN_DVI,
-		// 		maDvi: this.userInfo.MA_DVI
-		// 	  }
-		// 	)
-		//   }
+		if ((this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) && this.lstDvi.length == 0) {
+			this.lstDvi.push(
+				{
+					maDvi: this.maDvi,
+					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+				}
+			)
+		}
+
+		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+			this.isDvi = false;
+		}
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {
@@ -342,6 +337,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 				this.onSubmit(Utils.TT_BC_2, '')
 			},
 		});
+	}
+
+
+	statusDvi() {
+		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+			return true
+		} else {
+			return false
+		}
 	}
 
 	async getChildUnit() {
@@ -845,7 +849,7 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		}
 
 
-		console.log(this.lstDvi);
+
 
 		const dVi = this.donVis1.find(e => e.maDvi == this.maDonViTao);
 		let checkParent = false;

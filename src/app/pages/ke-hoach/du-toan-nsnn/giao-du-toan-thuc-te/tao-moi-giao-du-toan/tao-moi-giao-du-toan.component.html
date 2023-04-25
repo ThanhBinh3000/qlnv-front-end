@@ -218,12 +218,14 @@
                   <td></td>
                   <td *ngFor="let item of lstDvi">
                     <div *ngFor="let e of lstCtietBcao[0].lstCtietDvis">
-                      <div *ngIf="e.maDviNhan == item.maDvi">
-                        <ng-container *ngIf="e.trangThai == null">
-                          <a (click)="giaoSoTranChi(e.maDviNhan)">
-                            Giao
-                          </a>
-                        </ng-container>
+                      <div *ngIf="isDvi">
+                        <div *ngIf="e.maDviNhan == item.maDvi">
+                          <ng-container *ngIf="e.trangThai == null">
+                            <a (click)="giaoSoTranChi(e.maDviNhan)">
+                              Giao
+                            </a>
+                          </ng-container>
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -331,7 +333,8 @@
       </nz-card>
       <ng-template #extraTemplate>
         <div class="buttons">
-          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo">
+          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
+            [hidden]="statusGiaoToanBo || !isDvi">
             <span>Giao toàn bộ</span>
           </button>
           <button type="button" class="btn btn-sub" *ngIf="!status">

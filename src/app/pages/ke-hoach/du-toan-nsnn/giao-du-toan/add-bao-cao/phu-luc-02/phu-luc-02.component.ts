@@ -101,16 +101,30 @@ export class PhuLuc02Component implements OnInit {
       })
     })
     await this.getDinhMuc();
-    this.lstCtietBcao.forEach(item => {
-      // if (!item.tenDanhMuc) {
-      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-      item.tenDanhMuc = dinhMuc?.tenDinhMuc? dinhMuc?.tenDinhMuc : item.tenDanhMuc;
-      item.namDtDmuc = dinhMuc?.tongDmuc;
-      item.maDviTinh = dinhMuc?.donViTinh;
-      item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
-      item.namDtSluong = item.namDtSluong
-      // }
-    })
+    // this.lstCtietBcao.forEach(item => {
+    //   // if (!item.tenDanhMuc) {
+    //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
+    //   item.tenDanhMuc = dinhMuc?.tenDinhMuc ? dinhMuc?.tenDinhMuc : item.tenDanhMuc;
+    //   item.namDtDmuc = dinhMuc?.tongDmuc;
+    //   item.maDviTinh = dinhMuc?.donViTinh;
+    //   item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
+    //   item.namDtSluong = item.namDtSluong
+    //   // }
+    // })
+
+
+    if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
+      this.lstCtietBcao.forEach(item => {
+        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
+        if (!item.tenDanhMuc) {
+          item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+        }
+        item.namDtDmuc = dinhMuc?.tongDmuc;
+        item.maDviTinh = dinhMuc?.donViTinh;
+        item.namDtTtien = mulNumber(item.namDtTtien, item.namDtSluong);
+        // item.ttienTd = mulNumber(item.dmucNamDtoan, item.sluongTd);
+      })
+    }
     console.log(this.lstCtietBcao);
     // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
     this.sortByIndex();
