@@ -31,6 +31,7 @@ import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import {log} from "ng-zorro-antd/core/logger";
 import {AMOUNT, AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
+import moment from "moment";
 
 @Component({
   selector: 'app-thong-tin',
@@ -367,6 +368,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
             const dataThongTin = resTtin.data;
             await this.loadDsHd(dataKq.soQdKq)
             await this.setListDviTsan(dataThongTin.children);
+            const ngayHluc = moment(dataKq.ngayHluc);
+            const tgianGnhan = moment.duration(dataKq.tgianGnhan, 'days');
+            const nhapKho = ngayHluc.add(tgianGnhan);
             this.formData.patchValue({
               soQdKq: dataKq.soQdKq,
               ngayKyQdKq: dataKq.ngayKy,
@@ -378,6 +382,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
               moTaHangHoa: dataThongTin.moTaHangHoa,
               loaiHinhNx: dataKq.loaiHinhNx,
               kieuNhapXuat: dataKq.kieuNx,
+              tgianNkho: nhapKho.format('YYYY-MM-DD'),
             });
             this.listDviLquan = dataThongTin.listNguoiTgia;
             this.listToChucTrungDg = dataThongTin.children.flatMap(child =>
