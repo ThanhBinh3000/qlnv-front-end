@@ -48,6 +48,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKh: [null],
       maDvi: [null],
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],
@@ -58,6 +59,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       lyDo: [null, Validators.required],
       tmdt: [null, Validators.required],
       keHoachCaiTao: [null, Validators.required],
+      diaDiem: [null],
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
@@ -140,5 +142,14 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  changeDiemKho($event: any) {
+    let result = this.dsKho.filter(item => item.maDvi == $event)
+    if (result && result.length > 0) {
+      this.formData.patchValue({
+        diaDiem : result[0].diaChi
+      })
+    }
   }
 }
