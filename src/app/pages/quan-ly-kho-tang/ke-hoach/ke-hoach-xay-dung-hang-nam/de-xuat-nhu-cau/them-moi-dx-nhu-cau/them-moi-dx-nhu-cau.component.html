@@ -156,32 +156,6 @@
         <th class="text-center">Tổng số</th>
         <th class="text-center">Trong đó vốn NSTW</th>
       </tr>
-      <tr>
-        <th></th>
-        <th>
-          <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi">
-            <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
-            </nz-option>
-          </nz-select>
-        </th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th class="text-center" *ngIf="!isViewDetail" nzRight>
-          <a (click)="themItemcha()">
-            <i class="icon htvbdh_dau-cong"></i>
-          </a>
-
-        </th>
-      </tr>
       </thead>
       <tbody>
       <ng-container *ngFor="let data of dataTable , let idx = index">

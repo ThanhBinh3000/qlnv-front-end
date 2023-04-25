@@ -18,36 +18,26 @@ import {
 } from "../../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
+import {
+  DanhMucSuaChuaService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
+import { ThongTinDmScLonComponent } from "../danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
+import { ThemMoiDanhMucDuAnKhoComponent } from "./them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component";
 
 @Component({
   selector: 'app-danh-muc-du-an',
   templateUrl: './danh-muc-du-an.component.html',
   styleUrls: ['./danh-muc-du-an.component.scss']
 })
-export class DanhMucDuAnComponent implements OnInit {
+export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop'
   danhSachNam: any[] = [];
-
-  STATUS = STATUS;
-  rowItem: DanhMucKho = new DanhMucKho();
-  itemDetail: any;
-
-  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
-
-  searchFilter = {
-    maDvi: null,
-    soQd: '',
-    khoi: '',
-    tenDuAn: '',
-    diaDiem: '',
-    trangThai: '',
-    giaiDoan: '',
-    tgKhoiCong: '',
-    tgHoanThanh: ''
-  };
 
   listTrangThai = [{"ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện"},
     {"ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện"},
@@ -68,28 +58,44 @@ export class DanhMucDuAnComponent implements OnInit {
   userInfo: UserLogin;
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private dmService: DanhMucService,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
-    private dviService: DonviService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private danhMucKhoService: DanhMucKhoService,
+    private dviService: DonviService,
+    private dmService : DanhMucService
   ) {
+    super(httpClient, storageService, notification, spinner, modal, danhMucKhoService);
+    super.ngOnInit()
+    this.formData = this.fb.group({
+      maDvi: [null],
+      soQd: [null],
+      khoi: [null],
+      tenDuAn: [null],
+      diaDiem: [null],
+      trangThai: [null],
+      giaiDoanTu: [null],
+      giaiDoanDen: [null],
+      tgKhoiCongTu: [null],
+      tgKhoiCongDen: [null],
+      tgHoanThanhTu: [null],
+      tgHoanThanhDen: [null],
+    });
+    this.filterTable = {};
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.loadDsNam();
-      await this.search();
       if (this.userService.isCuc()) {
         await this.loadDsKhoi();
         await this.loadDanhSachCuc();
         await this.loadDsChiCuc();
       }
+      this.filter();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -97,6 +103,20 @@ export class DanhMucDuAnComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async loadDanhSachCuc() {
+    if (this.userService.isTongCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
+
+      const dsTong = await this.dviService.layDonViTheoCapDo(body);
+      this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+      this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
+    }
+  }
+
 
   async loadDsChiCuc() {
     let res = await this.dviService.layTatCaDonViByLevel(3);
@@ -116,15 +136,6 @@ export class DanhMucDuAnComponent implements OnInit {
     }
   }
 
-  loadDsNam() {
-    for (let i = -3; i < 23; i++) {
-      this.danhSachNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
-      });
-    }
-  }
-
   async loadDsKhoi() {
     let res = await this.dmService.danhMucChungGetAll("KHOI_DU_AN_KT");
     if (res.msg == MESSAGE.SUCCESS) {
@@ -132,169 +143,10 @@ export class DanhMucDuAnComponent implements OnInit {
     }
   }
 
-  async loadDanhSachCuc() {
-    if (this.userService.isTongCuc()) {
-      const body = {
-        maDviCha: this.userInfo.MA_DVI,
-        trangThai: '01',
-      };
-
-      const dsTong = await this.dviService.layDonViTheoCapDo(body);
-      this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
-      this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
-      if (this.userService.isCuc()) {
-        this.searchFilter.maDvi = this.userInfo.MA_DVI
-      }
-    }
-  }
-
-
-  async search() {
-    this.spinner.show();
-    let body = {
-      "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
-      "diaDiem": this.searchFilter.diaDiem,
-      "khoi": this.searchFilter.khoi,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page - 1
-      },
-      "soQd": this.searchFilter.soQd,
-      "tenDuAn": this.searchFilter.tenDuAn,
-      "tgHoanThanhTu":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[0] : null,
-      "tgHoanThanhDen":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[1] : null,
-      "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[0] : null,
-      "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[1] : null,
-      "trangThai": this.searchFilter.trangThai,
-      "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
-      "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
-    };
-    let res = await this.danhMucKhoService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-    } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg);
-      this.spinner.hide();
-    }
-    this.updateEditCache()
-    this.spinner.hide();
-  }
-
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      if (this.page === 1) {
-        await this.search();
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  clearFilter() {
-    this.searchFilter = {
-      soQd: '',
-      maDvi: null,
-      khoi: '',
-      tenDuAn: '',
-      diaDiem: '',
-      trangThai: '',
-      giaiDoan: '',
-      tgKhoiCong: '',
-      tgHoanThanh: '',
-    };
-    this.search();
-  }
-
-  xoaItem(id) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            "ids": id,
-          }
-          const res = await this.danhMucKhoService.delete(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            await this.search();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        } catch (e) {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
-  }
-
-  async getDetail(id) {
-    let res = await this.danhMucKhoService.getDetail(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.itemDetail = res.data;
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
-    }
-  }
-
-
   exportData() {
     this.spinner.show();
     try {
-      let body = {
-        "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
-        "diaDiem": this.searchFilter.diaDiem,
-        "khoi": this.searchFilter.khoi,
-        "paggingReq": {
-          "limit": 10,
-          "page": this.page - 1
-        },
-        "soQd": this.searchFilter.soQd,
-        "tenDuAn": this.searchFilter.tenDuAn,
-        "tgHoanThanhTu":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[0] : null,
-        "tgHoanThanhDen":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[1] : null,
-        "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[0] : null,
-        "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[1] : null,
-        "trangThai": this.searchFilter.trangThai,
-        "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
-        "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
-      };
+      let body = this.formData.value;
       this.danhMucKhoService
         .export(body)
         .subscribe((blob) =>
@@ -308,128 +160,37 @@ export class DanhMucDuAnComponent implements OnInit {
     }
   }
 
-  async startEdit(idx: number) {
-    this.dataEdit[idx].edit = true;
-  }
-
-  cancelEdit(index: number) {
-    this.dataEdit[index] = {
-      data: {...this.dataTable[index]},
-      edit: false,
-    };
-  }
-
-  async openDialog(id) {
-    await this.getDetail(id);
-    this.modal.create({
-      nzTitle: 'CHI TIẾT DỰ ÁN',
-      nzContent: DialogDanhMucKhoComponent,
+  openDialog(data: any, isView: boolean) {
+    let modalQD = this.modal.create({
+      nzContent: ThemMoiDanhMucDuAnKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '700px',
-      nzStyle: {top: '150px'},
+      nzBodyStyle : { 'overflow-y': 'auto' },
+      nzStyle: {top: '100px'},
+      nzWidth: '800px',
       nzFooter: null,
       nzComponentParams: {
-        item: this.itemDetail
+        dataDetail: data,
+        isViewDetail: isView
       },
     });
-  }
-
-  async themMoiItem(id?, data? : DanhMucKho) {
-    this.spinner.show();
-      if (!this.checkValidators(data)) {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
-        this.spinner.hide();
-        return;
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        await this.filter()
       }
-      if (id && id > 0) {
-        this.rowItem = data
-      }
-    let body = {
-      "diaDiem": this.rowItem.diaDiem,
-      "id": id? id : null,
-      "khoi": this.rowItem.khoi,
-      "luyKeNstw": this.rowItem.luyKeNstw,
-      "maDuAn": this.rowItem.maDuAn,
-      "nstwDuKien": this.rowItem.nstwDuKien,
-      "nstwDuyet": this.rowItem.nstwDuyet,
-      "soQdPd": this.rowItem.soQdPd,
-      "tenDuAn": this.rowItem.tenDuAn,
-      "tgHoanThanh": this.rowItem.tgHoanThanh,
-      "tgKhoiCong": this.rowItem.tgKhoiCong,
-      "tmdtDuKien": this.rowItem.tmdtDuKien,
-      "tmdtDuyet": this.rowItem.tmdtDuyet,
-      "tongSoLuyKe": this.rowItem.tongSoLuyKe,
-      "trangThai": STATUS.CHUA_THUC_HIEN,
-      "maDvi": this.userInfo.MA_DVI,
-      "maDiemKho": this.rowItem.maDiemKho,
-      "maChiCuc": this.rowItem.maChiCuc,
-    }
-    let res;
-    if (id && id > 0) {
-       res = await this.danhMucKhoService.update(body);
-    } else {
-       res = await this.danhMucKhoService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if(id && id > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      }
-      this.rowItem = new DanhMucKho();
-      await this.search();
-      this.updateEditCache();
-    } else {
-      this.notification.error(MESSAGE.SUCCESS, res.msg);
-      this.spinner.hide()
-      return;
-    }
-    this.spinner.hide();
-  }
-  checkValidators(rowItem: DanhMucKho) {
-    let arr = [];
-    let check = true;
-    arr.push(
-      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong ,rowItem.tgHoanThanh, rowItem.tmdtDuKien, rowItem.nstwDuKien, rowItem.maDiemKho
-      , rowItem.maChiCuc
-    )
-    if (arr && arr.length > 0) {
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
-          check = false;
-          break;
-        }
-      }
-    }
-    return check;
+    })
   }
 
-  updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        };
-      });
-    }
+  clearForm(currentSearch?: any) {
+    this.formData.reset();
+    this.filter();
   }
 
-  luuEdit(idx: number): void {
-    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
-    this.dataEdit[idx].edit = false;
-  }
-
-  huyEdit(idx: number): void {
-    this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
-      edit: false,
-    };
-  }
-
-  clearData() {
-    this.rowItem = new DanhMucKho();
+  filter() {
+    this.formData.patchValue({
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null
+    })
+    this.search()
   }
 }
 

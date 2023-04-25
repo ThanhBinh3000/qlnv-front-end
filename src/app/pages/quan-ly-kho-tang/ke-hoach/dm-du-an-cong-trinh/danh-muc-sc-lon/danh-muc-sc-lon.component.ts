@@ -166,23 +166,4 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.CHUA_THUC_HIEN) {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    }
-  }
 }

@@ -112,8 +112,8 @@
             <th class="text-center" style="width: 5%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
             <th class="text-center" style="width: 5%;">Số QĐ duyệt KHLCNT</th>
-            <th class="text-center" style="width: 7%;">{{ loaiVthh != '02' ? 'Thời hạn nhập kho' : 'Thời hạn thực hiện
-              dự án'}}</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
+            <th *ngIf="loaiVthh == '02'" class="text-center" style="width: 7%;">Thời hạn thực hiện dự án</th>
             <th class="text-center" style="width: 7%;">{{ userService.isTongCuc() ? 'Trạng thái đề xuất' : 'Trạng
               thái'}} </th>
             <th *ngIf="userService.isTongCuc() && loaiVthh != '02'" class="text-center" style="width: 7%;">Mã tổng hợp
@@ -194,10 +194,16 @@
                   (input)="filterInTable('soQdPdKqLcnt',filterTable.soQdPdKqLcnt)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="loaiVthh != '02'">
               <nz-input-group>
                 <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
                   (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"></nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th *ngIf="loaiVthh == '02'">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"
+                  (input)="filterInTable('tgianThien',filterTable.tgianThien)" size="small" />
               </nz-input-group>
             </th>
             <th *ngIf="loaiVthh != '02'">
@@ -243,7 +249,8 @@
             <td>
               <a style="color: blue" (click)="openQdPdKhlcntModal(data.idQdPdKqLcnt)">{{ data.soQdPdKqLcnt}}</a>
             </td>
-            <td>{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td *ngIf="loaiVthh == '02'">{{ data.tgianThien}}</td>
+            <td *ngIf="loaiVthh != '02'">{{ data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc() && loaiVthh != '02'">
               <span *ngIf="data.trangThaiTh == '24'">{{data.tenTrangThaiTh}}</span>

@@ -49,6 +49,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() isView: boolean;
   listLoaiHopDong: any[] = [];
   listDviTsan: any[] = [];
+  listAllDviTsan: any[] = [];
   listDviTsanFilter: any[] = [];
   listDviLquan: any[] = [];
   dataTablePhuLuc: any[] = [];
@@ -64,7 +65,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   listToChucTrungDg: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
+  tongSoLuong: number ;
+  tongThanhTien: number ;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -192,7 +194,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
-    this.maDviTsan(this.formData.value.toChucTrungDg);
+    this.maDviTsan(data.toChucTrungDg,data.trangThai);
     this.dataTable = data?.children || [];
     this.dataTable.forEach(e => e.tenChiCuc = e.tenDvi);
     this.dataTablePhuLuc = data?.phuLuc || [];
@@ -206,15 +208,17 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       await this.spinner.hide();
       return;
     }
-    let data = this.formData.value;
-    if (data.listMaDviTsan) {
-      data.maDviTsan = data.listMaDviTsan.join(',');
+    let body = cloneDeep(this.formData.value);
+    if (body.listMaDviTsan) {
+      body.maDviTsan = body.listMaDviTsan.join(',');
     }
-    data.soHd = this.formData.value.soHd + this.maHopDongSuffix;
-    data.children = this.dataTable;
-    if (this.formData.value.id > 0) {
-      if (data) {
-        await this.approve(data.id, status, message, null, sucessMessage);
+    if (body.soHd) {
+      body.soHd = this.formData.value.soHd + this.maHopDongSuffix;
+    }
+    body.children = this.dataTable;
+    if (body.id > 0) {
+      if (body) {
+        await this.approve(body.id, status, message, null, sucessMessage);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
@@ -312,7 +316,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   }
 
   async openDialogKqBdg() {
-    this.spinner.show()
+    await this.spinner.show()
     let listQdKq: any[] = [];
     let body = {
       loaiVthh: this.loaiVthh,
@@ -324,7 +328,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     if (res.data) {
       listQdKq = res.data?.content;
     }
-    this.spinner.hide();
+    await this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin Quyết định phê duyệt kết quả bán đấu giá',
       nzContent: DialogTableSelectionComponent,
@@ -413,17 +417,28 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         }
       })
     })
+      this.listAllDviTsan=this.listDviTsan;
       this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 =>{
         return s1.maDviTsan.split(',').includes(s.maDviTsan) && s1.toChucTrungDg.includes(s.toChucCaNhan);
         })
       );
-    console.log(2)
 
 
   }
-  maDviTsan(event) {
-    if (event) {
+  maDviTsan(event,trangThai?) {
+
+    if (event && trangThai==STATUS.DA_KY) {
+      this.listDviTsanFilter = this.listAllDviTsan.filter(obj => obj.toChucCaNhan === event);
+    }else {
       this.listDviTsanFilter = this.listDviTsan.filter(obj => obj.toChucCaNhan === event);
+    }
+    let thongTin= this.listDviLquan.find(f=>f.hoVaTen===event);
+    if(thongTin){
+      this.formData.patchValue({
+        tenNhaThau: thongTin.hoVaTen,
+        diaChiNhaThau: thongTin.diaChi,
+        mstNhaThau: thongTin.soCccd
+      })
     }
   }
 
@@ -440,7 +455,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(1)
   }
 
   // taiLieuDinhKem(type?: string) {
@@ -504,8 +518,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         // });
       });
       this.listMaDvts = listAll.flatMap(item => item.children);
-
-      console.log(this.listMaDvts,'listAll')
       await this.buildTableView();
     } else {
       this.dataTable = [];
@@ -524,21 +536,23 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       .map(async (value, key) => {
         let tenChiCuc = value.find(f => f.tenChiCuc === key);
         let tongSl = value.reduce((prev, cur) => prev + cur.soLuong, 0);
-        let newValue = await Promise.all(value.map(async s => {
-          let diaChi = await this.changeDiemKho(s.maDiemKho);
-          return {...s, diaChi};
-        }));
+        let thanhTien = value.reduce((prev, cur) => {
+          const curThanhTien = cur.soLuong * cur.donGiaVat;
+          return prev + curThanhTien;
+        }, 0);
         return {
           idVirtual: uuid.v4(),
           tenChiCuc: key,
           maDvi: tenChiCuc.maChiCuc,
-          children: newValue,
+          children: value,
           soLuong: tongSl,
-          donGiaVat: tenChiCuc.donGiaVat
+          thanhTien: thanhTien,
         };
       }).value();
     dataView = await Promise.all(dataView);
     this.dataTable = dataView;
+    this.tongSoLuong=this.dataTable.reduce((prev, cur) => prev + cur.soLuong, 0);
+    this.tongThanhTien=this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0);
     this.expandAll();
   }
 

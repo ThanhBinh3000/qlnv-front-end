@@ -132,10 +132,10 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       ]);
       await this.loadChiTiet(this.idInput);
 
-      //tao de xuat tu trang tong hop
+      // tao de xuat tu trang tong hop
       if (Object.keys(this.dataInit).length > 0) {
         this.checkChonPhuongAn();
-        this.formData.patchValue({qdPaXuatCapId: this.dataInit.id,})
+        this.formData.patchValue({qdPaXuatCapId: this.dataInit.id, checkXuatGao: true})
         await this.changePhuongAn(this.dataInit.id);
         await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
         await this.buildTableView();
@@ -243,7 +243,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
   }
 
   async selectRow(item?: any) {
-    console.log(item, 'itemmmmmmm')
     try {
       await this.spinner.show();
       if (item) {
