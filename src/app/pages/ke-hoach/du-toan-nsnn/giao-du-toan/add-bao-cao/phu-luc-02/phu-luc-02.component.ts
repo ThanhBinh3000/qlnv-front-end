@@ -104,7 +104,7 @@ export class PhuLuc02Component implements OnInit {
     this.lstCtietBcao.forEach(item => {
       // if (!item.tenDanhMuc) {
       const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-      item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+      item.tenDanhMuc = dinhMuc?.tenDinhMuc? dinhMuc?.tenDinhMuc : item.tenDanhMuc;
       item.namDtDmuc = dinhMuc?.tongDmuc;
       item.maDviTinh = dinhMuc?.donViTinh;
       item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);

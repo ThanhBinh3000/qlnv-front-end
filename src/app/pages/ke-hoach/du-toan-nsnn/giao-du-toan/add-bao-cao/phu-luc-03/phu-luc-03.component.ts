@@ -155,9 +155,9 @@ export class PhuLuc03Component implements OnInit {
         // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
         item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
         // item.maDviTinh = dinhMuc?.donViTinh;
-        item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
-        item.namDtCphiNgoaiCkhoTt = mulNumber(item.namDtCphiNgoaiCkhoBq, item.namDtCphiTaiCkhoSl);
-        item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
+        // item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+        // item.namDtCphiNgoaiCkhoTt = mulNumber(item.namDtCphiNgoaiCkhoBq, item.namDtCphiTaiCkhoSl);
+        // item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
         // }
       })
     }
