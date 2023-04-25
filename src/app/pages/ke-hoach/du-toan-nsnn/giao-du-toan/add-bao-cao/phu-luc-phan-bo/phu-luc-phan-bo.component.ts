@@ -128,7 +128,7 @@ export class PhuLucPhanBoComponent implements OnInit {
       })
     }
 
-    /**
+
     // if (this.dataInfo.data.trangThai == "3") {
     //   if (this.isSynthetic || this.isSynthetic == false) {
     //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
@@ -188,9 +188,22 @@ export class PhuLucPhanBoComponent implements OnInit {
     //   })
     //   this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
     // }
-    */
 
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
+
+    this.lstCtietBcao.forEach(item => {
+      if (item.maNdung) {
+        const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+        let tongCong = 0
+        this.lstCtietBcao[index].lstCtietDvis.forEach(itm => {
+          tongCong += itm.soTranChi
+        })
+        this.lstCtietBcao[index].dtoanGiao = tongCong;
+        this.sum(this.lstCtietBcao[index].stt)
+      }
+    })
+
+
     // this.tinhTong();
     console.log(this.lstCtietBcao);
 
