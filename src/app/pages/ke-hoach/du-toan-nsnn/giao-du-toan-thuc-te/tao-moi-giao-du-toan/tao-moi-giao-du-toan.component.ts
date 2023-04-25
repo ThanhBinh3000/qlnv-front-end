@@ -237,6 +237,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	async initialization() {
 
 		this.spinner.show();
+		console.log("this.data: ", this.data);
+		
 		// lấy id bản ghi từ router
 		this.id = this.data.id;
 
@@ -300,14 +302,15 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		await this.getChildUnit();
 		console.log(this.donVis1.find(e => e.maDvi == this.maDvi));
 
-		if (this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) {
-			this.lstDvi.push(
-				{
-					maDvi: this.maDvi,
-					tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
-				}
-			)
-		}
+		// if (this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("CNTT") || this.donVis1.find(e => e.maDvi == this.maDvi).tenVietTat.includes("_VP")) {
+		// 	this.lstDvi.push(
+		// 		{
+		// 			maDvi: this.maDvi,
+		// 			tenDvi: this.donVis1.find(e => e.maDvi == this.maDvi).tenDvi
+		// 		}
+		// 	)
+		// }
+
 		// if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 		// 	this.lstDvi.push(
 		// 	  {
@@ -316,7 +319,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 		// 	  }
 		// 	)
 		//   }
-		console.log(this.lstCtietBcao)
 		if (this.status) {
 			this.scrollX = (460 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
 		} else {

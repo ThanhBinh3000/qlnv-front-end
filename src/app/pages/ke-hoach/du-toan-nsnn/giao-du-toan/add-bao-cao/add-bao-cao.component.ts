@@ -469,166 +469,176 @@ export class AddBaoCaoComponent implements OnInit {
           let tongPl2 = 0
           let tongPl3 = 0
 
-          if (data1N?.trangThai != '3') {
-            const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N').lstCtietBcaos;
+          if (data1N && data1N?.trangThai != '3') {
+            const dataPL1N = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01N')?.lstCtietBcaos;
             let lstN = []
-            dataPL1N.forEach(i => {
+            dataPL1N?.forEach(i => {
               if (i.stt.length == 3) {
                 lstN.push(i)
               }
             })
             if (lstN.length > 0) {
-              lstN.forEach(i => {
-                tongPl1N += i.namDtTtien
+              lstN?.forEach(i => {
+                tongPl1N += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
-          if (data1X?.trangThai != '3') {
-            const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X').lstCtietBcaos;
+          if (data1X && data1X?.trangThai != '3') {
+            const dataPL1X = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl01X')?.lstCtietBcaos;
             let lstX = []
-            dataPL1X.forEach(i => {
+            dataPL1X?.forEach(i => {
               if (i.stt.length == 3) {
                 lstX.push(i)
               }
             })
             if (lstX.length > 0) {
-              lstX.forEach(i => {
-                tongPl1X += i.namDtTtien
+              lstX?.forEach(i => {
+                tongPl1X += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
 
-          if (data2?.trangThai != '3') {
-            const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02').lstCtietBcaos;
+          if (data2 && data2?.trangThai != '3') {
+            const dataPL2 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl02')?.lstCtietBcaos;
             let lstPl2 = []
-            dataPL2.forEach(i => {
+            dataPL2?.forEach(i => {
               if (i.stt.length == 3) {
                 lstPl2.push(i)
               }
             })
             if (lstPl2.length > 0) {
-              lstPl2.forEach(i => {
-                tongPl2 += i.namDtTtien
+              lstPl2?.forEach(i => {
+                tongPl2 += i.namDtTtien ? i.namDtTtien : 0;
               })
             }
           }
 
-          if (data3?.trangThai != '3') {
-            const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03').lstCtietBcaos;
+          if (data3 && data3?.trangThai != '3') {
+            const dataPL3 = this.baoCao.lstCtiets.find(e => e.maBieuMau == 'pl03')?.lstCtietBcaos;
             let lstPl3 = []
-            dataPL3.forEach(i => {
+            dataPL3?.forEach(i => {
               if (i.stt.length == 3) {
                 lstPl3.push(i)
               }
             })
             if (lstPl3.length > 0) {
-              lstPl3.forEach(i => {
-                tongPl3 += i.namDtTcong
+              lstPl3?.forEach(i => {
+                tongPl3 += i.namDtTcong ? i.namDtTcong : 0
               })
             }
           }
 
           let soTranChi = tongPl1N + tongPl1X + tongPl3 + tongPl2
-          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04").lstCtietBcaos
-          let tongCong = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2")?.tongCong
-          let tongCong1N = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
-          let tongCong1X = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
-          let tongCong2 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
-          let tongCong3 = lstCtietPlTong.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.2",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.baoCao.maDvi,
-                soTranChi: soTranChi
-              }
-            ],
-            maNdung: "0.1.2.2",
-            tongCong: soTranChi
-          })
+          const lstCtietPlTong = this.baoCao.lstCtiets.find(item => item.maBieuMau == "pl04")
+          let tongCong = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2")?.tongCong
+          let tongCong1N = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.1")?.tongCong
+          let tongCong1X = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.2")?.tongCong
+          let tongCong2 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.3")?.tongCong
+          let tongCong3 = lstCtietPlTong?.lstCtietBcaos.find(itm => itm.stt == "0.1.2.2.4")?.tongCong
 
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong1N,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.2.2",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.baoCao.maDvi,
-                soTranChi: tongPl1N
-              }
-            ],
-            maNdung: "0.1.2.2.2",
-            tongCong: tongPl1N
-          })
+          if ((data1N || data1X || data2 || data3) && lstCtietPlTong?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: soTranChi
+                }
+              ],
+              maNdung: "0.1.2.2",
+              tongCong: soTranChi
+            })
+          }
+          if (data1N && data1N?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong1N,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.2",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl1N
+                }
+              ],
+              maNdung: "0.1.2.2.2",
+              tongCong: tongPl1N
+            })
+          }
 
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong1X,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.2.3",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.baoCao.maDvi,
-                soTranChi: tongPl1X
-              }
-            ],
-            maNdung: "0.1.2.2.3",
-            tongCong: tongPl1X
-          })
+          if (data1X && data1X?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong1X,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.3",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl1X
+                }
+              ],
+              maNdung: "0.1.2.2.3",
+              tongCong: tongPl1X
+            })
+          }
 
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong3,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.2.4",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.baoCao.maDvi,
-                soTranChi: tongPl3
-              }
-            ],
-            maNdung: "0.1.2.2.4",
-            tongCong: tongPl3
-          })
+          if (data3 && data3?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong3,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.4",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl3
+                }
+              ],
+              maNdung: "0.1.2.2.4",
+              tongCong: tongPl3
+            })
+          }
 
-          dataInfo.extraData.push({
-            dtoanGiao: tongCong2,
-            id: uuid.v4() + "FE",
-            stt: "0.1.2.2.1",
-            loaiPa: null,
-            nguonKhac: null,
-            nguonNsnn: null,
-            panDtCtietId: null,
-            lstCtietDvis: [
-              {
-                id: uuid.v4() + "FE",
-                maDviNhan: this.baoCao.maDvi,
-                soTranChi: tongPl2
-              }
-            ],
-            maNdung: "0.1.2.2.1",
-            tongCong: tongPl2
-          })
+          if (data2 && data2?.trangThai != '3') {
+            dataInfo.extraData.push({
+              dtoanGiao: tongCong2,
+              id: uuid.v4() + "FE",
+              stt: "0.1.2.2.1",
+              loaiPa: null,
+              nguonKhac: null,
+              nguonNsnn: null,
+              panDtCtietId: null,
+              lstCtietDvis: [
+                {
+                  id: uuid.v4() + "FE",
+                  maDviNhan: this.baoCao.maDvi,
+                  soTranChi: tongPl2
+                }
+              ],
+              maNdung: "0.1.2.2.1",
+              tongCong: tongPl2
+            })
+          }
         }
         break;
       default:

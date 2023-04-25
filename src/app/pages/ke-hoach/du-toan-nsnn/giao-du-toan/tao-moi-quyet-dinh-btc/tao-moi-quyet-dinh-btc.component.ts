@@ -341,7 +341,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
-          this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
+          // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
