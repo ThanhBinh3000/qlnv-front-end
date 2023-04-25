@@ -13,6 +13,7 @@ import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 import dayjs from "dayjs";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-dm-sc-lon',
@@ -62,7 +63,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
-      trangThai: [null],
+      trangThai: [STATUS.CHUA_THUC_HIEN],
       type: ["00"],
     });
   }
@@ -99,7 +100,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.fileDinhKem = data.listFileDinhKems;
+          this.fileDinhKem = data.fileDinhKems;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);

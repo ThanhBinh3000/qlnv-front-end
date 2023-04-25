@@ -73,7 +73,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       loaiDuAn: [null],
       namBatDau: [null],
       namKetThuc: [null],
-      ngayTaoTt: [null],
+      ngayTao: [null],
       tgTongHop: [null],
       namKeHoach: [dayjs().get("year")],
       noiDung: [null],
@@ -120,7 +120,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         id: data.id,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
-        ngayTaoTt: data.ngayTaoTt,
+        ngayTao: data.ngayTao,
         ngayKyQd: data.ngayKyQd,
         noiDung: data.noiDung,
         maToTrinh: data.maToTrinh ? data.maToTrinh.split("/")[0] : null,
@@ -142,6 +142,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           this.selectRow(this.listDx[0]);
         }
       }
+    } else {
+      this.formData.patchValue({
+        ngayTao : Date.now()
+      })
     }
   }
 
@@ -151,7 +155,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+    this.helperService.removeValidators(this.formData)
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
+      this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
+      this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+    }
   }
 
 
