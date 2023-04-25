@@ -56,6 +56,7 @@
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
+
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -85,11 +86,11 @@
               <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td>
-                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link" nzBlock (click)="openModalQdNv(item.idQd)">{{
+                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link" (click)="openModalQdNv(item.idQd)">{{
                   item.soQd}}</a>
               </td>
               <td>{{item.nam}}</td>
-              <td>{{item.ngayQd}}</td>
+              <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
               <td></td>
               <td></td>
               <td></td>

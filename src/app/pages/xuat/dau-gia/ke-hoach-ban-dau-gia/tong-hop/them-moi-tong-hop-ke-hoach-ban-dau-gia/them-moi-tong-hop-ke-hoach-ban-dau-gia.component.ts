@@ -18,6 +18,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -51,28 +52,28 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formTraCuu = this.fb.group(
       {
-        loaiVthh: [null, [Validators.required]],
-        tenLoaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
-        tenCloaiVthh: [null, [Validators.required]],
+        loaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: ['', [Validators.required]],
+        cloaiVthh: ['', [Validators.required]],
+        tenCloaiVthh: ['', [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayDuyetTu: [null, [Validators.required]],
+        ngayDuyetTu: [null],
         ngayDuyetDen: [null],
       }
     );
     this.formData = this.fb.group({
       id: [],
       idTh: [],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
-      namKh: [, [Validators.required]],
-      ngayDuyetTu: ['', [Validators.required]],
-      ngayDuyetDen: ['', [Validators.required]],
-      ngayThop: [, [Validators.required]],
+      loaiVthh: [''],
+      cloaiVthh: [''],
+      namKh: [],
+      ngayDuyetTu: [''],
+      ngayDuyetDen: [''],
+      ngayThop: [''],
       noiDungThop: ['', [Validators.required]],
-      tenLoaiVthh: ['', [Validators.required]],
-      tenCloaiVthh: ['', [Validators.required]],
-      trangThai: [''],
+      tenLoaiVthh: [''],
+      tenCloaiVthh: [''],
+      trangThai: [STATUS.CHUA_TAO_QD],
       tenTrangThai: ['Chưa Tạo QĐ'],
     })
   }
@@ -116,12 +117,14 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
+
   async showFirstRow($event, data: any) {
     await this.showDetail($event, data);
   }
 
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
+    this.setValidator();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
@@ -170,6 +173,17 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
     return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
   };
+
+  setValidator() {
+    if (this.formTraCuu.value.ngayDuyetTu == null) {
+      console.log(this.formTraCuu.value.ngayDuyetTu, 999)
+      this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
+    } else {
+      this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
+    }
+  }
 
   async save() {
     let body = this.formData.value;

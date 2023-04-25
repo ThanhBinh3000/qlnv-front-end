@@ -127,7 +127,7 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       nzContent: ThongTinDmScLonComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzStyle: {top: '150px'},
+      nzStyle: {top: '100px'},
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
@@ -164,25 +164,6 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == this.STATUS.CHUA_THUC_HIEN) {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
     }
   }
 }

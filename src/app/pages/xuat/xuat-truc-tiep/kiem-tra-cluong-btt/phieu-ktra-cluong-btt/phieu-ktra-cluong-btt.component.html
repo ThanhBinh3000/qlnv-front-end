@@ -87,7 +87,7 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>
-                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link" nzBlock
+                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link"
                                     (click)="openModalQdNv(item.idQd)">{{
                                     item.soQd}}</a>
                             </td>
@@ -141,7 +141,7 @@
                                             <td>{{lv2.ngayKnghiem | date: 'dd/MM/YYYY' }}</td>
                                             <td>
                                                 <a *ngIf="lv2.soBienBan && lv2.idBienBan" nz-button nzType="link"
-                                                    nzBlock (click)="openModalSoBienBan(lv2.idBienBan)">{{
+                                                    (click)="openModalSoBienBan(lv2.idBienBan)">{{
                                                     lv2.soBienBan}}</a>
                                             </td>
                                             <td>{{lv2.ngayLayMau}}</td>

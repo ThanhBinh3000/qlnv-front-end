@@ -378,7 +378,6 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
   filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
-      console.log(this.dataTableAll, 'this.dataTableAll ')
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         if (date) {

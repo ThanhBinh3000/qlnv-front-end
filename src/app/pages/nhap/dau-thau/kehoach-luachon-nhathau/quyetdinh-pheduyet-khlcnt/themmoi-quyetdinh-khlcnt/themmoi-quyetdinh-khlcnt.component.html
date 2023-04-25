@@ -559,7 +559,7 @@
             <span> Địa điểm nhập hàng </span>
           </div>
         </div>
-        <div class="buttons">
+        <div *ngIf="!isView" class="buttons">
           <button type="button" class="btn btn-main" (click)="themMoiGoiThau()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
@@ -604,7 +604,7 @@
                 <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>
+                <td *ngIf="!isView">
                   <a (click)="themMoiGoiThau(item,i)">
                     <i class="fa fa-pencil"></i>
                   </a>
