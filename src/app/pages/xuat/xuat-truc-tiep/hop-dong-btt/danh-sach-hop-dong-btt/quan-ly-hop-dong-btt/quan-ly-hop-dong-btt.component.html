@@ -19,7 +19,7 @@
                     <span [ngClass]="formData.value.trangThaiHd == STATUS.DA_HOAN_THANH ? 'status-xanh' : 'status-do'">
                         {{ formData.value.tenTrangThaiHd }}
                     </span>
-                    <span>Quản lý hợp đồng/phụ lục hợp đồng</span>
+                    <span>QUẢN LÝ HỢP ĐỒNG/PHỤ LỤC HỢP ĐỒNG</span>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span></span>
-                        <span>Thông tin chung</span>
+                        <span>THÔNG TIN CHUNG</span>
                     </div>
                 </div>
             </div>
@@ -166,6 +166,32 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <!-- <nz-input-number [nzSize]="'small'" formControlName="soLuong"
+                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                nzDisabled>
+                                            </nz-input-number> -->
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <!-- <nz-input-number [nzSize]="'small'" formControlName="soLuong"
+                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                nzDisabled>
+                                            </nz-input-number> -->
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -212,7 +238,7 @@
                             <td>{{data.tenHd}}</td>
                             <td>{{data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{data.tenDviMua }}</td>
-                            <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{data.soLuongBanTrucTiep | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{data.donGia == null ? data.donGiaKhongVat : data.donGia| number : '1.0-1' : 'vi_VN' }}
                             </td>
                             <td>{{data.soLuong * data.donGiaGomThue == 0 ? data.soLuong * data.donGiaKhongVat :

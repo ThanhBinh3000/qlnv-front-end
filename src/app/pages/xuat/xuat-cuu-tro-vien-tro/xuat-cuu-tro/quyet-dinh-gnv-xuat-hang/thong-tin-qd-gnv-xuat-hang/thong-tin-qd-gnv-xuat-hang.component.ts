@@ -111,7 +111,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenDvi: [],
       soLuong: [],
       canCu: [new Array<FileDinhKem>()],
-      fileDinhKem: [new Array<FileDinhKem>(), [Validators.required]],
+      fileDinhKem: [new Array<FileDinhKem>()],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
@@ -243,6 +243,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                   this.chiTiet = [...this.chiTiet, ...s.quyetDinhPdDx];
                 });
                 this.formData.patchValue({
+                  soQdPd: res.data.soQd,
                   loaiVthh: res.data.loaiVthh,
                   tenLoaiVthh: res.data.tenLoaiVthh,
                   donViTinh: res.data.donViTinh,
