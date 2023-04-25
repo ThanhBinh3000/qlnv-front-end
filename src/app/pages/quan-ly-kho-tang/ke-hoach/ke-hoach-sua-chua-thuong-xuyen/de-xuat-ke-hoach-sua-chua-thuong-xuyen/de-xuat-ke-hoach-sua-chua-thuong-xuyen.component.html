@@ -22,11 +22,11 @@
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" *ngIf="userService.isCuc" (click)="clearForm()">
+        <button nz-button class="search__button--clear" *ngIf="userService.isCuc()" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" *ngIf="userService.isCuc" (click)="filter()">
+        <button nz-button class="search__button--search" *ngIf="userService.isCuc()" (click)="filter()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -40,15 +40,11 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Export</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')"
+        <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')"
                 type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
-        <!--            <button type="button" (click)="deleteMulti()" class="btn btn-sub btn-xoa">-->
-        <!--              <i class="fa fa-trash-o do"></i>-->
-        <!--              <span>Xoá</span>-->
-        <!--            </button>-->
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -62,7 +58,7 @@
           <th width="150px">Ngày ký</th>
           <th width="">Trích yếu</th>
           <th width="150px">Trạng thái</th>
-<!--          <th width="150px">Mã tổng hợp</th>-->
+          <th width="150px" *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
           <th width="130px" class="text-center" *ngIf="userService.isCuc">Hành động</th>
         </tr>
         </thead>
@@ -71,8 +67,10 @@
           <td></td>
           <td>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                     (input)="filterInTable('namKh',filterTable.namKh)"/>
+              <nz-select nzPlaceHolder="Chọn năm" nzAllowClear [(ngModel)]="filterTable.namKh"
+                         (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-input-group>
           </td>
           <td>
@@ -103,7 +101,7 @@
               </nz-select>
             </nz-input-group>
           </td>
-          <td>
+          <td *ngIf="userService.isTongCuc()">
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                      (input)="filterInTable('maTongHop',filterTable.maTongHop)"/>
@@ -113,19 +111,13 @@
           </td>
         </tr>
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td>
-            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
-          </td>
           <td>{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.soQd }}</td>
-          <td>{{ data.tenDuAn }}</td>
-          <td>{{ data.chuDauTu }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tongMucDt | number: '1.0-1': 'vi_VN' }}</td>
-          <td>{{ data.soQdKhDtxd }}</td>
+          <td>{{ data.namKh }}</td>
+          <td>{{ data.soCv }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-          <td class="text-left">{{ data.tenTrangThai }}</td>
+          <td>{{ data.trichYeu }}</td>
+          <td>{{ data.tenTrangThai }}</td>
+          <td *ngIf="userService.isTongCuc()">{{ data.chuDauTu }}</td>
           <td class="text-center">
             <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isCuc"
                (click)="redirectToChiTiet(data.id, true)">
@@ -162,7 +154,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <!--  <app-thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen [id]="selectedId" (showListEvent)="showList()"-->
-  <!--                                                 [isViewDetail]="isViewDetail"-->
-  <!--                                                 [idInput]="selectedId"></app-thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen>-->
+  <app-thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen [id]="selectedId" (showListEvent)="showList()"
+                                                        [isViewDetail]="isViewDetail"
+                                                        [idInput]="selectedId"></app-thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen>
 </ng-template>
