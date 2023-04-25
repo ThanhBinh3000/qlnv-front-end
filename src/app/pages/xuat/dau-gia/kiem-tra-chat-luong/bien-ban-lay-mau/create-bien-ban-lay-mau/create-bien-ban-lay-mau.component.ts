@@ -55,31 +55,25 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
-      loaiBienBan: ['', [Validators.required]],
-      nam: [dayjs().get('year'), [Validators.required]],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
+      loaiBienBan: [''],
+      nam: [dayjs().get('year')],
+      maDvi: [''],
+      tenDvi: [''],
       maQhns: [''],
-
       soQd: ['', [Validators.required]],
-      idQd: ['', [Validators.required]],
+      idQd: [],
       soHd: [''],
       ngayQd: [''],
       ngayHd: [''],
-
-      idKtv: [''],
+      idKtv: [],
       tenKtv: [''],
-
-      soBienBan: ['', [Validators.required]],
-      ngayLayMau: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-
-
+      soBienBan: [''],
+      ngayLayMau: [dayjs().format('YYYY-MM-DD')],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-
       idDdiemXh: [''],
       maDiemKho: [''],
       tenDiemKho: [''],
@@ -89,16 +83,13 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       tenNganKho: [''],
       maLoKho: [''],
       tenLoKho: [''],
-
-      dviKnghiem: ['', [Validators.required]],
-      ddiemLayMau: ['', [Validators.required]],
-
-      soLuongLayMau: ['', [Validators.required]],
-      ppLayMau: ['', [Validators.required]],
-      chiTieuKiemTra: ['', [Validators.required]],
+      dviKnghiem: [''],
+      ddiemLayMau: [''],
+      soLuongLayMau: [''],
+      ppLayMau: [''],
+      chiTieuKiemTra: [''],
       ketQuaNiemPhong: [],
       flagNiemPhong: [],
-
     })
   }
 
@@ -197,7 +188,6 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     this.bienBanLayMau = data.content;
     const diffList = [
       ...this.listDiaDiemXh.filter((item) => {
-        console.log(item, 999)
         return !this.bienBanLayMau.some((child) => {
           if (child.maNganKho.length > 0 && item.maNganKho.length > 0) {
             return item.maNganKho === child.maNganKho;
@@ -299,6 +289,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
   }
 
   async save(isGuiDuyet?: boolean) {
+    this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     body.children = [...this.listDaiDienChiCuc, ...this.listDaiDienCuc];
     body.ketQuaNiemPhong = body.flagNiemPhong ? 1 : 0;
@@ -342,6 +333,58 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     }
   }
 
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["loaiBienBan"].setValidators([Validators.required]);
+      this.formData.controls["nam"].setValidators([Validators.required]);
+      this.formData.controls["maQhns"].setValidators([Validators.required]);
+      this.formData.controls["maDvi"].setValidators([Validators.required]);
+      this.formData.controls["tenDvi"].setValidators([Validators.required]);
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["soBienBan"].setValidators([Validators.required]);
+      this.formData.controls["ngayLayMau"].setValidators([Validators.required]);
+      this.formData.controls["dviKnghiem"].setValidators([Validators.required]);
+      this.formData.controls["ddiemLayMau"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["maDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["maNhaKho"].setValidators([Validators.required]);
+      this.formData.controls["tenNhaKho"].setValidators([Validators.required]);
+      this.formData.controls["maNganKho"].setValidators([Validators.required]);
+      this.formData.controls["tenNganKho"].setValidators([Validators.required]);
+      this.formData.controls["soLuongLayMau"].setValidators([Validators.required]);
+      this.formData.controls["ppLayMau"].setValidators([Validators.required]);
+      this.formData.controls["chiTieuKiemTra"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["loaiBienBan"].clearValidators();
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["maQhns"].clearValidators();
+      this.formData.controls["maDvi"].clearValidators();
+      this.formData.controls["tenDvi"].clearValidators();
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["soBienBan"].clearValidators();
+      this.formData.controls["ngayLayMau"].clearValidators();
+      this.formData.controls["dviKnghiem"].clearValidators();
+      this.formData.controls["ddiemLayMau"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["tenLoaiVthh"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["tenCloaiVthh"].clearValidators();
+      this.formData.controls["maDiemKho"].clearValidators();
+      this.formData.controls["tenDiemKho"].clearValidators();
+      this.formData.controls["maNhaKho"].clearValidators();
+      this.formData.controls["tenNhaKho"].clearValidators();
+      this.formData.controls["maNganKho"].clearValidators();
+      this.formData.controls["tenNganKho"].clearValidators();
+      this.formData.controls["soLuongLayMau"].clearValidators();
+      this.formData.controls["ppLayMau"].clearValidators();
+      this.formData.controls["chiTieuKiemTra"].clearValidators();
+    }
+  }
+
   async loadChitiet() {
     let data = await this.detail(this.id);
     this.listDaiDienChiCuc = data.children.filter(x => x.loaiDaiDien == 'CHI_CUC')
@@ -353,5 +396,4 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
     this.canCuPhapLy = data.canCuPhapLy;
     this.fileNiemPhong = data.fileNiemPhong;
   }
-
 }

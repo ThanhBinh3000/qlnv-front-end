@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from "@angular/core";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../services/storage.service";
@@ -13,19 +13,22 @@ import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 import dayjs from "dayjs";
+import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
 import { STATUS } from "../../../../../../constants/status";
 
 @Component({
-  selector: 'app-thong-tin-danh-muc-sc-thuong-xuyen',
-  templateUrl: './thong-tin-danh-muc-sc-thuong-xuyen.component.html',
-  styleUrls: ['./thong-tin-danh-muc-sc-thuong-xuyen.component.scss']
+  selector: 'app-them-moi-danh-muc-du-an-kho',
+  templateUrl: './them-moi-danh-muc-du-an-kho.component.html',
+  styleUrls: ['./them-moi-danh-muc-du-an-kho.component.scss']
 })
-export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implements OnInit {
+export class ThemMoiDanhMucDuAnKhoComponent extends Base2Component implements OnInit {
+  @Input() dataDetail: any
   isViewDetail: boolean;
-  dataDetail: any
+  listLoaiDuAn: any[] = [];
+  listKhoi: any[] = [];
   dsKho: any[] = [];
   dsChiCuc: any[] = [];
-  listLoaiCongTrinh: any[] = [];
+  fileDinhKemDc: any[] = []
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
@@ -38,39 +41,47 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucKhoService: DanhMucKhoService,
     private danhMucService: DanhMucService,
-    private danhMucSc: DanhMucSuaChuaService,
     private danhMucSv: DanhMucService,
     private _modalRef: NzModalRef,
     private dviService: DonviService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, danhMucSc);
+    super(httpClient, storageService, notification, spinner, modal, danhMucKhoService);
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
-      maCongTrinh: [null, Validators.required],
-      tenCongTrinh: [null, Validators.required],
-      loaiCongTrinh: [null, Validators.required],
+      maDuAn: [null, Validators.required],
+      tenDuAn: [null, Validators.required],
       maChiCuc: [null, Validators.required],
+      diaDiem: [null, Validators.required],
+      khoi: [null, Validators.required],
       maDiemKho: [null, Validators.required],
-      tgThucHien: [null, Validators.required],
-      lyDo: [null, Validators.required],
-      tmdt: [null, Validators.required],
-      keHoachCaiTao: [null, Validators.required],
-      soQdPheDuyet: [null],
-      ngayQdPd: [null],
-      giaTriPd: [null],
+      tgKhoiCong: [null, Validators.required],
+      tgHoanThanh: [null, Validators.required],
+      loaiDuAn: [null , Validators.required],
+      tmdtDuKien: [null , Validators.required],
+      nstwDuKien: [null , Validators.required],
+      tmdtDuyet: [null , Validators.required],
+      nstwDuyet: [null , Validators.required],
+      soQdPd: [null , Validators.required],
+      ngayQdPd: [null , Validators.required],
+      soQdDc: [null],
+      ngayQdDc: [null],
+      soQdPdDtxd: [null],
+      tongSoLuyKe: [null],
+      luyKeNstw: [null],
       trangThai: [STATUS.CHUA_THUC_HIEN],
-      type: ["01"],
     });
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-       this.loadDsChiCuc()
-       this.loadDsLoaiCongTrinh()
+      this.loadDsChiCuc();
+      this.loadDsLoaiDuAn();
+      this.loadDsKhoi();
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -85,12 +96,13 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   async getDetail(id) {
     this.spinner.show();
     try {
-      let res = await this.danhMucSc.getDetail(id);
+      let res = await this.danhMucKhoService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKems;
+          this.fileDinhKemDc = data.fileDinhKemsDc;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -116,11 +128,19 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     this.dsChiCuc = this.dsChiCuc.filter(item => item.maDvi.startsWith(this.userInfo.MA_DVI) && item.type != 'PB')
   }
 
-  async loadDsLoaiCongTrinh() {
-    this.listLoaiCongTrinh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_CT_SUA_CHUA_KT');
+  async loadDsLoaiDuAn() {
+    this.listLoaiDuAn = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_DU_AN_KT');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiCongTrinh = res.data;
+      this.listLoaiDuAn = res.data;
+    }
+  }
+
+  async loadDsKhoi() {
+    this.listKhoi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('KHOI_DU_AN_KT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
     }
   }
 
@@ -131,7 +151,8 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     }
     let body = this.formData.value
     body.maDvi = this.userInfo.MA_DVI
-    body.fileDinhKems = this.fileDinhKem
+    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKemsDc = this.fileDinhKemDc;
     let res = await this.createUpdate(body);
     if (res) {
       this._modalRef.close(data);

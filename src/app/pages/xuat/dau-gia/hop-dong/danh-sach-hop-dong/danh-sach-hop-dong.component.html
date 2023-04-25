@@ -27,8 +27,17 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày ký QĐ phê duyệt KQ BĐG</label>
-            <nz-range-picker formControlName="ngayKy" placeholder="" nzFormat="dd/MM/yyyy">
-            </nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayKy" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKyTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayKy" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKyDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -206,10 +215,10 @@
             <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DANG_THUC_HIEN">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="goDetail(data.id,null,true)">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DA_HOAN_THANH">
                 <i class="fa fa-eye"></i>
               </a>
             </td>

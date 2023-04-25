@@ -50,9 +50,6 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
       tgThucHien: [null],
       tgThucHienTu: [null],
       tgThucHienDen: [null],
-      tgHoanThanh: [null],
-      tgHoanThanhTu: [null],
-      tgHoanThanhDen: [null],
       type: ["01"],
     });
   }
@@ -64,28 +61,13 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
         this.loadDsCuc()
       }
       this.loadDsDiemKho()
-      await this.filter()
+      this.filter()
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  async filter() {
-    if (this.formData.value.tgThucHien && this.formData.value.tgHoanThanh) {
-      this.formData.patchValue({
-        tgThucHienTu :  dayjs(this.formData.value.tgThucHien[0]).get('year'),
-        tgThucHienDen : dayjs(this.formData.value.tgThucHien[1]).get('year'),
-        tgHoanThanhTu : dayjs(this.formData.value.tgHoanThanh[0]).get('year'),
-        tgHoanThanhDen : dayjs(this.formData.value.tgHoanThanh[1]).get('year'),
-      })
-    }
-    this.formData.patchValue({
-      maDvi : this.userInfo.MA_DVI,
-    })
-    await this.search();
   }
 
 
@@ -123,7 +105,7 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.search()
+        await this.filter()
       }
     })
   }
@@ -151,5 +133,19 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+  }
+
+
+  clearForm(currentSearch?: any) {
+    this.formData.reset();
+    this.filter();
+  }
+
+  filter() {
+    this.formData.patchValue({
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      type : "01"
+    })
+    this.search()
   }
 }

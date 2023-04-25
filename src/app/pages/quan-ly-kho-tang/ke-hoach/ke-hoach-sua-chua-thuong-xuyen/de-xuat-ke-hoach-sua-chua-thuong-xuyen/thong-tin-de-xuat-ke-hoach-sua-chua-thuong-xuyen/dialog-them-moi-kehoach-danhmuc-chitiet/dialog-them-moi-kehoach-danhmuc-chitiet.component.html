@@ -1,0 +1,114 @@
+<div class="bg-trang">
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <div nz-row [nzGutter]="24">
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true" [nzRequired]="true">Danh mục</nz-form-label>
+          <nz-select [nzDisabled]="type == 'sua'" nzAllowClear [(ngModel)]="item.maDm"
+                     (ngModelChange)="changeDmucDuAn($event)">
+            <nz-option *ngFor="let item of listDmKho" [nzLabel]="item.tenDuAn" [nzValue]="item.maDuAn">
+            </nz-option>
+          </nz-select>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true" [nzRequired]="true">Chi cục</nz-form-label>
+          <input nz-input [(ngModel)]="item.tenChiCuc" readonly/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true" [nzRequired]="true">Điểm kho</nz-form-label>
+          <input nz-input [(ngModel)]="item.tenDiemKho" readonly/>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục đề nghị</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriDn" disabled/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục đã được phê duyệt</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriDuocDuyet" disabled/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục chưa được phê duyệt</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriChuaDuocPheDuyet" disabled/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục đã thực hiện/Giá trị ước thực hiện</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriUocTh"/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Chênh lệch kế hoạch - Thực hiện</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriChenhLech" disabled/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục đề nghị bổ sung đợt này</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriDnBs"/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Danh mục không có nhu cầu bổ sung</nz-form-label>
+          <nz-input-group>
+            <input class="money-input" currencyMask [options]="amount"
+                   [(ngModel)]="item.giaTriKbs"/>
+          </nz-input-group>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">Ghi chú</nz-form-label>
+          <input nz-input [(ngModel)]="item.ghiChu"/>
+        </nz-form-item>
+      </div>
+    </div>
+  </nz-card>
+</div>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel ml-2">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+      <button nz-button (click)="handleOk()" class="modal__button--save ml-2">
+        <i nz-icon nzType="save"></i>
+        Lưu
+      </button>
+
+    </div>
+  </div>
+</div>
