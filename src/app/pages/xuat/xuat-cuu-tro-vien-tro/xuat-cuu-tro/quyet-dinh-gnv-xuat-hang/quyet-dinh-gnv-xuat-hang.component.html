@@ -243,9 +243,10 @@
   </div>
 </ng-template>
 
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPd" (nzOnCancel)="closeQdPdModal()">
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true" [(nzVisible)]="openQdPd" (nzOnCancel)="closeQdPdModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idSelected]="idQdPd" [loaiVthh]="loaiVthh" [isView]="true">
+    <app-thong-tin-quyet-dinh-phe-duyet-phuong-an class="modal-content-detail" [idSelected]="idQdPd" [loaiVthh]="loaiVthh" [isView]="true">
     </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
   </ng-container>
   <div *nzModalFooter>
