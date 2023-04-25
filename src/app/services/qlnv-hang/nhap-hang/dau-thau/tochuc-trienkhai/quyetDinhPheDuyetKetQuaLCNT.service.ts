@@ -20,4 +20,9 @@ export class QuyetDinhPheDuyetKetQuaLCNTService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/bySoQd`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  exportHd(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/hop-dong`;
+    return this._httpClient.post(url, body, { responseType: 'blob' });
+  }
 }
