@@ -33,8 +33,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   listChiCuc = [];
   dataTable: any[] = [];
   thongTinCuc: DanhSachGoiThau = new DanhSachGoiThau();
-  thongTinChiCuc: DanhSachGoiThau = new DanhSachGoiThau();
-  thongTinDiemKho: DanhSachGoiThau = new DanhSachGoiThau();
+  thongTinChiCuc: any[] = [];
+  thongTinDiemKho: any[] = [];
 
   listChiCucMap = {};
   listDiemKhoMap = {};
@@ -272,7 +272,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addCuc() {
-    if (this.validateDataAdd('cuc') && this.validateSoLuongCuc()) {
+    if (this.validateDataAddCuc('cuc') && this.validateSoLuongCuc()) {
       if (this.thongTinCuc.maDvi && this.thongTinCuc.soLuong) {
         let dataDvi = this.listCuc.filter(d => d.maDvi == this.thongTinCuc.maDvi)
         this.thongTinCuc.tenDvi = dataDvi[0].tenDvi;
@@ -287,6 +287,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         this.formGoiThau.patchValue({
           soLuong: soLuong
         });
+        this.thongTinChiCuc[this.thongTinCuc.maDvi] = new DanhSachGoiThau();
         this.thongTinCuc = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
@@ -295,13 +296,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addChiCuc(i, maCuc) {
-    if (this.validateDataAdd('chiCuc') && this.validateSoLuongChiCuc(i)) {
-      if (this.thongTinChiCuc.maDvi && this.thongTinChiCuc.soLuong) {
-        let dataDvi = this.listChiCucMap[maCuc].filter(d => d.maDvi == this.thongTinChiCuc.maDvi)
-        this.thongTinChiCuc.tenDvi = dataDvi[0].tenDvi;
-        this.thongTinChiCuc.children = [];
-        this.dataTable[i].children = [...this.dataTable[i].children, this.thongTinChiCuc];
-        this.thongTinChiCuc = new DanhSachGoiThau();
+    if (this.validateDataAdd(maCuc, 'chiCuc') && this.validateSoLuongChiCuc(i, maCuc)) {
+      if (this.thongTinChiCuc[maCuc].maDvi && this.thongTinChiCuc[maCuc].soLuong) {
+        let dataDvi = this.listChiCucMap[maCuc].filter(d => d.maDvi == this.thongTinChiCuc[maCuc].maDvi)
+        this.thongTinChiCuc[maCuc].tenDvi = dataDvi[0].tenDvi;
+        this.thongTinChiCuc[maCuc].children = [];
+        this.dataTable[i].children = [...this.dataTable[i].children, this.thongTinChiCuc[maCuc]];
+        this.thongTinDiemKho[this.thongTinChiCuc[maCuc].maDvi] = new DanhSachGoiThau();
+        this.thongTinChiCuc[maCuc] = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
@@ -309,12 +311,12 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addDiemKho(i, y, maChiCuc) {
-    if (this.validateDataAdd('diemKho') && this.validateSoLuongDiemKho(i, y)) {
-      if (this.thongTinDiemKho.maDvi && this.thongTinDiemKho.soLuong) {
-        let dataDvi = this.listDiemKhoMap[maChiCuc].filter(d => d.maDvi == this.thongTinDiemKho.maDvi);
-        this.thongTinDiemKho.tenDvi = dataDvi[0].tenDvi;
-        this.dataTable[i].children[y].children = [...this.dataTable[i].children[y].children, this.thongTinDiemKho];
-        this.thongTinDiemKho = new DanhSachGoiThau();
+    if (this.validateDataAdd(maChiCuc, 'diemKho') && this.validateSoLuongDiemKho(i, y, maChiCuc)) {
+      if (this.thongTinDiemKho[maChiCuc].maDvi && this.thongTinDiemKho[maChiCuc].soLuong) {
+        let dataDvi = this.listDiemKhoMap[maChiCuc].filter(d => d.maDvi == this.thongTinDiemKho[maChiCuc].maDvi);
+        this.thongTinDiemKho[maChiCuc].tenDvi = dataDvi[0].tenDvi;
+        this.dataTable[i].children[y].children = [...this.dataTable[i].children[y].children, this.thongTinDiemKho[maChiCuc]];
+        this.thongTinDiemKho[maChiCuc] = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
@@ -329,30 +331,41 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     return true;
   }
 
-  validateSoLuongChiCuc(i) {
+  validateSoLuongChiCuc(i, ma) {
     let soLuongChiCuc = 0
     this.dataTable[i].children.forEach(i => {
       soLuongChiCuc = soLuongChiCuc + i.soLuong
     })
-    if (soLuongChiCuc + this.thongTinChiCuc.soLuong > this.dataTable[i].soLuong) {
+    if (soLuongChiCuc + this.thongTinChiCuc[ma].soLuong > this.dataTable[i].soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng nhập của Chi cục không được vượt quá số lượng nhập của Cục.")
       return false
     }
     return true
   }
-  validateSoLuongDiemKho(i, y) {
+  validateSoLuongDiemKho(i, y, ma) {
     let soLuongDiemKho = 0
     this.dataTable[i].children[y].children.forEach(i => {
       soLuongDiemKho = soLuongDiemKho + i.soLuong
     })
-    if (soLuongDiemKho + this.thongTinDiemKho.soLuong > this.dataTable[i].children[y].soLuong) {
+    if (soLuongDiemKho + this.thongTinDiemKho[ma].soLuong > this.dataTable[i].children[y].soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng nhập của Điểm kho không được vượt quá số lượng nhập của Chi cục.")
       return false
     }
     return true
   }
 
-  validateDataAdd(type): boolean {
+  validateDataAddCuc(type: string): boolean {
+    if (type == 'cuc') {
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinCuc.maDvi);
+      if (data.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+        return false
+      }
+      return true;
+    }
+  }
+
+  validateDataAdd(ma: any, type: string, i?: any, y?: any): boolean {
     if (type == 'cuc') {
       let data = this.dataTable.filter(item => item.maDvi == this.thongTinCuc.maDvi);
       if (data.length > 0) {
@@ -362,7 +375,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       return true;
     }
     if (type == 'chiCuc') {
-      let data = this.dataTable.filter(item => item.maDvi == this.thongTinChiCuc.maDvi);
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinChiCuc[ma].maDvi);
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
@@ -370,7 +383,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       return true;
     }
     if (type == 'diemKho') {
-      let data = this.dataTable.filter(item => item.maDvi == this.thongTinDiemKho.maDvi);
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinDiemKho[ma].maDvi);
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
@@ -400,13 +413,13 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.thongTinCuc.maDvi = null;
     this.thongTinCuc.soLuong = null;
   }
-  clearChiCuc() {
-    this.thongTinChiCuc.maDvi = null;
-    this.thongTinChiCuc.soLuong = null;
+  clearChiCuc(i) {
+    this.thongTinChiCuc[i].maDvi = null;
+    this.thongTinChiCuc[i].soLuong = null;
   }
-  clearDiemKho() {
-    this.thongTinDiemKho.maDvi = null;
-    this.thongTinDiemKho.soLuong = null;
+  clearDiemKho(y) {
+    this.thongTinDiemKho[y].maDvi = null;
+    this.thongTinDiemKho[y].soLuong = null;
   }
 
   expandSet = new Set<number>();

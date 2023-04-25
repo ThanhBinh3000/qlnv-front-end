@@ -305,9 +305,9 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
           trangThai: STATUS.BAN_HANH,
           loaiVthh: this.loaiVthh
         };
-        this.thongTinHopDong
-          .export(body)
-          .subscribe((blob) => saveAs(blob, 'thong-tin-hop-dong.xlsx'));
+        this.quyetDinhPheDuyetKetQuaLCNTService
+          .exportHd(body)
+          .subscribe((blob) => saveAs(blob, 'quan_ly_ky_hop_dong_mua_hang_dtqg.xlsx'));
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
