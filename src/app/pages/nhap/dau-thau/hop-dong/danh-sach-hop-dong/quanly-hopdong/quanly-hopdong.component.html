@@ -5,7 +5,9 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH" type="button"
+            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
+            && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))"
+                    type="button"
                 class="btn btn-sub xanh-nhat" (click)="approve()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
@@ -33,9 +35,9 @@
                 </div>
             </div>
             <form nzLayout="horizontal" [formGroup]="formData" nz-form>
-                <div nz-row [nzGutter]="[24]">
+                <div nz-row [nzGutter]="24">
                     <div nz-col nzSpan="8">
-                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+                        <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
@@ -87,7 +89,7 @@
                         </div>
                     </div>
                     <div nz-col nzSpan="8">
-                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
+                        <div nz-row [nzGutter]="24" class="label-50 mg-t-10 border-right">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
@@ -151,7 +153,7 @@
                         </div>
                     </div>
                     <div nz-col nzSpan="8">
-                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
+                        <div nz-row [nzGutter]="24" class="label-50 mg-t-10 ">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
@@ -230,7 +232,8 @@
                         <span>Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
                     </div>
                 </div>
-                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT">
+                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT
+&& (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
                     <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>

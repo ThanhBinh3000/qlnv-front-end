@@ -397,7 +397,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 "limit": this.globals.prop.MAX_INTERGER,
                 "page": 0
             },
-            loaiVthh: this.loaiVthh
+            loaiVthh: this.loaiVthh,
+            hdChuaBanHanh: true
         }
         let res = await this.ketQuaLcntService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
