@@ -33,10 +33,19 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Từ chối</span>
       </button>
-      <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Phê duyệt</span>
-      </button>
+      <ng-container *ngIf="statusDvi(); else viewDvi">
+        <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnLD">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Phê duyệt</span>
+        </button>
+      </ng-container>
+      <ng-template #viewDvi>
+        <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Phê duyệt</span>
+        </button>
+      </ng-template>
+
       <button class="btn btn-main" (click)="action('nonaccept')" [hidden]="statusBtnDVCT">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Từ chối</span>
