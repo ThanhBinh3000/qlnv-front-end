@@ -86,6 +86,25 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
+            </nz-form-label>
+            <input [readonly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input />
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo đề xuất</nz-form-label>
+            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
+            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định kế hoạch trung hạn
@@ -97,17 +116,43 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="5">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            <nz-form-label>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-form-control>
+                  <nz-select [nzDisabled]="true" formControlName="namBatDau" nzPlaceHolder="Năm bắt đầu"
+                             nzSpan="2"
+                             nzAllowClear>
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+              <div nz-col nzSpan="2" class="text-center">
+                <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-form-control>
+                  <nz-select [nzDisabled]="true" formControlName="namKetThuc" nzPlaceHolder="Năm kết thúc"
+                             nzSpan="2"
+                             nzAllowClear>
+                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                    </nz-option>
+                  </nz-select>
+                </nz-form-control>
+              </div>
+            </div>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="7">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
+            <nz-form-label [nzNoColon]="true">Loại dự án
             </nz-form-label>
-            <input [readonly]="isViewDetail" formControlName="trichYeu" class="search__input" nz-input />
+            <nz-form-control>
+              <input class="search__input" formControlName="loaiDuAn" [readonly]="true" nz-input />
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">

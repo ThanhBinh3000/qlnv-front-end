@@ -18,6 +18,7 @@ import { UserLogin } from "../../../../../../models/userlogin";
 import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import { STATUS } from "../../../../../../constants/status";
 import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { KtTongHopXdHnService } from "../../../../../../services/kt-tong-hop-xd-hn.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-nhu-cau',
@@ -63,7 +64,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private tongHopDxXdTh: TongHopKhTrungHanService,
+    private tongHopDxXdTh: KtTongHopXdHnService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService

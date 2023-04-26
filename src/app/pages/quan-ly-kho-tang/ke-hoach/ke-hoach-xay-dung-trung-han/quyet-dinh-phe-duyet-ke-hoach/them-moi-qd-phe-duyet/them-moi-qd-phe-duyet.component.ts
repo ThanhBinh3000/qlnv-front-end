@@ -263,7 +263,10 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            phuongAnTc: data.soQuyetDinh
+            phuongAnTc: data.soQuyetDinh,
+            namBatDau : data.namBatDau,
+            namKetThuc  :data.namKetThuc,
+            loaiDuAn : data.loaiDuAn
           });
           await this.loadDsChiTiet(data.id);
         }

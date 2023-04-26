@@ -19,6 +19,7 @@ import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { KtTongHopXdHnService } from "../../../../../services/kt-tong-hop-xd-hn.service";
 @Component({
   selector: 'app-tong-hop-dx-nhu-cau',
   templateUrl: './tong-hop-dx-nhu-cau.component.html',
@@ -72,7 +73,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private tongHopDxXdTh: KtTongHopXdHnService,
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     public userService: UserService,
@@ -139,7 +140,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
         page: this.page - 1,
       }
     };
-    let res = await this.tongHopTrungHanService.search(body);
+    let res = await this.tongHopDxXdTh.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -244,7 +245,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopTrungHanService.delete(body).then(async () => {
+          this.tongHopDxXdTh.delete(body).then(async () => {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
@@ -265,10 +266,11 @@ export class TongHopDxNhuCauComponent implements OnInit {
         let body = {
 
         };
-        this.tongHopTrungHanService
+        this.tongHopDxXdTh
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'tong-hop-nhu-cau-hang-nam' +
+              '.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -343,7 +345,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.tongHopTrungHanService.deleteMuti({ids: dataDelete});
+            let res = await this.tongHopDxXdTh.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
