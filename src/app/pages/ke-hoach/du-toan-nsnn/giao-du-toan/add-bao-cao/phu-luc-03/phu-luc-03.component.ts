@@ -138,7 +138,6 @@ export class PhuLuc03Component implements OnInit {
     }
 
     await this.getDinhMuc();
-    debugger
     this.lstCtietBcao.forEach(item => {
       const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc);
       if (!item.tenDanhMuc) {
@@ -149,20 +148,13 @@ export class PhuLuc03Component implements OnInit {
       item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
 
     })
-    // debugger
-    // if (this.isSynthetic) {
-    //   this.lstCtietBcao.forEach(item => {
-    //     const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && this.formDetail.trangThai == "3");
-    //     if (!item.tenDanhMuc) {
-    //       item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-    //     }
-    //     item.namDtCphiTaiCkhoDm = dinhMuc?.tongDmuc;
-    //     item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
-    //     item.namDtCphiNgoaiCkhoTt = mulNumber(item.namDtCphiNgoaiCkhoBq, item.namDtCphiTaiCkhoSl);
-    //     item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
-
-    //   })
-    // }
+    if (this.isSynthetic) {
+      this.lstCtietBcao.forEach(item => {
+        item.namDtCphiTaiCkhoTt = mulNumber(item.namDtCphiTaiCkhoDm, item.namDtCphiTaiCkhoSl);
+        // item.namDtCphiNgoaiCkhoTt = mulNumber(item.namDtCphiNgoaiCkhoBq, item.namDtCphiTaiCkhoSl);
+        item.namDtTcong = sumNumber([item.namDtCphiTaiCkhoTt, item.namDtCphiNgoaiCkhoTt])
+      })
+    }
 
     // this.sum1()
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao);

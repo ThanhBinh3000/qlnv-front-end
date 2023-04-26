@@ -113,7 +113,7 @@ export class PhuLuc02Component implements OnInit {
     // })
 
 
-    if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
+    if (this.dataInfo?.isSynthetic) {
       this.lstCtietBcao.forEach(item => {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
         if (!item.tenDanhMuc) {

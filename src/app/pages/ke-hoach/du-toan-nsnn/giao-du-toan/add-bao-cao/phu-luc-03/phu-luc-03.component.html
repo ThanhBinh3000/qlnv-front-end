@@ -64,7 +64,14 @@
             <th>2</th>
             <th>3=2x1</th>
             <th>4</th>
-            <th>5=4x1</th>
+            <th>
+              <ng-container *ngIf="isSynthetic; else showVal">
+                <span>5</span>
+              </ng-container>
+              <ng-template #showVal>
+                <span>5=4x1</span>
+              </ng-template>
+            </th>
             <th>6=5+3</th>
           </tr>
           <tr>
@@ -104,7 +111,14 @@
               <td>{{displayValue(data.namDtCphiTaiCkhoSl)}}</td>
               <td>{{displayValue(data.namDtCphiTaiCkhoDm)}}</td>
               <td>{{displayValue(data.namDtCphiTaiCkhoTt)}}</td>
-              <td>{{displayValue(data.namDtCphiNgoaiCkhoBq)}}</td>
+              <td>
+                <ng-container *ngIf="isSynthetic; else showVal1">
+                  <span></span>
+                </ng-container>
+                <ng-template #showVal1>
+                  {{displayValue(data.namDtCphiNgoaiCkhoBq)}}
+                </ng-template>
+              </td>
               <td>{{displayValue(data.namDtCphiNgoaiCkhoTt)}}</td>
               <td>{{displayValue(data.namDtTcong)}}</td>
               <td [hidden]="status">
@@ -139,8 +153,13 @@
                 {{displayValue(editCache[data.id].data.namDtCphiTaiCkhoTt)}}
               </td>
               <td>
-                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
-                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                <ng-container *ngIf="isSynthetic; else showVal1">
+                  <span></span>
+                </ng-container>
+                <ng-template #showVal1>
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.namDtCphiNgoaiCkhoBq"
+                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                </ng-template>
               </td>
               <td>
                 {{displayValue(editCache[data.id].data.namDtCphiNgoaiCkhoTt)}}

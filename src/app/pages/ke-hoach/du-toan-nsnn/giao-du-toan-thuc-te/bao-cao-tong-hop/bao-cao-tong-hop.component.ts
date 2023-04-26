@@ -275,7 +275,8 @@ export class BaoCaoTongHopComponent implements OnInit {
       await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
-            this.maPa = res.data;
+            this.maPa = res.data.slice(0, 2) + "TH" + res.data.slice(2) // res.data;
+
           } else {
             this.notification.error(MESSAGE.ERROR, res?.msg);
             return;
@@ -752,13 +753,33 @@ export class BaoCaoTongHopComponent implements OnInit {
   }
 
   // xem chi tiết bản ghi
-  xemChiTiet(id: string) {
-    const obj = {
-      id: id,
-      preData: this.data,
-      tabSelected: 'next' + this.data?.tabSelected,
+  // xemChiTiet(id: string) {
+  //   const obj = {
+  //     id: id,
+  //     preData: this.data,
+  //     tabSelected: 'next' + this.data?.tabSelected,
+  //   }
+  //   this.dataChange.emit(obj);
+  // }
+
+  xemChiTiet(id: string, maLoaiDan: string) {
+    console.log({ "id": id, "maLoaiDan": maLoaiDan });
+
+    if (maLoaiDan == "1") {
+      const obj = {
+        id: id,
+        tabSelected: 'phuongAnGiaoDuToan',
+      }
+      this.dataChange.emit(obj);
+    } else if (maLoaiDan == "2") {
+      const obj = {
+        id: id,
+        tabSelected: 'phuongAnGiaoDieuChinh',
+      }
+      this.dataChange.emit(obj);
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
     }
-    this.dataChange.emit(obj);
   }
 
   // set lại level

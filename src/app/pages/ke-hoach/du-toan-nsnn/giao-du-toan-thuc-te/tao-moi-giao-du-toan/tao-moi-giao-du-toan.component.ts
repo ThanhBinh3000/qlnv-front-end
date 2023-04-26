@@ -589,7 +589,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 	// đóng
 	back() {
-
 		const obj = {
 			id: this.data?.idPaBTC,
 			tabSelected: this.data?.preTab,
