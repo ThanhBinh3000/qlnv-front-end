@@ -291,6 +291,7 @@ export class AddBaoCaoComponent implements OnInit {
               tenDm: item.tenDm + " năm " + this.baoCao.namPa,
               trangThai: '3',
               lstCtietBcaos: lstCtietsPhuLucPhanBo,
+              nguoiBcao: this.userInfo?.sub
             })
           } else {
             this.baoCao.lstCtiets.push({
@@ -301,6 +302,7 @@ export class AddBaoCaoComponent implements OnInit {
               tenDm: item.tenDm + " năm " + this.baoCao.namPa,
               trangThai: '3',
               lstCtietBcaos: [],
+              nguoiBcao: this.userInfo?.sub
             })
           }
         })

@@ -138,9 +138,9 @@ export class PhuLuc03Component implements OnInit {
     }
 
     await this.getDinhMuc();
-
+    debugger
     this.lstCtietBcao.forEach(item => {
-      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && this.formDetail.trangThai == "3");
+      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc);
       if (!item.tenDanhMuc) {
         item.tenDanhMuc = dinhMuc?.tenDinhMuc;
       }

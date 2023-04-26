@@ -321,6 +321,14 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 		this.spinner.hide();
 	};
 
+	statusDvi() {
+		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+			return true
+		} else {
+			return false
+		}
+	}
+
 	async submitReport() {
 		this.modal.confirm({
 			nzClosable: false,
