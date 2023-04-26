@@ -57,7 +57,7 @@
     <div class="group-button">
       <h3 class="text-uppercase">Quản lý ký hợp đồng bán hàng DTQG theo phương thức bán đấu giá</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -215,10 +215,10 @@
             <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DANG_THUC_HIEN">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd!=STATUS.DA_HOAN_THANH && userService.isCuc()">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DA_HOAN_THANH">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThaiHd==STATUS.DA_HOAN_THANH ||userService.isTongCuc()">
                 <i class="fa fa-eye"></i>
               </a>
             </td>

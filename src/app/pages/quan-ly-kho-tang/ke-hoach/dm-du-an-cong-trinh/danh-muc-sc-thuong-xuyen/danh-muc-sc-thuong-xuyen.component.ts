@@ -43,6 +43,7 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, danhMucService);
     super.ngOnInit()
     this.formData = this.fb.group({
+      namKh: [null],
       maDvi: [null],
       tenCongTrinh: [null],
       maDiemKho: [null],

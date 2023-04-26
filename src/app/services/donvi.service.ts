@@ -53,6 +53,11 @@ export class DonviService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/ds-donvi-child`;
     return this.httpClient.get<any>(url).toPromise();
   }
+  getLastMadvi(maDvi): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/last-madvi/${maDvi}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
 
   getDonVi(body): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/chi-tiet`;

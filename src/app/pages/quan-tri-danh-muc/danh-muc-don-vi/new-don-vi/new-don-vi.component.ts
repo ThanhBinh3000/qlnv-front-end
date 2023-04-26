@@ -50,13 +50,14 @@ export class NewDonViComponent implements OnInit {
     this.formDonVi = this.fb.group({
       maDviCha: [''],
       tenDvi: ['', Validators.required],
-      maDvi: ['', [Validators.required, Validators.pattern("[0-9]{2}")]],
+      maDvi: ['', Validators.required],
       diaChi: [''],
       tenVietTat: [''],
       sdt: [''],
       fax: [''],
       trangThai: [false],
       type: [null],
+      maTuDinhNghia: [null],
       ghiChu: [''],
       vungMien: [''],
       tinhThanhList: [],
@@ -90,6 +91,10 @@ export class NewDonViComponent implements OnInit {
      }
    }
  }
+
+  convertNumberToString(value) {
+    return value < 10 ? "0" + value.toString() : value.toString();
+  }
 
   changeTinhThanh(event) {
     if (event) {
@@ -153,7 +158,6 @@ export class NewDonViComponent implements OnInit {
     let body = this.formDonVi.value;
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.type = this.formDonVi.get('type').value == true ? LOAI_DON_VI.PB : LOAI_DON_VI.DV;
-    body.maDvi = body.maDviCha + body.maDvi
     body.listIdDiaDanh = this.convertListDiaDanh();
     this.donviService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -169,5 +173,26 @@ export class NewDonViComponent implements OnInit {
         e.error.errors[0].defaultMessage,
       );
     });
+  }
+
+  async changeMaDvi(dataNode) {
+    if (dataNode) {
+      let maDvi = dataNode.origin.key
+      await this.donviService.getLastMadvi(maDvi).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let charLast = "00";
+          let lastDvi = dataNode.origin.key ;
+          if (res.data) {
+            charLast = res.data.slice(-2);
+            lastDvi = res.data;
+          }
+          let valueNext = this.convertNumberToString(parseInt(charLast) + 1);
+          let maDviMoi = res.data ? lastDvi.slice(0, -2) + valueNext : lastDvi + valueNext;
+          this.formDonVi.patchValue({
+            maDvi : maDviMoi
+          })
+        }
+      })
+    }
   }
 }

@@ -181,6 +181,7 @@ export class QuanlyHopdongComponent implements OnInit {
       tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
       vat: 5,
       soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
+      soGthauTruot: data.qdKhlcntDtl.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
       tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
@@ -210,10 +211,11 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async getDetailHopDong($event, id: number) {
+    debugger
     this.spinner.show();
     var firstRow = document.querySelector(".table-body tr.selectedRow");
     firstRow.classList.remove('selectedRow');
-    $event.target.parentElement.parentElement.parentElement.classList.add('selectedRow')
+    $event.target.parentElement.classList.add('selectedRow');
     this.idHopDong = id;
     this.spinner.hide();
   }
