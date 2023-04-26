@@ -361,7 +361,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         }
       }
     });
-
   }
 
   async getDataDetail(id) {

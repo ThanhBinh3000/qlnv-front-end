@@ -5,7 +5,7 @@ export const STORAGE_KEY = {
   ROLE: 'role',
   USER_INFO: 'user_info',
   PERMISSION: 'permission',
-  DVQL : 'dvql'
+  DVQL: 'dvql'
 };
 
 export const STATUS_CODE = {
@@ -223,4 +223,9 @@ export const STATUS_DA_HOAN_THANH = "35";
 export const TYPE_PAG = {
   GIA_MUA_TOI_DA: 'GMTDBTT',
   GIA_CU_THE: 'GCT',
+};
+//Loại danh mục sửa chữa
+export const DM_SC_TYPE = {
+  SC_THUONG_XUYEN: '01',
+  SC_LON: '00',
 };

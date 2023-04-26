@@ -33,7 +33,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách quyết định phê duyệt dự án ĐTXD</h3>
+      <h3 class="text-uppercase">Danh sách đề xuất kế hoạch sửa chữa thường xuyên của cục</h3>
       <div class="buttons">
         <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_EXP')"
                 class="btn btn-sub" (click)="exportData()">
@@ -119,14 +119,16 @@
           <td>{{ data.tenTrangThai }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.chuDauTu }}</td>
           <td class="text-center">
-            <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isCuc"
+            <a *ngIf="userService.isCuc && data.trangThai != STATUS.DU_THAO"
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)">
+            <a
+              *ngIf="(userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC ))"
+              (click)="redirectToChiTiet(data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
+            <a *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
