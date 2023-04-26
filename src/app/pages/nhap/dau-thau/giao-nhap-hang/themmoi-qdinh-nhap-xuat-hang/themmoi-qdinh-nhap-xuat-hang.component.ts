@@ -433,24 +433,23 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           if (this.userService.isChiCuc()) {
             console.log(this.dataTable)
             this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
-            //     debugger
-            //     this.dataTable.forEach(x => {
-            //       // let objListDiemKho = x.children.map(x => x.maDiemKho);
-            //       // if (objListDiemKho.length > 0) {
-            //       //   this.listDiemKho = this.listDiemKho.filter(item => item.key.indexOf(objListDiemKho) >= 0);
-            //       // }
-            //       this.listDiemKho.forEach(item => {
-            //         let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
-            //         item.soLuongDiemKho = ttDk.soLuongDiemKho;
-            //       })
-            //       console.log(this.listDiemKho)
-            //       this.formData.patchValue({
-            //         trangThaiChiCuc: x.trangThai
-            //       });
-            //       if (x.trangThai == STATUS.CHUA_CAP_NHAT) {
-            //         x.children = [];
-            //       }
-            //     });
+            this.dataTable.forEach(x => {
+              let objListDiemKho = x.children.map(x => x.maDiemKho);
+              if (objListDiemKho.length > 0) {
+                this.listDiemKho = this.listDiemKho.filter(item => item.key.indexOf(objListDiemKho) >= 0);
+              }
+              this.listDiemKho.forEach(item => {
+                let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
+                item.soLuongDiemKho = ttDk.soLuongDiemKho;
+              })
+              console.log(this.listDiemKho)
+              this.formData.patchValue({
+                trangThaiChiCuc: x.trangThai
+              });
+              if (x.trangThai == STATUS.CHUA_CAP_NHAT) {
+                x.children = [];
+              }
+            });
           }
           this.listFileDinhKem = data.fileDinhKems;
           this.listCanCu = data.fileCanCu;
@@ -695,7 +694,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   async loadDiemKho() {
-    debugger
     let body = {
       maDviCha: this.userInfo.MA_DVI,
       trangThai: '01',
@@ -717,7 +715,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             ]
           }
         });
-        console.log(this.listDiemKho)
       };
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

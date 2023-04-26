@@ -43,7 +43,7 @@ export class QuanlyHopdongComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private kqLcnt: QuyetDinhPheDuyetKetQuaLCNTService,
-    private userService: UserService,
+    public userService: UserService,
     private modal: NzModalService,
 
   ) {
