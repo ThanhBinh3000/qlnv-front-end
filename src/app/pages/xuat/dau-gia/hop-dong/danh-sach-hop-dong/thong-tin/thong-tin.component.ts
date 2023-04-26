@@ -3,10 +3,8 @@ import {Validators} from '@angular/forms';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
 import {MESSAGE} from 'src/app/constants/message';
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {saveAs} from 'file-saver';
 import {
   HopDongXuatHangService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
@@ -29,8 +27,6 @@ import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import * as uuid from "uuid";
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
-import {log} from "ng-zorro-antd/core/logger";
-import {AMOUNT, AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 import moment from "moment";
 
 @Component({
@@ -241,7 +237,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       this.formData.controls["soQdKq"].enable();
       this.formData.controls["soQdKq"].markAsDirty();
       if (this.formData.invalid) {
-
         return;
       }
       this.formData.enable();
@@ -259,12 +254,16 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       } else {
         res = await this.hopDongXuatHangService.create(body);
       }
+
       if (res.msg == MESSAGE.SUCCESS) {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
+        this.formData.disable();
+        await this.loadChiTiet(res.data.id)
+        this.formData.enable();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -431,10 +430,11 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   }
   maDviTsan(event,trangThai?) {
-    this.listDviTsanFilter=[];
-    this.formData.patchValue({
-      listMaDviTsan: [],
-    })
+    if(!this.formData.value.id){
+      this.formData.patchValue({
+        listMaDviTsan: [],
+      })
+    }
     if (event && trangThai==STATUS.DA_KY) {
       this.listDviTsanFilter = this.listAllDviTsan.filter(obj => obj.toChucCaNhan === event);
     }else {
