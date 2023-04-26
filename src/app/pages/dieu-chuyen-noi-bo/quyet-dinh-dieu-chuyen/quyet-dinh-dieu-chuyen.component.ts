@@ -16,6 +16,7 @@ import { isEmpty } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
+import { QuyetDinhDieuChuyenService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen.service';
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chuyen',
@@ -33,6 +34,8 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   loaiVthhCache: string;
 
   CHUC_NANG = CHUC_NANG;
+  listLoaiDieuChuyen: any[] = [];
+
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
   listChungLoaiHangHoa: any[] = [];
@@ -54,38 +57,24 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
+    private quyetDinhDieuChuyenService: QuyetDinhDieuChuyenService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, deXuatPhuongAnCuuTroService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenService);
     this.formData = this.fb.group({
       nam: null,
-      soQD: null,
-      ngayky: null,
-      ngayhl: null,
+      soQdinh: null,
+      ngayDuyetTc: null,
+      ngayHieuLuc: null,
       loaiDc: null,
       trichYeu: null,
-
-      tenDvi: null,
-      maDvi: null,
-      ngayLapKh: null,
-      ngayLapKhTu: null,
-      ngayLapKhDen: null,
-      ngayDuyetLdc: null,
-      ngayDuyetLdcTu: null,
-      ngayDuyetLdcDen: null,
-      soDxuat: null,
-      nguonChi: null,
-      loaiVthh: null,
-      cloaiVthh: null,
-      type: null
     })
     this.filterTable = {
       nam: '',
-      soDxuat: '',
+      soQdinh: '',
       ngayLapKh: '',
-      ngayDuyetLdc: '',
+      ngayDuyetTcTu: '',
       loaiDc: '',
-      maDvi: '',
+      trichYeu: '',
       tenDvi: '',
       tenTrangThai: '',
     };
@@ -133,10 +122,27 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.visibleTab = value;
     });
 
+    if (this.isChiCuc()) this.tabSelected = 1;
+    if (this.tabSelected == 0) {
+      this.listLoaiDieuChuyen = [
+        { ma: "ALL", ten: "Tất cả" },
+        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+      ]
+    }
+
+    if (this.tabSelected == 1) {
+      this.listLoaiDieuChuyen = [
+        { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
+        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+      ]
+    }
+
     try {
       this.initData()
       await this.timKiem();
-      await this.loadDsVthh();
+      // await this.loadDsVthh();
       await this.spinner.hide();
 
     } catch (e) {
@@ -145,7 +151,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
 
-    if (this.isChiCuc()) this.tabSelected = 1;
+
   }
 
   isShowDS() {
@@ -159,15 +165,15 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   isTongCuc() {
-    return this.userService.isTongCuc()
+    return true//this.userService.isTongCuc()
   }
 
   isCuc() {
-    return this.userService.isCuc()
+    return false//this.userService.isCuc()
   }
 
   isChiCuc() {
-    return this.userService.isChiCuc()
+    return false//this.userService.isChiCuc()
   }
 
   selectTab(tab: number) {
@@ -180,13 +186,14 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
   }
 
-  async loadDsVthh() {
-    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHangHoaAll = res.data;
-      this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-    }
-  }
+  // async loadDsVthh() {
+  //   let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.listHangHoaAll = res.data;
+  //     this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+  //   }
+  // }
+
   async changeHangHoa(event: any) {
     if (event) {
       this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
@@ -203,15 +210,15 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   async timKiem() {
+    if (this.formData.value.ngayDuyetTc) {
+      this.formData.value.ngayDuyetTcTu = dayjs(this.formData.value.ngayDuyetTc[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayDuyetTcDen = dayjs(this.formData.value.ngayDuyetTc[1]).format('YYYY-MM-DD')
+    }
+    if (this.formData.value.ngayHieuLuc) {
+      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
+      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
+    }
     console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
-    if (this.formData.value.ngayDx) {
-      this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
-    }
-    if (this.formData.value.ngayKetThuc) {
-      this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
-      this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
-    }
     await this.search();
   }
 

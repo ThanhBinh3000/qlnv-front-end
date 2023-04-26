@@ -61,6 +61,10 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   @Input() dataTongHop: any;
+
+  canCu: any[] = [];
+  quyetDinh: any[] = [];
+
   maQd: string = null;
   dataInput: any;
   dataInputCache: any;
@@ -70,7 +74,7 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   listDanhSachDeXuat: any[] = [];
   danhSachTongHop: any[] = [];
   // danhsachDx: any[] = [];
-  fileList: any[] = [];
+
   deXuatPhuongAn: any[] = [];
   deXuatPhuongAnCache: any[] = [];
   phuongAnView: any[] = [];
@@ -177,37 +181,48 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
-      id: [0],
-      maDvi: [],
+      loaiDc: ['CHI_CUC', [Validators.required]],
       nam: [dayjs().get("year"), [Validators.required]],
-      soQd: [, [Validators.required]],
-      ngayKy: [, [Validators.required]],
-      ngayHluc: [, [Validators.required]],
-      idTongHop: [, [Validators.required]],
-      maTongHop: [, [Validators.required]],
-      ngayThop: [, [Validators.required]],
-      idDx: [, [Validators.required]],
-      soDx: [, [Validators.required]],
-      ngayDx: [, [Validators.required]],
-      tongSoLuongDx: [],
-      tongSoLuong: [],
-      soLuongXuaCap: [],
-      loaiVthh: [],
-      cloaiVthh: [],
-      loaiNhapXuat: [],
-      trichYeu: [],
-      trangThai: [STATUS.DU_THAO],
-      lyDoTuChoi: [],
-      type: ['TH', [Validators.required]],
-      xuatCap: [false],
+      soQdinh: [, [Validators.required]],
+      ngayKyQdinh: [],
       ngayPduyet: [],
-      fileDinhKem: [FileDinhKem],
-      canCu: [new Array<FileDinhKem>()],
-      tenDvi: [],
-      tenLoaiVthh: [],
-      tenCloaiVthh: [],
-      tenTrangThai: ['Dự thảo'],
-      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+      idThop: [, [Validators.required]],
+      idDxuat: [, [Validators.required]],
+      trichYeu: [],
+
+      // idTongHop: [, [Validators.required]],
+      // maTongHop: [, [Validators.required]],
+      // id: [0],
+      // maDvi: [],
+      // nam: [dayjs().get("year"), [Validators.required]],
+      // soQd: [, [Validators.required]],
+      // ngayKy: [, [Validators.required]],
+      // ngayHluc: [, [Validators.required]],
+      // idTongHop: [, [Validators.required]],
+      // maTongHop: [, [Validators.required]],
+      // ngayThop: [, [Validators.required]],
+      // idDx: [, [Validators.required]],
+      // soDx: [, [Validators.required]],
+      // ngayDx: [, [Validators.required]],
+      // tongSoLuongDx: [],
+      // tongSoLuong: [],
+      // soLuongXuaCap: [],
+      // loaiVthh: [],
+      // cloaiVthh: [],
+      // loaiNhapXuat: [],
+      // trichYeu: [],
+      // trangThai: [STATUS.DU_THAO],
+      // lyDoTuChoi: [],
+      // type: ['TH', [Validators.required]],
+      // xuatCap: [false],
+      // ngayPduyet: [],
+      // fileDinhKem: [FileDinhKem],
+      // canCu: [new Array<FileDinhKem>()],
+      // tenDvi: [],
+      // tenLoaiVthh: [],
+      // tenCloaiVthh: [],
+      // tenTrangThai: ['Dự thảo'],
+      // quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
     }
     );
   }
@@ -243,11 +258,11 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
 
   isTongCuc() {
-    return false//this.userService.isTongCuc()
+    return true//this.userService.isTongCuc()
   }
 
   isCuc() {
-    return true//this.userService.isCuc()
+    return false//this.userService.isCuc()
   }
 
   collapse(array: any[], data: any, $event: boolean): void {
@@ -405,9 +420,11 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
 
   async save(isGuiDuyet?) {
-    await this.spinner.show();
-    this.setValidator(isGuiDuyet)
+    // await this.spinner.show();
+    // this.setValidator(isGuiDuyet)
     let body = this.formData.value;
+    console.log('save', body, this.canCu, this.quyetDinh)
+    return
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
@@ -458,6 +475,7 @@ export class ThongTinQuyetDinhDieuChuyenComponent extends Base2Component impleme
   }
 
   isDisabled() {
+    return false
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
       return false;
     } else {

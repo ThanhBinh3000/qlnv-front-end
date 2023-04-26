@@ -8,7 +8,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'ke-hoach-dieu-chuyen',
     idHover: 'ke-hoach-dieu-chuyen',
     hasTab: false,
-    caps: [1,2,3],
+    caps: [1, 2, 3],
     accessPermisson: 'DCNB_KHDC'
   },
   {
@@ -18,6 +18,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'quyet-dinh-dieu-chuyen',
     idHover: 'quyet-dinh-dieu-chuyen',
     hasTab: false,
+    accessPermisson: 'DCNB_QUYETDINHDC'
   },
   // {
   //   icon: 'htvbdh_tcdt_chitieukehoachnam',

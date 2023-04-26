@@ -46,10 +46,10 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại điều chuyển
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-radio-group>
-                  <label *ngIf="isCuc()" nz-radio nzValue="a">Trong nội bộ Chi cục</label>
-                  <label nz-radio nzValue="C">Giữa 2 chi cục trong cùng 1 cục</label>
-                  <label nz-radio nzValue="D">Giữa 2 cục DTNN KV</label>
+                <nz-radio-group formControlName="loaiDc">
+                  <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
+                  <label nz-radio nzValue="CHI_CUC">Giữa 2 chi cục trong cùng 1 cục</label>
+                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label>
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
@@ -63,7 +63,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select formControlName="nam" nzAllowClear [nzDisabled]="true">
+                <nz-select [disabled]="isDisabled()" formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -74,8 +74,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                    [nzSize]="'small'" [nzDisabled]="isDisabled()">
+                  <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
+                    [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -85,7 +85,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
+                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -94,19 +94,19 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
+                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [disabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                    <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="idThop" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -114,7 +114,7 @@
                 <label nz-radio nzValue="TTr">Chọn số đề xuất/ công văn</label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                    <input [readonly]="true" nz-input formControlName="idDx" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="idDxuat" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -150,7 +150,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()"></file-list>
+                <file-list [data]="canCu" [disabled]="isDisabled()"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -161,7 +161,7 @@
                 File đính kèm QĐ phê duyệt KH điều chuyển nội bộ của Tổng cục đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [disabled]="isDisabled()"></file-list>
+                <file-list [data]="quyetDinh" [disabled]="isDisabled()"></file-list>
               </div>
             </nz-form-item>
           </div>
