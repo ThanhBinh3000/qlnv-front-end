@@ -226,9 +226,11 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.dataTable = dataDetail.children;
       for (let i = 0; i < dataDetail.children.length; i++) {
         await this.onChangeCuc(dataDetail.children[i].maDvi);
+        this.thongTinChiCuc[dataDetail.children[i].maDvi] = new DanhSachGoiThau();
         this.thongTinCuc = new DanhSachGoiThau();
         for (let y = 0; y < dataDetail.children[i].children.length; y++) {
           this.onChangeChiCuc(dataDetail.children[i].children[y].maDvi, dataDetail.children[i].maDvi)
+          this.thongTinDiemKho[dataDetail.children[i].children[y].maDvi] = new DanhSachGoiThau();
         }
       }
     }

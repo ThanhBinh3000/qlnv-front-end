@@ -8,7 +8,7 @@
           <nz-form-control>
             <nz-input-group>
               <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
-                [nzDefaultExpandAll]="true" nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
+                [nzDefaultExpandAll]="true" nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" (nzTreeClick)="changeMaDvi($event.node)"
                 formControlName="maDviCha">
               </nz-tree-select>
             </nz-input-group>
@@ -48,9 +48,9 @@
       <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
         <nz-form-item>
           <nz-form-label nzRequired>Mã đơn vị</nz-form-label>
-          <nz-form-control nzErrorTip="Mã sai định dạng">
-            <nz-input-group [nzAddOnBefore]="formDonVi.value.maDviCha">
-              <input nz-input formControlName="maDvi" pattern="[0-9]{2}" placeholder="Mã gồm số có 2 chữ số">
+          <nz-form-control>
+            <nz-input-group>
+              <input readonly nz-input formControlName="maDvi">
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -86,6 +86,14 @@
         </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Mã tự định nghĩa</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <input nz-input formControlName="maTuDinhNghia" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
@@ -118,7 +126,7 @@
         <nz-form-label nzRequired>Quản lý các hoạt động DTNN trên các địa bàn tỉnh</nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-select  nzMode="multiple"  nzAllowClear
-                     formControlName="tinhThanh">
+                     formControlName="tinhThanhList">
             <nz-option *ngFor="let option of listTinhThanh" [nzValue]="option.id"
                        [nzLabel]="option.ten"></nz-option>
           </nz-select>

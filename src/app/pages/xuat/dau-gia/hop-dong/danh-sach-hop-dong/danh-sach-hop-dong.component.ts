@@ -3,12 +3,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -40,6 +38,8 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
       ngayKy: '',
+      ngayKyTu: '',
+      ngayKyDen: '',
       soHd: '',
       tenHd: '',
       nhaCungCap: '',
@@ -47,7 +47,8 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       loaiVthh: '',
       nam: '',
       tenDviThucHien: '',
-      tenDviMua: ''
+      tenDviMua: '',
+      maDvi:''
     });
     this.filterTable = {
       nam: '',
@@ -66,17 +67,33 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
+  disabledStartNgayKy = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKyDen) {
+      return startValue.getTime() >= this.formData.value.ngayKyDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+  };
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
+    console.log(this.userInfo.MA_DVI,"MA_DVI")
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
+        maDvi: this.userInfo.MA_DVI,
       })
+
       await this.search();
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
