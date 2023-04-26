@@ -104,6 +104,7 @@
                                 </nz-form-item>
                             </nz-radio-group>
                         </div>
+
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
@@ -146,7 +147,7 @@
                     <div nz-row [nzGutter]="[20]">
                         <div nz-col [nzSpan]="2">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
+                                <nz-form-label [nzNoColon]="true"> Năm kế hoạch
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <nz-select formControlName="namKh" nzAllowClear [nzDisabled]="true">
@@ -199,7 +200,7 @@
                         </div>
                         <div nz-col [nzSpan]="3">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> loại hình nhập xuất
+                                <nz-form-label [nzNoColon]="true"> loại hình nhập xuất
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
@@ -212,7 +213,7 @@
                         </div>
                         <div nz-col [nzSpan]="3">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất
+                                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-select formControlName="kieuNx" [nzDisabled]="true">
@@ -247,7 +248,6 @@
                                 <th>Trích yếu</th>
                                 <th>Số ĐV tài sản</th>
                                 <th>Tổng SL xuất bán (kg)</th>
-                                <!-- <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt (đ)</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -262,7 +262,6 @@
                                 <td>{{ data.trichYeu }}</td>
                                 <td>{{ data.slDviTsan }}</td>
                                 <td>{{ data.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                                <!-- <td>{{ data.tongSoLuong * data.donGiaVat *1000 | number : '1.0-1' : 'vi_VN'}}</td> -->
                             </tr>
                         </tbody>
                     </nz-table>
