@@ -74,13 +74,13 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         id: [],
-        soQd: [, [Validators.required]],
-        ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        ngayHluc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        namKhoach: [dayjs().get('year'), [Validators.required]],
-        trichYeu: [null, [Validators.required]],
+        soQd: [],
+        ngayKy: [dayjs().format('YYYY-MM-DD')],
+        ngayHluc: [dayjs().format('YYYY-MM-DD')],
+        namKhoach: [dayjs().get('year')],
+        trichYeu: [null],
         soQdPdKhlcnt: ['', [Validators.required]],
-        idQdPdKhlcnt: ['', [Validators.required]],
+        idQdPdKhlcnt: [''],
         idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
         trangThai: ['00'],
@@ -160,6 +160,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
+    console.log(this.danhSachFileCanCuPL)
+    console.log(this.danhSachFileDinhKem)
     debugger
     if (this.danhSachFileDinhKem.length > 0) {
       this.danhSachFileDinhKem.forEach(item => {
@@ -187,10 +189,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai();
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai();
         }
       }
     } else {
@@ -296,6 +296,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         element.tenLoaiVthh = element.tenLoaiVthh;
         element.cloaiVthh = element.cloaiVthh;
         element.tenCloaiVthh = element.tenCloaiVthh;
+        element.soQdPdKhlcnt = element.soQd;
       } else {
         element.soQdPdKhlcnt = element.hhQdKhlcntHdr?.soQd;
         element.loaiVthh = element.hhQdKhlcntHdr?.loaiVthh

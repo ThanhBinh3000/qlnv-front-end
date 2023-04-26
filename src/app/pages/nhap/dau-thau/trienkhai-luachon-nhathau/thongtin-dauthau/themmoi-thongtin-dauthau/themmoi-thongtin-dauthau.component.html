@@ -328,6 +328,7 @@
                         <th rowspan="2">Chi cục</th>
                         <th rowspan="2">Tên gói thầu</th>
                         <th rowspan="2">Địa điểm nhập kho</th>
+                        <th rowspan="2">SL theo KH năm đã được duyệt</th>
                         <th colspan="3">Kế hoạch đấu thầu</th>
                         <th colspan="4">Kết quả đấu thầu</th>
                         <th rowspan="4">Trạng thái gói thầu</th>
@@ -347,6 +348,7 @@
                         <tr>
                             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                             <td colspan="3">{{item.tenDvi}}</td>
+                            <td>{{item.soLuongTheoChiTieu[i]}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -360,6 +362,7 @@
                             <tr *ngFor="let dtGoiThau of item.dataChild, let y = index"
                                 (click)="showDetail($event,dtGoiThau)"
                                 [ngClass]="{'bg-selected': this.selected && y == 0 && i == 0}">
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td>{{dtGoiThau.goiThau}}</td>
@@ -595,7 +598,7 @@
                             </th>
                             <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.lyDo" /></th>
                             <th *ngIf="!isShowFromKq">
-                                <a disabled="isView" (click)="isView ? '' : addRow()" [class.disabled]="!itemRow">
+                                <a (click)="isView ? '' : addRow()" [class.disabled]="!itemRow">
                                     <i class="fa fa-plus"></i>
                                 </a>
                                 <!--                                <a (click)="clearItemRow()">-->

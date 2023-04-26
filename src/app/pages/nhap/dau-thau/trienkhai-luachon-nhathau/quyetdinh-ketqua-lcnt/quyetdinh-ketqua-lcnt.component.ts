@@ -87,6 +87,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   isViewDetail: boolean;
   idQdKq: number = 0;
   openQdKqKhlcnt = false;
+  tuNgayQd: Date | null = null;
+  denNgayQd: Date | null = null;
 
   STATUS = STATUS
 
@@ -138,18 +140,14 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
 
   async search() {
     let body = {
-      tuNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayTao: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
+      tuNgayKy: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKy: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
-      soQdinh: this.searchFilter.soQdinh,
+      soQd: this.searchFilter.soQdPdKqlcnt,
       loaiVthh: this.loaiVthh,
       cloaiVthh: this.searchFilter.cloaiVthh,
       namKhoach: this.searchFilter.namKhoach,
@@ -175,6 +173,20 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayQd) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayQd.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayQd) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayQd.getTime();
+  };
 
 
   redirectToChiTiet(id: number, roles: any) {
@@ -202,7 +214,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.soQdPdKhlcnt = null;
     this.searchFilter.soQdPdKqlcnt = null;
-
+    this.tuNgayQd = null;
+    this.denNgayQd = null;
     this.search();
   }
 
@@ -258,12 +271,8 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayTao: this.searchFilter.ngayTongHop
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayTongHop
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
+          tuNgayKy: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayKy: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
           soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
           soQdinh: this.searchFilter.soQdinh,
           cloaiVthh: this.searchFilter.cloaiVthh,
