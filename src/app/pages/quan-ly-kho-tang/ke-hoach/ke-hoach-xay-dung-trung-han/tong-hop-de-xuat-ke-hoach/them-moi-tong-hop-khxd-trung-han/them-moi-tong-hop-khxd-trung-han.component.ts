@@ -142,6 +142,10 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           this.selectRow(this.listDx[0]);
         }
       }
+    } else {
+      this.formData.patchValue({
+        ngayTaoTt : new Date()
+      })
     }
   }
 
@@ -151,7 +155,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+    this.helperService.removeValidators(this.formData)
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
+      this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+    }
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
+      this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
+      this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+    }
   }
 
 

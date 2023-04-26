@@ -57,7 +57,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       maDvi: [null],
       capDvi: [null],
       tenDvi: [null],
-      soCongVan: [null, Validators.required],
+      soCongVan: ['', Validators.required],
       namKeHoach: [dayjs().get('year'), Validators.required],
       trichYeu: [null, Validators.required],
       ngayKy: [null, Validators.required],
