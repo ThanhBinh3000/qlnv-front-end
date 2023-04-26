@@ -31,7 +31,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Loại công trình</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="loaiCongTrinh">
-                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -154,7 +154,7 @@
             <nz-form-item>
               <nz-form-control>
                 <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt quyết toán</nz-form-label>
-                <input [readonly]="true"  formControlName="soQdPheDuyet" class="text-blue" nz-input />
+                <input [readonly]="true"   class="text-blue" nz-input />
               </nz-form-control>
             </nz-form-item>
           </div>

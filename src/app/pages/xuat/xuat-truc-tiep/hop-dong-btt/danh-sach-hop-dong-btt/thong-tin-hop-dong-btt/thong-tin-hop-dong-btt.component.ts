@@ -14,8 +14,6 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { STATUS } from 'src/app/constants/status';
 import { chain, cloneDeep } from 'lodash';
 
@@ -57,8 +55,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     modal: NzModalService,
     private hopDongBttService: HopDongBttService,
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
-    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
@@ -118,6 +114,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         moTaHangHoa: [''],
         donViTinh: [''],
         soLuongBanTrucTiep: [],
+        donGiaBanTrucTiep: [],
         thanhTien: [],
         ghiChu: [''],
         tongSlXuatBanQdKh: [],
@@ -147,12 +144,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-
   initForm() {
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
       tenDvi: this.userInfo.TEN_DVI ?? null,
-      diaChi: this.userInfo.DON_VI.diaChi ?? null,
+      diaChiDvi: this.userInfo.DON_VI.diaChi ?? null,
     })
   }
 
@@ -185,21 +181,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
-
-  // async loadDsHd() {
-  //   let body = {
-  //     soQdKq: this.formData.value.soQdKq,
-  //     trangThai: STATUS.DA_KY,
-  //     loaiVthh: this.loaiVthh,
-  //   }
-  //   let res = await this.hopDongBttService.search(body);
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     let data = res.data;
-  //     this.listHdDaKy = data.content;
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, res.msg);
-  //   }
-  // }
 
   async loadChiTiet(id) {
     let data = await this.detail(id);
@@ -279,6 +260,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         .then(async (resKq) => {
           const dataKq = resKq.data;
           this.listDviTsan = dataKq.children
+          await this.loadDsHd(dataKq.soQdKq)
           if (resKq.data) {
             this.formData.patchValue({
               idQdKq: dataKq.id,
@@ -303,7 +285,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
             })
             as.forEach(s => {
               s.children.forEach(s1 => {
-                this.listTccnChaoGia.push(s1)
+                if (s1.luaChon == true) {
+                  this.listTccnChaoGia.push(s1)
+                }
               })
             })
           }
@@ -313,6 +297,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   setListTccnChaoGia() {
     this.spinner.hide();
+    let letDataTocChuc = []
+    if (this.listHdDaKy && this.listHdDaKy.length > 0) {
+      this.listHdDaKy.forEach(s => {
+        letDataTocChuc = this.listTccnChaoGia.filter(s1 => s1.id != s.idDviMua)
+      })
+    } else {
+      letDataTocChuc = this.listTccnChaoGia
+    }
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN TÊN TỔ CHỨC CÁ NHÂN CHÀO GIÁ',
       nzContent: DialogTableSelectionComponent,
@@ -323,7 +315,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       nzComponentParams: {
         dataHeader: ['Tên tổ chức cá nhân', ' Địa điểm chào giá', 'Số lượng'],
         dataColumn: ['tochucCanhan', 'diaDiemChaoGia', 'soLuong'],
-        dataTable: this.listTccnChaoGia.filter(s => s.luaChon == true)
+        dataTable: letDataTocChuc
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -340,11 +332,24 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
                 mstDviMua: dataToChuc.mst,
                 sdtDviMua: dataToChuc.sdt,
                 soLuongBanTrucTiep: dataToChuc.soLuong,
+                donGiaBanTrucTiep: dataToChuc.donGia,
                 thanhTien: dataToChuc.soLuong * dataToChuc.donGia,
                 tongSlXuatBanQdKh: dataToChuc.xhKqBttDdiem.soLuong,
                 tongSlBanttQdkhDakyHd: 0,
                 tongSlBanttQdkhChuakyHd: dataToChuc.xhKqBttDdiem.soLuong - 0
               });
+              if (this.listHdDaKy && this.listHdDaKy.length > 0) {
+                let tongSlKyHd: number = 0
+                this.listHdDaKy.forEach(s => {
+                  if (s.maDviTsan == this.formData.value.maDviTsan) {
+                    tongSlKyHd += s.soLuongBanTrucTiep
+                    this.formData.patchValue({
+                      tongSlBanttQdkhDakyHd: tongSlKyHd,
+                      tongSlBanttQdkhChuakyHd: this.formData.value.tongSlXuatBanQdKh - tongSlKyHd
+                    });
+                  }
+                })
+              }
               if (this.formData.value.maDviTsan) {
                 this.listDviTsan.forEach((item) => {
                   let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
@@ -359,14 +364,32 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
                   })
                 })
                 let listAll = this.listDviTsan.filter(s => this.formData.value.maDviTsan.includes(s.maDviTsan));
-                listAll.forEach(s => {
-                  this.dataTable = [... this.dataTable, s]
+                listAll.forEach((child) => {
+                  this.dataTable = [... this.dataTable, child]
                 })
+              } else {
+                this.dataTable = [];
               }
             }
           })
       }
     });
+  }
+
+  async loadDsHd(event) {
+    let body = {
+      soQdKq: event,
+      trangThai: STATUS.DA_KY,
+      loaiVthh: this.loaiVthh,
+      namHd: this.formData.value.namHd,
+    }
+    let res = await this.hopDongBttService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listHdDaKy = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async deletePhuLuc(data) {
@@ -450,7 +473,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       },
     });
   }
-
 
   isDisabled() {
     if (this.formData.value.trangThai == STATUS.DU_THAO) {

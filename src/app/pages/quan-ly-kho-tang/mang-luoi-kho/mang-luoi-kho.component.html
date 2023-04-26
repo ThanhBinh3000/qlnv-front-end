@@ -1680,9 +1680,9 @@
                     <thead>
                     <tr>
                       <th nzWidth="40px">STT</th>
-                      <th nzWidth="150px">Tên hàng hóa</th>
+                      <th nzWidth="150px" >Tên hàng hóa</th>
                       <th>Tên chủng loại hàng hóa</th>
-                      <th nzWidth="150px">Số lượng</th>
+                      <th nzWidth="150px">Số lượng tồn kho</th>
                       <th nzWidth="150px">ĐVT</th>
                     </tr>
                     </thead>
@@ -1691,9 +1691,9 @@
                       <tr>
                         <td>{{i+1}}</td>
                         <td (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
-                            [nzExpand]="expandSet.has(item.idVirtual)" nzShowExpand="true">{{item.tenLoaiVthh}}</td>
+                            [nzExpand]="expandSet.has(item.idVirtual)" class="font-weight-bold" nzShowExpand="true">{{item.tenLoaiVthh}}</td>
                         <td></td>
-                        <td class="text-right">{{sumTableDanhSachHh(item)  | number : '1.0-1' : 'vi-VN'}}</td>
+                        <td class="font-weight-bold text-right">{{sumTableDanhSachHh(item)  | number : '1.0-1' : 'vi-VN'}}</td>
                         <td></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(item.idVirtual)">
