@@ -145,16 +145,20 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
   }
 
   async loadDsDonVi() {
-    let body = {
-      trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
-      type: "DV"
-    };
-    let res = await this.donViService.getDonViTheoMaCha(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+    if (this.userService.isCuc()) {
+      await this.changeCuc(this.userInfo.MA_DVI)
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let body = {
+        trangThai: "01",
+        maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+        type: "DV"
+      };
+      let res = await this.donViService.getDonViTheoMaCha(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsDonVi = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 

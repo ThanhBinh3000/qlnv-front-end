@@ -76,12 +76,6 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-
-
-                        </div>
-                    </div>
-                    <div nz-col nzSpan="8">
-                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Chủ đầu tư </nz-form-label>
@@ -90,12 +84,16 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
+                        </div>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                                     <nz-form-control>
-                                        <nz-input-number [nzSize]="'small'" formControlName="tongMucDt"
-                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                        <nz-input-number formControlName="tongMucDt" [nzFormatter]="globals.formatter"
+                                            [nzParser]="globals.parser" nzDisabled class="blue-text">
                                         </nz-input-number>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -105,7 +103,10 @@
                                     <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư các gói thầu đã trúng
                                     </nz-form-label>
                                     <nz-form-control>
-                                        <input nz-input formControlName="tongMucDtGoiTrung" readonly />
+                                        <nz-input-number formControlName="tongMucDtGoiTrung"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
+                                            class="blue-text">
+                                        </nz-input-number>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -122,43 +123,11 @@
                                     <nz-form-label [nzNoColon]="true"> Tổng số gói thầu </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="soLuongNhap" readonly />
+                                            <input nz-input formControlName="soGthau" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                        </div>
-                    </div>
-                    <div nz-col nzSpan="8">
-                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                                    <nz-form-control>
-                                        <input nz-input formControlName="tenLoaiVthh" readonly="true" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-                                    <nz-form-control>
-                                        <input nz-input formControlName="tenCloaiVthh" readonly="true" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col nzSpan="24">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Thuế VAT (%) </nz-form-label>
-                                    <nz-form-control>
-                                        <nz-input-group>
-                                            <input nz-input formControlName="vat" readonly />
-                                        </nz-input-group>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-
-
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Số gói thầu đã trúng </nz-form-label>
@@ -171,12 +140,78 @@
                             </div>
                             <div nz-col nzSpan="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Số gói thầu đã trượt </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="soGthauTruot" readonly />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                    </div>
+                    <div nz-col nzSpan="8">
+                        <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 ">
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="tenLoaiVthh" readonly="true"
+                                            class="blue-text" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="tenCloaiVthh" readonly="true"
+                                            class="blue-text" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Thuế VAT (%) </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="vat" readonly class="blue-text" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Tổng số hợp đồng đã ký </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="soGthauTrung" readonly />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập theo kế hoạch </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-input-group>
+                                            <nz-input-number [nzSize]="'small'" formControlName=""
+                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                                nzDisabled>
+                                            </nz-input-number>
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="24">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true"> Tổng số lượng đã nhập đến thời điểm hiện tại
+                                    </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
                                             <nz-input-number [nzSize]="'small'" formControlName="soLuongNhap"
-                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                                nzDisabled>
+                                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
+                                                class="blue-text">
                                             </nz-input-number>
                                         </nz-input-group>
                                     </nz-form-control>
@@ -221,7 +256,8 @@
                         </tr>
                     </thead>
                     <tbody class="table-body">
-                        <tr *ngFor="let data of basicTable.data,let i = index" class="table-row">
+                        <tr *ngFor="let data of basicTable.data,let i = index" class="table-row"
+                            (click)="getDetailHopDong($event,data.hopDong.id)">
                             <td>{{ i + 1}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
                             <td>{{data.hopDong?.tenHd}}</td>
@@ -235,9 +271,6 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a *ngIf="data.hopDong" (click)="getDetailHopDong($event,data.hopDong.id)">
-                                    <i class="fa fa-eye"></i>
-                                </a>
                                 <a *ngIf="data.hopDong" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
