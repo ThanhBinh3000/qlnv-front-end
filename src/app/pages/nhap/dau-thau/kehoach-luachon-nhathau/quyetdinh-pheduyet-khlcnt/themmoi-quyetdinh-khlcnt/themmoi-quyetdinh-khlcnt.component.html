@@ -666,7 +666,7 @@
                         </td>
                       </tr>
                       <ng-container>
-                        <tr *ngFor="let diemKho of chiCuc.children">
+                        <tr *ngFor="let diemKho of chiCuc.children, let q = index">
                           <td></td>
                           <td></td>
                           <td></td>
@@ -682,6 +682,9 @@
                           <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                           <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                           <td class="text-right">
+                            <a (click)="deleteRow(diemKho)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
                           </td>
                         </tr>
                       </ng-container>

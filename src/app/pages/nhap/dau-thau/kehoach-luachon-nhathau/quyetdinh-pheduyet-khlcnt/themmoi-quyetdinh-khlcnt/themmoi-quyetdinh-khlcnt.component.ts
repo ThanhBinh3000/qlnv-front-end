@@ -33,6 +33,7 @@ import {
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DatePipe } from '@angular/common';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 
 
 @Component({
@@ -82,7 +83,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   iconButtonDuyet: string;
   titleButtonDuyet: string;
-
+  dataChiTieu: any;
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -96,6 +97,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   dataInputCache: any;
   isTongHop: boolean
   isCheckCreate: boolean = true
+  editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
     private router: Router,
@@ -105,6 +107,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private danhMucService: DanhMucService,
     private dxuatKhlcntService: DxuatKhLcntService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
     private fb: FormBuilder,
@@ -234,6 +237,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
       await Promise.all([
         this.loadDataComboBox(),
+        this.getDataChiTieu(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
     } catch (e) {
@@ -339,6 +343,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
+    // body.ngayHluc = this.convertDateToString(body.ngayHluc)
+    // body.ngayQd = this.convertDateToString(body.ngayQd)
     body.children = this.danhsachDx;
     body.fileDinhKems = this.listFileDinhKem;
     if (await !this.isValidate(body.children)) {
@@ -368,6 +374,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
   tuChoi() {
@@ -541,6 +555,25 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       console.log("11", this.danhsachDx)
       this.showFirstRow(event, this.danhsachDx[0]);
     };
+  }
+
+  async getDataChiTieu() {
+    let res2 = null;
+    if (this.loaiVthh.startsWith('02')) {
+      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachVtNam(
+        +this.formData.get('namKhoach').value,
+      );
+    } else {
+      res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+        +this.formData.get('namKhoach').value,
+      );
+    }
+    if (res2.msg == MESSAGE.SUCCESS) {
+      this.dataChiTieu = res2.data;
+      this.formData.patchValue({
+        soQd: this.dataChiTieu.soQuyetDinh
+      });
+    }
   }
 
 
@@ -785,12 +818,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       nzContent: DialogThemMoiGoiThauComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
         data: data,
+        dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
         dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
+        namKeHoach: this.formData.value.namKhoach,
       },
     });
     modal.afterClose.subscribe((res) => {
@@ -811,8 +846,19 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
   }
 
-  deleteRow(index) {
-
+  deleteRow(data: any) {
+    debugger
+    for (let index = 0; index < this.danhsachDx.length; index++) {
+      for (let y = 0; y < this.danhsachDx[index].children.length; y++) {
+        for (let k = 0; k < this.danhsachDx[index].children[y].children.length; k++) {
+          for (let q = 0; q < this.danhsachDx[index].children[y].children[k].children.length; q++) {
+            if (this.danhsachDx[index].children[y].children[k].children[q].id == data.id) {
+              this.danhsachDx[index].children[y].children[k].children = this.danhsachDx[index].children[y].children[k].children.filter(d => d.id !== data.id);
+            }
+          }
+        }
+      }
+    }
   }
 
   expandSet2 = new Set<number>();
