@@ -9,7 +9,8 @@
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo quyết định</span>
         </button>
-        <button *ngIf="(!formData.value.trangThai && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+        <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button" class="btn btn-main"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -33,15 +34,16 @@
                     <div nz-row [nzGutter]="20">
                         <div nz-col [nzSpan]="2">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
+                                <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                    <nz-select formControlName="namKh">
+                                    <nz-select formControlName="namKh" [nzDisabled]="true">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                             [nzLabel]="p.text"></nz-option>
                                     </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
+
                         <div nz-col [nzSpan]="4">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>

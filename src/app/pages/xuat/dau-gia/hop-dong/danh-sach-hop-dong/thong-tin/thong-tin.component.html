@@ -109,7 +109,7 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Thời hạn xuất kho trước ngày</nz-form-label>
-                  <nz-date-picker [nzDisabled]="isView" nzFormat="dd/MM/yyyy"
+                  <nz-date-picker [nzDisabled]="true" nzFormat="dd/MM/yyyy"
                                   formControlName="tgianNkho">
                   </nz-date-picker>
                 </nz-form-item>
@@ -565,10 +565,10 @@
             <ng-container>
               <tr>
                 <td colspan="5"></td>
-                <td class="text-right bold text-blue">{{tongSoLuong}}</td>
+                <td class="text-right bold text-blue">{{tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td></td>
                 <td></td>
-                <td class="text-right bold text-blue">{{tongThanhTien}}</td>
+                <td class="text-right bold text-blue">{{tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
               </tr>
             </ng-container>
             </tfoot>

@@ -39,7 +39,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   listKieuNx: any[] = [];
   selected: boolean = false;
   soLuongDeXuat: number;
-  donGiaDeXuat: number;
+  donGiaDuocDuyet: number;
 
 
 
@@ -186,7 +186,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     await this.spinner.show();
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
-    body.children = this.listOfData;
+    body.children = this.listOfData
     body.pthucBanTrucTiep = this.radioValue;
     body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
     body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
@@ -218,11 +218,13 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   addRow(): void {
-    if (this.validateSoLuong(true)) {
-      if (!this.listOfData) {
-        this.listOfData = [];
-      }
-      if (this.validateThongTinDviChaoGia()) {
+    if (this.formData.value.idDviDtl) {
+      this.rowItem.idDviDtl = this.formData.value.idDviDtl
+      if (this.validateSoLuong(true)) {
+        if (!this.listOfData) {
+          this.listOfData = [];
+        }
+        this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children = [...this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children, this.rowItem];
         this.listOfData = [...this.listOfData, this.rowItem];
         this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
         this.emitDataTable();
@@ -231,9 +233,28 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  validateThongTinDviChaoGia(): boolean {
+
+  validateSoLuong(isAdd?) {
+    let tongSoLuong = 0
+    if (isAdd) {
+      tongSoLuong += this.rowItem.soLuong;
+    }
+    this.listOfData.forEach(item => {
+      tongSoLuong += item.soLuong
+    })
     if (this.rowItem.tochucCanhan && this.rowItem.mst && this.rowItem.diaDiemChaoGia && this.rowItem.sdt && this.rowItem.ngayChaoGia && this.rowItem.soLuong && this.rowItem.donGia && this.rowItem.thueGtgt) {
-      return true;
+      if (this.rowItem.soLuong > this.soLuongDeXuat) {
+        this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+        return;
+      } else if (tongSoLuong > this.soLuongDeXuat) {
+        this.notification.error(MESSAGE.ERROR, " Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+        return;
+      } else if (this.rowItem.donGia < this.donGiaDuocDuyet) {
+        this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải lớn hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDuocDuyet + "đ) vui lòng nhập lại")
+        return;
+      } else {
+        return true;
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return false
@@ -292,32 +313,36 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   saveEdit(idx: number): void {
-    if (this.validateSoLuong(true)) {
+    if (this.validateSoLuongEdit(idx)) {
       Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
       this.dataEdit[idx].edit = false;
     }
   }
-  validateSoLuong(isAdd?) {
-    let tongSoLuong = 0
-    if (isAdd) {
-      tongSoLuong += this.rowItem.soLuong;
 
+  validateSoLuongEdit(index) {
+    let tongSoLuong = 0
+    if (this.listOfData[index].soLuong != this.dataEdit[index].data.soLuong) {
+      this.listOfData[index].soLuong = this.dataEdit[index].data.soLuong;
     }
     this.listOfData.forEach(item => {
       tongSoLuong += item.soLuong
-
     })
-    if (this.rowItem.soLuong > this.soLuongDeXuat) {
-      this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
-      return;
-    } else if (tongSoLuong > this.soLuongDeXuat) {
-      this.notification.error(MESSAGE.ERROR, "Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDeXuat + "đ) vui lòng nhập lại")
-      return;
-    } else if (this.rowItem.donGia > this.donGiaDeXuat) {
-      this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDeXuat + "đ) vui lòng nhập lại")
-      return;
+    if (this.dataEdit[index].data.tochucCanhan && this.dataEdit[index].data.mst && this.dataEdit[index].data.diaDiemChaoGia && this.dataEdit[index].data.sdt && this.dataEdit[index].data.ngayChaoGia && this.dataEdit[index].data.soLuong && this.dataEdit[index].data.donGia && this.dataEdit[index].data.thueGtgt) {
+      if (this.dataEdit[index].data.soLuong > this.soLuongDeXuat) {
+        this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+        return;
+      } else if (tongSoLuong > this.soLuongDeXuat) {
+        this.notification.error(MESSAGE.ERROR, " Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+        return;
+      } else if (this.dataEdit[index].data.donGia < this.donGiaDuocDuyet) {
+        this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải lớn hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDuocDuyet + "đ) vui lòng nhập lại")
+        return;
+      } else {
+        return true;
+      }
     } else {
-      return true;
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      return false
     }
   }
 
@@ -406,8 +431,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       })
       this.emitDataTable()
       this.updateEditCache()
-      this.soLuongDeXuat = item.soLuong
-      this.donGiaDeXuat = item.donGiaDeXuat
+      this.soLuongDeXuat = item.soLuongDeXuat
+      this.donGiaDuocDuyet = item.donGiaDuocDuyet
       await this.spinner.hide();
     } else {
       this.selected = true
@@ -418,8 +443,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       })
       this.emitDataTable()
       this.updateEditCache()
-      this.soLuongDeXuat = item[0].soLuong
-      this.donGiaDeXuat = item[0].donGiaDeXuat
+      this.soLuongDeXuat = item[0].soLuongDeXuat
+      this.donGiaDuocDuyet = item[0].donGiaDuocDuyet
       await this.spinner.hide();
     }
   }

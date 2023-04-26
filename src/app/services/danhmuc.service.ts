@@ -154,4 +154,9 @@ export class DanhMucService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  getLastMaHang(ma): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-category/dm-hang/last-mahh/${ma}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
 }

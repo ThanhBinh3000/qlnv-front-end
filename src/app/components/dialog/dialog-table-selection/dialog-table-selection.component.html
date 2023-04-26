@@ -10,7 +10,8 @@
         <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{i+1}}</td>
-                <td *ngFor="let column of dataColumn;">{{ data[column] }}</td>
+                <td *ngFor="let column of dataColumn;">{{column == 'donGiaNhaThau' ? (data[column] | number : '1.0-1' :
+                    'vi_VN') : data[column] }}</td>
                 <td class="text-center">
                     <a (click)="handleOk(data)">
                         <i class="icon htvbdh_dau-cong"></i>

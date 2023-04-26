@@ -9,7 +9,8 @@
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo quyết định</span>
         </button>
-        <button *ngIf="(!formData.value.trangThai && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+        <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button" class="btn btn-main"
+            (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -55,7 +56,7 @@
                         </div>
                         <div nz-col [nzSpan]="13">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
                                         <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
@@ -143,8 +144,6 @@
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>SL đơn vị tài sản</th>
-                            <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
-                            <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
                             <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
@@ -155,12 +154,10 @@
                             (click)="showDetail($event,data.idDxHdr)">
                             <td class="text-center">{{i + 1}} </td>
                             <td>{{ data.tenDvi }}</td>
-                            <td class="text-blue">{{ data.soDxuat }}</td>
+                            <td>{{ data.soDxuat }}</td>
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.slDviTsan}}</td>
-                            <td>{{ data.tongDonGia | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{ data.donGiaVat *data.tongSoLuong| number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
                             <td>
                                 <a>
@@ -170,7 +167,8 @@
                         </tr>
                     </tbody>
                 </nz-table>
-                <app-them-moi-de-xuat-kh-ban-truc-tiep *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
+                <app-them-moi-de-xuat-kh-ban-truc-tiep *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true"
+                    [loaiVthhInput]="loaiVthh">
                 </app-them-moi-de-xuat-kh-ban-truc-tiep>
             </nz-collapse-panel>
         </nz-collapse>
