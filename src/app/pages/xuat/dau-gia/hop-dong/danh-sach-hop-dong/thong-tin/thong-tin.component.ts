@@ -431,7 +431,10 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
 
   }
   maDviTsan(event,trangThai?) {
-
+    this.listDviTsanFilter=[];
+    this.formData.patchValue({
+      listMaDviTsan: [],
+    })
     if (event && trangThai==STATUS.DA_KY) {
       this.listDviTsanFilter = this.listAllDviTsan.filter(obj => obj.toChucCaNhan === event);
     }else {
