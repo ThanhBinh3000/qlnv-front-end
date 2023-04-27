@@ -154,6 +154,11 @@
         <nz-collapse nzAccordion>
           <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH'" [nzActive]="true">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+              <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+    </span>
+              </div>
               <nz-table nzBordered class="pd-10"
                         [nzFrontPagination]="false" [nzShowPagination]="false"
                         [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
@@ -169,8 +174,9 @@
                   <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
                   <th class="text-center" width="5%" rowSpan="2">Khối</th>
                   <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-                  <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-                  <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+                  <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
+                  <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
+                  <th class="text-center" width="7%" rowSpan="2" nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
                   <th class="text-center" width="5%" rowSpan="2"
                       *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO" nzRight>Hành động
                   </th>
@@ -187,7 +193,7 @@
                   <tr>
                     <td [nzExpand]="expandSet.has(data.idVirtual)"
                         (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-                    <td class="ont-weight-bold">{{data.tenChiCuc}}</td>
+                    <td class="font-weight-bold">{{data.tenChiCuc}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -200,6 +206,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td nzRight></td>
                     <td  *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO" nzRight ></td>
                   </tr>
                   <ng-container *ngIf="expandSet.has(data.idVirtual)">
@@ -222,8 +229,8 @@
                           class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'nstwDuKien', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td
                           class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhTongSo', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td
-                          class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td  class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'ncKhNstw', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td nzRight  class="font-weight-bold text-right">{{sumSoLuong(data.tenChiCuc, 'vonDauTu', item.khoi) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO"></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(item.idVirtual)">
@@ -241,17 +248,12 @@
                             <td>{{ children.soQdPd }}</td>
                             <td class="text-right">{{ children.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class="text-right">{{ children.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right"
-                                *ngIf="isEdit != (idx + '-' + y + '-' + y1)">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right" *ngIf="isEdit == (idx + '-' + y + '-' + y1)">
-                              <nz-input-number [(ngModel)]="children.ncKhTongSo" [nzSize]="'small'"
-                                               [nzFormatter]="globals.formatter" [nzMin]="0"
-                                               [nzParser]="globals.parser"></nz-input-number>
-                            </td>
-                            <td class="text-right"
-                                *ngIf="isEdit != (idx + '-' + y + '-' + y1)">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right" *ngIf="isEdit == (idx + '-' + y + '-' + y1)">
-                              <nz-input-number [(ngModel)]="children.ncKhNstw" [nzSize]="'small'"
+                            <td class="text-right">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td nzRight class="text-right"
+                                *ngIf="isEdit != (idx + '-' + y + '-' + y1)">{{ children.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td nzRight class="text-right" *ngIf="isEdit == (idx + '-' + y + '-' + y1)">
+                              <nz-input-number [(ngModel)]="children.vonDauTu" [nzSize]="'small'"
                                                [nzFormatter]="globals.formatter" [nzMin]="0"
                                                [nzParser]="globals.parser"></nz-input-number>
                             </td>
@@ -297,8 +299,8 @@
                       style="color: blue">{{sumSoLuong(null, 'nstwDuKien', null) | number : '1.0-1' : 'vi_VN'}}</td>
                   <td class="font-weight-bold text-right"
                       style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', null) | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="font-weight-bold text-right"
-                      style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw', null) | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td nzRight class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'vonDauTu', null) | number : '1.0-1' : 'vi_VN'}}</td>
                   <td nzRight *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO"></td>
                 </tr>
 

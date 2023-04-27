@@ -437,6 +437,24 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
+  themItemcha() {
+    if (!this.rowItemCha.khoi) {
+      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+      return;
+    }
+    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
+      return;
+    }
+    if (!this.formData.value.soQdTrunghan) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn kế hoạch trung hạn");
+      return;
+    }
+    this.rowItemCha.idVirtual = uuidv4();
+    this.dataTable.push(this.rowItemCha);
+    this.rowItemCha = new DanhMucKho();
+  }
+
 
 }
 

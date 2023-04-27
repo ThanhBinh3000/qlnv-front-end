@@ -54,8 +54,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   soQd: string;
   isEdit: string = "";
 
-  ncKhTongSoEdit: number;
-  ncKhNstwEdit: number;
+  vonDauTu: number;
 
   constructor(
     private router: Router,
@@ -389,9 +388,6 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
-      console.log(this.dataTableReq,123);
-      console.log(this.dataTable,234);
-      console.log(item,55555);
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
@@ -452,8 +448,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   editRow(idx, y, item) {
     this.isEdit = idx + "-" + y;
-    this.ncKhTongSoEdit = item.ncKhTongSo;
-    this.ncKhNstwEdit = item.ncKhNstw;
+    this.vonDauTu = item.vonDauTu;
   }
 
   saveEdit(item) {
@@ -466,8 +461,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
   }
 
   cancelEdit(data: any) {
-    data.ncKhTongSo = this.ncKhTongSoEdit;
-    data.ncKhNstw = this.ncKhNstwEdit;
+    data.vonDauTu = this.vonDauTu;
     this.isEdit = "";
   }
 
