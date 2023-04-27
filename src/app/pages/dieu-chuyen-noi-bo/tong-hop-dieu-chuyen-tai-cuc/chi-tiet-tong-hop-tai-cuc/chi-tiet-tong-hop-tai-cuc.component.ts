@@ -731,7 +731,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         try {
             if (this.formData.valid) {
                 this.isTongHop = true;
-                const thoiGianTongHop = dayjs().format("YYYY-MM-DD HH:mm:ss");
+                const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
                 this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
                 // call api tổng hợp dữ liệu;
                 const body = {
