@@ -11,23 +11,35 @@
       <span>Lưu và gửi duyệt</span>
 
     </button>
-    <button type="button" class="btn btn-sub do"
-            *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC')"
-            (click)="tuChoi()">
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-            *ngIf="  this.userService.isChiCuc() && isDisabled() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC')"
-            (click)="pheDuyet()">
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KT')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button class="btn btn-sub xanh"
-            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
-            (click)="save(false)">
-      <i class="icon  htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KT')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet "></i>
+      <span>Duyệt</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet "></i>
+      <span>Duyệt</span>
     </button>
   </div>
 </nz-affix>

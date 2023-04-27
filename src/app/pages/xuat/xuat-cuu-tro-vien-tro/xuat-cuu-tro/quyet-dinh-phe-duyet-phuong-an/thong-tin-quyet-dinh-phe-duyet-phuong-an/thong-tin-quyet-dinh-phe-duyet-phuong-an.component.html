@@ -259,8 +259,7 @@
                             Tổng số lượng đề xuất CT,VT
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongDxCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongDxCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -270,8 +269,7 @@
                             Tổng số lượng thực tế xuất CT,VT của từng chi cục
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongCache |number: '1.0-1' : 'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -281,8 +279,7 @@
                             Thành Tiền
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} (đ)</span>
+                            <span class="text-blue">{{listThanhTienCache |number: '1.0-1' :'vi_VN'}} (đ)</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -292,8 +289,7 @@
                             SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-danger">{{slXuatCapCache > 0 ? (slXuatCapCache |number: '1.0-1' : 'vi_VN')
-                              : ''}} {{formData.value.donViTinh}}</span>
+                            <span class="text-danger">{{listSoLuongXcCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
