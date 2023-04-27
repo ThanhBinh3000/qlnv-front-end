@@ -21,6 +21,8 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  maDviCuc: string;
+  dviCapCuc: any;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -120,6 +122,8 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   openModalQdPd(id: number) {
     this.idQdPd = id;
     this.isViewQdPd = true;
+    this.maDviCuc = this.userInfo.MA_DVI;
+    this.dviCapCuc = this.userService.isCuc()
   }
 
   closeModalQdPd() {

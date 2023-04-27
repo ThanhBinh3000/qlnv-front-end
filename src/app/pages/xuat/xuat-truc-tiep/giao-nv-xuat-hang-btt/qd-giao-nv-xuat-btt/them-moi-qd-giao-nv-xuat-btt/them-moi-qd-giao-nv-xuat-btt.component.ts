@@ -288,7 +288,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
         this.idInput = data.id;
         this.pheDuyet();
       } else {
-        this.goBack()
+        // this.goBack()
       }
     }
   }
@@ -342,6 +342,9 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       })
       this.dataTable = data.children;
       this.fileDinhKem = data.fileDinhKems;
+      if (data.phanLoai) {
+        this.radioValue = data.phanLoai
+      }
     };
   }
 
@@ -351,6 +354,14 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       return true
     }
     return false;
+  }
+
+  isDisabledQD() {
+    if (this.formData.value.id == null) {
+      return false
+    } else {
+      return true;
+    }
   }
 
   getNameFileQD($event: any) {
