@@ -236,6 +236,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       this.formData.disable();
       this.formData.controls["soQdKq"].enable();
       this.formData.controls["soQdKq"].markAsDirty();
+      this.formData.controls["soHd"].enable();
+      this.formData.controls["soHd"].markAsDirty();
       if (this.formData.invalid) {
         return;
       }

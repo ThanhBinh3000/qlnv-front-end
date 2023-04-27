@@ -6918,10 +6918,16 @@ td.action.ant-table-cell {
   .ant-form-item-label > label {
     height: 32px !important;
   }
-  .rdo-input .ant-form-item{
+
+  .rdo-input .ant-form-item {
     padding-top: 0px;
   }
 }
 
+.money-input {
+  border: 1px solid #bbb8b8;
+  height: inherit;
+  width: 100%;
+}
 
 // end lấy từ default qua....................................................
