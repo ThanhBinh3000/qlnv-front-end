@@ -11,7 +11,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, getHead, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CurrencyMaskInputMode } from 'ngx-currency';
 export class ItemData {
@@ -93,6 +93,8 @@ export class PhuLuc6Component implements OnInit {
   dToanVuGiam: number;
   total: ItemData = new ItemData();
   namBcao: number;
+  scrollX: string;
+  BOX_SIZE = 220;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -158,6 +160,13 @@ export class PhuLuc6Component implements OnInit {
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+
+    if (this.status) {
+      this.scrollX = (1100 + BOX_NUMBER_WIDTH * 7).toString() + 'px';
+    } else {
+      this.scrollX = (850 + BOX_NUMBER_WIDTH * 7).toString() + 'px';
+    }
+
     this.sortByIndex();
     this.sum1();
     this.tinhTong();

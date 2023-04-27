@@ -112,28 +112,27 @@ export class PhuLuc02Component implements OnInit {
     //   // }
     // })
 
+    this.lstCtietBcao.forEach(item => {
+      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
+      if (!item.tenDanhMuc) {
+        item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+      }
+      item.namDtDmuc = dinhMuc?.tongDmuc;
+      item.maDviTinh = dinhMuc?.donViTinh;
+      item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
+    })
 
-    if (this.dataInfo?.isSynthetic) {
-      this.lstCtietBcao.forEach(item => {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-        if (!item.tenDanhMuc) {
-          item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-        }
-        item.namDtDmuc = dinhMuc?.tongDmuc;
-        item.maDviTinh = dinhMuc?.donViTinh;
-        item.namDtTtien = mulNumber(item.namDtTtien, item.namDtSluong);
-        // item.ttienTd = mulNumber(item.dmucNamDtoan, item.sluongTd);
-      })
-    }
     console.log(this.lstCtietBcao);
     // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
     this.sortByIndex();
     this.getTotal();
+    this.sum1();
     this.updateEditCache();
     this.getStatusButton();
 
     this.spinner.hide();
   }
+
 
   async getDinhMuc() {
     const request = {
@@ -507,43 +506,43 @@ export class PhuLuc02Component implements OnInit {
     this.getTotal();
   }
 
-  // sum1() {
-  //   this.lstCtietBcao.forEach(itm => {
-  //     let stt = this.getHead(itm.stt);
-  //     while (stt != '0') {
-  //       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-  //       const data = this.lstCtietBcao[index];
-  //       this.lstCtietBcao[index] = {
-  //         ...new ItemData(),
-  //         id: data.id,
-  //         stt: data.stt,
-  //         danhMuc: data.danhMuc,
-  //         maDmuc: data.maDmuc,
-  //         tenDanhMuc: data.tenDanhMuc,
-  //         level: data.level,
-  //         namDtSluong: data.namDtSluong,
-  //         maDviTinh: data.maDviTinh,
-  //         namDtDmuc: data.namDtDmuc,
-  //         // sluongNamDtoan: data.sluongNamDtoan,
-  //         // ttienNamDtoan: data.ttienNamDtoan,
-  //         // thienNamTruoc: data.thienNamTruoc,
-  //         // dtoanNamHtai: data.dtoanNamHtai,
-  //         // uocNamHtai: data.uocNamHtai,
-  //         // dmucNamDtoan: data.dmucNamDtoan,
-  //         // ttienTd: data.ttienTd,
-  //       }
-  //       this.lstCtietBcao.forEach(item => {
-  //         if (this.getHead(item.stt) == stt) {
-  //           this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
-  //         }
-  //       })
-  //       stt = this.getHead(stt);
-  //     }
-  //     // this.getTotal();
-  //     this.getTotal();
-  //   })
+  sum1() {
+    this.lstCtietBcao.forEach(itm => {
+      let stt = this.getHead(itm.stt);
+      while (stt != '0') {
+        const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+        const data = this.lstCtietBcao[index];
+        this.lstCtietBcao[index] = {
+          ...new ItemData(),
+          id: data.id,
+          stt: data.stt,
+          danhMuc: data.danhMuc,
+          maDmuc: data.maDmuc,
+          tenDanhMuc: data.tenDanhMuc,
+          level: data.level,
+          namDtSluong: data.namDtSluong,
+          maDviTinh: data.maDviTinh,
+          namDtDmuc: data.namDtDmuc,
+          // sluongNamDtoan: data.sluongNamDtoan,
+          // ttienNamDtoan: data.ttienNamDtoan,
+          // thienNamTruoc: data.thienNamTruoc,
+          // dtoanNamHtai: data.dtoanNamHtai,
+          // uocNamHtai: data.uocNamHtai,
+          // dmucNamDtoan: data.dmucNamDtoan,
+          // ttienTd: data.ttienTd,
+        }
+        this.lstCtietBcao.forEach(item => {
+          if (this.getHead(item.stt) == stt) {
+            this.lstCtietBcao[index].namDtTtien = sumNumber([this.lstCtietBcao[index].namDtTtien, item.namDtTtien]);
+          }
+        })
+        stt = this.getHead(stt);
+      }
+      // this.getTotal();
+      this.getTotal();
+    })
 
-  // }
+  }
 
   getTotal() {
     this.total = new ItemData();

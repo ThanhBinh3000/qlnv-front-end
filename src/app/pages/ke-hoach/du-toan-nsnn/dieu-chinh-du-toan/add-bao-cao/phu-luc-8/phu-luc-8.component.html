@@ -36,21 +36,21 @@
       <nz-table nzBordered class="table__body">
         <thead>
           <tr>
-            <th rowspan="2" [hidden]="status" class="text-center">
+            <th rowspan="2" [hidden]="status" class="text-center" nzWidth="300px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
               </label>
             </th>
-            <th rowSpan="2">STT</th>
-            <th nzWidth="300px" rowSpan="2" >Mặt hàng</th>
-            <th rowSpan="2">ĐVT</th>
-            <th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
+            <th rowSpan="2" nzWidth="50px">STT</th>
+            <th nzWidth="300px" rowSpan="2">Mặt hàng</th>
+            <th rowSpan="2" nzWidth="300px">ĐVT</th>
+            <th rowSpan="2" nzWidth="300px">Số lượng bảo quản theo KH được giao</th>
             <th colSpan="3">Lượng hàng thực hiện</th>
-            <th rowSpan="2">Định mức</th>
-            <th rowSpan="2">Tổng nhu cầu dự toán năm {{namBcao}} </th>
+            <th rowSpan="2" nzWidth="300px">Định mức</th>
+            <th rowSpan="2" nzWidth="300px">Tổng nhu cầu dự toán năm {{namBcao}} </th>
             <th colSpan="3">Kinh phí được sử dụng năm {{namBcao}} </th>
-            <th rowSpan="2">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
-            <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
-            <th rowSpan="2">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
+            <th rowSpan="2" nzWidth="300px">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
+            <th rowSpan="2" *ngIf="viewAppraisalValue" nzWidth="300px">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2" nzWidth="300px">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
             <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
             <th nzWidth="50px" rowspan="2" *ngIf="!status || editAppraisalValue"></th>
           </tr>

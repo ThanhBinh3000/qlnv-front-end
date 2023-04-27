@@ -27,7 +27,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
     maBaoCao: "",
     donViTao: "",
     trangThai: Utils.TT_BC_1,
-    loaiDuAn: [1,2],
+    loaiDuAn: [1, 2],
+    maPhanGiao: "3"
   };
 
   userInfo: any;
@@ -108,7 +109,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     if (this.userInfo.CAP_DVI == "3") {
       requestReport = {
         loaiTimKiem: "3",
-        maPhanGiao: "2",
+        maPhanGiao: "3",
         maLoai: "2",
         loaiDuAn: this.searchFilter.loaiDuAn,
         maBcao: this.searchFilter.maBaoCao,
@@ -128,7 +129,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
       requestReport = {
         loaiTimKiem: "3",
         // ma phan giao 4 de tim bao cao tong hop
-        maPhanGiao: "2",
+        maPhanGiao: "3",
         maLoai: "2",
         maLoaiDan: this.searchFilter.loaiDuAn,
         maBcao: this.searchFilter.maBaoCao,
@@ -191,6 +192,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBaoCao = null
     this.searchFilter.trangThai = null
+    this.searchFilter.maPhanGiao = "3"
     this.search();
   }
 

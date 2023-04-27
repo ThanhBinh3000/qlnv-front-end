@@ -23,7 +23,7 @@ export class ItemData {
   noiDung: string;
   dviTinh: string;
   sluongDuocGiao: number;
-  sluongThucTe: number;
+  sluongThien: number;
   soluongUocThien: number;
   tongCong: number;
   dinhMuc: number;
@@ -577,7 +577,7 @@ export class PhuLuc5Component implements OnInit {
         maNoiDung: data.maNoiDung,
         dviTinh: data.dviTinh,
         sluongDuocGiao: data.sluongDuocGiao,
-        sluongThucTe: data.sluongThucTe,
+        sluongThien: data.sluongThien,
         soluongUocThien: data.soluongUocThien,
         tongCong: data.tongCong,
         dinhMuc: data.dinhMuc,
@@ -618,7 +618,7 @@ export class PhuLuc5Component implements OnInit {
           maNoiDung: data.maNoiDung,
           dviTinh: data.dviTinh,
           sluongDuocGiao: data.sluongDuocGiao,
-          sluongThucTe: data.sluongThucTe,
+          sluongThien: data.sluongThien,
           soluongUocThien: data.soluongUocThien,
           tongCong: data.tongCong,
           dinhMuc: data.dinhMuc,
@@ -678,7 +678,7 @@ export class PhuLuc5Component implements OnInit {
   };
 
   changeModel(id: string): void {
-    this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.sluongThucTe, this.editCache[id].data.soluongUocThien]);
+    this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.sluongThien, this.editCache[id].data.soluongUocThien]);
     this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.tongCong);
     this.editCache[id].data.dtoanDchinh = this.editCache[id].data.thanhTien - this.editCache[id].data.dtoanDaGiaoLke
   }
