@@ -118,7 +118,7 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.chuDauTu }}</td>
-          <td class="text-center">
+          <td class="text-center"  *ngIf="userService.isCuc">
             <a *ngIf="userService.isCuc && data.trangThai != STATUS.DU_THAO"
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>

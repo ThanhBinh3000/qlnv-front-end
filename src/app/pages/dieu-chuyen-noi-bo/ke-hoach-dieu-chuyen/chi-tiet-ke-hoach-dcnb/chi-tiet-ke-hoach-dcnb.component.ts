@@ -270,7 +270,6 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   async loadDsChiCuc(value?) {
-    debugger
     let body = {
       trangThai: "01",
       maDviCha: value ? value.maCucNhan ? value.maCucNhan : this.userInfo.MA_DVI.substring(0, 6) : this.userInfo.MA_DVI.substring(0, 6),
@@ -749,19 +748,21 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
-  async save(isBack?) {
+  async save(isBack?,isValid?) {
     const body = {
       ...this.formData.value,
       phuongAnDieuChuyen: this.rows.value
     }
-    for(let r of this.rows.controls){
-      this.helperService.markFormGroupTouched(r);
-      if (r.invalid) {
-        return;
+    if(isValid){
+      for(let r of this.rows.controls){
+        this.helperService.markFormGroupTouched(r);
+        if (r.invalid) {
+          return;
+        }
       }
     }
 
-    let result = await this.createUpdate(body);
+    let result = await this.createUpdate(body,undefined, isValid);
     if (isBack === false) {
       return result;
     }
@@ -770,13 +771,55 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
   }
 
+  async createUpdate(body, roles?: any, isValid?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.spinner.show();
+    try {
+      if(isValid){
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          return;
+        }
+      }
+      let res = null;
+      if (body.id && body.id > 0) {
+        res = await this.keHoachDieuChuyenService.update(body);
+      } else {
+        res = await this.keHoachDieuChuyenService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (body.id && body.id > 0) {
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
+          this.spinner.hide();
+          return res.data;
+        } else {
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
+          this.spinner.hide();
+          return res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+        return null;
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
   async saveAndSend(message: string) {
     this.setValidForm();
     if (!this.formData.value.danhSachHangHoa || (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length === 0)) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền thông tin hàng DTQG cần điều chuyển! ');
       return;
     } else {
-      let result = await this.save(false);
+      let result = await this.save(false, true);
       if (result) {
         this.idInput = result.id;
         if (this.formData.value.type == 'DC') {

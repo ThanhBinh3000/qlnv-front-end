@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from "../../../../services/user.service";
 
 @Component({
   selector: 'app-ke-hoach-xay-dung-hang-nam',
@@ -8,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 export class KeHoachXayDungHangNamComponent implements OnInit {
 
   tabSelected: string = "dxnc";
-  constructor() { }
+  constructor(
+    public  userService : UserService
+  ) { }
   ngOnInit(): void {
   }
 

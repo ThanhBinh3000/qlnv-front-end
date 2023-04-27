@@ -161,7 +161,7 @@
             <nz-input-group>
               <nz-input-group>
                 <nz-select nzAllowClear [(ngModel)]="filterTable.loaiDc"
-                           (ngModelChange)="filterInTable('loaiDc',filterTable.loaiDc)">
+                           (ngModelChange)="filterInTable('loaiDc',filterTable.loaiDc, 'eq')">
                   <nz-option *ngFor="let p of listLoaiDc" [nzValue]="p.ma"
                              [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
@@ -201,19 +201,19 @@
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" *ngIf="userService.isChiCuc()">
-            <a *ngIf="checkAllowView(data)  && userService.isAccessPermisson('DCNB_KHDC_XEM')">
+            <a *ngIf="checkAllowView(data)">
               <i class="icon htvbdh_eye" (click)="redirectDetail(data,true)"></i>
             </a>
-            <a  *ngIf="checkAllowEdit(data) && userService.isAccessPermisson('DCNB_KHDC_THEM')">
+            <a  *ngIf="checkAllowEdit(data)">
               <i class="fa fa-edit" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveNdc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')">
+            <a  *ngIf="checkApproveNdc(data)">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveDc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')">
+            <a  *ngIf="checkApproveDc(data)">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a *ngIf="checkAllowDelete(data) && userService.isAccessPermisson('DCNB_KHDC_XOA')">
+            <a *ngIf="checkAllowDelete(data)">
               <i class="fa fa-trash-o do" nz-popconfirm nz-button
                  nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoa(data)"></i>
             </a>

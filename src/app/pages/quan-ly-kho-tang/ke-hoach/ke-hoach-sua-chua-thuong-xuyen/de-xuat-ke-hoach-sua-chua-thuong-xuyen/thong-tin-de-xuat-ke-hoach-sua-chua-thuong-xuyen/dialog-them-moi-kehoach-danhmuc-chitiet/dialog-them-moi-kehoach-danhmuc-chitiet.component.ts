@@ -39,8 +39,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
   @Input() dataHeader: any
   @Input() listDmSuaChua: any[]
   listNguonKinhPhi: any[] = [];
-  listLoaiNhuCauDx: any[] = []
-  // listLoaiDuAn: any[] = []
+  listLoaiNhuCauDx: any[] = [];
   userInfo: UserLogin
   infoDanhMucSuaChua: any = {};
   namKh: number

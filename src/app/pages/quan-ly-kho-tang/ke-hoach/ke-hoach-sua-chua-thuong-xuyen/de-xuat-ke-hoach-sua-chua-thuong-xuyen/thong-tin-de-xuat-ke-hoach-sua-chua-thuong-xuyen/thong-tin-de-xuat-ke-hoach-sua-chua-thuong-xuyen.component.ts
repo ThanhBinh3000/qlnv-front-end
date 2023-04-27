@@ -113,6 +113,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const data = res.data;
+          this.suffixCv = data.soCv ? "/" + data.soCv.split('/')[1] : "/" + this.userInfo.MA_TCKT;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soCv: data.soCv ? data.soCv.split('/')[0] : null,

@@ -29,6 +29,7 @@ import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh
 export class ThemMoiQdPheDuyetComponent implements OnInit {
 
   @Input() isViewDetail: boolean;
+  @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
   @Output()
@@ -256,7 +257,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
-          type : "QDTH",
+          type: "QDTH",
           dsPhuongAn: this.listToTrinh
         }
       });
@@ -264,9 +265,9 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             phuongAnTc: data.soQuyetDinh,
-            namBatDau : data.namBatDau,
-            namKetThuc  :data.namKetThuc,
-            loaiDuAn : data.loaiDuAn
+            namBatDau: data.namBatDau,
+            namKetThuc: data.namKetThuc,
+            loaiDuAn: data.loaiDuAn
           });
           await this.loadDsChiTiet(data.id);
         }
@@ -356,10 +357,10 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     }
   }
 
-  sumSoLuong(tenChiCuc: string, row: string,  khoi: string) {
+  sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
     let sl = 0;
     if (tenChiCuc && khoi) {
-      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi)
+      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[row];
@@ -372,7 +373,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         prev += cur[row];
         return prev;
       }, 0);
-      sl = sum
+      sl = sum;
     }
     return sl;
   }

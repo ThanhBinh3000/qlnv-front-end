@@ -28,7 +28,7 @@
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
               *ngIf="((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP) && userService.isCuc()) || ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
-              (click)="duyet()">
+              (click)="formData.value.trangThai == STATUS.CHO_DUYET_LDC ? save(true) : duyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -90,7 +90,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="11">
+        <div nz-col nzSpan="8">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Trích yếu
             </nz-form-label>
@@ -101,8 +101,18 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo đề xuất</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker [nzDisabled]="isViewDetail || (formData.value.trangThai != STATUS.DU_THAO)" formControlName="ngayTaoDx" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày duyệt đề xuất</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker [nzDisabled]="!userService.isCuc() || (formData.value.trangThai != STATUS.CHO_DUYET_LDC)" formControlName="ngayDuyet" nzFormat="dd/MM/yyyy"></nz-date-picker>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -151,13 +161,13 @@
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span class="text-uppercase font-weight-bold">CHI TIẾT QUY HOẠCH</span>
+          <span class="text-uppercase font-weight-bold">CHI TIẾT KẾ HOẠCH</span>
         </div>
       </div>
     </div>
     <div>
     <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
     </span>
     </div>
     <nz-table nzBordered class="pd-10"
@@ -173,17 +183,14 @@
         <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
         <th class="text-center" width="5%" rowSpan="2">Khối</th>
         <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-        <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-        <th class="text-center" width="13%" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-        <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+        <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
+        <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
         <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
-        <th class="text-center">Tổng số</th>
+        <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
         <th class="text-center">Trong đó vốn NSTW</th>
-        <th class="text-center">Tổng số</th>
-        <th class="text-center">Trong đó vốn NSTW</th>
-        <th class="text-center">Tổng số</th>
+        <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
         <th class="text-center">Trong đó vốn NSTW</th>
       </tr>
       <tr>
@@ -194,8 +201,6 @@
             </nz-option>
           </nz-select>
         </th>
-        <th></th>
-        <th></th>
         <th></th>
         <th></th>
         <th></th>
@@ -227,8 +232,6 @@
           <td></td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonNstw') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
@@ -252,8 +255,6 @@
             <td>{{ item.soQdPd }}</td>
             <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-center" nzRight *ngIf="!isViewDetail">
@@ -282,10 +283,6 @@
             style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'nstwDuKien', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'khVonTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
-            style="color: blue">{{sumSoLuong(null, 'khVonNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
