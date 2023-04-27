@@ -46,9 +46,8 @@ export class DeXuatKeHoachComponent implements OnInit {
     namKeHoach: "",
     soCongVan: "",
     maDvi: "",
-    diaDiem: "",
-    ngayKyTu: "",
-    ngayKyDen: "",
+    ngayDuyetTu: "",
+    ngayDuyetDen: "",
     namBatDau: "",
     namKetThuc: ""
   };
@@ -138,11 +137,11 @@ export class DeXuatKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      diaDiem: this.searchFilter.diaDiem,
+      namKeHoach : this.searchFilter.namKeHoach,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      ngayKyTu: this.searchFilter.ngayKyTu,
-      ngayKyDen: this.searchFilter.ngayKyDen,
+      ngayDuyetTu: this.searchFilter.ngayDuyetTu,
+      ngayDuyetDen: this.searchFilter.ngayDuyetDen,
       soCongVan: this.searchFilter.soCongVan,
       paggingReq: {
         limit: this.pageSize,
@@ -244,9 +243,8 @@ export class DeXuatKeHoachComponent implements OnInit {
       namKeHoach: "",
       soCongVan: "",
       maDvi: "",
-      diaDiem: "",
-      ngayKyTu: "",
-      ngayKyDen: "",
+      ngayDuyetTu: "",
+      ngayDuyetDen: "",
       namBatDau: "",
       namKetThuc: ""
     };
@@ -288,11 +286,11 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          diaDiem: this.searchFilter.diaDiem,
+          namKeHoach : this.searchFilter.namKeHoach,
           namBatDau: this.searchFilter.namBatDau,
           namKetThuc: this.searchFilter.namKetThuc,
-          ngayKyTu: this.searchFilter.ngayKyTu,
-          ngayKyDen: this.searchFilter.ngayKyDen,
+          ngayDuyetTu: this.searchFilter.ngayDuyetTu,
+          ngayDuyetDen: this.searchFilter.ngayDuyetDen,
           soCongVan: this.searchFilter.soCongVan,
           paggingReq: {
             limit: this.pageSize,

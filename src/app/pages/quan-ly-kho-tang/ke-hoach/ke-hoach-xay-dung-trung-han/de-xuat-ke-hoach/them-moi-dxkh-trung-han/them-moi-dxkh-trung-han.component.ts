@@ -67,11 +67,12 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       maDvi: [null],
       namKeHoach: [dayjs().get("year"), [Validators.required]],
       tenDvi: [null],
-      soCongVan: [null, [Validators.required]],
-      ngayKy: [null, [Validators.required]],
-      namBatDau: [null, [Validators.required]],
-      namKetThuc: [null, [Validators.required]],
-      trichYeu: [null, [Validators.required]],
+      soCongVan: ['', [Validators.required]],
+      ngayTaoDx: [null],
+      ngayDuyet: [null],
+      namBatDau: [null],
+      namKetThuc: [null],
+      trichYeu: [null],
       lyDo: [null]
     });
 
@@ -79,7 +80,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.maQd = "/" + this.userInfo.DON_VI.tenVietTat + "-TCKT";
+    if (!this.idInput) {
+      this.maQd = "/" + this.userInfo.DON_VI.tenVietTat + "-TCKT";
+    }
     this.loadDsNam();
     await this.getDsKhoi();
     if (this.idInput > 0) {
@@ -154,16 +157,21 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["soCongVan"].setValidators(Validators.required);
     this.formData.controls["trichYeu"].setValidators(Validators.required);
-    this.formData.controls["ngayKy"].setValidators(Validators.required);
     this.formData.controls["namBatDau"].setValidators(Validators.required);
     this.formData.controls["namKetThuc"].setValidators(Validators.required);
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
+    }
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      this.formData.controls["ngayDuyet"].setValidators(Validators.required);
+    }
   }
 
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
+    this.formData.controls["soCongVan"].setValidators(Validators.required);
     if (isGuiDuyet || this.idInput > 0) {
       this.setValidators();
     }
@@ -175,10 +183,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     this.conVertTreToList();
     let body = this.formData.value;
-    body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
+    body.soCongVan = body.soCongVan + this.maQd;
     body.chiTietsReq = this.dataTableRes;
     body.maDvi = this.userInfo.MA_DVI;
-    body.tmdt = this.sumSoLuong(null, 'tmdtDuKien' , true);
+    body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     body.fileDinhKems = this.listFileDinhKem;
     let res;
     if (this.idInput > 0) {
@@ -192,12 +200,16 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           id: res.data.id,
           trangThai: res.data.trangThai
         });
-        this.guiDuyet();
+        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+          this.duyet()
+        } else {
+          this.guiDuyet();
+        }
       } else {
         if (this.idInput > 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
-          this.idInput = res.data.id
+          this.idInput = res.data.id;
           this.formData.patchValue({
             id: res.data.id,
             trangThai: res.data.trangThai
@@ -367,6 +379,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (id > 0) {
       let res = await this.dxTrungHanService.getDetail(id);
       const data = res.data;
+      this.maQd = data.soCongVan ? data.soCongVan.split("/")[1] : "",
       this.formData.patchValue({
         id: data.id,
         tenDvi: data.tenDvi,
@@ -374,7 +387,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         trichYeu: data.trichYeu,
         tenTrangThai: data.tenTrangThai,
         soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : "",
-        ngayKy: data.ngayKy,
+        ngayTaoDx: data.ngayTaoDx,
+        ngayDuyet: data.ngayDuyet,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
         lyDo: data.lyDoTuChoi
@@ -409,10 +423,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzStyle: { top: "200px" },
         nzFooter: null,
         nzComponentParams: {
-          dataTable : list && list.dataChild ? list.dataChild : []  ,
+          dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          page : "DXTH"
+          page: "DXTH"
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
@@ -499,8 +513,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         let sum = 0;
         this.dataTable.forEach(item => {
-           sum +=  this.sumSoLuong(item, row)
-        })
+          sum += this.sumSoLuong(item, row);
+        });
         sl = sum;
       }
     }

@@ -40,16 +40,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
 
   searchFilter = {
     namKeHoach : '',
-    maTongHop: '',
-    tenDuAn: '',
     tgKhoiCong : '',
     tgHoanThanh : '',
-    diaDiem: '',
     ngayTongHopTu: '',
     ngayTongHopDen: '',
     namBatDau: '',
     namKetThuc: '',
-    trangThai  :'',
   };
 
   filterTable: any = {
@@ -126,16 +122,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     let body = {
       namKeHoach : this.searchFilter.namKeHoach,
-      diaDiem: this.searchFilter.diaDiem,
-      tenDuAn: this.searchFilter.tenDuAn,
-      maTongHop: this.searchFilter.maTongHop,
       ngayTongHopTu: this.searchFilter.ngayTongHopTu,
       ngayTongHopDen: this.searchFilter.ngayTongHopDen,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
       tgKhoiCong : this.searchFilter.tgKhoiCong,
       tgHoanThanh : this.searchFilter.tgHoanThanh,
-      trangThai : this.searchFilter.trangThai,
       maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
       paggingReq: {
         limit: this.pageSize,
@@ -311,16 +303,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   async clearFilterTable() {
     this.searchFilter = {
       namKeHoach : '',
-      maTongHop: '',
-      tenDuAn: '',
       tgKhoiCong : '',
       tgHoanThanh : '',
-      diaDiem: '',
       ngayTongHopTu: '',
       ngayTongHopDen: '',
       namBatDau: '',
       namKetThuc: '',
-      trangThai  :'',
     };
     await this.search();
   }

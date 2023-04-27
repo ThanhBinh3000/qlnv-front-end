@@ -278,12 +278,9 @@
                       <th class="text-center" width="5%" rowSpan="2">Khối</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
                       <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
                       <th class="text-center" width="13%" colSpan="2" >Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
                     </tr>
                     <tr>
-                      <th class="text-center">Tổng số</th>
-                      <th class="text-center">Trong đó vốn NSTW</th>
                       <th class="text-center">Tổng số</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
                       <th class="text-center">Tổng số</th>
@@ -303,8 +300,6 @@
                         <td></td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien', dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien' , dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonTongSo' , dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonNstw' , dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo' , dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw' , dataTableDx) | number : '1.0-1' : 'vi_VN'}}</td>
                       </tr>
@@ -320,8 +315,6 @@
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                         </tr>
@@ -340,8 +333,6 @@
                       <td></td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'tmdtDuKien' , dataTableDx, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'nstwDuKien' , dataTableDx, true) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonTongSo'  , dataTableDx , true) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonNstw' , dataTableDx, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhTongSo' , dataTableDx, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw' , dataTableDx, true) | number : '1.0-1' : 'vi_VN'}}</td>
                     </tr>
@@ -369,13 +360,10 @@
                       <th class="text-center" width="5%" rowSpan="2">Khối</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
                       <th class="text-center" width="13%" colSpan="2">TMĐT</th>
-                      <th class="text-center" width="13%" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
                       <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
                       <th class="text-center"  width="5%" rowSpan="2" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC " nzRight>Hành động</th>
                     </tr>
                     <tr>
-                      <th class="text-center">Tổng số</th>
-                      <th class="text-center">Trong đó vốn NSTW</th>
                       <th class="text-center">Tổng số</th>
                       <th class="text-center">Trong đó vốn NSTW</th>
                       <th class="text-center">Tổng số</th>
@@ -395,8 +383,6 @@
                         <td></td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'tmdtDuKien', dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien' , dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonTongSo' , dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td class="font-weight-bold text-right">{{sumSoLuong(data, 'khVonNstw' , dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo' , dataTable) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw' , dataTable ) | number : '1.0-1' : 'vi_VN'}}</td>
                         <td nzRight *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC "></td>
@@ -413,8 +399,6 @@
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right">{{ item.khVonTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right">{{ item.khVonNstw | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right" *ngIf="isEdit != (idx + '-' + y)">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right" *ngIf="isEdit == (idx + '-' + y)">
                             <nz-input-number [(ngModel)]="item.ncKhTongSo" [nzSize]="'small'"
@@ -458,8 +442,6 @@
                       <td></td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'tmdtDuKien', dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'nstwDuKien', dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonTongSo', dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'khVonNstw' , dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td class="font-weight-bold text-right" style="color: blue">{{sumSoLuong(null, 'ncKhNstw' , dataTable, true) | number : '1.0-1' : 'vi_VN'}}</td>
                       <td  nzRight *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC "></td>
