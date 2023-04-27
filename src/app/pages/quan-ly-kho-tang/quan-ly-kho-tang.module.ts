@@ -206,7 +206,8 @@ import { DialogThemMoiKehoachDanhmucChitietComponent } from './ke-hoach/ke-hoach
     DialogThemMoiDxkhthComponent,
     DialogThemMoiKehoachDanhmucChitietComponent,
     ThemMoiDanhMucDuAnKhoComponent,
-    ThemMoiTongHopDxNhuCauComponent
+    ThemMoiTongHopDxNhuCauComponent,
+    ThemMoiQdPdDxNhuCauComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

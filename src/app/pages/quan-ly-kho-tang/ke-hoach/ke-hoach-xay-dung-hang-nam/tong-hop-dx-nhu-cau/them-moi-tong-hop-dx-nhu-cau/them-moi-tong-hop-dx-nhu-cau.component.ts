@@ -89,8 +89,10 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.maTt = "/TTr-TCDT";
-    this.soQd = "/QĐ-TCDT";
+    if(!this.idInput) {
+      this.maTt = "/" + this.userInfo.MA_TR;
+      this.soQd = "/" + this.userInfo.MA_QD;
+    }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
     await this.getAllLoaiDuAn();
@@ -117,6 +119,8 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
+      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
+        this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
       this.formData.patchValue({
         id: data.id,
         namBatDau: data.namBatDau,
@@ -143,10 +147,6 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
           this.selectRow(this.listDx[0]);
         }
       }
-    } else {
-      this.formData.patchValue({
-        ngayTaoTt : new Date()
-      })
     }
   }
 
@@ -159,6 +159,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     this.helperService.removeValidators(this.formData)
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
       this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+      this.formData.controls["ngayTaoTt"].setValidators([Validators.required]);
     }
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
       this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
@@ -180,8 +181,8 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : null;
-    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : null;
+    body.maToTrinh =  body.maToTrinh ?   body.maToTrinh + this.maTt : this.maTt;
+    body.soQuyetDinh = body.soQuyetDinh ?  body.soQuyetDinh + this.soQd : this.soQd;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
@@ -388,6 +389,9 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
+      console.log(this.dataTableReq,123);
+      console.log(this.dataTable,234);
+      console.log(item,55555);
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);

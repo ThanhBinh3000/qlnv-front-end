@@ -66,11 +66,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       maDvi: [null],
       tenDvi: [null],
       namKeHoach: [dayjs().get("year")],
-      soCongVan: [null],
+      soCongVan: [''],
       soQdTrunghan: [null, Validators.required],
       trichYeu: [null],
-      ngayKy: [null],
-      ngayTao: [null],
+      ngayTaoDx: [null],
+      ngayDuyet: [null],
       namBatDau: [null],
       namKetThuc: [null],
       loaiDuAn: [null],
@@ -83,7 +83,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = "/" + this.userInfo.MA_QD;
+     if (!this.idInput) {
+       this.maQd = "/" + this.userInfo.MA_QD;
+     }
       this.getDsKhoi();
       this.getAllQdTrungHan();
       if (this.idInput) {
@@ -91,7 +93,6 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       } else {
         this.formData.patchValue({
           tenDvi: this.userInfo.TEN_DVI,
-          ngayTao : new Date()
         });
       }
     } catch (e) {
@@ -124,6 +125,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (id > 0) {
       let res = await this.dexuatService.getDetail(id);
       const data = res.data;
+      this.maQd = data.soCongVan ? "/" +  data.soCongVan.split("/")[1] : "",
       this.formData.patchValue({
         id: data.id,
         maDvi: data.maDvi,
@@ -132,11 +134,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         namKeHoach: data.namKeHoach,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
-        ngayTao: data.ngayTao,
+        ngayTaoDx: data.ngayTaoDx,
         loaiDuAn: data.loaiDuAn,
         soQdTrunghan: data.soQdTrunghan,
         trichYeu: data.trichYeu,
-        ngayKy: data.ngayKy,
+        ngayDuyet: data.ngayDuyet,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai
       });
@@ -147,16 +149,21 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["soCongVan"].setValidators(Validators.required);
-    this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
     this.formData.controls["trichYeu"].setValidators(Validators.required);
-    this.formData.controls["ngayKy"].setValidators(Validators.required);
     this.formData.controls["namKeHoach"].setValidators(Validators.required);
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
+    }
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+      this.formData.controls["ngayDuyet"].setValidators(Validators.required);
+    }
   }
 
 
   async save(isOther: boolean) {
     this.helperService.removeValidators(this.formData);
+    this.formData.controls["soCongVan"].setValidators(Validators.required);
+    this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
     if (isOther || this.idInput > 0) {
       this.setValidators();
     }
@@ -167,7 +174,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI;
-    body.soCongVan = body.soCongVan + this.maQd;
+    body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTableRes;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
@@ -188,7 +195,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
             break;
           }
         }
-        await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
+        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+          this.duyet()
+        } else {
+          await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
+        }
       } else {
         this.idInput = data.id;
         this.formData.patchValue({
