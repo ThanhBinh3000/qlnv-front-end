@@ -165,7 +165,7 @@ export class PhuLuc02Component implements OnInit {
 				item.dmucTaiKho = dinhMuc?.tongDmuc;
 				// item.dviTinh = dinhMuc?.donViTinh;
 				item.ttienTaiKho = mulNumber(item.dmucTaiKho, item.sluongTaiKho);
-				item.ttienNgoaiKho = mulNumber(item.binhQuanNgoaiKho, item.sluongTaiKho);
+				// item.ttienNgoaiKho = mulNumber(item.binhQuanNgoaiKho, item.sluongTaiKho);
 				item.tongCong = sumNumber([item.ttienTaiKho, item.ttienNgoaiKho])
 				// }
 			})

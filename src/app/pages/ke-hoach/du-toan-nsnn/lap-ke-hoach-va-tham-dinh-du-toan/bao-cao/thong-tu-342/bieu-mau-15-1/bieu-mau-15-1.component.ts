@@ -138,9 +138,9 @@ export class BieuMau151Component implements OnInit {
 		await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
 			if (res.statusCode == 0) {
 				if (this.userInfo.capDvi == "1") {
-					this.donVis = res.data.filter(e => e.tenVietTat?.startsWith('CDT'));
+					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
 				} else if (this.userInfo.capDvi == "2") {
-					this.donVis = res.data.filter(e => e.tenVietTat?.startsWith('CCDT'));
+					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
 				} else if (this.userInfo.capDvi == "3") {
 					if (this.lstCtietBcao.length == 0) {
 						this.lstCtietBcao.push({
