@@ -57,7 +57,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     namKeHoach: "",
     giaiDoan: "",
     tenDvi: "",
-    ngayKy: "",
+    ngayDuyet: "",
     soQdGoc: "",
     tmdt: "",
     trichYeu: "",
@@ -400,17 +400,5 @@ export class DeXuatKeHoachComponent implements OnInit {
       result = dayjs(event).format("DD/MM/YYYY").toString();
     }
     return result;
-  }
-
-  async openModalCttongHop(data: any) {
-    if (data != "Chưa tổng hợp") {
-      this.idTongHop = data;
-      this.isViewTh = true;
-    }
-  }
-
-  closeDxPaModal() {
-    this.idTongHop = null;
-    this.isViewTh = false;
   }
 }

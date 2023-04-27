@@ -138,8 +138,8 @@
           <th>
             <nz-input-group>
               <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày tổng hợp"
-                              [(ngModel)]="filterTable.ngayTao"
-                              (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"
+                              [(ngModel)]="filterTable.tgTongHop"
+                              (ngModelChange)="filterInTable('tgTongHop', convertDateToString(filterTable.tgTongHop))"
               ></nz-date-picker>
             </nz-input-group>
           </th>
@@ -182,7 +182,7 @@
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.namBatDau && data.namKetThuc ?  data.namBatDau + ' - ' + data.namKetThuc : ''}}</td>
           <td>{{ data.id }}</td>
-          <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.maToTrinh }}</td>
           <td>{{ data.soQuyetDinh }}</td>
           <td>{{ data.noiDung}}</td>

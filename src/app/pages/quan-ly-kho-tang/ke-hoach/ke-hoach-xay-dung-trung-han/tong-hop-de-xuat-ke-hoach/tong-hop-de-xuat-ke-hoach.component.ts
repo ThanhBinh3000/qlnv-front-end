@@ -283,7 +283,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
-          if (['ngayTao'].includes(key)) {
+          if (['tgTongHop'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }

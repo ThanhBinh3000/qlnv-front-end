@@ -92,17 +92,16 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th style="width: 2%;">STT</th>
-          <th style="width: 10%;">Năm kế hoạch</th>
-          <th style="width: 10%;">Số công văn</th>
-          <th style="width: 10%;" *ngIf="userService.isTongCuc()">Đơn vị đề xuất</th>
-          <th style="width: 10%;">Ngày ký</th>
-          <th style="width: 10%;">Giai đoạn</th>
-          <th style="width: 10%;">Tổng mức đầu tư</th>
-          <th style="width: 35%;">Trích yếu</th>
-          <th style="width: 8%;">Mã tổng hợp</th>
-          <th style="width: 8%;">Trạng thái</th>
-          <th style="width: 8%;">Hành động</th>
+          <th class="text-center" style="width: 2%;">STT</th>
+          <th class="text-center"  style="width: 10%;">Năm kế hoạch</th>
+          <th class="text-center"  style="width: 10%;">Số công văn</th>
+          <th class="text-center"  style="width: 10%;" *ngIf="userService.isTongCuc()">Đơn vị đề xuất</th>
+          <th class="text-center"  style="width: 10%;">Ngày duyệt đề xuất</th>
+          <th class="text-center"  style="width: 10%;">Giai đoạn quy hoạch</th>
+          <th class="text-center"  style="width: 10%;">Tổng mức đầu tư (đ)</th>
+          <th class="text-center"  style="width: 35%;">Trích yếu</th>
+          <th class="text-center"  style="width: 8%;">Trạng thái</th>
+          <th class="text-center"  style="width: 8%;">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -128,8 +127,8 @@
           <th>
             <nz-input-group>
               <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
-                               [(ngModel)]="filterTable.ngayKy"
-                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
+                               [(ngModel)]="filterTable.ngayDuyet"
+                               (ngModelChange)="filterInTable('ngayDuyet', convertDateToString(filterTable.ngayDuyet))"
               ></nz-date-picker>
             </nz-input-group>
           </th>
@@ -153,12 +152,6 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                     (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
               <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -178,11 +171,10 @@
           <td>{{ data.namKeHoach }}</td>
           <td>{{ data.soCongVan }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyet | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : '' }}</td>
           <td>{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
           <td>{{data.trichYeu}}</td>
-          <td> <a nz-button nzType="link" (click)="openModalCttongHop(data.maTongHop)">{{ data.maTongHop }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,true)">
@@ -227,19 +219,3 @@
                                  [isViewDetail]="isViewDetail"></app-them-moi-dxkh-trung-han>
   </div>
 </ng-template>
-
-<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
-          [(nzVisible)]="isViewTh" (nzOnCancel)="closeDxPaModal()">
-  <ng-container *nzModalContent>
-    <app-them-moi-tong-hop-khxd-trung-han
-      [idInput]="idTongHop" (showListEvent)="showList()" [isViewQd]="true"
-      [isViewDetail]="isViewTh"
-    ></app-them-moi-tong-hop-khxd-trung-han>
-  </ng-container>
-  <div *nzModalFooter>
-    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
-      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
-      Đóng
-    </button>
-  </div>
-</nz-modal>
