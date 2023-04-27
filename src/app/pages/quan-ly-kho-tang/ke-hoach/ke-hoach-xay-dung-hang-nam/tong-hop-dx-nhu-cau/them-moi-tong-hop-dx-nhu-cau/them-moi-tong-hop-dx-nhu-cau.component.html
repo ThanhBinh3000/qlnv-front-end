@@ -264,6 +264,11 @@
             <nz-collapse nzAccordion>
               <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CỦA CÁC CỤC'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                  <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+    </span>
+                  </div>
                   <nz-table nzBordered class="pd-10"
                             [nzFrontPagination]="false" [nzShowPagination]="false"
                             [nzScroll]="dataTableDx &&dataTableDx.length > 0 ? { x: '2500px' } : null">
@@ -350,6 +355,11 @@
             <nz-collapse nzAccordion *ngIf="formData.value.trangThai != STATUS.DU_THAO">
               <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                  <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
+    </span>
+                  </div>
                   <nz-table nzBordered class="pd-10"
                             [nzFrontPagination]="false" [nzShowPagination]="false"
                             [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">

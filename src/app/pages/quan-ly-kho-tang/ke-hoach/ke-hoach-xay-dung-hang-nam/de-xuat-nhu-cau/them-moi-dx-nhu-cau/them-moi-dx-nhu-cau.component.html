@@ -180,9 +180,11 @@
         </div>
       </div>
     </div>
+    <div>
     <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
     </span>
+    </div>
     <nz-table nzBordered class="pd-10"
               [nzFrontPagination]="false" [nzShowPagination]="false"
               [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
@@ -198,7 +200,7 @@
         <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
         <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
         <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
-        <th class="text-center" width="7%" rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
+        <th class="text-center" width="7%" rowSpan="2" nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
         <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
@@ -225,7 +227,7 @@
         <th></th>
         <th></th>
         <th></th>
-        <th></th>
+        <th nzRight></th>
         <th class="text-center" *ngIf="!isViewDetail" nzRight>
           <a (click)="themItemcha()">
             <i class="icon htvbdh_dau-cong"></i>
@@ -249,7 +251,7 @@
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td  nzRight class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
             <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
               <i class="icon htvbdh_dau-cong"></i>
@@ -273,7 +275,7 @@
             <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+            <td nzRight  class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-center" nzRight *ngIf="!isViewDetail">
               <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
                 <i class="fa fa-pencil"></i>
@@ -304,7 +306,7 @@
             style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td class="font-weight-bold text-right"
+        <td nzRight  class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td *ngIf="!isViewDetail" nzRight>
       </tr>
