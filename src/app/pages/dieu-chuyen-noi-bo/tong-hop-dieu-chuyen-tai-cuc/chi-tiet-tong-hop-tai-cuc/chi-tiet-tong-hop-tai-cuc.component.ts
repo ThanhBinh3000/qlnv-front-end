@@ -556,7 +556,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                 const data = await this.detail(this.formData.value.id);
                 this.formData.patchValue(data);
                 this.daXdinhDiemNhap = data?.daXdinhDiemNhap
-                this.convertTongHop(data, false)
+                this.convertTongHop(data, this.isAddNew)
             }
             // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
         } catch (e) {
@@ -745,7 +745,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                 if (data.msg == MESSAGE.SUCCESS) {
                     // this.notification.success(MESSAGE.SUCCESS);
                     this.tongHopData = cloneDeep(data);
-                    this.convertTongHop(this.tongHopData, true)
+                    this.convertTongHop(this.tongHopData, this.isAddNew)
                 } else {
                     this.notification.error(MESSAGE.ERROR, data.msg);
                 }
@@ -784,7 +784,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             }, []));
             // this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
             this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc)
-            this.selectRow(this.groupData2Cuc[0], false)
+            this.selectRow(this.groupData2Cuc[0], isNew)
         } else {
 
             const data2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenNoiBoCucDtls) ? data.thKeHoachDieuChuyenNoiBoCucDtls : ["ALL", "CHI_CUC"].includes(this.formData.value.loaiDieuChuyen) && Array.isArray(data.data) ? data.data : [];
@@ -805,7 +805,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             // this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
             this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc)
             // this.dataTable2Cuc = this.mapExpanData(groupData2Cuc, "dcnbKeHoachDcDtlList");
-            this.selectRow(this.groupData2Cuc[0], false)
+            this.selectRow(this.groupData2Cuc[0], isNew)
         }
     }
 
@@ -890,7 +890,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         return dataView
     }
     setValidator(isGuiDuyet: boolean) {
-        console.log("isGuiDuyet", isGuiDuyet)
         if (isGuiDuyet) {
             this.formData.controls["soDeXuat"].setValidators([Validators.required]);
             this.formData.controls["trichYeu"].setValidators([Validators.required]);
