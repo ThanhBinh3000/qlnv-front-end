@@ -11,7 +11,7 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02')) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
