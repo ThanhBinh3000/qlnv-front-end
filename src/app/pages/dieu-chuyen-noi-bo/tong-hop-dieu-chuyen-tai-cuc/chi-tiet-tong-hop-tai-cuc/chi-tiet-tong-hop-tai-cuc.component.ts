@@ -684,7 +684,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         try {
             this.setValidator(isGuiDuyet)
             await this.spinner.show();
-            let body = { ...this.formData.value, ngayTongHop: dayjs(this.formData.value.ngayTongHop, 'DD/MM/YYYY').format("YYYY-MM-DD") };
+            let body = this.formData.value;
             let data;
             if (body.id) {
                 data = await this.tongHopDieuChuyenService.capNhatTHCuc(body)
@@ -702,7 +702,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
                 if (isGuiDuyet) {
                     if (this.formData.valid) {
-                        this.approve(data.data.id, STATUS.CHO_DUYET_TP, "Bạn có chắc chắn muốn gửi duyệt?");
+                        await this.approve(data.data.id, STATUS.CHO_DUYET_TP, "Bạn có chắc chắn muốn gửi duyệt?");
+                        this.quayLai();
 
                     } else {
                         Object.values(this.formData.controls).forEach(control => {
@@ -710,7 +711,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                             control.updateValueAndValidity({ onlySelf: true });
                         });
                     }
-                    this.quayLai();
                 }
             }
         } catch (error) {
@@ -766,28 +766,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     }
 
     convertTongHop(data, isNew: boolean = false) {
+        if (!data) return;
         if (isNew) {
-            const data2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenNoiBoCucDtls) ? data.thKeHoachDieuChuyenNoiBoCucDtls : ["ALL", "CHI_CUC"].includes(this.formData.value.loaiDieuChuyen) && Array.isArray(data.data) ? data.data : [];
-            this.dataCuc = Array.isArray(data.thKeHoachDieuChuyenCucKhacCucDtls) ? data.thKeHoachDieuChuyenCucKhacCucDtls : ["CUC"].includes(this.formData.value.loaiDieuChuyen) ? data.data : ["ALL"].includes(this.formData.value.loaiDieuChuyen) ? data.otherData : [];
-            this.groupData2Cuc = chain(this.dataCuc).groupBy('soDxuat').map((item, i) => {
-                const soDeXuat = item.find(f => f.soDxuat == i);
-                const newItem = item.map(f => ({ ...f.dcnbKeHoachDcDtls[0] }));
-                const duToanKphi = newItem?.reduce((sum, cur) => sum += cur.duToanKphi, 0)
-                return {
-                    ...soDeXuat,
-                    dcnbKeHoachDcDtls: newItem,
-                    duToanKphi
-                }
-            }).value();
-            const buildData2ChiCuc = this.buildTableView(data2ChiCuc?.reduce((arr, cur) => {
-                return arr.concat(cur.dcnbKeHoachDcDtls?.map(f => ({ ...f, maChiCucDxuat: cur.maChiCucDxuat, tenChiCucDxuat: cur.tenChiCucDxuat })))
-            }, []));
-            // this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
-            this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc)
-            this.selectRow(this.groupData2Cuc[0], isNew)
-        } else {
-
-            const data2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenNoiBoCucDtls) ? data.thKeHoachDieuChuyenNoiBoCucDtls : ["ALL", "CHI_CUC"].includes(this.formData.value.loaiDieuChuyen) && Array.isArray(data.data) ? data.data : [];
+            const data2ChiCuc = Array.isArray(data?.thKeHoachDieuChuyenNoiBoCucDtls) ? data?.thKeHoachDieuChuyenNoiBoCucDtls : ["ALL", "CHI_CUC"].includes(this.formData.value.loaiDieuChuyen) && Array.isArray(data.data) ? data.data : [];
             this.dataCuc = Array.isArray(data.thKeHoachDieuChuyenCucKhacCucDtls) ? data.thKeHoachDieuChuyenCucKhacCucDtls : ["CUC"].includes(this.formData.value.loaiDieuChuyen) ? data.data : ["ALL"].includes(this.formData.value.loaiDieuChuyen) ? data.otherData : [];
             this.groupData2Cuc = chain(this.dataCuc).groupBy('soDxuat').map((item, i) => {
                 const soDeXuat = item.find(f => f.soDxuat == i);
@@ -805,6 +786,26 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             // this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
             this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc)
             // this.dataTable2Cuc = this.mapExpanData(groupData2Cuc, "dcnbKeHoachDcDtlList");
+            this.selectRow(this.groupData2Cuc[0], isNew)
+
+        } else {
+            const data2ChiCuc = Array.isArray(data?.thKeHoachDieuChuyenNoiBoCucDtls) ? data?.thKeHoachDieuChuyenNoiBoCucDtls : ["ALL", "CHI_CUC"].includes(this.formData.value.loaiDieuChuyen) && Array.isArray(data.data) ? data.data : [];
+            this.dataCuc = Array.isArray(data.thKeHoachDieuChuyenCucKhacCucDtls) ? data.thKeHoachDieuChuyenCucKhacCucDtls : ["CUC"].includes(this.formData.value.loaiDieuChuyen) ? data.data : ["ALL"].includes(this.formData.value.loaiDieuChuyen) ? data.otherData : [];
+            this.groupData2Cuc = chain(this.dataCuc).groupBy('soDxuat').map((item, i) => {
+                const soDeXuat = item.find(f => f.soDxuat == i);
+                const newItem = item.map(f => ({ ...f.dcnbKeHoachDcDtls[0] }));
+                const duToanKphi = newItem?.reduce((sum, cur) => sum += cur.duToanKphi, 0)
+                return {
+                    ...soDeXuat,
+                    dcnbKeHoachDcDtls: newItem,
+                    duToanKphi
+                }
+            }).value();
+            const buildData2ChiCuc = this.buildTableView(data2ChiCuc?.reduce((arr, cur) => {
+                return arr.concat(cur.dcnbKeHoachDcDtls?.map(f => ({ ...f, maChiCucDxuat: cur.maChiCucDxuat, tenChiCucDxuat: cur.tenChiCucDxuat })))
+            }, []));
+            // this.dataTable2ChiCuc = this.mapExpanData(buildData2ChiCuc, "children");
+            this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc)
             this.selectRow(this.groupData2Cuc[0], isNew)
         }
     }
@@ -889,7 +890,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         };
         return dataView
     }
-    setValidator(isGuiDuyet: boolean) {
+    async setValidator(isGuiDuyet: boolean) {
         if (isGuiDuyet) {
             this.formData.controls["soDeXuat"].setValidators([Validators.required]);
             this.formData.controls["trichYeu"].setValidators([Validators.required]);

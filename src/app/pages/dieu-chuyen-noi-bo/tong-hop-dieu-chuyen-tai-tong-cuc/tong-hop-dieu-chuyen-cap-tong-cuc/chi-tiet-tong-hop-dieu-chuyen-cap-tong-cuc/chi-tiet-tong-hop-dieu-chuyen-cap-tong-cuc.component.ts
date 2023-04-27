@@ -386,7 +386,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                             id: 345,
                             parentId: null,
                             maChiCucNhan: "01010202",
-                            tenChiCucNhan: "Chi cục Dự trữ Nhà nước Phong Châu",
+                            tenChiCucNhan: "Chi cục Dự trữ Nhà nước AaA",
                             thoiGianDkDc: "2023-04-06",
                             loaiVthh: "0101",
                             cloaiVthh: "010101",
@@ -401,13 +401,13 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                             soLuongPhanBo: 0,
                             slDcConLai: 0,
                             coLoKho: true,
-                            maDiemKho: "0101020101",
+                            maDiemKho: "0101020106",
                             tenDiemKho: "Điểm kho Phủ Đức",
-                            maNhaKho: "010102010101",
+                            maNhaKho: "010102010601",
                             tenNhaKho: "Nhà kho A1",
-                            maNganKho: "01010201010101",
+                            maNganKho: "01010201060101",
                             tenNganKho: "Ngăn kho A1/1",
-                            maLoKho: "0101020101010104",
+                            maLoKho: "0101020106010104",
                             tenLoKho: "Lô kho mới 01",
                             maDiemKhoNhan: null,
                             tenDiemKhoNhan: null,
@@ -616,7 +616,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.setValidator(false);
         if (this.formData.valid) {
             this.isTongHop = true;
-            const thoiGianTongHop = dayjs().format("YYYY-MM-DD HH:mm:ss");
+            const thoiGianTongHop = dayjs().format("YYYY-MM-DDTHH:mm:ss");
             this.formData.patchValue({ thoiGianTongHop: thoiGianTongHop })
             // call api tổng hợp dữ liệu;
             this.tongHopData = cloneDeep(this.data);
@@ -664,7 +664,18 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     convertTongHop(data) {
         //Chi cuc
         const data2ChiCuc = Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? data.thKeHoachDieuChuyenTongCucDtls : [];
-        this.groupData2ChiCuc = cloneDeep(data2ChiCuc);
+        this.groupData2ChiCuc = chain(this.dataCuc).groupBy('soDxuat').map((item, i) => {
+            const soDeXuat = item.find(f => f.soDxuat == i);
+            const newItem = item.map(f => ({
+                ...f.dcnbKeHoachDcDtlList
+            }));
+            const duToanKphi = newItem?.reduce((sum, cur) => sum += cur.duToanKphi, 0)
+            return {
+                ...soDeXuat,
+                dcnbKeHoachDcDtlList: newItem,
+                duToanKphi
+            }
+        }).value();
         console.log("data2ChiCuc", data, data2ChiCuc, this.groupData2ChiCuc)
         //Cuc
         this.dataCuc = Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? data.thKeHoachDieuChuyenTongCucDtls : [];

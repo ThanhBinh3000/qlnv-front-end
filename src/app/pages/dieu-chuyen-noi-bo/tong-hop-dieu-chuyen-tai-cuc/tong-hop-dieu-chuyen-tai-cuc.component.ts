@@ -45,12 +45,12 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
     ];
     listLoaiDieuChuyen: any[] = [
-        { value: "ALL", giaTri: "Tất cả" },
+        // { value: "ALL", giaTri: "Tất cả" },
         { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
         { value: "CUC", giaTri: "Giữa 2 cục DTNN KV" },
     ];
     LIST_DIEU_CHUYEN = {
-        "ALL": "Tất cả",
+        // "ALL": "Tất cả",
         "CHI_CUC": "Giữa 2 chi cục trong cùng 1 cục",
         "CUC": "Giữa 2 cục DTNN KV"
     }
@@ -66,10 +66,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     isAddNew: boolean = false;
     isEdit: boolean = false;
 
-    dataTableAll: any[] = [
-        { id: 1, namKeHoach: 2022 }, { id: 2, namKeHoach: 2023 }
-    ]
-    dataTable: any[] = cloneDeep(this.dataTableAll);
+    dataTable: any[];
 
     listCuc: any[] = [];
 
