@@ -190,7 +190,7 @@ export class Base2Component implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?:string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
@@ -201,8 +201,20 @@ export class Base2Component implements OnInit {
               temp.push(item)
             }
           } else {
-            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-              temp.push(item)
+            if(type){
+              if('eq' == type){
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              }else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            }else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
             }
           }
         });
