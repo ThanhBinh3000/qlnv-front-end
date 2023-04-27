@@ -207,10 +207,10 @@
             <a  *ngIf="checkAllowEdit(data) && userService.isAccessPermisson('DCNB_KHDC_THEM')">
               <i class="fa fa-edit" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveNdc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')">
+            <a  *ngIf="checkApproveNdc(data) && userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC','DCNB_KHDC_DUYET_TBPTVQT')">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveDc(data) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')">
+            <a  *ngIf="checkApproveDc(data) && userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC', 'DCNB_KHDC_DUYET_TBPTVQT')">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
             <a *ngIf="checkAllowDelete(data) && userService.isAccessPermisson('DCNB_KHDC_XOA')">
