@@ -125,7 +125,7 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Trích yếu </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <input placeholder="" nz-input formControlName="trichYeu"
                                         [readonly]="isDisabled()" />
@@ -219,7 +219,7 @@
                             <th>Số kế hoạch/đề xuất</th>
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
-                            <!-- <th>Tên dự án</th> -->
+                            <th>Tên dự án</th>
                             <th>Số Lượng</th>
                             <th>Tổng tiền đã bao gồm thuế (đồng)</th>
                         </tr>
@@ -233,9 +233,9 @@
                             <td>{{ data.soDxuat }}</td>
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                             <td>{{ data.trichYeu }}</td>
-                            <!-- <td>{{ data.tenDuAn }}</td> -->
+                            <td></td>
                             <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-                            <td>{{ data.tongSoLuong * data.donGiaVat | number: '1.0-1' }}</td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </nz-table>

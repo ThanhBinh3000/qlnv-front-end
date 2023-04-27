@@ -135,6 +135,7 @@ import { ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent } from './ke-hoach/ke-
 import { DialogThemMoiDxkhthComponent } from './ke-hoach/ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component';
 import { ThemMoiDanhMucDuAnKhoComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-du-an/them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component';
 import { DialogThemMoiKehoachDanhmucChitietComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component';
+import { ThongTinTongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen.component';
 
 
 @NgModule({
@@ -206,7 +207,9 @@ import { DialogThemMoiKehoachDanhmucChitietComponent } from './ke-hoach/ke-hoach
     DialogThemMoiDxkhthComponent,
     DialogThemMoiKehoachDanhmucChitietComponent,
     ThemMoiDanhMucDuAnKhoComponent,
-    ThemMoiTongHopDxNhuCauComponent
+    ThemMoiTongHopDxNhuCauComponent,
+    ThongTinTongHopKhSuaChuaThuongXuyenComponent,
+    ThemMoiQdPdDxNhuCauComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

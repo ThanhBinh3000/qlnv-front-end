@@ -62,14 +62,15 @@
               <nz-date-picker nzPlaceHolder="Ngày tổng hợp đến" [(ngModel)]="searchFilter.ngayTongHopDen"
                               nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
             </div>
+
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Trạng thái</label>
-            <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear>
-              <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma">
-              </nz-option>
-            </nz-select>
-          </div>
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Trạng thái</label>
+          <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear>
+            <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma">
+            </nz-option>
+          </nz-select>
         </div>
       </div>
       <div nz-col class="cangiua group-button-search">

@@ -267,6 +267,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
       this.dataTable = this.listPhieuXuatKho;
+      console.log( this.dataTable,"this.listPhieuXuatKho")
       this.dataTable.forEach(s => {
           s.slXuat = s.thucXuat;
           s.soBkCanHang = s.soBangKeCh;

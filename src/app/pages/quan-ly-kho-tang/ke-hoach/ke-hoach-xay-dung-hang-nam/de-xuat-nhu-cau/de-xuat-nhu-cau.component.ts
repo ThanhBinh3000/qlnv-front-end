@@ -13,6 +13,7 @@ import { KtKhXdHangNamService } from "../../../../../services/kt-kh-xd-hang-nam.
 import { MESSAGE } from "../../../../../constants/message";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
+import { QuyetDinhKhTrungHanService } from "../../../../../services/quyet-dinh-kh-trung-han.service";
 
 @Component({
   selector: "app-de-xuat-nhu-cau",
@@ -23,6 +24,9 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   isViewDetail: boolean;
 
   danhSachCuc: any[] = [];
+
+  idTongHop: number = 0;
+  isViewTh: boolean;
 
   listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" },
     { "ma": "01", "giaTri": "Chờ duyệt TP" },
@@ -41,18 +45,18 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private dexuatService: KtKhXdHangNamService,
-    private dviService: DonviService
+    private dviService: DonviService,
+    private quyetDinhService: QuyetDinhKhTrungHanService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dexuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       maDvi: [null],
+      diaDiem: [null],
       namKeHoach: [null],
       soCongVan: [null],
-      diaDiem: [null],
-      ngayKyTu: [null],
-      ngayKyDen: [null],
-      trangThai: [null]
+      ngayDuyetTu: [null],
+      ngayDuyetDen: [null],
     });
     this.filterTable = {};
   }
@@ -100,6 +104,31 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   async clearForm() {
     this.formData.reset();
     await this.filter();
+  }
+
+
+  async openModalCttongHop(data: any) {
+    let body = {
+      namKeHoach : data.namKeHoach,
+      paggingReq: {
+        limit: 100,
+        page: this.page - 1,
+      }
+    };
+    let res = await this.quyetDinhService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let listData = res.data.content;
+      let result = listData.filter(item => item.soQuyetDinh == data.soQdTrunghan);
+      if (result && result.length > 0) {
+        this.idTongHop = result[0].id;
+        this.isViewTh = true;
+      }
+    }
+  }
+
+  closeDxPaModal() {
+    this.idTongHop = null;
+    this.isViewTh = false;
   }
 
 
