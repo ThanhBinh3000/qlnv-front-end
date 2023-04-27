@@ -570,9 +570,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soQd: this.dataChiTieu.soQuyetDinh
-      });
+      // this.formData.patchValue({
+      //   soQd: this.dataChiTieu.soQuyetDinh
+      // });
     }
   }
 
