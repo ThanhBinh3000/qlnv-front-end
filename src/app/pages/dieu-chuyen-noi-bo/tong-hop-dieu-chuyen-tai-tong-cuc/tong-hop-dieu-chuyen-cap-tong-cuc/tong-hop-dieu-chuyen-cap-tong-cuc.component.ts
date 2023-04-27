@@ -15,7 +15,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { TongHopDieuChuyenService } from './../tong-hop-dieu-chuyen-tai-tong-cuc.service';
+import { TongHopDieuChuyenCapTongCucService } from './../tong-hop-dieu-chuyen-tai-tong-cuc.service';
 
 @Component({
     selector: 'app-tong-hop-dieu-chuyen-cap-tong-cuc',
@@ -62,12 +62,12 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
-        private TongHopDieuChuyenService: TongHopDieuChuyenService,
+        private tongHopDieuChuyenCapTongCucService: TongHopDieuChuyenCapTongCucService,
         private donviService: DonviService,
         private danhMucService: DanhMucService,
         private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     ) {
-        super(httpClient, storageService, notification, spinner, modal, TongHopDieuChuyenService);
+        super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenCapTongCucService);
         this.formData = this.fb.group({
             // nam: [''],
             // maTongHop: [''],
@@ -143,36 +143,6 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             }
         }
     }
-    disabledStartNgayLapKh = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayLapKhDen) {
-            return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-        } else {
-            return false;
-        }
-    };
-
-    disabledEndNgayLapKh = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayLapKhTu) {
-            return false;
-        }
-        return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
-    };
-
-    disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayDuyetLdcDen) {
-            return startValue.getTime() > this.formData.value.ngayDuyetLdcDen.getTime();
-        }
-        return false;
-    };
-
-    disabledEndNgayDuyetLdc = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayDuyetLdcTu) {
-            return false;
-        }
-        return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
-    };
-
-
     async initData() {
         this.userInfo = this.userService.getUserLogin();
         this.userdetail.maDvi = this.userInfo.MA_DVI;
@@ -216,40 +186,52 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         this.isDetail = true;
         this.isViewDetail = isViewDetail;
         this.isEdit = !isViewDetail;
-        // this.isAddNew = true;
+        this.isAddNew = false;
     };
     xoaItem(item: any) {
-        this.modal.confirm({
-            nzClosable: false,
-            nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc chắn muốn xóa?',
-            nzOkText: 'Đồng ý',
-            nzCancelText: 'Không',
-            nzOkDanger: true,
-            nzWidth: 310,
-            nzOnOk: () => {
-                this.spinner.show();
-                try {
-                    // this.deXuatPAGService.delete({ id: item.id }).then((res) => {
-                    //     if (res.msg == MESSAGE.SUCCESS) {
-                    //         this.notification.success(
-                    //             MESSAGE.SUCCESS,
-                    //             MESSAGE.DELETE_SUCCESS,
-                    //         );
-                    //         this.search();
-                    //         this.getCount.emit();
-                    //     } else {
-                    //         this.notification.error(MESSAGE.ERROR, res.msg);
-                    //     }
-                    //     this.spinner.hide();
-                    // });
-                } catch (e) {
-                    console.log('error: ', e);
-                    this.spinner.hide();
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        this.delete(item)
+    }
+    deleteSelect() {
+        let dataDelete = [];
+        if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach((item) => {
+                if (item.checked) {
+                    dataDelete.push(item.id);
                 }
-            },
-        });
+            });
+        }
+        if (dataDelete && dataDelete.length > 0) {
+            this.modal.confirm({
+                nzClosable: false,
+                nzTitle: 'Xác nhận',
+                nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+                nzOkText: 'Đồng ý',
+                nzCancelText: 'Không',
+                nzOkDanger: true,
+                nzWidth: 310,
+                nzOnOk: async () => {
+                    this.spinner.show();
+                    try {
+                        let res = await this.tongHopDieuChuyenCapTongCucService.deleteMuti({ ids: dataDelete });
+                        if (res.msg == MESSAGE.SUCCESS) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                            await this.search();
+                            this.allChecked = false;
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, res.msg);
+                        }
+                        this.spinner.hide();
+                    } catch (e) {
+                        console.log('error: ', e);
+                        this.spinner.hide();
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    }
+                },
+            });
+        }
+        else {
+            this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+        }
     }
 
 }

@@ -52,7 +52,7 @@
         <div class="group-button">
             <h3 class="text-uppercase">Thông tin tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()"
+                <button type="button" class="btn btn-do" (click)="deleteSelect()"
                     *ngIf="!viewOnly && this.checkPermission(null)">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
@@ -167,17 +167,17 @@
                         <td>{{ data.namKeHoach }}</td>
                         <td *ngIf="userService.isTongCuc()">{{data.tenDvi}}</td>
                         <td>{{ data.maTongHop }}</td>
-                        <td>{{ data.loaiDieuChuyen}}</td>
-                        <td>{{ data.ngayTongHop |date: globals.dateFormat}}</td>
+                        <td>{{ LIST_DIEU_CHUYEN[data.loaiDieuChuyen]}}</td>
+                        <td>{{ data.ngayTongHop|date:"dd/MM/yyyy"}}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.trangThai }}</td>
+                        <td>{{ LIST_TRANG_THAI[data.trangThai]}}</td>
                         <td>
                             <a (click)="viewDetail(data.id, true)" *ngIf="this.checkPermission(null)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai) "
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-pencil"></i>
+                                <i class="fa fa-edit"></i>
                             </a>
                             <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai)"
                                 (click)="xoaItem(data)">

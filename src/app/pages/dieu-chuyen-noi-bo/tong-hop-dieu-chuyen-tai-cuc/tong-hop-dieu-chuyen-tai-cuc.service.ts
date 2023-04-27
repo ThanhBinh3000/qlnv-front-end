@@ -15,7 +15,7 @@ export class TongHopDieuChuyenService extends BaseService {
         super(httpClient, 'dieu-chuyen-noi-bo/tong-hop-ke-hoach-dieu-chuyen', 'qlnv-hang');
     }
     lapKeHoach(body): Promise<OldResponseData> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/lap-ke-hoach`;
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/lap-ke-hoach-cuc`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
     themTHCuc(body): Promise<OldResponseData> {
@@ -29,5 +29,13 @@ export class TongHopDieuChuyenService extends BaseService {
     guiYeuCauXacDinhDiemNhap(body): Promise<OldResponseData> {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/yeu-cau-xd`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+    search(body) {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu-cuc`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+    getDetail(id): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-kh-cuc/${id}`;
+        return this._httpClient.get<OldResponseData>(url).toPromise();
     }
 }

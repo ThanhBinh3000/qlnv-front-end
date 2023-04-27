@@ -49,6 +49,19 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
         { value: "CUC", giaTri: "Giữa 2 cục DTNN KV" },
     ];
+    LIST_DIEU_CHUYEN = {
+        "ALL": "Tất cả",
+        "CHI_CUC": "Giữa 2 chi cục trong cùng 1 cục",
+        "CUC": "Giữa 2 cục DTNN KV"
+    }
+    LIST_TRANG_THAI = {
+        "00": "Dự thảo",
+        "01": "Chờ duyệt - tp",
+        "02": "Từ chối -tp",
+        "03": "Chờ duyệt - lđ cục",
+        "04": "Từ chối - lđ cục",
+        "05": "Đã duyệt - lđ cục"
+    }
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
     isEdit: boolean = false;
@@ -200,6 +213,39 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         }
         return check;
     };
+    async search(roles?) {
+        if (!this.checkPermission(roles)) {
+            return
+        }
+        await this.spinner.show();
+        try {
+            let body = this.formData.value
+            body.paggingReq = {
+                limit: this.pageSize,
+                page: this.page - 1
+            }
+            let res = await this.tongHopDieuChuyenService.search(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+                let data = res.data;
+                this.dataTable = data.content;
+                this.totalRecord = data.totalElements;
+                if (this.dataTable && this.dataTable.length > 0) {
+                    this.dataTable.forEach((item) => {
+                        item.checked = false;
+                    });
+                }
+                this.dataTableAll = cloneDeep(this.dataTable);
+            } else {
+                this.dataTable = [];
+                this.totalRecord = 0;
+                this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+        } catch (e) {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+            await this.spinner.hide();
+        }
+    }
     viewDetail(id: number, isViewDetail: boolean) {
         this.selectedId = id;
         this.isDetail = true;
@@ -209,6 +255,48 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     };
     xoaItem(item: any) {
         this.delete(item)
+    }
+    deleteSelect() {
+        let dataDelete = [];
+        if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach((item) => {
+                if (item.checked) {
+                    dataDelete.push(item.id);
+                }
+            });
+        }
+        if (dataDelete && dataDelete.length > 0) {
+            this.modal.confirm({
+                nzClosable: false,
+                nzTitle: 'Xác nhận',
+                nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+                nzOkText: 'Đồng ý',
+                nzCancelText: 'Không',
+                nzOkDanger: true,
+                nzWidth: 310,
+                nzOnOk: async () => {
+                    this.spinner.show();
+                    try {
+                        let res = await this.tongHopDieuChuyenService.deleteMuti({ ids: dataDelete });
+                        if (res.msg == MESSAGE.SUCCESS) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                            await this.search();
+                            this.allChecked = false;
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, res.msg);
+                        }
+                        this.spinner.hide();
+                    } catch (e) {
+                        console.log('error: ', e);
+                        this.spinner.hide();
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    }
+                },
+            });
+        }
+        else {
+            this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+        }
     }
 
 }
