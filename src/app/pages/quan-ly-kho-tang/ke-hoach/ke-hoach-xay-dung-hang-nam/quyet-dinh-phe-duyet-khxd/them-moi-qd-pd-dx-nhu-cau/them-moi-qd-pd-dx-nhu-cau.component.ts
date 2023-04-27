@@ -55,8 +55,8 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
 
   STATUS = STATUS;
   isEdit: string = "";
-  ncKhTongSoEdit: number;
-  ncKhNstwEdit: number;
+  vonDauTu: number;
+
 
   constructor(
     private router: Router,
@@ -325,7 +325,6 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
           };
         }).value();
     }
-    console.log(table, 123);
     return table;
   }
 
@@ -374,8 +373,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
 
   editRow(idx, y, y1, item) {
     this.isEdit = idx + "-" + y + "-" + y1;
-    this.ncKhTongSoEdit = item.ncKhTongSo;
-    this.ncKhNstwEdit = item.ncKhNstw;
+    this.vonDauTu = item.vonDauTu;
   }
 
   saveEdit(item) {
@@ -388,8 +386,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   }
 
   cancelEdit(data: any) {
-    data.ncKhTongSo = this.ncKhTongSoEdit;
-    data.ncKhNstw = this.ncKhNstwEdit;
+    data.vonDauTu = this.vonDauTu;
     this.isEdit = "";
   }
 
