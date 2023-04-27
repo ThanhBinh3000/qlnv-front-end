@@ -83,10 +83,7 @@ export class DiaDiemGiaoNhan {
 
 export class DanhSachPhanLo {
     id: number;
-    maDvi: string;
-    tenDvi: string;
     maDiemKho: string;
-    diaDiemKho: string;
     tenDiemKho: string
     maNhaKho: string;
     tenNhaKho: string;
@@ -95,12 +92,13 @@ export class DanhSachPhanLo {
     maLoKho: string;
     tenLoKho: string;
     maDviTsan: string;
-    duDau: number;
-    soLuong: number;
+    tonKho: number;
+    soLuongDeXuat: number;
     donGiaDeXuat: number;
-    donGiaVat: number;
-    dviTinh: string;
-    khoanTienDatTruoc: number;
+    donGiaDuocDuyet: number;
+    donViTinh: string;
+    loaiVthh: string;
+    cloaiVthh: string;
     tenCloaiVthh: string;
     idVirtual?: number;
     isEdit: boolean;

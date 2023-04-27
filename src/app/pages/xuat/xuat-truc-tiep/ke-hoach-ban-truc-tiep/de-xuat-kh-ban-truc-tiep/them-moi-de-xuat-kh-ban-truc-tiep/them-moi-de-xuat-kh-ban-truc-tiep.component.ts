@@ -46,8 +46,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   giaToiDa: any;
   donGiaDuocDuyet: number = 0;
 
-
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -237,9 +235,18 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
             donViTinh: data.maDviTinh,
           });
         }
-        let res = await this.dmTieuChuanService.getDetailByMaHh(
-          this.formData.get('cloaiVthh').value,
-        );
+        this.getGiaToiThieu();
+      }
+    });
+  }
+
+  async getGiaToiThieu() {
+    if (this.formData.value.cloaiVthh && this.formData.value.namKh) {
+      let res = await this.deXuatKhBanTrucTiepService.getGiaBanToiThieu(this.formData.value.cloaiVthh, this.userInfo.MA_DVI, this.formData.value.namKh);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.giaToiDa = res.data;
+      }
+      if (this.formData.value.loaiVthh) {
         let bodyPag = {
           namKeHoach: this.formData.value.namKh,
           loaiVthh: this.formData.value.loaiVthh,
@@ -252,32 +259,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           const data = pag.data;
           this.donGiaDuocDuyet = data.giaQd
         }
-        if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-          this.formData.patchValue({
-            tchuanCluong: res.data ? res.data.tenQchuan : null,
-          });
-        }
       }
-      this.getGiaToiThieu();
-    });
-  }
-
-  async getGiaToiThieu() {
-    let res = await this.deXuatKhBanTrucTiepService.getGiaBanToiThieu(this.formData.get('cloaiVthh').value, this.userInfo.MA_DVI, this.formData.get('namKh').value);
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
-    }
-    let bodyPag = {
-      namKeHoach: this.formData.value.namKh,
-      loaiVthh: this.formData.value.loaiVthh,
-      cloaiVthh: this.formData.value.cloaiVthh,
-      trangThai: STATUS.BAN_HANH,
-      maDvi: this.formData.value.maDvi
-    }
-    let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-    if (pag.msg == MESSAGE.SUCCESS) {
-      const data = pag.data;
-      this.donGiaDuocDuyet = data.giaQd
+      let res2 = await this.dmTieuChuanService.getDetailByMaHh(
+        this.formData.value.cloaiVthh,
+      );
+      if (res2.statusCode == API_STATUS_CODE.SUCCESS) {
+        this.formData.patchValue({
+          tchuanCluong: res2.data ? res2.data.tenQchuan : null,
+        });
+      }
     }
   }
 
@@ -344,16 +334,11 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongDonGia: number = 0;
     this.dataTable.forEach((item) => {
       tongSoLuong += item.soLuongChiCuc;
-      item.children.forEach(child => {
-        tongDonGia += child.donGiaDeXuat;
-      })
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongDonGia: tongDonGia,
     });
   }
 
@@ -402,7 +387,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
   async getDataChiTieu() {
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKh').value,
+        +this.formData.value.namKh
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
@@ -412,10 +397,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
           idSoQdCtieu: res2.data.id
         });
       }
-    } else {
-      this.formData.patchValue({
-        soQdCtieu: 189
-      });
     }
   }
 

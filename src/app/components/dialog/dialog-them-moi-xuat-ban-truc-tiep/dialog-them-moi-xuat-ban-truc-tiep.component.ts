@@ -199,7 +199,6 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   changeDiemKho(index?) {
-    console.log(this.listDiemKho, 999)
     if (index >= 0) {
       let diemKho = this.listDiemKho.filter(item => item.maDvi == this.editCache[index].data.maDiemKho);
       if (diemKho.length > 0) {
@@ -280,12 +279,18 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
           'text': nganKho[0].listLoKhoEdit.children[i].tenDvi,
         };
         this.listLoKho.push(item);
+        if (this.listLoKho && this.listLoKho.length == 0) {
+          this.tonKho(nganKho)
+        }
         this.editCache[index].data.maLoKho = null;
       };
       this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
     } else {
       let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maNganKho)[0];
       this.listLoKho = nganKho.children;
+      if (this.listLoKho && this.listLoKho.length == 0) {
+        this.tonKho(nganKho)
+      }
       this.thongTinXuatBanTrucTiep.tenNganKho = nganKho.tenDvi;
       this.thongTinXuatBanTrucTiep.maLoKho = null;
     }
@@ -298,27 +303,30 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
         this.editCache[index].data.maLoKho = loKho[0].value
       }
+      this.tonKho(loKho)
     } else {
       let loKho = this.listLoKho.filter(item => item.maDvi == this.thongTinXuatBanTrucTiep.maLoKho)[0];
+      this.tonKho(loKho)
       this.thongTinXuatBanTrucTiep.tenLoKho = loKho.tenDvi;
-
-      let body = {
-        'maDvi': loKho.maDvi,
-        'loaiVthh': this.formData.value.loaiVthh
-      }
-      await this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          if (data.length > 0) {
-            let val = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
-            this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
-          } else {
-            this.thongTinXuatBanTrucTiep.tonKho = 0
-          }
-        }
-      });
-
     }
+  }
+
+  async tonKho(item) {
+    let body = {
+      'maDvi': item.maDvi,
+      'loaiVthh': this.formData.value.loaiVthh
+    }
+    await this.quanLyHangTrongKhoService.getTrangThaiHt(body).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.length > 0) {
+          let val = data.reduce((prev, cur) => prev + cur.slHienThoi, 0);
+          this.thongTinXuatBanTrucTiep.tonKho = cloneDeep(val)
+        } else {
+          this.thongTinXuatBanTrucTiep.tonKho = 0
+        }
+      }
+    });
   }
 
   addDiemKho() {

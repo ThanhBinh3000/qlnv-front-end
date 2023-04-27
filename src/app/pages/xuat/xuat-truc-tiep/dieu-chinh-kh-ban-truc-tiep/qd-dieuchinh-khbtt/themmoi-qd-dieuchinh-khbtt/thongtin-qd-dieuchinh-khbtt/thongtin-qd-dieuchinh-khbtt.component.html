@@ -196,7 +196,8 @@
                 <tr>
                     <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                     <td colspan="4">{{item.tenDvi}}</td>
-                    <td> {{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc | number : '1.0-1' :
+                        'vi_VN'}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -215,10 +216,10 @@
                             {{phanLo.tenNhaKho}}
                         </td>
                         <td>{{phanLo.maDviTsan}}</td>
-                        <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td>{{phanLo.dviTinh }}</td>
-                        <td>{{phanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                        <td>{{phanLo.donGiaDeXuat * phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{phanLo.soLuongDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                        <td>{{phanLo.donViTinh }}</td>
+                        <td>{{phanLo.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                        <td>{{phanLo.donGiaDuocDuyet * phanLo.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                         <td class="text-right" *ngIf="isView && !isCache">
                     </tr>
                 </ng-container>
