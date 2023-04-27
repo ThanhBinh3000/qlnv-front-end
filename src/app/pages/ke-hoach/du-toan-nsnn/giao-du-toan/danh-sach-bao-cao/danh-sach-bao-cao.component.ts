@@ -27,7 +27,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     maBaoCao: "",
     donViTao: "",
     trangThai: Utils.TT_BC_1,
-    loaiDuAn: null,
+    maLoaiDan: [3],
   };
 
   userInfo: any;
@@ -110,7 +110,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         loaiTimKiem: "3",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: [3],
+        maLoaiDan: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -129,7 +129,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         loaiTimKiem: "3",
         maPhanGiao: "3",
         maLoai: "2",
-        loaiDuAn: [3],
+        maLoaiDan: [3],
         maBcao: this.searchFilter.maBaoCao,
         donViTao: this.searchFilter.donViTao,
         namPa: this.searchFilter.nam,
@@ -190,7 +190,8 @@ export class DanhSachBaoCaoComponent implements OnInit {
     this.searchFilter.denNgay = null
     this.searchFilter.maBaoCao = null
     this.searchFilter.trangThai = null
-    this.search();
+    this.searchFilter.maLoaiDan = [3],
+      this.search();
   }
 
   checkEditStatus(item: any) {
