@@ -157,7 +157,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số đề xuất/công văn</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Số đề xuất/công văn</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-group nzAddOnAfter="/DCNB">
                 <input nz-input formControlName="soDxuat" [readOnly]="isView || isNhanDieuChuyen"/>
@@ -168,7 +168,7 @@
 
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngày lập KH</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày lập KH</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-date-picker class="search__input" formControlName="ngayLapKh"
                               [nzDisabled]="isView || isNhanDieuChuyen"
@@ -913,8 +913,6 @@
     </div>
   </ng-container>
   <ng-template #modalFooter>
-    <!-- <button nz-button (click)="handleCancel()">Đóng</button>
-    <button nz-button class="btn btn-main" (click)="handleOk()">Lưu</button> -->
     <div class="modal-footer">
       <div class="dcnb-footer nut">
         <div class="cantrai">
