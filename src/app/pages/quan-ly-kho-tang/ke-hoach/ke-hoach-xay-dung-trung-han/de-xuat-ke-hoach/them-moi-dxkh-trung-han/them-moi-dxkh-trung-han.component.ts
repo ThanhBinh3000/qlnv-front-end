@@ -183,7 +183,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     this.conVertTreToList();
     let body = this.formData.value;
-    body.soCongVan = body.soCongVan + this.maQd;
+    body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd :  this.maQd;
     body.chiTietsReq = this.dataTableRes;
     body.maDvi = this.userInfo.MA_DVI;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
@@ -379,7 +379,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (id > 0) {
       let res = await this.dxTrungHanService.getDetail(id);
       const data = res.data;
-      this.maQd = data.soCongVan ? data.soCongVan.split("/")[1] : "",
+      this.maQd = data.soCongVan ? "/" + data.soCongVan.split("/")[1] : "",
       this.formData.patchValue({
         id: data.id,
         tenDvi: data.tenDvi,

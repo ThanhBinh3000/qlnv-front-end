@@ -89,8 +89,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     if(!this.idInput) {
-      this.maTt = this.userInfo.MA_TR;
-      this.soQd = this.userInfo.MA_QD;
+      this.maTt = "/" + this.userInfo.MA_TR;
+      this.soQd = "/" + this.userInfo.MA_QD;
     }
     this.loadDsNam();
     await this.getDataDetail(this.idInput);
@@ -118,8 +118,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
-      this.maTt = data.maToTrinh ? data.maToTrinh.split("/")[1] : null,
-      this.soQd = data.soQuyetDinh ? data.soQuyetDinh.split("/")[1] : null,
+      this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
+      this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
       this.formData.patchValue({
         id: data.id,
         namBatDau: data.namBatDau,
@@ -183,8 +183,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     }
     let body = this.formData.value;
     body.tgTongHop = body.tgTongHop ? dayjs(body.tgTongHop) : null;
-    body.maToTrinh = body.maToTrinh + this.maTt ;
-    body.soQuyetDinh =body.soQuyetDinh + this.soQd ;
+    body.maToTrinh = body.maToTrinh? body.maToTrinh + this.maTt :  this.maTt  ;
+    body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd  ;
     body.ctiets = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;

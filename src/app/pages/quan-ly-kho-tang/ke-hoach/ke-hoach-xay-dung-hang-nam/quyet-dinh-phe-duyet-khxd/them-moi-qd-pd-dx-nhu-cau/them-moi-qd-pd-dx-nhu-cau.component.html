@@ -51,7 +51,7 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định
+            <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định/Số thông báo
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
@@ -60,9 +60,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Ngày trình BTC
+            <nz-form-label [nzNoColon]="true">Ngày trình BTC/Bộ KHĐT
             </nz-form-label>
             <nz-form-control>
               <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTrinhBtc"
@@ -70,9 +70,9 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Ngày ký QĐ của BTC
+            <nz-form-label [nzNoColon]="true" nzRequired>Ngày ký QĐ của Bộ KHĐT/Ngày thông báo của BTC
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKyBtc"
@@ -80,17 +80,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" nzRequired>Ngày hiệu lực
-            </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayHieuLuc"
-                              nzFormat="dd/MM/yyyy"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên quyết định Tổng cục trưởng đã duyệt
             </nz-form-label>
@@ -102,46 +92,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="5">
-          <nz-form-item class="form-item">
-            <nz-form-label>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
-            <div nz-row>
-              <div nz-col nzSpan="11">
-                <nz-form-control>
-                  <nz-select [nzDisabled]="true" formControlName="namBatDau" nzPlaceHolder="Năm bắt đầu"
-                             nzSpan="2"
-                             nzAllowClear>
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </div>
-              <div nz-col nzSpan="2" class="text-center">
-                <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
-              </div>
-              <div nz-col nzSpan="11">
-                <nz-form-control>
-                  <nz-select [nzDisabled]="true" formControlName="namKetThuc" nzPlaceHolder="Năm kết thúc"
-                             nzSpan="2"
-                             nzAllowClear>
-                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                    </nz-option>
-                  </nz-select>
-                </nz-form-control>
-              </div>
-            </div>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="4">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại dự án
-            </nz-form-label>
-            <nz-form-control>
-              <input class="search__input" formControlName="loaiDuAn" [readonly]="true" nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="20">
+        <div nz-col nzSpan="24">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Trích yếu
             </nz-form-label>

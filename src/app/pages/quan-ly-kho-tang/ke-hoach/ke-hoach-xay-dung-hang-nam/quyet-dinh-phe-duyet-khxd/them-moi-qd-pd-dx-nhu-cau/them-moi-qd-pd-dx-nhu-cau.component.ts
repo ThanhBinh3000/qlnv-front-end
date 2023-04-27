@@ -149,6 +149,8 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.removeValidators(this.formData);
+    this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
+    this.formData.controls["phuongAnTc"].setValidators([Validators.required]);
     if (isGuiDuyet || this.idInput > 0) {
       this.setValidators();
     }
@@ -196,11 +198,8 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["phuongAnTc"].setValidators([Validators.required]);
     this.formData.controls["ngayKyBtc"].setValidators([Validators.required]);
-    this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
     this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
   }
 
 
@@ -268,9 +267,6 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             phuongAnTc: data.soQuyetDinh,
-            namBatDau: data.namBatDau,
-            namKetThuc: data.namKetThuc,
-            loaiDuAn: data.loaiDuAn
           });
           await this.loadDsChiTiet(data.id);
         }
@@ -282,11 +278,6 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     let res = await this.tongHopDxXdTh.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       let detailTh = res.data;
-      this.formData.patchValue({
-        loaiDuAn: detailTh.loaiDuAn,
-        namBatDau: detailTh.namBatDau,
-        namKetThuc: detailTh.namKetThuc
-      });
       this.listDx = detailTh.listDx.dtlList;
       this.dataTableReq = detailTh.listDx.ctietList;
       if (this.listDx.length > 0) {

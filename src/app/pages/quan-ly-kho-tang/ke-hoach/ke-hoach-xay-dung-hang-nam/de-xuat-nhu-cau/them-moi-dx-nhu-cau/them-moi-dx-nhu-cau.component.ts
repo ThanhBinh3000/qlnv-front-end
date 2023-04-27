@@ -125,7 +125,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     if (id > 0) {
       let res = await this.dexuatService.getDetail(id);
       const data = res.data;
-      this.maQd = data.soCongVan ? data.soCongVan.split("/")[1] : "",
+      this.maQd = data.soCongVan ? "/" +  data.soCongVan.split("/")[1] : "",
       this.formData.patchValue({
         id: data.id,
         maDvi: data.maDvi,
@@ -174,7 +174,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI;
-    body.soCongVan = body.soCongVan + this.maQd;
+    body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTableRes;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);

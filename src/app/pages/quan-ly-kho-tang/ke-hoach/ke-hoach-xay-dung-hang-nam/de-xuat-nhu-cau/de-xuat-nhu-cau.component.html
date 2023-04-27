@@ -113,9 +113,9 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
-                               [(ngModel)]="filterTable.ngayKy"
-                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày duyệt"
+                               [(ngModel)]="filterTable.ngayDuyet"
+                               (ngModelChange)="filterInTable('ngayDuyet', convertDateToString(filterTable.ngayDuyet))"
               ></nz-date-picker>
             </nz-input-group>
           </th>
@@ -158,7 +158,7 @@
           <td *ngIf="!userService.isCuc()">{{ data.tenDvi }}</td>
           <td class="text-center">{{ data.namKeHoach }}</td>
           <td>{{ data.soCongVan }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayDuyet | date: 'dd/MM/YYYY' }}</td>
           <td class="text-right">{{ data.tmdt | number : '1.0-1': 'vi-VN' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.soQdTrunghan }}</a></td>
