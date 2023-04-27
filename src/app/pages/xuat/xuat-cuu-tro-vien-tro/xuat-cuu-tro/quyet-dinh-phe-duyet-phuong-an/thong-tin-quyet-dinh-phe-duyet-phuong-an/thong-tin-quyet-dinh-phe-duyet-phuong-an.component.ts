@@ -26,7 +26,6 @@ import {chain, cloneDeep} from 'lodash';
 import {v4 as uuidv4} from 'uuid';
 import {DonviService} from 'src/app/services/donvi.service';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -66,8 +65,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   load: boolean = false;
   listDanhSachTongHop: any[] = [];
   listDanhSachDeXuat: any[] = [];
-  danhSachTongHop: any[] = [];
-  // danhsachDx: any[] = [];
   fileList: any[] = [];
   deXuatPhuongAn: any[] = [];
   deXuatPhuongAnCache: any[] = [];
@@ -76,16 +73,16 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   listThanhTien: number[] = [0];
   listSoLuong: number[] = [0];
   listSoLuongDx: number[] = [0];
-  listThanhTienCache: number[] = [0];
-  listSoLuongCache: number[] = [0];
-  listSoLuongDxCache: number[] = [0];
+  listThanhTienCache: number;
+  listSoLuongCache: number;
+  listSoLuongDxCache: number ;
+  listSoLuongXcCache: number;
   slXuatCap: number = 0;
   slXuatCapCache: number = 0;
   expandSetString = new Set<string>();
   expandSetStringCache = new Set<string>();
   tongSoLuongDxuat = 0;
   tongSlDx = 0;
-  soLuongXuatKho = 0;
   tongThanhTienDxuat = 0;
   phuongAnRow: any = {};
   dsDonVi: any;
@@ -113,7 +110,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
-    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
@@ -140,7 +136,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         type: ['TH', [Validators.required]],
-        xuatCap: [],
+        xuatCap: [false],
         ngayPduyet: [],
         fileDinhKem: [FileDinhKem],
         canCu: [new Array<FileDinhKem>()],
@@ -662,12 +658,13 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
 
     this.expandAll()
     if (this.deXuatPhuongAnCache.length !== 0) {
-      this.listThanhTienCache = this.deXuatPhuongAnCache.map(s => s.thanhTien);
-      this.listSoLuongCache = this.deXuatPhuongAnCache.map(s => s.soLuongXuatChiCuc);
-      this.listSoLuongDxCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
+      this.listThanhTienCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.thanhTien, null)
+      this.listSoLuongCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, null)
+      this.listSoLuongDxCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuat, null)
+      this.listSoLuongXcCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuatCap, null)
     } else {
-      this.listThanhTienCache = [0];
-      this.listSoLuongCache = [0];
+      this.listThanhTienCache =null;
+      this.listSoLuongCache =null;
     }
 
     if (this.deXuatPhuongAn.length !== 0) {
@@ -807,18 +804,14 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       this.slXuatCap = null;
     }
+    if(!this.formData.value.id && this.slXuatCap >0){
+      this.formData.patchValue({
+        xuatCap: true,
+      })
+    }
     this.formData.patchValue({
       soLuongXuaCap: this.slXuatCap,
-      xuatCap:  this.formData.value.xuatCap === null ? true : this.formData.value.xuatCap,
     })
-
-    let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
-    let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
-    if (tongSoLuongXuatCache > tongSoLuongXuatThucTeCache) {
-      this.slXuatCapCache = tongSoLuongXuatCache - tongSoLuongXuatThucTeCache;
-    } else {
-      this.slXuatCapCache = null;
-    }
 
   }
 
