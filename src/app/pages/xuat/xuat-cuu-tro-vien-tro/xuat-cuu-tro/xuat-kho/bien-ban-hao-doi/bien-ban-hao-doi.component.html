@@ -238,20 +238,23 @@
                 <td></td>
                 <td>{{lv1.tenTrangThai}}</td>
                 <td class="text-left">
-                  <a
-                    *ngIf="lv1.trangThai!=STATUS.DU_THAO  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XEM')"
-                    (click)="redirectDetail(lv1.id, true)">
+                  <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&
+                                            !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA) &&
+                                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XEM')">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_KTVBQ || lv1.trangThai==STATUS.TU_CHOI_KT
-                                         || lv1.trangThai==STATUS.TU_CHOI_LDCC )&& userService.isChiCuc()
-                                        && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM')"
+                  <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM'))"
                      (click)="redirectDetail(lv1.id, false)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a
-                    *ngIf="lv1.trangThai==STATUS.DU_THAO && userService.isChiCuc() &&  userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XOA')"
-                    (click)="delete(lv1)">
+                  <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_KTVBQ) && !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KTVBQ'))||
+                                                  (vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_KT) && !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KT'))||
+                                                  (vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC) && !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC'))"
+                     (click)="redirectDetail(lv1.id, true)">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                  </a>
+                  <a *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XOA')"
+                     (click)="delete(lv1)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

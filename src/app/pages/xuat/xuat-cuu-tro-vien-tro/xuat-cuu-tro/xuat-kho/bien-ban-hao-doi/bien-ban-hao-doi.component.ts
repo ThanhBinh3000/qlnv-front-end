@@ -12,6 +12,8 @@ import { chain } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {CuuTroVienTroComponent} from "../../cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-bien-ban-hao-doi',
@@ -25,7 +27,8 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhCache: string;
 
-
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: CuuTroVienTroComponent;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -34,8 +37,10 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanHaoDoiService: BienBanHaoDoiService,
+    private cuuTroVienTroComponent: CuuTroVienTroComponent,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanHaoDoiService);
+    this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
