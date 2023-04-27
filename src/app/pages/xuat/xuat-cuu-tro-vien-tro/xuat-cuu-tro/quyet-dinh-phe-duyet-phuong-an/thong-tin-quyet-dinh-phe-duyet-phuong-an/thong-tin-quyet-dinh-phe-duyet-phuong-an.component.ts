@@ -140,7 +140,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
         type: ['TH', [Validators.required]],
-        xuatCap: [false],
+        xuatCap: [],
         ngayPduyet: [],
         fileDinhKem: [FileDinhKem],
         canCu: [new Array<FileDinhKem>()],
@@ -168,7 +168,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.firstInit = false;
 
       //tao de xuat tu trang tong hop
-      console.log(this.dataInit,'dataInit');
       if (Object.keys(this.dataInit).length > 0) {
         //de xuat
         if (this.dataInit.hasOwnProperty('maTongHop')) {
@@ -177,7 +176,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         }
         //tong hop
         else {
-          console.log('hahahaha')
           await this.selectMaTongHop(this.dataInit.id);
         }
         await this.selectRow(this.formData.value.quyetDinhPdDtl[0]);
@@ -238,7 +236,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       const res = await this.tongHopPhuongAnCuuTroService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
-        console.log(data, "data");
         let listDeXuat = [];
         listDeXuat = await Promise.all(data.deXuatCuuTro.map(async item => {
           let res1 = await this.deXuatPhuongAnCuuTroService.getDetail(item.idDx);
@@ -251,8 +248,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         listDeXuat = listDeXuat.map(item => ({...item, id: null}));
 
         //truong hop tao moi
-
-        console.log(this.firstInit,'firstInit')
         if (this.firstInit === false) {
 
           this.formData.patchValue({
@@ -362,7 +357,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     body.canCu = this.canCu;
     body.fileDinhKem = this.fileDinhKem;
     body.soQd = this.formData.value.soQd ? this.formData.value.soQd + '/' + this.maQd : undefined;
-    console.log(body, "cmm")
     await super.saveAndSend(body, status, message, sucessMessage);
     await this.spinner.hide();
   }
@@ -382,7 +376,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (!isGuiDuyet) {
     }
     let data = await this.createUpdate(body);
-
+    let id= data.id;
+    await this.loadChiTiet(id);
     await this.spinner.hide();
   }
 
@@ -577,7 +572,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   }
 
   async selectRow(item?: any) {
-    console.log(this.formData.value.quyetDinhPdDtl, 555)
     await this.spinner.show();
     if (item) {
       this.deXuatSelected = item;
@@ -815,7 +809,9 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     }
     this.formData.patchValue({
       soLuongXuaCap: this.slXuatCap,
+      xuatCap:  this.formData.value.xuatCap === null ? true : this.formData.value.xuatCap,
     })
+
     let tongSoLuongXuatCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuat, 0)
     let tongSoLuongXuatThucTeCache = this.phuongAnViewCache.reduce((prev, cur) => prev + cur.soLuongXuatThucTe, 0)
     if (tongSoLuongXuatCache > tongSoLuongXuatThucTeCache) {

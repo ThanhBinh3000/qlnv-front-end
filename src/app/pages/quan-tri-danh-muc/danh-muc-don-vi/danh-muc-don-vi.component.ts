@@ -63,6 +63,7 @@ export class DanhMucDonViComponent implements OnInit {
       capDvi: [""],
       fax: [""],
       sdt: [""],
+      maTuDinhNghia: [""],
       trangThai: [""],
       type: [],
       ghiChu: [""],
@@ -185,6 +186,7 @@ export class DanhMucDonViComponent implements OnInit {
             diaChi: res.data.diaChi,
             sdt: res.data.sdt,
             fax: res.data.fax,
+            maTuDinhNghia: res.data.maTuDinhNghia,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
@@ -268,7 +270,7 @@ export class DanhMucDonViComponent implements OnInit {
     });
   }
 
-  delete() {
+  delete(id) {
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -278,7 +280,7 @@ export class DanhMucDonViComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
+        this.donviService.delete({id : id}).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             // xét node về không

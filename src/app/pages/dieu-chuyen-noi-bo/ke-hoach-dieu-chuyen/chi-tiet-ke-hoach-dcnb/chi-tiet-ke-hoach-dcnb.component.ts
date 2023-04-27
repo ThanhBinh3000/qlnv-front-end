@@ -270,6 +270,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   async loadDsChiCuc(value?) {
+    debugger
     let body = {
       trangThai: "01",
       maDviCha: value ? value.maCucNhan ? value.maCucNhan : this.userInfo.MA_DVI.substring(0, 6) : this.userInfo.MA_DVI.substring(0, 6),
@@ -942,7 +943,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     if (value) {
       const tenCucNhan = this.dsDonViNhan.find(item => item.maDvi == value);
       this.formData.controls['tenCucNhan'].setValue(tenCucNhan.tenDvi);
-      this.loadDsChiCuc(this.formData.value.maCucNhan);
+      this.loadDsChiCuc(this.formData.value);
     }
   }
 

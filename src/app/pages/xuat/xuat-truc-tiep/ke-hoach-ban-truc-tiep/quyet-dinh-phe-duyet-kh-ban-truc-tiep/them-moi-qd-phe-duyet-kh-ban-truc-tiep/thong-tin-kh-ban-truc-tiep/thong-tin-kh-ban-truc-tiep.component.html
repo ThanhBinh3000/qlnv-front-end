@@ -2,9 +2,19 @@
     <nz-collapse-panel [nzHeader]="title" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[24]">
-                <div nz-col [nzSpan]="24">
+                <div nz-col [nzSpan]="24" *ngIf="isView">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tổ chức bán trực tiếp </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
+                            </nz-range-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" *ngIf="!isView">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn trực tiếp tổ chức bán trực tiếp đến hết
+                            ngày </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
                             </nz-range-picker>
@@ -157,17 +167,17 @@
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px" class="text-center"></th>
-                    <th nzWidth="150px" class="text-center wrap">Chi cục</th>
-                    <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
+                    <th class="text-center wrap"></th>
+                    <th class="text-center wrap">Chi cục</th>
+                    <th class="text-center wrap">Điểm kho</th>
                     <th class="text-center wrap">Lô kho</th>
-                    <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
-                    <th nzWidth="100px" class="text-center wrap" *ngIf="isView">SL xuất bán TT đề xuất</th>
-                    <th nzWidth="100px" class="text-center wrap" *ngIf="!isView">SL xuất bán TT </th>
-                    <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-                    <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
-                    <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
-                    <th nzWidth="50px" *ngIf="!isView">Hành động</th>
+                    <th class="text-center wrap">Mã ĐVTS</th>
+                    <th class="text-center wrap" *ngIf="isView">SL xuất bán TT đề xuất</th>
+                    <th class="text-center wrap" *ngIf="!isView">SL xuất bán TT </th>
+                    <th class="text-center wrap">ĐVT</th>
+                    <th class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+                    <th class="text-center wrap">Thành tiền (đ)</th>
+                    <th class="text-center wrap" *ngIf="!isView">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -175,7 +185,8 @@
                     <tr>
                         <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                         <td colspan="4">{{item.tenDvi}}</td>
-                        <td> {{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc | number : '1.0-1' :
+                            'vi_VN'}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -194,11 +205,11 @@
                                 {{children.tenNhaKho}}
                             </td>
                             <td>{{children.maDviTsan}}</td>
-                            <td *ngIf="isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td *ngIf="!isView">{{children.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{children.dviTinh}}</td>
-                            <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td *ngIf="isView">{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td *ngIf="!isView">{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{children.donViTinh}}</td>
+                            <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{children.donGiaDuocDuyet * children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right" *ngIf="!isView">
                             </td>
                         </tr>

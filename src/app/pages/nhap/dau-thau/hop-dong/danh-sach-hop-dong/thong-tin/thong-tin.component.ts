@@ -115,6 +115,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
     tongSlHang: number = 0;
     //namKhoach: number = 0;
     listNam: any[] = [];
+    isContentVisible: any[] = [true, true, true, true, true, true];
+    isArrowUp: any[] = [false, false, false, false, false, false];
 
     constructor(
         private router: Router,
@@ -189,7 +191,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 trangThai: [STATUS.DU_THAO],
                 tenTrangThai: ['Dự thảo'],
                 noiDung: [],
-                dieuKien: []
+                dieuKien: [],
+                loaiHinhNx: 'Mua đấu thầu',
+                kieuNx: 'Nhập mua'
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -323,8 +327,35 @@ export class ThongTinComponent implements OnInit, OnChanges {
     setValidator(isKy) {
         if (isKy) {
             this.formData.controls["maHdong"].setValidators([Validators.required]);
+            this.formData.controls["soQdKqLcnt"].setValidators([Validators.required]);
+            this.formData.controls["idQdKqLcnt"].setValidators([Validators.required]);
+            this.formData.controls["tenGoiThau"].setValidators([Validators.required]);
+            this.formData.controls["tenHd"].setValidators([Validators.required]);
+            this.formData.controls["soNgayThien"].setValidators([Validators.required]);
+            this.formData.controls["maDvi"].setValidators([Validators.required]);
+            this.formData.controls["tenDvi"].setValidators([Validators.required]);
+            this.formData.controls["diaChi"].setValidators([Validators.required]);
+            this.formData.controls["mst"].setValidators([Validators.required]);
+            this.formData.controls["sdt"].setValidators([Validators.required]);
+            this.formData.controls["stk"].setValidators([Validators.required]);
+            this.formData.controls["fax"].setValidators([Validators.required]);
+            this.formData.controls["moTai"].setValidators([Validators.required]);
+            this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+            this.formData.controls["chucVu"].setValidators([Validators.required]);
         } else {
-            this.formData.controls["maHdong"].clearValidators();
+            this.formData.controls["tenGoiThau"].clearValidators();
+            this.formData.controls["tenHd"].clearValidators();
+            this.formData.controls["soNgayThien"].clearValidators();
+            this.formData.controls["maDvi"].clearValidators();
+            this.formData.controls["tenDvi"].clearValidators();
+            this.formData.controls["diaChi"].clearValidators();
+            this.formData.controls["mst"].clearValidators();
+            this.formData.controls["sdt"].clearValidators();
+            this.formData.controls["stk"].clearValidators();
+            this.formData.controls["fax"].clearValidators();
+            this.formData.controls["moTai"].clearValidators();
+            this.formData.controls["tenNguoiDdien"].clearValidators();
+            this.formData.controls["chucVu"].clearValidators();
         }
     }
 
@@ -366,7 +397,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 "limit": this.globals.prop.MAX_INTERGER,
                 "page": 0
             },
-            loaiVthh: this.loaiVthh
+            loaiVthh: this.loaiVthh,
+            hdChuaBanHanh: true
         }
         let res = await this.ketQuaLcntService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -456,8 +488,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
             nzFooter: null,
             nzComponentParams: {
                 dataTable: this.listGoiThau,
-                dataHeader: ['Tên gói thầu', 'Tên đơn vị', 'Số lượng', 'Đơn giá Vat', 'Đơn giá nhà thầu'],
-                dataColumn: ['goiThau', 'tenDvi', 'soLuong', 'donGiaVat', 'donGiaNhaThau'],
+                dataHeader: ['Tên gói thầu', 'Số lượng', 'Đơn giá Vat'],
+                dataColumn: ['goiThau', 'soLuong', 'donGiaNhaThau'],
             },
         });
         modalQD.afterClose.subscribe(async (data) => {
@@ -632,5 +664,30 @@ export class ThongTinComponent implements OnInit, OnChanges {
         } else {
             this.expandSet3.delete(id);
         }
+    }
+
+    calcTongSl() {
+        if (this.dataTable) {
+            let sum = 0
+            this.dataTable.forEach(item => {
+                sum += item.soLuong;
+            })
+            return sum;
+        }
+    }
+
+    calcTongThanhTien() {
+        if (this.dataTable) {
+            let sum = 0
+            this.dataTable.forEach(item => {
+                sum += item.soLuong * item.donGiaVat;
+            })
+            return sum;
+        }
+    }
+
+    toggleContentVisibility(i) {
+        this.isContentVisible[i] = !this.isContentVisible[i];
+        this.isArrowUp[i] = !this.isArrowUp[i];
     }
 }

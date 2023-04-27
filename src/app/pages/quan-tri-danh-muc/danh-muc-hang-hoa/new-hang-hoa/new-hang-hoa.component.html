@@ -38,8 +38,8 @@
         <nz-form-item>
           <nz-form-label nzRequired>Mã hàng hóa</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-group [nzAddOnBefore]="formHangHoa.value.maCha">
-              <input nz-input formControlName="ma" />
+            <nz-input-group >
+              <input nz-input [readonly]="formHangHoa.value.maCha != null" formControlName="ma" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>

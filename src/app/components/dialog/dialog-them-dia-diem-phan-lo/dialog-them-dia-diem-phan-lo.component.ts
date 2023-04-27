@@ -180,7 +180,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       if (chiCuc.soLuongXuat) {
-        if (LOAI_HANG_DTQG.MUOI) {
+        if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.MUOI)) {
           this.formData.patchValue({
             tenDvi: res.data.tenDvi,
             diaChi: res.data.diaChi,
@@ -363,7 +363,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateGiaDeXuat() {
-    if (this.thongtinPhanLo.donGiaDeXuat <= this.giaToiDa) {
+    if (this.giaToiDa >= this.thongtinPhanLo.donGiaDeXuat) {
       this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất phải lớn hơn hoặc bằng giá bán tối thiểu (" + this.giaToiDa + " đ)")
       return false
     } else {

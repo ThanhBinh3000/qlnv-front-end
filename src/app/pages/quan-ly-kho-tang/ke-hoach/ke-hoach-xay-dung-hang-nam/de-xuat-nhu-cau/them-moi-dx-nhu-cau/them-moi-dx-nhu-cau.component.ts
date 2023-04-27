@@ -70,6 +70,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       soQdTrunghan: [null, Validators.required],
       trichYeu: [null],
       ngayKy: [null],
+      ngayTao: [null],
+      namBatDau: [null],
+      namKetThuc: [null],
+      loaiDuAn: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [null]
@@ -86,7 +90,8 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         await this.getDataDetail(this.idInput);
       } else {
         this.formData.patchValue({
-          tenDvi: this.userInfo.TEN_DVI
+          tenDvi: this.userInfo.TEN_DVI,
+          ngayTao : new Date()
         });
       }
     } catch (e) {
@@ -125,6 +130,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         tenDvi: data.tenDvi,
         soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : "",
         namKeHoach: data.namKeHoach,
+        namBatDau: data.namBatDau,
+        namKetThuc: data.namKetThuc,
+        ngayTao: data.ngayTao,
+        loaiDuAn: data.loaiDuAn,
         soQdTrunghan: data.soQdTrunghan,
         trichYeu: data.trichYeu,
         ngayKy: data.ngayKy,
@@ -389,7 +398,10 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            soQdTrunghan: data.soQuyetDinh
+            soQdTrunghan: data.soQuyetDinh,
+              namBatDau : data.namBatDau,
+              namKetThuc : data.namKetThuc,
+              loaiDuAn : data.loaiDuAn,
           });
           await this.changeSoQdTrunghan(data.id)
         }
