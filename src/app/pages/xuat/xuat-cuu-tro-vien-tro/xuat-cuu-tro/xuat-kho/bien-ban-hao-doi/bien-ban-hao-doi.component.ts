@@ -25,6 +25,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthhCache: string;
 
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -82,7 +83,12 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   children: any = [];
   expandSetString = new Set<string>();
 
-
+  idBbTk: number = 0;
+  openBbTk = false;
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
+  idBangKe: number = 0;
+  openBangKe = false;
   ngOnInit(): void {
     try {
       this.initData()
@@ -169,6 +175,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
+    console.log(this.children,"this.children")
     this.expandAll()
 
   }
@@ -194,4 +201,38 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+
+  openBbTkModal(id: number) {
+    console.log(id, "id")
+    this.idBbTk = id;
+    this.openBbTk = true;
+  }
+
+  closeBbTkModal() {
+    this.idBbTk = null;
+    this.openBbTk = false;
+  }
+
+  openPhieuXkModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
+  }
+
+  openBangKeModal(id: number) {
+    console.log(id, "id")
+    this.idBangKe = id;
+    this.openBangKe = true;
+  }
+
+  closeBangKeModal() {
+    this.idBangKe = null;
+    this.openBangKe = false;
+  }
+
 }
