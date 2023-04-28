@@ -20,12 +20,12 @@
         </div>
         <div nz-col [nzSpan]="18"></div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
-          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" *ngIf="!status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
           <ng-container>
-            <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
+            <button type="button" class="btn btn-main" (click)="selectGoods()" *ngIf="!status">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -33,26 +33,26 @@
         </div>
       </div>
 
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowspan="2" [hidden]="status" class="text-center" nzWidth="300px">
+            <th rowspan="2" *ngIf="!status" class="text-center" nzWidth="50px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
               </label>
             </th>
             <th rowSpan="2" nzWidth="50px">STT</th>
             <th nzWidth="300px" rowSpan="2">Mặt hàng</th>
-            <th rowSpan="2" nzWidth="300px">ĐVT</th>
-            <th rowSpan="2" nzWidth="300px">Số lượng bảo quản theo KH được giao</th>
+            <th rowSpan="2">ĐVT</th>
+            <th rowSpan="2">Số lượng bảo quản theo KH được giao</th>
             <th colSpan="3">Lượng hàng thực hiện</th>
-            <th rowSpan="2" nzWidth="300px">Định mức</th>
-            <th rowSpan="2" nzWidth="300px">Tổng nhu cầu dự toán năm {{namBcao}} </th>
+            <th rowSpan="2">Định mức</th>
+            <th rowSpan="2">Tổng nhu cầu dự toán năm {{namBcao}} </th>
             <th colSpan="3">Kinh phí được sử dụng năm {{namBcao}} </th>
-            <th rowSpan="2" nzWidth="300px">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
-            <th rowSpan="2" *ngIf="viewAppraisalValue" nzWidth="300px">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
-            <th rowSpan="2" nzWidth="300px">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
-            <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
-            <th nzWidth="50px" rowspan="2" *ngIf="!status || editAppraisalValue"></th>
+            <th rowSpan="2">Dự toán điều chỉnh (+ tăng) (- giảm)</th>
+            <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2">Dự toán phí bảo quản thiếu năm {{namBcao}}</th>
+            <th rowspan="2" *ngIf="!status"></th>
+            <th rowspan="2" *ngIf="!status || editAppraisalValue"></th>
           </tr>
           <tr>
             <th>Số lượng bảo quản thực tế đã thực hiện đến thời điểm báo cáo </th>
@@ -63,7 +63,7 @@
             <th>Dự toán đã giao trong năm</th>
           </tr>
           <tr>
-            <th [hidden]="status"></th>
+            <th *ngIf="!status"></th>
             <th>A</th>
             <th>B</th>
             <th>C</th>
@@ -79,13 +79,13 @@
             <th>10 = 6 - 7</th>
             <th *ngIf="viewAppraisalValue">11</th>
             <th>12</th>
-            <th [hidden]="status"></th>
+            <th *ngIf="!status"></th>
             <th *ngIf="!status || editAppraisalValue"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Tổng cộng</td>
             <td></td>
@@ -101,11 +101,11 @@
             <td>{{displayValue(total.dtoanDchinhDnghi)}}</td>
             <td *ngIf="viewAppraisalValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td>{{displayValue(total.dtoanPhiBquanThieu)}}</td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh giảm</td>
             <td></td>
@@ -121,11 +121,11 @@
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh giảm</td>
             <td></td>
@@ -141,7 +141,7 @@
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewAppraisalValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editAppraisalValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -173,7 +173,7 @@
               <td>
                 {{displayValue(data.dtoanPhiBquanThieu)}}
               </td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status || editAppraisalValue">
@@ -182,7 +182,7 @@
 
             </ng-container>
             <ng-template #editTemplate>
-              <td [hidden]="status" class="text-center">
+              <td *ngIf="!status" class="text-center">
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -259,7 +259,7 @@
                     [options]="amount" />
                 </td>
               </ng-template>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status || editAppraisalValue">

@@ -33,15 +33,12 @@
         </div>
       </div>
 
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowSpan="2">STT</th>
+            <th rowSpan="2" nzWidth="50px">STT</th>
             <th rowSpan="2" nzWidth="300px">Nội dung</th>
-            <!-- <th rowSpan="2">Dữ liệu từ phụ lục tương ứng</th> -->
             <th colSpan="3">Dự toán, kinh phí được sử dụng trong năm</th>
-            <!-- <th rowSpan="2">Dự toán đã thực hiện đến thời điểm báo cáo</th>
-            <th rowSpan="2">Dự toán ước thực hiện đến cuối năm</th> -->
             <th rowSpan="2">Tổng nhu cầu dự toán trong năm</th>
             <th rowSpan="2">Dự toán đề nghị điều chỉnh (+ tăng) (- giảm)</th>
             <th rowSpan="2" *ngIf="viewRecommendedValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>

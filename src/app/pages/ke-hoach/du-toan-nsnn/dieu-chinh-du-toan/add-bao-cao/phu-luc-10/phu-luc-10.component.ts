@@ -79,6 +79,9 @@ export class PhuLuc10Component implements OnInit {
   tongDieuChinhGiam: number;
   dToanVuTang: number;
   dToanVuGiam: number;
+  scrollX: string;
+
+  BOX_NUMBER_WIDTH = 400;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -140,6 +143,13 @@ export class PhuLuc10Component implements OnInit {
     this.lstCtietBcao.forEach(item => {
       item.congTrinh = this.noiDungs.find(e => e.ma == item.maCongTrinh)?.giaTri;
     })
+
+    if (this.status) {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    } else {
+      this.scrollX = (300 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    }
+
     this.updateEditCache();
     this.getStatusButton();
     this.spinner.hide();

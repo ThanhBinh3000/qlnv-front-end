@@ -591,11 +591,11 @@ export class BaoCaoTongHopComponent implements OnInit {
       return;
     }
 
-    lstCtietBcaoTemp.forEach(item => {
-      if (item.id?.length == 36) {
-        item.id = null;
-      }
-    });
+    // lstCtietBcaoTemp.forEach(item => {
+    //   if (item.id?.length == 38) {
+    //     item.id = null;
+    //   }
+    // });
 
     //get list file url
     let checkFile = true;
@@ -696,6 +696,7 @@ export class BaoCaoTongHopComponent implements OnInit {
               }
             }
             this.id = data.data.id;
+            await this.getDetailReport();
             await this.getStatusButton();
             this.listFile = [];
           } else {
@@ -722,11 +723,11 @@ export class BaoCaoTongHopComponent implements OnInit {
         },
       );
     }
-    this.lstCtietBcao.filter(item => {
-      if (!item.id) {
-        item.id = uuid.v4() + 'FE';
-      }
-    });
+    // this.lstCtietBcao.filter(item => {
+    //   if (!item.id) {
+    //     item.id = uuid.v4() + 'FE';
+    //   }
+    // });
     this.spinner.hide();
   };
 

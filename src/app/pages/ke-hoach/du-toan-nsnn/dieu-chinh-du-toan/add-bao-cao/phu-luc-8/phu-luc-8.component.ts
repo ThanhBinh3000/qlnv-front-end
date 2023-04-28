@@ -90,6 +90,8 @@ export class PhuLuc8Component implements OnInit {
   dsDinhMuc: any[] = [];
   linhVucChis: any[] = DANH_MUC;
   isSynthetic: any;
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 250;
   constructor(
     private _modalRef: NzModalRef,
     private notification: NzNotificationService,
@@ -184,6 +186,13 @@ export class PhuLuc8Component implements OnInit {
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    }
+
     this.sortByIndex();
     this.sum1();
     this.getTotal()
@@ -507,14 +516,14 @@ export class PhuLuc8Component implements OnInit {
         } else {
           this.tongDieuChinhTang += Number(item?.dtoanDchinhDnghi);
         }
-  
+
         if (item.dtoanVuTvqtDnghi < 0) {
           this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
         } else {
           this.dToanVuTang += Number(item?.dtoanVuTvqtDnghi);
         }
       }
-      
+
     })
   };
 

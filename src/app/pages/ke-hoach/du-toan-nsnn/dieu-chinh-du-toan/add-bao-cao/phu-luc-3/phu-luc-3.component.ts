@@ -94,6 +94,8 @@ export class PhuLuc3Component implements OnInit {
   lstTaiSans: any[] = [];
   total: ItemData = new ItemData();
   soLaMa: any[] = LA_MA;
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 250;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -138,7 +140,7 @@ export class PhuLuc3Component implements OnInit {
         stt: "0.1",
         maNoiDung: this.userInfo.MA_DVI,
         noiDung: this.userInfo.TEN_DVI,
-        loaiKhoan:"340-341"
+        loaiKhoan: "340-341"
       })
       // })
       // this.setLevel();
@@ -149,6 +151,12 @@ export class PhuLuc3Component implements OnInit {
       this.lstCtietBcao.forEach(item => {
         item.stt = item.maNoiDung;
       })
+    }
+
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 8).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 8).toString() + 'px';
     }
 
     // this.sortByIndex();

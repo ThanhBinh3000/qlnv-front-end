@@ -20,7 +20,7 @@
         </div>
         <div nz-col [nzSpan]="18"></div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
-          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+          <button type="button" class="btn btn-main" (click)="deleteAllChecked()" *ngIf="!status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
@@ -32,10 +32,10 @@
         </div>
       </div>
 
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowspan="2" [hidden]="status" class="text-center">
+            <th rowspan="2" *ngIf="!status" class="text-center" nzWidth="50px">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
               </label>
             </th>
@@ -49,8 +49,8 @@
             <th>Dự toán đề nghị điều chỉnh lần này</th>
             <th *ngIf="viewRecommendedValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th>Ghi chú(Đã duyệt quyết toán/ chưa duyệt quyết toán)</th>
-            <th [hidden]="status"></th>
-            <th [hidden]="status "></th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status"></th>
             <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
           <tr>
@@ -64,14 +64,14 @@
             <th>6 = 5 -2</th>
             <th *ngIf="viewRecommendedValue">7</th>
             <th>8</th>
-            <th [hidden]="status"></th>
-            <th [hidden]="status"></th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status"></th>
             <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Tổng cộng</td>
             <td>{{displayValue(total.kh2021)}}</td>
@@ -82,12 +82,12 @@
             <td>{{displayValue(total.dtoanDnghiDchinhLnay)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(total.dtoanVuTvqtDnghi)}}</td>
             <td></td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh tăng</td>
             <td></td>
@@ -98,12 +98,12 @@
             <td>{{displayValue(tongDieuChinhTang)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuTang)}}</td>
             <td></td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh giảm</td>
             <td></td>
@@ -114,13 +114,13 @@
             <td>{{displayValue(tongDieuChinhGiam)}}</td>
             <td *ngIf="viewRecommendedValue">{{displayValue(dToanVuGiam)}}</td>
             <td></td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
+            <td *ngIf="!status"></td>
+            <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
-              <td [hidden]="status" class="text-center">
+              <td *ngIf="!status" class="text-center">
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -140,10 +140,10 @@
               <td>
                 {{data.ghiChu}}
               </td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i class="fa fa-plus" (click)="addLine(data.id)"></i>
               </td>
               <!-- <td [hidden]="status && !viewRecommendedValue">
@@ -156,7 +156,7 @@
               </td>
             </ng-container>
             <ng-template #editTemplate>
-              <td [hidden]="status" class="text-center">
+              <td *ngIf="!status" class="text-center">
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -214,8 +214,8 @@
                   <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.ghiChu" />
                 </td>
               </ng-template>
-              <td [hidden]="status"></td>
-              <td [hidden]="status">
+              <td *ngIf="!status"></td>
+              <td *ngIf="!status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td>

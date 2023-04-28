@@ -75,6 +75,9 @@ export class PhuLuc1Component implements OnInit {
   noiDungs: any[] = DANH_MUC_PL10;
   soLaMa: any[] = LA_MA;
   total: ItemData = new ItemData();
+
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 400;
   constructor(
     private dieuChinhDuToanService: DieuChinhService,
     private _modalRef: NzModalRef,
@@ -99,7 +102,7 @@ export class PhuLuc1Component implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
     console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
-    
+
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
@@ -133,11 +136,11 @@ export class PhuLuc1Component implements OnInit {
           const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNdung);
           this.lstCtietBcao[index].dtoanKphiNamTruoc = item?.dtoanKphiNamTruoc ? item?.dtoanKphiNamTruoc : 0;
           this.lstCtietBcao[index].dtoanKphiNamNay = item?.dtoanKphiNamNay ? item?.dtoanKphiNamNay : 0;
-          this.lstCtietBcao[index].tong = item?.tong? item?.tong : 0;
+          this.lstCtietBcao[index].tong = item?.tong ? item?.tong : 0;
           this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
-          if(item?.dtoanDnghiDchinh){
+          if (item?.dtoanDnghiDchinh) {
             this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
-          }else{
+          } else {
             this.lstCtietBcao[index].dtoanDnghiDchinh = 0;
           }
           this.lstCtietBcao[index].dtoanVuTvqtDnghi = item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0;
@@ -159,6 +162,13 @@ export class PhuLuc1Component implements OnInit {
       })
     }
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+
+    if (this.status) {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 5).toString() + 'px';
+    } else {
+      this.scrollX = (300 + this.BOX_NUMBER_WIDTH * 5).toString() + 'px';
+    }
+
     this.tinhTong();
     this.getTotal();
     this.updateEditCache();
@@ -272,7 +282,7 @@ export class PhuLuc1Component implements OnInit {
     this.dToanVuTang = 0;
     this.dToanVuGiam = 0;
     console.log(this.lstCtietBcao);
-    
+
     this.lstCtietBcao.forEach(item => {
       const str = item.stt
       if (!(this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1)) {
@@ -282,7 +292,7 @@ export class PhuLuc1Component implements OnInit {
           } else {
             this.tongDieuChinhTang += Number(item?.dtoanDnghiDchinh);
           }
-    
+
           if (item.dtoanVuTvqtDnghi < 0) {
             this.dToanVuGiam += Number(item?.dtoanVuTvqtDnghi);
           } else {

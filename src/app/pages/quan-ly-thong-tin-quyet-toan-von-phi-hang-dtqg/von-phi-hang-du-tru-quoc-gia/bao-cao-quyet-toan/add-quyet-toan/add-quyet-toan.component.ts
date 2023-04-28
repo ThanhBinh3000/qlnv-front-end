@@ -135,6 +135,19 @@ export class AddQuyetToanComponent implements OnInit {
 		checked: false
 	};
 
+	total1: ItemData = {
+		id: null,
+		stt: "0",
+		level: 0,
+		tenHang: "",
+		maLoaiHang: "",
+		maDviTinh: null,
+		soLuong: 0,
+		donGiaMua: 0,
+		thanhTien: null,
+		checked: false
+	};
+
 	// before uploaf file
 	beforeUpload = (file: NzUploadFile): boolean => {
 		this.fileList = this.fileList.concat(file);
@@ -1037,10 +1050,35 @@ export class AddQuyetToanComponent implements OnInit {
 
 	getTotal() {
 		this.total = new ItemData();
+		this.total1 = new ItemData();
+		let tongLk1
+		let tongLk2
 		this.lstCtietBcao.forEach(item => {
-			if (item.level == 0) {
-				this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+			if (item.level == 1 && item.stt == "0.1.1") {
+				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				return tongLk1 = item.thanhTien
 			}
+			if (item.level == 1 && item.stt == "0.2.1") {
+				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				return tongLk2 = item.thanhTien
+			}
+
+			this.total.thanhTien = sumNumber([tongLk1, tongLk2]);
+		})
+
+		let tongPs1
+		let tongPs2
+		this.lstCtietBcao.forEach(item => {
+			if (item.level == 1 && item.stt == "0.1.2") {
+				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				return tongPs1 = item.thanhTien
+			}
+			if (item.level == 1 && item.stt == "0.2.2") {
+				// this.total.thanhTien = sumNumber([this.total.thanhTien, item.thanhTien]);
+				return tongPs2 = item.thanhTien
+			}
+
+			this.total1.thanhTien = sumNumber([tongPs1, tongPs2]);
 		})
 
 	};

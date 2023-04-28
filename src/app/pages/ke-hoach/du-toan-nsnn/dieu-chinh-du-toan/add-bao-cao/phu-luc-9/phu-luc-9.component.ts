@@ -106,6 +106,9 @@ export class PhuLuc9Component implements OnInit {
   soLaMa: any[] = LA_MA;
   amount = AMOUNT;
   amount1 = AMOUNT1;
+  scrollX: string;
+
+  BOX_NUMBER_WIDTH = 400;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -158,7 +161,7 @@ export class PhuLuc9Component implements OnInit {
       // this.lstCtietBcao.forEach(item => {
       //   item.tenDanhMuc += this.getName(item.level, item.maDanhMuc);
       // })
-    } 
+    }
     else if (!this.lstCtietBcao[0]?.stt) {
       let sttItem = 1
       this.lstCtietBcao.forEach(item => {
@@ -177,6 +180,13 @@ export class PhuLuc9Component implements OnInit {
     // }
 
     // this.sortByIndex();
+
+    if (this.status) {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    }
+
     this.getTotal();
     this.tinhTong();
     this.updateEditCache();
@@ -424,7 +434,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.hslPcapKhac
     ]);
     this.editCache[id].data.hslPcapTso = sumNumber([this.editCache[id].data.hslPcapHsl, this.editCache[id].data.hslPcapTong]);
-    this.editCache[id].data.tqtlPcapTong  = sumNumber([
+    this.editCache[id].data.tqtlPcapTong = sumNumber([
       // this.editCache[id].data.tqtlPcapTluong,
       // this.editCache[id].data.tqtlPcapTong,
       this.editCache[id].data.tqtlPcapChucVu,
@@ -448,7 +458,7 @@ export class PhuLuc9Component implements OnInit {
       this.editCache[id].data.dtoanKphiDtoanNtruoc,
       this.editCache[id].data.dtoanKphiDaGiao
     ])
-    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongNcauTluong -  this.editCache[id].data.dtoanKphiCong
+    this.editCache[id].data.dtoanDnghiDchinh = this.editCache[id].data.tongNcauTluong - this.editCache[id].data.dtoanKphiCong
   };
 
   saveEdit(id: string): void {

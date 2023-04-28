@@ -85,9 +85,9 @@ export class DialogTongHopComponent implements OnInit {
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
           // this.response.maPaCha = data.data.maPaCha;
           this.response.lstCtietBcao.forEach(item => {
-            if (!item.id) {
-              item.id = uuid.v4() + 'FE';
-            }
+            // if (!item.id) {
+            //   item.id = uuid.v4() + 'FE';
+            // }
             // item.lstCtietBcaos.forEach(itm => {
             //   if (!itm.id) {
             //     itm.id = uuid.v4() + 'FE';

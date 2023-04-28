@@ -96,6 +96,9 @@ export class PhuLuc7Component implements OnInit {
   userInfo: any;
   lstTaiSans: any[] = [];
   total: ItemData = new ItemData();
+  dsDinhMucX: any[] = [];
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 350
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -131,6 +134,13 @@ export class PhuLuc7Component implements OnInit {
       })
     })
 
+    await this.getDinhMucPL2X();
+
+    if (this.status) {
+      this.scrollX = (800 + this.BOX_NUMBER_WIDTH * 9).toString() + 'px';
+    } else {
+      this.scrollX = (750 + this.BOX_NUMBER_WIDTH * 9).toString() + 'px';
+    }
     // this.sortByIndex();
     this.getTotal();
     this.tinhTong();
@@ -138,6 +148,26 @@ export class PhuLuc7Component implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   };
+
+
+  async getDinhMucPL2X() {
+    const request = {
+      loaiDinhMuc: '02',
+      maDvi: this.maDviTao,
+    }
+    await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMucX = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
 
   updateAllChecked(): void {
     if (this.allChecked) {                                    // checkboxall == true thi set lai lstCTietBCao.checked = true

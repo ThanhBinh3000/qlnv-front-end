@@ -79,6 +79,8 @@ export class PhuLuc4Component implements OnInit {
   tongDieuChinhGiam: number;
   dToanVuTang: number;
   dToanVuGiam: number;
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 250
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -110,7 +112,7 @@ export class PhuLuc4Component implements OnInit {
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
     console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
-    
+
     const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
     if (category) {
       category.data.forEach(
@@ -137,6 +139,13 @@ export class PhuLuc4Component implements OnInit {
         this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
       }
     }
+
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+    }
+
     // this.sortByIndex();
     this.getTotal();
     this.tinhTong();

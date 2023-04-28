@@ -97,6 +97,8 @@ export class PhuLuc2Component implements OnInit {
   userInfo: any;
   lstTaiSans: any[] = [];
   total: ItemData = new ItemData();
+  scrollX: string;
+  BOX_NUMBER_WIDTH = 250;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -132,6 +134,12 @@ export class PhuLuc2Component implements OnInit {
       })
     })
     await this.getListTaiSan();
+
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 9).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 9).toString() + 'px';
+    }
 
     // this.sortByIndex();
     this.getTotal();
