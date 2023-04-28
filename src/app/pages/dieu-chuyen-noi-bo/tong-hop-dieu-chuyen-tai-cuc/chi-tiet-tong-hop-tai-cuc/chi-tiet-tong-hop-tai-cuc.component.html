@@ -46,7 +46,7 @@
                  formData.value.trangThai == STATUS.TU_CHOI_LDV ||
                   formData.value.trangThai == STATUS.TU_CHOI_LDC ||
                    formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && checkPermission(null)"
-                    type="button" class="btn btn-sub" (click)="save(true)" [disabled]="daXdinhDiemNhap">
+                    type="button" class="btn btn-sub" (click)="save(true)" [disabled]="!daXdinhDiemNhap">
                     <i class="icon htvbdh_tcdt_guiduyet"></i>
                     <span>Lưu và gửi duyệt</span>
                 </button>
@@ -346,7 +346,7 @@
                                             (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
                                         </td>
                                         <td></td>
-                                        <td class="bold">{{ item.tenChiCucDxuat || "" }}</td>
+                                        <td class="bold">{{ item.tenDvi || "" }}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -595,19 +595,18 @@
                                 <ng-container *ngFor="let item of dataTable2Cuc , let i = index">
                                     <tr class="level-2">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-                                        <td *ngIf="item.dcnbKeHoachDcDtls?.length>0|| item.dcnbKeHoachDcDtlList.length>0; else tdNormal"
+                                        <td *ngIf="item.danhSachHangHoa?.length>0; else tdNormal"
                                             [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
-                                        <td class="bold">{{ item.tenChiCucDxuat }}</td>
+                                        <td class="bold">{{ item.tenDvi }}</td>
                                         <td colspan="6"></td>
-                                        <td class="text-right">{{item.duToanKphi}}</td>
+                                        <td class="text-right bold">{{item.duToanKphi}}</td>
                                         <td colspan="3"></td>
                                         <ng-template #tdNormal>
                                             <td></td>
                                         </ng-template>
                                     </tr>
                                     <ng-container *ngIf="item.expand">
-                                        <ng-container
-                                            *ngFor="let bb of (item.dcnbKeHoachDcDtls || item.dcnbKeHoachDcDtlList), let y = index">
+                                        <ng-container *ngFor="let bb of item.danhSachHangHoa, let y=index">
                                             <tr>
                                                 <td></td>
                                                 <td></td>

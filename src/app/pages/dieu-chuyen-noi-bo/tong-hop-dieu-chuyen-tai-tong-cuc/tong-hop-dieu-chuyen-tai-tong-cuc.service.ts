@@ -12,7 +12,7 @@ export class TongHopDieuChuyenCapTongCucService extends BaseService {
     GATEWAY = '/dieu-chuyen-noi-bo';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'tong-hop-ke-hoach-dieu-chuyen', 'dieu-chuyen-noi-bo');
+        super(httpClient, 'tong-hop-ke-hoach-dieu-chuyen-tc', 'dieu-chuyen-noi-bo');
     }
     yeuCauXacDinhDiemNhap(id: number): Promise<OldResponseData> {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/yeu-cau`;
