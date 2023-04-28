@@ -118,7 +118,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
         khoi: this.dataInput.khoi,
         tenKhoi: this.dataInput.tenKhoi,
       })
-      if (this.dataInput.id && this.type == 'sua') {
+      if (this.type == 'sua') {
         this.getDetail();
       }
     } catch (e) {
