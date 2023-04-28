@@ -103,7 +103,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered [nzData]="dataTable"
-                [nzScroll]="dataTable && dataTable.length ? { x: '2500px'} : null">
+                [nzScroll]="dataTable && dataTable.length ? { x: '3000px'} : null">
         <thead>
         <tr>
           <th nzWidth="40px">
@@ -112,9 +112,10 @@
           </th>
           <th class="text-center" nzWidth="40px">STT</th>
           <th class="text-center"  *ngIf="userService.isTongCuc()">Cục DTNN KV</th>
-          <th class="text-center" >Mã công trình</th>
+          <th class="text-center" nzWidth="100px" >Mã công trình</th>
           <th class="text-center" >Loại công trình</th>
           <th class="text-center">Tên công trình</th>
+          <th class="text-center" >Khối danh mục/Công trình</th>
           <th class="text-center">Thuộc chi cục</th>
           <th class="text-center" >Điểm kho</th>
           <th class="text-center" >Thời gian sửa chữa <br> gần nhất</th>
@@ -124,8 +125,8 @@
           <th class="text-center" >Số QĐ tổng mức đầu tư <br> khái toán, dự toán được duyệt(đ)</th>
           <th class="text-center" >Ngày QĐ phê duyệt <br> quyết toán</th>
           <th class="text-center" >Giá trị QĐ phê duyệt <br> quyết toán</th>
-          <th class="text-center" >Trạng thái</th>
-          <th class="text-center" nzRight>Hành động</th>
+          <th class="text-center"  nzWidth="120px">Trạng thái</th>
+          <th class="text-center" nzWidth="120px" nzRight>Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -152,6 +153,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCongTrinh"
                      (input)="filterInTable('tenCongTrinh',filterTable.tenCongTrinh)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenKhoi"
+                     (input)="filterInTable('tenKhoi',filterTable.tenKhoi)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -228,6 +235,7 @@
           <td>{{ data.maCongTrinh }}</td>
           <td>{{ data.loaiCongTrinh }}</td>
           <td>{{ data.tenCongTrinh}}</td>
+          <td>{{ data.tenKhoi}}</td>
           <td>{{ data.tenChiCuc}}</td>
           <td>{{ data.tenDiemKho }}</td>
           <td class="text-center">{{ data.tgSuaChua }}</td>

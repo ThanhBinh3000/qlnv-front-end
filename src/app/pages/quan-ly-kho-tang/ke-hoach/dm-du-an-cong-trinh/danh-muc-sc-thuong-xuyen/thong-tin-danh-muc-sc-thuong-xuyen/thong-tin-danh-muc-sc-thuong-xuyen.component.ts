@@ -25,6 +25,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   dataDetail: any
   dsKho: any[] = [];
   dsChiCuc: any[] = [];
+  listKhoi: any[] = [];
   listLoaiCongTrinh: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
@@ -59,6 +60,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       lyDo: [null, Validators.required],
       tmdt: [null, Validators.required],
       keHoachCaiTao: [null, Validators.required],
+      khoi: [null, Validators.required],
       diaDiem: [null],
       soQdPheDuyet: [null],
       ngayQdPd: [null],
@@ -73,6 +75,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     try {
        this.loadDsChiCuc()
        this.loadDsLoaiCongTrinh()
+       this.loadDsKhoi()
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -81,6 +84,14 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsKhoi() {
+    this.listKhoi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('KHOI_DU_AN_KT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
     }
   }
 

@@ -50,6 +50,7 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {CuuTroVienTroRoutingModule} from "../xuat-cuu-tro/cuu-tro-vien-tro-routing.module";
 import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component";
+import {CuuTroVienTroModule} from "../xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 
 @NgModule({
@@ -116,14 +117,15 @@ import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke
 
     ChiTietBangKeCanComponent
   ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-    NzStatisticModule,
-    NzPipesModule,
-    CuuTroVienTroRoutingModule,
-  ]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        DirectivesModule,
+        NzStatisticModule,
+        NzPipesModule,
+        CuuTroVienTroRoutingModule,
+        CuuTroVienTroModule,
+    ]
 })
 export class XuatCapModule {
 }
