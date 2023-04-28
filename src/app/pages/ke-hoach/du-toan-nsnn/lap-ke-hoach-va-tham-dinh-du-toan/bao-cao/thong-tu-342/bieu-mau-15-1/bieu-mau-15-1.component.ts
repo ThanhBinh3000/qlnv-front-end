@@ -141,30 +141,42 @@ export class BieuMau151Component implements OnInit {
 					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
 				} else if (this.userInfo.capDvi == "2") {
 					this.donVis = res.data.filter(e => e.tenVietTat && (e.tenVietTat?.startsWith('CCDT') || e.tenVietTat?.includes('_VP') || e.tenVietTat?.includes('CNTT')));
-				} else if (this.userInfo.capDvi == "3") {
-					if (this.lstCtietBcao.length == 0) {
-						this.lstCtietBcao.push({
-							... new ItemData(),
-							maLvuc: this.maDviTao,
-							tenDmuc: this.userInfo?.tenDvi
-						})
-					}
 				}
+				// else if (this.userInfo.capDvi == "3") {
+				// 	if (this.lstCtietBcao.length == 0) {
+				// 		this.lstCtietBcao.push({
+				// 			... new ItemData(),
+				// 			maLvuc: this.maDviTao,
+				// 			tenDmuc: this.userInfo?.tenDvi
+				// 		})
+				// 	}
+				// }
 			} else {
 				this.notification.error(MESSAGE.ERROR, res?.msg);
 			}
 		}, err => {
 			this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
 		})
-		this.donVis.forEach(item => {
-			if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
+		if (this.dataInfo?.isSynthetic) {
+			this.donVis.forEach(item => {
+				if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
+					this.lstCtietBcao.push({
+						... new ItemData(),
+						maLvuc: item.maDvi,
+						tenDmuc: item.tenDvi
+					})
+				}
+			})
+		} else {
+			if (this.lstCtietBcao.length == 0) {
 				this.lstCtietBcao.push({
 					... new ItemData(),
-					maLvuc: item.maDvi,
-					tenDmuc: item.tenDvi
+					maLvuc: this.maDviTao,
+					tenDmuc: this.userInfo?.tenDvi
 				})
 			}
-		})
+		}
+
 		this.getTotal();
 		this.updateEditCache();
 		this.getStatusButton();

@@ -48,12 +48,13 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	}
 
 	changeDnghi() {
+		this.loaiDns = LOAI_DE_NGHI;
 		if (this.userService.isTongCuc()) {
 			if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
 				this.loaiDns = LOAI_DE_NGHI.filter(e => e.id != Utils.MUA_VTU);
-			} else {
-				this.loaiDns = LOAI_DE_NGHI;
 			}
+		} else {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
 		}
 		if (this.response.canCuVeGia == Utils.QD_DON_GIA) {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_GAO && e.id != Utils.MUA_MUOI);
