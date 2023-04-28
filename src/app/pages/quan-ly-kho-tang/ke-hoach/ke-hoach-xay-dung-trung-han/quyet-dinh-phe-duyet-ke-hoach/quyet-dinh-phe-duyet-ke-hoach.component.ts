@@ -40,10 +40,12 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   searchFilter = {
     namKeHoach  :'',
     soQuyetDinh: '',
-    trichYeu: '',
     ngayKyTu: '',
     ngayKyDen: '',
-    trangThai: ''
+    ngayHieuLucTu : '',
+    ngayHieuLucDen : '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
   };
 
   filterTable: any = {
@@ -107,10 +109,12 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     let body = {
       namKeHoach : this.searchFilter.namKeHoach,
       soQuyetDinh : this.searchFilter.soQuyetDinh,
-      trichYeu : this.searchFilter.trichYeu,
       ngayKyTu : this.searchFilter.ngayKyTu,
       ngayKyDen : this.searchFilter.ngayKyDen,
-      trangThai : this.searchFilter.trangThai,
+      ngayHieuLucTu : this.searchFilter.ngayHieuLucTu,
+      ngayHieuLucDen : this.searchFilter.ngayHieuLucDen,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh  : this.searchFilter.tgHoanThanh,
       maDvi : this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
@@ -134,11 +138,6 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-  }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
   }
 
   async changePageIndex(event) {
@@ -215,10 +214,12 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     this.searchFilter = {
       namKeHoach  :'',
       soQuyetDinh: '',
-      trichYeu: '',
       ngayKyTu: '',
       ngayKyDen: '',
-      trangThai: ''
+      ngayHieuLucTu : '',
+      ngayHieuLucDen : '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
     }
     this.search();
   }
@@ -361,7 +362,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     let res = await this.tongHopTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let listData = res.data.content;
-      let result = listData.filter(item => item.maToTrinh == data.phuongAnTc);
+      let result = listData.filter(item => item.soQuyetDinh == data.phuongAnTc);
       if (result && result.length > 0) {
         this.idTongHop = result[0].id;
         this.isViewTh = true;

@@ -34,6 +34,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() dataTongHop: any;
   @Input() idTh: number = 0;
   @Input() isViewOnModal: boolean;
+  @Input() maDviCuc: string
+  @Input() dviCapCuc: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -213,13 +215,19 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async loadChiTiet(id: number) {
+    console.log(this.maDviCuc, 999)
+    console.log(this.dviCapCuc, 888)
     this.spinner.show()
     if (id) {
       let data = await this.detail(id);
       this.formData.patchValue({
         soQdPd: data.soQdPd?.split('/')[0]
       })
-      this.danhsachDx = data.children;
+      if (this.maDviCuc && this.dviCapCuc == true) {
+        this.danhsachDx = data.children.filter(s => s.maDvi == this.maDviCuc)
+      } else {
+        this.danhsachDx = data.children;
+      }
       if (this.danhsachDx && this.danhsachDx.length > 0) {
         this.showFirstRow(event, this.danhsachDx[0]);
       }

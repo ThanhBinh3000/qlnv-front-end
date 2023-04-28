@@ -23,7 +23,16 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
   isDetail: boolean = false;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
-    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt trưởng phòng'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối trưởng phòng'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt lãnh đạo cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối lãnh đạo cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt lãnh đạo cục'},
+    {ma: this.STATUS.TU_CHOI_CBV, giaTri: 'Từ chối cán bộ vụ'},
+    {ma: this.STATUS.DA_DUYET_CBV, giaTri: 'Đã duyệt cán bộ vụ'},
+    {ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt lãnh đạo vụ'},
+    {ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối lãnh đạo vụ'},
+    {ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt lãnh đạo vụ'},
   ];
 
   constructor(

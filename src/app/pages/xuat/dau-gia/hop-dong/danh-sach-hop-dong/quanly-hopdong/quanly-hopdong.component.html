@@ -181,6 +181,7 @@
                             <th>Số hợp đồng</th>
                             <th>Tên hợp đồng</th>
                             <th>Ngày ký hợp đồng</th>
+                            <th>Tên tổ chức/cá nhân trúng ĐG</th>
                             <th>Số lượng (kg)</th>
                             <th>Thành tiền (đ)</th>
                             <th>Số QĐ giao NV XH</th>
@@ -195,6 +196,7 @@
                                 <td>{{data.soHd}}</td>
                                 <td>{{data.tenHd}}</td>
                                 <td>{{data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
+                                <td>{{ data.toChucTrungDg }}</td>
                                 <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{data.soQdGnv}}</td>

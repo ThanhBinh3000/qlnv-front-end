@@ -40,6 +40,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   selected: boolean = false;
   soLuongDeXuat: number;
   donGiaDuocDuyet: number;
+  idDviDtl: number;
 
 
 
@@ -58,7 +59,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.formData = this.fb.group(
       {
         id: [],
-        idDviDtl: [],
         idDtl: [],
         namKh: [],
         soQdPd: [''],
@@ -186,7 +186,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     await this.spinner.show();
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
-    body.children = this.listOfData
+    body.children = this.dataTable
     body.pthucBanTrucTiep = this.radioValue;
     body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
     body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
@@ -218,13 +218,14 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   addRow(): void {
-    if (this.formData.value.idDviDtl) {
-      this.rowItem.idDviDtl = this.formData.value.idDviDtl
+    if (this.idDviDtl) {
+      this.rowItem.idDviDtl = this.idDviDtl
       if (this.validateSoLuong(true)) {
         if (!this.listOfData) {
           this.listOfData = [];
         }
         this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children = [...this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children, this.rowItem];
+        this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children.idDviDtl = this.rowItem.idDviDtl
         this.listOfData = [...this.listOfData, this.rowItem];
         this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
         this.emitDataTable();
@@ -232,7 +233,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       }
     }
   }
-
 
   validateSoLuong(isAdd?) {
     let tongSoLuong = 0
@@ -426,9 +426,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       $event.target.parentElement.classList.add('selectedRow');
       this.listOfData = item.children;
       this.showFromTT = true;
-      this.formData.patchValue({
-        idDviDtl: item.id,
-      })
+      this.idDviDtl = item.id;
       this.emitDataTable()
       this.updateEditCache()
       this.soLuongDeXuat = item.soLuongDeXuat
@@ -438,9 +436,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.selected = true
       this.listOfData = item[0].children;
       this.showFromTT = true;
-      this.formData.patchValue({
-        idDviDtl: item[0].id,
-      })
+      this.idDviDtl = item[0].id;
       this.emitDataTable()
       this.updateEditCache()
       this.soLuongDeXuat = item[0].soLuongDeXuat

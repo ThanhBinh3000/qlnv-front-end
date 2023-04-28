@@ -108,16 +108,11 @@ export class ThongTinKhBanTrucTiepComponent implements OnChanges {
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongDonGia: number = 0;
     this.dataTable.forEach((item) => {
       tongSoLuong += item.soLuongChiCuc;
-      item.children.forEach(child => {
-        tongDonGia += child.donGiaDeXuat;
-      })
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongDonGia: tongDonGia,
     });
   }
 

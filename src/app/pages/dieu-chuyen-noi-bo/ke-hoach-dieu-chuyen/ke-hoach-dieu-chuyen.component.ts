@@ -194,22 +194,27 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   }
 
   checkAllowEdit(data: any): boolean {
-    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC);
+    return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.TU_CHOI_LDCC
+        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC)
+      && this.userService.isAccessPermisson('DCNB_KHDC_THEM');
   }
 
   checkAllowDelete(data: any): boolean {
-    return data.trangThai == this.STATUS.DU_THAO;
+    return data.trangThai == this.STATUS.DU_THAO && this.userService.isAccessPermisson('DCNB_KHDC_XOA');
   }
 
   checkApproveDc(data: any) {
-    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC);
+    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC)
+      && this.userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC', 'DCNB_KHDC_DUYET_TBPTVQT');
   }
 
   checkApproveNdc(data: any) {
-    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC);
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC)
+      && this.userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC', 'DCNB_KHDC_DUYET_TBPTVQT');
   }
 
   checkAllowView(data: any) {
-    return (data.trangThai == this.STATUS.DA_PHANBO_DC_DADUYET_LDCC || data.trangThai == this.STATUS.DA_DUYET_LDCC);
+    return !(this.checkAllowEdit(data) || this.checkAllowDelete(data) || this.checkApproveDc(data) || this.checkApproveNdc(data))
+      && this.userService.isAccessPermisson('DCNB_KHDC_XEM');
   }
 }
