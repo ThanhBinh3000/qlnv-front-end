@@ -17,11 +17,11 @@ import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
 
 @Component({
-  selector: 'app-quyet-dinh-dieu-chuyen',
-  templateUrl: './quyet-dinh-dieu-chuyen.component.html',
-  styleUrls: ['./quyet-dinh-dieu-chuyen.component.scss']
+  selector: 'app-quyet-dinh-dieu-chuyen-tc',
+  templateUrl: './quyet-dinh-dieu-chuyen-tc.component.html',
+  styleUrls: ['./quyet-dinh-dieu-chuyen-tc.component.scss']
 })
-export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnInit {
+export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
@@ -32,7 +32,15 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   loaiVthhCache: string;
 
   CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [];
+  listLoaiDieuChuyen: any[] = [
+    { ma: "ALL", ten: "Tất cả" },
+    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  ];
+  listLoaiDCFilterTable: any[] = [
+    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
+  ];
 
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
@@ -69,11 +77,11 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     this.filterTable = {
       nam: '',
       soQdinh: '',
-      ngayLapKh: '',
-      ngayDuyetTcTu: '',
+      ngayKyQdinh: '',
       loaiDc: '',
       trichYeu: '',
-      tenDvi: '',
+      maDxuat: '',
+      maThop: '',
       tenTrangThai: '',
     };
   }
@@ -120,23 +128,6 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.visibleTab = value;
     });
 
-    if (this.isChiCuc()) this.tabSelected = 1;
-    if (this.tabSelected == 0) {
-      this.listLoaiDieuChuyen = [
-        { ma: "ALL", ten: "Tất cả" },
-        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-      ]
-    }
-
-    if (this.tabSelected == 1) {
-      this.listLoaiDieuChuyen = [
-        { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
-        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-      ]
-    }
-
     try {
       this.initData()
       await this.timKiem();
@@ -153,26 +144,22 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   isShowDS() {
-    if (this.isChiCuc()) return true
-
-    if (this.tabSelected == 0 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else if (this.tabSelected == 1 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+    if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
       return true
     else return false
   }
 
   isTongCuc() {
-    return false//this.userService.isTongCuc()
+    return true//this.userService.isTongCuc()
   }
 
-  isCuc() {
-    return true//this.userService.isCuc()
-  }
+  // isCuc() {
+  //   return false//this.userService.isCuc()
+  // }
 
-  isChiCuc() {
-    return false//this.userService.isChiCuc()
-  }
+  // isChiCuc() {
+  //   return false//this.userService.isChiCuc()
+  // }
 
   selectTab(tab: number) {
     if (this.isDetail) {
@@ -223,14 +210,12 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     await this.search();
   }
 
-  exportData() {
-    debugger
+  exportDataTC() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
 
         let body = this.formData.value;
-        debugger
         if (this.formData.value.ngayDuyetTc) {
           body.ngayDuyetTcTu = body.ngayDuyetTc[0];
           body.ngayDuyetTcDen = body.ngayDuyetTc[1];
@@ -242,7 +227,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
         this.quyetDinhDieuChuyenTCService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen.xlsx'),
+            saveAs(blob, 'quyet-dinh-dieu-chuyen-tc.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

@@ -14,14 +14,14 @@ import { isEmpty } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
-import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 
 @Component({
-  selector: 'app-quyet-dinh-dieu-chuyen',
-  templateUrl: './quyet-dinh-dieu-chuyen.component.html',
-  styleUrls: ['./quyet-dinh-dieu-chuyen.component.scss']
+  selector: 'app-quyet-dinh-dieu-chuyen-cuc',
+  templateUrl: './quyet-dinh-dieu-chuyen-cuc.component.html',
+  styleUrls: ['./quyet-dinh-dieu-chuyen-cuc.component.scss']
 })
-export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnInit {
+export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements OnInit {
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
@@ -32,7 +32,11 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   loaiVthhCache: string;
 
   CHUC_NANG = CHUC_NANG;
-  listLoaiDieuChuyen: any[] = [];
+  listLoaiDieuChuyen: any[] = [
+    { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
+    { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
+    { ma: "CUC", ten: "Giữa 2 cục DTNN KV" }
+  ];
 
   listLoaiHangHoa: any[] = [];
   listHangHoaAll: any[] = [];
@@ -55,9 +59,9 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenTCService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhDieuChuyenCucService);
     this.formData = this.fb.group({
       nam: null,
       soQdinh: null,
@@ -69,11 +73,11 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     this.filterTable = {
       nam: '',
       soQdinh: '',
-      ngayLapKh: '',
-      ngayDuyetTcTu: '',
+      ngayKyQdinh: '',
       loaiDc: '',
+      maThop: '',
       trichYeu: '',
-      tenDvi: '',
+      maDxuat: '',
       tenTrangThai: '',
     };
   }
@@ -85,6 +89,62 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   selectedId: number = 0;
   isVatTu: boolean = false;
   isView = false;
+
+
+
+  async ngOnInit() {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
+
+    try {
+      this.initData()
+      await this.timKiem();
+      // await this.loadDsVthh();
+      await this.spinner.hide();
+
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+
+
+  }
+
+  async initData() {
+    this.userInfo = this.userService.getUserLogin();
+    this.userdetail.maDvi = this.userInfo.MA_DVI;
+    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+  }
+
+  isShowDS() {
+    if (this.isChiCuc()) return true
+    else if (this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
+      return true
+    else return false
+  }
+
+  isTongCuc() {
+    return false//this.userService.isTongCuc()
+  }
+
+  isCuc() {
+    return true//this.userService.isCuc()
+  }
+
+  isChiCuc() {
+    return false//this.userService.isChiCuc()
+  }
+
+  selectTab(tab: number) {
+    if (this.isDetail) {
+      this.quayLai()
+    }
+    this.tabSelected = tab;
+  }
+
+
 
   disabledStartNgayLapKh = (startValue: Date): boolean => {
     if (startValue && this.formData.value.ngayLapKhDen) {
@@ -115,78 +175,6 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     return endValue.getTime() <= this.formData.value.ngayDuyetLdcDen.getTime();
   };
 
-  async ngOnInit() {
-    this.isVisibleChangeTab$.subscribe((value: boolean) => {
-      this.visibleTab = value;
-    });
-
-    if (this.isChiCuc()) this.tabSelected = 1;
-    if (this.tabSelected == 0) {
-      this.listLoaiDieuChuyen = [
-        { ma: "ALL", ten: "Tất cả" },
-        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-      ]
-    }
-
-    if (this.tabSelected == 1) {
-      this.listLoaiDieuChuyen = [
-        { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
-        { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
-        { ma: "CUC", ten: "Giữa 2 cục DTNN KV" },
-      ]
-    }
-
-    try {
-      this.initData()
-      await this.timKiem();
-      // await this.loadDsVthh();
-      await this.spinner.hide();
-
-    } catch (e) {
-      console.log('error: ', e)
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-
-
-  }
-
-  isShowDS() {
-    if (this.isChiCuc()) return true
-
-    if (this.tabSelected == 0 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else if (this.tabSelected == 1 && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_CUC') && this.userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM'))
-      return true
-    else return false
-  }
-
-  isTongCuc() {
-    return false//this.userService.isTongCuc()
-  }
-
-  isCuc() {
-    return true//this.userService.isCuc()
-  }
-
-  isChiCuc() {
-    return false//this.userService.isChiCuc()
-  }
-
-  selectTab(tab: number) {
-    if (this.isDetail) {
-      this.quayLai()
-    }
-    this.tabSelected = tab;
-  }
-
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.userdetail.maDvi = this.userInfo.MA_DVI;
-    this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-  }
-
   // async loadDsVthh() {
   //   let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
   //   if (res.msg == MESSAGE.SUCCESS) {
@@ -196,18 +184,18 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   // }
 
   async changeHangHoa(event: any) {
-    if (event) {
-      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+    // if (event) {
+    //   this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listChungLoaiHangHoa = res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
+    //   let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    //   if (res.msg == MESSAGE.SUCCESS) {
+    //     if (res.data) {
+    //       this.listChungLoaiHangHoa = res.data;
+    //     }
+    //   } else {
+    //     this.notification.error(MESSAGE.ERROR, res.msg);
+    //   }
+    // }
   }
 
   async timKiem() {
@@ -223,7 +211,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     await this.search();
   }
 
-  exportData() {
+  exportDataCuc() {
     debugger
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -239,10 +227,10 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
           body.ngayHieuLucTu = body.ngayHieuLuc[0];
           body.ngayHieuLucDen = body.ngayHieuLuc[1];
         }
-        this.quyetDinhDieuChuyenTCService
+        this.quyetDinhDieuChuyenCucService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chuyen.xlsx'),
+            saveAs(blob, 'quyet-dinh-dieu-chuyen-cuc.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
