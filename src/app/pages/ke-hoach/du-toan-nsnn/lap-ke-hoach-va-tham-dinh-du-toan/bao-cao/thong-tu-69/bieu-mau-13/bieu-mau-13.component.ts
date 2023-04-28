@@ -133,6 +133,12 @@ export class BieuMau13Component implements OnInit {
                 this.sum(this.lstCtietBcao[index].stt);
             })
         }
+        if (this.formDetail.trangThai == '3') {
+            this.lstCtietBcao.forEach(item => {
+                item.clechTranChiVsNcauChiN = sumNumber([item.tranChiN, -item.ncauChiN])
+            })
+        }
+
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
