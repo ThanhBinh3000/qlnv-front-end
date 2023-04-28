@@ -72,6 +72,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   soLuong: any;
   thanhTien: any;
   donViTinh: any;
+  maHauTo: any = '/' + dayjs().year() + '-QĐGNVCT';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -142,11 +143,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            //phan quyen du lieu
+            res.data.soQd = res.data.soQd.split('/')[0]
             this.formData.patchValue(res.data);
-            if (this.formData.value.soQd) {
-              this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
-            }
+
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -300,12 +299,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   async save() {
-    this.formData.disable()
-    let rs = await this.createUpdate(this.formData.value);
-    this.formData.enable()
-    if (rs) {
-      this.goBack();
-    }
+    this.formData.disable();
+    let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
+    await this.createUpdate(body);
+    this.formData.enable();
+  }
+
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
+    await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
   onExpandStringChange(id: string, checked: boolean): void {
