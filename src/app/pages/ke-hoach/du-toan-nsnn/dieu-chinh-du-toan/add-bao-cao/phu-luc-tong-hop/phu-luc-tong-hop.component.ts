@@ -64,6 +64,7 @@ export class PhuLucTongHopComponent implements OnInit {
   isSynthetic: any;
   amount = AMOUNT;
   total: ItemData = new ItemData();
+  scrollX: string;
   constructor(
     private modal: NzModalService,
     private _modalRef: NzModalRef,
@@ -84,7 +85,7 @@ export class PhuLucTongHopComponent implements OnInit {
   async initialization() {
     this.spinner.show();
     console.log(this.dataInfo);
-    
+
     this.maDvi = this.dataInfo.maDvi;
 
     // lấy danh sách đơn vị
@@ -107,7 +108,7 @@ export class PhuLucTongHopComponent implements OnInit {
     this.isSynthetic = this.dataInfo?.isSynthetic;
     this.statusBtnOk = this.dataInfo?.statusBtnOk;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
-    
+
 
     this.lstCtietBcao = this.dataInfo.data.lstCtietDchinh;
     if (this.isSynthetic && this.isSynthetic == true) {
@@ -193,6 +194,12 @@ export class PhuLucTongHopComponent implements OnInit {
 
 
     // console.log(lstCtietTemp);
+
+    if (this.status) {
+      this.scrollX = (350 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+    } else {
+      this.scrollX = (350 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
+    }
 
     this.tinhTong();
     this.getTotal();
@@ -297,9 +304,9 @@ export class PhuLucTongHopComponent implements OnInit {
       this.lstCtietBcao[index].tongDchinhGiam = 0
       this.lstCtietBcao[index].tongDchinhTang = 0
       this.lstCtietBcao[index].child.forEach(item => {
-        if(item.dtoanVuTvqtDnghi < 0){
+        if (item.dtoanVuTvqtDnghi < 0) {
           this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
-        }else{
+        } else {
           this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);
         }
       })
@@ -536,7 +543,7 @@ export class PhuLucTongHopComponent implements OnInit {
       this.lstCtietBcao[index].tongDchinhGiam = 0
       this.lstCtietBcao[index].tongDchinhTang = 0
       this.lstCtietBcao[index].child.forEach(item => {
-        if(item.dtoanVuTvqtDnghi < 0){
+        if (item.dtoanVuTvqtDnghi < 0) {
           this.lstCtietBcao[index].tongDchinhGiam += Number(item.dtoanVuTvqtDnghi);
         } else {
           this.lstCtietBcao[index].tongDchinhTang += Number(item.dtoanVuTvqtDnghi);

@@ -33,10 +33,10 @@
         </div>
       </div>
 
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowSpan="4">STT</th>
+            <th rowSpan="4" nzWidth="50px">STT</th>
             <th rowSpan="4" nzWidth="300px">Tên đơn vị(Biên chế thực tế có mặt)</th>
             <th rowSpan="4">Biên chế {{namBcao}} được giao</th>
             <th rowSpan="4">Biên chế có mặt</th>

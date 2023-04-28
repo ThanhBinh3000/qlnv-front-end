@@ -342,8 +342,7 @@
       </nz-card>
       <ng-template #extraTemplate>
         <div class="buttons">
-          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)"
-            [hidden]="statusGiaoToanBo || !isDvi">
+          <button type="button" class="btn btn-main" (click)="giaoSoTranChi(null)" [hidden]="statusGiaoToanBo || isDvi">
             <span>Giao toàn bộ</span>
           </button>
           <button type="button" class="btn btn-sub" *ngIf="!status">

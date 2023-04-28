@@ -196,6 +196,7 @@ export class PhuLuc6Component implements OnInit {
       }
     )
   };
+
   async getDinhMucPL2X() {
     const request = {
       loaiDinhMuc: '02',

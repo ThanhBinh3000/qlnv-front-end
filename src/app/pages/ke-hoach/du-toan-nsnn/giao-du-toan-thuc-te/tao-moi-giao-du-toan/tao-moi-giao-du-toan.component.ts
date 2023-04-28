@@ -341,7 +341,8 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 	statusDvi() {
-		if (this.userInfo.DON_VI.tenVietTat.includes("CDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
+		console.log(this.userInfo)
+		if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 			return true
 		} else {
 			return false

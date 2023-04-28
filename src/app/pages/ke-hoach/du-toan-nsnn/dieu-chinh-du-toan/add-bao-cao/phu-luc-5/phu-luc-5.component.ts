@@ -93,6 +93,9 @@ export class PhuLuc5Component implements OnInit {
   dToanVuGiam: number;
   total: ItemData = new ItemData();
   namBcao: number;
+  scrollX: string;
+
+  BOX_NUMBER_WIDTH = 400;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -158,6 +161,13 @@ export class PhuLuc5Component implements OnInit {
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+
+    if (this.status) {
+      this.scrollX = (550 + this.BOX_NUMBER_WIDTH * 8).toString() + 'px';
+    } else {
+      this.scrollX = (500 + this.BOX_NUMBER_WIDTH * 8).toString() + 'px';
+    }
+
     this.sortByIndex();
     this.sum1();
     this.tinhTong();

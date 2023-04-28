@@ -20,12 +20,12 @@
         </div>
         <div nz-col [nzSpan]="18"></div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
-          <!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+          <!-- <button type="button" class="btn btn-main" (click)="deleteAllChecked()" *ngIf="!status">
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
           <ng-container>
-            <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
+            <button type="button" class="btn btn-main" (click)="selectGoods()" *ngIf="!status">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
@@ -33,20 +33,20 @@
         </div>
       </div>
 
-      <nz-table nzBordered class="table__body">
+      <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
         <thead>
           <tr>
-            <th rowSpan="2">STT</th>
+            <th rowSpan="2" nzWidth="50px">STT</th>
             <th rowSpan="2" nzWidth="300px">Nội dung</th>
             <th rowSpan="2">Loại Khoản</th>
             <th rowSpan="2">Nhu cầu dự toán kinh phí năm {{namBcao}}</th>
             <th colSpan="3">Dự toán kinh phí được sử dụng trong năm</th>
             <th rowSpan="2">Kinh phí ước thực hiện cả năm</th>
             <th rowSpan="2">Dự toán điều chỉnh Tăng(+)/Giảm(-) </th>
-            <th rowSpan="2" *ngIf="viewRecommendedValue" >Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
-            <th rowSpan="2" [hidden]="status">
+            <th rowSpan="2" *ngIf="viewRecommendedValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
+            <th rowSpan="2" *ngIf="!status">
             </th>
-            <th rowSpan="2"  *ngIf="!status || editRecommendedValue">
+            <th rowSpan="2" *ngIf="!status || editRecommendedValue">
             </th>
           </tr>
           <tr>
@@ -65,8 +65,8 @@
             <th>5</th>
             <th>6 = 1 - 4</th>
             <th *ngIf="viewRecommendedValue">7</th>
-            <th [hidden]="status"></th>
-            <th  *ngIf="!status || editRecommendedValue"></th>
+            <th *ngIf="!status"></th>
+            <th *ngIf="!status || editRecommendedValue"></th>
           </tr>
         </thead>
         <tbody>
@@ -92,10 +92,10 @@
               <td *ngIf="viewRecommendedValue">
                 {{displayValue(data.dtoanVuTvqtDnghi)}}
               </td>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td  *ngIf="!status || editRecommendedValue">
+              <td *ngIf="!status || editRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
             </ng-container>
@@ -119,7 +119,7 @@
                 <td>
                   <!-- <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                     (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
-                    <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
+                  <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                     [options]="amount1" />
                 </td>
               </ng-container>
@@ -144,14 +144,14 @@
                     (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                 </td>
                 <td>
-                    {{displayValue(editCache[data.id].data.dtoanDchinh)}}
+                  {{displayValue(editCache[data.id].data.dtoanDchinh)}}
                 </td>
                 <td *ngIf="viewRecommendedValue">
                   <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.dtoanVuTvqtDnghi"
                     [options]="amount1" />
                 </td>
               </ng-template>
-              <td [hidden]="status">
+              <td *ngIf="!status">
                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td [hidden]="status && !viewRecommendedValue">
