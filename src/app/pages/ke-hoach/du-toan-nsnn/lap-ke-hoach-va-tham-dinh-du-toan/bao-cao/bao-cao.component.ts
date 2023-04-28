@@ -1084,7 +1084,7 @@ export class BaoCaoComponent implements OnInit {
             case 'TT342_14':
                 nzContent = BieuMau140Component;
                 //bieu mau 15.1
-                if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+                if (Utils.statusSave.includes(this.baoCao.trangThai) && !isSynthetic) {
                     dataInfo.extraData = [];
                     const data151 = this.baoCao.lstLapThamDinhs.find(item => item.maBieuMau == 'TT342_15.1');
                     if (data151 && data151?.trangThai != '3') {
