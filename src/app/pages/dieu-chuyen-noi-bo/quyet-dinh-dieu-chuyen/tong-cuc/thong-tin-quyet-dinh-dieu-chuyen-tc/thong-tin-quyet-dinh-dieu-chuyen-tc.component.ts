@@ -560,7 +560,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       nzComponentParams: {
         dataTable: this.listDanhSachDeXuat,
         dataHeader: ['Số tờ trình đề xuất', 'Loại hàng hóa', 'loại hình nhập xuất'],
-        dataColumn: ['soDx', 'tenLoaiVthh', 'loaiNhapXuat']
+        dataColumn: ['id', 'tenLoaiVthh', 'loaiNhapXuat']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
