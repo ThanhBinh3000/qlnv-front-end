@@ -97,6 +97,7 @@
           <th class="text-center" nzWidth="120px">Mã công trình</th>
           <th class="text-center">Tên công trình</th>
           <th class="text-center">Loại công trình</th>
+          <th class="text-center">Khối dự án/Công trình</th>
           <th class="text-center">Thuộc chi cục</th>
           <th class="text-center">Điểm kho</th>
           <th class="text-center" nzWidth="120px">Năm thực hiện</th>
@@ -137,6 +138,12 @@
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiCongTrinh"
                      (input)="filterInTable('tenLoaiCongTrinh',filterTable.tenLoaiCongTrinh)" size="small" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.khoi"
+                     (input)="filterInTable('khoi',filterTable.khoi)"  />
             </nz-input-group>
           </th>
           <th>
@@ -196,6 +203,7 @@
           <td>{{ data.maCongTrinh }}</td>
           <td>{{ data.tenCongTrinh}}</td>
           <td>{{ data.tenLoaiCongTrinh}}</td>
+          <td>{{ data.tenKhoi}}</td>
           <td>{{ data.tenChiCuc}}</td>
           <td>{{ data.tenDiemKho }}</td>
           <td class="text-center">{{ data.tgThucHien }}</td>

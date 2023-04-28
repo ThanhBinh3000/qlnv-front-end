@@ -70,11 +70,11 @@ export const NHAP_ROUTE_LIST = [
     dropdown: 'danh-muc-dvi-lien-quan',
     idHover: 'danh-muc-dvi-lien-quan',
   },
-  // {
-  //   icon: 'htvbdh_tcdt_icon-common',
-  //   title: 'Danh mục Thủ kho',
-  //   url: `/${NHAP_MAIN_ROUTE}/danh-muc-thu-kho`,
-  //   dropdown: 'danh-muc-thu-kho',
-  //   idHover: 'danh-muc-thu-kho',
-  // },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục Thủ kho',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-thu-kho`,
+    dropdown: 'danh-muc-thu-kho',
+    idHover: 'danh-muc-thu-kho',
+  },
 ];
