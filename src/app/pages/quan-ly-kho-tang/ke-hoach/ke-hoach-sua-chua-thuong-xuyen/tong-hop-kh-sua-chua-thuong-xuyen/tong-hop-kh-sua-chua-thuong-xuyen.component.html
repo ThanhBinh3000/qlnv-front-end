@@ -65,7 +65,6 @@
           <th width="150px">Mã tổng hợp</th>
           <th width="150px">Ngày tổng hợp</th>
           <th width="">Nội dung tổng hợp</th>
-          <th width="150px">Trạng thái</th>
           <th width="200px">Số QĐ PD kế hoạch, danh mục</th>
           <th width="150px">Ngày ký QĐ</th>
           <th width="150px">Trạng thái</th>
@@ -113,14 +112,6 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
-                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
-                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDungTh"
                      (input)="filterInTable('noiDungTh',filterTable.noiDungTh)"/>
             </nz-input-group>
@@ -156,8 +147,8 @@
           <td>{{ data.soToTrinh }}</td>
           <td>{{ data.ngayTaoTt | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.id }}</td>
-          <td>{{ data.thoiGianTh }}</td>
-          <td>{{ data.noiDung }}</td>
+          <td>{{ data.thoiGianTh |date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.noiDungTh }}</td>
           <td>{{ data.soQdPdKhDm }}</td>
           <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThai }}</td>
