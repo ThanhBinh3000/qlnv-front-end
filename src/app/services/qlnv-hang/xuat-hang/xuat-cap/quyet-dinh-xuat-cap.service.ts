@@ -9,6 +9,6 @@ export class QuyetDinhXuatCapService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'cuu-tro/xuat-cap/quyet-dinh', '');
+    super(httpClient, 'xuat-hang/xuat-cap/quyet-dinh', '');
   }
 }

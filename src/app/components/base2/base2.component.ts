@@ -361,7 +361,7 @@ export class Base2Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    this.spinner.show();
+    await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -376,23 +376,19 @@ export class Base2Component implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (body.id && body.id > 0) {
           this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
-          this.spinner.hide();
           return res.data;
         } else {
           this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
-          this.spinner.hide();
           return res.data;
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
         return null;
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
 
   }
