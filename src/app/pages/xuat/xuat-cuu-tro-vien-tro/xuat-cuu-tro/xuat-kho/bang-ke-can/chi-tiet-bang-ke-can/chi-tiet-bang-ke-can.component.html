@@ -150,7 +150,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngày xuất</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Ngày xuất</nz-form-label>
             <nz-form-control nz-col>
               <nz-date-picker class="search__input" formControlName="ngayXuat" [nzDisabled]="isView"
                 nzFormat="dd/MM/yyyy">
@@ -282,8 +282,8 @@
             <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
               <td>{{i + 1}}</td>
               <td>{{item.maCan}}</td>
-              <td>{{item.trongLuongBaoBi|number: '1.0-1'}}</td>
-              <td>{{item.trongLuongCaBi|number: '1.0-1'}}</td>
+              <td>{{item.trongLuongBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
+              <td>{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
                   <i class="fa fa-pencil"></i>
@@ -318,14 +318,6 @@
             </ng-template>
           </tr>
         </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td>Tổng số lượng xuất viện trợ, cứu trợ</td>
-            <td>{{tongSLbangKeDtl|number: '1.0-1'}}</td>
-            <td></td>
-          </tr>
-        </tfoot>
       </nz-table>
     </nz-card>
     <div nz-row [nzGutter]="24">
@@ -336,7 +328,7 @@
           <nz-form-control nz-col style="margin-top: 5px;">
             <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
               [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" [(ngModel)]="bangKeDtlCreate.soLuong"
-              [(ngModel)]="formData.value.tongTrongLuongBaoBi" (ngModelChange)="trongLuongTruBi()" nzDisabled="isView">
+              [(ngModel)]="formData.value.tongTrongLuongBaoBi" (ngModelChange)="trongLuongTruBi()" [nzDisabled]="isView">
             </nz-input-number>
           </nz-form-control>
         </nz-form-item>
@@ -408,7 +400,7 @@
             <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
               <td>{{i + 1}}</td>
               <td>{{item.soSerial}}</td>
-              <td>{{item.soLuong|number: '1.0-1': 'vi_VN'}}</td>
+              <td>{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
               <td>
                 <a (click)="editRow(i)" *ngIf="!isView">
                   <i class="fa fa-pencil"></i>
@@ -442,7 +434,7 @@
           <tr>
             <td></td>
             <td>Tổng </td>
-            <td>{{tongSl|number: '1.0-1'}}</td>
+            <td>{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
             <td></td>
           </tr>
         </tfoot>
