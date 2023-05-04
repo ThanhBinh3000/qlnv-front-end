@@ -71,11 +71,15 @@
     <div class="group-button">
       <h3>DANH SÁCH DANH MỤC SỬA CHỮA THƯỜNG XUYÊN</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub ml-2" (click)="exportData()">
+        <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_XOA')" (click)="deleteMulti()" type="button" class="btn btn-sub btn-xoa">
+          <i class="fa fa-trash-o do"></i>
+          <span>Xóa</span>
+        </button>
+        <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" *ngIf="userService.isCuc()" (click)="openDialog(null, false)">
+        <button type="button" class="btn btn-sub xanh" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_THEM')" (click)="openDialog(null, false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -212,14 +216,14 @@
           <td>{{ data.soQdPheDuyet  }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" nzRight>
-            <a (click)="openDialog(data, true)">
+            <a (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="openDialog(data, false)" *ngIf="userService.isCuc()">
+              (click)="openDialog(data, false)" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_THEM')">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc()">
+            <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_XOA')">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

@@ -28,7 +28,6 @@ import * as uuid from "uuid";
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import moment from "moment";
-import {log} from "ng-zorro-antd/core/logger";
 
 @Component({
   selector: 'app-thong-tin',
@@ -44,6 +43,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Output()
+  sendListAllDviTsan = new EventEmitter<any>();
   @Input() isView: boolean;
   listLoaiHopDong: any[] = [];
   listDviTsan: any[] = [];
@@ -426,6 +427,8 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       })
     })
     this.listAllDviTsan = this.listDviTsan;
+    this.sendListAllDviTsan.emit(this.listAllDviTsan);
+    console.log(this.listAllDviTsan, "this.listAllDviTsan")
     this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => {
         return s1.maDviTsan.split(',').includes(s.maDviTsan) && s1.toChucTrungDg.includes(s.toChucCaNhan);
       })
@@ -600,7 +603,5 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     }*/
     this.ngOnInit();
   }
-
-
 }
 
