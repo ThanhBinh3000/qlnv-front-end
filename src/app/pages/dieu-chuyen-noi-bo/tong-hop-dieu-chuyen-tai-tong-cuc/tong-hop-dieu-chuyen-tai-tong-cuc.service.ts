@@ -30,10 +30,6 @@ export class TongHopDieuChuyenCapTongCucService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat-tong-cuc`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
-    guiYeuCauXacDinhDiemNhap(body): Promise<OldResponseData> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/yeu-cau-xd`;
-        return this._httpClient.post<OldResponseData>(url, body).toPromise();
-    }
     search(body) {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu-tong-cuc`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();

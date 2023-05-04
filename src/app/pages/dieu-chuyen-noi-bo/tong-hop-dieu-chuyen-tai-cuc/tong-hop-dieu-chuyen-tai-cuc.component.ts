@@ -43,6 +43,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
         { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
         { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
+        { ma: this.STATUS.DA_PHANBO_DC_CHODUYET_LDC, giaTri: "Y/c chi cục xác định điểm nhập" }
     ];
     listLoaiDieuChuyen: any[] = [
         // { value: "ALL", giaTri: "Tất cả" },
@@ -60,7 +61,8 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         "02": "Từ chối -tp",
         "03": "Chờ duyệt - lđ cục",
         "04": "Từ chối - lđ cục",
-        "05": "Đã duyệt - lđ cục"
+        "05": "Đã duyệt - lđ cục",
+        "65": "Y/c chi cục xác định điểm nhập"
     }
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
@@ -102,7 +104,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         this.filterTable = {
             namKeHoach: '',
             tenDvi: '',
-            maTongHop: '',
+            id: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
             thTuNgay: '',
@@ -205,7 +207,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     };
     checkRole(trangThai) {
         let check = true;
-        if ((this.userService.isTongCuc() && trangThai == STATUS.DU_THAO || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_TP)) {
+        if ((this.userService.isCuc() && trangThai == STATUS.DU_THAO || this.userService.isCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isCuc() && trangThai == STATUS.TU_CHOI_TP)) {
             check = false;
         }
         return check;

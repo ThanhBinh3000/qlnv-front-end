@@ -27,7 +27,7 @@ export class TongHopDieuChuyenService extends BaseService {
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
     guiYeuCauXacDinhDiemNhap(body): Promise<OldResponseData> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/yeu-cau-xd`;
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/yeu-cau-xac-dinh-diem-nhap`;
         return this._httpClient.post<OldResponseData>(url, body).toPromise();
     }
     search(body) {

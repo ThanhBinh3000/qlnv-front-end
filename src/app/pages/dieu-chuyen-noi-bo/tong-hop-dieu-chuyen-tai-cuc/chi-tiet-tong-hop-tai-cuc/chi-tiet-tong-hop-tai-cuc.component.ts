@@ -73,7 +73,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
     maHauTo: string;
     isTongHop: boolean = false;
-    yeuCauSuccess: boolean = false;
     daXdinhDiemNhap: boolean = false;
 
     idKeHoachDC: any = null;
@@ -313,7 +312,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         "02": "Từ chối -tp",
         "03": "Chờ duyệt - lđ cục",
         "04": "Từ chối - lđ cục",
-        "05": "Đã duyệt - lđ cục"
+        "05": "Đã duyệt - lđ cục",
+        "65": "Y/c chi cục xác định điểm nhập"
     }
     constructor(httpClient: HttpClient,
         storageService: StorageService,
@@ -427,13 +427,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         this.isTongHop = false;
         this.formData.patchValue({ thoiGianTongHop: '' })
     }
-    yeuCauChiCucNhan = ($event) => {
+    yeuCauXacDinhDiemNhap = async ($event) => {
         $event.stopPropagation();
-        //call api yêu cầu chi cục xác định điểm nhập
-        this.formData.controls["trangThai"].setValue("00");
-        this.formData.controls["tenTrangThai"].setValue("Dự thảo");
-        this.yeuCauSuccess = true;
-        this.save(false)
+        await this.save(false);
+        this.tongHopDieuChuyenService.guiYeuCauXacDinhDiemNhap({ id: this.formData.value.id })
     }
     expandAll() {
         // this.phuongAnView.forEach(s => {
@@ -502,14 +499,14 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             }
             else {
                 data = await this.tongHopDieuChuyenService.themTHCuc(body);
-            }
+            };
             if (data.statusCode == 0) {
                 this.isAddNew = false;
                 this.isViewDetail = false;
                 this.isDetail = true;
                 this.isEdit = true;
                 this.isTongHop = true;
-                data?.data?.id && this.formData.patchValue({ ...data?.data })
+                data?.data?.id && this.formData.patchValue({ ...data?.data, maTongHop: data.data.id })
 
                 if (isGuiDuyet) {
                     if (this.formData.valid) {
@@ -533,7 +530,6 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
 
     }
     async tongHop() {
-        this.yeuCauSuccess = false;
         this.groupData2Cuc = [];
         this.dataTable2Cuc = [];
         this.dataTable2ChiCuc = [];
@@ -650,6 +646,12 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                                 const maLoKho = vs.find(s => s?.maLoKho == ks);
                                 const rsss = chain(vs).groupBy("id").map((x, ix) => {
                                     const ids = x.find(f => f.id == ix);
+                                    //
+                                    const hasDiemKhoNhan = x.some(f => f.maDiemKhoNhan);
+                                    if (!hasDiemKhoNhan) return {
+                                        ...ids
+                                    }
+                                    //
                                     const rssx = chain(x).groupBy("maDiemKhoNhan")?.map((m, im) => {
                                         const maDiemKhoNhan = m.find(f => f.maDiemKho == im);
                                         return {

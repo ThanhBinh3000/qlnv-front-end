@@ -115,8 +115,8 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                                    (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.id"
+                                    (input)="filterInTable('id',filterTable.id)" size="small" />
                             </nz-input-group>
 
                         </th>
@@ -161,12 +161,12 @@
                     <tr *ngFor="let data of dataTable; let i = index">
                         <th width="45px" *ngIf="!viewOnly">
                             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                                [nzDisabled]="data.trangThai && data.trangThai != STATUS.DU_THAO"></label>
                         </th>
                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td *ngIf="userService.isTongCuc()">{{data.tenDvi}}</td>
-                        <td>{{ data.maTongHop }}</td>
+                        <td>{{ data.id }}</td>
                         <td>{{ LIST_DIEU_CHUYEN[data.loaiDieuChuyen]}}</td>
                         <td>{{ data.ngayTongHop|date:"dd/MM/yyyy"}}</td>
                         <td>{{ data.trichYeu }}</td>
@@ -175,11 +175,11 @@
                             <a (click)="viewDetail(data.id, true)" *ngIf="this.checkPermission(null)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai) "
+                            <a *ngIf="!viewOnly && this.checkPermission(null) && !checkRole(data.trangThai) "
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && checkRole(data.trangThai)"
+                            <a *ngIf="!viewOnly && this.checkPermission(null) && (!data.trangThai || data.trangThai == STATUS.DU_THAO)"
                                 (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>

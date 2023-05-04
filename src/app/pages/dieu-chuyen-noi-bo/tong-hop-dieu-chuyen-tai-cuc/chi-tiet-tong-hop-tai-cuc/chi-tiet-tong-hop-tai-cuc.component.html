@@ -16,6 +16,11 @@
                     <i class="fa fa-arrow-left"></i>
                     <span>Quay lại</span>
                 </button>
+                <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
+                    *ngIf="!isViewDetail && !daXdinhDiemNhap && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC)">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Y/c Chi cục xác định điểm nhập ĐC</span>
+                </button>
                 <button
                     *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && checkPermission(null)"
                     type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
@@ -76,7 +81,7 @@
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn năm kế hoạch">
                                 <nz-select formControlName="namKeHoach" [nzDisabled]="isViewDetail"
-                                    (ngModelChange)="handleChangeLoaiDC($event)">
+                                    (change)="handleChangeLoaiDC($event)">
                                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                         [nzLabel]="p.text"></nz-option>
                                 </nz-select>
@@ -89,7 +94,7 @@
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn loại điều chuyển">
                                 <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup" nzRequired
-                                    (ngModelChange)="handleChangeLoaiDC($event)" [nzDisabled]="isViewDetail">
+                                    (change)="handleChangeLoaiDC($event)" [nzDisabled]="isViewDetail">
                                     <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
                                     <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
                                     <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
@@ -293,11 +298,11 @@
     <div class="bg-trang">
         <nz-card class="flex-card p-lr16">
             <ng-template #extraTpl>
-                <button type="button" id="id-btn-main" class="btn btn-main" (click)=" yeuCauChiCucNhan($event)"
+                <!-- <button type="button" id="id-btn-main" class="btn btn-main" (click)=" yeuCauChiCucNhan($event)"
                     *ngIf="!isViewDetail && !daXdinhDiemNhap">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Y/c Chi cục xác định điểm nhập ĐC</span>
-                </button>
+                </button> -->
             </ng-template>
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'KẾ HOẠCH ĐIỀU CHUYỂN GIỮA 2 CHI CỤC TRONG CÙNG 1 CỤC'" [nzActive]="true"
