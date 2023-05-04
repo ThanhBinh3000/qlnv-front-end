@@ -45,7 +45,8 @@ export class DeXuatKeHoachComponent implements OnInit {
   searchFilter = {
     namKeHoach: "",
     soCongVan: "",
-    maDvi: "",
+    maDvi: null,
+    capDvi: "",
     ngayDuyetTu: "",
     ngayDuyetDen: "",
     namBatDau: "",
@@ -147,7 +148,8 @@ export class DeXuatKeHoachComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1
       },
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maDvi,
+      capDvi:this.userInfo.CAP_DVI
     };
     let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -243,6 +245,7 @@ export class DeXuatKeHoachComponent implements OnInit {
       namKeHoach: "",
       soCongVan: "",
       maDvi: "",
+      capDvi: "",
       ngayDuyetTu: "",
       ngayDuyetDen: "",
       namBatDau: "",
@@ -296,7 +299,8 @@ export class DeXuatKeHoachComponent implements OnInit {
             limit: this.pageSize,
             page: this.page - 1
           },
-          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+          capDvi: this.userInfo.CAP_DVI
         };
         this.deXuatTrungHanService
           .export(body)

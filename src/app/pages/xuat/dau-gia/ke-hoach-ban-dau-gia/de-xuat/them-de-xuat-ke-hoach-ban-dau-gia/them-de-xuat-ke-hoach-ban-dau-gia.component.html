@@ -50,18 +50,6 @@
         <span>Lưu</span>
       </button>
     </ng-container>
-    <!-- <ng-container *ngIf="userService.isTongCuc()">
-      <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
-        (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub xanh-nhat"
-        (click)="guiDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-    </ng-container> -->
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -426,7 +414,7 @@
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
-              <th nzWidth="50px">Hành động</th>
+              <th nzWidth="50px" *ngIf="!isDisable()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -448,11 +436,11 @@
                   number : '1.0-1' :
                   'vi_VN'}}
                 </td>
-                <td>
-                  <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
+                <td *ngIf="!isDisable()">
+                  <a (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="!isDisable()" (click)="deleteRow(i)">
+                  <a (click)="deleteRow(i)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -476,10 +464,11 @@
                   <td>{{children.soLuongDeXuat * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 |
                     number :
                     '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet |
+                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet *
+                    formData.value.khoanTienDatTruoc / 100 |
                     number :
                     '1.0-1' : 'vi_VN' }}</td>
-                  <td class="text-right">
+                  <td class="text-right" *ngIf="!isDisable()">
                   </td>
                 </tr>
               </ng-container>

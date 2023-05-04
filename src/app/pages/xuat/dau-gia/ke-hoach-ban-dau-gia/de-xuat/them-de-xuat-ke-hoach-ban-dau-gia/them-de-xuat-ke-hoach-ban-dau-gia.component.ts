@@ -30,6 +30,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
 export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implements OnInit, OnChanges {
+
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -39,7 +40,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
@@ -75,7 +75,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       soQdCtieu: [''],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
       ngayPduyet: [''],
-
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
@@ -85,7 +84,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       thoiGianDuKien: [''],
       tgianDkienTu: [''],
       tgianDkienDen: [''],
-
       tgianTtoan: [],
       tgianTtoanGhiChu: [''],
       pthucTtoan: [''],
@@ -281,7 +279,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
-
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
@@ -339,18 +336,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   validateAddDiaDiem(dataAdd): boolean {
-    let maDviTsan = []
     let data = this.dataTable.filter(item => item.maDvi == dataAdd.maDvi);
-    this.dataTable.forEach((item) => {
-      dataAdd.children.forEach((child) => {
-        maDviTsan = item.children.filter(s => s.maDviTsan == child.maDviTsan)
-      })
-    })
     if (data.length > 0) {
       this.notification.error(MESSAGE.ERROR, "Chi cục " + data[0].tenDvi + " đã tồn tại. Vui lòng thêm chi cục khác");
-      return false;
-    } else if (maDviTsan.length > 0) {
-      this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + maDviTsan[0].maDviTsan + " đã tồn tại vui lòng nhập lại");
       return false;
     }
     return true;
@@ -447,7 +435,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   quayLai() {
     this.showListEvent.emit();
   }
-
   async guiDuyet() {
     if (this.dataTable.length == 0) {
       this.notification.error(
@@ -456,34 +443,63 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
       return;
     }
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_CBV:
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
-        msg = MESSAGE.GUI_DUYET_CONFIRM
-        break;
+    if (this.validatemaDviTsan()) {
+      let trangThai = '';
+      let msg = '';
+      switch (this.formData.get('trangThai').value) {
+        case STATUS.TU_CHOI_CBV:
+        case STATUS.TU_CHOI_LDC:
+        case STATUS.TU_CHOI_TP:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TP;
+          msg = MESSAGE.GUI_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_TP: {
+          trangThai = STATUS.CHO_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_LDC: {
+          trangThai = STATUS.DA_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.DA_DUYET_LDC: {
+          trangThai = STATUS.DA_DUYET_CBV;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
+      this.approve(this.idInput, trangThai, msg);
+    }
+  }
+
+  validatemaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let data = this.dataTable.flatMap(s => s.children)
+      const checkMaDviTsan = {};
+      data.forEach((item) => {
+        const maDviTsan = item.maDviTsan;
+        if (checkMaDviTsan[maDviTsan]) {
+          checkMaDviTsan[maDviTsan]++;
+        } else {
+          checkMaDviTsan[maDviTsan] = 1;
+        }
+      });
+      let result = '';
+      for (let prop in checkMaDviTsan) {
+        if (checkMaDviTsan[prop] > 1) {
+          result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
+        }
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_CBV;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
+      let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
+      if (rs == true) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
+        return false;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    return true;
   }
 
   tuChoi() {

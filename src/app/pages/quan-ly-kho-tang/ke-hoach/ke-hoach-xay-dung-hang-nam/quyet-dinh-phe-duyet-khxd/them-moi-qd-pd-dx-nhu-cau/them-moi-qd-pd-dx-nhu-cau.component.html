@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button"
+      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')" type="button"
               class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO"
+      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')"
               class="btn btn-sub xanh-nhat ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
