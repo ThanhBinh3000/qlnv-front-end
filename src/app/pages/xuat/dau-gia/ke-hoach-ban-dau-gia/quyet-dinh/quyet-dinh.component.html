@@ -80,12 +80,12 @@
                         </th>
                         <th class="text-center" style="width: 2%;">STT</th>
                         <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
-                        <th class="text-center" style="width: 10%;">Số QĐ PD KH BDG</th>
+                        <th class="text-center" style="width: 10%;">Số QĐ PD KH BĐG</th>
                         <th class="text-center" style="width: 10%;">Ngày ký QĐ</th>
                         <th class="text-center" style="width: 35%;">Trích yếu</th>
-                        <th>Số KH/tờ trình</th>
-                        <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
-                        <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+                        <th class="text-center">Số KH/tờ trình</th>
+                        <th class="text-center">Mã tổng hợp</th>
+                        <th class="text-center" style="width: 12%;" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
                         <th class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
                         <th class="text-center" style="width: 8%;">Số đơn vị tài sản</th>
                         <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
@@ -102,18 +102,17 @@
                             </nz-select>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="calendar"></i>
-                            </ng-template>
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKyQd"
-                                    (input)="filterInTable('ngayKyQd',filterTable.ngayKyQd)" size="small" />
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder=""
+                                    [(ngModel)]="filterTable.ngayKyQd"
+                                    (ngModelChange)="filterInTable('ngayKyQd', convertDateToString(filterTable.ngayKyQd))">
+                                </nz-date-picker>
                             </nz-input-group>
                         </th>
                         <th>
@@ -128,13 +127,13 @@
                                     (input)="filterInTable('soTrHdr',filterTable.soTrHdr)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th *ngIf="userService.isTongCuc()">
+                        <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.idThHdr"
                                     (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
+                        <th *ngIf="loaiVthh.startsWith('02')">
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
                                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
@@ -187,11 +186,11 @@
                                 (click)="openModalDxKh(data.idTrHdr)">{{
                                 data.soTrHdr}}</a>
                         </td>
-                        <td *ngIf="userService.isTongCuc()">
+                        <td>
                             <a *ngIf="data.idThHdr" nz-button nzType="link" (click)="openModalTh(data.idThHdr)">{{
                                 data.idThHdr}}</a>
                         </td>
-                        <td>{{data.tenLoaiVthh}}</td>
+                        <td *ngIf="loaiVthh.startsWith('02')">{{data.tenLoaiVthh}}</td>
                         <td>{{data.tenCloaiVthh}}</td>
                         <td>{{data.slDviTsan}}</td>
                         <td>{{data.slHdDaKy}}</td>

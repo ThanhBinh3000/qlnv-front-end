@@ -57,8 +57,9 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       thongBaoKh: [null,],
       khoanTienDatTruoc: [null,],
       tongSoLuong: [null,],
-      tongTienGiaKhoiDiemDx: [null,],
-      tongKhoanTienDatTruocDx: [null],
+      donViTinh: [null,],
+      tongTienGiaKdTheoDgiaDd: [null,],
+      tongKhoanTienDtTheoDgiaDd: [null],
       diaChi: [],
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
@@ -75,7 +76,6 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
-        console.log(this.dataInput.children, 999)
         await this.ptThanhToan(this.dataInput)
         this.calculatorTable();
       } else {
@@ -118,25 +118,25 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   }
 
   calculatorTable() {
-    let soLuongChiCuc = 0;
     let tongSoLuong: number = 0;
-    let tongDonGiaDx: number = 0;
-
+    let tongTienGiaKdTheoDgiaDd: number = 0;
+    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
+      item.children.forEach((child) => {
+        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
+        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        tongSoLuong += child.soLuongDeXuat;
+        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
       })
-      item.soLuongChiCuc = soLuongChiCuc;
-      tongDonGiaDx += item.donGiaChiCuc;
-      tongSoLuong += item.soLuongChiCuc
-
+      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienGiaKhoiDiemDx: tongSoLuong * tongDonGiaDx,
-      tongKhoanTienDatTruocDx: tongSoLuong * tongDonGiaDx * this.formData.value.khoanTienDatTruoc / 100,
+      tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
+      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
     });
   }
+
 
   isDisable() {
     return false;
