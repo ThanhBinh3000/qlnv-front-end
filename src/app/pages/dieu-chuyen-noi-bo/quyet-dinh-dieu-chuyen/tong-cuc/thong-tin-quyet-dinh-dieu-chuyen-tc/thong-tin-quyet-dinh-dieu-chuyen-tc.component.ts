@@ -101,73 +101,73 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   deXuatSelected: any = []
 
   listOfMapData: any[] = [
-    {
-      key: `1`,
-      name: '1 John Brown sr.',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
-      isEx: true,
-      children: [
-        {
-          key: `1-1`,
-          name: '1-1 John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park',
-          isCol: false,
-        },
-        {
-          key: `1-2`,
-          name: '1-2 John Brown jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park',
-          isCol: true,
-          children: [
-            {
-              key: `1-2-1`,
-              name: '1-2-1 Jimmy Brown',
-              age: 16,
-              address: 'New York No. 3 Lake Park'
-            }
-          ]
-        },
-        {
-          key: `1-3`,
-          name: '1-3 Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
-          isCol: true,
-          children: [
-            {
-              key: `1-3-1`,
-              name: '1-3-1 Jim Green',
-              age: 42,
-              address: 'London No. 2 Lake Park',
-              // children: [
-              //   {
-              //     key: `1-3-1-1`,
-              //     name: '1-3-1-1 Jim Green jr.',
-              //     age: 25,
-              //     address: 'London No. 3 Lake Park'
-              //   },
-              //   {
-              //     key: `1-3-1-2`,
-              //     name: '1-3-1-2 Jimmy Green sr.',
-              //     age: 18,
-              //     address: 'London No. 4 Lake Park'
-              //   }
-              // ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      key: `2`,
-      name: '2 Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      isEx: false
-    },
+    // {
+    //   key: `1`,
+    //   name: '1 John Brown sr.',
+    //   age: 60,
+    //   address: 'New York No. 1 Lake Park',
+    //   isEx: true,
+    //   children: [
+    //     {
+    //       key: `1-1`,
+    //       name: '1-1 John Brown',
+    //       age: 42,
+    //       address: 'New York No. 2 Lake Park',
+    //       isCol: false,
+    //     },
+    //     {
+    //       key: `1-2`,
+    //       name: '1-2 John Brown jr.',
+    //       age: 30,
+    //       address: 'New York No. 3 Lake Park',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-2-1`,
+    //           name: '1-2-1 Jimmy Brown',
+    //           age: 16,
+    //           address: 'New York No. 3 Lake Park'
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       key: `1-3`,
+    //       name: '1-3 Jim Green sr.',
+    //       age: 72,
+    //       address: 'London No. 1 Lake Park',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-3-1`,
+    //           name: '1-3-1 Jim Green',
+    //           age: 42,
+    //           address: 'London No. 2 Lake Park',
+    //           // children: [
+    //           //   {
+    //           //     key: `1-3-1-1`,
+    //           //     name: '1-3-1-1 Jim Green jr.',
+    //           //     age: 25,
+    //           //     address: 'London No. 3 Lake Park'
+    //           //   },
+    //           //   {
+    //           //     key: `1-3-1-2`,
+    //           //     name: '1-3-1-2 Jimmy Green sr.',
+    //           //     age: 18,
+    //           //     address: 'London No. 4 Lake Park'
+    //           //   }
+    //           // ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
+    // {
+    //   key: `2`,
+    //   name: '2 Joe Black',
+    //   age: 32,
+    //   address: 'Sidney No. 1 Lake Park',
+    //   isEx: false
+    // },
     // {
     //   key: `3`,
     //   name: '2 Joe Black',
@@ -420,13 +420,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           })
 
           this.listOfMapData.push({
-            // ...dcnbKeHoachDcHdr,
-            key: `${3}`,
-            isEx: false,
-            // children: children,
-            name: '2 Joe Black',
-            age: 32,
-            address: 'Sidney No. 1 Lake Park',
+            ...dcnbKeHoachDcHdr,
+            key: `${item.dcnbKeHoachDcHdr.id}`,
+            isEx: children.length > 0,
+            children: children,
           })
 
 
