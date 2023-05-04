@@ -63,6 +63,7 @@ export class QuyetDinhPdDx {
   tenChiCuc: string = '';
 
   soLuongXuatThucTe: number = 0;
+  level: number = 0;
 }
 
 @Component({
@@ -353,7 +354,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (data) {
       this.changeCuc(data.maDviCuc);
       //truong hop la ban ghi dau tien cua 1 noi dung
-      if (data.childData?.childData && !data.childData[0].tenCuc) {
+      if (data.level == 1 && !data.childData[0].tenCuc) {
         data.id = data.childData[0].childData[0].id
       }
       this.phuongAnRow.patchValue(data);
@@ -371,20 +372,29 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       tenCloaiVthh: this.listChungLoaiHangHoa.find(s => s.ma === this.phuongAnRow.value.cloaiVthh)?.ten,
       soLuongXuatCuc: this.phuongAnRow.value.soLuongXuatChiCuc
     });
-
-    let find = this.deXuatPhuongAn.find(s=>s.idVirtual == this.phuongAnRow.value.idVirtual);
-    console.log(find);
-
-    /*let index = this.deXuatSelected.quyetDinhPdDx.findIndex(s => s.idVirtual === this.phuongAnRow.value.idVirtual);
-    if (index == -1) {
-      index = this.deXuatSelected.quyetDinhPdDx.findIndex(s => s.noiDung === this.phuongAnRow.value.noiDung);
-    }
-    if (index != -1) {
-      this.deXuatSelected.quyetDinhPdDx.splice(index, 1, this.phuongAnRow.value);
+    if (this.phuongAnRow.value.level == 1 || this.phuongAnRow.value.level == 2) {
+      let index = this.deXuatPhuongAn.findIndex(s => s.noiDung === this.phuongAnRow.value.noiDung)
+      let exists = this.deXuatPhuongAn.findIndex(s =>
+        s.noiDung === this.phuongAnRow.value.noiDung &&
+        s.tenChiCuc === this.phuongAnRow.value.tenChiCuc &&
+        s.tenCloaiVthh === this.phuongAnRow.value.tenCloaiVthh
+      )
+      if (this.deXuatPhuongAn[index]?.tenCuc && exists == -1) {
+        this.deXuatPhuongAn = [...this.deXuatPhuongAn, this.phuongAnRow.value];
+      } else if (exists == -1) {
+        this.deXuatPhuongAn[index] = this.phuongAnRow.value;
+      } else {
+        this.deXuatPhuongAn[exists] = this.phuongAnRow.value;
+      }
     } else {
-      this.deXuatSelected.quyetDinhPdDx = [...this.deXuatSelected.quyetDinhPdDx, this.phuongAnRow.value];
+      let index = this.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.value.idVirtual);
+      if (index != -1) {
+        this.deXuatPhuongAn[index] = this.phuongAnRow.value;
+      } else {
+        this.deXuatPhuongAn = [...this.deXuatPhuongAn, this.phuongAnRow.value];
+      }
     }
-    this.formData.value.quyetDinhPdDtl.splice(this.deXuatSelectedIndex, 1, this.deXuatSelected)*/
+    this.formData.value.quyetDinhPdDtl[this.deXuatSelectedIndex].quyetDinhPdDx = this.deXuatPhuongAn;
     this.selectRow();
 
     this.isVisible = false;
@@ -410,10 +420,12 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
                 let rowCuc = v.find(s => s.tenCuc === k);
                 return {
                   idVirtual: uuidv4(),
+                  level: 2,
                   tenCuc: k,
                   soLuongXuatCuc: rowCuc?.soLuongXuatCuc ?? 0,
                   soLuongXuatCucThucTe: soLuongXuatCucThucTe ?? 0,
                   tenCloaiVthh: v[0].tenCloaiVthh,
+
                   childData: v
                 };
               }
@@ -422,6 +434,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
           return {
             idVirtual: uuidv4(),
+            level: 1,
             noiDung: key,
             soLuongXuat: soLuongXuat ?? 0,
             soLuongXuatThucTe: soLuongXuatThucTe ?? 0,
@@ -438,6 +451,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
                 let rowCuc = v.find(s => s.tenCuc === k);
                 return {
                   idVirtual: uuidv4(),
+                  level: 2,
                   tenCuc: k,
                   soLuongXuatCuc: rowCuc?.soLuongXuatCuc ?? 0,
                   soLuongXuatCucThucTe: soLuongXuatCucThucTe ?? 0,
@@ -452,6 +466,7 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
           let rowDiaPhuong = value.find(s => s.noiDung === key);
           return {
             idVirtual: uuidv4(),
+            level: 1,
             noiDung: key,
             soLuongXuat: rowDiaPhuong?.soLuongXuat ?? 0,
             soLuongXuatThucTe: soLuongXuatThucTe ?? 0,

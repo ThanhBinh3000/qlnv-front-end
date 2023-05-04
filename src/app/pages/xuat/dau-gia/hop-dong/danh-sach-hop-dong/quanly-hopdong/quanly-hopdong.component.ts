@@ -1,16 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { cloneDeep } from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {
+  HopDongXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {
+  QdPdKetQuaBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import {
+  ThongTinDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
+
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -61,8 +68,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     await this.spinner.show()
-    await Promise.all([
-    ]);
+    await Promise.all([]);
     if (this.id) {
       await this.getDetail(this.id)
       await this.selectRow(this.dataTable[0])
@@ -91,6 +97,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       }
     }
   }
+
   async selectRow(item: any) {
     if (this.dataTable.length > 0) {
       this.dataTable.forEach(i => i.selected = false);
@@ -99,6 +106,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       this.isView = true;
     }
   }
+
   async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
@@ -171,5 +179,4 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       },
     });
   }
-
 }
