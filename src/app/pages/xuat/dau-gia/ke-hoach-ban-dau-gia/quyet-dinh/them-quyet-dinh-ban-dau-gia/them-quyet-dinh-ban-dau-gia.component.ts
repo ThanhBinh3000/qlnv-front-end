@@ -12,7 +12,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from "../../../../../../constants/status";
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
@@ -32,7 +31,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
-  @Input() idTh: number = 0;
   @Input() isViewOnModal: boolean;
   @Input() maDviCuc: string
   @Input() dviCapCuc: any;
@@ -133,9 +131,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
-      if (this.idTh) {
-        await this.selectMaTongHop(this.idTh)
-      }
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -171,10 +166,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         nam: dataTongHop.namKh,
-        idThHdr: dataTongHop.id,
+        idThHdr: dataTongHop.id == null ? dataTongHop.idTh : dataTongHop.id,
         phanLoai: 'TH',
       })
-      await this.selectMaTongHop(dataTongHop.id);
+      await this.selectMaTongHop(this.formData.value.idThHdr);
     }
   }
 
@@ -194,7 +189,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        this.quayLai();
+        // this.quayLai();
       }
     }
     await this.spinner.hide();
@@ -215,8 +210,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async loadChiTiet(id: number) {
-    console.log(this.maDviCuc, 999)
-    console.log(this.dviCapCuc, 888)
     this.spinner.show()
     if (id) {
       let data = await this.detail(id);

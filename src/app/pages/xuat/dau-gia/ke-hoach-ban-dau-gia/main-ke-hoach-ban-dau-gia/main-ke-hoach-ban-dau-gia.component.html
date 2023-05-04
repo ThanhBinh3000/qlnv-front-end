@@ -41,7 +41,7 @@
   <app-de-xuat [loaiVthh]="inputLoaiVthh"></app-de-xuat>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-tong-hop [loaiVthh]="inputLoaiVthh"></app-tong-hop>
+  <app-tong-hop [loaiVthh]="inputLoaiVthh" [listVthh]="listVthh"></app-tong-hop>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <app-quyet-dinh [loaiVthh]="inputLoaiVthh"></app-quyet-dinh>
