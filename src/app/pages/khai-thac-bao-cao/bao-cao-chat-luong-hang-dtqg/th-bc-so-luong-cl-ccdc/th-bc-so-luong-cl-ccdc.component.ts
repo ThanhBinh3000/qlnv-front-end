@@ -156,4 +156,9 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
       }
     }
   }
+  async clearFilter() {
+    this.formData.get('maCuc').setValue(null);
+    this.formData.get('maChiCuc').setValue(null);
+    this.formData.get('maDvi').setValue(null);
+  }
 }

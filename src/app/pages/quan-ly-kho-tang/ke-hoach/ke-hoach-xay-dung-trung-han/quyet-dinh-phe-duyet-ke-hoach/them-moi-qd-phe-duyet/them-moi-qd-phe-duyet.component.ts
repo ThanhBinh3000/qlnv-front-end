@@ -299,7 +299,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         item.selected = false;
       });
       item.selected = true;
-
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {

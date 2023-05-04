@@ -42,7 +42,7 @@
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
           <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
+          <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_EXP')" type="button" class="btn btn-sub"
           (click)="exportData()">

@@ -58,12 +58,23 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="14">
+        <div nz-col nzSpan="9">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Điểm kho</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
                 <nz-option *ngFor="let p of dsKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/Công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="khoi">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -91,7 +102,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Lý do, mục tiêu sửa chũa</nz-form-label>
+              <nz-form-label [nzNoColon]="true" nzRequired>Lý do, mục tiêu sửa chũa</nz-form-label>
               <textarea [readonly]="isViewDetail" rows="3" class="search__input" nz-input
                         formControlName="lyDo"></textarea>
             </nz-form-control>
@@ -184,7 +195,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_THEM') && !isViewDetail" class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

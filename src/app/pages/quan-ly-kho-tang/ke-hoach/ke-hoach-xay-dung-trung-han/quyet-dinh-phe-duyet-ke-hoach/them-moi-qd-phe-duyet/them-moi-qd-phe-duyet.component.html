@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM) CỦA BTC</span>
+        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM) CỦA BTC 111</span>
       </div>
     </div>
     <div class="btn-group">
@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button"
+      <button *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button"
               class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
-      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO"
+      <button *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD_THEM') && userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO"
               class="btn btn-sub xanh-nhat ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>

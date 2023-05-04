@@ -7,7 +7,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-danh-sach-hop-dong',
   templateUrl: './danh-sach-hop-dong.component.html',
@@ -104,5 +104,26 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     this.isQuanLy = isQuanLy;
     this.isAddNew = !isQuanLy;
   }
+
+  exportQdPd(fileName?: string) {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.qdPdKetQuaBanDauGiaService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
 
 }
