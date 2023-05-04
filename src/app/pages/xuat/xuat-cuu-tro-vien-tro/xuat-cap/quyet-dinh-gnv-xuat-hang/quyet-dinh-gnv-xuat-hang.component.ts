@@ -14,7 +14,7 @@ import {
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
-  selector: 'app-quyet-dinh-gnv-xuat-hang',
+  selector: 'app-xc-quyet-dinh-gnv-xuat-hang',
   templateUrl: './quyet-dinh-gnv-xuat-hang.component.html',
   styleUrls: ['./quyet-dinh-gnv-xuat-hang.component.scss']
 })
