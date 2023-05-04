@@ -41,7 +41,7 @@
                 <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XOA')"
                     type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
                     <i class="fa fa-trash-o do"></i>
-                    <span>Xoá</span>
+                    <span>Xóa</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_EXP')" type="button"
                     class="btn btn-sub" (click)="exportData()">
@@ -155,7 +155,7 @@
                                 *ngIf="data.trangThai != '00' && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC) 
+                            <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC)
                              && userService.isTongCuc()
                              && userService.isAccessPermisson('NHDTQG_PTMTT_DCKHMTT_XEM')"
                                 (click)="redirectToChiTiet(false,data.id)">

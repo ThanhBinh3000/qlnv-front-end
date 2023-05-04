@@ -113,11 +113,11 @@
   <div class="group-button">
     <h3> DANH SÁCH DỰ ÁN KHO DTQG</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-sub ml-2" (click)="exportData()">
+      <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
         <span>Xuất file</span>
       </button>
-      <button type="button" class="btn btn-sub xanh" *ngIf="userService.isCuc()" (click)="openDialog(null, false)">
+      <button type="button" class="btn btn-sub xanh" *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')" (click)="openDialog(null, false)">
         <i class="icon htvbdh_dau-cong"></i>
         <span>Thêm</span>
       </button>
@@ -128,24 +128,24 @@
       <thead>
       <tr>
         <th class="text-center" nzWidth = "40px">STT</th>
-        <th class="text-left" nzWidth = "120px" *ngIf="!userService.isCuc()">Đơn vị</th>
-        <th class="text-left" nzWidth = "100px">Mã dự án</th>
-        <th class="text-left" nzWidth = "120px">Tên dự án</th>
-        <th class="text-left" nzWidth = "150px">Địa điểm xây dựng</th>
-        <th class="text-left" nzWidth = "150px">Khối dự án, công trình</th>
-        <th class="text-left" nzWidth = "200px">Thuộc Chi cục</th>
-        <th class="text-left" nzWidth = "200px">Điểm kho</th>
+        <th class="text-center" nzWidth = "120px" *ngIf="!userService.isCuc()">Đơn vị</th>
+        <th class="text-center" nzWidth = "100px">Mã dự án</th>
+        <th class="text-center" nzWidth = "120px">Tên dự án</th>
+        <th class="text-center" nzWidth = "150px">Địa điểm xây dựng</th>
+        <th class="text-center" nzWidth = "150px">Khối dự án, công trình</th>
+        <th class="text-center" nzWidth = "200px">Thuộc Chi cục</th>
+        <th class="text-center" nzWidth = "200px">Điểm kho</th>
         <th class="text-center" nzWidth = "120px">Thời gian <br> khởi công</th>
         <th class="text-center" nzWidth = "120px">Thời gian <br> hoàn thành</th>
-        <th class="text-left" nzWidth = "120px">Tổng số <br> TMĐT dự kiến</th>
-        <th class="text-left" nzWidth = "120px">TMĐT vốn <br> NSTW dự kiến</th>
-        <th class="text-left" nzWidth = "150px">Số QĐ PD TMĐT</th>
-        <th class="text-left" nzWidth = "200px">Số QĐ điều chỉnh TMĐT</th>
-        <th class="text-left" nzWidth = "150px">Số QĐ PD DA ĐTXD</th>
-        <th class="text-left" nzWidth = "150px">Tổng số TMĐT <br> được duyệt</th>
-        <th class="text-left" nzWidth = "150px">Tổng số TMĐT <br> NSTW được duyệt</th>
-        <th class="text-left" nzWidth = "120px">Trạng thái</th>
-        <th class="text-left" nzWidth = "120px" nzRight>Hành động</th>
+        <th class="text-center" nzWidth = "120px">Tổng số <br> TMĐT dự kiến</th>
+        <th class="text-center" nzWidth = "120px">TMĐT vốn <br> NSTW dự kiến</th>
+        <th class="text-center" nzWidth = "150px">Số QĐ PD TMĐT</th>
+        <th class="text-center" nzWidth = "200px">Số QĐ điều chỉnh TMĐT</th>
+        <th class="text-center" nzWidth = "150px">Số QĐ PD DA ĐTXD</th>
+        <th class="text-center" nzWidth = "150px">Tổng số TMĐT <br> được duyệt</th>
+        <th class="text-center" nzWidth = "150px">Tổng số TMĐT <br> NSTW được duyệt</th>
+        <th class="text-center" nzWidth = "120px">Trạng thái</th>
+        <th class="text-center" nzWidth = "120px" nzRight>Hành động</th>
       </tr>
       <tr class="search-table">
         <th></th>
@@ -276,13 +276,13 @@
         <td class="text-right">{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-left" nzRight>
-          <a (click)="openDialog(data, true)">
+          <a (click)="openDialog(data, true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_XEM')">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc()" (click)="openDialog(data, false)">
+          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')" (click)="openDialog(data, false)">
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc()" (click)="delete(data)">
+          <a *ngIf="data.trangThai == STATUS.CHUA_THUC_HIEN && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_XOA')" (click)="delete(data)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
