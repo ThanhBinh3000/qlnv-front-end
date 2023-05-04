@@ -4,7 +4,7 @@ import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
-  selector: 'app-kiem-tra-chat-luong',
+  selector: 'app-xc-kiem-tra-chat-luong',
   templateUrl: './kiem-tra-chat-luong.component.html',
   styleUrls: ['./kiem-tra-chat-luong.component.scss']
 })
