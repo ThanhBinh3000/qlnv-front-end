@@ -157,7 +157,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     }
     let res = await this.danhMucSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmSuaChua = res.data.content
+      this.listDmSuaChua = res.data.content;
     }
   }
 
@@ -174,7 +174,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.type == data.khoi) : [],
+          listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == data.khoi) : [],
           dataHeader: this.formData.value,
         }
       });

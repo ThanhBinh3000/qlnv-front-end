@@ -428,32 +428,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     let trangThai = ''
     let mesg = ''
     // Vật tư
-    if (this.formData.get('loaiVthh').value.startsWith('02')) {
-      switch (this.formData.get('trangThai').value) {
-        case STATUS.TU_CHOI_LDV:
-        case STATUS.DU_THAO: {
-          trangThai = STATUS.CHO_DUYET_LDV;
-          mesg = 'Bạn có muốn gửi duyệt ?'
-          break;
-        }
-        case STATUS.CHO_DUYET_LDV: {
-          trangThai = STATUS.DA_DUYET_LDV;
-          mesg = 'Văn bản sẵn sàng duyệt ?'
-          break;
-        }
-        case STATUS.DA_DUYET_LDV: {
-          trangThai = STATUS.BAN_HANH;
-          mesg = 'Văn bản sẵn sàng ban hành ?'
-          break;
-        }
-      }
-    } else {
-      switch (this.formData.get('trangThai').value) {
-        case STATUS.DU_THAO: {
-          trangThai = STATUS.BAN_HANH;
-          mesg = 'Văn bản sẵn sàng ban hành ?'
-          break;
-        }
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.BAN_HANH;
+        mesg = 'Văn bản sẵn sàng ban hành ?'
+        break;
       }
     }
     this.modal.confirm({

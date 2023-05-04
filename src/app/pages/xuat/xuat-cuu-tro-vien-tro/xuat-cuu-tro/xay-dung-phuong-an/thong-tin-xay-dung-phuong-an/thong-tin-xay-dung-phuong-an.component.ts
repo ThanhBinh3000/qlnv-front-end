@@ -155,6 +155,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         idQdPd: [''],
         soQdPd: [''],
         tongSoLuong: [0],
+        tongSoLuongDeXuat: [0],
         thanhTien: [0],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
@@ -736,7 +737,10 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     //disable ds cloai hh da ton tai
     this.listChungLoaiHangHoa.forEach(s => {
       s.disable = false;
-      if (this.defaultCloaiVthh !== s.ma && this.formData.value.deXuatPhuongAn.find(s1 => s1.cloaiVthh === s.ma && s1.maDviChiCuc === this.phuongAnRow.maDviChiCuc)) {
+      if (this.defaultCloaiVthh !== s.ma && this.formData.value.deXuatPhuongAn.find(
+        s1 => s1.cloaiVthh === s1.cloaiVthh &&
+          s1.cloaiVthh === s.ma &&
+          s1.maDviChiCuc === this.phuongAnRow.maDviChiCuc)) {
         s.disable = true;
       }
     })
@@ -748,8 +752,14 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       soDx: this.formData.value.soDx + this.maHauTo,
       tongSoLuong: this.tongSoLuong,
       thanhTien: this.tongThanhTien,
-      soLuongXuatCap: this.tongSoLuongXuatCap
+      soLuongXuatCap: this.tongSoLuongXuatCap,
+      tongSoLuongDeXuat: this.tongSoLuongDeXuat
     })
+    //xuat cap
+    if (this.formData.value.soLuongXuatCap > 0) {
+      this.formData.value.deXuatPhuongAn.forEach(s => s.soLuongXuatCap = s.soLuongXuat - s.tonKhoCuc);
+    }
+
     let result = await this.createUpdate(this.formData.value);
     this.formData.patchValue({
       soDx: this.formData.value.soDx.split("/")[0]
@@ -779,11 +789,16 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
       this.notification.error(MESSAGE.ERROR, 'SL hàng xuất thực tế vượt quá hàng trong kho hiện tại ' + errorSlChiCuc);
     } else {
       this.formData.patchValue({
-        soDx: this.formData.value.soDx + this.maHauTo,
+        soDx: this.formData.value.soDx ? this.formData.value.soDx + this.maHauTo : null,
         tongSoLuong: this.tongSoLuong,
         thanhTien: this.tongThanhTien,
-        soLuongXuatCap: this.tongSoLuongXuatCap
+        soLuongXuatCap: this.tongSoLuongXuatCap,
+        tongSoLuongDeXuat: this.tongSoLuongDeXuat
       })
+      //xuat cap
+      if (this.formData.value.soLuongXuatCap > 0) {
+        this.formData.value.deXuatPhuongAn.forEach(s => s.soLuongXuatCap = s.soLuongXuat - s.tonKhoCuc);
+      }
       if (this.userService.isTongCuc()) {
         await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, message);
       } else {
@@ -811,12 +826,19 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     } else if (errorSlChiCuc) {
       this.notification.error(MESSAGE.ERROR, 'SL hàng xuất thực tế vượt quá hàng trong kho hiện tại ' + errorSlChiCuc);
     } else {
+
       this.formData.patchValue({
-        soDx: this.formData.value.soDx + this.maHauTo,
+        soDx: this.formData.value.soDx ? this.formData.value.soDx + this.maHauTo : null,
         tongSoLuong: this.tongSoLuong,
         thanhTien: this.tongThanhTien,
-        soLuongXuatCap: this.tongSoLuongXuatCap
+        soLuongXuatCap: this.tongSoLuongXuatCap,
+        tongSoLuongDeXuat: this.tongSoLuongDeXuat
       })
+
+      //xuat cap
+      if (this.formData.value.soLuongXuatCap > 0) {
+        this.formData.value.deXuatPhuongAn.forEach(s => s.soLuongXuatCap = s.soLuongXuat - s.tonKhoCuc);
+      }
 
       await super.saveAndSend(this.formData.value, status, message, sucessMessage);
       // let result = await this.createUpdate();

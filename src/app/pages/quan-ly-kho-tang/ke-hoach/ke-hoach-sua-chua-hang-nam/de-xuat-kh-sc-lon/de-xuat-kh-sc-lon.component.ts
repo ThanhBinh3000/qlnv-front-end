@@ -47,11 +47,8 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
       soCongVan : [null],
       tenCongTrinh : [null],
       diaDiem : [null],
-      trichYeu : [null],
       ngayKy : [null],
-      namKeHoachTu : [null],
-      trangThai : [null],
-      namKeHoachDen: [null],
+      namKeHoach : [null],
       ngayKyTu: [''],
       ngayKyDen: [''],
     });
