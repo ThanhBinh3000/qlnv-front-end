@@ -58,7 +58,7 @@
       <h3 class="text-uppercase">Quản lý ký hợp đồng bán hàng DTQG theo phương thức bán đấu giá</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub"
-                (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-dau-gia.xlsx')">
+                (click)="exportQdPd('quan-ly-ky-hop-dong-ban-hang-dtqg-theo-phuong-thuc-ban-dau-gia.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -86,7 +86,7 @@
           <th width="175px">Chủng loại hàng hóa</th>
           <th width="175px">ĐV thực hiện</th>
           <th width="175px" class="wrap">TCCN thắng đấu giá</th>
-          <th width="175px" class="wrap">Tổng SL xuất bán (kg)</th>
+          <th width="175px" class="wrap">Tổng SL xuất bán {{loaiVthh=='02' ? null: '(kg)'}}</th>
           <th width="90px">Thành tiền (đ)</th>
           <th width="90px">Trạng thái HĐ</th>
           <th width="90px">Trạng thái XH</th>

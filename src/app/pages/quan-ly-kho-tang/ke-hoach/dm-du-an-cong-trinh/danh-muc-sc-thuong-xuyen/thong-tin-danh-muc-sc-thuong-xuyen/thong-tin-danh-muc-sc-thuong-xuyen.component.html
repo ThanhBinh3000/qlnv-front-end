@@ -58,12 +58,23 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="14">
+        <div nz-col nzSpan="9">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Điểm kho</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
                 <nz-option *ngFor="let p of dsKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/Công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="khoi">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>

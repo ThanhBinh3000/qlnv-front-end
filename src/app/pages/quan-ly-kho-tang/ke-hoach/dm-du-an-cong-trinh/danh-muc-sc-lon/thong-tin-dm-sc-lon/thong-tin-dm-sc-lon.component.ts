@@ -26,6 +26,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
   dsKho: any[] = [];
   dsChiCuc: any[] = [];
   listLoaiCongTrinh: any[] = [];
+  listKhoi: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
@@ -54,6 +55,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       maDiemKho: [null, Validators.required],
       tgThucHien: [null, Validators.required],
       tgHoanThanh: [null, Validators.required],
+      khoi: [null, Validators.required],
       tieuChuan: [null],
       loaiCongTrinh: [null],
       maChiCuc: [null],
@@ -73,6 +75,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
     try {
       await this.loadDsChiCuc()
       await this.loadDsLoaiCongTrinh()
+      await this.loadDsKhoi()
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -81,6 +84,14 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsKhoi() {
+    this.listKhoi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('KHOI_DU_AN_KT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
     }
   }
 

@@ -28,6 +28,7 @@ import * as uuid from "uuid";
 import {STATUS} from 'src/app/constants/status';
 import {DonviService} from "../../../../../../services/donvi.service";
 import moment from "moment";
+import {log} from "ng-zorro-antd/core/logger";
 
 @Component({
   selector: 'app-thong-tin',
@@ -62,8 +63,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
   listToChucTrungDg: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-  tongSoLuong: number ;
-  tongThanhTien: number ;
+  tongSoLuong: number;
+  tongThanhTien: number;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -191,7 +193,7 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     this.formData.patchValue({
       soHd: data?.soHd?.split('/')[0],
     });
-    this.maDviTsan(data.toChucTrungDg,data.trangThai);
+    this.maDviTsan(data.toChucTrungDg, data.trangThai);
     this.dataTable = data?.children || [];
     this.dataTable.forEach(e => e.tenChiCuc = e.tenDvi);
     this.dataTablePhuLuc = data?.phuLuc || [];
@@ -423,27 +425,28 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
         }
       })
     })
-      this.listAllDviTsan=this.listDviTsan;
-      this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 =>{
+    this.listAllDviTsan = this.listDviTsan;
+    this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => {
         return s1.maDviTsan.split(',').includes(s.maDviTsan) && s1.toChucTrungDg.includes(s.toChucCaNhan);
-        })
-      );
+      })
+    );
 
 
   }
-  maDviTsan(event,trangThai?) {
-    if(!this.formData.value.id){
+
+  maDviTsan(event, trangThai?) {
+    if (!this.formData.value.id) {
       this.formData.patchValue({
         listMaDviTsan: [],
       })
     }
-    if (event && trangThai==STATUS.DA_KY) {
+    if (event && trangThai == STATUS.DA_KY) {
       this.listDviTsanFilter = this.listAllDviTsan.filter(obj => obj.toChucCaNhan === event);
-    }else {
+    } else {
       this.listDviTsanFilter = this.listDviTsan.filter(obj => obj.toChucCaNhan === event);
     }
-    let thongTin= this.listDviLquan.find(f=>f.hoVaTen===event);
-    if(thongTin){
+    let thongTin = this.listDviLquan.find(f => f.hoVaTen === event);
+    if (thongTin) {
       this.formData.patchValue({
         tenNhaThau: thongTin.hoVaTen,
         diaChiNhaThau: thongTin.diaChi,
@@ -561,8 +564,12 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       }).value();
     dataView = await Promise.all(dataView);
     this.dataTable = dataView;
-    this.tongSoLuong=this.dataTable.reduce((prev, cur) => prev + cur.soLuong, 0);
-    this.tongThanhTien=this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0);
+    this.tongSoLuong = this.dataTable.reduce((prev, cur) => prev + cur.soLuong, 0);
+    this.tongThanhTien = this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0);
+    this.formData.patchValue({
+      soLuong: this.tongSoLuong,
+      tongTien: this.tongThanhTien,
+    })
     this.expandAll();
   }
 
