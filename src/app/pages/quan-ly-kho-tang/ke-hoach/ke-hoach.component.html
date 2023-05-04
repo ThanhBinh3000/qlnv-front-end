@@ -1,21 +1,21 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dmk')">
+    <li nz-menu-item nzSelected (click)="selectTab('dmk')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM')">
       Danh mục dự án, công trình kho
     </li>
-    <li nz-menu-item (click)="selectTab('qhk')">
+    <li nz-menu-item (click)="selectTab('qhk')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK')">
       Quy hoạch kho
     </li>
-    <li nz-menu-item (click)="selectTab('khxdth')" >
+    <li nz-menu-item (click)="selectTab('khxdth')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN')" >
       Thông tin đầu tư xây dựng trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('khxdhn')" >
+    <li nz-menu-item (click)="selectTab('khxdhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM')" >
       Kế hoạch đầu tư xây dựng theo năm
     </li>
-    <li nz-menu-item (click)="selectTab('khsclhn')" >
+    <li nz-menu-item (click)="selectTab('khsclhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON')" >
       Kế hoạch sửa chữa lớn hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('khsctx')" >
+    <li nz-menu-item (click)="selectTab('khsctx')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX')" >
       Kế hoạch sửa chữa thường xuyên
     </li>
   </ul>
