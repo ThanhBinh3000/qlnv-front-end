@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DonviService} from "../../../../../../../services/donvi.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {UserService} from "../../../../../../../services/user.service";
 import {NzModalRef} from "ng-zorro-antd/modal";
@@ -14,11 +13,11 @@ import { STATUS } from "../../../../../../../constants/status";
 import dayjs from "dayjs";
 
 @Component({
-  selector: 'app-dialog-them-moi-dxkhth',
-  templateUrl: './dialog-them-moi-dxkhth.component.html',
-  styleUrls: ['./dialog-them-moi-dxkhth.component.scss']
+  selector: 'app-dialog-dx-sc-lon',
+  templateUrl: './dialog-dx-sc-lon.component.html',
+  styleUrls: ['./dialog-dx-sc-lon.component.scss']
 })
-export class DialogThemMoiDxkhthComponent implements OnInit {
+export class DialogDxScLonComponent implements OnInit {
   @Input() dataInput: any
   @Input() type: string
   @Input() sum: number
@@ -46,8 +45,8 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
-    this.getDetail();
-    this.item.namKeHoach = dayjs().get('year');
+    this.getDetail()
+
   }
 
   handleOk() {

@@ -23,6 +23,7 @@ import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
 import dayjs from "dayjs";
+import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 
 @Component({
   selector: 'app-them-moi-sc-lon',
@@ -39,10 +40,12 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   dsChiCuc: any[] = [];
   rowItem: DanhMucKho = new DanhMucKho();
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
-  listQdKhTh: any[] = [];
   dataTableDm: any[] = [];
   dataTableRes: any[] = [];
-  rowItemCha: DanhMucKho = new DanhMucKho();
+  tableTren : any[] = [];
+  tableDuoi : any[] = [];
+  rowItemChaDuoi: DanhMucKho = new DanhMucKho();
+  rowItemChaTren: DanhMucKho = new DanhMucKho();
   listFileDinhKem: any[] = [];
   listKhoi: any[] = [];
   listLoaiDuAn: any[] = [];
@@ -275,8 +278,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   themMoiItem(data: any, type: string, idx: number, list?: any) {
     if (!this.isViewDetail) {
       let modalQD = this.modal.create({
-        nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
-        nzContent: DialogThemMoiDxkhthComponent,
+        nzTitle: 'ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM',
+        nzContent: DialogDxScLonComponent,
         nzMaskClosable: false,
         nzClosable: false,
         nzWidth: "1000px",
@@ -381,33 +384,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     this.dataTableRes = arr;
   }
 
-  openDialogToTrinh() {
-    if (!this.isViewDetail) {
-      const modal = this.modal.create({
-        nzTitle: "Danh sách quyết định kế hoạch trung hạn",
-        nzContent: DialogQdXdTrungHanComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: "900px",
-        nzFooter: null,
-        nzComponentParams: {
-          type: "DXNC",
-          dsPhuongAn: this.listQdKhTh
-        }
-      });
-      modal.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.formData.patchValue({
-            soQdTrunghan: data.soQuyetDinh,
-            namBatDau : data.namBatDau,
-            namKetThuc : data.namKetThuc,
-            loaiDuAn : data.loaiDuAn,
-          });
-          await this.changeSoQdTrunghan(data.id)
-        }
-      });
-    }
-  }
 
   convertListToTree() {
     this.dataTable = chain(this.dataTableRes).groupBy("khoi")
@@ -426,22 +402,32 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  themItemcha() {
-    if (!this.rowItemCha.khoi) {
-      this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
-      return;
+  themItemcha(type : string) {
+    if (type == 'duoi') {
+      if (!this.rowItemChaDuoi.khoi) {
+        this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+        return;
+      }
+      if (this.checkExitsData(this.rowItemChaDuoi, this.tableDuoi)) {
+        this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
+        return;
+      }
+      this.rowItemChaDuoi.idVirtual = uuidv4();
+      this.tableDuoi.push(this.rowItemChaDuoi);
+      this.rowItemChaDuoi = new DanhMucKho();
+    } else {
+      if (!this.rowItemChaTren.khoi) {
+        this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
+        return;
+      }
+      if (this.checkExitsData(this.rowItemChaTren, this.tableTren)) {
+        this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
+        return;
+      }
+      this.rowItemChaTren.idVirtual = uuidv4();
+      this.tableTren.push(this.rowItemChaTren);
+      this.rowItemChaTren = new DanhMucKho();
     }
-    if (this.checkExitsData(this.rowItemCha, this.dataTable)) {
-      this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục khối");
-      return;
-    }
-    if (!this.formData.value.soQdTrunghan) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng chọn kế hoạch trung hạn");
-      return;
-    }
-    this.rowItemCha.idVirtual = uuidv4();
-    this.dataTable.push(this.rowItemCha);
-    this.rowItemCha = new DanhMucKho();
   }
 
 
