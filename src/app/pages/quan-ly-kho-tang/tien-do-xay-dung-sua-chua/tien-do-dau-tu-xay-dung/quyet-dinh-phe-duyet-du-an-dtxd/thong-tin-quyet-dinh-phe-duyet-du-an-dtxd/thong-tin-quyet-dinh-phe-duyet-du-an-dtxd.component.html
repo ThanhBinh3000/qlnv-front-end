@@ -1,32 +1,34 @@
 <div class="bg-trang">
-  <div class="header header-green-background">
-    <div class="header-text">
-      <div class="title-chi-tieu">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.BAN_HANH  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class="text-uppercase">Quyết định phê duyệt dự án ĐTXD</span>
+          <span class="text-uppercase">Quyết định phê duyệt dự án ĐTXD</span>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm ml-2" *ngIf="!idInput" (click)="goBack()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Ban hành</span>
+        </button>
+        <button (click)="save()"
+                *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
+                class="btn btn-main btn-sm waves-effect waves-light ml-2">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
-    <div class="btn-group">
-      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
-      <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Ban hành</span>
-      </button>
-      <button (click)="save()"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
-              class="btn btn-main btn-sm waves-effect waves-light ml-2">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-    </div>
-  </div>
+  </nz-affix>
   <nz-alert *ngIf="formData.value.trangThai == STATUS.TUCHOI_CB_CUC " nzShowIcon nzType="error"
             nzMessage="Lý do từ chối"
             nzDescription="{{formData.value.lyDoTuChoi}}">
@@ -68,11 +70,12 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ kế hoạch ĐTXD
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeSoQdKhDtxd($event)" formControlName="soQdKhDtxd"
-                         [nzDisabled]="isViewDetail">
-                <nz-option *ngFor="let p of listQdKhDtxd" [nzValue]="p.soQd"
-                           [nzLabel]="p.soQd"></nz-option>
-              </nz-select>
+              <input nz-input formControlName="soQdKhDtxd" [readonly]="true"/>
+              <!--              <nz-select nzAllowClear (ngModelChange)="changeSoQdKhDtxd($event)" formControlName="soQdKhDtxd"-->
+              <!--                         [nzDisabled]="isViewDetail">-->
+              <!--                <nz-option *ngFor="let p of listQdKhDtxd" [nzValue]="p.soQd"-->
+              <!--                           [nzLabel]="p.soQd"></nz-option>-->
+              <!--              </nz-select>-->
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -81,11 +84,12 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên dự án
               </nz-form-label>
-              <nz-select nzAllowClear (ngModelChange)="changeDuAn($event)" formControlName="tenDuAn"
-                         [nzDisabled]="isViewDetail">
-                <nz-option *ngFor="let p of listDuAnDtxd" [nzValue]="p.tenDuAn"
-                           [nzLabel]="p.tenDuAn"></nz-option>
-              </nz-select>
+              <input nz-input formControlName="tenDuAn" [readonly]="true"/>
+              <!--              <nz-select nzAllowClear (ngModelChange)="changeDuAn($event)" formControlName="tenDuAn"-->
+              <!--                         [nzDisabled]="isViewDetail">-->
+              <!--                <nz-option *ngFor="let p of listDuAnDtxd" [nzValue]="p.tenDuAn"-->
+              <!--                           [nzLabel]="p.tenDuAn"></nz-option>-->
+              <!--              </nz-select>-->
             </nz-form-control>
           </nz-form-item>
         </div>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetduandtxdService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-du-an-dtxd',
@@ -16,6 +17,10 @@ import {
   styleUrls: ['./quyet-dinh-phe-duyet-du-an-dtxd.component.scss']
 })
 export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implements OnInit {
+  @Input()
+  itemDuAn: any;
+  @Input("itemQdPdDaDtxd")
+  itemQdPdDaDtxd: any;
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -38,16 +43,21 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component implement
   }
 
   async ngOnInit() {
-    this.formData = this.fb.group({
-      soQd: [''],
-      tenDuAn: [''],
-      chuDauTu: [''],
-      soQdKhDtxd: [''],
-      trangThai: [''],
-      ngayKy: [''],
-      trichYeu: [''],
-    });
-    this.filter();
+    if (this.itemQdPdDaDtxd) {
+      this.selectedId = this.itemQdPdDaDtxd.id;
+      this.isDetail = true;
+      this.isViewDetail = this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH ? true : false;
+    }
+    // this.formData = this.fb.group({
+    //   soQd: [''],
+    //   tenDuAn: [''],
+    //   chuDauTu: [''],
+    //   soQdKhDtxd: [''],
+    //   trangThai: [''],
+    //   ngayKy: [''],
+    //   trichYeu: [''],
+    // });
+    // this.filter();
   }
 
   filter() {
