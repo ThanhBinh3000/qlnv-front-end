@@ -72,6 +72,12 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     tenNgan: '',
   };
 
+  listTrangThai: any[] = [
+    { ma: STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    { ma: STATUS.DU_THAO, giaTri: 'Dự Thảo' },
+    { ma: STATUS.TU_CHOI_TP, giaTri: 'Từ chối TP' }
+  ];
+
   dataTableAll: any[] = [];
   allChecked = false;
   indeterminate = false;
