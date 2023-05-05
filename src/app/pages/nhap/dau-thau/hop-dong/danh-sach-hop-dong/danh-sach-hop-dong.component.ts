@@ -193,6 +193,13 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       this.totalRecord = data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
+          if(item.hhQdKhlcntHdr) {
+            let sum = 0;
+            item.hhQdKhlcntHdr.children.forEach(i => {
+              sum += i.donGiaNhaThau * i.soLuong;
+            })
+            item.hhQdKhlcntHdr.thanhTien = sum;
+          }
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);

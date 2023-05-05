@@ -10,10 +10,15 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
+import {
+  PhieuKiemNghiemChatLuongService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service";
+import {CuuTroVienTroComponent} from "../../../xuat-cuu-tro/cuu-tro-vien-tro.component";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
 
 @Component({
-  selector: 'app-phieu-kiem-nghiem-chat-luong',
+  selector: 'app-xc-phieu-kiem-nghiem-chat-luong',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
@@ -24,19 +29,27 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   @Input()
   loaiVthhCache: string;
 
+  CHUC_NANG = CHUC_NANG;
+  public vldTrangThai: XuatCuuTroVienTroComponent;
+  idQdGnv: number = 0;
+  openQdGnv = false;
+  idBbTk: number = 0;
+  openBbTk = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService
+    private phieuKiemNghiemChatLuongService: PhieuKiemNghiemChatLuongService,
+    private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
+    this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
-      nam: [dayjs().get("year")],
+      nam: null,
       soQdGiaoNvXh: null,
       soPhieuKnCl: null,
       soBienBan: null,
@@ -73,6 +86,20 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
+
+  disabledStartNgayKn = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKnMauDen) {
+      return startValue.getTime() >= this.formData.value.ngayKnMauDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKn = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnMauTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKnMauTu.getTime();
+  };
 
 
   ngOnInit(): void {
@@ -150,5 +177,24 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
+  }
+  openQdGnvModal(id: any) {
+    this.idQdGnv = id;
+    this.openQdGnv = true;
+  }
+
+  closeQdGnvModal() {
+    this.idQdGnv = null;
+    this.openQdGnv = false;
+  }
+
+  openSoBbTkModal(id: any) {
+    this.idBbTk = id;
+    this.openBbTk = true;
+  }
+
+  closeSoBbTkModal() {
+    this.idBbTk = null;
+    this.openBbTk = false;
   }
 }

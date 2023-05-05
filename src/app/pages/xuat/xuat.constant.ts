@@ -11,7 +11,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_nhapkhac2',
+    icon: 'htvbdh_tcdt_dauthau',
     title: 'Xuất theo phương thức bán đấu giá',
     url: `/dau-gia`,
     dropdown: 'dau-thau',
@@ -19,7 +19,7 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_dieu_chuyen',
+    icon: 'htvbdh_tcdt_muatructiep',
     title: 'Xuất theo phương thức bán trực tiếp',
     url: `/xuat-truc-tiep`,
     dropdown: 'xuat-truc-tiep',
@@ -27,9 +27,9 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_nhapkhac2',
+    icon: 'htvbdh_tcdt_tieuhuy',
     title: 'Xuất Thanh lý, tiêu hủy',
-    url: `/cuu-tro-ho-tro`,
+    url: `/xuat-thanh-ly`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,
