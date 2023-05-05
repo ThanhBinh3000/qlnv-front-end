@@ -13,7 +13,7 @@ import * as uuid from "uuid";
 import { PhieuKiemNghiemChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
 
 @Component({
-  selector: 'app-phieu-kiem-nghiem-chat-luong',
+  selector: 'app-xc-phieu-kiem-nghiem-chat-luong',
   templateUrl: './phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./phieu-kiem-nghiem-chat-luong.component.scss']
 })
