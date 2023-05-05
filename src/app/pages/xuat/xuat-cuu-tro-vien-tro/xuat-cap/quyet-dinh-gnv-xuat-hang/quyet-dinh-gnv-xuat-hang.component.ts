@@ -1,17 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhMucService } from "src/app/services/danhmuc.service";
-import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DanhMucService} from "src/app/services/danhmuc.service";
+import {DanhMucTieuChuanService} from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "src/app/constants/message";
-import { Base2Component } from "src/app/components/base2/base2.component";
+import {MESSAGE} from "src/app/constants/message";
+import {Base2Component} from "src/app/components/base2/base2.component";
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
+import {CHUC_NANG} from "../../../../../constants/status";
+import {XuatCuuTroVienTroComponent} from "../../xuat-cuu-tro-vien-tro.component";
 
 @Component({
   selector: 'app-xc-quyet-dinh-gnv-xuat-hang',
@@ -24,19 +26,30 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  public vldTrangThai: XuatCuuTroVienTroComponent;
+  public CHUC_NANG = CHUC_NANG;
 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
-
+  idQdPd: number = 0;
+  openQdPd = false;
+  idBbTk: number = 0;
+  openBbTk = false;
+  idBbHd: number = 0;
+  openBbHd = false;
+  isView = false;
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private danhMucService: DanhMucService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+              private danhMucService: DanhMucService,
+              private danhMucTieuChuanService: DanhMucTieuChuanService,
+              private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent
+  ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
+    this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       nam: [dayjs().get('year')],
       soQd: [''],
@@ -81,10 +94,10 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
-    this.selectedId = id;
+  redirectDetail(id, b: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isView = b;
   }
 
   async loadDsVthh() {
@@ -94,6 +107,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
+
   async timKiem() {
     await this.spinner.show();
     try {
@@ -106,5 +120,35 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
       console.log(e)
     }
     await this.spinner.hide();
+  }
+
+  openQdPdModal(id: any) {
+    this.idQdPd = id;
+    this.openQdPd = true;
+  }
+
+  closeQdPdModal() {
+    this.idQdPd = null;
+    this.openQdPd = false;
+  }
+
+  openSoBbTkModal(id: any) {
+    this.idBbTk = id;
+    this.openBbTk = true;
+  }
+
+  closeSoBbTkModal() {
+    this.idBbTk = null;
+    this.openBbTk = false;
+  }
+
+  openSoBbHdModal(id: any) {
+    this.idBbHd = id;
+    this.openBbHd = true;
+  }
+
+  closeSoBbHdModal() {
+    this.idBbHd = null;
+    this.openBbHd = false;
   }
 }

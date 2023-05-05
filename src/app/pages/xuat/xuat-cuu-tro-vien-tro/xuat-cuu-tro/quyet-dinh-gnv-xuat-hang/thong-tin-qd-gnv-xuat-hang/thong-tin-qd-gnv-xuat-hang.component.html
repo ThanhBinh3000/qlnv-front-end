@@ -97,7 +97,7 @@
         </ng-container>
       </ng-template>
       <div [nzGutter]="24" nz-row>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm xuất
             </nz-form-label>
@@ -106,7 +106,7 @@
             </nz-select>
           </nz-form-item>
         </div>
-        <div [nzSpan]="5" nz-col>
+        <div [nzSpan]="6" nz-col>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ xuất hàng</nz-form-label>
             <nz-form-control>
@@ -120,7 +120,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="5" nz-col>
+        <div [nzSpan]="3" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Ngày ký QĐ xuất hàng</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
@@ -130,7 +130,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="5" nz-col>
+        <div [nzSpan]="3" nz-col>
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ trên QĐ PD phương án</nz-form-label>
             <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
@@ -143,13 +143,13 @@
         </div>
         <div [nzSpan]="6" nz-col>
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao nv xuất hàng</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Đơn vị ra QĐ giao NV xuất hàng</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
               <input [readonly]="true" formControlName="tenDvi" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="4" nz-col>
+        <div [nzSpan]="6" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
@@ -157,7 +157,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="2" nz-col>
+        <div [nzSpan]="3" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Đơn vị tính</nz-form-label>
             <nz-form-control>
@@ -165,7 +165,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="5" nz-col>
+        <div [nzSpan]="3" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thời gian giao nhận hàng</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
@@ -175,10 +175,26 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="6" nz-col>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label  [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-control>
+              <input nz-input [readonly]="true" formControlName="loaiNhapXuat"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label  [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+            <nz-form-control>
+              <input nz-input [readonly]="true" formControlName="kieuNhapXuat"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div [nzSpan]="24" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
-            <nz-form-control [nzSpan]="24" nz-col>
+            <nz-form-control >
               <input [readOnly]="isView" formControlName="trichYeu" nz-input/>
             </nz-form-control>
           </nz-form-item>
@@ -211,7 +227,7 @@
         </nz-form-item>
       </div>
       <div [nzGutter]="24" nz-row>
-        <div [nzSpan]="6" nz-col>
+        <div [nzSpan]="4" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng SL cứu trợ, viện trợ</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
@@ -220,14 +236,45 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div [nzSpan]="6" nz-col>
+        <div [nzSpan]="4" nz-col>
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thành Tiền</nz-form-label>
             <nz-form-control [nzSpan]="24" nz-col>
-              <span class="text-blue">{{formData.value.thanhTien| number : '1.0-1' : 'vi_VN'}} (đ)</span>
+              <span class="text-blue">{{formData.value.thanhTien == null ? '' :(formData.value.thanhTien| number : '1.0-1' : 'vi_VN' )+ ' (vnđ)'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div [nzSpan]="4" nz-col>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Mục đích xuất cứu trợ</nz-form-label>
+            <nz-form-control [nzSpan]="24" nz-col>
+              <span class="text-blue">{{formData.value.mucDichXuat}}</span>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div [nzGutter]="24" nz-row>
+        <div [nzSpan]="12" nz-col>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Địa phương nhận cứu trợ viên trợ </nz-form-label>
+            <nz-form-control [nzSpan]="24" nz-col>
+              <ng-container *ngFor="let item of noiDungCuuTroView, let i = index;">
+              <span >{{(i + 1)+'.'}} {{ item.noiDung }}</span>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div [nzSpan]="12" nz-col>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> SL nhận cứu trợ, viên trợ {{formData.value.donViTinh}}</nz-form-label>
+            <nz-form-control [nzSpan]="24" nz-col>
+              <ng-container *ngFor="let item of noiDungCuuTroView, let i = index;">
+              <span >{{item.soLuongXuat |number : '1.0-1' : 'vi_VN'}}</span>
+              </ng-container>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
       </div>
       <div class="mt-16">
         <nz-table #tblData [nzData]="noiDungCuuTroView" class="nowrap table-chi-tiet" nzBordered>
