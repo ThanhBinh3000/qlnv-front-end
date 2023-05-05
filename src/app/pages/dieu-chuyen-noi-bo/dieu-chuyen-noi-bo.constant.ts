@@ -27,4 +27,13 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'tong-hop-dieu-chuyen-tai-tong-cuc',
     hasTab: false,
   },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Quyết định điều chuyển',
+    url: `/quyet-dinh-dieu-chuyen`,
+    dropdown: 'quyet-dinh-dieu-chuyen',
+    idHover: 'quyet-dinh-dieu-chuyen',
+    hasTab: false,
+    accessPermisson: 'DCNB_QUYETDINHDC'
+  },
 ];
