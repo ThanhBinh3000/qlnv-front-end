@@ -9,7 +9,7 @@
                     </nz-select>
                 </div>
                 <div nz-col nzSpan="4">
-                    <label class="search__label">Số QĐ giao nhiệm NH</label>
+                    <label class="search__label">Số QĐ giao nhiệm vụ NH</label>
                     <!-- <nz-input-group nzAddOnAfter="/{{qdTCDT}}"> -->
                     <input [(ngModel)]="searchFilter.soQuyetDinh" nz-input nzSize="small" placeholder="Nhập số"
                         appNumberOnly />
@@ -20,7 +20,7 @@
                     <input class="search__input" placeholder="Nhập Số phiếu" nz-input [(ngModel)]="searchFilter.soBb" />
                 </div>
                 <div nz-col nzSpan="5">
-                    <label class="search__label">Ngày lập phiếu</label>
+                    <label class="search__label">Ngày lập biên bản</label>
                     <div nz-row [nzGutter]="24">
                         <div nz-col nzSpan="12" class="cus-start-date">
                             <nz-date-picker [nzDisabledDate]="disabledTuNgayLP" nzFormat="dd/MM/yyyy"

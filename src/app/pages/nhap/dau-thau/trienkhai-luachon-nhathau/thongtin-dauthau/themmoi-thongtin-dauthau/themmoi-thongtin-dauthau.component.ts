@@ -118,6 +118,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   listData: any[] = [];
   listDataCuc: any[] = [];
   listDataChiCuc: any[] = [];
+  listDataDiemKho: any[] = [];
   donGiaVatObject: any;
   selected: boolean = false;
 
@@ -337,6 +338,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     this.listDataChiCuc = [];
     this.listDataCuc = [];
     this.listDataDetail = [];
+    this.listDataDiemKho = [];
     this.listData = [];
     this.listOfData.forEach(item => {
       this.listDataCuc.push(item)

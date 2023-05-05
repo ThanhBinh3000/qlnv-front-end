@@ -135,7 +135,8 @@
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
+                                <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT <br> (Thời gian phát
+                                    hành
                                     HSMT)</nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
@@ -266,7 +267,7 @@
                         </div>
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian nhập hàng trước ngày </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Thời gian thực hiện dự án </nz-form-label>
                                 <nz-form-control>
                                     <nz-input-group>
                                         <input nz-input formControlName="tgianNhang" nzFormat="dd/MM/yyyy" readonly />
@@ -327,6 +328,7 @@
                         <th rowspan="2" style="width: 2%;">STT</th>
                         <th rowspan="2">Chi cục</th>
                         <th rowspan="2">Tên gói thầu</th>
+                        <th rowspan="2">Điểm kho</th>
                         <th rowspan="2">Địa điểm nhập kho</th>
                         <th rowspan="2">SL theo KH năm đã được duyệt</th>
                         <th colspan="3">Kế hoạch đấu thầu</th>
@@ -357,16 +359,17 @@
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                         </tr>
-                        <ng-container>
-                            <tr *ngFor="let dtGoiThau of item.dataChild, let y = index"
-                                (click)="showDetail($event,dtGoiThau)"
+                        <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">
+                            <tr (click)="showDetail($event,dtGoiThau)"
                                 [ngClass]="{'bg-selected': this.selected && y == 0 && i == 0}">
                                 <td></td>
                                 <td></td>
-                                <td></td>
                                 <td>{{dtGoiThau.goiThau}}</td>
-                                <td>{{dtGoiThau.diaDiemNhap}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td class="text-right">{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-right">{{(dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat :
                                     dtGoiThau.donGiaTamTinh ) |
@@ -388,6 +391,26 @@
                                     number: '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                             </tr>
+                            <ng-container *ngFor="let res of dtGoiThau.children, let k = index">
+                                <ng-container *ngFor="let diemKho of res.children, let l = index">
+                                    <tr *ngIf="res.idGoiThau == dtGoiThau.id">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{diemKho.tenDvi}}</td>
+                                        <td>{{res.diaDiemNhap}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
                 </tbody>
@@ -395,21 +418,26 @@
                     <tr>
                         <td></td>
                         <td></td>
-                        <td class="text-blue">Tổng</td>
+                        <td class=" text-blue">Tổng</td>
                         <td></td>
                         <td></td>
-                        <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaTamTinh', null, 'tong') |
+                        <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaTamTinh', null,
+                            'tong') |
                             number:
                             '1.0-3'}}</td>
-                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('donGiaTamTinh') | number:
+                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('donGiaTamTinh') |
+                            number:
                             '1.0-3'}}
                         </td>
                         <td></td>
-                        <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaNhaThau', null, 'tong') |
+                        <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaNhaThau', null,
+                            'tong') |
                             number: '1.0-3'}}</td>
-                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('donGiaNhaThau') | number:
+                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('donGiaNhaThau') |
+                            number:
                             '1.0-3'}}</td>
-                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('chenhLech') | number: '1.0-3'}}
+                        <td class="text-blue" style="text-align: right;">{{sumThanhTien('chenhLech') |
+                            number: '1.0-3'}}
                         </td>
                     </tr>
 
