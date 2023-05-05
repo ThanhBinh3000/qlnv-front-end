@@ -197,7 +197,7 @@
                                     <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập theo kế hoạch </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <nz-input-number [nzSize]="'small'" formControlName=""
+                                            <nz-input-number [nzSize]="'small'" formControlName="soLuongNhapKh"
                                                 [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                                 nzDisabled>
                                             </nz-input-number>
@@ -240,7 +240,7 @@
                     </button>
                 </div>
             </div>
-            <nz-card class="flex-card p-lr16 card-table">
+            <nz-card class="flex-card p-lr16 card-table" style="margin-bottom: 35px">
                 <nz-table #basicTable class="pd-10" [nzData]="dataTable" nzBordered>
                     <thead>
                         <tr>
@@ -274,7 +274,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a *ngIf="data.hopDong" (click)="redirectHopDong(true,data.hopDong.id)">
+                                <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"
@@ -285,7 +285,7 @@
                         </tr>
                     </tbody>
                     <tr *ngIf="basicTable.data.length > 0">
-                        <td colspan="6" class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
+                        <td colspan="5" class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>
                         <td class="background-last-row text-right blue-text">{{ calcTongSl() | number : '1.0-1' :
                             'vi_VN' }}</td>
                         <td></td>
@@ -298,7 +298,7 @@
                     </tr>
                 </nz-table>
             </nz-card>
-            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isView]="true" [isQuanLy]="true" (showListEvent)="redirectHopDong(false,null)">
             </app-thong-tin>
         </nz-card>
     </div>
