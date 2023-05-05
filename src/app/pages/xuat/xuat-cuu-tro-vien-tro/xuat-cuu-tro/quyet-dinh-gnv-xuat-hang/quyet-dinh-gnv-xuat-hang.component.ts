@@ -61,10 +61,12 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
-      nam: [dayjs().get('year')],
+      nam: [''],
       soQd: [''],
       maDvi: [''],
       ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
       loaiVthh: [''],
       trichYeu: [''],
     });
@@ -83,7 +85,19 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
 
     };
   }
+  disabledStartNgayKy = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKyDen) {
+      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+    }
+    return false;
+  };
 
+  disabledEndNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+  };
   async ngOnInit() {
     await this.spinner.show();
     try {
