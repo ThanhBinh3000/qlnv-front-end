@@ -156,28 +156,19 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [isViewDetail]="isView"></file-list>
+                <file-list [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
         </div>
-
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input/>
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file"/>
-                  </div>
-                </ng-template>
-              </div>
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm QĐ đã ban hành
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </form>
@@ -286,7 +277,8 @@
                             Tổng SL gạo cần xuất cứu trợ, viện trợ theo PA được duyệt
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                             <span class="text-blue">{{+deXuatSelected.tongSoLuongDx + +deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
+                             <span
+                               class="text-blue">{{+deXuatSelected.tongSoLuongDx + +deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
                                (kg)</span>
                           </nz-form-control>
                         </nz-form-item>
@@ -384,7 +376,8 @@
                           Tổng SL gạo cần xuất cứu trợ, viện trợ theo PA được duyệt
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                             <span class="text-blue">{{deXuatSelected.soLuongXuatCap * 2 | number : globals.numberFormat}}
+                             <span
+                               class="text-blue">{{deXuatSelected.soLuongXuatCap * 2 | number : globals.numberFormat}}
                                (kg)</span>
                         </nz-form-control>
                       </nz-form-item>
@@ -568,7 +561,8 @@
             <nz-form-item *ngIf="formData.value.idQdPd">
               <nz-form-label [nzNoColon]="true" [nzXs]="7">SL xuất thóc gia công còn lại cần phân bổ</nz-form-label>
               <nz-form-control>
-            <span style="color: red">{{+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe|number : globals.numberFormat}}
+            <span
+              style="color: red">{{+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe|number : globals.numberFormat}}
               (kg)</span>
               </nz-form-control>
             </nz-form-item>
@@ -635,7 +629,8 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCloaiVthh|number : globals.numberFormat}}</span></p>
+                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCloaiVthh|number : globals.numberFormat}}</span>
+                    </p>
                   </div>
                 </div>
               </nz-form-control>
