@@ -57,14 +57,14 @@ export class QuyetDinhPdDtl {
 })
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
 
-  @Input() loaiVthh: string;
+  // @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
-  @Input() idTongHop: number;
+  // @Input() idTongHop: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() id: number;
-  @Input() dataTongHop: any;
+  // @Input() id: number;
+  // @Input() dataTongHop: any;
 
   canCu: any[] = [];
   quyetDinh: any[] = [];
@@ -203,6 +203,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       idDxuat: [, [Validators.required]],
       trichYeu: [],
       type: ['TH', [Validators.required]],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ['Dự thảo'],
       // idTongHop: [, [Validators.required]],
       // maTongHop: [, [Validators.required]],
       // id: [0],
@@ -224,7 +226,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       // cloaiVthh: [],
       // loaiNhapXuat: [],
       // trichYeu: [],
-      // trangThai: [STATUS.DU_THAO],
       // lyDoTuChoi: [],
       // type: ['TH', [Validators.required]],
       // xuatCap: [false],
@@ -234,7 +235,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       // tenDvi: [],
       // tenLoaiVthh: [],
       // tenCloaiVthh: [],
-      // tenTrangThai: ['Dự thảo'],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
       danhSachHangHoa: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
@@ -258,10 +258,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       } else {
         this.initForm();
       }
-      await Promise.all([
-        this.bindingDataTongHop(this.dataTongHop),
-        this.loadDsDonVi(),
-      ]);
+      // await Promise.all([
+      //   this.bindingDataTongHop(this.dataTongHop),
+      //   this.loadDsDonVi(),
+      // ]);
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -271,7 +271,9 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   initForm() {
-
+    // this.formData.patchValue({
+    //   type: 'TH',
+    // })
   }
 
   isTongCuc() {
@@ -362,34 +364,44 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.show()
     if (id) {
       let data = await this.detail(id);
-      if (data.type == 'TH') {
-        await this.selectMaTongHop(data.idTongHop);
-      } else {
-      }
+
       this.formData.patchValue(data);
-      this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0],
-        quyetDinhPdDtl: this.formData.value.quyetDinhPdDtl
-      })
-      this.fileDinhKem = data.fileDinhKem;
-      await this.buildTableView();
+
+      if (data.idThop) {
+        this.formData.patchValue({
+          type: "TH",
+        })
+        await this.selectMaTongHop(data.idThop);
+      } else {
+        this.formData.patchValue({
+          type: "TTr",
+        })
+        await this.onChangeIdTrHdr(data.idDxuat);
+      }
+      // this.formData.patchValue({
+      //   soQd: data.soQd?.split('/')[0],
+      //   quyetDinhPdDtl: this.formData.value.quyetDinhPdDtl
+      // })
+      this.canCu = data.canCu;
+      this.quyetDinh = data.quyetDinh;
+      // await this.buildTableView();
     }
     await this.spinner.hide();
   }
 
-  async bindingDataTongHop(dataTongHop?) {
-    if (dataTongHop) {
-      this.formData.patchValue({
-        cloaiVthh: dataTongHop.cloaiVthh,
-        tenCloaiVthh: dataTongHop.tenCloaiVthh,
-        loaiVthh: dataTongHop.loaiVthh,
-        tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        idTongHop: dataTongHop.id,
-        type: 'TH',
-      })
-      await this.selectMaTongHop(dataTongHop.id);
-    }
-  }
+  // async bindingDataTongHop(dataTongHop?) {
+  //   if (dataTongHop) {
+  //     this.formData.patchValue({
+  //       cloaiVthh: dataTongHop.cloaiVthh,
+  //       tenCloaiVthh: dataTongHop.tenCloaiVthh,
+  //       loaiVthh: dataTongHop.loaiVthh,
+  //       tenLoaiVthh: dataTongHop.tenLoaiVthh,
+  //       idTongHop: dataTongHop.id,
+  //       type: 'TH',
+  //     })
+  //     await this.selectMaTongHop(dataTongHop.id);
+  //   }
+  // }
 
   async selectMaTongHop(event) {
     // await this.spinner.show()
@@ -402,32 +414,66 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         let listQD = []
 
         data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
-          listDeXuat.push(item.dcnbKeHoachDcHdr)
-          listQD.push({
-            id: item.id,
-            hdrId: item.hdrId,
-            keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
-          })
-          item.dcnbKeHoachDcHdr.danhSachHangHoa.map(async item => {
-            listHangHoa.push(item)
-          })
-          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
-          let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(item => {
-            return {
-              ...item,
-              key: item.id
+          if (item.thKeHoachDieuChuyenCucHdr) {
+
+            if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenCucKhacCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenCucKhacCucDtls.map(async itemKH => {
+                listDeXuat.push(itemKH.dcnbKeHoachDcHdr)
+                listQD.push({
+                  // id: item.id,
+                  // hdrId: item.hdrId,
+                  keHoachDcHdrId: itemKH.dcnbKeHoachDcHdr.id,
+                })
+                itemKH.dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
+                  listHangHoa.push(itemHH)
+                })
+                let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(itemHH => {
+                  return {
+                    ...itemHH,
+                    key: itemHH.id
+                  }
+                })
+
+                this.listOfMapData.push({
+                  ...dcnbKeHoachDcHdr,
+                  key: `${item.dcnbKeHoachDcHdr.id}`,
+                  isEx: children.length > 0,
+                  children: children,
+                })
+              })
             }
-          })
 
-          this.listOfMapData.push({
-            ...dcnbKeHoachDcHdr,
-            key: `${item.dcnbKeHoachDcHdr.id}`,
-            isEx: children.length > 0,
-            children: children,
-          })
+            if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(async itemKH => {
+                listDeXuat.push(itemKH.dcnbKeHoachDcHdr)
+                listQD.push({
+                  // id: item.id,
+                  // hdrId: item.hdrId,
+                  keHoachDcHdrId: itemKH.dcnbKeHoachDcHdr.id,
+                })
+                let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
+                  listHangHoa.push(itemHH)
+                })
 
+                let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(itemHH => {
+                  return {
+                    ...itemHH,
+                    key: itemHH.id
+                  }
+                })
 
+                this.listOfMapData.push({
+                  ...dcnbKeHoachDcHdr,
+                  key: `${dcnbKeHoachDcHdr.id}`,
+                  isEx: children.length > 0,
+                  children: children,
+                })
+              })
+            }
 
+          }
 
         })
         this.listOfMapData.forEach(item => {
@@ -473,10 +519,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async save(isGuiDuyet?) {
-    // await this.spinner.show();
+    await this.spinner.show();
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
-
+    if (this.idInput) body.id = this.idInput
     // return
     // if (this.formData.value.soQd) {
     //   body.soQd = this.formData.value.soQd + "/" + this.maQd;
@@ -499,8 +545,31 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   async guiDuyet() {
+    let trangThai = STATUS.CHO_DUYET_LDV;
+    let mesg = 'Bạn muốn gửi duyệt văn bản?'
+    this.approve(this.idInput, trangThai, mesg);
+  }
+
+  async tuChoi() {
+    let trangThai = () => {
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV)
+        return STATUS.TU_CHOI_LDV
+      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC)
+        return STATUS.TU_CHOI_LDTC
+      return STATUS.CHO_DUYET_LDV;
+    };
+    this.reject(this.idInput, trangThai());
+  }
+
+  async pheDuyet() {
+    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
+    let mesg = 'Bạn muốn phê duyệt văn bản?'
+    this.approve(this.idInput, trangThai, mesg);
+  }
+
+  async banHanh() {
     let trangThai = STATUS.BAN_HANH;
-    let mesg = 'Văn bản sẵn sàng ban hành ?'
+    let mesg = 'Bạn muốn ban hành văn bản?'
     this.approve(this.idInput, trangThai, mesg);
   }
 
@@ -532,7 +601,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   }
 
   isDisabled() {
-    return false
+    if (this.isView) return true
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
       return false;
     } else {
@@ -623,8 +692,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           idDxuat: data.id,
         });
         await this.onChangeIdTrHdr(data);
-        this.tongSoLuongDxuat = data.tongSoLuong;
-        this.tongThanhTienDxuat = data.thanhTien;
+        // this.tongSoLuongDxuat = data.tongSoLuong;
+        // this.tongThanhTienDxuat = data.thanhTien;
       }
     });
   }
@@ -636,16 +705,57 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       const res = await this.soDeXuatQuyetDinhDieuChuyenService.getDetail(data.id)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
+        let listDeXuat = []
         let listQD = []
         data.thKeHoachDieuChuyenCucKhacCucDtls.map(async item => {
+          listDeXuat.push(item.dcnbKeHoachDcHdr)
           listQD.push({
-            id: item.id,
-            hdrId: item.hdrId,
+            // id: item.id,
+            // hdrId: item.hdrId,
             keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
           })
+          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+          let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(item => {
+            return {
+              ...item,
+              key: item.id
+            }
+          })
+          this.listOfMapData.push({
+            ...dcnbKeHoachDcHdr,
+            key: `${item.dcnbKeHoachDcHdr.id}`,
+            isEx: children.length > 0,
+            children: children,
+          })
         })
+        data.thKeHoachDieuChuyenNoiBoCucDtls.map(async item => {
+          listDeXuat.push(item.dcnbKeHoachDcHdr)
+          listQD.push({
+            // id: item.id,
+            // hdrId: item.hdrId,
+            keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
+          })
+          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+          let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(item => {
+            return {
+              ...item,
+              key: item.id
+            }
+          })
+          this.listOfMapData.push({
+            ...dcnbKeHoachDcHdr,
+            key: `${item.dcnbKeHoachDcHdr.id}`,
+            isEx: children.length > 0,
+            children: children,
+          })
+        })
+        this.listOfMapData.forEach(item => {
+          this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+        });
         this.formData.patchValue({
-          danhSachQuyetDinh: listQD
+          quyetDinhPdDtl: listDeXuat,
+          danhSachQuyetDinh: listQD,
+          listOfMapData: this.listOfMapData
         });
         // dataRes.idDxHdr = dataRes.id;
         // this.danhsachDx.push(dataRes);

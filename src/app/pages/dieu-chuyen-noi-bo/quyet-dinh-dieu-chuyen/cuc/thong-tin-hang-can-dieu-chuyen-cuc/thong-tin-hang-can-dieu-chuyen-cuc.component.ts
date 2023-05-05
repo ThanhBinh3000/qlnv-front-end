@@ -9,12 +9,25 @@ import { FormBuilder, FormGroup } from "@angular/forms";
   styleUrls: ['./thong-tin-hang-can-dieu-chuyen-cuc.component.scss']
 })
 export class ThongTinHangCanDieuChuyenCucComponent implements OnInit {
-  dataHeader: any[] = [];
-  dataColumn: any[] = []
-  dataTable: any[] = [];
-  code: string;
+  // dataHeader: any[] = [];
+  // dataColumn: any[] = []
+  // dataTable: any[] = [];
+  // code: string;
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
+
+  dsChiCuc: any[] = [];
+  dsDiemKho: any[] = [];
+
+  dsNhaKho: any[] = [];
+  dsNganKho: any[] = [];
+  dsLoKho: any[] = [];
+
+  dsDiemKhoNhan: any[] = [];
+
+  dsNhaKhoNhan: any[] = [];
+  dsNganKhoNhan: any[] = [];
+  dsLoKhoNhan: any[] = [];
 
   dataOP: any[] = [
     {
@@ -31,13 +44,32 @@ export class ThongTinHangCanDieuChuyenCucComponent implements OnInit {
     private _modalRef: NzModalRef,
   ) {
     this.formData = this.fb.group({
-      // ngayPduyet: [],
+      chiCucDC: [],
+      diemKho: [],
+      nhaKho: [],
+      nganKho: [],
+      loKho: [],
+      thuKho: [],
+      loaiHH: [],
+      clHH: [],
+      tonKho: [],
+      slDC: [],
+      kinhPhi: [],
+      thoiGian: [],
+      diemKhoNhan: [],
+      nhaKhoNhan: [],
+      nganKhoNhan: [],
+      loKhoNhan: [],
+      thuKhoNhan: [],
+      thayDoiThuDo: [],
+      slDCCL: [],
+      tlKD: [],
+      slNhapDC: [],
     }
     );
   }
 
   ngOnInit(): void {
-    console.log(this.dataTable);
   }
 
 
@@ -48,4 +80,66 @@ export class ThongTinHangCanDieuChuyenCucComponent implements OnInit {
   onCancel() {
     this._modalRef.close();
   }
+
+  getListNhaKho(value) {
+    if (value) {
+      this.formData.patchValue({
+        nhaKho: []
+      })
+      this.dsNhaKho = Array.isArray(this.dsDiemKho) ? this.dsDiemKho.find(f => f.maDvi === value)?.children : [];
+      console.log('getListNhaKho', value, this.dsNhaKho)
+    }
+  }
+
+  getListNhaKhoNhan(value) {
+    if (value) {
+      this.formData.patchValue({
+        nhaKhoNhan: []
+      })
+      this.dsNhaKhoNhan = Array.isArray(this.dsDiemKhoNhan) ? this.dsDiemKhoNhan.find(f => f.maDvi === value)?.children : [];
+      console.log('getListNhaKhoNhan', value, this.dsNhaKhoNhan)
+    }
+  }
+
+  getListNganKho(value) {
+    if (value) {
+      this.formData.patchValue({
+        nganKho: []
+      })
+      this.dsNganKho = Array.isArray(this.dsNhaKho) ? this.dsNhaKho.find(f => f.maDvi === value)?.children : [];
+      console.log('getListNganKho', value, this.dsNganKho)
+    }
+  }
+
+  getListNganKhoNhan(value) {
+    if (value) {
+      this.formData.patchValue({
+        nganKhoNhan: []
+      })
+      this.dsNganKhoNhan = Array.isArray(this.dsNhaKhoNhan) ? this.dsNhaKhoNhan.find(f => f.maDvi === value)?.children : [];
+      console.log('getListNganKhoNhan', value, this.dsNganKhoNhan)
+    }
+  }
+
+  getListLoKho(value) {
+    if (value) {
+      this.formData.patchValue({
+        loKho: []
+      })
+      this.dsLoKho = Array.isArray(this.dsNganKho) ? this.dsNganKho.find(f => f.maDvi === value)?.children : [];
+      console.log('getListLoKho', value, this.dsLoKho)
+    }
+  }
+
+  getListLoKhoNhan(value) {
+    if (value) {
+      this.formData.patchValue({
+        loKhoNhan: []
+      })
+      this.dsLoKhoNhan = Array.isArray(this.dsNganKhoNhan) ? this.dsNganKhoNhan.find(f => f.maDvi === value)?.children : [];
+      console.log('getListLoKhoNhan', value, this.dsLoKhoNhan)
+    }
+  }
+
+
 }

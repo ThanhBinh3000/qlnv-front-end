@@ -90,11 +90,16 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   phuongAnRow: any = {};
   dsDonVi: any;
   listChiCuc: any[] = [];
+  listChiCucNhan: any[] = [];
   isVisible = false;
   listNoiDung = []
   listChungLoaiHangHoa: any[] = [];
   quyetDinhPdDtlCache: any[] = [];
   deXuatSelected: any = []
+
+  listDiemKho: any[] = [];
+  listDiemKhoNhan: any[] = [];
+
 
   listOfMapData: any[] = [
     {
@@ -222,18 +227,22 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       // tenLoaiVthh: [],
       // tenCloaiVthh: [],
       // tenTrangThai: ['Dự thảo'],
-      // quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+      listOfMapData: [new Array<any>(),],
     }
     );
   }
 
   async ngOnInit() {
-    this.listOfMapData.forEach(item => {
-      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    });
-
-
+    // this.listOfMapData.forEach(item => {
+    //   this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    // });
     await this.spinner.show();
+
+    this.loadDsChiCuc()
+    this.getListDiemKho(this.userInfo.MA_DVI)
+    this.getListDiemKhoNhan(this.userInfo.MA_DVI)
+
     try {
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
@@ -258,11 +267,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   isTongCuc() {
-    return true//this.userService.isTongCuc()
+    return false//this.userService.isTongCuc()
   }
 
   isCuc() {
-    return false//this.userService.isCuc()
+    return true//this.userService.isCuc()
   }
 
   collapse(array: any[], data: any, $event: boolean): void {
@@ -305,6 +314,84 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
+  async loadDsChiCuc(value?) {
+    let body = {
+      trangThai: "01",
+      maDviCha: value ? value.maCucNhan ? value.maCucNhan : this.userInfo.MA_DVI.substring(0, 6) : this.userInfo.MA_DVI.substring(0, 6),
+      type: "DV"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
+        return f.maDvi !== this.userInfo.MA_DVI
+      }) : [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async getListDiemKho(maDvi) {
+    if (maDvi) {
+      try {
+        let body = {
+          maDviCha: maDvi,
+          trangThai: '01',
+        }
+        const res = await this.donViService.getTreeAll(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+
+          if (res.data && res.data.length > 0) {
+            res.data.forEach(element => {
+              if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKho = [];
+                this.listDiemKho = [
+                  ...this.listDiemKho,
+                  ...element.children
+                ]
+                console.log('getListDiemKho', this.listDiemKho)
+              }
+            });
+          }
+        }
+
+      } catch (error) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        this.spinner.hide();
+      }
+    }
+  }
+
+  async getListDiemKhoNhan(maDvi) {
+    if (maDvi) {
+      try {
+        let body = {
+          maDviCha: maDvi,
+          trangThai: '01',
+        }
+        const res = await this.donViService.getTreeAll(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data && res.data.length > 0) {
+            res.data.forEach(element => {
+              if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKhoNhan = [
+                  ...this.listDiemKhoNhan,
+                  ...element.children
+                ]
+              }
+            });
+          }
+        }
+
+      } catch (error) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        this.spinner.hide();
+      }
+    }
+  }
+
+
   async add() {
     await this.spinner.show();
     // let bodyTh = {
@@ -331,11 +418,27 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         // dataTable: this.listDanhSachTongHop,
         // dataHeader: ['Số tổng hợp', 'Nội dung tổng hợp'],
         // dataColumn: ['id', 'noiDungThop']
+        dsChiCuc: this.listChiCucNhan,
+        dsDiemKho: this.listDiemKho,
+        dsDiemKhoNhan: this.listDiemKhoNhan
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.selectMaTongHop(data.id);
+        console.log('modalQD', data)
+        // await this.selectMaTongHop(data.id);
+        this.listOfMapData.push({
+          ...data,
+          key: `${data.chiCucDC}`
+        })
+
+        this.listOfMapData.forEach(item => {
+          this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+        });
+
+        this.formData.patchValue({
+          listOfMapData: this.listOfMapData
+        })
 
       }
     });

@@ -10,8 +10,8 @@
           <div nz-col nzSpan="19">
             <nz-form-item>
               <nz-form-control>
-                <nz-select formControlName="nam1" nzAllowClear>
-                  <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select formControlName="chiCucDC" nzAllowClear>
+                  <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.id" [nzLabel]="p.title"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -30,8 +30,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam2" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="diemKho" nzAllowClear (ngModelChange)="getListNhaKho($event)">
+                      <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -44,8 +44,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam3" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="nhaKho" nzAllowClear (ngModelChange)="getListNganKho($event)">
+                      <nz-option *ngFor="let p of dsNhaKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -58,8 +58,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam4" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="nganKho" nzAllowClear (ngModelChange)="getListLoKho($event)">
+                      <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -72,8 +72,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam5" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="loKho" nzAllowClear>
+                      <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -86,9 +86,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam6" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                    </nz-select>
+                    <input nz-input [readonly]="true" />
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -149,7 +147,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy">
+                    <nz-date-picker formControlName="thoiGian" nzFormat="dd/MM/yyyy">
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
@@ -168,8 +166,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam7" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="diemKhoNhan" nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
+                      <nz-option *ngFor="let p of dsDiemKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -182,8 +180,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam8" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="nhaKhoNhan" nzAllowClear (ngModelChange)="getListNganKhoNhan($event)">
+                      <nz-option *ngFor="let p of dsNhaKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -196,8 +194,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam9" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="nganKhoNhan" nzAllowClear (ngModelChange)="getListLoKhoNhan($event)">
+                      <nz-option *ngFor="let p of dsNganKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -210,8 +208,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select formControlName="nam10" nzAllowClear>
-                      <nz-option *ngFor="let p of dataOP" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <nz-select formControlName="loKhoNhan" nzAllowClear>
+                      <nz-option *ngFor="let p of dsLoKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -304,6 +302,10 @@
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onCancel()">
           <i nz-icon nzType="close" class="icon-close"></i>
           Đóng
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk(formData.value)">
+          <i nz-icon nzType="close" class="icon-close"></i>
+          Lưu
         </a>
       </div>
     </div>

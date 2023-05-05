@@ -11,19 +11,49 @@
     </div>
 
     <div class="btn-group">
+
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+
       <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
         class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+
+      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-main ml-2"
+        (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
+
+      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
+        (click)="guiDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Gửi duyệt</span>
+      </button>
+
+      <button
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
+        type="button" class="btn btn-sub" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span>Từ chối</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub"
+        (click)="pheDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
+        (click)="banHanh()">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
+      </button>
+
     </div>
   </div>
   <!-- <nz-card class="mg-t-16 flex-card p-lr16"> -->
@@ -282,7 +312,7 @@
           <ng-container *ngFor="let data of expandTable.data, let i = index">
             <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
               <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                <td>{{i + 1}}</td>
+                <td>{{item.tenDvi ? (i + 1) : ''}}</td>
                 <td [nzShowExpand]="item.isEx" [(nzExpand)]="item.expand"
                   (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
                 </td>
