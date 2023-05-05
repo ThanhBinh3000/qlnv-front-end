@@ -281,6 +281,9 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
     if (event) {
       let data = await this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(event);
       this.quyetDinhPdDtlCache = cloneDeep(data.data.quyetDinhPdDtl);
+      this.tenLoaiVthh = data.data.tenLoaiVthh;
+      this.loaiNhapXuat = data.data.loaiNhapXuat;
+      this.kieuNhapXuat = data.data.kieuNhapXuat;
       if (this.formData.value.id) {
 
       } else {
@@ -327,9 +330,6 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       this.deXuatPhuongAn = cloneDeep(dataEdit.quyetDinhPdDx)
       let dataCache = this.quyetDinhPdDtlCache.find(s => s.idDx === this.deXuatSelected.idDx);
       if (dataCache) {
-        this.tenLoaiVthh = dataCache.tenLoaiVthh;
-        this.loaiNhapXuat = dataCache.loaiNhapXuat;
-        this.kieuNhapXuat = dataCache.kieuNhapXuat;
         dataCache.quyetDinhPdDx = dataCache.quyetDinhPdDx.map(s => ({...s, idVirtual: uuidv4()}));
         this.deXuatPhuongAnCache = cloneDeep(dataCache.quyetDinhPdDx);
       }
