@@ -32,6 +32,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   danhSachChiCuc: any[] = [];
   dataTable: any[] = [];
   dataTableRaw: any[] = [];
+  itemSelected: any;
+  tabSelected: string = "01";
+  itemQdPdDaDtxd: any;
 
   constructor(
     httpClient: HttpClient,
@@ -40,7 +43,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private ktQdXdHangNamService: KtQdXdHangNamService
+    private ktQdXdHangNamService: KtQdXdHangNamService,
+    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -85,6 +89,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     } finally {
       await this.spinner.hide();
     }
+    this.itemSelected = null;
   }
 
   clearForm() {
@@ -101,6 +106,31 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+  }
+
+
+  async loadQdPdDaDtxdByDuAn(item) {
+    this.spinner.show();
+    try {
+      let body = {
+        "idDuAn": item.id,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetduandtxdService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        console.log(this.itemQdPdDaDtxd, '88888');
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   convertListData(dataTable: any[]) {
@@ -156,27 +186,34 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     }
   }
 
-  selectRow(data) {
-    this.dataTable.forEach(itemKhoi => {
-      if (itemKhoi.dataChild && itemKhoi.dataChild.length > 0) {
-        itemKhoi.dataChild.forEach(itemNam => {
-          if (itemNam.dataChild && itemNam.dataChild.length > 0) {
-            itemNam.dataChild.forEach(itemChiCuc => {
-              if (itemChiCuc.dataChild && itemChiCuc.dataChild.length > 0) {
-                itemChiCuc.dataChild.forEach(itemDetail => {
-                  itemDetail.selected = false;
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+  async selectRow(data) {
+    if (this.itemSelected) {
+      this.tabSelected = null;
+      this.itemSelected = null;
+      this.dataTable.forEach(itemKhoi => {
+        if (itemKhoi.dataChild && itemKhoi.dataChild.length > 0) {
+          itemKhoi.dataChild.forEach(itemNam => {
+            if (itemNam.dataChild && itemNam.dataChild.length > 0) {
+              itemNam.dataChild.forEach(itemChiCuc => {
+                if (itemChiCuc.dataChild && itemChiCuc.dataChild.length > 0) {
+                  itemChiCuc.dataChild.forEach(itemDetail => {
+                    itemDetail.selected = false;
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+    await this.loadQdPdDaDtxdByDuAn(data);
     data.selected = true;
+    this.itemSelected = data;
+    this.selectTab("01");
   }
 
-  // selectTab(tab) {
-  //   this.tabSelected = tab;
-  // }
+ async selectTab(tab) {
+    this.tabSelected = tab;
+  }
 
 }
