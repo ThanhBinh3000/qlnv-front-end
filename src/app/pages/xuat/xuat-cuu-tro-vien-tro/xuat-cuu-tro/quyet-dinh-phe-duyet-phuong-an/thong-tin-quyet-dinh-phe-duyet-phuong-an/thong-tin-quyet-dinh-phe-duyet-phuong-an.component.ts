@@ -75,7 +75,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   listSoLuongDx: number[] = [0];
   listThanhTienCache: number;
   listSoLuongCache: number;
-  listSoLuongDxCache: number ;
+  listSoLuongDxCache: number;
   listSoLuongXcCache: number;
   slXuatCap: number = 0;
   slXuatCapCache: number = 0;
@@ -131,7 +131,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         soLuongXuaCap: [],
         loaiVthh: [],
         cloaiVthh: [],
-        loaiNhapXuat: [],
         trichYeu: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
@@ -145,7 +144,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         tenCloaiVthh: [],
         tenTrangThai: ['Dự thảo'],
         quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-        donViTinh: []
+        donViTinh: [],
+        loaiNhapXuat: [''],
+        kieuNhapXuat: [''],
+        mucDichXuat: ['']
       }
     );
   }
@@ -372,7 +374,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (!isGuiDuyet) {
     }
     let data = await this.createUpdate(body);
-    let id= data.id;
+    let id = data.id;
     await this.loadChiTiet(id);
     await this.spinner.hide();
   }
@@ -663,8 +665,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.listSoLuongDxCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuat, null)
       this.listSoLuongXcCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuatCap, null)
     } else {
-      this.listThanhTienCache =null;
-      this.listSoLuongCache =null;
+      this.listThanhTienCache = null;
+      this.listSoLuongCache = null;
     }
 
     if (this.deXuatPhuongAn.length !== 0) {
@@ -804,7 +806,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       this.slXuatCap = null;
     }
-    if(!this.formData.value.id && this.slXuatCap >0){
+    if (!this.formData.value.id && this.slXuatCap > 0) {
       this.formData.patchValue({
         xuatCap: true,
       })

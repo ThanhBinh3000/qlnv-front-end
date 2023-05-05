@@ -75,6 +75,7 @@ export class QuyetDinhPdDx {
 export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
+  @Input() loaiVthh: string;
   listLoaiHinhNhapXuat: any[] = [];
   listKieuNhapXuat: any[] = [];
   deXuatPhuongAnCache: any[] = [];

@@ -116,6 +116,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
+      loaiNhapXuat: [''],
+      kieuNhapXuat: [''],
+      mucDichXuat:['']
     })
   }
 
@@ -249,6 +252,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                   noiDungCuuTro: this.chiTiet,
                   soLuong: this.chiTiet.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
                   thanhTien: this.chiTiet.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                  loaiNhapXuat:res.data.loaiNhapXuat,
+                  kieuNhapXuat:res.data.kieuNhapXuat,
+                  mucDichXuat:res.data.mucDichXuat,
                 });
               }
               this.selectHangHoa(res.data.loaiVthh);
