@@ -1,16 +1,23 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
-import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { StorageService } from 'src/app/services/storage.service';
-import { cloneDeep } from 'lodash';
+import {HttpClient} from '@angular/common/http';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {
+  HopDongXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {
+  QdPdKetQuaBanDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import {
+  ThongTinDauGiaService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import {StorageService} from 'src/app/services/storage.service';
+import {cloneDeep} from 'lodash';
+
 @Component({
   selector: 'app-quanly-hopdong',
   templateUrl: './quanly-hopdong.component.html',
@@ -25,8 +32,8 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   isView = false;
   idHopDong: number;
   isEditHopDong: boolean
-  rowSelected: number = 0;
-
+  listAllDviTsan: any[] = [];
+  listDviTsanDaKy: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -61,8 +68,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     await this.spinner.show()
-    await Promise.all([
-    ]);
+    await Promise.all([]);
     if (this.id) {
       await this.getDetail(this.id)
       await this.selectRow(this.dataTable[0])
@@ -86,11 +92,20 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
             trangThaiHd: data.trangThaiHd,
             tenTrangThaiHd: data.tenTrangThaiHd
           })
+          this.listAllDviTsan= dataTtin.data.children;
+          this.listAllDviTsan=this.listAllDviTsan.flatMap(item => item.children).filter((item) =>{
+            return item.toChucCaNhan !== null && item.soLanTraGia>0
+          }).map(item => item.maDviTsan);
+
           this.dataTable = data.listHopDong;
+          this.listDviTsanDaKy=this.dataTable.filter(item => item.trangThai==STATUS.DA_KY);
+          this.listDviTsanDaKy=this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
+
         });
       }
     }
   }
+
   async selectRow(item: any) {
     if (this.dataTable.length > 0) {
       this.dataTable.forEach(i => i.selected = false);
@@ -99,6 +114,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       this.isView = true;
     }
   }
+
   async getDetailHopDong($event, id: number, b: boolean) {
     this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
@@ -119,7 +135,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     await this.spinner.show()
     if (this.validateData()) {
-      this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
+      if (this.listAllDviTsan.length == this.listDviTsanDaKy.length){
+        this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các mã đơn vị tài sản");
+      }
     }
     await this.spinner.hide()
   }
@@ -170,6 +191,11 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
         }
       },
     });
+  }
+
+  outputListAllDviTsan($event) {
+    console.log(123)
+    this.listAllDviTsan=$event;
   }
 
 }

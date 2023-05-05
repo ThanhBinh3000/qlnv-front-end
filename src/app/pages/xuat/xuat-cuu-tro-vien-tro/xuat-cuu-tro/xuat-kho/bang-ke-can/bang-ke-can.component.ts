@@ -54,9 +54,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.vldTrangThai = this.cuuTroVienTroComponent;
     this.formData = this.fb.group({
       id: [0],
-      nam: dayjs().get('year'),
+      nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
+      loaiVthh:[],
       thoiGianGiaoNhan: [],
       thoiGianGiaoNhanTu: [],
       thoiGianGiaoNhanDen: [],

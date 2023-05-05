@@ -30,7 +30,7 @@ import {Validators} from '@angular/forms';
   styleUrls: ['./them-moi-bien-ban-tinh-kho.component.scss']
 })
 export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements OnInit {
-  @Input() loaVthh: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -43,7 +43,13 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   maBb: string;
   checked: boolean = false;
   listFileDinhKem: any = [];
-
+  tongSoLuongXk: number
+  idPhieuKnCl: number = 0;
+  openPhieuKnCl = false;
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
+  idBangKe: number = 0;
+  openBangKe = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -170,7 +176,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaVthh,
+      loaiVthh: this.loaiVthh,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
@@ -261,13 +267,12 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
       let body = {
         trangThai: STATUS.DA_DUYET_LDCC,
         type: "XUAT_CTVT",
-        loaiVthh: this.loaVthh
+        loaiVthh: this.loaiVthh
       }
       let res = await this.phieuXuatKhoService.search(body)
       const list = res.data.content;
       this.listPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho && item.soBangKeCh !== null));
       this.dataTable = this.listPhieuXuatKho;
-      console.log( this.dataTable,"this.listPhieuXuatKho")
       this.dataTable.forEach(s => {
           s.slXuat = s.thucXuat;
           s.soBkCanHang = s.soBangKeCh;
@@ -275,6 +280,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
           s.idPhieuXuatKho = s.id;
         }
       )
+      this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
     }
   }
 
@@ -398,5 +404,40 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
   }
+
+
+  openPhieuKnClModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuKnCl = id;
+    this.openPhieuKnCl = true;
+  }
+
+  closePhieuKnClModal() {
+    this.idPhieuKnCl = null;
+    this.openPhieuKnCl = false;
+  }
+
+  openPhieuXkModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
+  }
+
+  openBangKeModal(id: number) {
+    console.log(id, "id")
+    this.idBangKe = id;
+    this.openBangKe = true;
+  }
+
+  closeBangKeModal() {
+    this.idBangKe = null;
+    this.openBangKe = false;
+  }
+
 
 }

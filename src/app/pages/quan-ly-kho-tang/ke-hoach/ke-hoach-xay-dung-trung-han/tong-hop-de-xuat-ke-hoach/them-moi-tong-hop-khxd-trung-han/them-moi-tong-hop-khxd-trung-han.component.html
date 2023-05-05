@@ -16,25 +16,27 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf="!isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_THEM') && !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" !isViewQd && (formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              *ngIf=" !isViewQd &&((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_DUYETLCTC')))  && isTongHop "
               (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf=" !isViewQd &&(formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              *ngIf=" !isViewQd &&((formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_DUYETLDV'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_DUYETLCTC')))  && isTongHop "
               (click)="save(true)">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH_THEM') &&  !isViewQd && !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -377,10 +379,10 @@
                     <thead>
                     <tr>
                       <th class="text-center" width="2%" rowSpan="2">STT</th>
-                      <th class="text-center" width="8%%" rowSpan="2">Danh mục khối</th>
-                      <th class="text-center" width="8%%" rowSpan="2">Danh mục dự án</th>
-                      <th class="text-center" width="8%%" rowSpan="2">Địa điểm xây dựng</th>
-                      <th class="text-center" width="7%%" rowSpan="2">Loại dự án</th>
+                      <th class="text-center" width="8%" rowSpan="2">Danh mục khối</th>
+                      <th class="text-center" width="8%" rowSpan="2">Danh mục dự án</th>
+                      <th class="text-center" width="8%" rowSpan="2">Địa điểm xây dựng</th>
+                      <th class="text-center" width="7%" rowSpan="2">Loại dự án</th>
                       <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
                       <th class="text-center" width="5%" rowSpan="2">Khối</th>
                       <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>

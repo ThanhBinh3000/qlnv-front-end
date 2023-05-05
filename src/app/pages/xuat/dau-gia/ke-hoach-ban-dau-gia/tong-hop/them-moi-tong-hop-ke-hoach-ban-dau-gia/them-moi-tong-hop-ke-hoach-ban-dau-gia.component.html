@@ -5,7 +5,7 @@
             <span>Quay lại</span>
         </button>
         <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
-            class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
+            class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo quyết định</span>
         </button>
@@ -20,7 +20,7 @@
     <div class="header header-green-background">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span [ngClass]="formData.value.trangThai == STATUS.DA_DU_THAO_QD ? 'status-xanh' : 'status-do' ">
+                <span [ngClass]="formData.value.trangThai == STATUS.DA_BAN_HANH_QD ? 'status-xanh' : 'status-do' ">
                     {{ formData.value.tenTrangThai }}
                 </span>
                 <span>TỔNG HỢP KẾ HOẠCH BÁN ĐẤU GIÁ</span>
@@ -153,14 +153,14 @@
                         <tr>
                             <th [width]="30">STT</th>
                             <th>Cục DTNN KV</th>
-                            <th>Số kế hoạch</th>
+                            <th>Số kế hoạch/đề xuất</th>
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>SL đơn vị tài sản</th>
                             <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
                             <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
                             <th>Trạng thái</th>
-                            <th>Trạng thái</th>
+                            <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -173,8 +173,8 @@
                             <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.slDviTsan}}</td>
-                            <td>{{ data.tongTienGiaKhoiDiemDx | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{ data.tongKhoanTienDatTruocDx | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.giaKdTheoDonGiaDd | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{ data.khoanTienDtruocTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{ data.tenTrangThai}}</td>
                             <td>
                                 <a>
@@ -185,7 +185,8 @@
                         </tr>
                     </tbody>
                 </nz-table>
-                <app-them-de-xuat-ke-hoach-ban-dau-gia *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
+                <app-them-de-xuat-ke-hoach-ban-dau-gia *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true"
+                    [loaiVthhInput]="loaiVthh">
                 </app-them-de-xuat-ke-hoach-ban-dau-gia>
             </nz-collapse-panel>
         </nz-collapse>

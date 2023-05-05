@@ -97,7 +97,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
@@ -106,6 +106,17 @@
                                  [nzMin]="0" [nzStep]="1" [nzFormatter]="globals.formatter">
                 </nz-input-number>
               </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/Công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="khoi">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -187,7 +198,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2" *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
