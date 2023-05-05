@@ -1,0 +1,651 @@
+<div class="bg-trang">
+    <div class="mt16 flex-card p-lr16">
+        <div class="header header-green-background">
+            <div class="header-text">
+                <div class="title-chi-tieu">
+                    <span
+                        [ngClass]="formData.value.trangThai && ((formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV||formData.value.trangThai == STATUS.DA_TAO_CBV) ? 'status-xanh' : 'status-do')">
+                        <!-- {{ formData.value.tenTrangThai }} -->
+                        {{listTenTrangThai[formData.value.trangThai]}}
+                    </span>
+                    <span>Tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</span>
+                </div>
+            </div>
+            <div class="btn-group tong-hop-dc">
+                <button type="button" class="btn btn-sub" (click)="quayLai()">
+                    <i class="fa fa-arrow-left"></i>
+                    <span>Quay lại</span>
+                </button>
+                <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
+                    *ngIf="!isViewDetail && !daXdinhDiemNhap && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC)">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Y/c Chi cục xác định điểm nhập ĐC</span>
+                </button>
+                <button
+                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && checkPermission(null)"
+                    type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+                    <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                    <span>Từ chối</span>
+                </button>
+                <button
+                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && checkPermission(null)"
+                    type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+                    <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                    <span>Từ chối</span>
+                </button>
+                <button
+                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && checkPermission(null)"
+                    type="button" class="btn btn-sub"
+                    (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    <span>Duyệt</span>
+                </button>
+                <button
+                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && checkPermission(null)"
+                    type="button" class="btn btn-sub"
+                    (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                    <span>Duyệt</span>
+                </button>
+                <button *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai == STATUS.DU_THAO ||
+                 formData.value.trangThai == STATUS.TU_CHOI_LDV ||
+                  formData.value.trangThai == STATUS.TU_CHOI_LDC ||
+                   formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && checkPermission(null)"
+                    type="button" class="btn btn-sub" (click)="save(true)" [disabled]="!daXdinhDiemNhap">
+                    <i class="icon htvbdh_tcdt_guiduyet"></i>
+                    <span>Lưu và gửi duyệt</span>
+                </button>
+                <button
+                    *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || 
+                    formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && checkPermission(null)"
+                    nz-button type="button" class="modal__button--save" (click)="save(false)">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <nz-alert class="mb-2"
+        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC"
+        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    </nz-alert>
+</div>
+<ng-container *ngIf="!formData.value.trangThai">
+    <div class="bg-trang">
+        <nz-card class="flex-card pd-l-6 pd-r-6">
+            <form nzLayout="vertical" nz-form [formGroup]="formData">
+                <div nz-row nzSpan="24" [nzGutter]="24">
+                    <div nz-col nzSpan="3">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
+                            </nz-form-label>
+                            <nz-form-control nzErrorTip="Vui lòng chọn năm kế hoạch">
+                                <nz-select formControlName="namKeHoach" [nzDisabled]="isViewDetail"
+                                    (change)="handleChangeLoaiDC($event)">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                                        [nzLabel]="p.text"></nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan>
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" class="label-color-kh" nzRequired>Loại điều chuyển
+                            </nz-form-label>
+                            <nz-form-control nzErrorTip="Vui lòng chọn loại điều chuyển">
+                                <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup" nzRequired
+                                    (change)="handleChangeLoaiDC($event)" [nzDisabled]="isViewDetail">
+                                    <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
+                                    <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
+                                    <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
+                                </nz-radio-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="5">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" class="label-color-kh">Thời gian tổng hợp
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-date-picker class="search__input" formControlName="thoiGianTongHop"
+                                    [nzShowTime]="true" nzDisabled [nzFormat]="FORMAT_DATE_TIME_STR"></nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </form>
+            <ng-container *ngIf="!isViewDetail && !formData.value.trangThai">
+                <div class="bottom-right-btn">
+                    <button type="button" class="btn btn-main mr-12" (click)="tongHop()">
+                        <i class="icon htvbdh_tcdt_tao-qd"></i>
+                        <span>Tổng hợp KH Điều chuyển</span>
+                    </button>
+                </div>
+            </ng-container>
+        </nz-card>
+    </div>
+</ng-container>
+<ng-container *ngIf="isTongHop">
+    <div class="bg-trang">
+        <nz-card class="flex-card pd-l-6 pd-r-6">
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
+                    <form nzLayout="vertical" nz-form [formGroup]="formData">
+                        <!-- <ng-template #error let-control>
+                            <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                            </ng-container>
+                        </ng-template>
+                        <div class="mt16 flex-card p-lr16">
+                            <div class="header header-green-background mg-t-16">
+                                <div class="header-text">
+                                    <div class="title-chi-tieu">
+                                        <span></span>
+                                        <span>Thông tin chung</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="bg-trang"> -->
+                        <div nz-row nzSpan="24" [nzGutter]="24">
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Mã tổng hợp
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="maTongHop" [readOnly]="true" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="3">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Số đề xuất công
+                                        văn
+                                    </nz-form-label>
+                                    <nz-form-control nzErrorTip="Vui lòng nhập số đề xuất">
+                                        <nz-input-group nzAddOnAfter="/DCNB">
+                                            <input nz-input formControlName="soDeXuat" [readonly]="isViewDetail" />
+                                        </nz-input-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="5">
+                                <nz-form-item>
+                                    <!-- TODO:Chỉ mở ra cho test và phải đóng lại khi chạy thật -->
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày tạo đề xuất (Ngày tổng
+                                        hợp)
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker class="search__input" formControlName="ngayTongHop"
+                                            [nzDisabled]="isViewDetail" [nzFormat]="FORMAT_DATE_STR">
+                                        </nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="8">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Trích yếu (Nội
+                                        dung tổng
+                                        hợp)
+                                    </nz-form-label>
+                                    <nz-form-control nzErrorTip="Vui lòng nhập trích yếu">
+                                        <textarea nz-input formControlName="trichYeu"
+                                            [readonly]="isViewDetail"></textarea>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày trình duyệt tổng cục
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker class="search__input" formControlName="ngayDuyetLdc"
+                                            [nzDisabled]="true" [nzFormat]="FORMAT_DATE_STR">
+                                        </nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                        <!-- <div class="bg-trang"> -->
+                        <div nz-row nzSpan="24" [nzGutter]="24">
+                            <div nz-col nzSpan="3">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-select formControlName="namKeHoach" [nzDisabled]="true">
+                                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                                                [nzLabel]="p.text"></nz-option>
+                                        </nz-select>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan>
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh" nzRequired>Loại điều chuyển
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup"
+                                            [nzDisabled]="true">
+                                            <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
+                                            <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
+                                            <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
+                                        </nz-radio-group>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="5">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Thời gian tổng hợp
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <nz-date-picker class="search__input" formControlName="thoiGianTongHop"
+                                            [nzShowTime]="true" nzDisabled
+                                            [nzFormat]="FORMAT_DATE_TIME_STR"></nz-date-picker>
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                        </div>
+                        <!-- </div> -->
+                    </form>
+                </nz-collapse-panel>
+            </nz-collapse>
+        </nz-card>
+    </div>
+    <!-- <nz-card class="flex-card pd-l-6 pd-r-6">
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
+            <div class="bg-trang">
+                <div nz-row nzSpan="24" [nzGutter]="24">
+                    <div nz-col nzSpan="3">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
+                            </nz-form-label>
+                            <nz-select formControlName="nam" [nzDisabled]="true">
+                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                            </nz-select>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan>
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" class="label-color-kh" nzRequired>Loại điều chuyển
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-radio-group formControlName="type" nzName="radiogroup" [nzDisabled]="true">
+                                    <label nz-radio nzValue="TC">Tất cả</label>
+                                    <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
+                                    <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
+                                </nz-radio-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="5">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" class="label-color-kh">Thời gian tổng hợp
+                            </nz-form-label>
+                            <nz-form-control>
+                                <nz-date-picker class="search__input" formControlName="thoiGianTongHop"
+                                    [nzShowTime]="true" nzDisabled [nzFormat]="FORMAT_DATE_TIME_STR"></nz-date-picker>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nz-card> -->
+    <!--thông tin tổng hợp giua 2 chi cuc-->
+</ng-container>
+<ng-container *ngIf="isTongHop && ['ALL', 'CHI_CUC'].includes(this.formData.value.loaiDieuChuyen)">
+    <div class="bg-trang">
+        <nz-card class="flex-card p-lr16">
+            <ng-template #extraTpl>
+                <!-- <button type="button" id="id-btn-main" class="btn btn-main" (click)=" yeuCauChiCucNhan($event)"
+                    *ngIf="!isViewDetail && !daXdinhDiemNhap">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Y/c Chi cục xác định điểm nhập ĐC</span>
+                </button> -->
+            </ng-template>
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'KẾ HOẠCH ĐIỀU CHUYỂN GIỮA 2 CHI CỤC TRONG CÙNG 1 CỤC'" [nzActive]="true"
+                    [nzExtra]="extraTpl ">
+                    <!-- <nz-card class="mt-2px flex-card data-table card-border-content table-card"> -->
+                    <div class="bg-trang">
+                        <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTable2ChiCuc"
+                            [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" width="60px" class="text-center">STT</th>
+                                    <th rowspan="2"></th>
+                                    <th rowspan="2"></th>
+                                    <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+                                    <th rowspan="2"
+                                        style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
+                                        class="text-center">Thời gian dự
+                                        kiến điều chuyển</th>
+                                    <th colspan="5" class="text-center">Chi cục nhận điều chuyển đến</th>
+                                    <th rowspan="2" class="text-center break max-w-90 min-w-90">Trạng thái xác định điểm
+                                        nhập
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Chi cục</th>
+                                    <th>Điểm kho</th>
+                                    <th>Lô kho</th>
+                                    <th class="text-center">Loại HH</th>
+                                    <th class="text-center">Chủng loại hàng hóa</th>
+                                    <th class="text-center">ĐVT</th>
+                                    <th class="text-center">Tồn kho</th>
+                                    <th class="text-center">Sl điều chuyển</th>
+                                    <th class="text-center">Dự toán kinh phí (triệu đồng)</th>
+                                    <th>Chi cục</th>
+                                    <th class="text-center">Điểm kho</th>
+                                    <th class="text-center">Lô kho</th>
+                                    <th class="text-center">Tích lượng khả dụng</th>
+                                    <th class="text-center">Sl nhập ĐC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of basicTable.data , let i = index">
+                                    <tr class="level-2">
+                                        <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                                        <td *ngIf="item.children.length>0; else tdNormal" [nzExpand]="item.expand"
+                                            (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+                                        </td>
+                                        <td></td>
+                                        <td class="bold">{{ item.tenDvi || "" }}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
+                                            'vi_VN'}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <ng-template #tdNormal>
+                                            <td></td>
+                                        </ng-template>
+                                    </tr>
+                                    <ng-container *ngIf="item.expand">
+                                        <ng-container *ngFor="let bb of item.children, let y = index">
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td [nzExpand]="bb.expand" (nzExpandChange)="bb.expand=!bb.expand">
+                                                </td>
+                                                <td></td>
+                                                <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <ng-container *ngIf="bb.expand">
+                                                <ng-container *ngFor="let c of bb.children, let y = index">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                        (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                    </td> -->
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="bold">{{c.tenLoKho || ""}}</td>
+                                                        <td class="bold">{{c.tenLoaiVthh || ""}}</td>
+                                                        <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                                                        <td class="bold">{{c.tenDonViTinh || ""}}</td>
+                                                        <td class="text-right bold">{{c.tonKho|number: '1.0-1':
+                                                            'vi_VN'}}
+                                                        </td>
+                                                        <td class="text-right bold">{{c.soLuongDc|number: '1.0-1':
+                                                            'vi_VN'}}</td>
+                                                        <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
+                                                            'vi_VN'}}</td>
+                                                        <!-- <td>{{c.thoiGianDkDc}}</td>
+                                                        <td>{{c.tenChiCucNhan}}</td>
+                                                        <td>{{c.tenDiemKhoNhan}}</td>
+                                                        <td>{{c.tenNhaKhoNhan}}</td>
+                                                        <td>{{c.tenNganKhoNhan}}</td>
+                                                        <td>{{c.tenLoKhoNhan}}</td>
+                                                        <td>{{c.tichLuongKd}}</td>
+                                                        <td>{{c.soLuongPhanBo}}</td> -->
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <ng-container *ngFor="let d of c.children, let y = index">
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                            (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                        </td> -->
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="bold">{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
+                                                            <td class="bold">{{d.tenChiCucNhan || ""}}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="text-center">
+                                                                <label nz-checkbox [(ngModel)]="c.daXdinhDiemNhap"
+                                                                    nzDisabled="true"></label>
+                                                            </td>
+                                                        </tr>
+                                                        <ng-container *ngFor="let e of d.children, let y = index">
+                                                            <tr>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                                (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                            </td> -->
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td>{{(e.tenDiemKhoNhan || "")}}</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                            </tr>
+                                                            <ng-container *ngFor="let e of d.children, let y = index">
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <!-- <td [nzExpand]="expandSet.has(bb.key)"
+                                                                    (nzExpandChange)="onExpandChange(bb.key, $event)">
+                                                                </td> -->
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td>{{(e.tenLoKhoNhan|| "") + " - " +
+                                                                        (e.tenNganKhoNhan
+                                                                        || "") + " - "
+                                                                        + (e.tenNhaKhoNhan || "")}}</td>
+                                                                    <td class="text-right">
+                                                                        {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
+                                                                    <td class="text-right">
+                                                                        {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            </ng-container>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </ng-container>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <!-- </nz-card> -->
+                </nz-collapse-panel>
+            </nz-collapse>
+        </nz-card>
+    </div>
+</ng-container>
+
+<!-- Thong tin tong hop dieu chuyen giua 2 cuc -->
+<ng-container *ngIf="isTongHop && ['ALL', 'CUC'].includes(this.formData.value.loaiDieuChuyen)">
+    <div class="bg-trang">
+        <nz-card class="flex-card p-lr16">
+            <nz-collapse nzAccordion>
+                <nz-collapse-panel [nzHeader]="'KẾ HOẠCH ĐIỀU CHUYỂN GIỮA 2 CỤC DỰ TRỮ NHÀ NƯỚC KHU VỰC'"
+                    [nzActive]="true">
+                    <div class="pd-10">
+                        <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="groupData2Cuc"
+                            [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                            <thead>
+                                <tr>
+                                    <th width="60px" class="text-center">STT</th>
+                                    <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
+                                    <th style="width: 10%">Số đề xuất/công văn</th>
+                                    <th style="width: 15%">Ngày trình duyệt tổng cục</th>
+                                    <th style="width: 17%">Tổng dự toán kinh phí(triệu đồng)</th>
+                                    <th>Trích yếu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of groupData2Cuc, let i = index">
+                                    <tr [ngClass]="{'bg-selected': item.selected}" class="tr-cursor"
+                                        (click)="selectRow(item, isAddNew)">
+                                        <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                                        <td>{{ item.tenCucNhan }}</td>
+                                        <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
+                                                item.soDxuat }}</a></td>
+                                        <td>{{ item.ngayGduyetTc|date:"dd/MM/yyyy" }}</td>
+                                        <td>{{ item.tongDuToanKp }}</td>
+                                        <td>{{item.trichYeu}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                    <div class="pd-10">
+                        <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTable2Cuc"
+                            [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" width="60px" class="text-center">STT</th>
+                                    <th rowspan="2"></th>
+                                    <th colspan="8">Chi cục đề xuất điều chuyển</th>
+                                    <th rowspan="2" class="text-center"
+                                        style="max-width: 90px; min-width: 90px;  white-space: break-spaces;">Thời
+                                        gian dự kiến điều chuyển</th>
+                                    <th>Chi cục nhận điều chuyển đến</th>
+                                </tr>
+                                <tr>
+                                    <th>Chi cục/điểm kho</th>
+                                    <th>Lô kho</th>
+                                    <th>Loại HH</th>
+                                    <th>Chủng loại hàng hóa</th>
+                                    <th>ĐVT</th>
+                                    <th>Tồn kho</th>
+                                    <th>Sl điều chuyển</th>
+                                    <th>Dự toán kinh phí (triệu đồng)</th>
+                                    <th>Chi cục</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of dataTable2Cuc , let i = index">
+                                    <tr class="level-2">
+                                        <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                                        <td *ngIf="item.danhSachHangHoa?.length>0; else tdNormal"
+                                            [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
+                                        <td class="bold">{{ item.tenDvi }}</td>
+                                        <td colspan="6"></td>
+                                        <td class="text-right bold">{{item.duToanKphi}}</td>
+                                        <td colspan="3"></td>
+                                        <ng-template #tdNormal>
+                                            <td></td>
+                                        </ng-template>
+                                    </tr>
+                                    <ng-container *ngIf="item.expand">
+                                        <ng-container *ngFor="let bb of item.danhSachHangHoa, let y=index">
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{bb.tenDiemKho}}</td>
+                                                <td>{{bb.tenLoKho}}</td>
+                                                <td>{{bb.tenLoaiVthh}}</td>
+                                                <td>{{bb.tenCloaiVthh}}</td>
+                                                <td>{{bb.tenDonViTinh}}</td>
+                                                <td class="text-right">{{bb.tonKho}}</td>
+                                                <td class="text-right">{{bb.soLuongDc}}</td>
+                                                <td class="text-right">{{bb.duToanKphi}}</td>
+                                                <td>{{bb.thoiGianDkDc|date:"dd/MM/yyyy"}}</td>
+                                                <td>{{bb.tenChiCucNhan}}</td>
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </nz-collapse-panel>
+            </nz-collapse>
+        </nz-card>
+    </div>
+</ng-container>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKeHoachDC"
+    (nzOnCancel)="closeModalKeHoachDC()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-chi-tiet-ke-hoach-dcnb [id]="idKeHoachDC" [isViewOnModal]="true"></app-chi-tiet-ke-hoach-dcnb>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalKeHoachDC()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

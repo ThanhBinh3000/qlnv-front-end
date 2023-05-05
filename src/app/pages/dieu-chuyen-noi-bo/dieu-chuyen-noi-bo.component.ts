@@ -26,6 +26,7 @@ export class DieuChuyenNoiBoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("router", this.router.url)
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
