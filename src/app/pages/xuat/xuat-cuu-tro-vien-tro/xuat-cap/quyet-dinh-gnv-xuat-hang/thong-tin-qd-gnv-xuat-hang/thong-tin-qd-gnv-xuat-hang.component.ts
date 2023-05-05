@@ -119,7 +119,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadDsVthh(),
         this.loadDsQdPd(),
@@ -127,7 +127,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.loadDsDiemKho()
       ])
       await this.loadDetail(this.id)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
@@ -137,15 +137,17 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   async loadDetail(id: number) {
+    console.log(id,"íd")
     if (id > 0) {
+      console.log(id,"íd")
       await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             res.data.soQd = res.data.soQd.split('/')[0]
             this.formData.patchValue(res.data);
-
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
+            console.log(res,"data")
             this.buildTableView();
           }
         })
@@ -165,8 +167,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   buildTableView() {
     let data = cloneDeep(this.formData.value.noiDungCuuTro);
-    console.log(data, "data");
-    console.log(this.userInfo.MA_DVI, "this.userInfo.MA_DVI");
     if (this.userService.isCuc()) {
       data = data.filter(s => s.maDviChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
     }
@@ -229,7 +229,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.quyetDinhXuatCapService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              console.log(res.data,"res.data")
               let noiDungCuuTro1 = []
               if (this.userInfo.CAP_DVI === "2") {
                 noiDungCuuTro1 = cloneDeep(res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI)));
@@ -292,7 +291,6 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
           this.dsQdPd = data.content;
-          console.log(res,"res")
         }
       } else {
         this.dsQdPd = [];
