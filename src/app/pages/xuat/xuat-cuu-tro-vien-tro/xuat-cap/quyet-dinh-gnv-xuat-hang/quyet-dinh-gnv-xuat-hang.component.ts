@@ -23,9 +23,10 @@ import {XuatCuuTroVienTroComponent} from "../../xuat-cuu-tro-vien-tro.component"
 export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnInit {
 
   @Input() loaiVthh: string;
+  @Input() isView: boolean;
   isDetail: boolean = false;
-  selectedId: number = 0;
-  isViewDetail: boolean;
+  idSelected: number = 0;
+
   public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
 
@@ -37,7 +38,21 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   openBbTk = false;
   idBbHd: number = 0;
   openBbHd = false;
-  isView = false;
+
+  listTrangThai: any[] = [
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục'},
+    {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
+  ];
+  listTrangThaiXh: any[] = [
+    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
+    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
+    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'}
+  ];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -51,7 +66,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
-      nam: [dayjs().get('year')],
+      nam: [''],
       soQd: [''],
       maDvi: [''],
       ngayKy: [''],
@@ -75,7 +90,19 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
 
     };
   }
+  disabledStartNgayKy = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKyDen) {
+      return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
+    }
+    return false;
+  };
 
+  disabledEndNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
+  };
   async ngOnInit() {
     await this.spinner.show();
     try {
@@ -95,6 +122,7 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   }
 
   redirectDetail(id, b: boolean) {
+    console.log(id,55)
     this.idSelected = id;
     this.isDetail = true;
     this.isView = b;
