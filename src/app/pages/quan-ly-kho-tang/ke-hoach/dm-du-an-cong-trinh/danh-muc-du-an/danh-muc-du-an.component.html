@@ -175,8 +175,8 @@
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.khoi"
-                   (input)="filterInTable('khoi',filterTable.khoi)" size="small"/>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenKhoi"
+                   (input)="filterInTable('tenKhoi',filterTable.tenKhoi)" size="small"/>
           </nz-input-group>
         </th>
         <th>
@@ -262,7 +262,7 @@
         <td>{{ data.maDuAn }}</td>
         <td>{{ data.tenDuAn}}</td>
         <td>{{ data.diaDiem }}</td>
-        <td>{{ data.khoi }}</td>
+        <td>{{ data.tenKhoi }}</td>
         <td>{{ data.tenChiCuc }}</td>
         <td>{{ data.tenDiemKho }}</td>
         <td  class="text-center">{{data.tgKhoiCong}}</td>
