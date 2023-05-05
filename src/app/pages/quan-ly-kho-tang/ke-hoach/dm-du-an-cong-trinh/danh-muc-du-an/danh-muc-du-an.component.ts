@@ -188,6 +188,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
 export class DanhMucKho {
   id: number;
+  namKeHoach : number;
   idVirtual : any
   maDuAn: string;
   tenDuAn: string;

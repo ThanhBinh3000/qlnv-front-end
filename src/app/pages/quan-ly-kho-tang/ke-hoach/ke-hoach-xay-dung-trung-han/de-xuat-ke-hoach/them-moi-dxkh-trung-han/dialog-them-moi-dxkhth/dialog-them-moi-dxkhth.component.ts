@@ -46,8 +46,8 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
-    this.getDetail()
-
+    this.getDetail();
+    this.item.namKeHoach = dayjs().get('year');
   }
 
   handleOk() {
