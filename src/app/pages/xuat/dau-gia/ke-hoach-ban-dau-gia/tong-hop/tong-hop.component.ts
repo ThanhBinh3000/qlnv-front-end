@@ -7,6 +7,8 @@ import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 
 @Component({
   selector: 'app-tong-hop',
@@ -15,9 +17,13 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class TongHopComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  @Input()
+  listVthh: any[] = [];
   isQuyetDinh: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  listLoaiHangHoa: any[] = [];
+  dataTongHop: any;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa Tạo QĐ' },
@@ -31,6 +37,7 @@ export class TongHopComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
@@ -71,14 +78,14 @@ export class TongHopComponent extends Base2Component implements OnInit {
     }
   }
 
-  taoQdinh(id: number) {
+  taoQdinh(data: number) {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
     tabActive.classList.remove('ant-menu-item-selected')
     let setActive = elem.getElementsByClassName('ant-menu-item')[2];
     setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = true;
-    this.idSelected = id;
+    this.dataTongHop = data;
   }
 
   showTongHop() {
@@ -95,6 +102,9 @@ export class TongHopComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
     })
+    if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+      this.loadDsVthh();
+    }
   }
 
   clearFilter() {
@@ -127,4 +137,10 @@ export class TongHopComponent extends Base2Component implements OnInit {
     return endValue.getTime() <= this.formData.value.ngayThopTu.getTime();
   };
 
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
+    }
+  }
 }

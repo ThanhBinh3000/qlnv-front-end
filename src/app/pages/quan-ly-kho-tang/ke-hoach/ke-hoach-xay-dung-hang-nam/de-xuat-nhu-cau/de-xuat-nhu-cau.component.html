@@ -56,15 +56,15 @@
     <div class="group-button">
       <h3> DANH SÁCH ĐỀ XUẤT NHU CẦU ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</h3>
       <div class="buttons">
-        <button *ngIf="userService.isCuc()" type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XOA')" (click)="deleteMulti()" type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
+          <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isCuc()" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM')" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -164,14 +164,14 @@
           <td> <a nz-button nzType="link" (click)="openModalCttongHop(data)">{{ data.soQdTrunghan }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,true)">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isCuc()  ">
+              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM')  ">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() " (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_XOA') " (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

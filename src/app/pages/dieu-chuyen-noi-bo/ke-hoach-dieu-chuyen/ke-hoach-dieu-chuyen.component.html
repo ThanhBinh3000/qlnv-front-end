@@ -207,15 +207,20 @@
             <a  *ngIf="checkAllowEdit(data)">
               <i class="fa fa-edit" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveNdc(data)">
+            <a  *ngIf="checkApproveNdcTvqt(data)">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
-            <a  *ngIf="checkApproveDc(data)">
+            <a  *ngIf="checkApproveNdcLdcc(data)">
+              <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
+            </a>
+            <a  *ngIf="checkApproveDcTvqt(data)">
+              <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
+            </a>
+            <a  *ngIf="checkApproveDcLdcc(data)">
               <i class="icon htvbdh_tcdt_pheduyet" (click)="redirectDetail(data,false)"></i>
             </a>
             <a *ngIf="checkAllowDelete(data)">
-              <i class="fa fa-trash-o do" nz-popconfirm nz-button
-                 nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="xoa(data)"></i>
+              <i class="fa fa-trash-o do" (click)="xoa(data)"></i>
             </a>
           </td>
           <td class="text-left" *ngIf="!userService.isChiCuc()">

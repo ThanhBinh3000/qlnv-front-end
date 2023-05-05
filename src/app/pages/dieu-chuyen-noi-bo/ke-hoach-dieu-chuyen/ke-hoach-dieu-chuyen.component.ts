@@ -54,7 +54,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
   ) {
     super(httpClient, storageService, notification, spinner, modal, keHoachDieuChuyenService);
     this.formData = this.fb.group({
-      nam: [dayjs().get("year"), [Validators.required]],
+      nam: null,
       loaiDc: null,
       tenDvi: null,
       maDvi: null,
@@ -189,8 +189,37 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     await this.search();
   }
 
-  xoa(data: any) {
-
+  xoa(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.keHoachDieuChuyenService.delete({ id: item.id }).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   checkAllowEdit(data: any): boolean {
@@ -203,18 +232,24 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     return data.trangThai == this.STATUS.DU_THAO && this.userService.isAccessPermisson('DCNB_KHDC_XOA');
   }
 
-  checkApproveDc(data: any) {
-    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.CHO_DUYET_LDCC)
-      && this.userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC', 'DCNB_KHDC_DUYET_TBPTVQT');
+  checkApproveDcTvqt(data: any) {
+    return (data.trangThai == this.STATUS.CHODUYET_TBP_TVQT && this.userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT'));
   }
 
-  checkApproveNdc(data: any) {
-    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC)
-      && this.userService.isAccessPermissons('DCNB_KHDC_DUYET_LDCCUC', 'DCNB_KHDC_DUYET_TBPTVQT');
+  checkApproveDcLdcc(data: any) {
+    return ( data.trangThai == this.STATUS.CHO_DUYET_LDCC && this.userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC'));
+  }
+
+  checkApproveNdcTvqt(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT  && this.userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT'));
+  }
+
+  checkApproveNdcLdcc(data: any) {
+    return (data.trangThai == this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC && this.userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC'));
   }
 
   checkAllowView(data: any) {
-    return !(this.checkAllowEdit(data) || this.checkAllowDelete(data) || this.checkApproveDc(data) || this.checkApproveNdc(data))
+    return !(this.checkAllowEdit(data) || this.checkAllowDelete(data) || this.checkApproveDcLdcc(data) || this.checkApproveDcTvqt(data) || this.checkApproveNdcLdcc(data) || this.checkApproveNdcTvqt(data))
       && this.userService.isAccessPermisson('DCNB_KHDC_XEM');
   }
 }
