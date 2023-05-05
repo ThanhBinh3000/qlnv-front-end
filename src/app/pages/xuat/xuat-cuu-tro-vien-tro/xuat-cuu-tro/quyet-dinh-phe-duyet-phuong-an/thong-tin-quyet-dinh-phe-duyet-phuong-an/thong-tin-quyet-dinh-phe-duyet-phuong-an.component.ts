@@ -75,7 +75,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
   listSoLuongDx: number[] = [0];
   listThanhTienCache: number;
   listSoLuongCache: number;
-  listSoLuongDxCache: number;
+  listSoLuongDxCache: number ;
   listSoLuongXcCache: number;
   slXuatCap: number = 0;
   slXuatCapCache: number = 0;
@@ -131,6 +131,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         soLuongXuaCap: [],
         loaiVthh: [],
         cloaiVthh: [],
+        loaiNhapXuat: [],
+        kieuNhapXuat: [],
         trichYeu: [],
         trangThai: [STATUS.DU_THAO],
         lyDoTuChoi: [],
@@ -144,10 +146,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
         tenCloaiVthh: [],
         tenTrangThai: ['Dự thảo'],
         quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-        donViTinh: [],
-        loaiNhapXuat: [''],
-        kieuNhapXuat: [''],
-        mucDichXuat: ['']
+        donViTinh: []
       }
     );
   }
@@ -254,6 +253,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             loaiVthh: data.loaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             loaiNhapXuat: data.loaiNhapXuat,
+            kieuNhapXuat: data.kieuNhapXuat,
             idTongHop: event,
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
@@ -314,6 +314,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
             loaiVthh: data.loaiVthh,
             tenLoaiVthh: data.tenLoaiVthh,
             loaiNhapXuat: data.loaiNhapXuat,
+            kieuNhapXuat: data.kieuNhapXuat,
             idTongHop: null,
             maTongHop: data.maTongHop,
             tongSoLuongDx: data.tongSlCtVt,
@@ -374,7 +375,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     if (!isGuiDuyet) {
     }
     let data = await this.createUpdate(body);
-    let id = data.id;
+    let id= data.id;
     await this.loadChiTiet(id);
     await this.spinner.hide();
   }
@@ -665,8 +666,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
       this.listSoLuongDxCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuat, null)
       this.listSoLuongXcCache = this.deXuatPhuongAnCache.reduce((prev, cur) => prev + cur.soLuongXuatCap, null)
     } else {
-      this.listThanhTienCache = null;
-      this.listSoLuongCache = null;
+      this.listThanhTienCache =null;
+      this.listSoLuongCache =null;
     }
 
     if (this.deXuatPhuongAn.length !== 0) {
@@ -806,7 +807,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     } else {
       this.slXuatCap = null;
     }
-    if (!this.formData.value.id && this.slXuatCap > 0) {
+    if(!this.formData.value.id && this.slXuatCap >0){
       this.formData.patchValue({
         xuatCap: true,
       })
