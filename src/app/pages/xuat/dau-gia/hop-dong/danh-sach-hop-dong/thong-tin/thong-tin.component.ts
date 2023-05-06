@@ -428,7 +428,6 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
     })
     this.listAllDviTsan = this.listDviTsan;
     this.sendListAllDviTsan.emit(this.listAllDviTsan);
-    console.log(this.listAllDviTsan, "this.listAllDviTsan")
     this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => {
         return s1.maDviTsan.split(',').includes(s.maDviTsan) && s1.toChucTrungDg.includes(s.toChucCaNhan);
       })

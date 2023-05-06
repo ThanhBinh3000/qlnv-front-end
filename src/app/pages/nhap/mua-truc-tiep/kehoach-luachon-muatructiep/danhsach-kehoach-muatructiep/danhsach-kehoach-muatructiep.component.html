@@ -80,7 +80,7 @@
             </form>
             <div nz-col class="cangiua group-button-search">
                 <div>
-                    <button nz-button class="search__button--clear" (click)="clearForm()">
+                    <button nz-button class="search__button--clear" (click)="clearForm({loaiVthh: this.loaiVthh, maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null})">
                         <i class="icon  htvbdh_nhap-lai1"></i>
                         Xóa điều kiện
                     </button>
@@ -122,7 +122,7 @@
                         <th class="text-center" style="width: 2%;">STT</th>
                         <th class="text-center" style="width: 7%;">Số kế hoạch/đề xuất</th>
                         <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
-                        <th class="text-center" style="width: 7%;">Ngày tạo</th>
+                        <th class="text-center" style="width: 7%;">Ngày lập</th>
                         <th class="text-center" style="width: 5%;">Ngày phê duyệt</th>
                         <th class="text-center" style="width: 10%;">Trích yếu</th>
                         <th class="text-center" style="width: 5%;">Số QĐ giao chỉ tiêu</th>
@@ -146,27 +146,23 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                                    (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
+                                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
+                                           (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                                </nz-select>
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                                    (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
+                                                (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"></nz-date-picker>
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo123>
-                                <i nz-icon nzType="calendar"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
-                                    (input)="filterInTable('ngayPduyet',filterTable.ngayPduyet)" size="small" />
+                            <nz-input-group>
+                                <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.ngayPduyet"
+                                                (ngModelChange)="filterInTable('ngayPduyet', convertDateToString(filterTable.ngayPduyet))"></nz-date-picker>
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo123>
-                                <i nz-icon nzType="calendar"></i>
-                            </ng-template>
                         </th>
                         <th>
                             <nz-input-group>
@@ -176,8 +172,8 @@
                         </th>
                         <th>
                             <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                                    (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdCc"
+                                    (input)="filterInTable('soQdCc',filterTable.soQdCc)" size="small" />
                             </nz-input-group>
                         </th>
                         <th *ngIf="userService.isTongCuc()">
@@ -258,15 +254,22 @@
                                 data.tenTrangThaiTh: data.maThop}}</a>
                         </td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')"
-                                *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.DA_DUYET_CBV )">
+                            <a (click)="xemChiTiet(data.id, true,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')"
+                                *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC && data.trangThai != STATUS.CHO_DUYET_TP && data.trangThai != STATUS.DA_DUYET_CBV) ?
+                                (!userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM') && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM'))
+                                : userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XEM')">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC && data.trangThai != STATUS.DA_DUYET_CBV )"
-                                (click)="goDetail(data.id,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')">
+                            <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC && data.trangThai != STATUS.CHO_DUYET_TP && data.trangThai != STATUS.DA_DUYET_CBV && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM'))"
+                                (click)="xemChiTiet(data.id, false,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_THEM')">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO )"
+                            <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC'))
+                                     || (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))"
+                               (click)="xemChiTiet(data.id, false, false)">
+                                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                            </a>
+                            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XOA')"
                                 (click)="delete(data,'NHDTQG_PTMTT_KHMTT_LT_DEXUAT_XOA')">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
@@ -284,7 +287,7 @@
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
-                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                             </ng-template>
                         </nz-pagination>
                         <!-- end phân trang  -->
@@ -295,7 +298,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-themmoi-kehoach-muatructiep [idInput]="idSelected" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
+    <app-themmoi-kehoach-muatructiep [idInput]="idSelected" [isView]="isViewChiTiet" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
     </app-themmoi-kehoach-muatructiep>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewChiTieu" (nzOnCancel)="closeModalChiTieu()">
@@ -334,3 +337,6 @@
         </button>
     </div>
 </nz-modal>
+<ng-template #suffixTemplateInfo123>
+    <i nz-icon nzType="calendar"></i>
+</ng-template>
