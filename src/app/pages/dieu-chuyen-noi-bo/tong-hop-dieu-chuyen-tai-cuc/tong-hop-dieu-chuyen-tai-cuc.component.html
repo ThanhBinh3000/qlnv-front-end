@@ -17,7 +17,7 @@
                     </div>
                     <div nz-col nzSpan="2" class="mt-16">
                         <label class="search__label">Mã tổng hợp</label>
-                        <input nz-input formControlName="maTongHop" />
+                        <input nz-input formControlName="id" />
                     </div>
                     <div nz-col nzSpan="3" class="mt-16">
                         <label class="search__label">Loại điều chuyển </label>
@@ -53,7 +53,7 @@
             <h3 class="text-uppercase">Thông tin tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="!viewOnly && this.checkPermission(null)">
+                    *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && userService.isCuc()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
@@ -61,12 +61,14 @@
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button> -->
-                <button type="button" class="btn btn-sub" (click)="exportData('xay-dung-phuong-an-ctvt.xlsx')">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('tong-hop-ke-hoach-dieu-chuyen-tai-cuc.xlsx')"
+                    *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_EXP') && userService.isCuc()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,true)"
-                    *ngIf="!viewOnly && this.checkPermission(null)">
+                    *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && userService.isCuc()">
                     <i class=" icon htvbdh_tcdt_tao-qd"></i>
                     <span>Tổng hợp</span>
                 </button>
@@ -124,7 +126,7 @@
                             <nz-input-group>
                                 <nz-input-group>
                                     <nz-select nzAllowClear [(ngModel)]="filterTable.loaiDieuChuyen"
-                                        (ngModelChange)="filterInTable('loaiDieuChuyen',filterTable.loaiDieuChuyen)">
+                                        (ngModelChange)="filterInTable('loaiDieuChuyen',filterTable.loaiDieuChuyen, 'eq')">
                                         <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.value"
                                             [nzLabel]="p.giaTri"></nz-option>
                                     </nz-select>
@@ -147,7 +149,7 @@
                         <th>
                             <nz-input-group>
                                 <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
-                                    (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                                    (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, 'eq')">
                                     <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma"
                                         [nzLabel]="p.giaTri"></nz-option>
                                 </nz-select>
@@ -172,14 +174,19 @@
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ LIST_TRANG_THAI[data.trangThai]}}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, true)" *ngIf="this.checkPermission(null)">
+                            <a (click)="viewDetail(data.id, true)"
+                                *ngIf="viewOnly || (!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') && checkRoleView(data.trangThai))">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && !checkRole(data.trangThai) "
+                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <a *ngIf="!viewOnly && this.checkPermission(null) && (!data.trangThai || data.trangThai == STATUS.DU_THAO)"
+                            <a
+                                *ngIf="!viewOnly && checkPermissonApprove(data.trangThai) && checkRoleApproveDc(data.trangThai)">
+                                <i class="icon htvbdh_tcdt_pheduyet" (click)="viewDetail(data.id,false)"></i>
+                            </a>
+                            <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && checkRoleDelete(data.trangThai)"
                                 (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>

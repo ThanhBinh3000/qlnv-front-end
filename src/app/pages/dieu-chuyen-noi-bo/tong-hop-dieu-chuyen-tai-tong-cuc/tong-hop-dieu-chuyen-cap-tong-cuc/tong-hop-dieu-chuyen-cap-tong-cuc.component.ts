@@ -35,26 +35,29 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     listHangHoaAll: any[] = [];
     listChungLoaiHangHoa: any[] = [];
     listTrangThai: any[] = [
-        { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-        { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
-        { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
-        { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
-        { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
-        { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-        { ma: this.STATUS.DA_TAO_CBV, giaTri: 'Đã tạo - CB Vụ' },
+        { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
+        { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
+        { ma: this.STATUS.DA_BAN_HANH_QD, giaTri: 'Đã ban hành QĐ' }
     ];
+    LIST_TRANG_THAI: { [key: string]: string } = {
+        '26': 'Chưa tạo QĐ',
+        '27': 'Đã dự thảo QĐ',
+        '28': 'Đã ban hành QĐ',
+    }
     listLoaiDieuChuyen: any[] = [
-        { value: 1, giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
-        { value: 2, giaTri: "Giữa 2 cục DTNN KV" },
+        { value: "CHI_CUC", giaTri: "Giữa 2 chi cục trong cùng 1 cục" },
+        { value: "CUC", giaTri: "Giữa 2 cục DTNN KV" },
     ];
+    LIST_DIEU_CHUYEN = {
+        // "ALL": "Tất cả",
+        "CHI_CUC": "Giữa 2 chi cục trong cùng 1 cục",
+        "CUC": "Giữa 2 cục DTNN KV"
+    }
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
     isEdit: boolean = false;
 
-    dataTableAll: any[] = [
-        { id: 1, namKeHoach: 2022 }, { id: 2, namKeHoach: 2023 }
-    ]
-    dataTable: any[] = cloneDeep(this.dataTableAll)
+    dataTable: any[] = []
 
     constructor(
         httpClient: HttpClient,
@@ -79,7 +82,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             // chungLoaiHangHoa: [''],
             // noiDungTongHop: ['']
             namKeHoach: [''],
-            maTongHop: [''],
+            id: [''],
             loaiDieuChuyen: [''],
             soDeXuat: [''],
             ngayTongHop: [''],
@@ -92,7 +95,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         })
         this.filterTable = {
             namKeHoach: '',
-            maTongHop: '',
+            id: '',
             loaiDieuChuyen: '',
             ngayTongHop: '',
             trichYeu: '',
@@ -174,15 +177,35 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         this.isViewDetail = false;
         await this.search();
     };
-    checkRole(trangThai) {
-        let check = true;
-        if ((this.userService.isTongCuc() && trangThai == STATUS.DU_THAO || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_TP)) {
-            check = false;
+    updateAllChecked(): void {
+        this.indeterminate = false;
+        if (this.allChecked) {
+            if (this.dataTable && this.dataTable.length > 0) {
+                this.dataTable.forEach((item) => {
+                    if (item.trangThai == this.STATUS.CHUA_TAO_QD) {
+                        item.checked = true;
+                    }
+                });
+            }
+        } else {
+            if (this.dataTable && this.dataTable.length > 0) {
+                this.dataTable.forEach((item) => {
+                    item.checked = false;
+                });
+            }
         }
-        return check;
+    }
+    checkRoleView(trangThai: string): boolean {
+        return !(this.checkRoleEdit(trangThai) || this.checkRoleDelete(trangThai))
+    }
+    checkRoleEdit(trangThai: string): boolean {
+        return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
     };
+    checkRoleDelete(trangThai: string): boolean {
+        return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
+    }
     viewDetail(id: number, isViewDetail: boolean) {
-        this.idSelected = id;
+        this.selectedId = id;
         this.isDetail = true;
         this.isViewDetail = isViewDetail;
         this.isEdit = !isViewDetail;
