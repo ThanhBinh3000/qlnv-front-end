@@ -295,7 +295,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.dsQdPd = data.content;
+          this.dsQdPd = data.content.filter(item=>item.soQdGiaoNv==null);
         }
       } else {
         this.dsQdPd = [];
