@@ -125,6 +125,10 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     }
   }
 
+  goBack() {
+    this.showListEvent.emit();
+  }
+
   async loadQdKhĐtxd() {
     this.spinner.show();
     try {
@@ -265,7 +269,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         });
       }
     } else {
-      let res = await this.createUpdate(this.formData.value)
+      await this.createUpdate(this.formData.value)
       // if (res) {
       //   this.goBack()
       // }
