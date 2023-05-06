@@ -565,6 +565,7 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   async loadThongTinChiTiet(nguonTongHopId: string) {
+    console.log(nguonTongHopId,'nguonTongHopId');
     this.isTonghop = true;
     this.spinner.show();
     if (nguonTongHopId == 'TCDT') {
