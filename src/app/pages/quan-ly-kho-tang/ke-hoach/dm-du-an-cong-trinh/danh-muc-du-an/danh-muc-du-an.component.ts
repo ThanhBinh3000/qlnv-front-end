@@ -1,30 +1,19 @@
 import { Component, OnInit } from "@angular/core";
-import dayjs from "dayjs";
-import { cloneDeep } from "lodash";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { PAGE_SIZE_DEFAULT } from "src/app/constants/config";
 import { MESSAGE } from "src/app/constants/message";
 import { UserLogin } from "src/app/models/userlogin";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
 import { saveAs } from "file-saver";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
 import { DanhMucKhoService } from "../../../../../services/danh-muc-kho.service";
 import { STATUS } from "../../../../../constants/status";
-import {
-  DialogDanhMucKhoComponent
-} from "../../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
-import {
-  DanhMucSuaChuaService
-} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import { ThongTinDmScLonComponent } from "../danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
 import { ThemMoiDanhMucDuAnKhoComponent } from "./them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component";
 
 @Component({
@@ -71,6 +60,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
+      capDvi: [null],
       soQd: [null],
       khoi: [null],
       tenDuAn: [null],
@@ -91,9 +81,10 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.userService.isCuc()) {
-        await this.loadDsKhoi();
-        await this.loadDanhSachCuc();
-        await this.loadDsChiCuc();
+         this.loadDsKhoi();
+         this.loadDsChiCuc();
+      } else {
+         this.loadDanhSachCuc();
       }
       this.filter();
       this.spinner.hide();
@@ -188,7 +179,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
   filter() {
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
     })
     this.search()
   }
@@ -196,6 +188,7 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
 export class DanhMucKho {
   id: number;
+  namKeHoach : number;
   idVirtual : any
   maDuAn: string;
   tenDuAn: string;

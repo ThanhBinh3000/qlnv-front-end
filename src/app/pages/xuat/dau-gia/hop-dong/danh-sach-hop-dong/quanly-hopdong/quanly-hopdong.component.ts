@@ -32,8 +32,8 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   isView = false;
   idHopDong: number;
   isEditHopDong: boolean
-  rowSelected: number = 0;
-
+  listAllDviTsan: any[] = [];
+  listDviTsanDaKy: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -92,7 +92,15 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
             trangThaiHd: data.trangThaiHd,
             tenTrangThaiHd: data.tenTrangThaiHd
           })
+          this.listAllDviTsan= dataTtin.data.children;
+          this.listAllDviTsan=this.listAllDviTsan.flatMap(item => item.children).filter((item) =>{
+            return item.toChucCaNhan !== null && item.soLanTraGia>0
+          }).map(item => item.maDviTsan);
+
           this.dataTable = data.listHopDong;
+          this.listDviTsanDaKy=this.dataTable.filter(item => item.trangThai==STATUS.DA_KY);
+          this.listDviTsanDaKy=this.listDviTsanDaKy.map(item => item.maDviTsan.split(",")).flat();
+
         });
       }
     }
@@ -127,7 +135,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
   async pheDuyet() {
     await this.spinner.show()
     if (this.validateData()) {
-      this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
+      if (this.listAllDviTsan.length == this.listDviTsanDaKy.length){
+        this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoàn thành thực hiện hợp đồng ?")
+      }
+      else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các mã đơn vị tài sản");
+      }
     }
     await this.spinner.hide()
   }
@@ -179,4 +192,10 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
       },
     });
   }
+
+  outputListAllDviTsan($event) {
+    console.log(123)
+    this.listAllDviTsan=$event;
+  }
+
 }

@@ -49,6 +49,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null],
+      namKh: [dayjs().get('year'), Validators.required],
       soQd: [null],
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],

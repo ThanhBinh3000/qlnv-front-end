@@ -8,7 +8,7 @@
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
        formData.value.trangThai == STATUS.TU_CHOI_LDV)&& userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
       type="button" class="btn btn-sub"
-      (click)="saveAndSend(STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
+      (click)="saveAndSend(formData.value, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
@@ -121,7 +121,7 @@
               <nz-form-label [nzNoColon]="true">
               </nz-form-label>
               <label nz-checkbox [ngModelOptions]="{standalone: true}" [ngModel]="checkXuatGao"
-                     [nzDisabled]="checkXuatGao"
+                     [nzDisabled]="formData.value.id"
                      (ngModelChange)="changeCheckXuatGao($event)">Chọn phương án xuất gạo
                 chuyển xuất cấp</label>
             </nz-form-item>
@@ -131,6 +131,7 @@
               <nz-form-label [nzNoColon]="true"></nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-select formControlName="idQdPd"
+                           [nzDisabled]="formData.value.id"
                            (ngModelChange)="changeQdPd($event)">
                   <nz-option *ngFor="let p of listQdPaChuyenXc" [nzValue]="p.id" [nzLabel]="p.soQd">
                   </nz-option>
@@ -155,28 +156,19 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [isViewDetail]="isView"></file-list>
+                <file-list [data]="formData.value.canCu" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
         </div>
-
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input/>
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file"/>
-                  </div>
-                </ng-template>
-              </div>
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm QĐ đã ban hành
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </form>
@@ -193,7 +185,7 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #quyetDinhPdDtl1 class="nowrap mt-16 table-chi-tiet" nzBordered
+      <nz-table #quyetDinhPdDtl class="nowrap mt-16 table-chi-tiet" nzBordered
                 [nzData]="formData.value.quyetDinhPdDtl">
         <thead>
         <tr>
@@ -206,14 +198,14 @@
         </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let item of quyetDinhPdDtl1.data, let i = index;">
+        <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
           <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
             <td>{{i + 1}}</td>
             <td>{{item.tenDviDx}}</td>
             <td>{{item.soDx}}</td>
             <td>{{item.ngayPduyetDx|date:globals.dateFormat}}</td>
             <td>{{item.trichYeuDx}}</td>
-            <td>{{item.tongSoLuongDx|number: '1.0-1'}}</td>
+            <td>{{item.tongSoLuongDx|number : globals.numberFormat}}</td>
           </tr>
         </ng-container>
         </tbody>
@@ -224,7 +216,7 @@
           <th></th>
           <th></th>
           <th class="text-blue">Tổng</th>
-          <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
+          <th class="text-blue">{{tongSoLuongDxuat|number : globals.numberFormat}}</th>
         </tr>
         </tfoot>
       </nz-table>
@@ -274,7 +266,7 @@
                             SL xuất cứu trợ, viện trợ gạo được chuyển sang xuất cấp(thóc gia công)
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                             <span class="text-red">{{deXuatSelected.soLuongXuatCap | number : '1.0-1' : 'vi_VN'}}
+                             <span class="text-red">{{deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
                                (kg)</span>
                           </nz-form-control>
                         </nz-form-item>
@@ -285,7 +277,8 @@
                             Tổng SL gạo cần xuất cứu trợ, viện trợ theo PA được duyệt
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                             <span class="text-blue">{{deXuatSelected.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}
+                             <span
+                               class="text-blue">{{+deXuatSelected.tongSoLuongDx + +deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
                                (kg)</span>
                           </nz-form-control>
                         </nz-form-item>
@@ -296,7 +289,7 @@
                             SL gạo xuất được từ kho để cứu trợ, viện trợ
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{deXuatSelected.tongSoLuongDx | number : '1.0-1' : 'vi_VN'}}
+                            <span class="text-blue">{{deXuatSelected.tongSoLuongDx | number : globals.numberFormat}}
                               (kg)</span>
                           </nz-form-control>
                         </nz-form-item>
@@ -372,7 +365,7 @@
                           SL xuất cứu trợ, viện trợ gạo được chuyển sang xuất cấp(thóc gia công)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                             <span class="text-red">{{deXuatSelected.soLuongXuatCap | number : '1.0-1' : 'vi_VN'}}
+                             <span class="text-red">{{deXuatSelected.soLuongXuatCap | number : globals.numberFormat}}
                                (kg)</span>
                         </nz-form-control>
                       </nz-form-item>
@@ -383,7 +376,8 @@
                           Tổng SL gạo cần xuất cứu trợ, viện trợ theo PA được duyệt
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                             <span class="text-blue">{{deXuatSelected.soLuongXuatCap * 2 | number : '1.0-1' : 'vi_VN'}}
+                             <span
+                               class="text-blue">{{deXuatSelected.soLuongXuatCap * 2 | number : globals.numberFormat}}
                                (kg)</span>
                         </nz-form-control>
                       </nz-form-item>
@@ -394,7 +388,7 @@
                           SL gạo xuất được từ kho để cứu trợ, viện trợ
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{formData.value.tongTienGiaDeXuat | number : '1.0-1' : 'vi_VN'}}
+                            <span class="text-blue">{{formData.value.tongTienGiaDeXuat | number : globals.numberFormat}}
                               (kg)</span>
                         </nz-form-control>
                       </nz-form-item>
@@ -408,7 +402,7 @@
                         <span></span>
                         <span>Phương án xuất cấp thóc gia công phục vụ cứu trợ, viện trợ</span>
                       </div>
-                      <div>
+                      <div *ngIf="!formData.value.idQdPd">
                         <button type="button"
                                 class="btn btn-main" (click)="showModal()" *ngIf="!isView">
                           <i class="icon htvbdh_dau-cong"></i>
@@ -484,24 +478,24 @@
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col nzSpan="6">
+                <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                      SL thóc cần xuất cấp gia công phục vụ cứu trợ, viện trợ
+                    <nz-form-label [nzNoColon]="true">SL thóc cần xuất cấp gia công để cứu trợ, viện trợ
                     </nz-form-label>
-                    <nz-form-control [nzErrorTip]="error">
-                      <nz-statistic
-                        [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                    <nz-form-control>
+                      <span
+                        style="color: blue;font-size: 16px"><strong>{{this.deXuatSelected.soLuongXuatCap|number:globals.numberFormat}}</strong></span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
-                <div nz-col nzSpan="6">
+                <div nz-col [nzSpan]="6">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true">
-                      Thành tiền
+                    <nz-form-label [nzNoColon]="true">Thành tiền
                     </nz-form-label>
-                    <nz-form-control [nzErrorTip]="error">
-                      <nz-statistic [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'"></nz-statistic>
+                    <nz-form-control>
+                    <span
+                      style="color: blue;font-size: 16px"><strong>{{this.deXuatSelected.soLuongXuatCap|number:globals.numberFormat}}
+                     </strong></span>
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -531,8 +525,10 @@
       </nz-card>
     </div>
   </div>
-  <nz-modal [nzWidth]="'50%'" [nzVisible]="isVisible" [nzFooter]="modalFooter" [nzClosable]="false"
+  <nz-modal [nzWidth]="'50%'" [nzVisible]="isVisible" [nzFooter]="modalFooter"
+            nzClosable="false"
             nzMaskClosable="true"
+            (nzOnCancel)="handleCancel()"
             nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
     <ng-container *nzModalContent>
       <form nz-form [formGroup]="phuongAnRow">
@@ -548,24 +544,25 @@
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="formData.value.idQdPd">
               <nz-form-label [nzNoColon]="true" [nzXs]="7">SL thóc cần xuất gia công</nz-form-label>
               <nz-form-control>
-            <span>{{phuongAnRow.value.soLuongXuat|number : '1.0-1' : 'vi_VN'}}
+            <span style="color: red">{{phuongAnRow.value.soLuongXuat|number : globals.numberFormat}}
               (kg)</span>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="formData.value.idQdPd">
               <nz-form-label [nzNoColon]="true" [nzXs]="7">SL thóc đã phân bổ xuất gia công</nz-form-label>
               <nz-form-control>
-            <span>{{phuongAnRow.value.soLuongXuatThucTe|number : '1.0-1' : 'vi_VN'}}
+            <span style="color: blue">{{phuongAnRow.value.soLuongXuatThucTe|number : globals.numberFormat}}
               (kg)</span>
               </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
+            <nz-form-item *ngIf="formData.value.idQdPd">
               <nz-form-label [nzNoColon]="true" [nzXs]="7">SL xuất thóc gia công còn lại cần phân bổ</nz-form-label>
               <nz-form-control>
-            <span>{{+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe|number : '1.0-1' : 'vi_VN'}}
+            <span
+              style="color: red">{{+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe|number : globals.numberFormat}}
               (kg)</span>
               </nz-form-control>
             </nz-form-item>
@@ -581,13 +578,13 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCuc|number : '1.0-1' : 'vi_VN'}}</span></p>
+                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCuc|number : globals.numberFormat}}</span></p>
                   </div>
                 </div>
 
               </nz-form-control>
             </nz-form-item>
-            <!--<nz-form-item>
+            <nz-form-item *ngIf="!formData.value.idQdPd">
               <nz-form-label [nzNoColon]="true" [nzRequired]="true" [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
               <nz-form-control [nzErrorTip]="'Vui lòng nhập tổng số lượng'">
                 <nz-input-number formControlName="soLuongXuatCuc" [nzMin]="1"
@@ -597,7 +594,7 @@
                                  [nzDisabled]="disableInputComponent.soLuongXuatCuc">
                 </nz-input-number>
               </nz-form-control>
-            </nz-form-item>-->
+            </nz-form-item>
           </nz-card>
           <nz-card nzTitle="Thông tin phân bổ xuất cứu trợ, viện trợ thực tế của Cục">
             <nz-form-item>
@@ -613,7 +610,7 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{phuongAnRow.value.tonKhoChiCuc|number : '1.0-1' : 'vi_VN'}}</span></p>
+                      style="color: #001CFF">{{phuongAnRow.value.tonKhoChiCuc|number : globals.numberFormat}}</span></p>
                   </div>
                 </div>
               </nz-form-control>
@@ -632,7 +629,8 @@
                   </div>
                   <div nz-col [nzSpan]="8">
                     <p style="font-size: 13px;font-weight: 500">Tồn kho: <span
-                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCloaiVthh|number : '1.0-1' : 'vi_VN'}}</span></p>
+                      style="color: #001CFF">{{phuongAnRow.value.tonKhoCloaiVthh|number : globals.numberFormat}}</span>
+                    </p>
                   </div>
                 </div>
               </nz-form-control>
@@ -644,8 +642,10 @@
                   <div nz-col [nzSpan]="16">
                     <nz-input-number formControlName="soLuongXuatChiCuc" [nzMin]="1" [nzStep]="0.1"
                                      [nzSize]="'small'"
-                                     [nzMax]="(+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe)  < phuongAnRow.value.tonKhoCloaiVthh?
-                                     +phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe:phuongAnRow.value.tonKhoCloaiVthh"
+                                     [nzMax]="formData.value.idQdPd?
+                                     ((+phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe)  < phuongAnRow.value.tonKhoCloaiVthh?
+                                     +phuongAnRow.value.soLuongXuat - +phuongAnRow.value.soLuongXuatThucTe:phuongAnRow.value.tonKhoCloaiVthh):
+                                     (phuongAnRow.value.soLuongXuatCuc  < phuongAnRow.value.tonKhoCloaiVthh?phuongAnRow.value.soLuongXuatCuc:phuongAnRow.value.tonKhoCloaiVthh)"
                                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
 
                     </nz-input-number>
@@ -670,7 +670,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true" [nzXs]="7">Thành tiền</nz-form-label>
               <nz-form-control>
-            <span>{{+phuongAnRow.value.soLuongXuatChiCuc * +phuongAnRow.value.donGiaKhongVat|number : '1.0-1' : 'vi_VN'}}
+            <span>{{+phuongAnRow.value.soLuongXuatChiCuc * +phuongAnRow.value.donGiaKhongVat|number : globals.numberFormat}}
               (đồng)</span>
               </nz-form-control>
             </nz-form-item>
@@ -686,7 +686,7 @@
 
   <!--modal sua noi dung-->
   <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleSuaNoiDung" [nzFooter]="modalFooterSuaNoiDung"
-            [nzClosable]="false"
+            [nzClosable]="false" [nzMaskClosable]="true"
             nzTitle="CHI TIẾT PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ">
     <ng-container *nzModalContent>
       <!--    <form nz-form>-->
@@ -739,14 +739,15 @@
         </tr>
         </thead>
         <tbody>
-
         <ng-container *ngFor="let item of tblData.data, let i = index;">
           <tr>
             <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
             <td>{{i + 1}}</td>
             <td>{{ item.noiDung }}</td>
-            <td><strong>{{ item.soLuongXuat |number:'1.0-1' : 'vi_VN'}}</strong></td>
+            <td>
+              <strong>{{item.soLuongXuatThucTe |number:'1.0-1' : 'vi_VN'}}</strong>
+            </td>
             <td></td>
             <td></td>
             <td><strong>{{item.soLuongXuatThucTe|number:'1.0-1' : 'vi_VN'}}</strong></td>
@@ -762,14 +763,14 @@
               <a>
                 <i class="fa fa-plus" *ngIf="!isView" (click)="showModal(item)"></i>
               </a>
-             <!-- <a>
-                <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
-              </a>-->
-              <!--<a>
-                <i class="fa fa-trash-o do" *ngIf="!isView" nz-popconfirm nz-button
+              <!-- <a>
+                 <i class="fa fa-edit" *ngIf="!isView" (click)="suaNoiDung(item)"></i>
+               </a>-->
+              <a>
+                <i class="fa fa-trash-o do" *ngIf="!isView && !formData.value.idQdPd" nz-popconfirm nz-button
                    nzPopconfirmTitle="Bạn có chắc muốn xóa ?"
                    (nzOnConfirm)="xoaPhuongAn(item)"></i>
-              </a>-->
+              </a>
             </td>
           </tr>
           <ng-container *ngIf="expandSetString.has(item.idVirtual) && item.childData[0].tenCuc">

@@ -11,6 +11,8 @@ export class MainKeHoachBanDauGiaComponent implements OnInit {
   @Input() isView: boolean;
   @Input() inputLoaiVthh: string;
   @Input() idInput: number;
+  @Input()
+  listVthh: any[] = [];
   @Output()
   showListEvent = new EventEmitter<any>();
 

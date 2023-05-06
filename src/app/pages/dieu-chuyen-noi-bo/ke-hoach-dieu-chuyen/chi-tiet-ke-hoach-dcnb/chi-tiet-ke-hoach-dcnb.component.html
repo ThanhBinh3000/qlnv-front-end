@@ -1,103 +1,3 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group" *ngIf="!isNhanDieuChuyen">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <ng-container *ngIf="userService.isChiCuc()">
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TUCHOI_TBP_TVQT)">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')"
-        type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')"
-        type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
-        formData.value.trangThai == STATUS.TU_CHOI_LDCC ||
-         formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
-              type="button" class="btn btn-sub"
-              (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
-      </button>
-      <button
-        *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
-        type="button" class="btn btn-main" (click)="save()">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-    </ng-container>
-  </div>
-  <div class="btn-group" *ngIf="isNhanDieuChuyen">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <ng-container *ngIf="userService.isChiCuc()">
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_LDCCUC')"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.DA_PHANBO_DC_TUCHOI_LDCC)">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_TBPTVQT')"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT)">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_LDCCUC')"
-        type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.DA_PHANBO_DC_DADUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_TBPTVQT')"
-        type="button" class="btn btn-sub"
-        (click)="approve(idInput,STATUS.DA_PHANBO_DC_CHODUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC ||
-        formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC ||
-         formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
-              type="button" class="btn btn-sub"
-              (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
-      </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
-        type="button" class="btn btn-main" (click)="save()">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-    </ng-container>
-  </div>
-</nz-affix>
 <div class="bg-trang">
   <div class="mt16 flex-card p-lr16">
     <div class="header header-green-background mg-t-16">
@@ -110,6 +10,104 @@
           <span>Kế hoạch điều chuyển nội bộ hàng DTQG </span>
         </div>
       </div>
+        <div class="btn-group" *ngIf="!isNhanDieuChuyen">
+          <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </button>
+          <ng-container *ngIf="userService.isChiCuc()">
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+              <i class="icon htvbdh_tcdt_tuchoi do"></i>
+              <span>Từ chối</span>
+            </button>
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')"
+              type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.TUCHOI_TBP_TVQT)">
+              <i class="icon htvbdh_tcdt_tuchoi do"></i>
+              <span>Từ chối</span>
+            </button>
+
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub ml-2"
+              (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+              <span>Duyệt</span>
+            </button>
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')"
+              type="button" class="btn btn-sub ml-2"
+              (click)="approve(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+              <span>Duyệt</span>
+            </button>
+            <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
+        formData.value.trangThai == STATUS.TU_CHOI_LDCC ||
+         formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
+                    type="button" class="btn btn-sub ml-2"
+                    (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
+              <i class="icon htvbdh_tcdt_guiduyet"></i>
+              <span>Lưu và gửi duyệt</span>
+            </button>
+            <button
+              *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
+              type="button" class="btn btn-main ml-2" (click)="save()">
+              <i class="icon htvbdh_tcdt_save"></i>
+              <span>Lưu</span>
+            </button>
+          </ng-container>
+        </div>
+        <div class="btn-group" *ngIf="isNhanDieuChuyen">
+          <button type="button" class="btn btn-sub ml-2 ml-2" (click)="quayLai()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+          </button>
+          <ng-container *ngIf="userService.isChiCuc()">
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.DA_PHANBO_DC_TUCHOI_LDCC)">
+              <i class="icon htvbdh_tcdt_tuchoi do"></i>
+              <span>Từ chối</span>
+            </button>
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_TBPTVQT')"
+              type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT)">
+              <i class="icon htvbdh_tcdt_tuchoi do"></i>
+              <span>Từ chối</span>
+            </button>
+
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_LDCCUC')"
+              type="button" class="btn btn-sub ml-2"
+              (click)="approve(idInput,STATUS.DA_PHANBO_DC_DADUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+              <span>Duyệt</span>
+            </button>
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_TBPTVQT')"
+              type="button" class="btn btn-sub ml-2"
+              (click)="approve(idInput,STATUS.DA_PHANBO_DC_CHODUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+              <span>Duyệt</span>
+            </button>
+            <button *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC ||
+        formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC ||
+         formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
+                    type="button" class="btn btn-sub ml-2"
+                    (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
+              <i class="icon htvbdh_tcdt_guiduyet"></i>
+              <span>Lưu và gửi duyệt</span>
+            </button>
+            <button
+              *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
+              type="button" class="btn btn-main ml-2" (click)="save()">
+              <i class="icon htvbdh_tcdt_save"></i>
+              <span>Lưu</span>
+            </button>
+          </ng-container>
+        </div>
     </div>
   </div>
   <nz-alert class="mg-t-16 mb-2"

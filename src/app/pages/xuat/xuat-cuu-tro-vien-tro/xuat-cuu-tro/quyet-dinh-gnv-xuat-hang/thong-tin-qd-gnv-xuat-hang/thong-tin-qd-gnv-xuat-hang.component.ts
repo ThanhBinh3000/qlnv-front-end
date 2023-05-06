@@ -116,12 +116,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
+      loaiNhapXuat: [''],
+      kieuNhapXuat: [''],
+      mucDichXuat:['']
     })
   }
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadDsVthh(),
         this.loadDsQdPd(),
@@ -129,7 +132,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.loadDsDiemKho()
       ])
       await this.loadDetail(this.id)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
@@ -249,6 +252,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                   noiDungCuuTro: this.chiTiet,
                   soLuong: this.chiTiet.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
                   thanhTien: this.chiTiet.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                  loaiNhapXuat:res.data.loaiNhapXuat,
+                  kieuNhapXuat:res.data.kieuNhapXuat,
+                  mucDichXuat:res.data.mucDichXuat,
                 });
               }
               this.selectHangHoa(res.data.loaiVthh);
@@ -289,7 +295,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.dsQdPd = data.content;
+          this.dsQdPd = data.content.filter(item=>item.soQdGiaoNv==null);
         }
       } else {
         this.dsQdPd = [];

@@ -16,11 +16,10 @@ import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-ha
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import { filter } from 'rxjs/operators';
 import { Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-them-moi-bien-ban-tinh-kho',
+  selector: 'app-xc-them-moi-bien-ban-tinh-kho',
   templateUrl: './them-moi-bien-ban-tinh-kho.component.html',
   styleUrls: ['./them-moi-bien-ban-tinh-kho.component.scss']
 })

@@ -1,12 +1,12 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dxkh')">
+    <li nz-menu-item nzSelected (click)="selectTab('dxkh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX')">
       Đề xuất KH đầu tư xây dựng trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('thkh')" *ngIf="userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab('thkh')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH')">
       Tổng hợp phương án đề xuất KH đầu tư xây dựng trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('qdpdkh')">
+    <li nz-menu-item (click)="selectTab('qdpdkh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD')">
       Quyết định phê duyệt KH đầu tư xây dựng trung hạn (5 năm) của BTC
     </li>
   </ul>

@@ -50,7 +50,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/công trình</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="khoi">
-                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -262,7 +262,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2" *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

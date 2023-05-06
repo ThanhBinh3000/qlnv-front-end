@@ -223,6 +223,6 @@
   </div>
 </ng-container>
 <ng-template #tempHopDong>
-  <app-thong-tin [idKqBdg]="id" [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null)">
+  <app-thong-tin [idKqBdg]="id" [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null)" (sendListAllDviTsan)="outputListAllDviTsan($event)">
   </app-thong-tin>
 </ng-template>

@@ -33,8 +33,9 @@ import { XuatKhoComponent } from './xuat-kho.component';
     DirectivesModule,
     BangKeCanModule,
   ],
-  exports: [
-    XuatKhoComponent,
-  ]
+    exports: [
+        XuatKhoComponent,
+        ThemMoiBienBanHaoDoiComponent,
+    ]
 })
 export class XuatKhoModule { }

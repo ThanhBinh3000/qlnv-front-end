@@ -135,7 +135,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           window.location.href = '/error/401'
         }
       }
-      console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
         this.listNam.push({

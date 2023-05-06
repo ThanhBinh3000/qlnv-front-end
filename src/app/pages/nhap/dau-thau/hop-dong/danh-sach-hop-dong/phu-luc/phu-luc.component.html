@@ -1,20 +1,32 @@
 <nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
   <div class="btn-group">
-    <button class="btn btn-sub xanh" (click)="save()">
-      <i class="icon  htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
+    <button type="button" class="btn btn-sub" (click)="back()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub" (click)="save(true)">
+    <button *ngIf="formPhuLuc.value.trangThai != STATUS.DA_KY && !isView" type="button" class="btn btn-sub xanh-nhat"
+            (click)="save(true)">
       <i class="icon htvbdh_trinh"></i>
       <span>Ký</span>
     </button>
-    <button class="btn btn-sub" (click)="back()">
-      <i class="icon htvbdh_dakyduyet"></i>
-      <span>Quay lại hợp đồng</span>
+    <button *ngIf="formPhuLuc.value.trangThai != STATUS.DA_KY && !isView"
+            class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+      <i class="icon  htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
 <div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+                    <span [ngClass]="formPhuLuc.value.trangThai == STATUS.DA_KY ? 'status-xanh' : 'status-do'">
+                        {{ formPhuLuc.value.tenTrangThai }}
+                    </span>
+        <span>Phụ lục hợp đồng</span>
+      </div>
+    </div>
+  </div>
   <form nz-form [formGroup]="formPhuLuc" [nzLayout]="'vertical'">
     <ng-template #error let-control>
       <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -22,205 +34,204 @@
     </ng-template>
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="[18, 12]">
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired>Số phụ lục</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Số hợp đồng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="search__input" placeholder="Phụ lục số" nz-input formControlName="soPluc"/>
+              <input class="search__input" nz-input formControlName="soHd" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="8">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Ngày ký</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Tên hợp đồng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker class="search__input" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <input class="search__input" nz-input formControlName="tenHd" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">Ngày hiệu lực</nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired>Ngày hiệu lực HĐ</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker class="search__input" formControlName="ngayHluc" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-date-picker class="search__input" formControlName="ngayHlucTrc" nzFormat="dd/MM/yyyy"
+                              nzDisabled></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6"></div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired>Số phụ lục hợp đồng</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="{{maPhuLucSuffix}}">
+                <nz-input-number [nzSize]="'small'" nz-input [nzDisabled]="isView"
+                                 placeholder="Số phụ lục" formControlName="maPluc" [nzMin]="1"
+                                 [nzMax]="globals.prop.MAX_INTERGER">
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Ngày hiệu lực của phụ lục HĐ</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker class="search__input" formControlName="ngayHluc" nzFormat="dd/MM/yyyy" [nzDisabled]="isView"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="24">
-          <label class="search__label">Về việc</label>
-          <textarea rows="3" nz-input class="search__input" formControlName="veViec"></textarea>
-        </div>
-        <div nz-col nzSpan="12">
-          <label class="search__label">Số hợp đồng</label>
-          <input placeholder="Số hợp đồng" nz-input formControlName="soHd" readonly/>
-        </div>
-        <div nz-col nzSpan="12">
-          <label class="search__label">Tên hợp đồng</label>
-          <input placeholder="Tên hợp đồng" nz-input formControlName="tenHd" readonly/>
+          <nz-form-item>
+            <nz-form-label class="search__label" nzRequired>Nội dung phụ lục HĐ</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" nz-input class="search__input" formControlName="noiDungPl" [readOnly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </nz-card>
-    <p class="mt-16 title-ky-hop-dong pd-10">ĐIỀU CHỈNH THỜI GIAN THỰC HIỆN</p>
-    <nz-tabset nzType="card" class="tab-level-3 pd-10">
-      <nz-tab [nzTitle]="'Điều chỉnh thời gian thực hiện'">
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label [nzNoColon]="false">Ngày hiệu lực đến ngày trước điều chỉnh</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker class="search__input" formControlName="denNgayHlucTrc" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Ngày hiệu lực đến ngày sau điều chỉnh</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker class="search__input" formControlName="denNgayHlucDc" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu pointer-cursor" (click)="toggleContentVisibility(0)">
+          <span><i class="icon htvbdh_line-dow" *ngIf="!isArrowUp[0]"></i></span>
+          <span><i class="icon htvbdh_Untitled-1_line-up" *ngIf="isArrowUp[0]"></i></span>
+          <span>ĐIỀU CHỈNH THỜI GIAN THỰC HIỆN</span>
         </div>
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Ngày hiệu lực từ ngày trước điều chỉnh</nz-form-label>
+      </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16" *ngIf="isContentVisible[0]">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="false">Ngày hiệu lực trước khi điều chỉnh</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker class="search__input" formControlName="tuNgayHlucTrc" [nzDisabled]="true" nzFormat="dd/MM/yyyy">
+                <nz-date-picker nzFormat="dd/MM/yyyy" nzDisabled
+                                nzPlaceHolder="Ngày hiệu lực trước khi điều chỉnh" formControlName="ngayHlucTrc">
                 </nz-date-picker>
               </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Ngày hiệu lực từ ngày sau điều chỉnh</nz-form-label>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Ngày hiệu lực sau khi điều chỉnh</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker class="search__input" formControlName="tuNgayHlucDc" nzFormat="dd/MM/yyyy">
+                <nz-date-picker nzFormat="dd/MM/yyyy" [nzDisabled]="isView"
+                                nzPlaceHolder="Ngày hiệu lực sau khi điều chỉnh" formControlName="ngayHlucDc">
                 </nz-date-picker>
               </nz-form-control>
-            </nz-form-item>
-          </div>
+            </nz-form-control>
+          </nz-form-item>
         </div>
-        <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Số ngày thực hiện trước điều chỉnh</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <input placeholder="Số ngày thực hiện trước điều chỉnh" nz-input readonly
-                       formControlName="tgianThienHdTrc"/>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="6">
-            <nz-form-item>
-              <nz-form-label>Số ngày thực hiện sau điều chỉnh</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <input placeholder="Số ngày thực hiện sau điều chỉnh" nz-input
-                       formControlName="tgianThienHdDc"/>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Số ngày thực hiện trước khi điều chỉnh</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input placeholder="Số ngày thực hiện trước điều chỉnh" nz-input readonly
+                     formControlName="tgianThienHdTrc" />
+            </nz-form-control>
+          </nz-form-item>
         </div>
-      </nz-tab>
-      <nz-tab [nzTitle]="'Điều chỉnh địa diểm nhập'">
-        <ng-container *ngIf="userService.isTongCuc()">
-          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
-            <thead>
-            <tr>
-              <th class="text-center" width="60px">STT</th>
-              <th width="130px">Cục</th>
-              <th width="">Chi cục</th>
-              <th width="175px">Số lượng nhập</th>
-              <th width="175px">Đơn vị tính</th>
-              <th width="175px" class="text-right"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td>Cục DTNN KV A</td>
-              <td>Chi cục DTNN KV A</td>
-              <td>500</td>
-              <td>Bộ</td>
-            </tr>
-            <tr>
-              <td class="text-center"></td>
-              <td>Tổng</td>
-              <td>Tổng</td>
-              <td>{{ 1800 | number: '1.0-1' }}</td>
-              <td>Bộ</td>
-            </tr>
-            </tbody>
-          </nz-table>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label>Số ngày thực hiện sau khi điều chỉnh</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <input placeholder="Số ngày thực hiện sau điều chỉnh" nz-input [readOnly]="isView"
+                     formControlName="tgianThienHdDc" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu pointer-cursor" (click)="toggleContentVisibility(1)">
+          <span><i class="icon htvbdh_line-dow" *ngIf="!isArrowUp[1]"></i></span>
+          <span><i class="icon htvbdh_Untitled-1_line-up" *ngIf="isArrowUp[1]"></i></span>
+          <span>ĐIỀU CHỈNH ĐỊA ĐIỂM GIAO, NHẬN HÀNG</span>
+        </div>
+      </div>
+    </div>
+    <nz-card class="flex-card p-lr16 card-table" *ngIf="isContentVisible[1]">
+      <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+        <thead>
+        <tr>
+          <th scope="col">STT</th>
+          <th scope="col">Địa điểm trước khi điều chỉnh</th>
+          <th scope="col">Địa chỉ trước điều chỉnh</th>
+          <th scope="col">Địa điểm sau khi điều chỉnh</th>
+          <th scope="col">Địa chỉ sau điều chỉnh</th>
+          <th scope="col">Số lượng mua</th>
+          <th scope="col">Đơn giá đã bao gồm VAT(đ/kg)</th>
+          <th scope="col">Thành tiền (đồng)</th>
+          <th scope="col">Bằng chữ</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let diaDiem of dataTable , let i = index">
+          <tr>
+            <td class="text-center">{{ i + 1 }}</td>
+            <td>{{diaDiem.tenDvi}}</td>
+            <td>{{diaDiem.diaDiemNhap}}</td>
+            <!--              <td *ngIf="isViewPhuLuc">-->
+            <!--                <nz-select [(ngModel)]="listChiCuc[i].maDvi">-->
+            <!--                  <nz-option *ngFor="let p of listAllChiCuc[i]" [nzValue]="p.value" [nzLabel]="p.text">-->
+            <!--                  </nz-option>-->
+            <!--                </nz-select>-->
+            <!--              </td>-->
+            <td>{{diaDiem.diaDiemDc}}</td>
+            <td>{{diaDiem.diaChiDc}}</td>
+            <td>{{diaDiem.soLuong}}</td>
+            <td>{{diaDiem.donGiaVat}}</td>
+            <td>{{diaDiem.donGiaVat * diaDiem.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{convertTien(diaDiem.donGiaVat * diaDiem.soLuong)}}</td>
+          </tr>
         </ng-container>
-        <ng-container *ngIf="userService.isCuc()">
-          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
-            <thead>
-            <tr>
-              <th class="text-center" width="60px">STT</th>
-              <th width="130px">Chi cục DTNN</th>
-              <th width="175px">Điểm kho</th>
-              <th width="175px">Địa điểm kho</th>
-              <th width="175px">Số lượng (tấn)</th>
-              <th width="">Đơn giá</th>
-              <th width="175px">Giá sau thuế</th>
-              <th width="175px" class="text-right"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td>Việt Trì, Phú Thọ</td>
-              <td>Thủ Đức</td>
-              <td>Phú Thọ</td>
-              <td>120</td>
-              <td>10.000.000</td>
-              <td>17.000.000.000</td>
-              <td>
-                <a (click)="thongTinPhuLuc()">
-                  <i class="fa fa-pencil"></i>
-                </a>
-                <a>
-                  <i class="fa fa-trash-o do"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </nz-table>
-        </ng-container>
-
-      </nz-tab>
-      <nz-tab [nzTitle]="'Khác'">
-        <div class="search__body" nz-row [nzGutter]="[18, 12]">
-          <div nz-col nzSpan="6"></div>
-          <div nz-col nzSpan="24">
-            <nz-form-item>
-              <nz-form-label>Nội dung điều chỉnh</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <textarea rows="3" nz-input class="search__input" formControlName="noiDung"></textarea>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="24" class="btn-tep">
-            <nz-form-item class="form-item">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
-              <div class="list-file">
-                <file-list [data]="fileDinhKem"></file-list>
-              </div>
-            </nz-form-item>
-          </div>
+        </tbody>
+      </nz-table>
+    </nz-card>
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu pointer-cursor" (click)="toggleContentVisibility(2)">
+          <span><i class="icon htvbdh_line-dow" *ngIf="!isArrowUp[2]"></i></span>
+          <span><i class="icon htvbdh_Untitled-1_line-up" *ngIf="isArrowUp[2]"></i></span>
+          <span>ĐIỀU CHỈNH KHÁC</span>
         </div>
-      </nz-tab>
-    </nz-tabset>
-    <nz-form-item>
-      <nz-form-label nzRequired [nzNoColon]="true">
-        Ghi chú
-      </nz-form-label>
-      <textarea nz-input [rows]="3" formControlName="ghiChu" (input)="validateGhiChu()"></textarea>
-      <span class="error-text" *ngIf="errorGhiChu">{{errorInputRequired}}</span>
-    </nz-form-item>
+      </div>
+    </div>
+    <nz-card class="mt16 flex-card p-lr16" *ngIf="isContentVisible[2]">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Nội dung điều chỉnh</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" nz-input class="search__input" formControlName="noiDung" [readOnly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label>Ghi chú</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" nz-input class="search__input" formControlName="ghiChu" [readOnly]="isView"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
   </form>
 </div>

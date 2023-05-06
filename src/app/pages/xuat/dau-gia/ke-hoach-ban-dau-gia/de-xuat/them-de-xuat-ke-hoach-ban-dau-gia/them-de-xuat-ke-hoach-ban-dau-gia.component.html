@@ -464,7 +464,8 @@
                   <td>{{children.soLuongDeXuat * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 |
                     number :
                     '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet |
+                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet *
+                    formData.value.khoanTienDatTruoc / 100 |
                     number :
                     '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right" *ngIf="!isDisable()">

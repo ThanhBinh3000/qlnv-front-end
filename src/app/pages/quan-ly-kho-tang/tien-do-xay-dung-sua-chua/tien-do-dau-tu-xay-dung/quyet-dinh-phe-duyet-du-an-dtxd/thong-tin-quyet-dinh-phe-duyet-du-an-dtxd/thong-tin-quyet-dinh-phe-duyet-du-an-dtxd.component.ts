@@ -34,6 +34,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input('itemDuAn') itemDuAn: any;
   isVisiblePopTongMucDauTu = false;
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
@@ -95,12 +96,14 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   async ngOnInit() {
     this.spinner.show();
     try {
-      await Promise.all([
-        this.loadQdKhĐtxd(),
-        this.loadListDuAn()
-      ]);
+      // await Promise.all([
+      //   this.loadQdKhĐtxd(),
+      //   this.loadListDuAn()
+      // ]);
       if (this.idInput) {
         this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       await this.convertListData();
       this.spinner.hide();
@@ -111,11 +114,26 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     }
   }
 
+  bindingData() {
+    if (this.itemDuAn) {
+      this.formData.patchValue({
+        tenDuAn: this.itemDuAn.tenDuAn,
+        idDuAn: this.itemDuAn.id,
+        soQdKhDtxd: this.itemDuAn.soQdPdKhNam,
+        idQdKhDtxd: this.itemDuAn.idType
+      })
+    }
+  }
+
+  goBack() {
+    this.showListEvent.emit();
+  }
+
   async loadQdKhĐtxd() {
     this.spinner.show();
     try {
       let body = {
-        "maDvi": this.userInfo.MA_DVI,
+        // "maDvi": this.userInfo.MA_DVI,
         "paggingReq": {
           "limit": 10,
           "page": this.page - 1
@@ -213,13 +231,48 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     if (isBanHanh) {
       let res = await this.createUpdate(this.formData.value);
       if (res) {
-        this.approve(res.id, STATUS.BAN_HANH, 'Ban hành quyết định');
+        this.modal.confirm({
+          nzClosable: false,
+          nzTitle: 'Xác nhận',
+          nzContent: "Ban hành quyết định",
+          nzOkText: 'Đồng ý',
+          nzCancelText: 'Không',
+          nzOkDanger: true,
+          nzWidth: 350,
+          nzOnOk: async () => {
+            this.spinner.show();
+            try {
+              let body = {
+                id: res.id,
+                trangThai: STATUS.BAN_HANH,
+              }
+              let res1 = await this.quyetdinhpheduyetduandtxdService.approve(body);
+              if (res1.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
+                this.formData.patchValue({
+                  trangThai: STATUS.BAN_HANH,
+                })
+                this.isViewDetail = true;
+                this.spinner.hide();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res1.msg);
+                this.spinner.hide();
+              }
+            } catch (e) {
+              console.log('error: ', e);
+              this.spinner.hide();
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            } finally {
+              this.spinner.hide();
+            }
+          },
+        });
       }
     } else {
-      let res = await this.createUpdate(this.formData.value)
-      if (res) {
-        this.goBack()
-      }
+      await this.createUpdate(this.formData.value)
+      // if (res) {
+      //   this.goBack()
+      // }
     }
   }
 

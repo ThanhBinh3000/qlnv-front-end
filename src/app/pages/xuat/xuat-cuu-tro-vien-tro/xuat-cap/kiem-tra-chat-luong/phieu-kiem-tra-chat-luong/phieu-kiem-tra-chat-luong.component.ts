@@ -10,7 +10,11 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { MESSAGE } from 'src/app/constants/message';
 import { chain } from 'lodash';
 import * as uuid from "uuid";
-import { PhieuKiemTraChatLuongService } from './../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service';
+import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
+import {CHUC_NANG} from "../../../../../../constants/status";
+import {
+  PhieuKiemTraChatLuongService
+} from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
 
 @Component({
   selector: 'app-phieu-kiem-tra-chat-luong',
@@ -24,19 +28,27 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
   @Input()
   loaiVthhCache: string;
 
+  public vldTrangThai: XuatCuuTroVienTroComponent;
+  public CHUC_NANG = CHUC_NANG;
+  idQdGnv: number = 0;
+  openQdGnv = false;
+  idBbTk: number = 0;
+  openBbTk = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService
+    private phieuKiemTraChatLuongService: PhieuKiemTraChatLuongService,
+    private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemTraChatLuongService);
+    this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
-      nam: [dayjs().get("year")],
+      nam: null,
       soQdGiaoNvXh: null,
       soPhieuKtCl: null,
       soBienBan: null,
@@ -74,6 +86,19 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
   children: any = [];
   expandSetString = new Set<string>();
 
+  disabledStartNgayKn = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKnMauDen) {
+      return startValue.getTime() >= this.formData.value.ngayKnMauDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKn = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnMauTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKnMauTu.getTime();
+  };
 
   ngOnInit(): void {
     try {
@@ -151,4 +176,24 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+  openQdGnvModal(id: any) {
+    this.idQdGnv = id;
+    this.openQdGnv = true;
+  }
+
+  closeQdGnvModal() {
+    this.idQdGnv = null;
+    this.openQdGnv = false;
+  }
+
+  openSoBbTkModal(id: any) {
+    this.idBbTk = id;
+    this.openBbTk = true;
+  }
+
+  closeSoBbTkModal() {
+    this.idBbTk = null;
+    this.openBbTk = false;
+  }
+
 }
