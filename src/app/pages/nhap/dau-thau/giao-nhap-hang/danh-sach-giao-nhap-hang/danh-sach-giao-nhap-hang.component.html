@@ -170,7 +170,10 @@
             <td>{{ data.namNhap }}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayQdinh | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soHd }}</td>
+            <td>
+              <a style="color: blue; font-weight: bold;" (click)="openHdModal(data.idHd)">{{
+                data.soHd}}</a>
+            </td>
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
@@ -227,17 +230,15 @@
     [loaiVthh]="loaiVthh">
   </app-themmoi-qdinh-nhap-xuat-hang>
 </ng-container>
-<!-- <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdPdKhlcnt"
-  (nzOnCancel)="closeQdPdKhlcntModal()">
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openHd" (nzOnCancel)="closeHdModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-thong-tin [id]="selectedId" [idGoiThau]="idGoiThau" (showListEvent)="showList()"
-    [isView]="isView" [loaiVthh]="loaiVthh">
-  </app-thong-tin>
+    <app-thong-tin [id]="idHd" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-thong-tin>
   </ng-container>
   <div *nzModalFooter>
-    <button nz-button (click)="closeQdPdKhlcntModal()" class="modal__button--cancel">
+    <button nz-button (click)="closeHdModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>
   </div>
-</nz-modal> -->
+</nz-modal>
