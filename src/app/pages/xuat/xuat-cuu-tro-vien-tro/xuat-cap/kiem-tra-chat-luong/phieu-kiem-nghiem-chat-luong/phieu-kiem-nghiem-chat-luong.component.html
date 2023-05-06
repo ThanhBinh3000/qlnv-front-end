@@ -252,7 +252,8 @@
   <app-them-moi-phieu-kiem-nghiem-chat-luong [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </div>
-<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          nzMaskClosable="true"  [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-xc-quyet-dinh-gnv-xuat-hang [id]="idQdGnv" [loaiVthh]="loaiVthh" [isView]="true">
     </app-xc-quyet-dinh-gnv-xuat-hang>
