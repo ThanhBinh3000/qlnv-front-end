@@ -61,7 +61,7 @@ export class ThongTinTonghopComponent implements OnInit {
   filePhuongAn: any = {};
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
-
+  STATUS = STATUS;
   filePA: any
   nameFilePhuongAn: string = "";
   selectedId: number = 0;
@@ -157,7 +157,7 @@ export class ThongTinTonghopComponent implements OnInit {
             "maToTrinh": data.maToTrinh,
             "noiDung": data.noiDung,
             nameFilePhuongAn: data.fileDinhKem.fileName,
-            khDnCapVonIds:data.ct1s.map(s=>s.khDnCapVonId)
+            khDnCapVonIds: data.ct1s.map(s => s.khDnCapVonId)
           });
           this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.ct1s];
@@ -173,16 +173,15 @@ export class ThongTinTonghopComponent implements OnInit {
             phuongAn.tcCapThem = pa.tcCapThem;
             phuongAnList = [...phuongAnList, phuongAn];
           });
-        /*  this.khDnCapVonIds = res.data.cts.map(item => item.id);
-          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});*/
+          /*  this.khDnCapVonIds = res.data.cts.map(item => item.id);
+            this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});*/
         }
       }
     }
     this.spinner.hide();
   }
 
-  async save(isOther?: boolean) {
-    // chờ API và body request
+  async save(isGuiDuyet?: boolean) {
     let phuongAnList = [];
     this.detail.tCThem.forEach(pa => {
       if (!pa.isSum) {
@@ -229,11 +228,10 @@ export class ThongTinTonghopComponent implements OnInit {
       if (this.idInput > 0) {
         let res = await this.tongHopDeNghiCapVonService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.guiDuyet();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -241,11 +239,10 @@ export class ThongTinTonghopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if (!isGuiDuyet) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.guiDuyet();
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -277,14 +274,13 @@ export class ThongTinTonghopComponent implements OnInit {
       nzWidth: 350,
       nzOnOk: async () => {
         this.spinner.show();
-        await this.save(true);
+        // await this.save(true);
         try {
           let body = {
             id: this.idInput,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
+            trangThai: STATUS.CHO_DUYET_LDV,
           };
-
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -504,20 +500,15 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   loadPhuongAnTongCuc(data?) {
-    // if (!this.detail?.tCThem) {
-    //   this.detail.tCThem = [];
-    // }
-    // this.sortTableId();
-    // let item = cloneDeep(this.create);
-    // item.stt = this.detail?.tCThem.length + 1;
-    // this.detail.tCThem = [
-    //   ...this.detail?.tCThem,
-    //   item,
-    // ]
     if (!data) {
       this.detail.tCThem = [];
     }
     this.detail.tCThem = data;
+    if (this.detail.tCThem && this.detail.tCThem.length > 0) {
+      this.detail.tCThem.forEach(item => {
+        item.tcCapThem = item.ycCapThem;
+      })
+    }
     this.updateEditCache();
     this.clearItemRow();
   }
@@ -565,26 +556,33 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   async loadThongTinChiTiet(nguonTongHopId: string) {
-    console.log(nguonTongHopId,'nguonTongHopId');
-    this.isTonghop = true;
+    console.log(nguonTongHopId, 'nguonTongHopId');
+
     this.spinner.show();
     if (nguonTongHopId == 'TCDT') {
       let body = {
         nguonTongHop: nguonTongHopId,
-        nam:this.formData.get('nam').value
+        nam: this.formData.get('nam').value
       };
       let res = await this.deNghiCapVonBoNganhService.loadThTCDT(body);
       //to do
       if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listThongTinChiTiet = data;
-        this.loadPhuongAnTongCuc(data);
+        if (res.data && res.data.length > 0) {
+          this.isTonghop = true;
+          let data = res.data;
+          this.listThongTinChiTiet = data;
+          this.loadPhuongAnTongCuc(data);
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
+          this.spinner.hide();
+          return;
+        }
       }
     } else {
       let body = {
         soDeNghi: null,
         maBoNganh: null,
-        nam:this.formData.get('nam').value,
+        nam: this.formData.get('nam').value,
         trangThai: STATUS.DA_HOAN_THANH,
         type: 'TH',
         loaiTh: nguonTongHopId,
@@ -596,13 +594,20 @@ export class ThongTinTonghopComponent implements OnInit {
       };
       let res = await this.deNghiCapVonBoNganhService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.listThongTinChiTiet = data.content;
-        this.khDnCapVonIds = data.content.map(item => item.id)
-        this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
-        this.totalRecord = data.totalElements;
-        // this.detail.tCThem = data.content;
-        this.loadPhuongAnTongCuc(data.content);
+        if (res.data && res.data.length > 0) {
+          let data = res.data;
+          this.listThongTinChiTiet = data.content;
+          this.khDnCapVonIds = data.content.map(item => item.id)
+          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
+          this.totalRecord = data.totalElements;
+          // this.detail.tCThem = data.content;
+          this.isTonghop = true;
+          this.loadPhuongAnTongCuc(data.content);
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu để tổng hợp.");
+          this.spinner.hide();
+          return;
+        }
       } else {
         this.listThongTinChiTiet = [];
         this.totalRecord = 0;
