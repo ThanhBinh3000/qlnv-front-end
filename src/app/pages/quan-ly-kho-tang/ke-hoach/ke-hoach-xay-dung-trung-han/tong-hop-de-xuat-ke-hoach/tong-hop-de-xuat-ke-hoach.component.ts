@@ -22,6 +22,7 @@ import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
@@ -76,6 +77,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
+    private router : Router
   ) { }
 
   listTrangThai: any[] = [
@@ -88,6 +90,9 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   ];
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

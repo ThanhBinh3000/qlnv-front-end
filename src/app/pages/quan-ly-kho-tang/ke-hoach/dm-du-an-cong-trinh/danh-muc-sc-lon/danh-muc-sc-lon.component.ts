@@ -8,12 +8,12 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "../../../../../services/donvi.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {saveAs} from 'file-saver';
-import {HienTrangMayMoc} from "../../../../../constants/status";
 import dayjs from "dayjs";
 import {ThongTinDmScLonComponent} from "./thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
+import {  Router } from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-sc-lon',
@@ -29,8 +29,6 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
     {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
   ];
-  statusMm = HienTrangMayMoc
-
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -38,7 +36,8 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucSuaChuaService,
-    private dviService: DonviService
+    private dviService: DonviService,
+    private router: Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucService);
     super.ngOnInit()
@@ -59,6 +58,9 @@ export class DanhMucScLonComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       if (this.userService.isTongCuc()) {
