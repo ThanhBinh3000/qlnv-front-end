@@ -17,6 +17,9 @@ import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.servi
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../services/donvi.service";
 import {MESSAGE} from "../../../../constants/message";
+import {
+  QuyetdinhpheduyetTktcTdtService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -44,7 +47,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     modal: NzModalService,
     private donViService: DonviService,
     private ktQdXdHangNamService: KtQdXdHangNamService,
-    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService
+    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
+    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -123,6 +127,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         console.log(this.itemQdPdDaDtxd, '88888');
+        //Check tiếp quyết định phê duyệt bản vẽ
+
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
