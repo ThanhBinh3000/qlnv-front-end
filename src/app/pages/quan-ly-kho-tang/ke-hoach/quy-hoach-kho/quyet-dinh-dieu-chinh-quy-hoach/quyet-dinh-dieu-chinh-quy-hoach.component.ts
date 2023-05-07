@@ -20,6 +20,7 @@ import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service"
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {literal} from "@angular/compiler/src/output/output_ast";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chinh-quy-hoach',
@@ -79,11 +80,15 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
     private dmService: DanhMucService,
     private dmDviService: DonviService,
     private modal: NzModalService,
+    private router: Router,
     public userService: UserService,
     public globals: Globals,
   ) { }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

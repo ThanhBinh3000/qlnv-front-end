@@ -19,6 +19,7 @@ import {STATUS} from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
 import { KtQdXdHangNamService } from "../../../../../services/kt-qd-xd-hang-nam.service";
 import { KtTongHopXdHnService } from "../../../../../services/kt-tong-hop-xd-hn.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-khxd',
@@ -72,6 +73,7 @@ export class QuyetDinhPheDuyetKhxdComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private router: Router,
     public userService: UserService,
     private quyetDinhService: KtQdXdHangNamService,
     public globals: Globals,
@@ -80,6 +82,9 @@ export class QuyetDinhPheDuyetKhxdComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
