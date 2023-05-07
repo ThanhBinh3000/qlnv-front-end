@@ -185,18 +185,21 @@ export class DanhMucKho {
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
+  temKhoi: string;
   maChiCuc : string;
   tenChiCuc : string;
   maDiemKho : string;
   tenDiemKho : string;
-  giaiDoan: any
-  tgKcHt: any
+  giaiDoan: any;
+  tgKcHt: any;
+  ngayQdDc : any;
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
   tgHoanThanh: any;
   tmdtDuKien: number;
   nstwDuKien: number;
+  ghiChu: string;
   soQdPd: string;
   soQdDcPd: string;
   soQdPdDtxd: string;
