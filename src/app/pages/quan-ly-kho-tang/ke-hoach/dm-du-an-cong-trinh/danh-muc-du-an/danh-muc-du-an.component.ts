@@ -185,7 +185,7 @@ export class DanhMucKho {
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
-  temKhoi: string;
+  tenKhoi: string;
   maChiCuc : string;
   tenChiCuc : string;
   maDiemKho : string;

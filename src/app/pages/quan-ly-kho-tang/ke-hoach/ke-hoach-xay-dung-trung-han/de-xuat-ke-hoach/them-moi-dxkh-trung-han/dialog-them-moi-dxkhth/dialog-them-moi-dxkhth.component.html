@@ -12,11 +12,10 @@
       <div nz-col nzSpan="6">
         <nz-form-item>
           <nz-form-label nzNoColon="true">Khối dự án/công trình</nz-form-label>
-          <nz-form-control>
-            <nz-input-group>
-              <input nz-input [(ngModel)]="item.khoi" readonly />
-            </nz-input-group>
-          </nz-form-control>
+              <nz-select nzAllowClear [(ngModel)]="item.khoi" nzDisabled (ngModelChange)="changeKhoi($event)">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="6">
@@ -110,10 +109,10 @@
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Tổng số (tất cả các nguồn vốn)</nz-form-label>
+          <nz-form-label nzRequired nzNoColon="true">Tổng số (tất cả các nguồn vốn)</nz-form-label>
           <nz-input-group>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.ncKhTongSo" [nzMin]="0"
-                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" nzDisabled class="text-blue"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"  class="text-blue"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
@@ -121,10 +120,10 @@
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Trong đó vốn NSTW</nz-form-label>
+          <nz-form-label nzRequired nzNoColon="true">Trong đó vốn NSTW</nz-form-label>
           <nz-input-group>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.ncKhNstw" [nzMin]="0"
-                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" nzDisabled class="text-blue"
+                             [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"  class="text-blue"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
