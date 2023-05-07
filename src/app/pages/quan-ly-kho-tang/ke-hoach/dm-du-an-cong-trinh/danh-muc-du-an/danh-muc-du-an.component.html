@@ -9,7 +9,7 @@
       <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
         <label class="search__label">Khối</label>
         <nz-select  nzAllowClear  formControlName="khoi">
-          <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+          <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </div>
@@ -124,7 +124,9 @@
     </div>  </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table #basicTable nzBordered [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered  [nzData]="dataTable">
+              [nzShowPagination]="false" nzBordered  [nzData]="dataTable"
+              [nzScroll]="dataTableAll && dataTableAll.length > 0 ? { x: '3000px'} : null"
+    >
       <thead>
       <tr>
         <th class="text-center" nzWidth = "40px">STT</th>
@@ -144,8 +146,8 @@
         <th class="text-center" >Số QĐ PD DA ĐTXD</th>
         <th class="text-center" >Tổng số TMĐT <br> được duyệt</th>
         <th class="text-center" >Tổng số TMĐT <br> NSTW được duyệt</th>
-        <th class="text-center">Trạng thái</th>
-        <th class="text-center"  nzRight>Hành động</th>
+        <th class="text-center" nzWidth="120px">Trạng thái</th>
+        <th class="text-center" nzWidth="120px"  nzRight>Hành động</th>
       </tr>
       <tr class="search-table">
         <th></th>

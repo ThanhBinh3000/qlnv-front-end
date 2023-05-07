@@ -47,7 +47,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.getAllDmKho();
     this.getAllLoaiDuAn();
     this.getDetail();
-    this.item.namKeHoach = dayjs().get('year');
   }
 
   handleOk() {
@@ -126,6 +125,9 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
+    } else {
+      this.item.namKeHoach = dayjs().get('year');
+      this.item.temKhoi = this.dataInput.temKhoi
     }
   }
 

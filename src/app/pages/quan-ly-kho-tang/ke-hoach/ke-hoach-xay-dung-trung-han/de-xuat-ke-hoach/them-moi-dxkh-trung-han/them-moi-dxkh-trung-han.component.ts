@@ -419,7 +419,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         nzContent: DialogThemMoiDxkhthComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: "1000px",
+        nzWidth: "1200px",
         nzStyle: { top: "200px" },
         nzFooter: null,
         nzComponentParams: {
