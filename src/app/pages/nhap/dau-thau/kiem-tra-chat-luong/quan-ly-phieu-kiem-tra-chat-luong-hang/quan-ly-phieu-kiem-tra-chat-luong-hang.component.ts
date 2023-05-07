@@ -292,7 +292,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
           denNgayGD: this.denNgayGD != null ? dayjs(this.denNgayGD).format('YYYY-MM-DD') + " 24:59:59" : null
         };
         this.quanLyNghiemThuKeLotService
-          .export(body)
+          .exportPktCl(body)
           .subscribe((blob) =>
             saveAs(blob, 'Danh_sach_phieu_kiem_tra_chat_luong.xlsx'),
           );
