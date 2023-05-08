@@ -14,7 +14,7 @@ import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-c
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
 
 @Component({
-  selector: 'app-bien-ban-hao-doi',
+  selector: 'app-xc-bien-ban-hao-doi',
   templateUrl: './bien-ban-hao-doi.component.html',
   styleUrls: ['./bien-ban-hao-doi.component.scss']
 })
