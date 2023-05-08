@@ -14,12 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub xanh-nhat ml-2" (click)="banHanh(idInput)"
-              *ngIf="(idInput && idInput > 0) && (formData.value.trangThai == STATUS.DU_THAO) ">
+      <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT_THEM')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Ban hành</span>
       </button>
-      <button (click)="save()"
+      <button (click)="save(false)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
               class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
@@ -180,13 +180,23 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
+              <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
             </div>
           </nz-form-item>
         </div>
