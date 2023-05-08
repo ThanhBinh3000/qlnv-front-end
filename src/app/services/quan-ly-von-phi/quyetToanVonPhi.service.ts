@@ -163,6 +163,14 @@ export class QuyetToanVonPhiService extends BaseService {
     );
   }
 
+  tongHop1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/quyet-toan/tong-hop',
+      'http://localhost:9159/quyet-toan/tong-hop',
+      request
+    );
+  }
+
   getHangHoaKho(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/kho/tra-cuu',
