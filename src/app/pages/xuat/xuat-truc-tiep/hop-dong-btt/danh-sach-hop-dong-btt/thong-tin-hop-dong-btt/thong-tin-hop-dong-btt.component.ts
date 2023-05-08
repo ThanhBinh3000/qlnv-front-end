@@ -1,21 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { STATUS } from 'src/app/constants/status';
-import { chain, cloneDeep } from 'lodash';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import {
+  QdPdKetQuaBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import {STATUS} from 'src/app/constants/status';
+import {chain, cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -293,7 +297,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
 
-
   setListTccnChaoGia() {
     this.spinner.hide();
     let map = new Map();
@@ -369,14 +372,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
 
-
   selectMaDviTsan() {
-
     this.dataTable = [];
-    //let currentSelectList = cloneDeep(this.formData.value.listMaDviTsan);
-
+    let currentSelectList = cloneDeep(this.listDviTsanFilter);
     if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
-      let listAll = this.listDviTsanFilter.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+      let listAll = currentSelectList.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
       console.log(listAll, 'listAll')
       listAll.forEach(item => {
         if (this.dataTable && this.dataTable.length > 0) {
@@ -389,21 +389,12 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           })
         } else {
           this.dataTable = [...this.dataTable, item]
-          console.log(this.dataTable, 'â')
         }
       });
     } else {
       this.dataTable = []
     }
   }
-
-
-
-
-
-
-
-
 
 
   async loadDsHd(event) {
@@ -449,7 +440,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       },
     });
   }
-
 
 
   redirectPhuLuc(id) {
