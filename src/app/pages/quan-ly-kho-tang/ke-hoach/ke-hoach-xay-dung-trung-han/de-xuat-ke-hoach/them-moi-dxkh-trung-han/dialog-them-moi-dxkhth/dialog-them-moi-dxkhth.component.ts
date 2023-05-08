@@ -120,6 +120,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
 
   getDetail() {
     this.item.namKeHoach = dayjs().get('year');
+    this.item.khoi = this.dataInput.khoi;
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
       this.item.diaDiem = this.dataInput.diaDiem;
@@ -132,9 +133,10 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.khVonNstw = this.dataInput.khVonNstw;
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
+      this.item.tgKhoiCong = this.dataInput.tgKhoiCong;
+      this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
+      this.item.ghiChu = this.dataInput.ghiChu;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
-    } else {
-      this.item.khoi = this.dataInput.khoi;
     }
   }
 
@@ -143,7 +145,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       let result = this.listDmKho.filter(item => item.maDuAn == event)
       if (result && result.length > 0) {
         this.item = result[0];
-        console.log(this.item, '00000')
+        this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
       }
     }
   }
@@ -152,15 +154,6 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLoaiDuAn = res.data;
-    }
-  }
-
-  changeKhoi(event) {
-    if (event) {
-      let result = this.listKhoi.filter(item => item.ma == event);
-      if (result && result.length > 0) {
-        this.item.tenKhoi =  result[0].giaTri
-      }
     }
   }
 }

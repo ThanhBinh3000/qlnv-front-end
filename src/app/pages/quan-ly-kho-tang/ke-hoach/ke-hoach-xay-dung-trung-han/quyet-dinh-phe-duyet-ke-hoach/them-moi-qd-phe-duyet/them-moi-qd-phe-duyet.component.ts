@@ -20,6 +20,9 @@ import { MESSAGE } from "../../../../../../constants/message";
 import { STATUS } from "../../../../../../constants/status";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
+import {
+  DialogThemMoiDxkhthComponent
+} from "../../de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 @Component({
   selector: "app-them-moi-qd-phe-duyet",
@@ -314,11 +317,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         .groupBy("tenChiCuc")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("khoi")
+            .groupBy("tenKhoi")
             .map((v, k) => {
                 return {
                   idVirtual: uuidv4(),
-                  khoi: k,
+                  tenKhoi: k,
                   dataChild: v
                 };
               }
@@ -330,7 +333,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
           };
         }).value();
     }
-    console.log(table, 123);
     return table;
   }
 
@@ -429,6 +431,43 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
   }
 
+  themMoiItem(data: any, type: string, idx: number, list?: any) {
+    console.log(list);
+    console.log(data,123);
+    let modalQD = this.modal.create({
+      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzContent: DialogThemMoiDxkhthComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "200px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: "DXTH"
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list[idx], detail);
+          }
+        }
+        this.expandAll(this.dataTable);
+      }
+    });
+  }
 }
 
 

@@ -413,7 +413,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
-    if (!this.isViewDetail) {
       let modalQD = this.modal.create({
         nzTitle: type == "them" ? "Thêm mới chi tiết kế hoạch " : "Chỉnh sửa chi tiết kế hoạch",
         nzContent: DialogThemMoiDxkhthComponent,
@@ -447,7 +446,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           this.expandAll();
         }
       });
-    }
   }
 
   themItemcha() {
@@ -550,6 +548,15 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       ).value();
     }
     this.expandAll();
+  }
+
+  changeKhoi(event) {
+    if (event) {
+      let result = this.listKhoi.filter(item => item.ma == event);
+      if (result && result.length > 0) {
+        this.rowItemCha.tenKhoi =  result[0].giaTri
+      }
+    }
   }
 
 }
