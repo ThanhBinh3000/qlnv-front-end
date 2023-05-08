@@ -148,6 +148,7 @@ export class ThBcSoLuongClCcdcComponent extends Base2Component implements OnInit
         maDviCha: event,
         type: "DV"
       };
+      this.formData.get('maChiCuc').setValue(null);
       let res = await this.donViService.getDonViTheoMaCha(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;

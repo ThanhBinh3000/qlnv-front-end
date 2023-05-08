@@ -19,8 +19,8 @@
           <div nz-col [nzSpan]="10" *ngIf="userService.isTongCuc()">
             <nz-form-item>
               <nz-form-label [nzXs]="7">Cục DTNN KV</nz-form-label>
-              <nz-form-control nz-col [nzErrorTip]="error" nzAllowClear>
-                <nz-select formControlName="maCuc" (ngModelChange)="changeCuc($event)">
+              <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-select formControlName="maCuc" (ngModelChange)="changeCuc($event)" nzAllowClear>
                   <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -55,7 +55,7 @@
 </div>
 
 <!--popup preview-->
-<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%">
+<nz-modal [(nzVisible)]="showDlgPreview" nzTitle="Báo cáo" nzWidth="100%" (nzOnCancel)="closeDlg()">
   <div *nzModalContent class="modal__content">
     <pdf-viewer [src]="pdfSrc" [original-size]="false" [render-text]="true" style="width: 100%; height: 600px;">
     </pdf-viewer>
