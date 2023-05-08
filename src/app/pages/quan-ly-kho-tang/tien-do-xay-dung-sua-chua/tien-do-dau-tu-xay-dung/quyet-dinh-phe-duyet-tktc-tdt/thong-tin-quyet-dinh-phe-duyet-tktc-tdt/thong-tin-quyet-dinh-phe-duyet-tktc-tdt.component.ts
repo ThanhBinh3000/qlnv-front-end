@@ -34,6 +34,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   @Input()
   idInput: number;
   @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
+  @Input('itemDuAn') itemDuAn: any;
   isVisiblePopDuToanXayDung = false;
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
@@ -57,10 +58,13 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKh: [null],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayHieuLuc: [null, Validators.required],
       soQdPdDtxd: [null, Validators.required],
+      soQdPdDtxdNam: [null, Validators.required],
       idQdPdDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
@@ -91,6 +95,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       ]);
       if (this.idInput) {
         this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.convertListData();
       this.spinner.hide();
@@ -98,6 +104,23 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  bindingData() {
+    if (this.itemDuAn && this.itemQdPdDaDtxd) {
+      this.formData.patchValue({
+        namKh: this.itemDuAn.namKeHoach,
+        tenDuAn: this.itemDuAn.tenDuAn,
+        idDuAn: this.itemDuAn.id,
+        soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
+        loaiDuAn: this.itemDuAn.loaiDuAn,
+        khoi: this.itemDuAn.khoi,
+        diaDiem: this.itemDuAn.diaDiem,
+        tgKhoiCong: this.itemDuAn.tgKhoiCong,
+        tgHoanThanh: this.itemDuAn.tgHoanThanh,
+        vonNsTw: this.itemDuAn.ncKhNstw
+      })
     }
   }
 
