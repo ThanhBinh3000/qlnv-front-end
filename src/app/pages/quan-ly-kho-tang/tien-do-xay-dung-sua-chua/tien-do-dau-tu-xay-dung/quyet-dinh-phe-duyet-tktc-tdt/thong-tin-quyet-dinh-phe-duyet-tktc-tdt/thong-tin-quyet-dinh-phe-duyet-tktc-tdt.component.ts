@@ -33,6 +33,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
   isVisiblePopDuToanXayDung = false;
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
