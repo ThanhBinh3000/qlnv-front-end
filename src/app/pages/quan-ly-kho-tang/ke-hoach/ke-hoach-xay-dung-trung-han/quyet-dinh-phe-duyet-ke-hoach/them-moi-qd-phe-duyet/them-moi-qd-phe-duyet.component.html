@@ -263,7 +263,7 @@
                         <td></td>
                         <td [nzExpand]="expandSet.has(item.idVirtual)"
                             (nzExpandChange)="onExpandChange(item.idVirtual, $event)"></td>
-                        <td class="font-weight-bold">{{item.khoi}}</td>
+                        <td class="font-weight-bold">{{item.tenKhoi}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -291,40 +291,20 @@
                             <td>{{children.diaDiem}}</td>
                             <td>{{children.loaiDuAn}}</td>
                             <td>{{children.tgKcHt}}</td>
-                            <td>{{children.khoi}}</td>
+                            <td>{{children.tenKhoi}}</td>
                             <td>{{ children.soQdPd }}</td>
                             <td class="text-right">{{ children.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class="text-right">{{ children.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right"
-                                *ngIf="isEdit != (idx + '-' + y + '-' + y1)">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right" *ngIf="isEdit == (idx + '-' + y + '-' + y1)">
-                              <nz-input-number [(ngModel)]="children.ncKhTongSo" [nzSize]="'small'"
-                                               [nzFormatter]="globals.formatter" [nzMin]="0"
-                                               [nzParser]="globals.parser"></nz-input-number>
-                            </td>
-                            <td class="text-right"
-                                *ngIf="isEdit != (idx + '-' + y + '-' + y1)">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td class="text-right" *ngIf="isEdit == (idx + '-' + y + '-' + y1)">
-                              <nz-input-number [(ngModel)]="children.ncKhNstw" [nzSize]="'small'"
-                                               [nzFormatter]="globals.formatter" [nzMin]="0"
-                                               [nzParser]="globals.parser"></nz-input-number>
-                            </td>
+                            <td class="text-right">{{ children.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td class="text-right">{{ children.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                             <td class="text-center" nzRight
-                                *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO && isEdit != (idx + '-' + y + '-' + y1)  ">
-                              <a (click)="editRow(idx, y, y1,  children)">
+                                *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO">
+                              <a (click)="themMoiItem(children, 'sua', y,  item.dataChild)">
                                 <i class="fa fa-pencil"></i>
                               </a>
                               <a (click)="deleteRow(children)">
                                 <i class="fa fa-trash-o do"></i>
                               </a>
-                            </td>
-                            <td class="text-center" nzRight
-                                *ngIf="!isViewDetail && formData.value.trangThai == STATUS.DU_THAO && isEdit == (idx + '-' + y + '-' + y1)">
-                              <a class="save" (click)="saveEdit(children)">
-                                <i class="fa fa-save"></i>
-                              </a>
-                              <a (click)="cancelEdit(children)">
-                                <i class="fa fa-ban do"></i> </a>
                             </td>
                           </tr>
                         </ng-container>
