@@ -17,6 +17,7 @@ import {saveAs} from 'file-saver';
 import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ke-hoach',
@@ -77,11 +78,15 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     public userService: UserService,
     private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
-    private tongHopTrungHanService: TongHopKhTrungHanService
+    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private router  :Router
   ) {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

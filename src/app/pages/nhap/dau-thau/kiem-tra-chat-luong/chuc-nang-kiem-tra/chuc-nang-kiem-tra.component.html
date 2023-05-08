@@ -1,10 +1,10 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item (click)="selectTab(0)" *ngIf="typeVthh != '02'">
+    <li nz-menu-item [nzSelected]="this.typeVthh != '02'" (click)="selectTab(0)" *ngIf="typeVthh != '02'">
       Biên bản nghiệm thu bảo quản lần đầu
     </li>
-    <li nz-menu-item [nzSelected]="this.typeVthh != '02'" (click)="selectTab(1)" *ngIf="typeVthh != '02'">
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh != '02'">
       Phiếu kiểm tra chất lượng
     </li>
     <li nz-menu-item (click)="selectTab(2)">

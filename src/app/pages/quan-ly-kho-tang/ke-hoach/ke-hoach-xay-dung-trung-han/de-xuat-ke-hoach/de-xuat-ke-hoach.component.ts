@@ -20,6 +20,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 import { DxXdTrungHanService } from "../../../../../services/dx-xd-trung-han.service";
 import { STATUS } from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
+import { Route, Router } from "@angular/router";
 
 @Component({
   selector: "app-de-xuat-ke-hoach",
@@ -93,11 +94,15 @@ export class DeXuatKeHoachComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private tongHopTrungHanService: TongHopKhTrungHanService
+    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private router: Router
   ) {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

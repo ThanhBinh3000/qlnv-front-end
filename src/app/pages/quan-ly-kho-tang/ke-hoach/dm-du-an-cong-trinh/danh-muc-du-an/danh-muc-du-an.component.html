@@ -9,7 +9,7 @@
       <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
         <label class="search__label">Khối</label>
         <nz-select  nzAllowClear  formControlName="khoi">
-          <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+          <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </div>
@@ -123,29 +123,31 @@
       </button>
     </div>  </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered  [nzData]="dataTable" [nzScroll]="dataTable && dataTable.length ? { x: '3000px'} : null">
+    <nz-table #basicTable nzBordered [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered  [nzData]="dataTable"
+              [nzScroll]="dataTableAll && dataTableAll.length > 0 ? { x: '3000px'} : null"
+    >
       <thead>
       <tr>
         <th class="text-center" nzWidth = "40px">STT</th>
-        <th class="text-center" nzWidth = "120px" *ngIf="!userService.isCuc()">Đơn vị</th>
-        <th class="text-center" nzWidth = "100px">Mã dự án</th>
-        <th class="text-center" nzWidth = "120px">Tên dự án</th>
-        <th class="text-center" nzWidth = "150px">Địa điểm xây dựng</th>
-        <th class="text-center" nzWidth = "150px">Khối dự án, công trình</th>
-        <th class="text-center" nzWidth = "200px">Thuộc Chi cục</th>
-        <th class="text-center" nzWidth = "200px">Điểm kho</th>
-        <th class="text-center" nzWidth = "120px">Thời gian <br> khởi công</th>
-        <th class="text-center" nzWidth = "120px">Thời gian <br> hoàn thành</th>
-        <th class="text-center" nzWidth = "120px">Tổng số <br> TMĐT dự kiến</th>
-        <th class="text-center" nzWidth = "120px">TMĐT vốn <br> NSTW dự kiến</th>
-        <th class="text-center" nzWidth = "150px">Số QĐ PD TMĐT</th>
-        <th class="text-center" nzWidth = "200px">Số QĐ điều chỉnh TMĐT</th>
-        <th class="text-center" nzWidth = "150px">Số QĐ PD DA ĐTXD</th>
-        <th class="text-center" nzWidth = "150px">Tổng số TMĐT <br> được duyệt</th>
-        <th class="text-center" nzWidth = "150px">Tổng số TMĐT <br> NSTW được duyệt</th>
-        <th class="text-center" nzWidth = "120px">Trạng thái</th>
-        <th class="text-center" nzWidth = "120px" nzRight>Hành động</th>
+        <th class="text-center"  *ngIf="!userService.isCuc()">Đơn vị</th>
+        <th class="text-center" >Mã dự án</th>
+        <th class="text-center" >Tên dự án</th>
+        <th class="text-center" >Địa điểm xây dựng</th>
+        <th class="text-center" >Khối dự án, công trình</th>
+        <th class="text-center" >Thuộc Chi cục</th>
+        <th class="text-center" >Điểm kho</th>
+        <th class="text-center" >Thời gian <br> khởi công</th>
+        <th class="text-center" >Thời gian <br> hoàn thành</th>
+        <th class="text-center" >Tổng số <br> TMĐT dự kiến</th>
+        <th class="text-center" >TMĐT vốn <br> NSTW dự kiến</th>
+        <th class="text-center" >Số QĐ PD TMĐT</th>
+        <th class="text-center" >Số QĐ điều chỉnh TMĐT</th>
+        <th class="text-center" >Số QĐ PD DA ĐTXD</th>
+        <th class="text-center" >Tổng số TMĐT <br> được duyệt</th>
+        <th class="text-center" >Tổng số TMĐT <br> NSTW được duyệt</th>
+        <th class="text-center" nzWidth="120px">Trạng thái</th>
+        <th class="text-center" nzWidth="120px"  nzRight>Hành động</th>
       </tr>
       <tr class="search-table">
         <th></th>

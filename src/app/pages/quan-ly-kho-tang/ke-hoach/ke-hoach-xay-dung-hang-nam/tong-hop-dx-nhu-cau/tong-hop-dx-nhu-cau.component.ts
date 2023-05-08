@@ -20,6 +20,7 @@ import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trun
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import { KtTongHopXdHnService } from "../../../../../services/kt-tong-hop-xd-hn.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-tong-hop-dx-nhu-cau',
   templateUrl: './tong-hop-dx-nhu-cau.component.html',
@@ -72,6 +73,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
+    private router: Router,
     private notification: NzNotificationService,
     private tongHopDxXdTh: KtTongHopXdHnService,
     private modal: NzModalService,
@@ -90,6 +92,9 @@ export class TongHopDxNhuCauComponent implements OnInit {
   ];
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

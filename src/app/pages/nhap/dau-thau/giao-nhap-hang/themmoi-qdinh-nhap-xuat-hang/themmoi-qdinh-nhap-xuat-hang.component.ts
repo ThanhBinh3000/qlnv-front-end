@@ -402,14 +402,14 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     if (isGuiDuyet) {
       if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
         this.formData.controls["soQd"].setValidators([Validators.required]);
-        this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
+        // this.formData.controls["ngayQdinh"].setValidators([Validators.required]);
       } else {
         this.formData.controls["soQd"].clearValidators();
-        this.formData.controls["ngayQdinh"].clearValidators();
+        // this.formData.controls["ngayQdinh"].clearValidators();
       }
     } else {
       this.formData.controls["soQd"].clearValidators();
-      this.formData.controls["ngayQdinh"].clearValidators();
+      // this.formData.controls["ngayQdinh"].clearValidators();
     }
   }
 
@@ -635,14 +635,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   calcTong(index?) {
     if (this.dataTable && index != null) {
+      debugger
       const sum = this.dataTable[index].children.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
       return sum;
     } else if (this.dataTable) {
+      debugger
       const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.soLuong;
+        cur.children.forEach(res => {
+          prev += res.soLuong;
+        })
         return prev;
       }, 0);
       return sum;
