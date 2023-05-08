@@ -134,7 +134,7 @@
         <div nz-col nzSpan="24">
           <!-- <nz-form-item> -->
           <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-            {{userService.isCuc() ? ' Quyết định chỉ tiêu kế hoạch của Tổng cục' : 'Quyết định của BTC giao TCDT'}}
+            Căn cứ
           </nz-form-label>
           <nz-form-control [nzErrorTip]="canCuError">
             <nz-input-group>
@@ -624,7 +624,7 @@
             <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
           </tr>
-          <tr>
+          <tr *ngIf="userService.isTongCuc()">
             <th></th>
             <th></th>
             <th></th>
@@ -649,6 +649,39 @@
             <th></th>
             <th
               class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr *ngIf="userService.isCuc()">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1'}}</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
             <th></th>
             <th></th>
             <th></th>
