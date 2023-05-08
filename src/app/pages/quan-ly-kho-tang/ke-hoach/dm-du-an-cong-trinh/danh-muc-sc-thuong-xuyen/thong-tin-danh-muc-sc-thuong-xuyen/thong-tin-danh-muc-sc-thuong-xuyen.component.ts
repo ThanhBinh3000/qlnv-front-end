@@ -25,6 +25,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
   dataDetail: any
   dsKho: any[] = [];
   dsChiCuc: any[] = [];
+  listKhoi: any[] = [];
   listLoaiCongTrinh: any[] = [];
   listTrangThai: any[] = [
     {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
@@ -48,6 +49,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKh: [null],
       maDvi: [null],
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],
@@ -58,6 +60,8 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       lyDo: [null, Validators.required],
       tmdt: [null, Validators.required],
       keHoachCaiTao: [null, Validators.required],
+      khoi: [null, Validators.required],
+      diaDiem: [null],
       soQdPheDuyet: [null],
       ngayQdPd: [null],
       giaTriPd: [null],
@@ -71,6 +75,7 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
     try {
        this.loadDsChiCuc()
        this.loadDsLoaiCongTrinh()
+       this.loadDsKhoi()
       if (this.dataDetail) {
         await this.getDetail(this.dataDetail.id)
       }
@@ -79,6 +84,14 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadDsKhoi() {
+    this.listKhoi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('KHOI_DU_AN_KT');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
     }
   }
 
@@ -140,5 +153,14 @@ export class ThongTinDanhMucScThuongXuyenComponent extends Base2Component implem
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  changeDiemKho($event: any) {
+    let result = this.dsKho.filter(item => item.maDvi == $event)
+    if (result && result.length > 0) {
+      this.formData.patchValue({
+        diaDiem : result[0].diaChi
+      })
+    }
   }
 }

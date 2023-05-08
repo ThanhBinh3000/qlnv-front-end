@@ -36,6 +36,11 @@
     //margin-right: 0px !important;
     //margin-left: 0px !important;
   }
+
+  .blue-text .ant-input-number-input-wrap input {
+    color: #001CFF;
+    font-weight: 500;
+  }
 }
 
 .selectedRow {
@@ -47,5 +52,4 @@
 .blue-text {
   color: #001CFF;
   font-weight: 500;
-  font-size: 12px;
 }

@@ -30,6 +30,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
 export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implements OnInit, OnChanges {
+
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -39,12 +40,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   listPhuongThucThanhToan: any[] = [];
   dataChiTieu: any;
-  donGiaVat: number = 0;
+  donGiaDuocDuyet: number = 0;
   maTrinh: string = '';
   giaToiDa: any;
 
@@ -71,10 +71,10 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       namKh: [dayjs().get('year')],
       soDxuat: [''],
       trichYeu: [''],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
-      ngayPduyet: [''],
       idSoQdCtieu: [],
       soQdCtieu: [''],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayPduyet: [''],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
@@ -94,23 +94,20 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       khoanTienDatTruoc: [],
       tongSoLuong: [],
       tongTienGiaKhoiDiemDx: [],
+      tongTienGiaKdTheoDgiaDd: [],
       tongKhoanTienDatTruocDx: [],
+      tongKhoanTienDtTheoDgiaDd: [],
       ghiChu: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
       tongDonGiaDx: [],
-      dviTinh: [''],
-      tongTienGiaKdTheoDgiaDd: [],
-      tongKhoanTienDtTheoDgiaDd: [],
+      donViTinh: [''],
     });
   }
 
   async ngOnInit() {
     this.spinner.show();
-    this.formData.patchValue({
-      typeVthh: this.loaiVthhInput,
-    })
     this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
@@ -168,20 +165,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         })
         this.dataTable = data.children;
         this.fileDinhKem = data.fileDinhKems;
-        await this.calculatorTableHdr(data);
         this.getGiaToiThieu();
+        this.calculatorTable();
       }
     }
   }
-
-  async calculatorTableHdr(dataTable) {
-    dataTable.children.forEach((item) => {
-      item.children.forEach((child) => {
-        item.soTienDatTruocChiCuc += child.soLuong * child.donGiaDeXuat * dataTable.khoanTienDatTruoc / 100
-      })
-    })
-  }
-
 
   initForm() {
     if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
@@ -247,66 +235,60 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         }
         if (this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.THOC)) {
           this.formData.patchValue({
-            dviTinh: 'Kg',
+            donViTinh: 'Kg',
           });
         } else {
           this.formData.patchValue({
-            dviTinh: data.maDviTinh,
+            donViTinh: data.maDviTinh,
           });
         }
-        let res = await this.dmTieuChuanService.getDetailByMaHh(
-          this.formData.get('cloaiVthh').value,
-        );
+        this.getGiaToiThieu();
+      }
+    });
+  }
+
+  async getGiaToiThieu() {
+    if (this.formData.value.cloaiVthh && this.formData.value.namKh) {
+      let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.formData.get('cloaiVthh').value, this.userInfo.MA_DVI, this.formData.get('namKh').value);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.giaToiDa = res.data;
+      }
+      if (this.formData.value.loaiVthh) {
         let bodyPag = {
           namKeHoach: this.formData.value.namKh,
           loaiVthh: this.formData.value.loaiVthh,
           cloaiVthh: this.formData.value.cloaiVthh,
           trangThai: STATUS.BAN_HANH,
-          maDvi: this.loaiVthhInput.startsWith(LOAI_HANG_DTQG.VAT_TU) ? "0101" : this.formData.value.maDvi
+          maDvi: this.formData.value.maDvi
         }
         let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
         if (pag.msg == MESSAGE.SUCCESS) {
           const data = pag.data;
-          this.donGiaVat = data.giaQd
-        }
-        if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-          this.formData.patchValue({
-            tchuanCluong: res.data ? res.data.tenQchuan : null,
-          });
+          this.donGiaDuocDuyet = data.giaQd
         }
       }
-      this.getGiaToiThieu();
-    });
-  }
-
-  async getGiaToiThieu() {
-    let res = await this.deXuatKhBanDauGiaService.getGiaBanToiThieu(this.formData.get('cloaiVthh').value, this.userInfo.MA_DVI, this.formData.get('namKh').value);
-    if (res.msg === MESSAGE.SUCCESS) {
-      this.giaToiDa = res.data;
-      console.log(this.giaToiDa, 999)
-    }
-  }
-
-  validateGiaGiaToiDa() {
-    if (this.giaToiDa == null) {
-      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
-      return false;
-    } else {
-      return true;
+      let resTC = await this.dmTieuChuanService.getDetailByMaHh(
+        this.formData.get('cloaiVthh').value,
+      );
+      if (resTC.statusCode == API_STATUS_CODE.SUCCESS) {
+        this.formData.patchValue({
+          tchuanCluong: resTC.data ? resTC.data.tenQchuan : null,
+        });
+      }
     }
   }
 
   themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
+    $event.stopPropagation();
+    if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
+      return;
+    }
+    if (!this.formData.get('khoanTienDatTruoc').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
+      return;
+    }
     if (this.validateGiaGiaToiDa()) {
-      $event.stopPropagation();
-      if (!this.formData.get('loaiVthh').value || !this.formData.get('cloaiVthh').value) {
-        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa và chủng loại hàng hóa');
-        return;
-      }
-      if (!this.formData.get('khoanTienDatTruoc').value) {
-        this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
-        return;
-      }
       const modalGT = this.modal.create({
         nzTitle: 'THÊM ĐỊA ĐIỂM GIAO NHẬN HÀNG',
         nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -322,8 +304,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
           khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
           namKh: this.formData.get('namKh').value,
-          dviTinh: this.formData.get('dviTinh').value,
-          donGiaVat: this.donGiaVat,
+          donViTinh: this.formData.get('donViTinh').value,
+          donGiaDuocDuyet: this.donGiaDuocDuyet,
           giaToiDa: this.giaToiDa,
         },
       });
@@ -344,6 +326,15 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   };
 
+  validateGiaGiaToiDa() {
+    if (this.giaToiDa == null) {
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần lập và trình duyệt phương án giá mua tối đa, giá bán tối thiểu trước. Chỉ sau khi có giá bán tối thiểu bạn mới thêm được danh mục đơn vị tài sản BDG vì giá bán đề xuất ở đây nhập vào phải >= giá bán tối thiểu');
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   validateAddDiaDiem(dataAdd): boolean {
     let data = this.dataTable.filter(item => item.maDvi == dataAdd.maDvi);
     if (data.length > 0) {
@@ -355,21 +346,27 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongDonGiaDx: number = 0;
+    let tongTienGiaKhoiDiemDx: number = 0;
     let tongTienGiaKdTheoDgiaDd: number = 0;
+    let tongKhoanTienDatTruocDx: number = 0;
     let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
-      tongDonGiaDx += item.donGiaChiCuc;
-      tongSoLuong += item.soLuongChiCuc;
-      tongTienGiaKdTheoDgiaDd = tongSoLuong * this.donGiaVat
-      tongKhoanTienDtTheoDgiaDd = tongSoLuong * this.donGiaVat * this.formData.value.khoanTienDatTruoc / 100
+      item.children.forEach((child) => {
+        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
+        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        tongSoLuong += child.soLuongDeXuat;
+        tongTienGiaKhoiDiemDx += child.soLuongDeXuat * child.donGiaDeXuat;
+        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
+      })
+      tongKhoanTienDatTruocDx += item.soTienDtruocDx
+      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienGiaKhoiDiemDx: tongSoLuong * tongDonGiaDx,
+      tongTienGiaKhoiDiemDx: tongTienGiaKhoiDiemDx,
       tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
-      tongKhoanTienDatTruocDx: tongSoLuong * tongDonGiaDx * this.formData.value.khoanTienDatTruoc / 100,
-      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd
+      tongKhoanTienDatTruocDx: tongKhoanTienDatTruocDx,
+      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
     });
   }
 
@@ -411,7 +408,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
           this.idInput = res.id;
           this.guiDuyet();
         } else {
-          // this.quayLai()
+          this.getDetail(res.id)
         }
       }
     }
@@ -438,7 +435,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   quayLai() {
     this.showListEvent.emit();
   }
-
   async guiDuyet() {
     if (this.dataTable.length == 0) {
       this.notification.error(
@@ -447,34 +443,63 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       );
       return;
     }
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_CBV:
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
-        msg = MESSAGE.GUI_DUYET_CONFIRM
-        break;
+    if (this.validatemaDviTsan()) {
+      let trangThai = '';
+      let msg = '';
+      switch (this.formData.get('trangThai').value) {
+        case STATUS.TU_CHOI_CBV:
+        case STATUS.TU_CHOI_LDC:
+        case STATUS.TU_CHOI_TP:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TP;
+          msg = MESSAGE.GUI_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_TP: {
+          trangThai = STATUS.CHO_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_LDC: {
+          trangThai = STATUS.DA_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.DA_DUYET_LDC: {
+          trangThai = STATUS.DA_DUYET_CBV;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
+      this.approve(this.idInput, trangThai, msg);
+    }
+  }
+
+  validatemaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let data = this.dataTable.flatMap(s => s.children)
+      const checkMaDviTsan = {};
+      data.forEach((item) => {
+        const maDviTsan = item.maDviTsan;
+        if (checkMaDviTsan[maDviTsan]) {
+          checkMaDviTsan[maDviTsan]++;
+        } else {
+          checkMaDviTsan[maDviTsan] = 1;
+        }
+      });
+      let result = '';
+      for (let prop in checkMaDviTsan) {
+        if (checkMaDviTsan[prop] > 1) {
+          result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
+        }
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_CBV;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
+      let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
+      if (rs == true) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
+        return false;
       }
     }
-    this.approve(this.idInput, trangThai, msg);
+    return true;
   }
 
   tuChoi() {
@@ -502,6 +527,19 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     };
   }
 
+  validateNgay() {
+    let pipe = new DatePipe('en-US');
+    let ngayTao = new Date(pipe.transform(this.formData.value.ngayTao, 'yyyy-MM-dd'));
+    let ngayPduyet = new Date(pipe.transform(this.formData.value.ngayPduyet, 'yyyy-MM-dd'));
+    if (this.formData.value.ngayPduyet) {
+      if (ngayTao > ngayPduyet) {
+        this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
+        return false
+      }
+    }
+    return true;
+  }
+
   isDisable(): boolean {
     if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
       this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV) {
@@ -521,19 +559,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
-  validateNgay() {
-    let pipe = new DatePipe('en-US');
-    let ngayTao = new Date(pipe.transform(this.formData.value.ngayTao, 'yyyy-MM-dd'));
-    let ngayPduyet = new Date(pipe.transform(this.formData.value.ngayPduyet, 'yyyy-MM-dd'));
-    if (this.formData.value.ngayPduyet) {
-      if (ngayTao > ngayPduyet) {
-        this.notification.error(MESSAGE.ERROR, "Ngày tạo không được vượt quá ngày phê duyệt");
-        return false
-      }
-    }
-    return true;
-  }
-
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls["tenDvi"].setValidators([Validators.required]);
@@ -547,10 +572,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       this.formData.controls["soQdCtieu"].setValidators([Validators.required]);
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-      // this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
       this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      // this.formData.controls["tgianDkienTu"].setValidators([Validators.required]);
-      // this.formData.controls["tgianDkienDen"].setValidators([Validators.required]);
       this.formData.controls["tgianTtoan"].setValidators([Validators.required]);
       this.formData.controls["pthucTtoan"].setValidators([Validators.required]);
       this.formData.controls["tgianGnhan"].setValidators([Validators.required]);
@@ -568,10 +590,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       this.formData.controls["soQdCtieu"].clearValidators();
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
-      // this.formData.controls["moTaHangHoa"].clearValidators();
       this.formData.controls["thoiGianDuKien"].clearValidators();
-      // this.formData.controls["tgianDkienTu"].clearValidators();
-      // this.formData.controls["tgianDkienDen"].clearValidators();
       this.formData.controls["tgianTtoan"].clearValidators();
       this.formData.controls["pthucTtoan"].clearValidators();
       this.formData.controls["tgianGnhan"].clearValidators();

@@ -120,7 +120,7 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
         this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
       }
       let body = this.formData.value;
-      body.maDvi = body.maCuc == null ? null : (body.maChiCuc == null ? body.maCuc : body.maChiCuc)
+      // body.maDvi = body.maCuc == null ? null : (body.maChiCuc == null ? body.maCuc : body.maChiCuc)
       body.typeFile = "pdf";
       body.fileName = "th_bc_sl_cl_may_moc_thiet_bi_chuyen_dung.jrxml";
       body.tenBaoCao = "Tổng hợp báo cáo số lượng, chất lượng máy móc, thiết bị chuyên dùng";
@@ -145,16 +145,20 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
   }
 
   async loadDsDonVi() {
-    let body = {
-      trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI.substring(0, 4),
-      type: "DV"
-    };
-    let res = await this.donViService.getDonViTheoMaCha(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+    if (this.userService.isCuc()) {
+      await this.changeCuc(this.userInfo.MA_DVI)
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let body = {
+        trangThai: "01",
+        maDviCha: this.userInfo.MA_DVI.substring(0, 4),
+        type: "DV"
+      };
+      let res = await this.donViService.getDonViTheoMaCha(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.dsDonVi = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -165,6 +169,7 @@ export class ThBcSoLuongClMayMocThietBiChuyenDungComponent extends Base2Componen
         maDviCha: event,
         type: "DV"
       };
+      this.formData.get('maChiCuc').setValue(null);
       let res = await this.donViService.getDonViTheoMaCha(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;

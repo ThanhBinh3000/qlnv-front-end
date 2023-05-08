@@ -13,6 +13,16 @@
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="namKh">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Mã công trình</nz-form-label>
               <input [readonly]="isViewDetail" formControlName="maCongTrinh" class="search__input" nz-input />
             </nz-form-control>
@@ -31,7 +41,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Loại công trình</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="loaiCongTrinh">
-                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -41,10 +51,12 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Thuộc chi cục</nz-form-label>
-              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maChiCuc" (ngModelChange)="changeChiCuc($event)">
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maChiCuc"
+                         (ngModelChange)="changeChiCuc($event)">
                 <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
-              </nz-select>            </nz-form-control>
+              </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -97,7 +109,18 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/Công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="khoi">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tổng mức đầu tư khái toán, dự toán được duyệt</nz-form-label>
@@ -130,7 +153,7 @@
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Ngày quyết định </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Ngày quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker class="search__input" [nzDisabled]="isViewDetail"
@@ -150,29 +173,29 @@
             </div>
           </nz-form-item>
         </div>
-          <div nz-col nzSpan="8">
-            <nz-form-item>
-              <nz-form-control>
-                <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt quyết toán</nz-form-label>
-                <input [readonly]="true"   class="text-blue" nz-input />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="8">
-            <nz-form-item>
-              <nz-form-control>
-                <nz-form-label [nzNoColon]="true">Ngày QĐ phê duyệt quyết toán</nz-form-label>
-                <input [readonly]="true" formControlName="ngayQdPd" class="text-blue" nz-input />
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="8">
-            <nz-form-item>
-              <nz-form-control>
-                <nz-form-label [nzNoColon]="true">Giá trị phê duyệt quyết toán (đ)</nz-form-label>
-                <input [readonly]="true" formControlName="giaTriPd" class="text-body" nz-input />
-              </nz-form-control>
-            </nz-form-item>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt quyết toán</nz-form-label>
+              <input [readonly]="true" class="text-blue" nz-input />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Ngày QĐ phê duyệt quyết toán</nz-form-label>
+              <input [readonly]="true" formControlName="ngayQdPd" class="text-blue" nz-input />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-form-label [nzNoColon]="true">Giá trị phê duyệt quyết toán (đ)</nz-form-label>
+              <input [readonly]="true" formControlName="giaTriPd" class="text-body" nz-input />
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </form>
@@ -187,7 +210,8 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2"
+              *ngIf="!isViewDetail && userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCL_THEM')">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

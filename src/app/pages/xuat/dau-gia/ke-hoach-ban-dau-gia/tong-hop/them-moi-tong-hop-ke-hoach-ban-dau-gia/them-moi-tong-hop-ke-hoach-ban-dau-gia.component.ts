@@ -143,6 +143,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTable = dataDetail.children;
+
         if (this.dataTable && this.dataTable.length > 0) {
           this.showFirstRow(event, this.dataTable[0].idDxHdr);
         }
@@ -160,6 +161,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
+
   disabledNgayDuyetTu = (startValue: Date): boolean => {
     if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
       return false;
@@ -176,7 +178,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   setValidator() {
     if (this.formTraCuu.value.ngayDuyetTu == null) {
-      console.log(this.formTraCuu.value.ngayDuyetTu, 999)
       this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
       this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
     } else {
@@ -185,11 +186,15 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-  async save() {
+  async save(isTaoQd?) {
     let body = this.formData.value;
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
-      this.quayLai();
+      if (isTaoQd) {
+        this.taoQdinh();
+      } else {
+        this.quayLai();
+      }
     }
   }
 

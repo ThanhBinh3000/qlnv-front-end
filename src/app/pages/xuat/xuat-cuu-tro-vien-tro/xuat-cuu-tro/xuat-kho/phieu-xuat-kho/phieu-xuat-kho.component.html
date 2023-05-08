@@ -172,7 +172,7 @@
                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px"></td>
               <td class="bold">{{ item.soQdGiaoNvXh }}</td>
               <td class="bold">{{ item.nam }}</td>
-              <td class="bold">{{ item.ngayQdGiaoNvXh }}</td>
+              <td class="bold">{{ item.ngayQdGiaoNvXh | date: 'dd/MM/YYYY' }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -213,21 +213,20 @@
                       <td></td>
                       <td class="bold">{{lv2.soPhieuXuatKho}}</td>
                       <td>{{lv2.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
-                      <td><a *ngIf="item.soPhieuKnCl" nzType="link"
+                      <td><a *ngIf="lv2.soPhieuKnCl" nzType="link"
                           (click)="openPhieuKnClModal(lv2.idPhieuKnCl)">{{lv2.soPhieuKnCl}}</a> </td>
                       <td>{{lv2.ngayKn | date: 'dd/MM/YYYY' }}</td>
                       <td>{{lv2.tenTrangThai}}</td>
                       <td class="text-left">
                         <a (click)="redirectDetail(lv2.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM) &&
-                            !vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA) &&
-                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM')">
+                            !(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM'))">
                           <i class="fa fa-eye"></i>
                         </a>
                         <a *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_THEM'))"
                           (click)="redirectDetail(lv2.id, false)">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && !vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))"
+                        <a *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))"
                           (click)="redirectDetail(lv2.id, true)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>

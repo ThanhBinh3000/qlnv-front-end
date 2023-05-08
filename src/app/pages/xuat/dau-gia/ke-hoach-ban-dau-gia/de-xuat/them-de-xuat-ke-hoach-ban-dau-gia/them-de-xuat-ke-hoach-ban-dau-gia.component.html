@@ -50,18 +50,6 @@
         <span>Lưu</span>
       </button>
     </ng-container>
-    <!-- <ng-container *ngIf="userService.isTongCuc()">
-      <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
-        (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub xanh-nhat"
-        (click)="guiDuyet()">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-    </ng-container> -->
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -77,7 +65,7 @@
     </div>
   </div>
   <nz-alert class="mg-t-10"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_CBV"
+    *ngIf=" formData.value.trangThai == STATUS.TU_CHOI_TP ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV"
     nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mt16 flex-card p-lr16">
@@ -359,7 +347,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
                   <span style="color: blue">{{formData.value.tongSoLuong | number : '1.0-1' : 'vi_VN' }}
-                    {{formData.value.dviTinh}}</span>
+                    {{formData.value.donViTinh}}</span>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -376,7 +364,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span style="color: blue">{{formData.value.tongTienGiaKdTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
+                  <span style="color: blue">{{formData.value.tongTienGiaKdTheoDgiaDd == 0 ? null :
+                    formData.value.tongTienGiaKdTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -394,7 +383,8 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                  <span style="color: blue">{{formData.value.tongKhoanTienDtTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
+                  <span style="color: blue">{{formData.value.tongKhoanTienDtTheoDgiaDd == 0 ? null :
+                    formData.value.tongKhoanTienDtTheoDgiaDd | number : '1.0-1' : 'vi_VN'}}
                     (vnd)</span>
                 </nz-form-control>
               </nz-form-item>
@@ -412,19 +402,19 @@
               <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
               <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
               <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!loaiVthhInput.startsWith('02')">Đơn giá đề
                 xuất (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá đề
+              <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthhInput.startsWith('02')">Đơn giá đề
                 xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap" *ngIf="!formData.value.typeVthh?.startsWith('02')">Đơn giá
+              <th nzWidth="100px" class="text-center wrap" *ngIf="!loaiVthhInput.startsWith('02')">Đơn giá
                 được duyệt (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap" *ngIf="formData.value.typeVthh?.startsWith('02')">Đơn giá
+              <th nzWidth="100px" class="text-center wrap" *ngIf="loaiVthhInput.startsWith('02')">Đơn giá
                 được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
-              <th nzWidth="50px">Hành động</th>
+              <th nzWidth="50px" *ngIf="!isDisable()">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -438,18 +428,19 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td style="color: black ;font-weight: bold;">{{item.soTienDatTruocChiCuc | number : '1.0-1'
+                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDx | number : '1.0-1'
                   :
                   'vi_VN'}}
                 </td>
-                <td style="color: black ;font-weight: bold;">{{item.tongTienDatTruocDuocDuyet | number : '1.0-1' :
+                <td style="color: black ;font-weight: bold;">{{item.soTienDtruocDd == 0 ? null : item.soTienDtruocDd |
+                  number : '1.0-1' :
                   'vi_VN'}}
                 </td>
-                <td>
-                  <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
+                <td *ngIf="!isDisable()">
+                  <a (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="!isDisable()" (click)="deleteRow(i)">
+                  <a (click)="deleteRow(i)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -462,18 +453,22 @@
                   <td>{{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }}, {{children.tenNhaKho}}
                   </td>
                   <td>{{children.maDviTsan}}</td>
-                  <td>{{children.duDau | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.dviTinh}}</td>
+                  <td>{{children.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.donViTinh}}</td>
                   <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{(children.soLuong * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 ) | number :
+                  <td>{{children.donGiaDeXuat * children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.donGiaDuocDuyet == null ? null : children.donGiaDuocDuyet * children.soLuongDeXuat |
+                    number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuongDeXuat * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 |
+                    number :
                     '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{(children.soLuong * children.donGiaVat * formData.value.khoanTienDatTruoc / 100 ) | number :
+                  <td>{{children.donGiaDuocDuyet == null ? null : children.soLuongDeXuat * children.donGiaDuocDuyet *
+                    formData.value.khoanTienDatTruoc / 100 |
+                    number :
                     '1.0-1' : 'vi_VN' }}</td>
-                  <td class="text-right">
+                  <td class="text-right" *ngIf="!isDisable()">
                   </td>
                 </tr>
               </ng-container>

@@ -9,13 +9,13 @@ import {DonviService} from "../../../../../services/donvi.service";
 import {MESSAGE} from "../../../../../constants/message";
 import {saveAs} from 'file-saver';
 import {HienTrangMayMoc} from "../../../../../constants/status";
-import dayjs from "dayjs";
 import {
   DanhMucSuaChuaService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 import {
   ThongTinDanhMucScThuongXuyenComponent
 } from "./thong-tin-danh-muc-sc-thuong-xuyen/thong-tin-danh-muc-sc-thuong-xuyen.component";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-danh-muc-sc-thuong-xuyen',
   templateUrl: './danh-muc-sc-thuong-xuyen.component.html',
@@ -30,7 +30,6 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
-  statusMm = HienTrangMayMoc
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -38,11 +37,13 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService : DanhMucSuaChuaService,
-    private dviService : DonviService
+    private dviService : DonviService,
+    private router : Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucService);
     super.ngOnInit()
     this.formData = this.fb.group({
+      namKh: [null],
       maDvi: [null],
       tenCongTrinh: [null],
       maDiemKho: [null],
@@ -55,6 +56,9 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       if (this.userService.isTongCuc()) {
@@ -141,11 +145,30 @@ export class DanhMucScThuongXuyenComponent extends Base2Component implements OnI
     this.filter();
   }
 
-  filter() {
+  async filter() {
     this.formData.patchValue({
       maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       type : "01"
     })
-    this.search()
+    await this.search()
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.STATUS.CHUA_THUC_HIEN) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
   }
 }

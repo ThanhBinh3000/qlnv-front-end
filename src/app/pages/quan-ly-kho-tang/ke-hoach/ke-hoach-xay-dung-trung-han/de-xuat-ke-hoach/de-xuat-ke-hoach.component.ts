@@ -20,6 +20,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 import { DxXdTrungHanService } from "../../../../../services/dx-xd-trung-han.service";
 import { STATUS } from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
+import { Route, Router } from "@angular/router";
 
 @Component({
   selector: "app-de-xuat-ke-hoach",
@@ -45,10 +46,10 @@ export class DeXuatKeHoachComponent implements OnInit {
   searchFilter = {
     namKeHoach: "",
     soCongVan: "",
-    maDvi: "",
-    diaDiem: "",
-    ngayKyTu: "",
-    ngayKyDen: "",
+    maDvi: null,
+    capDvi: "",
+    ngayDuyetTu: "",
+    ngayDuyetDen: "",
     namBatDau: "",
     namKetThuc: ""
   };
@@ -58,7 +59,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     namKeHoach: "",
     giaiDoan: "",
     tenDvi: "",
-    ngayKy: "",
+    ngayDuyet: "",
     soQdGoc: "",
     tmdt: "",
     trichYeu: "",
@@ -93,11 +94,15 @@ export class DeXuatKeHoachComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private tongHopTrungHanService: TongHopKhTrungHanService
+    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private router: Router
   ) {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -138,17 +143,18 @@ export class DeXuatKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      diaDiem: this.searchFilter.diaDiem,
+      namKeHoach : this.searchFilter.namKeHoach,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      ngayKyTu: this.searchFilter.ngayKyTu,
-      ngayKyDen: this.searchFilter.ngayKyDen,
+      ngayDuyetTu: this.searchFilter.ngayDuyetTu,
+      ngayDuyetDen: this.searchFilter.ngayDuyetDen,
       soCongVan: this.searchFilter.soCongVan,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1
       },
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : this.searchFilter.maDvi,
+      capDvi:this.userInfo.CAP_DVI
     };
     let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -244,9 +250,9 @@ export class DeXuatKeHoachComponent implements OnInit {
       namKeHoach: "",
       soCongVan: "",
       maDvi: "",
-      diaDiem: "",
-      ngayKyTu: "",
-      ngayKyDen: "",
+      capDvi: "",
+      ngayDuyetTu: "",
+      ngayDuyetDen: "",
       namBatDau: "",
       namKetThuc: ""
     };
@@ -288,17 +294,18 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          diaDiem: this.searchFilter.diaDiem,
+          namKeHoach : this.searchFilter.namKeHoach,
           namBatDau: this.searchFilter.namBatDau,
           namKetThuc: this.searchFilter.namKetThuc,
-          ngayKyTu: this.searchFilter.ngayKyTu,
-          ngayKyDen: this.searchFilter.ngayKyDen,
+          ngayDuyetTu: this.searchFilter.ngayDuyetTu,
+          ngayDuyetDen: this.searchFilter.ngayDuyetDen,
           soCongVan: this.searchFilter.soCongVan,
           paggingReq: {
             limit: this.pageSize,
             page: this.page - 1
           },
-          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+          capDvi: this.userInfo.CAP_DVI
         };
         this.deXuatTrungHanService
           .export(body)
@@ -402,17 +409,5 @@ export class DeXuatKeHoachComponent implements OnInit {
       result = dayjs(event).format("DD/MM/YYYY").toString();
     }
     return result;
-  }
-
-  async openModalCttongHop(data: any) {
-    if (data != "Chưa tổng hợp") {
-      this.idTongHop = data;
-      this.isViewTh = true;
-    }
-  }
-
-  closeDxPaModal() {
-    this.idTongHop = null;
-    this.isViewTh = false;
   }
 }

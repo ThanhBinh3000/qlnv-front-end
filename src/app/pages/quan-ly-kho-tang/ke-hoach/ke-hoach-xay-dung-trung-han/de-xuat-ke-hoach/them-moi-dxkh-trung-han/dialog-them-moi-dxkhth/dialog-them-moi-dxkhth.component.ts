@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DonviService} from "../../../../../../../services/donvi.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {UserService} from "../../../../../../../services/user.service";
 import {NzModalRef} from "ng-zorro-antd/modal";
@@ -27,6 +26,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   item: DanhMucKho = new DanhMucKho();
   listDmKho: any[] = []
   listLoaiDuAn: any[] = []
+  listKhoi: any[] = []
   userInfo: UserLogin
   namKh : number
 
@@ -46,8 +46,15 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
-    this.getDetail()
+    this.getDsKhoi();
+    this.getDetail();
+  }
 
+  async getDsKhoi() {
+    let res = await this.danhMucService.danhMucChungGetAll("KHOI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
+    }
   }
 
   handleOk() {
@@ -112,19 +119,23 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   }
 
   getDetail() {
+    this.item.namKeHoach = dayjs().get('year');
+    this.item.khoi = this.dataInput.khoi;
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
       this.item.diaDiem = this.dataInput.diaDiem;
       this.item.loaiDuAn = this.dataInput.loaiDuAn;
-      this.item.khoi = this.dataInput.khoi;
-      this.item.tgKcHt = this.dataInput.tgKcHt;
       this.item.soQdPd = this.dataInput.soQdPd;
+      this.item.ngayQdDc = this.dataInput.ngayQdDc;
       this.item.tmdtDuKien = this.dataInput.tmdtDuKien;
       this.item.nstwDuKien = this.dataInput.nstwDuKien;
       this.item.khVonTongSo = this.dataInput.khVonTongSo;
       this.item.khVonNstw = this.dataInput.khVonNstw;
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
+      this.item.tgKhoiCong = this.dataInput.tgKhoiCong;
+      this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
+      this.item.ghiChu = this.dataInput.ghiChu;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
     }
   }
@@ -145,5 +156,4 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.listLoaiDuAn = res.data;
     }
   }
-
 }

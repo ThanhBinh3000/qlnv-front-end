@@ -187,7 +187,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   calendarSoLuong(dviTsan) {
     let soLuong = 0;
-    dviTsan.children.forEach(item => soLuong += item.soLuong);
+    dviTsan.children.forEach(item => soLuong += item.soLuongDeXuat);
     return soLuong
   }
 
@@ -196,9 +196,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   convertDataTable() {
-    console.log(this.dataTable, 1111111);
-
-
     this.dataTable.forEach((item) => {
       let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => {
         let current = value.find(s => s.maDviTsan == key);

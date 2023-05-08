@@ -83,10 +83,7 @@ export class DiaDiemGiaoNhan {
 
 export class DanhSachPhanLo {
     id: number;
-    maDvi: string;
-    tenDvi: string;
     maDiemKho: string;
-    diaDiemKho: string;
     tenDiemKho: string
     maNhaKho: string;
     tenNhaKho: string;
@@ -95,12 +92,13 @@ export class DanhSachPhanLo {
     maLoKho: string;
     tenLoKho: string;
     maDviTsan: string;
-    duDau: number;
-    soLuong: number;
+    tonKho: number;
+    soLuongDeXuat: number;
     donGiaDeXuat: number;
-    donGiaVat: number;
-    dviTinh: string;
-    khoanTienDatTruoc: number;
+    donGiaDuocDuyet: number;
+    donViTinh: string;
+    loaiVthh: string;
+    cloaiVthh: string;
     tenCloaiVthh: string;
     idVirtual?: number;
     isEdit: boolean;
@@ -113,10 +111,7 @@ export class DanhSachPhanLo {
 
 export class DanhSachXuatBanTrucTiep {
     id: number;
-    maDvi: string;
-    tenDvi: string;
     maDiemKho: string;
-    diaDiemKho: string;
     tenDiemKho: string
     maNhaKho: string;
     tenNhaKho: string;
@@ -124,22 +119,16 @@ export class DanhSachXuatBanTrucTiep {
     tenNganKho: string;
     maLoKho: string;
     tenLoKho: string;
+    maDviTsan: string;
+    tonKho: number;
+    soLuongDeXuat: number;
+    donViTinh: string;
+    donGiaDeXuat: number;
+    donGiaDuocDuyet: number;
     loaiVthh: string;
     tenLoaiVthh: string;
     cloaiVthh: string;
     tenCloaiVthh: string;
-    maDviTsan: string;
-    duDau: number;
-    soLuong: number;
-    giaKhongVat: number;
-    giaKhoiDiem: number;
-    donGiaDeXuat: number;
-    donGiaVat: number;
-    giaKhoiDiemDduyet: number;
-    soLuongChiTieu: number;
-    soLuongKh: number;
-    dviTinh: string;
-    tongSoLuong: number;
     idVirtual?: number;
     isEdit: boolean;
     children?: DanhSachPhanLo[];

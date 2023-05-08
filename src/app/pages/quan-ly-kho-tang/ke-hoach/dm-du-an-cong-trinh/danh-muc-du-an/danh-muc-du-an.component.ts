@@ -1,31 +1,19 @@
 import { Component, OnInit } from "@angular/core";
-import dayjs from "dayjs";
-import { cloneDeep } from "lodash";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
-import { PAGE_SIZE_DEFAULT } from "src/app/constants/config";
 import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
-import { UserService } from "src/app/services/user.service";
-import { Globals } from "src/app/shared/globals";
 import { saveAs } from "file-saver";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
 import { DanhMucKhoService } from "../../../../../services/danh-muc-kho.service";
 import { STATUS } from "../../../../../constants/status";
-import {
-  DialogDanhMucKhoComponent
-} from "../../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
-import {
-  DanhMucSuaChuaService
-} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
-import { ThongTinDmScLonComponent } from "../danh-muc-sc-lon/thong-tin-dm-sc-lon/thong-tin-dm-sc-lon.component";
 import { ThemMoiDanhMucDuAnKhoComponent } from "./them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-du-an',
@@ -36,27 +24,15 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-  tabSelected: string = 'phuong-an-tong-hop'
   danhSachNam: any[] = [];
-
   listTrangThai = [{"ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện"},
     {"ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện"},
     {"ma": STATUS.DA_HOAN_THANH, "giaTri": "Đã hoàn thành"}
   ];
-
-  allChecked = false;
-  indeterminate = false;
-  dataTableAll: any[] = [];
   dsKhoi: any[] = [];
-  dataTable: any[] = [];
   danhSachCuc: any[] = [];
   dsChiCuc: any[] = [];
   dsDiemKho: any[] = [];
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 0;
-  userInfo: UserLogin;
-
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -65,12 +41,14 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private danhMucKhoService: DanhMucKhoService,
     private dviService: DonviService,
-    private dmService : DanhMucService
+    private dmService : DanhMucService,
+    private router : Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucKhoService);
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
+      capDvi: [null],
       soQd: [null],
       khoi: [null],
       tenDuAn: [null],
@@ -87,13 +65,17 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
       if (this.userService.isCuc()) {
-        await this.loadDsKhoi();
-        await this.loadDanhSachCuc();
-        await this.loadDsChiCuc();
+         this.loadDsKhoi();
+         this.loadDsChiCuc();
+      } else {
+         this.loadDanhSachCuc();
       }
       this.filter();
       this.spinner.hide();
@@ -188,7 +170,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
   filter() {
     this.formData.patchValue({
-      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
     })
     this.search()
   }
@@ -196,23 +179,27 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
 export class DanhMucKho {
   id: number;
+  namKeHoach : number;
   idVirtual : any
   maDuAn: string;
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
+  tenKhoi: string;
   maChiCuc : string;
   tenChiCuc : string;
   maDiemKho : string;
   tenDiemKho : string;
-  giaiDoan: any
-  tgKcHt: any
+  giaiDoan: any;
+  tgKcHt: any;
+  ngayQdDc : any;
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
   tgHoanThanh: any;
   tmdtDuKien: number;
   nstwDuKien: number;
+  ghiChu: string;
   soQdPd: string;
   soQdDcPd: string;
   soQdPdDtxd: string;

@@ -96,7 +96,7 @@
                                 </nz-form-label>
                                 <nz-form-control>
                                     <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
-                                        [ngModelOptions]="{standalone: true}">
+                                        [ngModelOptions]="{standalone: true}" [nzDisabled]="isDisabledQD()">
                                         <label nz-radio nzValue="HD"> Căn cứ vào hợp đồng </label>
                                         <label nz-radio nzValue="QDDX"> Căn cứ vào Ủy quyền/Bán lẻ </label>
                                     </nz-radio-group>

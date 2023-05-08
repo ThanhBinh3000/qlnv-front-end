@@ -13,7 +13,7 @@ import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 
 @Component({
-  selector: 'app-phieu-xuat-kho',
+  selector: 'app-xc-phieu-xuat-kho',
   templateUrl: './phieu-xuat-kho.component.html',
   styleUrls: ['./phieu-xuat-kho.component.scss']
 })

@@ -9,6 +9,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 import { isEmpty } from 'lodash';
 import { DonviService } from 'src/app/services/donvi.service';
+
 @Component({
   selector: 'app-de-xuat-kh-ban-truc-tiep',
   templateUrl: './de-xuat-kh-ban-truc-tiep.component.html',

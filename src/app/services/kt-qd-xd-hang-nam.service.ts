@@ -25,4 +25,9 @@ export class KtQdXdHangNamService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-xd-theo-nam/quyet-dinh/danh-sach-dm-du-an`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  getListToTrinh(): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-tt`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }

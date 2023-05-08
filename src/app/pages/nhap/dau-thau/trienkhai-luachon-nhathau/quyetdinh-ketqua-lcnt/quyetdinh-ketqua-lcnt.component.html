@@ -16,17 +16,37 @@
           <label>Số QĐ PD KQLCNT</label>
           <input nz-input [(ngModel)]="searchFilter.soQdPdKqlcnt" />
         </div>
-        <div nz-col nzSpan="4">
+        <!-- <div nz-col nzSpan="4">
           <label>Ngày ký QĐ PD KQLCNT</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
+        </div> -->
         <div nz-col nzSpan="4">
+          <label>Ngày ký QĐ PD KQLCNT</label>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="12" class="cus-start-date">
+              <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayQd"
+                nzPlaceHolder="Ngày bắt đầu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="12" class="cus-end-date">
+              <nz-date-picker [nzDisabledDate]="disabledDenNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayQd"
+                nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="loaiVthh.startsWith('02')" nz-col nzSpan="4">
+          <label>Loại hàng hóa </label>
+          <nz-select [(ngModel)]="searchFilter.loaiVthh">
+            <nz-option *ngFor="let p of dsLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+          </nz-select>
+        </div>
+        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
           <label> Loại hàng hóa </label>
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
             <input [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh" readonly="true" />
           </nz-input-group>
         </div>
-        <div nz-col nzSpan="4">
+        <div *ngIf="!loaiVthh.startsWith('02')" nz-col nzSpan="4">
           <label> Chủng loại hàng hóa</label>
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
             <input [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh" readonly="true" />
@@ -54,7 +74,7 @@
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA')" type="button"
           class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
+          <span>Xóa</span>
         </button>
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_EXP')" type="button"
           class="btn btn-sub" (click)="exportData()">
@@ -82,12 +102,12 @@
             <th style="width: 6%;">Số QĐ PD KQLCNT</th>
             <th style="width: 6%;">Số QĐ PD KHLCNT</th>
             <th style="width: 6%;">Ngày ký QĐ PD KQLCNT</th>
-            <th style="width: 9%;">Đơn vị</th>
+            <!-- <th style="width: 9%;">Đơn vị</th> -->
             <th style="width: 5%;">Trích yếu</th>
             <th *ngIf="loaiVthh.startsWith('02')" style="width: 5%;">Loại hàng hóa</th>
-            <th *ngIf="loaiVthh.startsWith('02')" style="width: 5%;">Chủng loại hàng hóa</th>
             <th *ngIf="!loaiVthh.startsWith('02')" style="width: 5%;">Chủng loại hàng hóa</th>
             <th style="width: 5%;">Số gói thầu</th>
+            <th style="width: 5%;">Số gói thầu trúng</th>
             <th style="width: 5%;">Trạng thái </th>
             <th class="text-center" style="width: 5%;">Hành động</th>
           </tr>
@@ -120,12 +140,12 @@
                   (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"></nz-date-picker>
               </nz-input-group>
             </th>
-            <th>
+            <!-- <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
                   (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
               </nz-input-group>
-            </th>
+            </th> -->
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
@@ -138,22 +158,28 @@
                   (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
               </nz-input-group>
             </th>
-            <th *ngIf="loaiVthh.startsWith('02')">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
-                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
-              </nz-input-group>
-            </th>
             <th *ngIf="!loaiVthh.startsWith('02')">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
               </nz-input-group>
             </th>
+            <!-- <th *ngIf="!loaiVthh.startsWith('02')">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
+              </nz-input-group>
+            </th> -->
             <th>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthau"
                   (input)="filterInTable('soGthau',filterTable.soGthau)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthauTrung"
+                  (input)="filterInTable('soGthauTrung',filterTable.soGthauTrung)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -181,13 +207,15 @@
                 {{ data.soQdPdKhlcnt }}
               </a>
             </td>
-            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.tenDvi}}</td>
+            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+            <!-- <td>{{ data.tenDvi}}</td> -->
             <td>{{ data.trichYeu }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
-            <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
+            <!-- <td *ngIf="loaiVthh.startsWith('02')">{{ data?.hhQdKhlcntHdr?.tenCloaiVthh }}</td> -->
             <td *ngIf="!loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
-            <td>{{ data.soGthau }}</td>
+            <td>{{ data.soGthau ? data.soGthau : data.hhQdKhlcntHdr.soGthau }}</td>
+            <td>{{ data.qdKhlcntDtl ? data.qdKhlcntDtl.soGthauTrung : data.hhQdKhlcntHdr.soGthauTrung }}
+            </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"

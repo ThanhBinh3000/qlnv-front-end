@@ -6873,7 +6873,7 @@ td.action.ant-table-cell {
   line-height: 1;
 
   label {
-    height: 32px;
+    height: 48px;
     line-height: 16px;
   }
 }
@@ -6884,18 +6884,21 @@ td.action.ant-table-cell {
 
   .ant-form-item {
     margin-right: 20px;
-    padding-top: 10px;
+    padding-top: 26px;
 
     &:last-child {
       margin-right: 0px;
     }
+    .ant-form-item-control{
+      padding-top: 4px;
+    }
   }
 
   label {
-    padding-top: 8px;
-    font-size: 13px;
+    padding-top: 0px;
+    font-size: 14px;
     font-weight: 500;
-    height: 32px;
+    height: 28px;
   }
 }
 
@@ -6917,11 +6920,18 @@ td.action.ant-table-cell {
 .modal-content-detail {
   .ant-form-item-label > label {
     height: 32px !important;
+    padding-top: 4px;
   }
-  .rdo-input .ant-form-item{
+
+  .rdo-input .ant-form-item {
     padding-top: 0px;
   }
 }
 
+.money-input {
+  border: 1px solid #bbb8b8;
+  height: inherit;
+  width: 100%;
+}
 
 // end lấy từ default qua....................................................

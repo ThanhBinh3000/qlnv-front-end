@@ -29,6 +29,7 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
   isViewChiTieu: boolean = false;
   idQdPd: number = 0;
   isViewQdPd: boolean = false;
+  isViewChiTiet: boolean = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
@@ -202,4 +203,13 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     }
     return endValue.getTime() <= this.formData.value.ngayDuyetTu.getTime();
   };
+
+  xemChiTiet(id: number, isView: boolean, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.isViewChiTiet = isView;
+    this.idSelected = id;
+    this.isDetail = true;
+  }
 }

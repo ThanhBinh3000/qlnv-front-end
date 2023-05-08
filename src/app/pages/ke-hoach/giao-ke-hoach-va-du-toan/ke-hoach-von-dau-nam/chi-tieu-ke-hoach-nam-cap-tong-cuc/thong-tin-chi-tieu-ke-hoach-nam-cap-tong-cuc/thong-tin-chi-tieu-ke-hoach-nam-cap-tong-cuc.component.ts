@@ -147,6 +147,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuConEditNhapShow: any[] = []
   dataVatTuConEditXuatShow: any[] = [];
   dataQdTtcpGiaoBTC: any;
+  dataQdTCDTGiaoCuc: any;
 
   //
 
@@ -220,10 +221,21 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
+          this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
             canCu: data.soQuyetDinh,
             chiTieuId: data.id
-          })
+          });
+          // Lấy kế hoạch tổng cục giao cho cục đang login
+          let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+          if (dataLuongThuc) {
+            this.dataQdTCDTGiaoCuc = {
+              "ltThocMua": dataLuongThuc.ntnThoc,
+              "ltGaoMua": dataLuongThuc.ntnGao,
+              "ltThocXuat": dataLuongThuc.xtnTongThoc,
+              "ltGaoXuat": dataLuongThuc.xtnTongGao,
+            }
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -233,8 +245,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
-        console.log(res, 'cccccccccccccc')
         if (data) {
+          //Lấy data của TTCP giao cho BTC (TCDT)
           this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
           this.formData.patchValue({
             canCu: data.soQd
@@ -1475,8 +1487,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       return;
     }
-    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hay ko ?
-    let checkFlag = this.soSanhCtBTCGiao('save');
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
+    let checkFlag = this.soSanhCtCapTrenGiao('save');
     if (!checkFlag) {
       return;
     }
@@ -2163,50 +2175,83 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       : '0';
   }
 
-  soSanhCtBTCGiao(action) {
+  soSanhCtCapTrenGiao(action) {
     let totalNtnThoc, totalNtnGao = 0;
     let checkFlag = true;
-    if (action == 'add') {
-      totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
-      totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
-      if (totalNtnThoc || totalNtnGao) {
-        if (totalNtnThoc > this.dataQdTtcpGiaoBTC.ltThocMua) {
-          this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
-          checkFlag = false;
-          return;
+    if (this.userService.isTongCuc()) {
+      if (action == 'add') {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc > this.dataQdTtcpGiaoBTC.ltThocMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
+            checkFlag = false;
+            return;
+          }
+          if (totalNtnGao > this.dataQdTtcpGiaoBTC.ltGaoMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
+            checkFlag = false;
+            return;
+          }
         }
-        if (totalNtnGao > this.dataQdTtcpGiaoBTC.ltGaoMua) {
-          this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
-          checkFlag = false;
-          return;
+      } else {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc < this.dataQdTtcpGiaoBTC.ltThocMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
+            checkFlag = false;
+            return;
+          }
+          if (totalNtnGao < this.dataQdTtcpGiaoBTC.ltGaoMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
+            checkFlag = false;
+            return;
+          }
         }
       }
     } else {
-      totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
-      totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
-      if (totalNtnThoc || totalNtnGao) {
-        if (totalNtnThoc < this.dataQdTtcpGiaoBTC.ltThocMua) {
-          this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
-          checkFlag = false;
-          return;
+      if (action == 'add') {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc > this.dataQdTCDTGiaoCuc.ltThocMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc TCDT giao");
+            checkFlag = false;
+            return;
+          }
+          if (totalNtnGao > this.dataQdTCDTGiaoCuc.ltGaoMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo TCDT giao");
+            checkFlag = false;
+            return;
+          }
         }
-        if (totalNtnGao < this.dataQdTtcpGiaoBTC.ltGaoMua) {
-          this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
-          checkFlag = false;
-          return;
+      } else {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc < this.dataQdTCDTGiaoCuc.ltThocMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
+            checkFlag = false;
+            return;
+          }
+          if (totalNtnGao < this.dataQdTCDTGiaoCuc.ltGaoMua) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
+            checkFlag = false;
+            return;
+          }
         }
       }
     }
     return checkFlag;
   }
 
-
   themMoiKHLT() {
     if (!this.isAddLuongThuc) {
       return;
     }
-    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hay ko ?
-    let checkFlag = this.soSanhCtBTCGiao('add');
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
+    let checkFlag = this.soSanhCtCapTrenGiao('add');
     if (!checkFlag) {
       return;
     }

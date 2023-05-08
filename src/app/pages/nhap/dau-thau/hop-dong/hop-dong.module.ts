@@ -31,6 +31,7 @@ import { TrienkhaiLuachonNhathauModule } from "../trienkhai-luachon-nhathau/trie
   exports: [
     HopDongComponent,
     DanhSachHopDongComponent,
+    ThongTinComponent
   ]
 })
 export class HopDongModule { }

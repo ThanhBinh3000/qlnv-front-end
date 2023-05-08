@@ -22,6 +22,7 @@ import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
@@ -40,16 +41,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
 
   searchFilter = {
     namKeHoach : '',
-    maTongHop: '',
-    tenDuAn: '',
     tgKhoiCong : '',
     tgHoanThanh : '',
-    diaDiem: '',
     ngayTongHopTu: '',
     ngayTongHopDen: '',
     namBatDau: '',
     namKetThuc: '',
-    trangThai  :'',
   };
 
   filterTable: any = {
@@ -80,6 +77,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
+    private router : Router
   ) { }
 
   listTrangThai: any[] = [
@@ -92,6 +90,9 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   ];
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -126,16 +127,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     let body = {
       namKeHoach : this.searchFilter.namKeHoach,
-      diaDiem: this.searchFilter.diaDiem,
-      tenDuAn: this.searchFilter.tenDuAn,
-      maTongHop: this.searchFilter.maTongHop,
       ngayTongHopTu: this.searchFilter.ngayTongHopTu,
       ngayTongHopDen: this.searchFilter.ngayTongHopDen,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
       tgKhoiCong : this.searchFilter.tgKhoiCong,
       tgHoanThanh : this.searchFilter.tgHoanThanh,
-      trangThai : this.searchFilter.trangThai,
       maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
       paggingReq: {
         limit: this.pageSize,
@@ -291,7 +288,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
-          if (['ngayTao'].includes(key)) {
+          if (['tgTongHop'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
@@ -311,16 +308,12 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   async clearFilterTable() {
     this.searchFilter = {
       namKeHoach : '',
-      maTongHop: '',
-      tenDuAn: '',
       tgKhoiCong : '',
       tgHoanThanh : '',
-      diaDiem: '',
       ngayTongHopTu: '',
       ngayTongHopDen: '',
       namBatDau: '',
       namKetThuc: '',
-      trangThai  :'',
     };
     await this.search();
   }

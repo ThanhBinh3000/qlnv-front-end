@@ -34,11 +34,32 @@
         <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
           <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
             <div nz-row [nzGutter]="[16,12]">
-              <div nz-col nzSpan="2">
+              <div nz-col [nzSpan]="2">
                 <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Năm hợp đồng</nz-form-label>
+                  <nz-form-label [nzNoColon]="true"> Năm hợp đồng</nz-form-label>
                   <nz-form-control>
                     <input nz-input formControlName="nam" readonly/>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                  <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd"> Số hợp đồng
+                  </nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
+                      <nz-input-number [nzSize]="'small'" [nzMin]="0" placeholder="Số hợp đồng" formControlName="soHd"
+                                       [nzDisabled]="isView">
+                      </nz-input-number>
+                    </nz-input-group>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Tên hợp đồng</nz-form-label>
+                  <nz-form-control [nzErrorTip]="error">
+                    <input nz-input placeholder="Tên hợp đồng" formControlName="tenHd" [readonly]="isView"/>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -54,7 +75,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="3">
+              <div nz-col [nzSpan]="4">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Ngày ký QĐ phê duyệt kết quả BĐG</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -65,7 +86,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-              <div nz-col [nzSpan]="3">
+              <div nz-col [nzSpan]="4">
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">Căn cứ QĐ Phê duyệt KH BĐG</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
@@ -137,27 +158,6 @@
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="3">
-                <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd"> Số hợp đồng
-                  </nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
-                      <nz-input-number [nzSize]="'small'" [nzMin]="0" placeholder="Số hợp đồng" formControlName="soHd"
-                                       [nzDisabled]="isView">
-                      </nz-input-number>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col [nzSpan]="6">
-                <nz-form-item>
-                  <nz-form-label nzRequired [nzNoColon]="true"> Tên hợp đồng</nz-form-label>
-                  <nz-form-control [nzErrorTip]="error">
-                    <input nz-input placeholder="Tên hợp đồng" formControlName="tenHd" [readonly]="isView"/>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col [nzSpan]="6">
 
                 <nz-form-item>
                   <nz-form-label nzRequired [nzNoColon]="true">Ngày hiệu lực (Ngày ký hợp đồng)
@@ -476,16 +476,14 @@
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
-                  <nz-input-number nz-input [nzDisabled]="isView" placeholder="Số lượng" formControlName="soLuong"
-                                   [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                   [nzParser]="globals.parser"></nz-input-number>
+                  <input nz-input [value]="tongSoLuong|number : '1.0-1' : 'vi_VN'" readonly>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="9"></div>
               <div nz-col [nzSpan]="3">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true">Thành tiền</nz-form-label>
-                  <input [readonly]="true" nz-input formControlName="tongTien" readonly="true"/>
+                  <input nz-input [value]="tongThanhTien|number : '1.0-1' : 'vi_VN'" readonly>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="1">
@@ -499,7 +497,7 @@
               <div nz-col [nzSpan]="20">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
-                  <input [ngModel]=" convertTienTobangChu(formData.value.tongTien)" nz-input readonly
+                  <input [ngModel]=" convertTienTobangChu(tongThanhTien)" nz-input readonly
                          [ngModelOptions]="{standalone: true}"/>
                 </nz-form-item>
               </div>
@@ -520,7 +518,7 @@
         <nz-collapse-panel [nzHeader]="'ĐỊA ĐIỂM CUNG CẤP HÀNG HÓA'" [nzActive]="true">
           <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
-            <thead >
+            <thead>
             <tr>
               <th class="text-center"></th>
               <th class="text-center">Chi cục DTNN KV</th>

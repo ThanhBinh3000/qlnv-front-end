@@ -19,6 +19,7 @@ import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service"
 import {DonviService} from "../../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach',
@@ -77,12 +78,16 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     private quyHoachKhoService: QuyHoachKhoService,
     private donViService: DonviService,
     private dmService: DanhMucService,
+    private router: Router,
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
   ) { }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

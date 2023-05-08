@@ -10,7 +10,17 @@
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="3">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Năm KH</nz-form-label>
+              <nz-select formControlName="namKh">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Mã công trình</nz-form-label>
@@ -18,7 +28,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Tên công trình</nz-form-label>
@@ -26,12 +36,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="5">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Loại công trình</nz-form-label>
               <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="loaiCongTrinh">
-                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                <nz-option *ngFor="let p of listLoaiCongTrinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -48,14 +58,33 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="18">
+        <div nz-col nzSpan="9">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true">Điểm kho</nz-form-label>
-              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho">
+              <nz-select [nzDisabled]="isViewDetail" nzShowSearch nzAllowClear formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
                 <nz-option *ngFor="let p of dsKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="5">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Khối dự án/Công trình</nz-form-label>
+              <nz-select [nzDisabled]="isViewDetail" nzAllowClear formControlName="khoi">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-form-label nzRequired [nzNoColon]="true">Địa điểm</nz-form-label>
+              <input [readonly]="true" formControlName="diaDiem" class="search__input" nz-input/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -73,7 +102,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Lý do, mục tiêu sửa chũa</nz-form-label>
+              <nz-form-label [nzNoColon]="true" nzRequired>Lý do, mục tiêu sửa chũa</nz-form-label>
               <textarea [readonly]="isViewDetail" rows="3" class="search__input" nz-input
                         formControlName="lyDo"></textarea>
             </nz-form-control>
@@ -92,7 +121,7 @@
         <div nz-col nzSpan="12">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true">Kế hoạch cải tạo, sửa chữa thuường xuyên kho tàng (đ)</nz-form-label>
+              <nz-form-label nzRequired [nzNoColon]="true">Kế hoạch cải tạo, sửa chữa thường xuyên kho tàng (đ)</nz-form-label>
               <nz-input-number [nzFormatter]="globals.formatter" [nzDisabled]="isViewDetail" [nzParser]="globals.parser" [nzSize]="'small'"
                                formControlName="keHoachCaiTao">
               </nz-input-number>
@@ -166,7 +195,7 @@
         <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
         Đóng
       </button>
-      <button nz-button (click)="handleOk('save')" class="modal__button--save ml-2">
+      <button nz-button (click)="handleOk('save')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_CONGTRINHSCTX_THEM') && !isViewDetail" class="modal__button--save ml-2">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>

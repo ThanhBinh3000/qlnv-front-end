@@ -20,6 +20,9 @@ import { MESSAGE } from "../../../../../../constants/message";
 import { STATUS } from "../../../../../../constants/status";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
+import {
+  DialogThemMoiDxkhthComponent
+} from "../../de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 @Component({
   selector: "app-them-moi-qd-phe-duyet",
@@ -29,6 +32,7 @@ import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh
 export class ThemMoiQdPheDuyetComponent implements OnInit {
 
   @Input() isViewDetail: boolean;
+  @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
   @Output()
@@ -256,14 +260,17 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
-          type : "QDTH",
+          type: "QDTH",
           dsPhuongAn: this.listToTrinh
         }
       });
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            phuongAnTc: data.maToTrinh
+            phuongAnTc: data.soQuyetDinh,
+            namBatDau: data.namBatDau,
+            namKetThuc: data.namKetThuc,
+            loaiDuAn: data.loaiDuAn
           });
           await this.loadDsChiTiet(data.id);
         }
@@ -295,7 +302,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         item.selected = false;
       });
       item.selected = true;
-
       // phg án tổng cục
       this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
       if (this.dataTable && this.dataTable.length > 0) {
@@ -311,11 +317,11 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         .groupBy("tenChiCuc")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("khoi")
+            .groupBy("tenKhoi")
             .map((v, k) => {
                 return {
                   idVirtual: uuidv4(),
-                  khoi: k,
+                  tenKhoi: k,
                   dataChild: v
                 };
               }
@@ -327,7 +333,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
           };
         }).value();
     }
-    console.log(table, 123);
     return table;
   }
 
@@ -353,10 +358,10 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     }
   }
 
-  sumSoLuong(tenChiCuc: string, row: string,  khoi: string) {
+  sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
     let sl = 0;
     if (tenChiCuc && khoi) {
-      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi)
+      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           prev += cur[row];
@@ -369,7 +374,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
         prev += cur[row];
         return prev;
       }, 0);
-      sl = sum
+      sl = sum;
     }
     return sl;
   }
@@ -426,6 +431,43 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
   }
 
+  themMoiItem(data: any, type: string, idx: number, list?: any) {
+    console.log(list);
+    console.log(data,123);
+    let modalQD = this.modal.create({
+      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzContent: DialogThemMoiDxkhthComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "200px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: "DXTH"
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list[idx], detail);
+          }
+        }
+        this.expandAll(this.dataTable);
+      }
+    });
+  }
 }
 
 

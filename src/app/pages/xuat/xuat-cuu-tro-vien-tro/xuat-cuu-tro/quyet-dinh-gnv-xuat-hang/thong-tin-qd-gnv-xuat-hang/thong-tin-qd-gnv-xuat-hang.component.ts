@@ -72,6 +72,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   soLuong: any;
   thanhTien: any;
   donViTinh: any;
+  maHauTo: any = '/' + dayjs().year() + '-QĐGNVCT';
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -115,12 +116,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       tonKhoChiCuc: [],
+      loaiNhapXuat: [''],
+      kieuNhapXuat: [''],
+      mucDichXuat:['']
     })
   }
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadDsVthh(),
         this.loadDsQdPd(),
@@ -128,7 +132,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.loadDsDiemKho()
       ])
       await this.loadDetail(this.id)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
@@ -142,11 +146,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            //phan quyen du lieu
+            res.data.soQd = res.data.soQd.split('/')[0]
             this.formData.patchValue(res.data);
-            if (this.formData.value.soQd) {
-              this.formData.value.soQd = this.formData.value.soQd.split('/')[0];
-            }
+
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
             this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
@@ -250,6 +252,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                   noiDungCuuTro: this.chiTiet,
                   soLuong: this.chiTiet.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
                   thanhTien: this.chiTiet.reduce((prev, cur) => prev + cur.thanhTien, 0),
+                  loaiNhapXuat:res.data.loaiNhapXuat,
+                  kieuNhapXuat:res.data.kieuNhapXuat,
+                  mucDichXuat:res.data.mucDichXuat,
                 });
               }
               this.selectHangHoa(res.data.loaiVthh);
@@ -290,7 +295,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.dsQdPd = data.content;
+          this.dsQdPd = data.content.filter(item=>item.soQdGiaoNv==null);
         }
       } else {
         this.dsQdPd = [];
@@ -300,12 +305,15 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   }
 
   async save() {
-    this.formData.disable()
-    let rs = await this.createUpdate(this.formData.value);
-    this.formData.enable()
-    if (rs) {
-      this.goBack();
-    }
+    this.formData.disable();
+    let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
+    await this.createUpdate(body);
+    this.formData.enable();
+  }
+
+  async saveAndSend(trangThai: string, msg: string, msgSuccess?: string) {
+    let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
+    await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
   onExpandStringChange(id: string, checked: boolean): void {

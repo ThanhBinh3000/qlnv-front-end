@@ -5,13 +5,13 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && formData.value.loaiVthh.startsWith('02') && isDetailPermission() && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && formData.value.loaiVthh.startsWith('02') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  !userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02')) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && !isView"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO) &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') &&  userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_BANHANH') && !isView"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
@@ -285,6 +285,16 @@
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open">
                   <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]=6>
+            <nz-form-item>
+              <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group nzAddOnAfterIcon="folder-open">
+                  <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -590,7 +600,7 @@
           <tbody>
             <ng-container *ngFor="let item of danhsachDx , let i = index">
               <tr>
-                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                 <td>{{item.goiThau}}</td>
                 <td>{{item.tenCloaiVthh}}</td>
                 <td></td>
@@ -613,18 +623,18 @@
                   </a>
                 </td>
               </tr>
-              <ng-container *ngIf="expandSet.has(i)">
+              <ng-container>
                 <ng-container *ngFor="let cuc of item.children, let y = index">
                   <tr>
                     <td></td>
                     <td></td>
-                    <td class="text-right" [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
+                    <td class="text-right" [nzExpand]="true" (nzExpandChange)="onExpandChange2(y, $event)">
                     </td>
                     <td>{{cuc.tenDvi}}</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{cuc.soLuongTheoChiTieu}}</td>
+                    <td>{{cuc.soLuongDaMua}}</td>
                     <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{item.dviTinh }}</td>
                     <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
@@ -634,14 +644,13 @@
                     <td class="text-right">
                     </td>
                   </tr>
-                  <ng-container *ngIf="expandSet2.has(y)">
+                  <ng-container>
                     <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
                       <tr>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="text-right" [nzExpand]="expandSet3.has(z)"
-                          (nzExpandChange)="onExpandChange3(z, $event)">
+                        <td class="text-right" [nzExpand]="true" (nzExpandChange)="onExpandChange3(z, $event)">
                         </td>
                         <td>{{chiCuc.tenDvi}}</td>
                         <td></td>
@@ -656,8 +665,8 @@
                         <td class="text-right">
                         </td>
                       </tr>
-                      <ng-container *ngIf="expandSet3.has(z)">
-                        <tr *ngFor="let diemKho of chiCuc.children">
+                      <ng-container>
+                        <tr *ngFor="let diemKho of chiCuc.children, let q = index">
                           <td></td>
                           <td></td>
                           <td></td>
@@ -673,6 +682,9 @@
                           <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                           <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                           <td class="text-right">
+                            <a (click)="deleteRow(diemKho)">
+                              <i class="fa fa-trash-o do"></i>
+                            </a>
                           </td>
                         </tr>
                       </ng-container>

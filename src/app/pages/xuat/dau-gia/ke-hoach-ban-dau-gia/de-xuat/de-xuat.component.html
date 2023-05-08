@@ -3,46 +3,46 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div nz-row [nzGutter]="24">
-          <div nz-col nzSpan="2">
-            <label class="search__label"> Năm kế hoạch </label>
+          <div nz-col [nzSpan]="2">
+            <label> Năm kế hoạch </label>
             <nz-select formControlName="namKh">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
-          <div nz-col nzSpan="3">
-            <label class="search__label">Số kế hoạch/tờ trình</label>
+          <div nz-col [nzSpan]="3">
+            <label>Số kế hoạch/tờ trình</label>
             <input placeholder="" nz-input formControlName="soDxuat" />
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Ngày lập kế hoạch</label>
+          <div nz-col [nzSpan]="4">
+            <label>Ngày lập kế hoạch</label>
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayTaoTu" nzFormat="dd/MM/yyyy" formControlName="ngayTaoTu"
                   nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayTaoDen" nzFormat="dd/MM/yyyy" formControlName="ngayTaoDen"
                   nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Ngày duyệt kế hoạch</label>
+          <div nz-col [nzSpan]="4">
+            <label>Ngày duyệt kế hoạch</label>
             <div nz-row [nzGutter]="24">
-              <div nz-col nzSpan="12" class="cus-start-date">
+              <div nz-col [nzSpan]="12" class="cus-start-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayDuyetTu" nzFormat="dd/MM/yyyy"
                   formControlName="ngayDuyetTu" nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
-              <div nz-col nzSpan="12" class="cus-end-date">
+              <div nz-col [nzSpan]="12" class="cus-end-date">
                 <nz-date-picker [nzDisabledDate]="disabledNgayDuyetDen" nzFormat="dd/MM/yyyy"
                   formControlName="ngayDuyetDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
               </div>
             </div>
           </div>
-          <div nz-col nzSpan="11">
-            <label class="search__label">Trích yếu</label>
+          <div nz-col [nzSpan]="11">
+            <label>Trích yếu</label>
             <input placeholder="" nz-input formControlName="trichYeu" />
           </div>
         </div>
@@ -333,7 +333,8 @@
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPd" (nzOnCancel)="closeModalQdPd()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
-    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+    <app-them-quyet-dinh-ban-dau-gia [idInput]="idQdPd" [maDviCuc]="maDviCuc" [dviCapCuc]="dviCapCuc"
+      [loaiVthh]="loaiVthh" [isViewOnModal]="true">
     </app-them-quyet-dinh-ban-dau-gia>
   </ng-container>
   <div *nzModalFooter>

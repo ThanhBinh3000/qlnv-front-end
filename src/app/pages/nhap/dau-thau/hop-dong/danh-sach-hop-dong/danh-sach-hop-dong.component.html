@@ -49,17 +49,14 @@
     <div class="group-button">
       <h3> QUẢN LÝ KÝ HỢP ĐỒNG MUA HÀNG DTQG</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XOA')" type="button" class="btn btn-do"
-          (click)="deleteSelect()">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xóa</span>
-        </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_EXP')" type="button"
+        <button *ngIf="(loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_EXP'))
+         || (!loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_EXP')) " type="button"
           class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')" type="button"
+        <button *ngIf="(loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM'))
+         || (!loaiVthh.startsWith('02') && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')) " type="button"
           class="btn btn-main" (click)="themMoi(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm hợp đồng</span>
@@ -82,11 +79,11 @@
             <th nzWidth="5%">Tổng số gói thầu</th>
             <th nzWidth="5%">Số gói thầu đã trúng</th>
             <th nzWidth="5%">SL hợp đồng đã ký</th>
-            <th>Thời hạn nhập kho</th>
-            <th nzWidth="10%">Chủng loại hàng hóa</th>
+            <th nzWidth="5%" *ngIf="loaiVthh.startsWith('02')">Thời gian thực hiện HĐ</th>
+            <th nzWidth="5%">Thời hạn nhập kho</th>
+            <th nzWidth="10%" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
-            <th nzWidth="5%">Chủ đầu tư</th>
-            <th nzWidth="10%" *ngIf="userService.isTongCuc()">Nhà thầu trúng thầu</th>
+            <th nzWidth="5%" *ngIf="!loaiVthh.startsWith('02')">Chủ đầu tư</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
             <th nzWidth="5%">Trạng thái NH</th>
             <th nzWidth="3%">Hành động</th>
@@ -132,16 +129,22 @@
                   (input)="filterInTable('slHdDaKy',filterTable.slHdDaKy)" />
               </nz-input-group>
             </th>
+            <th *ngIf="loaiVthh.startsWith('02')">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgianThien"
+                  (input)="filterInTable('tgianThien',filterTable.tgianThien)" />
+              </nz-input-group>
+            </th>
             <th>
               <nz-input-group>
                 <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.tgianNhang"
                   (ngModelChange)="filterInTable('tgianNhang', convertDateToString(filterTable.tgianNhang))"></nz-date-picker>
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="loaiVthh.startsWith('02')">
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
-                  (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                       (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" />
               </nz-input-group>
             </th>
             <th>
@@ -150,16 +153,10 @@
                   (input)="filterInTable('tongMucDt',filterTable.tongMucDt)" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="!loaiVthh.startsWith('02')">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
                   (input)="filterInTable('tenDvi',filterTable.tenDvi)" />
-              </nz-input-group>
-            </th>
-            <th *ngIf="userService.isTongCuc()">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviTrungThau"
-                  (input)="filterInTable('tenDviTrungThau',filterTable.tenDviTrungThau)" />
               </nz-input-group>
             </th>
             <th>
@@ -182,37 +179,39 @@
           </tr>
         </thead>
         <tbody>
+        <ng-container *ngIf="!loaiVthh.startsWith('02');else dataVt">
           <tr *ngFor="let data of basicTable.data; let i = index">
             <td>
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai!=globals.prop.NHAP_DU_THAO"></label>
+                     [nzDisabled]="data.trangThai!=globals.prop.NHAP_DU_THAO"></label>
             </td>
             <td>{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.namKhoach}}</td>
             <td><a style="color: #001CFF;" (click)="openQdPdKhlcntModal(data.idQdPdKhlcnt)">{{ data.soQdPdKhlcnt}}</a>
             </td>
             <td><a style="color: #001CFF;" (click)="openQdPdKqlcntModal(data.id)">{{ data.soQd}}</a></td>
-            <td>{{ data.soGthau}}</td>
-            <td>{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
-            <td>{{ data.listHopDong?.length }}</td>
+            <td class="text-right">{{ data.soGthau}}</td>
+            <td class="text-right">{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
+            <td class="text-right">{{ data.listHopDong?.length }}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianThien}}</td>
             <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
-            <td>{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ data.tenDvi}}</td>
-            <td *ngIf="userService.isTongCuc()">{{ data.tenDviTrungThau}}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
+            <td class="text-right">{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td *ngIf="!loaiVthh.startsWith('02')">{{ data.tenDvi}}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
             <td>{{ data.tenTrangThaiNh }}</td>
             <td class="text-left">
               <div nz-row>
-                <div nz-col nzSpan="8">
-                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM')"
-                    (click)="redirectToChiTiet(true, data)">
+                <div nz-col nzSpan="16">
+                  <a *ngIf="(data.trangThaiHd == STATUS.CHUA_THUC_HIEN || data.trangThaiHd == STATUS.DANG_THUC_HIEN) ?
+                  (loaiVthh === '02' ? (userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM'))
+                  : (userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')))
+                  : (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM'))"
+                     (click)="redirectToChiTiet(true, data)">
                     <i class="fa fa-eye"></i>
                   </a>
-                </div>
-                <div nz-col nzSpan="8">
                   <a (click)="redirectToChiTiet(false, data)"
-                    *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
+                     *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
                      && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
                     <i class="fa fa-pencil"></i>
                   </a>
@@ -220,6 +219,47 @@
               </div>
             </td>
           </tr>
+        </ng-container>
+        <ng-template #dataVt>
+          <tr *ngFor="let data of basicTable.data; let i = index">
+            <td>
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                     [nzDisabled]="data.trangThai!=globals.prop.NHAP_DU_THAO"></label>
+            </td>
+            <td>{{(page - 1) * pageSize + i + 1}}</td>
+            <td>{{ data.namKhoach}}</td>
+            <td><a style="color: #001CFF;" (click)="openQdPdKhlcntModal(data.idQdPdKhlcnt)">{{ data.soQdPdKhlcnt}}</a>
+            </td>
+            <td><a style="color: #001CFF;" (click)="openQdPdKqlcntModal(data.id)">{{ data.soQd}}</a></td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthau}}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.soGthauTrung}}</td>
+            <td class="text-right">{{ data.listHopDong?.length }}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tgianThien}}</td>
+            <td>{{ data.hhQdKhlcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td *ngIf="loaiVthh.startsWith('02')">{{ data.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
+            <td class="text-right">{{ data.hhQdKhlcntHdr?.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.tenTrangThaiHd }}</td>
+            <td>{{ data.tenTrangThaiNh }}</td>
+            <td class="text-left">
+              <div nz-row>
+                <div nz-col nzSpan="16">
+                  <a *ngIf="(data.trangThaiHd == STATUS.CHUA_THUC_HIEN || data.trangThaiHd == STATUS.DANG_THUC_HIEN) ?
+                  (loaiVthh === '02' ? (userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM'))
+                  : (userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM') && !userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')))
+                  : (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_XEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM'))"
+                     (click)="redirectToChiTiet(true, data)">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <a (click)="redirectToChiTiet(false, data)"
+                     *ngIf="data.trangThaiHd != STATUS.DA_HOAN_THANH
+                     && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
@@ -232,7 +272,7 @@
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->

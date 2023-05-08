@@ -88,9 +88,7 @@
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="12">
-
             <nz-form-item>
-
               <nz-form-control [nzErrorTip]="error">
                 <nz-radio-group [nzDisabled]="disableSelect()" nzSize="small" class="rdo-input" formControlName="type">
                 <nz-form-item>
@@ -112,28 +110,8 @@
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
-
-
-            <!--<nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
-              <nz-form-item>
-                <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                    <input [readonly]="true" nz-input formControlName="idTongHop" readonly="true" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-              <nz-form-item>
-                <label nz-radio nzValue="TTr">Chọn Số công văn/đề xuất</label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                    <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </nz-radio-group>-->
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="12">
             <nz-form-item class="form-item">
               <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24">
@@ -146,15 +124,21 @@
 
           <div nz-col [nzSpan]="6">
             <nz-form-item>
-              <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
-              <nz-form-control nz-col [nzSpan]="24">
-                <nz-input-group>
-                  <input [readonly]="true" nz-input formControlName="loaiNhapXuat" readonly="true" />
-                </nz-input-group>
+              <nz-form-label  [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+              <nz-form-control>
+                <input nz-input [readonly]="true" formControlName="loaiNhapXuat"/>
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="12">
+          <div nz-col [nzSpan]="6">
+            <nz-form-item>
+              <nz-form-label  [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
+              <nz-form-control>
+                <input nz-input [readonly]="true" formControlName="kieuNhapXuat"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Trích yếu
@@ -259,8 +243,7 @@
                             Tổng số lượng đề xuất CT,VT
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongDxCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongDxCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -270,8 +253,7 @@
                             Tổng số lượng thực tế xuất CT,VT của từng chi cục
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listSoLuongCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} {{formData.value.donViTinh}}</span>
+                            <span class="text-blue">{{listSoLuongCache |number: '1.0-1' : 'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -281,8 +263,7 @@
                             Thành Tiền
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-blue">{{listThanhTienCache | nzAggregate: 'sum'|number: '1.0-1' :
-                              'vi_VN'}} (đ)</span>
+                            <span class="text-blue">{{listThanhTienCache |number: '1.0-1' :'vi_VN'}} (đ)</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -292,8 +273,7 @@
                             SL đề xuất CT,VT trong kho không đáp ứng chuyển sang xuất cấp
                           </nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <span class="text-danger">{{slXuatCapCache > 0 ? (slXuatCapCache |number: '1.0-1' : 'vi_VN')
-                              : ''}} {{formData.value.donViTinh}}</span>
+                            <span class="text-danger">{{listSoLuongXcCache |number: '1.0-1' :'vi_VN'}} {{formData.value.donViTinh}}</span>
                           </nz-form-control>
                         </nz-form-item>
                       </div>
