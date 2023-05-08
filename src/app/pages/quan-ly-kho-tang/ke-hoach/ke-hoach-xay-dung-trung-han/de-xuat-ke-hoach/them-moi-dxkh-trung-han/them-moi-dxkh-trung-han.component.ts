@@ -124,7 +124,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.khoi == item.khoi) {
+        if (it.tenKhoi == item.tenKhoi) {
           rs = true;
           return;
         }
