@@ -75,102 +75,107 @@
       </ng-template>
       <div nz-row [nzGutter]="[16, 12]">
         <div nz-col nzSpan="3">
-          <!-- <nz-form-item> -->
-          <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
-          </nz-form-label>
-          <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
-            <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="isViewDetail"
-                       nzAllowClear>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-            </nz-select>
-            <ng-template #namKeHoachError let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
-          <!-- </nz-form-item> -->
+          <nz-form-item>
+            <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left"> Năm kế hoạch
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="namKeHoachError">
+              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" [nzDisabled]="isViewDetail"
+                         nzAllowClear>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+              <ng-template #namKeHoachError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
-          <!-- <nz-form-item> -->
-          <nz-form-label [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
-          <nz-form-control [nzErrorTip]="soQDError">
-            <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
-              <input formControlName="soQd" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
-                     placeholder="Nhập số quyết định" appNumberOnly
-              />
-            </nz-input-group>
-            <ng-template #soQDError let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
-          <!-- </nz-form-item> -->
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
+            <nz-form-control [nzErrorTip]="soQDError">
+              <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
+                <input formControlName="soQd" [readonly]="checkTrangThaiRecord()" nz-input nzSize="small"
+                       placeholder="Nhập số quyết định" appNumberOnly
+                />
+              </nz-input-group>
+              <ng-template #soQDError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
-          </nz-form-label>
-          <nz-form-control nz-col [nzErrorTip]="ngayKyError1">
-            <nz-date-picker class="search__input" [nzDisabled]="checkTrangThaiRecord()"
-                            [nzDisabledDate]="disabledStartDate"
-                            nzFormat="dd-MM-yyyy" formControlName="ngayKy" nzPlaceHolder="Ngày ký">
-            </nz-date-picker>
-            <ng-template #ngayKyError let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="ngayKyError1">
+              <nz-date-picker class="search__input" [nzDisabled]="checkTrangThaiRecord()"
+                              [nzDisabledDate]="disabledStartDate"
+                              nzFormat="dd-MM-yyyy" formControlName="ngayKy" nzPlaceHolder="Ngày ký">
+              </nz-date-picker>
+              <ng-template #ngayKyError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
-          <!-- <nz-form-item> -->
-          <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
-          </nz-form-label>
-          <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
-            <nz-date-picker nzFormat="dd-MM-yyyy" [nzDisabled]="checkTrangThaiRecord()" formControlName="ngayHieuLuc"
-                            nzPlaceHolder="Ngày hiệu lực">
-            </nz-date-picker>
-            <ng-template #ngayHieuLucError let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
-          <!-- </nz-form-item> -->
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
+              <nz-date-picker nzFormat="dd-MM-yyyy" [nzDisabled]="checkTrangThaiRecord()" formControlName="ngayHieuLuc"
+                              nzPlaceHolder="Ngày hiệu lực">
+              </nz-date-picker>
+              <ng-template #ngayHieuLucError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
-          <!-- <nz-form-item> -->
-          <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
-            {{userService.isCuc() ? ' Quyết định chỉ tiêu kế hoạch của Tổng cục' : 'Quyết định của BTC giao TCDT'}}
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="canCuError">
-            <nz-input-group>
-              <input formControlName="canCu" nz-input nzSize="small" [readonly]="true"/>
-            </nz-input-group>
-            <!--<nz-select formControlName="arrCanCu" nzMode="multiple" nzPlaceHolder="Chọn căn cứ"
-                       [nzDisabled]="isViewDetail">
-              <nz-option *ngFor="let option of this.dsCanCu" [nzLabel]="option.soQd" [nzValue]="option.id"></nz-option>
-            </nz-select>-->
-            <ng-template #canCuError let-control>
-              <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
-            </ng-template>
-          </nz-form-control>
-          <!-- </nz-form-item> -->
+          <nz-form-item>
+            <nz-form-label nz-col nzRequired [nzNoColon]="true" class="text-left">
+              Căn cứ
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="canCuError">
+              <nz-input-group>
+                <input formControlName="canCu" nz-input nzSize="small" [readonly]="true"/>
+              </nz-input-group>
+              <!--<nz-select formControlName="arrCanCu" nzMode="multiple" nzPlaceHolder="Chọn căn cứ"
+                         [nzDisabled]="isViewDetail">
+                <nz-option *ngFor="let option of this.dsCanCu" [nzLabel]="option.soQd" [nzValue]="option.id"></nz-option>
+              </nz-select>-->
+              <ng-template #canCuError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
-          <!-- <nz-form-item> -->
-          <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true" class="text-left"> Trích yếu
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
             <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input nzSize="small"
                       placeholder="Nhập text" [readonly]="isViewDetail"></textarea>
-            <ng-template #error let-control>
-              <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-              </ng-container>
-            </ng-template>
-          </nz-form-control>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
-          <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
-          <nz-form-control>
-            <div class="list-file">
-              <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList"
-                         [isViewDetail]="isViewDetail"></file-list>
-            </div>
-          </nz-form-control>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
+            <nz-form-control>
+              <div class="list-file">
+                <file-list [disabled]="isViewDetail" [data]="taiLieuDinhKemList"
+                           [isViewDetail]="isViewDetail"></file-list>
+              </div>
+            </nz-form-control>
+          </nz-form-item>
         </div>
       </div>
     </form>
@@ -624,7 +629,7 @@
             <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
           </tr>
-          <tr>
+          <tr *ngIf="userService.isTongCuc()">
             <th></th>
             <th></th>
             <th></th>
@@ -649,6 +654,39 @@
             <th></th>
             <th
               class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr *ngIf="userService.isCuc()">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1'}}</th>
+            <th
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1'}}</th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
             <th></th>
             <th></th>
             <th></th>

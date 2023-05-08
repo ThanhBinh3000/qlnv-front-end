@@ -315,7 +315,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   themDonViCungCap() {
     let isValid = true;
     for (let key in this.rowItem) {
-      if (this.rowItem[key] === null && key != 'maVatTu' && key != 'tenHangHoa' && key != 'tenVatTu') {
+      if (this.rowItem[key] === null && key != 'maVatTu' && key != 'tenHangHoa' && key != 'tenVatTu' && key != 'kinhPhiDaCap') {
         isValid = false;
       }
     }
