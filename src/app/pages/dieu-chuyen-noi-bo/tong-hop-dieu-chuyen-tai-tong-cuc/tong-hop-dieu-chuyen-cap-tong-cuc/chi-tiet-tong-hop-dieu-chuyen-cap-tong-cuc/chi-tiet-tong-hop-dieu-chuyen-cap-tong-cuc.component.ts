@@ -378,15 +378,11 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 });
 
                 if (item.thKhDcHdrId) {
-                    const detailCuc = Array.isArray(item?.thKeHoachDieuChuyenCucHdr?.thKeHoachDieuChuyenCucKhacCucDtls) ? item?.thKeHoachDieuChuyenCucHdr?.thKeHoachDieuChuyenCucKhacCucDtls : [];
-                    if (!detailCuc) return;
                     let flatArray = [];
-                    Array.isArray(detailCuc) && detailCuc.forEach(element => {
-                        Array.isArray(element?.dcnbKeHoachDcHdr) && element.dcnbKeHoachDcHdr.forEach(elmHdr => {
-                            Array.isArray(elmHdr?.danhSachHangHoa) && elmHdr.danhSachHangHoa.forEach(elmDs => {
-                                flatArray.push({ ...element, dcnbKeHoachDcHdr: null, ...elmHdr, danhSachHangHoa: null, ...elmDs })
-                            })
-                        });
+                    Array.isArray(item?.thKeHoachDieuChuyenCucKhacCucDtl?.dcnbKeHoachDcHdr) && item?.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.forEach(elmHdr => {
+                        Array.isArray(elmHdr?.danhSachHangHoa) && elmHdr.danhSachHangHoa.forEach(elmDs => {
+                            flatArray.push({ ...elmHdr, danhSachHangHoa: null, ...elmDs })
+                        })
                     });
                     this.dataTable2Cuc = chain(flatArray).groupBy('soDxuat').map((item, i) => {
                         const soDxuat = item.find(f => f.soDxuat == i);
