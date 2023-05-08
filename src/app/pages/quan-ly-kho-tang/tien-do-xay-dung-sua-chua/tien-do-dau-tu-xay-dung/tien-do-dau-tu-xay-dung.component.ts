@@ -20,6 +20,7 @@ import {MESSAGE} from "../../../../constants/message";
 import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -38,6 +39,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   itemSelected: any;
   tabSelected: string = "01";
   itemQdPdDaDtxd: any;
+  itemQdPdTktcTdt: any;
 
   constructor(
     httpClient: HttpClient,
@@ -128,7 +130,24 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         console.log(this.itemQdPdDaDtxd, '88888');
         //Check tiếp quyết định phê duyệt bản vẽ
-
+        if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+          let body = {
+            "idQdPdDtxd": this.itemQdPdDaDtxd.id,
+            "paggingReq": {
+              "limit": 10,
+              "page": 0
+            }
+          }
+          let res1 = await this.quyetdinhpheduyetTktcTdtService.search(body);
+          if (res1.msg == MESSAGE.SUCCESS) {
+            this.itemQdPdTktcTdt = res1.data.content && res1.data.content.length > 0 ? res1.data.content[0] : null;
+            console.log(this.itemQdPdTktcTdt, 'this.itemQdPdTktcTdtthis.itemQdPdTktcTdt')
+          } else {
+            this.notification.error(MESSAGE.ERROR, res1.msg);
+          }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -218,7 +237,11 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.selectTab("01");
   }
 
- async selectTab(tab) {
+  async selectTab(tab) {
+    if (tab != '01' && (!this.itemQdPdDaDtxd || this.itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH)) {
+      this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
+      return;
+    }
     this.tabSelected = tab;
   }
 
