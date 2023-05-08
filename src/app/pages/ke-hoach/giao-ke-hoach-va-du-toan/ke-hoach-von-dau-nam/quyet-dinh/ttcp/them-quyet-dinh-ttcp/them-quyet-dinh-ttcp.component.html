@@ -84,6 +84,16 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isCanCuPL]="true" [isViewDetail]="isView" [data]="listCcPhapLy"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
             <nz-form-label [nzNoColon]="true" class="label-color-kh">File đính kèm quyết định của Thủ tướng chính phủ
             </nz-form-label>
