@@ -194,7 +194,7 @@
         <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
         <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
         <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
-        <th class="text-center" *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV || formData.value.trangThai != STATUS.DA_DUYET_LDC " width="5%" rowSpan="2" nzRight>Hành động</th>
+        <th class="text-center" *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC " width="5%" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
         <th class="text-center">Tổng số (tất cả nguồn vốn)</th>
@@ -220,7 +220,7 @@
         <th></th>
         <th></th>
         <th></th>
-        <th class="text-center"  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV || formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
+        <th class="text-center"  *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
           <a (click)="themItemcha()">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
@@ -243,7 +243,7 @@
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right" class="text-center"*ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV || formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
+          <td class="font-weight-bold text-right" class="text-center"*ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
             <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])" *ngIf="!isViewDetail">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
@@ -266,7 +266,7 @@
             <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-            <td class="text-center" nzRight *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV || formData.value.trangThai != STATUS.DA_DUYET_LDC">
+            <td class="text-center" nzRight *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC">
               <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
                 <i class="fa fa-pencil"></i>
               </a>
@@ -296,9 +296,8 @@
             style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV || formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
+        <td *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
       </tr>
-
       </tfoot>
     </nz-table>
   </nz-card>
