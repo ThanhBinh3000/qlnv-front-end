@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { ROUTE_LIST } from "./dieu-chuyen-noi-bo.constant";
-import {UserService} from "../../services/user.service";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../services/storage.service";
+import { UserService } from "../../services/user.service";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../services/storage.service";
 
 
 @Component({
