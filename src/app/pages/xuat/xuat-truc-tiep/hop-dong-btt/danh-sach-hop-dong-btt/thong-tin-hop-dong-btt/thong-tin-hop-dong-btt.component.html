@@ -35,7 +35,7 @@
                         <div nz-row [nzGutter]="[16,12]">
                             <div nz-col [nzSpan]="2">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Năm hợp đồng </nz-form-label>
+                                    <nz-form-label nzRequired [nzNoColon]="true"> Năm hợp đồng </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                         <nz-select formControlName="namHd" [nzDisabled]="true">
                                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
@@ -46,7 +46,7 @@
                             </div>
                             <div nz-col [nzSpan]="4">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ phê duyệt kết quả chào
+                                    <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ phê duyệt kết quả chào giá
                                     </nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKqBTT()">
@@ -79,8 +79,7 @@
                             </div>
                             <div nz-col [nzSpan]="3">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ QĐ phê duyệt KH bán trực
-                                        tiếp
+                                    <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ phê duyệt KH bán trực tiếp
                                     </nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -102,11 +101,16 @@
                             </div>
                             <div nz-col [nzSpan]="3">
                                 <nz-form-item>
-                                    <nz-form-label nzRequired [nzNoColon]="true"> Mã đơn vị tài sản
-                                    </nz-form-label>
+                                    <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
-                                        <nz-input-group nzAddOnAfterIcon="folder-open">
-                                            <input [readonly]="true" nz-input formControlName="maDviTsan" readonly />
+                                        <nz-input-group>
+                                            <nz-select nzMode="multiple" formControlName="listMaDviTsan"
+                                                (ngModelChange)="selectMaDviTsan()">
+                                                <nz-option *ngFor="let item of listDviTsanFilter"
+                                                    [nzValue]="item.maDviTsan" [nzDisabled]="item.disable"
+                                                    [nzLabel]="item.maDviTsan">
+                                                </nz-option>
+                                            </nz-select>
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -507,7 +511,7 @@
                                     <nz-form-label [nzNoColon]="true"> Số lượng bán TT
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-green">{{formData.value.soLuongBanTrucTiep | number : '1.0-1'
+                                        <span style="color: blue">{{formData.value.soLuongBanTrucTiep | number : '1.0-1'
                                             : 'vi_VN'
                                             }}</span>
                                     </nz-form-control>
@@ -550,7 +554,8 @@
                                         tiếp
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-green">{{formData.value.tongSlXuatBanQdKh | number : '1.0-1' :
+                                        <span style="color: blue">{{formData.value.tongSlXuatBanQdKh | number : '1.0-1'
+                                            :
                                             'vi_VN'
                                             }}</span>
                                     </nz-form-control>
@@ -562,7 +567,7 @@
                                         tiếp đã ký HĐ
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-green">{{formData.value.tongSlBanttQdkhDakyHd | number :
+                                        <span style="color: blue">{{formData.value.tongSlBanttQdkhDakyHd | number :
                                             '1.0-1'
                                             :
                                             'vi_VN'
@@ -576,7 +581,7 @@
                                         chưa ký HĐ
                                     </nz-form-label>
                                     <nz-form-control nz-col [nzSpan]="24">
-                                        <span class="text-red">{{formData.value.tongSlBanttQdkhChuakyHd | number :
+                                        <span style="color: red">{{formData.value.tongSlBanttQdkhChuakyHd | number :
                                             '1.0-1'
                                             :
                                             'vi_VN'
@@ -595,12 +600,18 @@
                             <tr>
                                 <th width="60px" class="text-center"></th>
                                 <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+                                <th nzWidth="150px" class="text-center wrap">Địa điểm nhập kho</th>
                                 <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
                                 <th class="text-center wrap">Lô kho</th>
                                 <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
                                 <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
+                                <th nzWidth="100px" class="text-center wrap">SL xuất bán TT ký hợp đồng</th>
                                 <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-                                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
+                                <th nzWidth="100px" class="text-center wrap">Đơn giá cụ thể được duyệt không VAT (đ/kg)
+                                </th>
+                                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất theo KH không VAT (đ/kg)
+                                </th>
+                                <th nzWidth="100px" class="text-center wrap">Đơn giá ký hợp đồng không VAT (đ/kg)</th>
                                 <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
                             </tr>
                         </thead>
@@ -608,8 +619,15 @@
                             <ng-container *ngFor="let item of dataTable , let i = index">
                                 <tr>
                                     <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                                    <td colspan="4">{{item.tenDvi}}</td>
-                                    <td class="text-black">{{item.soLuongChiCuc | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td colspan="5">{{item.tenDvi}}</td>
+                                    <td style="color: black ;font-weight: bold;">{{item.soLuongBanTrucTiep | number :
+                                        '1.0-1' : 'vi_VN'}}
+                                    </td>
+                                    <td style="color: black ;font-weight: bold;">{{item.soLuongBanTrucTiepHd | number :
+                                        '1.0-1' : 'vi_VN'}}
+                                    </td>
+                                    <td></td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -618,20 +636,48 @@
                                     <tr *ngFor="let children of item.children, let y = index">
                                         <td></td>
                                         <td></td>
+                                        <td>{{children.diaDiemKho}}</td>
                                         <td>{{children.tenDiemKho}}</td>
                                         <td>{{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
                                             {{children.tenNhaKho}}
                                         </td>
                                         <td>{{children.maDviTsan}}</td>
-                                        <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                        <td>{{children.dviTinh}}</td>
+                                        <td>{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{children.soLuongKyHd | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{children.donViTinh}}</td>
+                                        <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
                                         <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                                        <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}
+                                        <td>{{children.donGiaKyHd | number : '1.0-1' : 'vi_VN' }}</td>
+                                        <td>{{children.soLuongDeXuat * children.donGiaDuocDuyet | number : '1.0-1' :
+                                            'vi_VN'}}
                                         </td>
                                     </tr>
                                 </ng-container>
                             </ng-container>
                         </tbody>
+                        <tfoot>
+                            <tr *ngIf="dataTable.length > 0">
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th style="color: blue ;font-weight: bold;"> {{ calcTong('soLuongBanTrucTiep') | number
+                                    :
+                                    '1.0-1' : 'vi_VN' }}
+                                </th>
+                                <th style="color: blue ;font-weight: bold;"> {{ calcTong('soLuongBanTrucTiepHd') |
+                                    number : '1.0-1' : 'vi_VN'
+                                    }}
+                                </th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </nz-table>
                 </nz-collapse-panel>
             </nz-collapse>
