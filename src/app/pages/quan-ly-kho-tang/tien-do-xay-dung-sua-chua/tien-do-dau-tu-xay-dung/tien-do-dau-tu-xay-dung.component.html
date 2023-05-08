@@ -11,7 +11,7 @@
               </nz-select>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4" *ngIf=" userService.isCuc()">
+          <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
             <label class="search__label">Chi cục</label>
             <nz-input-group>
               <nz-select formControlName="maDvi" nzAllowClear>
@@ -208,7 +208,9 @@
             <li nz-menu-item [nzSelected]="tabSelected == '02'? true: false" (click)="selectTab('02')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
               Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
-              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+              <img *ngIf="itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <img *ngIf="!itemQdPdTktcTdt || itemQdPdTktcTdt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
             <li nz-menu-item [nzSelected]="tabSelected == '03'? true: false" (click)="selectTab('03')"
@@ -246,7 +248,8 @@
                                                [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-du-an-dtxd>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-tktc-tdt></app-quyet-dinh-phe-duyet-tktc-tdt>
+          <app-quyet-dinh-phe-duyet-tktc-tdt [itemDuAn]="itemSelected" [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                             [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-tktc-tdt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
           <app-quyet-dinh-phe-duyet-khlcnt></app-quyet-dinh-phe-duyet-khlcnt>
