@@ -432,8 +432,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   }
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
-    console.log(list);
-    console.log(data,123);
     let modalQD = this.modal.create({
       nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,

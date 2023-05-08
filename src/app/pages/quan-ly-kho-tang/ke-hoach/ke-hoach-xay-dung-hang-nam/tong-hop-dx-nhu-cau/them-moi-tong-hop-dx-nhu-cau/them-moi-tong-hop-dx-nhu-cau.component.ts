@@ -13,12 +13,14 @@ import dayjs from "dayjs";
 import { MESSAGE } from "../../../../../../constants/message";
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { KeHoachXayDungTrungHan } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import { STATUS } from "../../../../../../constants/status";
 import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import { KtTongHopXdHnService } from "../../../../../../services/kt-tong-hop-xd-hn.service";
+import {
+  DialogThemMoiDxkhthComponent
+} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-nhu-cau',
@@ -399,6 +401,11 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     if (table && table.length > 0) {
       table.forEach(s => {
         this.expandSet.add(s.idVirtual);
+        if (s.dataChild && s.dataChild.length > 0) {
+          s.dataChild.forEach(item => {
+            this.expandSet.add(item.idVirtual);
+          });
+        }
       });
     }
   }
@@ -414,55 +421,49 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
 
   convertListData(table: any[]) {
     if (table && table.length > 0) {
-      table = chain(table).groupBy("khoi").map((value, key) => ({
-          khoi: key,
-          dataChild: value,
-          idVirtual: uuidv4()
-        })
-      ).value();
+      table = chain(table)
+        .groupBy("tenChiCuc")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenKhoi")
+            .map((v, k) => {
+                return {
+                  idVirtual: uuidv4(),
+                  tenKhoi: k,
+                  dataChild: v
+                };
+              }
+            ).value();
+          return {
+            idVirtual: uuidv4(),
+            tenChiCuc: key,
+            dataChild: rs
+          };
+        }).value();
     }
     return table;
   }
 
-  sumSoLuong(data: any, row: string, table: any[], type?: any) {
+
+  sumSoLuong(tenChiCuc: string, row: string, khoi: string) {
     let sl = 0;
-    if (!type) {
-      if (data && data.dataChild && data.dataChild.length > 0) {
-        const sum = data.dataChild.reduce((prev, cur) => {
+    if (tenChiCuc && khoi) {
+      let arr = this.dataTableReq.filter(item => item.tenChiCuc == tenChiCuc && item.khoi == khoi);
+      if (arr && arr.length > 0) {
+        const sum = arr.reduce((prev, cur) => {
           prev += cur[row];
           return prev;
         }, 0);
         sl = sum;
       }
     } else {
-      if (table && table.length > 0) {
-        let sum = 0;
-        table.forEach(item => {
-          sum += this.sumSoLuong(item, row, table);
-        });
-        sl = sum;
-      }
+      const sum = this.dataTableReq.reduce((prev, cur) => {
+        prev += cur[row];
+        return prev;
+      }, 0);
+      sl = sum;
     }
     return sl;
-  }
-
-  editRow(idx, y, item) {
-    this.isEdit = idx + "-" + y;
-    this.vonDauTu = item.vonDauTu;
-  }
-
-  saveEdit(item) {
-    this.isEdit = "";
-    let list = this.dataTableReq.filter(item => item.maDuAn == item.maDuAn);
-    if (list && list.length > 0) {
-      let idx = this.dataTableReq.indexOf(list[0]);
-      Object.assign(this.dataTableReq[idx], item);
-    }
-  }
-
-  cancelEdit(data: any) {
-    data.vonDauTu = this.vonDauTu;
-    this.isEdit = "";
   }
 
   deleteRow(item: any) {
@@ -492,6 +493,42 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
         } catch (e) {
           console.log("error", e);
         }
+      }
+    });
+  }
+
+  themMoiItem(data: any, type: string, idx: number, list?: any) {
+    let modalQD = this.modal.create({
+      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzContent: DialogThemMoiDxkhthComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "200px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: "DXTH"
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list[idx], detail);
+          }
+        }
+        this.expandAll(this.dataTable);
       }
     });
   }

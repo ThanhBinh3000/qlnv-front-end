@@ -243,7 +243,7 @@
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td class="font-weight-bold text-right" class="text-center"*ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
+          <td class="font-weight-bold text-right" class="text-center" *ngIf="formData.value.trangThai != STATUS.DA_DUYET_CBV && formData.value.trangThai != STATUS.DA_DUYET_LDC" nzRight>
             <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])" *ngIf="!isViewDetail">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
