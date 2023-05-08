@@ -1,0 +1,66 @@
+<nz-card class="mg-t-16 flex-card p-lr16">
+  <div class="header header-green-background mg-t-16">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>Thông tin chung</span>
+      </div>
+    </div>
+  </div>
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Thông tư số </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="thongTuSo" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Biểu số </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="bieuSo" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Đơn vị gửi báo cáo </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="donViGui" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Đơn vị nhận báo cáo </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input readonly formControlName="donViNhan" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="4">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tạo </nz-form-label>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+</nz-card>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
