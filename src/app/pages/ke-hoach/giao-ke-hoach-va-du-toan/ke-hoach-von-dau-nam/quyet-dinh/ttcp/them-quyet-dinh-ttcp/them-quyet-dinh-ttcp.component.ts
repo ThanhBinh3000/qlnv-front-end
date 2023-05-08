@@ -18,6 +18,7 @@ import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {CurrencyMaskInputMode} from 'ngx-currency'
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {FILETYPE} from "../../../../../../../constants/fileType";
 
 
 @Component({
@@ -35,6 +36,8 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   formData: FormGroup;
   STATUS = STATUS;
   taiLieuDinhKemList: any[] = [];
+  listCcPhapLy: any[] = [];
+  listFile: any[] = []
   dsNam: any[] = [];
   maQd: string;
   userInfo: UserLogin;
@@ -125,7 +128,14 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           })
           this.onInputNumberBNChange();
         }
-        this.taiLieuDinhKemList = data.fileDinhkems;
+        data.fileDinhkems.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.taiLieuDinhKemList.push(item)
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.listCcPhapLy.push(item)
+          }
+        });
+        this.listFile = data.fileDinhkems;
       }
     }
   }
@@ -294,7 +304,22 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     body.listToanBoNganh = this.dataTableAllBn.filter(item => item.isSum == false);
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems = this.listFile;
+    }
     let res;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);

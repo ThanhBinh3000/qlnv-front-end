@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -19,7 +19,12 @@ import {
   styleUrls: ['./quyet-dinh-phe-duyet-tktc-tdt.component.scss']
 })
 export class QuyetDinhPheDuyetTktcTdtComponent extends Base2Component implements OnInit {
-
+  @Input()
+  itemDuAn: any;
+  @Input("itemQdPdTktcTdt")
+  itemQdPdTktcTdt: any;
+  @Input("itemQdPdDaDtxd")
+  itemQdPdDaDtxd: any;
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;

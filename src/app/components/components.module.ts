@@ -303,7 +303,7 @@ import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcn
     DialogThongBaoThongTinDauThauComponent,
     DialogKtGiaoKhoComponent,
     DialogQdPdKhlcntComponent,
-    DialogQdPdKqlcntComponent
+    DialogQdPdKqlcntComponent,
   ],
   imports: [
     CommonModule,
