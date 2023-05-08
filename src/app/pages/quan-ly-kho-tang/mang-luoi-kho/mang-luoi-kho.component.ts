@@ -372,8 +372,6 @@ export class MangLuoiKhoComponent implements OnInit {
 
   checkStatusSurplus(): boolean {
     let check = false;
-    console.log(this.detailDonVi.value.coLoKho);
-    console.log(!this.detailDonVi.value.loaiVthh);
     if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == false && !this.detailDonVi.value.loaiVthh)) {
       check = true;
     }

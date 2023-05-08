@@ -99,6 +99,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       ngayKyQd: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
+      loai: ["00", Validators.required],
       lyDoTuChoi: []
     });
   }
@@ -427,8 +428,6 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   }
 
   selectRow(item: any) {
-    console.log(this.listDx, 'this.listDxthis.listDx');
-    console.log(this.dataTableReq, 'this.dataTableReq')
     this.dataTableDx = [];
     this.itemSelected = item;
     this.dataTable = [];
@@ -454,7 +453,6 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
         this.expandAll(this.dataTable);
       }
     } else {
-      console.log(this.dataTableReq,'this.dataTableReqthis.dataTableReqthis.dataTableReq');
       //th view detail tổng hợp
       this.dataTable = this.dataTableReq.filter(data => data.idHdrDx == item.id);
       if (this.dataTable && this.dataTable.length > 0) {
@@ -490,8 +488,6 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
             data.idVirtual = uuidv4();
           }
           if (list) {
-            console.log(list,'listlistlistlistlistlist')
-            // console.log(list.dataChild[idx],'list.dataChild[idx]')
             Object.assign(list[idx], detail);
           }
           this.expandAll(this.dataTable);

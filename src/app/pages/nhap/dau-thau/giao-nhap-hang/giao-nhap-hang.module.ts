@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { DanhSachGiaoNhapHangComponent } from './danh-sach-giao-nhap-hang/danh-sach-giao-nhap-hang.component';
 import { GiaoNhapHangComponent } from './giao-nhap-hang.component';
 import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-hang/themmoi-qdinh-nhap-xuat-hang.component';
+import { HopDongModule } from '../hop-dong/hop-dong.module';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { ThemmoiQdinhNhapXuatHangComponent } from './themmoi-qdinh-nhap-xuat-han
         CommonModule,
         ComponentsModule,
         DirectivesModule,
+        HopDongModule
     ],
     exports: [
         GiaoNhapHangComponent,

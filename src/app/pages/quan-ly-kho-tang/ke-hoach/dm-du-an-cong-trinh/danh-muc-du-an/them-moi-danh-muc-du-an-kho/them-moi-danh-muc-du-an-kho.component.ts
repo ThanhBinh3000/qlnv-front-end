@@ -72,6 +72,7 @@ export class ThemMoiDanhMucDuAnKhoComponent extends Base2Component implements On
       soQdPdDtxd: [null],
       tongSoLuyKe: [null],
       luyKeNstw: [null],
+      type : [null],
       trangThai: [STATUS.CHUA_THUC_HIEN],
     });
   }

@@ -14,6 +14,7 @@ import { MESSAGE } from "../../../../../constants/message";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { QuyetDinhKhTrungHanService } from "../../../../../services/quyet-dinh-kh-trung-han.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-de-xuat-nhu-cau",
@@ -47,6 +48,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     private dexuatService: KtKhXdHangNamService,
     private dviService: DonviService,
     private quyetDinhService: QuyetDinhKhTrungHanService,
+    private router: Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dexuatService);
     super.ngOnInit();
@@ -62,6 +64,9 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();

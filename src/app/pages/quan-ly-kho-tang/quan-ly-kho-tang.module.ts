@@ -80,7 +80,7 @@ import {TinhHinhSuDungComponent} from './tinh-hinh-su-dung/tinh-hinh-su-dung.com
 import {
   TienDoDauTuXayDungComponent
 } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-dau-tu-xay-dung.component';
-import {TienDoSuaChuaComponent} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua/tien-do-sua-chua.component';
+import {TienDoSuaChuaLonHangNamComponent} from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-sua-chua-lon-hang-nam.component';
 import {DmDuAnCongTrinhComponent} from "./ke-hoach/dm-du-an-cong-trinh/dm-du-an-cong-trinh.component";
 import {DanhMucScLonComponent} from "./ke-hoach/dm-du-an-cong-trinh/danh-muc-sc-lon/danh-muc-sc-lon.component";
 import {
@@ -136,6 +136,9 @@ import { DialogThemMoiDxkhthComponent } from './ke-hoach/ke-hoach-xay-dung-trung
 import { ThemMoiDanhMucDuAnKhoComponent } from './ke-hoach/dm-du-an-cong-trinh/danh-muc-du-an/them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component';
 import { DialogThemMoiKehoachDanhmucChitietComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component';
 import { ThongTinTongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen/thong-tin-tong-hop-kh-sua-chua-thuong-xuyen.component';
+import { ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent } from './ke-hoach/ke-hoach-sua-chua-thuong-xuyen/quyet-dinh-phe-duyet-ke-hoach-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc/thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc.component';
+import { TienDoSuaChuaThuongXuyenComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-thuong-xuyen/tien-do-sua-chua-thuong-xuyen.component';
+import { DialogDxScLonComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component';
 
 
 @NgModule({
@@ -175,7 +178,7 @@ import { ThongTinTongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoac
     TienDoXayDungSuaChuaComponent,
     TinhHinhSuDungComponent,
     TienDoDauTuXayDungComponent,
-    TienDoSuaChuaComponent,
+    TienDoSuaChuaLonHangNamComponent,
     DmDuAnCongTrinhComponent,
     DanhMucScLonComponent,
     DanhMucScThuongXuyenComponent,
@@ -209,7 +212,10 @@ import { ThongTinTongHopKhSuaChuaThuongXuyenComponent } from './ke-hoach/ke-hoac
     ThemMoiDanhMucDuAnKhoComponent,
     ThemMoiTongHopDxNhuCauComponent,
     ThongTinTongHopKhSuaChuaThuongXuyenComponent,
-    ThemMoiQdPdDxNhuCauComponent
+    ThemMoiQdPdDxNhuCauComponent,
+    ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
+    TienDoSuaChuaThuongXuyenComponent,
+    DialogDxScLonComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

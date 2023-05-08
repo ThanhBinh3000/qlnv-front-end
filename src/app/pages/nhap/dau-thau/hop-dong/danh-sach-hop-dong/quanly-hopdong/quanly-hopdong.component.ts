@@ -87,6 +87,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soLuongTong: [''],
       soLuongGtTrung: [''],
       soLuongNhap: [''],
+      soLuongNhapKh: [''],
       tenTrangThaiHd: [''],
       trangThaiHd: [''],
     });
@@ -170,23 +171,23 @@ export class QuanlyHopdongComponent implements OnInit {
     this.formData.patchValue({
       id: data.id,
       namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
-      soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
-      tenDuAn: data.qdKhlcntDtl.tenDuAn,
-      tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
+      soQdPdKhlcnt: data.qdKhlcntDtl?.hhQdKhlcntHdr?.soQd,
+      soQdPdKqLcnt: data.qdKhlcntDtl?.soQdPdKqLcnt,
+      tenDuAn: data.qdKhlcntDtl?.tenDuAn,
+      tenLoaiHdong: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiHdong,
       tenDvi: data.tenDvi,
-      tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
-      soGthau: data.qdKhlcntDtl.soGthau,
-      tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
+      tenNguonVon: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenNguonVon,
+      soGthau: data.qdKhlcntDtl?.soGthau,
+      tenLoaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh,
+      tenCloaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh,
       vat: 5,
-      soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
-      soGthauTruot: data.qdKhlcntDtl.soGthauTruot,
+      soGthauTrung: data.qdKhlcntDtl?.soGthauTrung,
+      soGthauTruot: data.qdKhlcntDtl?.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
-      tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
+      tongMucDt: data.qdKhlcntDtl?.soLuong * data.qdKhlcntDtl?.donGiaVat * 1000
     });
-    this.dataTable = data.qdKhlcntDtl.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
@@ -211,7 +212,6 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async getDetailHopDong($event, id: number) {
-    debugger
     this.spinner.show();
     var firstRow = document.querySelector(".table-body tr.selectedRow");
     firstRow.classList.remove('selectedRow');
@@ -311,7 +311,9 @@ export class QuanlyHopdongComponent implements OnInit {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
-        sum += item.hopDong.soLuong;
+        if (item.hopDong) {
+          sum += item.hopDong.soLuong;
+        }
       })
       return sum;
     }
@@ -321,7 +323,9 @@ export class QuanlyHopdongComponent implements OnInit {
     if (this.dataTable) {
       let sum = 0
       this.dataTable.forEach(item => {
-        sum += item.hopDong.soLuong * item.hopDong.donGia;
+        if (item.hopDong) {
+          sum += item.hopDong.soLuong * item.hopDong.donGia;
+        }
       })
       return sum;
     }

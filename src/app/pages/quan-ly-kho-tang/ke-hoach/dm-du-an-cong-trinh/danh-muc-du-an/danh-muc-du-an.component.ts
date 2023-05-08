@@ -2,9 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
-import { PAGE_SIZE_DEFAULT } from "src/app/constants/config";
 import { MESSAGE } from "src/app/constants/message";
-import { UserLogin } from "src/app/models/userlogin";
 import { saveAs } from "file-saver";
 import { DanhMucService } from "../../../../../services/danhmuc.service";
 import { DanhMucKhoService } from "../../../../../services/danh-muc-kho.service";
@@ -15,6 +13,7 @@ import { Base2Component } from "../../../../../components/base2/base2.component"
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { ThemMoiDanhMucDuAnKhoComponent } from "./them-moi-danh-muc-du-an-kho/them-moi-danh-muc-du-an-kho.component";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-danh-muc-du-an',
@@ -25,27 +24,15 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-  tabSelected: string = 'phuong-an-tong-hop'
   danhSachNam: any[] = [];
-
   listTrangThai = [{"ma": STATUS.CHUA_THUC_HIEN, "giaTri": "Chưa thực hiện"},
     {"ma": STATUS.DANG_THUC_HIEN, "giaTri": "Đang thực hiện"},
     {"ma": STATUS.DA_HOAN_THANH, "giaTri": "Đã hoàn thành"}
   ];
-
-  allChecked = false;
-  indeterminate = false;
-  dataTableAll: any[] = [];
   dsKhoi: any[] = [];
-  dataTable: any[] = [];
   danhSachCuc: any[] = [];
   dsChiCuc: any[] = [];
   dsDiemKho: any[] = [];
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 0;
-  userInfo: UserLogin;
-
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
@@ -54,7 +41,8 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private danhMucKhoService: DanhMucKhoService,
     private dviService: DonviService,
-    private dmService : DanhMucService
+    private dmService : DanhMucService,
+    private router : Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, danhMucKhoService);
     super.ngOnInit()
@@ -77,6 +65,9 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -188,23 +179,27 @@ export class DanhMucDuAnComponent extends Base2Component implements OnInit {
 
 export class DanhMucKho {
   id: number;
+  namKeHoach : number;
   idVirtual : any
   maDuAn: string;
   tenDuAn: string;
   diaDiem: string;
   khoi: string;
+  tenKhoi: string;
   maChiCuc : string;
   tenChiCuc : string;
   maDiemKho : string;
   tenDiemKho : string;
-  giaiDoan: any
-  tgKcHt: any
+  giaiDoan: any;
+  tgKcHt: any;
+  ngayQdDc : any;
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
   tgHoanThanh: any;
   tmdtDuKien: number;
   nstwDuKien: number;
+  ghiChu: string;
   soQdPd: string;
   soQdDcPd: string;
   soQdPdDtxd: string;

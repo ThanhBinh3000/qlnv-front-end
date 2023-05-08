@@ -21,8 +21,8 @@
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf="(((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
-               (formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP')) && userService.isCuc())) ||
+              *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
+               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP'))) && userService.isCuc()) ||
                 ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETCBVU') &&
                  userService.isTongCuc())"
               (click)="tuChoi()">
@@ -30,8 +30,8 @@
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(((formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
-               (formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP')) && userService.isCuc())) ||
+              *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETLDCUC'))  ||
+               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETTP'))) && userService.isCuc()) ||
                 ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_DX_DUYETCBVU') &&
                  userService.isTongCuc())"
               (click)="formData.value.trangThai == STATUS.CHO_DUYET_LDC ? save(true) : duyet()">
@@ -206,7 +206,7 @@
         <th></th>
         <th>
           <nz-select nzAllowClear [(ngModel)]="rowItemCha.khoi">
-            <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+            <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
             </nz-option>
           </nz-select>
         </th>
@@ -232,7 +232,7 @@
       <ng-container *ngFor="let data of dataTable , let idx = index">
         <tr>
           <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-          <td class="font-weight-bold">{{data.khoi}}</td>
+          <td class="font-weight-bold">{{data.tenKhoi}}</td>
           <td></td>
           <td></td>
           <td></td>

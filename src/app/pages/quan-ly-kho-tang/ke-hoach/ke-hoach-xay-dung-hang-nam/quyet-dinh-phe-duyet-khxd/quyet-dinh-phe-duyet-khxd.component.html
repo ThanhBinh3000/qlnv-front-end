@@ -44,17 +44,17 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG TRUNG HẠN (5 NĂM)</h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-main"
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')" type="button" class="btn btn-main"
                 (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_soanthao"></i>
           <span>Dự thảo QĐ của BTC/Bộ KHĐT</span>
@@ -139,15 +139,15 @@
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a (click)="redirectToChiTiet(data.id,true)">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
               (click)="redirectToChiTiet(data.id,false)"
-              *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()">
+              *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_THEM')">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()" (click)="xoaItem(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_QD_XOA')" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

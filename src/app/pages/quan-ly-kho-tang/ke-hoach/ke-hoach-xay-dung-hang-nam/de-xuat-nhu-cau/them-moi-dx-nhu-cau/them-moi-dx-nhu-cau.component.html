@@ -15,26 +15,30 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc()) "
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM') && ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_CBV) && userService.isCuc()) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
-        type="button" class="btn btn-sub ml-2" (click)="tuChoi()">
+        *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETLDCUC'))  ||
+               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETTP'))) && userService.isCuc()) ||
+                ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETCBVU') &&
+                 userService.isTongCuc())"        type="button" class="btn btn-sub ml-2" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf=" ((formData.value.trangThai == STATUS.CHO_DUYET_LDC  || formData.value.trangThai == STATUS.CHO_DUYET_TP) && userService.isCuc()) || (  formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
-        type="button" class="btn btn-sub ml-2"
+        *ngIf="(((formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETLDCUC'))  ||
+               (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETTP'))) && userService.isCuc()) ||
+                ( formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_DUYETCBVU') &&
+                 userService.isTongCuc())" type="button" class="btn btn-sub ml-2"
         (click)="formData.value.trangThai == STATUS.CHO_DUYET_LDC ? save(true) : duyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc())"
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_DX_THEM') && ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc())"
               (click)="save(false)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -68,7 +72,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true"> Đơn vị đề xuất
             </nz-form-label>
-            <nz-form-control >
+            <nz-form-control>
               <nz-input-group>
                 <input class="search__input" formControlName="tenDvi" [readonly]="true" nz-input />
               </nz-input-group>
@@ -81,7 +85,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <input type="text" nz-input [readonly]="isViewDetail"  formControlName="soCongVan" >
+                <input type="text" nz-input [readonly]="isViewDetail" formControlName="soCongVan">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -99,7 +103,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isViewDetail || (formData.value.trangThai != STATUS.DU_THAO)" formControlName="ngayTaoDx" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-date-picker [nzDisabled]="isViewDetail || (formData.value.trangThai != STATUS.DU_THAO)"
+                              formControlName="ngayTaoDx" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -107,7 +112,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày duyệt đề xuất</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="!userService.isCuc() || (formData.value.trangThai != STATUS.CHO_DUYET_LDC)" formControlName="ngayDuyet" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-date-picker [nzDisabled]="!userService.isCuc() || (formData.value.trangThai != STATUS.CHO_DUYET_LDC)"
+                              formControlName="ngayDuyet" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -251,7 +257,8 @@
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-          <td  nzRight class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
+          <td nzRight
+              class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
             <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
               <i class="icon htvbdh_dau-cong"></i>
@@ -275,7 +282,7 @@
             <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-            <td nzRight  class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+            <td nzRight class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
             <td class="text-center" nzRight *ngIf="!isViewDetail">
               <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
                 <i class="fa fa-pencil"></i>
@@ -306,7 +313,7 @@
             style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-        <td nzRight  class="font-weight-bold text-right"
+        <td nzRight class="font-weight-bold text-right"
             style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
         <td *ngIf="!isViewDetail" nzRight>
       </tr>

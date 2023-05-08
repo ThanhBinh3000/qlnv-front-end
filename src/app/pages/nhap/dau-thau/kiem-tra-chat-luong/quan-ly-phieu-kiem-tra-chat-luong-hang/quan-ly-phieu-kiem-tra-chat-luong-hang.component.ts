@@ -18,6 +18,7 @@ import { STATUS } from "../../../../../constants/status";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -34,7 +35,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   searchFilter = {
     soPhieu: '',
     ngayTongHop: '',
-    ketLuan: '',
+    kqDanhGia: '',
     soQuyetDinh: '',
     namKhoach: '',
     soBb: ''
@@ -59,8 +60,8 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isView: boolean = false;
   idQdGiaoNvNh: number = 0;
   isTatCa: boolean = false;
-  tuNgayLP: Date | null = null;
-  denNgayLP: Date | null = null;
+  tuNgayGD: Date | null = null;
+  denNgayGD: Date | null = null;
   tuNgayKT: Date | null = null;
   denNgayKT: Date | null = null;
   allChecked = false;
@@ -84,6 +85,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
@@ -156,11 +158,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       trangThai: STATUS.BAN_HANH,
       soQd: this.searchFilter.soQuyetDinh,
       namNhap: this.searchFilter.namKhoach,
+      kqDanhGia: this.searchFilter.kqDanhGia,
       soBbNtBq: this.searchFilter.soBb,
-      tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
-      tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
-      denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
+      tuNgayGD: this.tuNgayGD != null ? dayjs(this.tuNgayGD).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayGD: this.denNgayGD != null ? dayjs(this.denNgayGD).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -218,15 +219,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.searchFilter = {
       soPhieu: '',
       ngayTongHop: '',
-      ketLuan: '',
+      kqDanhGia: '',
       soQuyetDinh: '',
       namKhoach: '',
       soBb: ''
     };
-    this.tuNgayLP = null;
-    this.denNgayLP = null;
-    this.tuNgayKT = null;
-    this.denNgayKT = null;
+    this.tuNgayGD = null;
+    this.denNgayGD = null;
     this.search();
   }
 
@@ -289,15 +288,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
           soQd: this.searchFilter.soQuyetDinh,
           namNhap: this.searchFilter.namKhoach,
           soBbNtBq: this.searchFilter.soBb,
-          tuNgayLP: this.tuNgayLP != null ? dayjs(this.tuNgayLP).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denNgayLP: this.denNgayLP != null ? dayjs(this.denNgayLP).format('YYYY-MM-DD') + " 24:59:59" : null,
-          tuNgayKT: this.tuNgayKT != null ? dayjs(this.tuNgayKT).format('YYYY-MM-DD') + " 00:00:00" : null,
-          denNgayKT: this.denNgayKT != null ? dayjs(this.denNgayKT).format('YYYY-MM-DD') + " 24:59:59" : null,
+          tuNgayGD: this.tuNgayGD != null ? dayjs(this.tuNgayGD).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayGD: this.denNgayGD != null ? dayjs(this.denNgayGD).format('YYYY-MM-DD') + " 24:59:59" : null
         };
-        this.quyetDinhGiaoNhapHangService
-          .exportBbNtBq(body)
+        this.quanLyNghiemThuKeLotService
+          .exportPktCl(body)
           .subscribe((blob) =>
-            saveAs(blob, 'bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
+            saveAs(blob, 'Danh_sach_phieu_kiem_tra_chat_luong.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -415,32 +412,18 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     }
   }
 
-  disabledTuNgayLP = (startValue: Date): boolean => {
-    if (!startValue || !this.denNgayLP) {
+  disabledTuNgayGD = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayGD) {
       return false;
     }
-    return startValue.getTime() > this.denNgayLP.getTime();
+    return startValue.getTime() > this.denNgayGD.getTime();
   };
 
-  disabledDenNgayLP = (endValue: Date): boolean => {
-    if (!endValue || !this.tuNgayLP) {
+  disabledDenNgayGD = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayGD) {
       return false;
     }
-    return endValue.getTime() <= this.tuNgayLP.getTime();
-  };
-
-  disabledTuNgayKT = (startValue: Date): boolean => {
-    if (!startValue || !this.denNgayLP) {
-      return false;
-    }
-    return startValue.getTime() > this.denNgayLP.getTime();
-  };
-
-  disabledDenNgayKT = (endValue: Date): boolean => {
-    if (!endValue || !this.tuNgayLP) {
-      return false;
-    }
-    return endValue.getTime() <= this.tuNgayLP.getTime();
+    return endValue.getTime() <= this.tuNgayGD.getTime();
   };
 
 }
