@@ -223,28 +223,31 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   async loaiVTHHGetAll() {
     try {
+
       let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
-      await this.danhMucService.getDanhMucHangHoaDvql({
-        "maDvi": bnObject.maDvi
-      }).subscribe((hangHoa) => {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          this.hangHoaAll = hangHoa.data;
-          this.listLoaiHangHoa = this.hangHoaAll.filter(item => item.maHangHoa.length == 4)
-          // hangHoa.data.forEach((item) => {
-          // if (item.cap === "1" && item.ma != '01') {
-          //   this.listLoaiHangHoa = [
-          //     ...this.listLoaiHangHoa,
-          //     item
-          //   ];
-          // } else {
-          //   this.listLoaiHangHoa = [
-          //     ...this.listLoaiHangHoa,
-          //     ...item.child
-          //   ];
-          // }
-          // });
-        }
-      });
+      if (bnObject) {
+        await this.danhMucService.getDanhMucHangHoaDvql({
+          "maDvi": bnObject.maDvi
+        }).subscribe((hangHoa) => {
+          if (hangHoa.msg == MESSAGE.SUCCESS) {
+            this.hangHoaAll = hangHoa.data;
+            this.listLoaiHangHoa = this.hangHoaAll.filter(item => item.maHangHoa.length == 4)
+            // hangHoa.data.forEach((item) => {
+            // if (item.cap === "1" && item.ma != '01') {
+            //   this.listLoaiHangHoa = [
+            //     ...this.listLoaiHangHoa,
+            //     item
+            //   ];
+            // } else {
+            //   this.listLoaiHangHoa = [
+            //     ...this.listLoaiHangHoa,
+            //     ...item.child
+            //   ];
+            // }
+            // });
+          }
+        });
+      }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -290,8 +293,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.maxYeuCauCapThem = thanhTien;
       this.rowItem.thanhTien = thanhTien;
     }
-    if (this.rowItem.kinhPhiDaCap && this.rowItem.thanhTien) {
-      let yeuCauCapThem = this.rowItem.thanhTien - this.rowItem.kinhPhiDaCap;
+    if (this.rowItem.thanhTien) {
+      let yeuCauCapThem = this.rowItem.thanhTien - (this.rowItem.kinhPhiDaCap ? this.rowItem.kinhPhiDaCap : 0);
       this.rowItem.ycCapThem = yeuCauCapThem;
     }
   }
