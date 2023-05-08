@@ -15,7 +15,6 @@ import { ThongTinHangCanDieuChuyenComponent } from "./thong-tin-hang-can-dieu-ch
 
 import { QuyetDinhDieuChuyenTCComponent } from './tong-cuc/quyet-dinh-dieu-chuyen-tc/quyet-dinh-dieu-chuyen-tc.component';
 import { ThongTinQuyetDinhDieuChuyenTCComponent } from "./tong-cuc/thong-tin-quyet-dinh-dieu-chuyen-tc/thong-tin-quyet-dinh-dieu-chuyen-tc.component";
-import { ThongTinHangCanDieuChuyenTCComponent } from "./tong-cuc/thong-tin-hang-can-dieu-chuyen-tc/thong-tin-hang-can-dieu-chuyen-tc.component";
 
 import { QuyetDinhDieuChuyenCucComponent } from './cuc/quyet-dinh-dieu-chuyen-cuc/quyet-dinh-dieu-chuyen-cuc.component';
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from "./cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component";
@@ -28,7 +27,6 @@ import { ThongTinHangCanDieuChuyenCucComponent } from "./cuc/thong-tin-hang-can-
     ThongTinHangCanDieuChuyenComponent,
     QuyetDinhDieuChuyenTCComponent,
     ThongTinQuyetDinhDieuChuyenTCComponent,
-    ThongTinHangCanDieuChuyenTCComponent,
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
     ThongTinHangCanDieuChuyenCucComponent
@@ -49,7 +47,6 @@ import { ThongTinHangCanDieuChuyenCucComponent } from "./cuc/thong-tin-hang-can-
     ThongTinHangCanDieuChuyenComponent,
     QuyetDinhDieuChuyenTCComponent,
     ThongTinQuyetDinhDieuChuyenTCComponent,
-    ThongTinHangCanDieuChuyenTCComponent,
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
     ThongTinHangCanDieuChuyenCucComponent

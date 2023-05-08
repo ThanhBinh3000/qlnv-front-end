@@ -119,7 +119,7 @@
               </th>
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
+                  <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayKyQdinh"
                     (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
                   </nz-date-picker>
                 </nz-input-group>
@@ -189,7 +189,7 @@
               <td>{{ data.maThop }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
-                <a (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isTongCuc()"

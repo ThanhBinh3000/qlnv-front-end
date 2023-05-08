@@ -36,7 +36,7 @@
       </button>
 
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
         type="button" class="btn btn-sub" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
@@ -76,7 +76,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại điều chuyển
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-radio-group formControlName="loaiDc">
+                <nz-radio-group formControlName="loaiDc" [nzDisabled]="isDisabled()">
                   <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
                   <label nz-radio nzValue="CHI_CUC">Giữa 2 chi cục trong cùng 1 cục</label>
                   <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label>
@@ -93,7 +93,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [disabled]="isDisabled()" formControlName="nam" nzAllowClear>
+                <nz-select [nzDisabled]="isDisabled()" formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -104,8 +104,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                    [nzSize]="'small'">
+                  <nz-input-number [nzDisabled]="isDisabled()" formControlName="soQdinh" [nzMin]="1"
+                    [nzMax]="999999999999" [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -115,7 +115,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -124,14 +124,14 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isDisabled()" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [disabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [nzDisabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
@@ -180,7 +180,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="canCu" [disabled]="isDisabled()"></file-list>
+                <file-list [data]="canCu" [disabled]="isDisabled()" [isViewDetail]="isDisabled()"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -191,7 +191,7 @@
                 File đính kèm QĐ phê duyệt KH điều chuyển nội bộ của Tổng cục đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="quyetDinh" [disabled]="isDisabled()"></file-list>
+                <file-list [data]="quyetDinh" [disabled]="isDisabled()" [isViewDetail]="isDisabled()"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -245,7 +245,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
+            <tr [ngClass]="{'bg-selected': item.selected}">
               <td>{{i + 1}}</td>
               <td>{{item.tenDviCuc}}</td>
               <td>{{item.tenCucNhan}}</td>
@@ -267,15 +267,10 @@
           <div class="title-chi-tieu">
             <span></span>
             <span *ngIf="isTongCuc()">Quyết định của TCDTNN</span>
-            <span *ngIf="isCuc()"> QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG TRONG CÙNG 1 CHI CỤC DTNN</span>
+            <!-- <span *ngIf="isCuc()"> QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG TRONG CÙNG 1 CHI CỤC DTNN</span> -->
           </div>
         </div>
-        <div class="btn-group">
-          <button *ngIf="!isView && isCuc()" type="button" class="btn btn-main ml-2" (click)="add()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-        </div>
+
       </div>
 
       <nz-table *ngIf="isTongCuc()" #expandTable [nzData]="formData.value.listOfMapData" class="nowrap table-chi-tiet"
@@ -342,7 +337,7 @@
         </tbody>
       </nz-table>
 
-      <nz-table *ngIf="isCuc()" #expandTable [nzData]="listOfMapData" class="nowrap table-chi-tiet" nzBordered
+      <!-- <nz-table *ngIf="isCuc()" #expandTable [nzData]="listOfMapData" class="nowrap table-chi-tiet" nzBordered
         [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
@@ -350,7 +345,6 @@
             <th [rowspan]="2"></th>
             <th [rowspan]="2"></th>
             <th [colspan]="10">Ngăn/lô/kho đang bảo quản hàng hoá</th>
-            <!-- <th [rowspan]="2">Thời gian dự kiến điều chuyển</th> -->
             <th [colspan]="7">Ngăn/lô/kho điều chuyển đến</th>
             <th [rowspan]="2">Hành động</th>
           </tr>
@@ -409,15 +403,13 @@
                   <a *ngIf="data.trangThai == STATUS.DU_THAO">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <!-- <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a> -->
+
                 </td>
               </tr>
             </ng-container>
           </ng-container>
         </tbody>
-      </nz-table>
+      </nz-table> -->
 
 
 

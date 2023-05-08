@@ -104,45 +104,113 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   listOfMapData: any[] = [
     {
       key: `1`,
-      name: '1 John Brown sr.',
-      age: 60,
-      address: 'New York No. 1 Lake Park',
+      chicuc: 'chicuc',
+      dtkp: 'dtkp',
       isEx: true,
       children: [
         {
           key: `1-1`,
-          name: '1-1 John Brown',
-          age: 42,
-          address: 'New York No. 2 Lake Park',
+          diemkho: 'diemkho',
+          lokho: 'lokho',
+          loaihh: 'loaihh',
+          clhh: 'clhh',
+          dvt: 'dvt',
+          tonkho: 'tonkho',
+          sldc: 'sldc',
+          dtkp: 'dtkp',
+          thoigian: 'thoigian',
+          diemkhoden: 'diemkhoden',
+          nhakhoden: 'nhakhoden',
+          ngankhoden: 'ngankhoden',
+          lokhoden: 'lokhoden',
+          tdthukho: 'tdthukho',
+          tlkd: 'tlkd',
+          slpb: 'slpb',
           isCol: false,
         },
         {
           key: `1-2`,
-          name: '1-2 John Brown jr.',
-          age: 30,
-          address: 'New York No. 3 Lake Park',
+          diemkho: 'diemkho',
           isCol: true,
           children: [
             {
               key: `1-2-1`,
-              name: '1-2-1 Jimmy Brown',
-              age: 16,
-              address: 'New York No. 3 Lake Park'
+              lokho: 'lokho',
+              loaihh: 'loaihh',
+              clhh: 'clhh',
+              dvt: 'dvt',
+              tonkho: 'tonkho',
+              sldc: 'sldc',
+              dtkp: 'dtkp',
+              thoigian: 'thoigian',
+              diemkhoden: 'diemkhoden',
+              nhakhoden: 'nhakhoden',
+              ngankhoden: 'ngankhoden',
+              lokhoden: 'lokhoden',
+              tdthukho: 'tdthukho',
+              tlkd: 'tlkd',
+              slpb: 'slpb',
+            },
+            {
+              key: `1-2-2`,
+              lokho: 'lokho',
+              loaihh: 'loaihh',
+              clhh: 'clhh',
+              dvt: 'dvt',
+              tonkho: 'tonkho',
+              sldc: 'sldc',
+              dtkp: 'dtkp',
+              thoigian: 'thoigian',
+              diemkhoden: 'diemkhoden',
+              nhakhoden: 'nhakhoden',
+              ngankhoden: 'ngankhoden',
+              lokhoden: 'lokhoden',
+              tdthukho: 'tdthukho',
+              tlkd: 'tlkd',
+              slpb: 'slpb',
+            },
+            {
+              key: `1-2-3`,
+              lokho: 'lokho',
+              loaihh: 'loaihh',
+              clhh: 'clhh',
+              dvt: 'dvt',
+              tonkho: 'tonkho',
+              sldc: 'sldc',
+              dtkp: 'dtkp',
+              thoigian: 'thoigian',
+              diemkhoden: 'diemkhoden',
+              nhakhoden: 'nhakhoden',
+              ngankhoden: 'ngankhoden',
+              lokhoden: 'lokhoden',
+              tdthukho: 'tdthukho',
+              tlkd: 'tlkd',
+              slpb: 'slpb',
             }
           ]
         },
         {
           key: `1-3`,
-          name: '1-3 Jim Green sr.',
-          age: 72,
-          address: 'London No. 1 Lake Park',
+          diemkho: 'diemkho',
           isCol: true,
           children: [
             {
               key: `1-3-1`,
-              name: '1-3-1 Jim Green',
-              age: 42,
-              address: 'London No. 2 Lake Park',
+              lokho: 'lokho',
+              loaihh: 'loaihh',
+              clhh: 'clhh',
+              dvt: 'dvt',
+              tonkho: 'tonkho',
+              sldc: 'sldc',
+              dtkp: 'dtkp',
+              thoigian: 'thoigian',
+              diemkhoden: 'diemkhoden',
+              nhakhoden: 'nhakhoden',
+              ngankhoden: 'ngankhoden',
+              lokhoden: 'lokhoden',
+              tdthukho: 'tdthukho',
+              tlkd: 'tlkd',
+              slpb: 'slpb',
               // children: [
               //   {
               //     key: `1-3-1-1`,
@@ -164,9 +232,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     },
     {
       key: `2`,
-      name: '2 Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
+      chicuc: 'chicuc',
+      dtkp: 'dtkp',
       isEx: false
     }
   ];
@@ -186,7 +253,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetPhuongAnCuuTroService);
     this.formData = this.fb.group({
-      loaiDc: ['CHI_CUC', [Validators.required]],
+      loaiDc: ['NOi_BO', [Validators.required]],
       nam: [dayjs().get("year"), [Validators.required]],
       soQdinh: [, [Validators.required]],
       ngayKyQdinh: [],
@@ -194,7 +261,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       idThop: [, [Validators.required]],
       idDxuat: [, [Validators.required]],
       trichYeu: [],
-
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ['Dự thảo'],
+      tongtien: [],
       // idTongHop: [, [Validators.required]],
       // maTongHop: [, [Validators.required]],
       // id: [0],
@@ -234,9 +303,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   async ngOnInit() {
-    // this.listOfMapData.forEach(item => {
-    //   this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    // });
+    this.listOfMapData.forEach(item => {
+      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    });
     await this.spinner.show();
 
     this.loadDsChiCuc()
@@ -244,7 +313,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     this.getListDiemKhoNhan(this.userInfo.MA_DVI)
 
     try {
-      this.maQd = this.userInfo.MA_QD;
+      this.maQd = 'DCNB'//this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
