@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DonviService} from "../../../../../../../services/donvi.service";
 import {UserLogin} from "../../../../../../../models/userlogin";
 import {UserService} from "../../../../../../../services/user.service";
 import {NzModalRef} from "ng-zorro-antd/modal";
@@ -27,6 +26,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   item: DanhMucKho = new DanhMucKho();
   listDmKho: any[] = []
   listLoaiDuAn: any[] = []
+  listKhoi: any[] = []
   userInfo: UserLogin
   namKh : number
 
@@ -46,8 +46,15 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
+    this.getDsKhoi();
     this.getDetail();
-    this.item.namKeHoach = dayjs().get('year');
+  }
+
+  async getDsKhoi() {
+    let res = await this.danhMucService.danhMucChungGetAll("KHOI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
+    }
   }
 
   handleOk() {
@@ -112,13 +119,13 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
   }
 
   getDetail() {
+    this.item.namKeHoach = dayjs().get('year');
     if (this.type == 'sua') {
       this.item.maDuAn = this.dataInput.maDuAn;
       this.item.diaDiem = this.dataInput.diaDiem;
       this.item.loaiDuAn = this.dataInput.loaiDuAn;
-      this.item.khoi = this.dataInput.khoi;
-      this.item.tgKcHt = this.dataInput.tgKcHt;
       this.item.soQdPd = this.dataInput.soQdPd;
+      this.item.ngayQdDc = this.dataInput.ngayQdDc;
       this.item.tmdtDuKien = this.dataInput.tmdtDuKien;
       this.item.nstwDuKien = this.dataInput.nstwDuKien;
       this.item.khVonTongSo = this.dataInput.khVonTongSo;
@@ -126,6 +133,8 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
+    } else {
+      this.item.khoi = this.dataInput.khoi;
     }
   }
 
@@ -134,7 +143,7 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
       let result = this.listDmKho.filter(item => item.maDuAn == event)
       if (result && result.length > 0) {
         this.item = result[0];
-        this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
+        console.log(this.item, '00000')
       }
     }
   }
@@ -146,4 +155,12 @@ export class DialogThemMoiDxkhthComponent implements OnInit {
     }
   }
 
+  changeKhoi(event) {
+    if (event) {
+      let result = this.listKhoi.filter(item => item.ma == event);
+      if (result && result.length > 0) {
+        this.item.tenKhoi =  result[0].giaTri
+      }
+    }
+  }
 }

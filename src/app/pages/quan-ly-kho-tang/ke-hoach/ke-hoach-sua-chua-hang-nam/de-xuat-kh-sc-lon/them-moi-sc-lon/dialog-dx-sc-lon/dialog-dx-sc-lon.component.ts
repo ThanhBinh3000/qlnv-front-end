@@ -11,6 +11,9 @@ import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.se
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { STATUS } from "../../../../../../../constants/status";
 import dayjs from "dayjs";
+import {
+  DanhMucSuaChuaService
+} from "../../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 
 @Component({
   selector: 'app-dialog-dx-sc-lon',
@@ -24,7 +27,7 @@ export class DialogDxScLonComponent implements OnInit {
   @Input() dataTable: any
   @Input() page: string
   item: DanhMucKho = new DanhMucKho();
-  listDmKho: any[] = []
+  listDmScLon: any[] = []
   listLoaiDuAn: any[] = []
   userInfo: UserLogin
   namKh : number
@@ -36,7 +39,7 @@ export class DialogDxScLonComponent implements OnInit {
     public globals: Globals,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private dmKhoService : DanhMucKhoService
+    private dmSuaChuaService : DanhMucSuaChuaService
   ) {
   }
 
@@ -46,7 +49,6 @@ export class DialogDxScLonComponent implements OnInit {
     this.getAllDmKho();
     this.getAllLoaiDuAn();
     this.getDetail()
-
   }
 
   handleOk() {
@@ -98,14 +100,14 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "type" : "DMK",
+      "namKeHoach" : "DMK",
       "maDvi" : this.userInfo.MA_DVI
     }
-    let res = await this.dmKhoService.getAllDmKho(body);
+    let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmKho = res.data
-      if (this.listDmKho && this.listDmKho.length > 0) {
-        this.listDmKho = this.listDmKho.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi)
+      this.listDmScLon = res.data
+      if (this.listDmScLon && this.listDmScLon.length > 0) {
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi)
       }
     }
   }
@@ -125,12 +127,14 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
       this.item.ncKhNstw = this.dataInput.ncKhNstw;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
+    } else {
+      this.item.namKeHoach = dayjs().get('year')
     }
   }
 
   changeDmucDuAn(event: any) {
     if (event) {
-      let result = this.listDmKho.filter(item => item.maDuAn == event)
+      let result = this.listDmScLon.filter(item => item.maDuAn == event)
       if (result && result.length > 0) {
         this.item = result[0];
         this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh

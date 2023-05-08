@@ -72,6 +72,13 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     tenNgan: '',
   };
 
+  listTrangThai: any[] = [
+    { ma: STATUS.BAN_HANH, giaTri: 'Ban Hành' },
+    { ma: STATUS.DU_THAO, giaTri: 'Dự Thảo' },
+    { ma: STATUS.TU_CHOI_TP, giaTri: 'Từ chối TP' }
+  ];
+  openHd = false;
+  idHd: any;
   dataTableAll: any[] = [];
   allChecked = false;
   indeterminate = false;
@@ -448,6 +455,16 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  openHdModal(id: number) {
+    this.idHd = id;
+    this.openHd = true;
+  }
+
+  closeHdModal() {
+    this.idHd = null;
+    this.openHd = false;
   }
 
 }
