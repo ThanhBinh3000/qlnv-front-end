@@ -31,9 +31,9 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     @Input()
     viewOnly: boolean;
     CHUC_NANG = CHUC_NANG;
-    listLoaiHangHoa: any[] = [];
-    listHangHoaAll: any[] = [];
-    listChungLoaiHangHoa: any[] = [];
+    // listLoaiHangHoa: any[] = [];
+    // listHangHoaAll: any[] = [];
+    // listChungLoaiHangHoa: any[] = [];
     listTrangThai: any[] = [
         { ma: this.STATUS.CHUA_TAO_QD, giaTri: 'Chưa tạo QĐ' },
         { ma: this.STATUS.DA_DU_THAO_QD, giaTri: 'Đã dự thảo QĐ' },
@@ -88,8 +88,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             ngayTongHop: [''],
             thTuNgay: [''],
             thDenNgay: [''],
-            loaiHangHoa: [''],
-            chungLoaiHangHoa: [''],
+            // loaiHangHoa: [''],
+            // chungLoaiHangHoa: [''],
             trichYeu: ['']
 
         })
@@ -116,7 +116,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         try {
             await this.initData()
             this.timKiem();
-            this.loadDsVthh();
+            // this.loadDsVthh();
         } catch (e) {
             console.log('error: ', e)
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -124,28 +124,28 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             this.spinner.hide();
         }
     }
-    async loadDsVthh() {
-        let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.listHangHoaAll = res.data;
-            this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-        }
-    }
-    async changeHangHoa(event: any) {
-        if (event) {
-            this.formData.patchValue({ chungLoaiHangHoa: "" });
-            this.listChungLoaiHangHoa = []
+    // async loadDsVthh() {
+    //     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    //     if (res.msg == MESSAGE.SUCCESS) {
+    //         this.listHangHoaAll = res.data;
+    //         this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+    //     }
+    // }
+    // async changeHangHoa(event: any) {
+    //     if (event) {
+    //         this.formData.patchValue({ chungLoaiHangHoa: "" });
+    //         this.listChungLoaiHangHoa = []
 
-            let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-            if (res.msg == MESSAGE.SUCCESS) {
-                if (res.data) {
-                    this.listChungLoaiHangHoa = res.data;
-                }
-            } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-        }
-    }
+    //         let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    //         if (res.msg == MESSAGE.SUCCESS) {
+    //             if (res.data) {
+    //                 this.listChungLoaiHangHoa = res.data;
+    //             }
+    //         } else {
+    //             this.notification.error(MESSAGE.ERROR, res.msg);
+    //         }
+    //     }
+    // }
     async initData() {
         this.userInfo = this.userService.getUserLogin();
         this.userdetail.maDvi = this.userInfo.MA_DVI;

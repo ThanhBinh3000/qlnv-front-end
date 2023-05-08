@@ -27,7 +27,7 @@ import * as dayjs from "dayjs";
 import { FileDinhKem } from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import { MESSAGE } from "../../../../../constants/message";
 import { STATUS } from "src/app/constants/status";
-import { chain, cloneDeep, includes } from 'lodash';
+import { chain, cloneDeep, includes, groupBy } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
 import { Router } from '@angular/router';
@@ -59,9 +59,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     iconButtonDuyet: string = '';
     styleStatus: string = 'du-thao-va-lanh-dao-duyet';
     tabSelected: string = 'thongTinChung';
-    listHangHoaAll: any[] = [];
-    listLoaiHangHoa: any[] = [];
-    listChungLoaiHangHoa: any[] = [];
+    // listHangHoaAll: any[] = [];
+    // listLoaiHangHoa: any[] = [];
+    // listChungLoaiHangHoa: any[] = [];
     errorInputRequired: string = 'Dữ liệu không được để trống.';
     userInfo: UserLogin;
     expandSet = new Set<number>();
@@ -77,6 +77,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     tableRow: any = {};
     isVisible = false;
     isVisibleSuaNoiDung = false;
+    isViewTHKeHoachDCCUC: boolean = false;
+    idTHKeHoachDCCUC: any = null;
     isViewKeHoachDC: boolean = false;
     idKeHoachDC: any = null;
     listNoiDung = [];
@@ -143,8 +145,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 tenCloaiVthh: [''],
                 donViTinh: [''],
                 tenTrangThai: [''],
-                loaiHangHoa: [''],
-                chungLoaiHangHoa: [''],
+                // loaiHangHoa: [''],
+                // chungLoaiHangHoa: [''],
 
                 lyDoDc: [''],
                 namKeHoach: [dayjs().get('year'), Validators.required],
@@ -166,7 +168,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.initData()
         try {
             this.spinner.show();
-            this.loadDsVthh()
+            // this.loadDsVthh()
             if (this.formData.value.id) {
                 const data = await this.detail(this.formData.value.id);
                 this.formData.patchValue(data);
@@ -200,32 +202,32 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         });
         return result;
     }
-    async loadDsVthh() {
-        let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.listHangHoaAll = res.data;
-            this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
-        }
-    }
+    // async loadDsVthh() {
+    //     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    //     if (res.msg == MESSAGE.SUCCESS) {
+    //         this.listHangHoaAll = res.data;
+    //         this.listLoaiHangHoa = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+    //     }
+    // }
     handleChangeLoaiDC = (value) => {
         this.isTongHop = false;
         this.formData.patchValue({ thoiGianTongHop: '' });
     }
-    changeHangHoa = async (event) => {
-        if (event) {
-            this.formData.patchValue({ chungLoaiHangHoa: "" });
-            this.listChungLoaiHangHoa = []
+    // changeHangHoa = async (event) => {
+    //     if (event) {
+    //         this.formData.patchValue({ chungLoaiHangHoa: "" });
+    //         this.listChungLoaiHangHoa = []
 
-            let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-            if (res.msg == MESSAGE.SUCCESS) {
-                if (res.data) {
-                    this.listChungLoaiHangHoa = res.data;
-                }
-            } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-        }
-    }
+    //         let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+    //         if (res.msg == MESSAGE.SUCCESS) {
+    //             if (res.data) {
+    //                 this.listChungLoaiHangHoa = res.data;
+    //             }
+    //         } else {
+    //             this.notification.error(MESSAGE.ERROR, res.msg);
+    //         }
+    //     }
+    // }
     yeuCauChiCucNhan = () => {
         //call api yêu cầu chi cục xác định điểm nhập
         this.yeuCauSuccess = true;
@@ -336,21 +338,68 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             if (this.formData.value.loaiDieuChuyen == "CUC" && this.groupData2Cuc?.length > 0) {
                 this.groupData2Cuc = this.groupData2Cuc.map(i => {
                     i.selected = false;
-                    if (i.thKhDcHdrId == item.thKhDcHdrId) {
+                    if (i.thKhDcDtlId == item.thKhDcDtlId) {
                         i.selected = true
                     }
                     return { ...i }
                 });
 
                 if (item.thKhDcHdrId) {
-                    const res = await this.tongHopDieuChuyenService.getDetail(item.thKhDcHdrId);
-                    const detailCuc = res.data;
+                    const detailCuc = item.thKeHoachDieuChuyenCucKhacCucDtls;
                     if (!detailCuc) return;
-
+                    let flatArray = [];
+                    Array.isArray(item.thKeHoachDieuChuyenCucKhacCucDtls) && item.thKeHoachDieuChuyenCucKhacCucDtls.forEach(element => {
+                        Array.isArray(element?.dcnbKeHoachDcHdr) && element.dcnbKeHoachDcHdr.forEach(elmHdr => {
+                            Array.isArray(elmHdr?.danhSachHangHoa) && elmHdr.danhSachHangHoa.forEach(elmDs => {
+                                flatArray.push({ ...element, dcnbKeHoachDcHdr: null, ...elmHdr, danhSachHangHoa: null, ...elmDs })
+                            })
+                        });
+                    });
+                    this.dataTable2Cuc = chain(flatArray).groupBy('soDxuat').map((item, i) => {
+                        const soDxuat = item.find(f => f.soDxuat == i);
+                        const duToanKphi = item.reduce((sum, cur) => sum += cur.duToanKphi, 0)
+                        return {
+                            ...soDxuat,
+                            children: item,
+                            duToanKphi,
+                            expand: true
+                        }
+                    }).value();
                 }
             }
         } else {
+            if (this.formData.value.loaiDieuChuyen == "CUC" && this.groupData2Cuc?.length > 0) {
+                this.groupData2Cuc = this.groupData2Cuc.map(i => {
+                    i.selected = false;
+                    if (i.thKhDcDtlId == item.thKhDcDtlId) {
+                        i.selected = true
+                    }
+                    return { ...i }
+                });
 
+                if (item.thKhDcHdrId) {
+                    const detailCuc = Array.isArray(item?.thKeHoachDieuChuyenCucHdr?.thKeHoachDieuChuyenCucKhacCucDtls) ? item?.thKeHoachDieuChuyenCucHdr?.thKeHoachDieuChuyenCucKhacCucDtls : [];
+                    if (!detailCuc) return;
+                    let flatArray = [];
+                    Array.isArray(detailCuc) && detailCuc.forEach(element => {
+                        Array.isArray(element?.dcnbKeHoachDcHdr) && element.dcnbKeHoachDcHdr.forEach(elmHdr => {
+                            Array.isArray(elmHdr?.danhSachHangHoa) && elmHdr.danhSachHangHoa.forEach(elmDs => {
+                                flatArray.push({ ...element, dcnbKeHoachDcHdr: null, ...elmHdr, danhSachHangHoa: null, ...elmDs })
+                            })
+                        });
+                    });
+                    this.dataTable2Cuc = chain(flatArray).groupBy('soDxuat').map((item, i) => {
+                        const soDxuat = item.find(f => f.soDxuat == i);
+                        const duToanKphi = item.reduce((sum, cur) => sum += cur.duToanKphi, 0)
+                        return {
+                            ...soDxuat,
+                            children: item,
+                            duToanKphi,
+                            expand: true
+                        }
+                    }).value();
+                }
+            }
         }
         if (this.formData.value.loaiDieuChuyen == "CHI_CUC" && this.groupData2ChiCuc?.length > 0) {
             this.groupData2ChiCuc = this.groupData2ChiCuc.map(i => {
@@ -397,14 +446,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 this.selectRow(this.groupData2ChiCuc[0], isNew)
             }
             else if (data.loaiDieuChuyen == "CUC") {
-                this.groupData2Cuc = Array.isArray(data.thKeHoachDieuChuyenCucKhacCucDtls) ? data.thKeHoachDieuChuyenCucKhacCucDtls.map((item, i) => ({ ...item.dcnbKeHoachDcHdr, dcnbKeHoachDcHdrId: item.dcnbKeHoachDcHdrId })) : []
+                this.groupData2Cuc = Array.isArray(data.thKeHoachDieuChuyenTongCucDtls) ? cloneDeep(data.thKeHoachDieuChuyenTongCucDtls) : []
                 if (Array.isArray(this.groupData2Cuc)) {
-                    this.daXdinhDiemNhap = true;
-                    this.groupData2Cuc.forEach((item, id) => {
-                        if (item.danhSachHangHoa.some(cur => !cur.daXdinhDiemNhap)) {
-                            this.daXdinhDiemNhap = false
-                        }
-                    })
                     this.selectRow(this.groupData2Cuc[0], isNew)
                 }
             }
@@ -495,12 +538,28 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         };
         return dataView
     }
-    openModalKeHoachDC(id: any) {
+    openModalTHKeHoachDCCUC(event, id: number) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (id) {
+            this.idTHKeHoachDCCUC = id;
+            this.isViewTHKeHoachDCCUC = true;
+            this.isViewKeHoachDC = false;
+        }
+
+    }
+    openModalKeHoachDC(event, id: number) {
+        event.preventDefault();
+        event.stopPropagation();
         if (id) {
             this.idKeHoachDC = id;
             this.isViewKeHoachDC = true;
+            this.isViewTHKeHoachDCCUC = false
         }
-
+    }
+    closeModalTHKeHoachDCCUC() {
+        this.idTHKeHoachDCCUC = null;
+        this.isViewTHKeHoachDCCUC = false;
     }
     closeModalKeHoachDC() {
         this.idKeHoachDC = null;

@@ -15,7 +15,7 @@
                             <nz-option *ngFor="let p of listCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="2" class="mt-16">
+                    <div nz-col nzSpan="3" class="mt-16">
                         <label class="search__label">Mã tổng hợp</label>
                         <input nz-input formControlName="id" />
                     </div>
@@ -30,7 +30,7 @@
                         <label class="search__label">Ngày tổng hợp</label>
                         <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
-                    <div nz-col nzSpan="9" class="mt-16">
+                    <div nz-col nzSpan="8" class="mt-16">
                         <label class="search__label">Nội dung tổng hợp</label>
                         <input nz-input formControlName="trichYeu" />
                     </div>

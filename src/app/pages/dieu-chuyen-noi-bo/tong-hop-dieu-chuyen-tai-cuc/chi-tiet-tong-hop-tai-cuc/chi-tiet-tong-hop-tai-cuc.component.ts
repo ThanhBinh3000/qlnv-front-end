@@ -149,7 +149,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             console.log("e", e)
             this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
         } finally {
-            if (this.isEdit || this.isViewDetail) {
+            if (this.isEdit || this.isViewDetail || this.isViewOnModal) {
                 this.isTongHop = true
             };
             this.spinner.hide();
