@@ -240,9 +240,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             this.helperService.markFormGroupTouched(this.formData);
             if (!this.formData.valid) return;
             const res = await this.save();
-            if (res.msg == MESSAGE.ADD_SUCCESS) {
+            if (res.msg == MESSAGE.SUCCESS) {
                 this.router.navigate([
-                    '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
+                    '/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen',
                     this.formData.value.id,
                 ]);
             }
