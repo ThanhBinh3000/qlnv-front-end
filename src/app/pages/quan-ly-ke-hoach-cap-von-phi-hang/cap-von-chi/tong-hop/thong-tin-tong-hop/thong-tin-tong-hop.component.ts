@@ -594,7 +594,7 @@ export class ThongTinTonghopComponent implements OnInit {
       };
       let res = await this.deNghiCapVonBoNganhService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.length > 0) {
+        if (res.data && res.data.content.length > 0) {
           let data = res.data;
           this.listThongTinChiTiet = data.content;
           this.khDnCapVonIds = data.content.map(item => item.id)

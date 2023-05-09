@@ -1,4 +1,4 @@
-<div class="bg-trang">
+<div class="bg-trang" *ngIf="!redirectBtc">
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -40,6 +40,11 @@
               (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
+      </button>
+      <button nz-button class="btn btn-sub xanh ml-2" (click)="redirectToDuThao()"
+              *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDTC">
+        <i class="icon htvbdh_soanthao"></i>
+        <span> Dự thảo quyết định của BTC</span>
       </button>
     </div>
   </div>
@@ -305,7 +310,7 @@
                       <tr>
                         <td [nzExpand]="expandSet.has(data.idVirtual)"
                             (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-                        <td class="font-weight-bold">{{data.khoi}}</td>
+                        <td class="font-weight-bold">{{data.tenKhoi}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -329,7 +334,7 @@
                           <td>{{item.diaDiem}}</td>
                           <td>{{item.loaiDuAn}}</td>
                           <td>{{item.tgKcHt}}</td>
-                          <td>{{item.khoi}}</td>
+                          <td>{{item.tenKhoi}}</td>
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
@@ -405,7 +410,7 @@
                       <tr>
                         <td [nzExpand]="expandSet.has(data.idVirtual)"
                             (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-                        <td class="font-weight-bold">{{data.khoi}}</td>
+                        <td class="font-weight-bold">{{data.tenKhoi}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -431,40 +436,20 @@
                           <td>{{item.diaDiem}}</td>
                           <td>{{item.loaiDuAn}}</td>
                           <td>{{item.tgKcHt}}</td>
-                          <td>{{item.khoi}}</td>
+                          <td>{{item.tenKhoi}}</td>
                           <td>{{ item.soQdPd }}</td>
                           <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right"
-                              *ngIf="isEdit != (idx + '-' + y)">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right" *ngIf="isEdit == (idx + '-' + y)">
-                            <nz-input-number [(ngModel)]="item.ncKhTongSo" [nzSize]="'small'"
-                                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                                             [nzParser]="globals.parser"></nz-input-number>
-                          </td>
-                          <td class="text-right"
-                              *ngIf="isEdit != (idx + '-' + y)">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                          <td class="text-right" *ngIf="isEdit == (idx + '-' + y)">
-                            <nz-input-number [(ngModel)]="item.ncKhNstw" [nzSize]="'small'"
-                                             [nzFormatter]="globals.formatter" [nzMin]="0"
-                                             [nzParser]="globals.parser"></nz-input-number>
-                          </td>
+                          <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
+                          <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                           <td class="text-center" nzRight
-                              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && isEdit != (idx + '-' + y)  ">
-                            <a (click)="editRow(idx, y, item)">
+                              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)">
+                            <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
                               <i class="fa fa-pencil"></i>
                             </a>
                             <a (click)="deleteRow(item)">
                               <i class="fa fa-trash-o do"></i>
                             </a>
-                          </td>
-                          <td class="text-center" nzRight
-                              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC) && isEdit == (idx + '-' + y)">
-                            <a class="save" (click)="saveEdit(item)">
-                              <i class="fa fa-save"></i>
-                            </a>
-                            <a (click)="cancelEdit(data)">
-                              <i class="fa fa-ban do"></i> </a>
                           </td>
                         </tr>
                       </ng-container>
@@ -507,3 +492,10 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
+
+<div class="chi-tiet" *ngIf="redirectBtc">
+  <div class="chi-tiet">
+    <app-them-moi-qd-phe-duyet [idInput]="null" (showListEvent)="backToTongHop()"
+                               [isViewDetail]="false"></app-them-moi-qd-phe-duyet>
+  </div>
+</div>

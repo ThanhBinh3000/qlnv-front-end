@@ -11,7 +11,7 @@
               </nz-select>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4" *ngIf=" userService.isCuc()">
+          <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
             <label class="search__label">Chi cục</label>
             <nz-input-group>
               <nz-select formControlName="maDvi" nzAllowClear>
@@ -197,7 +197,7 @@
       <nz-card class="flex-card p-lr16 mt-2">
         <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
           <ul nz-menu nzMode="horizontal">
-            <li nz-menu-item [nzSelected]="tabSelected == '01'? true: false" (click)="selectTab('01')"
+            <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
               Quyết định phê duyệt dự án ĐTXD
               <img *ngIf="itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH" class="ml-1"
@@ -205,36 +205,51 @@
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '02'? true: false" (click)="selectTab('02')"
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '02'"
+                (click)="selectTab('02')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
               Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
-              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+              <img *ngIf="itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <img *ngIf="!itemQdPdTktcTdt || itemQdPdTktcTdt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '03'? true: false" (click)="selectTab('03')"
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
               Quyết định phê duyệt KH lựa chọn nhà thầu
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '04'? true: false" (click)="selectTab('04')"
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT') || userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
               Tổ chức triển khai KH lựa chọn nhà thầu
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '05'? true: false" (click)="selectTab('05')"
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
               Hợp đồng và PL hợp đồng
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '06'? true: false" (click)="selectTab('06')">
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
               Tiến độ công việc
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
-            <li nz-menu-item [nzSelected]="tabSelected == '07'? true: false" (click)="selectTab('07')">
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
               Biên bản nghiệm thu
               <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
@@ -246,7 +261,8 @@
                                                [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-du-an-dtxd>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-tktc-tdt></app-quyet-dinh-phe-duyet-tktc-tdt>
+          <app-quyet-dinh-phe-duyet-tktc-tdt [itemDuAn]="itemSelected" [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                             [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-tktc-tdt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
           <app-quyet-dinh-phe-duyet-khlcnt></app-quyet-dinh-phe-duyet-khlcnt>

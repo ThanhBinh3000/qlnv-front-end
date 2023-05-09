@@ -19,7 +19,7 @@ import {
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 
 @Component({
-  selector: 'app-bang-ke-can',
+  selector: 'app-xc-bang-ke-can',
   templateUrl: './bang-ke-can.component.html',
   styleUrls: ['./bang-ke-can.component.scss']
 })

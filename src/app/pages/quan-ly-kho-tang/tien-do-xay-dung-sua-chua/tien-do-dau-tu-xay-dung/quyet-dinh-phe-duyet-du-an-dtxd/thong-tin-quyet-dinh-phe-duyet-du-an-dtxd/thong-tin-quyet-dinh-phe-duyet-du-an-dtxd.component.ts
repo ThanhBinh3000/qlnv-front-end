@@ -246,6 +246,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   }
 
   async save(isBanHanh?) {
+    return;
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
