@@ -47,7 +47,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()"
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
                 *ngIf="!this.isViewDetail && (thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_LDC || thongTinChiTieuKeHoachNam.trangThai == STATUS.TU_CHOI_TP)">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
@@ -62,8 +62,8 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
-            {{thongTinChiTieuKeHoachNam.trangThai == '00' ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
+            [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
+            {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
           </span>
           <span>Thông tin chỉ tiêu kế hoạch năm {{userService.isTongCuc() ? 'Tổng cục' : 'Cục'}} giao</span>
         </div>
@@ -255,7 +255,7 @@
             <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
           </tr>
           <tr
-            [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
+            [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === STATUS.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
             <th nzLeft></th>
             <th nzLeft>
               <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
@@ -736,9 +736,9 @@
             </th>
           </tr>
           <tr
-            [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled11' : ''">
-            <td></td>
-            <td>
+            [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === STATUS.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
+            <th></th>
+            <th>
               <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
                 <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                                 class="search__input autocomplete__input donvi__input ">
@@ -760,25 +760,25 @@
 
                 </nz-autocomplete>
               </nz-form-control>
-            </td>
-            <td class="text-right">
+            </th>
+            <th class="text-right">
               {{keHoachMuoiCreate.tonKhoDauNam}}
-            </td>
-            <td class="text-right">
+            </th>
+            <th class="text-right">
               <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0" [nzSize]="'small'"
                                [(ngModel)]="keHoachMuoiCreate.nhapTrongNam">
               </nz-input-number>
-            </td>
-            <td class="text-right">
+            </th>
+            <th class="text-right">
               <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0" [nzSize]="'small'"
                                [nzMax]="keHoachMuoiCreate.tonKhoDauNam"
                                [(ngModel)]="keHoachMuoiCreate.xuatTrongNamMuoi">
               </nz-input-number>
-            </td>
-            <td class="text-right">
+            </th>
+            <th class="text-right">
               {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0)}}
-            </td>
-            <td *ngIf="!this.isViewDetail" class="text-center">
+            </th>
+            <th *ngIf="!this.isViewDetail" class="text-center">
               <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': (!isAddMuoi)}"
                  style="margin-right: 30px;">
                 <i class="icon htvbdh_dau-cong"></i>
@@ -786,7 +786,7 @@
               <a (click)="clearMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}" style="margin-right: 10px;">
                 <i class="fa fa-trash-o do"></i>
               </a>
-            </td>
+            </th>
           </tr>
           </thead>
           <tbody>
@@ -846,9 +846,18 @@
             <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
             <td></td>
           </tr>
-          <tr>
+          <tr *ngIf="userService.isTongCuc()">
             <td></td>
             <td style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td></td>
+          </tr>
+          <tr *ngIf="userService.isCuc()">
+            <td></td>
+            <td style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>

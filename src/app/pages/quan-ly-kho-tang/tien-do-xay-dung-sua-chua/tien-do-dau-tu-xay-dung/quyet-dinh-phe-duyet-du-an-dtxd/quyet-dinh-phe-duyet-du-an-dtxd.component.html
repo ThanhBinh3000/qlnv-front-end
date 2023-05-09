@@ -221,5 +221,6 @@
 <ng-template #templateThemmoi>
   <app-thong-tin-quyet-dinh-phe-duyet-du-an-dtxd [id]="selectedId" [itemDuAn]="itemDuAn" (showListEvent)="showList()"
                                                  [isViewDetail]="isViewDetail"
+                                                 (dataItemDaDtxd)="receivedData($event)"
                                                  [idInput]="selectedId"></app-thong-tin-quyet-dinh-phe-duyet-du-an-dtxd>
 </ng-template>

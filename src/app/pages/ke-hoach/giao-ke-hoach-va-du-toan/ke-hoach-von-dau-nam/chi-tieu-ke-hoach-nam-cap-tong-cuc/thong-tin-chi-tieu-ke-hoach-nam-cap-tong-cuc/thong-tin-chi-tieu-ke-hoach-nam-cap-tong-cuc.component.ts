@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output
 } from '@angular/core';
@@ -174,7 +174,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.showListEvent, 'showListEvent');
     this.yearNow = dayjs().get('year');
     for (let i = 0; i < 5; i++) {
       this.listNam.push({
@@ -210,7 +209,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
-
 
   async findCanCuByYear(year: number, id?) {
     this.formData.patchValue({
@@ -1490,6 +1488,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
     let checkFlag = this.soSanhCtCapTrenGiao('save');
     if (!checkFlag) {
+      this.spinner.hide();
       return;
     }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
@@ -1615,7 +1614,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   }
                 })
             } else {
-              this.redirectChiTieuKeHoachNam();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              // this.redirectChiTieuKeHoachNam();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1629,7 +1629,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      console.log(this.thongTinChiTieuKeHoachNamInput);
       // return;
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
@@ -1667,7 +1666,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 })
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectChiTieuKeHoachNam()
+              // this.redirectChiTieuKeHoachNam()
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
