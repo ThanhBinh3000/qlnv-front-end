@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -21,11 +21,12 @@ import {UserService} from "../../../../../services/user.service";
   styleUrls: ['./quyet-dinh-phe-duyet-tktc-tdt.component.scss']
 })
 export class QuyetDinhPheDuyetTktcTdtComponent implements OnInit {
+
   @Input()
   itemDuAn: any;
   @Input("itemQdPdTktcTdt")
   itemQdPdTktcTdt: any;
-  @Input("itemQdPdDaDtxd")
+  @Input()
   itemQdPdDaDtxd: any;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -35,6 +36,7 @@ export class QuyetDinhPheDuyetTktcTdtComponent implements OnInit {
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+  @Output() dataItemTktcTdt = new EventEmitter<object>();
 
   constructor(
     public userService: UserService,
@@ -51,6 +53,15 @@ export class QuyetDinhPheDuyetTktcTdtComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
+  }
+
+  receivedData(data: any) {
+    this.itemQdPdTktcTdt = data;
+    this.emitDataTktcTdt(data);
+  }
+
+  emitDataTktcTdt(data) {
+    this.dataItemTktcTdt.emit(data);
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {

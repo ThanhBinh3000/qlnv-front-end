@@ -19,11 +19,13 @@ import * as uuid from "uuid";
 import {chain, cloneDeep} from 'lodash';
 import {QuanLyHangTrongKhoService} from "../../../../../services/quanLyHangTrongKho.service";
 import {
-  QuyetDinhThanhLyService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
+  BaoCaoKqThanhLyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BaoCaoKqThanhLy.service";
 
-export class BaoCaoKqDtl {
+export class QuyetDinhDtl {
   idVirtual: string;
+  idTongHop: number;
+  maTongHop: string;
   maDiaDiem: string;
   loaiVthh: string;
   cloaiVthh: string;
@@ -42,11 +44,11 @@ export class BaoCaoKqDtl {
   type: string;
 }
 @Component({
-  selector: 'app-them-moi-quyet-dinh-thanh-ly',
-  templateUrl: './them-moi-quyet-dinh-thanh-ly.component.html',
-  styleUrls: ['./them-moi-quyet-dinh-thanh-ly.component.scss']
+  selector: 'app-them-moi-bao-cao-ket-qua-thanh-ly',
+  templateUrl: './them-moi-bao-cao-ket-qua-thanh-ly.component.html',
+  styleUrls: ['./them-moi-bao-cao-ket-qua-thanh-ly.component.scss']
 })
-export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements OnInit {
+export class ThemMoiBaoCaoKetQuaThanhLyComponent extends Base2Component implements OnInit {
   @Input() isView: boolean;
   @Input() idInput: number;
   @Input() loaiVthh: string;
@@ -54,7 +56,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   expandSetString = new Set<string>();
   isVisible = false;
   maHauTo: any;
-  listHoSo: any[] = [];
+  listSoQd: any[] = [];
   chiTiet: any = [];
 
 
@@ -66,11 +68,11 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     modal: NzModalService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
-    private quyetDinhThanhLyService: QuyetDinhThanhLyService,
+    private baoCaoKqThanhLyService: BaoCaoKqThanhLyService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, baoCaoKqThanhLyService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get("year") - i,
@@ -79,18 +81,28 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     }
     this.formData = this.fb.group({
 
-      id:[],
-      maDvi:[],
-      nam:[dayjs().get("year"), [Validators.required]],
-      soBaoCao:['', [Validators.required]],
-      ngayBaoCao:[],
-      idQd:['', [Validators.required]],
-      soQd:['', [Validators.required]],
-      noiDung:['', [Validators.required]],
+      id: [],
+      maDvi: [],
+      nam: [dayjs().get("year"), [Validators.required]],
+      soQd: ['', [Validators.required]],
+      ngayKy: ['', [Validators.required]],
+      idQd: ['', [Validators.required]],
+      soHoSo: ['', [Validators.required]],
+      idKq: [],
+      soKq: [],
+      thoiGianTl: [],
+      thoiGianTlTu: [],
+      thoiGianTlDen: [],
+      trichYeu: [],
       trangThai: [STATUS.DU_THAO],
-      tongSoLuongTl:[],
-      tongSoLuongCon:[],
-      tongThanhTien:[],
+      tongSoLuongTl: [],
+      tongSoLuongCon: [],
+      tongThanhTien: [],
+      lyDoTuChoi: [],
+      tenDvi: [],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKem: [new Array<FileDinhKem>()],
+      quyetDinhDtl: [new Array<QuyetDinhDtl>()],
       ngayTao: [],
       nguoiTaoId: [],
       ngaySua: [],
@@ -99,13 +111,6 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       nguoiPduyetId: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
-      lyDoTuChoi: [],
-      tenDvi: [],
-      tenTrangThai: ['Dự thảo'],
-      fileDinhKem: [new Array<FileDinhKem>()],
-      canCu: [new Array<FileDinhKem>()],
-      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
-
     });
 
   }
@@ -115,12 +120,12 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     try {
       this.maHauTo = '/' + this.userInfo.MA_QD;
       await Promise.all([
-        this.loadDsHoSo(),
+        this.loadDsSoQd(),
       ]);
       await this.loadChiTiet(this.idInput);
       if (Object.keys(this.dataInit).length > 0) {
-        this.formData.patchValue({idHoSo: this.dataInit.id})
-        await this.changeHoSo(this.dataInit.id);
+        this.formData.patchValue({idQd: this.dataInit.id})
+        await this.changeSoQd(this.dataInit.id);
       }
     } catch (e) {
       console.log("error: ", e);
@@ -133,20 +138,19 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async loadChiTiet(idInput: number) {
     if (idInput) {
-      await this.quyetDinhThanhLyService.getDetail(idInput)
+      await this.baoCaoKqThanhLyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.setValue({
               ...res.data,
-              soQd: res.data.soQd?.split('/')[0] ?? null,
-              thoiGianTl: (res.data.thoiGianTlTu && res.data.thoiGianTlDen) ? [res.data.thoiGianTlTu, res.data.thoiGianTlDen] : null
+              soBaoCao: res.data.soBaoCao?.split('/')[0] ?? null,
 
             }, {emitEvent: false});
 
             this.formData.value.quyetDinhDtl.forEach(s => {
               idVirtual: uuid.v4();
             });
-            this.changeHoSo(res.data.idHoSo);
+            this.changeSoQd(res.data.idQd);
           }
           console.log(this.formData.value)
         })
@@ -165,7 +169,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   }
 
-  async loadDsHoSo() {
+  async loadDsSoQd() {
     this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
       trangThai: STATUS.BAN_HANH,
       nam: this.formData.get('nam').value,
@@ -177,10 +181,10 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.listHoSo = data.content.filter(item => item.soQd == null);
+          this.listSoQd = data.content.filter(item => item.soBaoCao == null);
         }
       } else {
-        this.listHoSo = [];
+        this.listSoQd = [];
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     });
@@ -190,19 +194,15 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     this.formData.disable({emitEvent: false});
     let body = {
       ...this.formData.value,
-      soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : this.maHauTo
+      soBaoCao: this.formData.value.soBaoCao ? this.formData.value.soBaoCao + this.maHauTo : this.maHauTo
     };
-    if (this.formData.get('thoiGianTl').value) {
-      body.thoiGianTlTu = dayjs(this.formData.get('thoiGianTl').value[0]).format('YYYY-MM-DD');
-      body.thoiGianTlDen = dayjs(this.formData.get('thoiGianTl').value[1]).format('YYYY-MM-DD')
-    }
     let rs = await this.createUpdate(body);
     this.formData.enable({emitEvent: false});
     this.formData.patchValue({id: rs.id})
   }
 
   async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
-    body = {...body, soQd: this.formData.value.soQd + this.maHauTo}
+    body = {...body, soBaoCao: this.formData.value.soBaoCao + this.maHauTo}
     await super.saveAndSend(body, trangThai, msg, msgSuccess);
   }
 
@@ -210,7 +210,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     this.showListEvent.emit();
   }
 
-  changeHoSo(id) {
+  changeSoQd(id) {
     if (id) {
       try {
         this.spinner.show();
