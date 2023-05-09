@@ -1,4 +1,4 @@
-<div class="bg-trang" *ngIf="!redirectBtc">
+<div class="bg-trang">
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
@@ -41,8 +41,8 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button nz-button class="btn btn-sub xanh ml-2" (click)="redirectToDuThao()"
-              *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDTC">
+      <button nz-button class="btn btn-sub xanh ml-2" (click)="redirectToDuThao(dataDetail)"
+              *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDTC && formData.value.trangThaiQd == '00'">
         <i class="icon htvbdh_soanthao"></i>
         <span> Dự thảo quyết định của BTC</span>
       </button>
@@ -492,10 +492,3 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
-
-<div class="chi-tiet" *ngIf="redirectBtc">
-  <div class="chi-tiet">
-    <app-them-moi-qd-phe-duyet [idInput]="null" (showListEvent)="backToTongHop()"
-                               [isViewDetail]="false"></app-them-moi-qd-phe-duyet>
-  </div>
-</div>
