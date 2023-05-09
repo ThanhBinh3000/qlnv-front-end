@@ -34,6 +34,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { convertDviTinh } from 'src/app/shared/commonFunction';
 import { DanhMucCongCuDungCuService } from 'src/app/services/danh-muc-cong-cu-dung-cu.service';
 import { convertMaCcdc } from 'src/app/shared/commonFunction';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -68,7 +69,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   createRowUpdate: any = {};
   tongKphi: any;
   listCcdc: any = [];
-
+  danhSachFileDinhKem: FileDinhKem[] = [];
+  listFile: any[] = []
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -279,8 +281,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
       this.listSoPhieuNhapKho.forEach(item => {
         let phieuKtraCL = data.listPhieuKtraCl.filter(x => x.soPhieu == item.soPhieuKtraCl)[0];
-        item.soLuongThucNhap = phieuKtraCL.soLuongNhapKho
+        item.soLuongThucNhap = phieuKtraCL ? phieuKtraCL.soLuongNhapKho : 0
       })
+      await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -327,7 +330,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.typeVthh,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",
@@ -373,6 +376,13 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
+
+          if (res.data.children1.length > 0) {
+            res.data.children1.forEach(item => {
+              this.danhSachFileDinhKem.push(item)
+            })
+          }
+
           this.bindingDataDdNhap(dataDdNhap);
         }
       }
@@ -742,6 +752,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
         let body = this.formData.value;
         body.detail = this.listDviChuDongTh;
         // body.detailDm = this.detail;
+        if (this.danhSachFileDinhKem.length > 0) {
+          this.danhSachFileDinhKem.forEach(item => {
+            this.listFile.push(item)
+          })
+        }
+        body.fileDinhKems = this.listFile;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyNghiemThuKeLotService.update(body);
@@ -822,5 +838,17 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   convertMaCcdc(maCcdc: string) {
     return convertMaCcdc(maCcdc);
+  }
+
+  async getNganKho(maDvi: any) {
+    if (maDvi) {
+      let res = await this.quanLyNghiemThuKeLotService.getDataKho(maDvi);
+
+      this.formData.patchValue({
+        tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
+        loaiHinhKho: res.data.lhKho
+      });
+      console.log(this.formData.get('tichLuong').value)
+    }
   }
 }

@@ -89,6 +89,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
   openQdKqKhlcnt = false;
   tuNgayQd: Date | null = null;
   denNgayQd: Date | null = null;
+  dsLoaiVthh: any[] = [];
 
   STATUS = STATUS
 
@@ -107,7 +108,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       };
-      this.getListVthh();
+      await this.loadDsVthh();
       await this.search();
       this.spinner.hide();
     }
@@ -148,7 +149,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQd: this.searchFilter.soQdPdKqlcnt,
-      loaiVthh: this.loaiVthh,
+      loaiVthh: this.searchFilter.loaiVthh ? this.searchFilter.loaiVthh : this.loaiVthh,
       cloaiVthh: this.searchFilter.cloaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
@@ -266,6 +267,13 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
     return convertTrangThaiGt(status);
   }
 
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiVthh = res.data;
+      this.dsLoaiVthh = res.data?.filter((x) => x.ma.length == 4 && x.loaiHang == "VT");
+    }
+  }
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();

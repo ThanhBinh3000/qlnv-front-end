@@ -143,7 +143,7 @@
         </div>
         <nz-table nzBordered class="pd-10"
                   [nzFrontPagination]="false" [nzShowPagination]="false"
-                  [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+                  [nzScroll]="tableDuoi && tableDuoi.length > 0 ? { x: '2500px' } : null">
           <thead>
           <tr>
             <th class="text-center">STT</th>
@@ -161,12 +161,12 @@
             <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>
             <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
             <th class="text-center">Ghi chú</th>
-            <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
+            <th class="text-center" *ngIf="!isViewDetail" nzRight>Hành động</th>
           </tr>
           <tr>
             <th></th>
             <th>
-              <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemCha.khoi">
+              <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemChaDuoi.khoi">
                 <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -181,9 +181,11 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
+            <th></th>
             <th nzRight></th>
             <th class="text-center" *ngIf="!isViewDetail" nzRight>
-              <a (click)="themItemcha()">
+              <a (click)="themItemcha('duoi')">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
 
@@ -191,10 +193,12 @@
           </tr>
           </thead>
           <tbody>
-          <ng-container *ngFor="let data of dataTable , let idx = index">
+          <ng-container *ngFor="let data of tableDuoi , let idx = index">
             <tr>
               <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
               <td class="font-weight-bold">{{data.khoi}}</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -208,7 +212,7 @@
               <td nzRight
                   class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
-                <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
+                <a (click)="themMoiItem(data, 'them', idx, tableDuoi[idx])">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
                 <a (click)="deleteItemCha(idx)">
@@ -225,6 +229,8 @@
                 <td>{{item.loaiDuAn}}</td>
                 <td>{{item.tgKcHt}}</td>
                 <td>{{item.khoi}}</td>
+                <td>{{ item.soQdPd }}</td>
+                <td>{{ item.soQdPd }}</td>
                 <td>{{ item.soQdPd }}</td>
                 <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                 <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
@@ -248,6 +254,8 @@
             <td></td>
             <td></td>
             <td class="font-weight-bold" style="color: blue">Tổng</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -279,32 +287,30 @@
           </div>
           <nz-table nzBordered class="pd-10"
                     [nzFrontPagination]="false" [nzShowPagination]="false"
-                    [nzScroll]="dataTable &&dataTable.length > 0 ? { x: '2500px' } : null">
+                    [nzScroll]="tableTren &&tableTren.length > 0 ? { x: '2500px' } : null">
             <thead>
             <tr>
-              <th class="text-center" width="2%" rowSpan="2">STT</th>
-              <th class="text-center" width="8%" rowSpan="2">Danh mục khối</th>
-              <th class="text-center" width="8%" rowSpan="2">Danh mục dự án</th>
-              <th class="text-center" width="8%" rowSpan="2">Địa điểm xây dựng</th>
-              <th class="text-center" width="7%" rowSpan="2">Loại dự án</th>
-              <th class="text-center" width="5%" rowSpan="2">Thời gian KC-HT</th>
-              <th class="text-center" width="5%" rowSpan="2">Khối</th>
-              <th class="text-center" width="5%" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-              <th class="text-center" width="13%" colSpan="2">Tổng mức đầu tư (TMĐT)</th>
-              <th class="text-center" width="13%" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 5 năm</th>
-              <th class="text-center" width="7%" rowSpan="2" nzRight>KH vốn đầu tư <br> nguồn NSNN năm hiện tại</th>
-              <th class="text-center" *ngIf="!isViewDetail" width="5%" rowSpan="2" nzRight>Hành động</th>
-            </tr>
-            <tr>
-              <th class="text-center">Tổng số</th>
-              <th class="text-center">Trong đó vốn NSTW</th>
-              <th class="text-center">Tổng số</th>
-              <th class="text-center">Trong đó vốn NSTW</th>
+              <th class="text-center">STT</th>
+              <th class="text-center">Khối dự án/công trình</th>
+              <th class="text-center">Tên công trình</th>
+              <th class="text-center">Địa điểm</th>
+              <th class="text-center">Loại công trình</th>
+              <th class="text-center">Chi cục</th>
+              <th class="text-center">Điểm kho</th>
+              <th class="text-center">Thời gian thực hiện</th>
+              <th class="text-center">Nguồn vốn</th>
+              <th class="text-center">Thời gian sửa chữa <br> gần đây nhất</th>
+              <th class="text-center">Tổng mức đầu tư (khái <br> toán/dự toán) (đ)</th>
+              <th class="text-center">Giá trị quyết <br> toán được <br> duyệt (đ)</th>
+              <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>
+              <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
+              <th class="text-center">Ghi chú</th>
+              <th class="text-center" *ngIf="!isViewDetail" nzRight>Hành động</th>
             </tr>
             <tr>
               <th></th>
               <th>
-                <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemCha.khoi">
+                <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemChaTren.khoi">
                   <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -319,9 +325,11 @@
               <th></th>
               <th></th>
               <th></th>
+              <th></th>
+              <th></th>
               <th nzRight></th>
               <th class="text-center" *ngIf="!isViewDetail" nzRight>
-                <a (click)="themItemcha()">
+                <a (click)="themItemcha('tren')">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
 
@@ -329,10 +337,12 @@
             </tr>
             </thead>
             <tbody>
-            <ng-container *ngFor="let data of dataTable , let idx = index">
+            <ng-container *ngFor="let data of tableTren , let idx = index">
               <tr>
                 <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                 <td class="font-weight-bold">{{data.khoi}}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -364,13 +374,15 @@
                   <td>{{item.tgKcHt}}</td>
                   <td>{{item.khoi}}</td>
                   <td>{{ item.soQdPd }}</td>
+                  <td>{{ item.soQdPd }}</td>
+                  <td>{{ item.soQdPd }}</td>
                   <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
                   <td nzRight class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-center" nzRight *ngIf="!isViewDetail">
-                    <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
+                    <a (click)="themMoiItem(item, 'sua', y, tableTren[idx])">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="deleteItem(idx, y)">
@@ -386,6 +398,8 @@
               <td></td>
               <td></td>
               <td class="font-weight-bold" style="color: blue">Tổng</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

@@ -17,6 +17,10 @@ import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.servi
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../services/donvi.service";
 import {MESSAGE} from "../../../../constants/message";
+import {
+  QuyetdinhpheduyetTktcTdtService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -32,6 +36,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   danhSachChiCuc: any[] = [];
   dataTable: any[] = [];
   dataTableRaw: any[] = [];
+  itemSelected: any;
+  tabSelected: string = "01";
+  itemQdPdDaDtxd: any;
+  itemQdPdTktcTdt: any;
 
   constructor(
     httpClient: HttpClient,
@@ -40,7 +48,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private ktQdXdHangNamService: KtQdXdHangNamService
+    private ktQdXdHangNamService: KtQdXdHangNamService,
+    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
+    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -85,6 +95,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     } finally {
       await this.spinner.hide();
     }
+    this.itemSelected = null;
   }
 
   clearForm() {
@@ -101,6 +112,50 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+  }
+
+
+  async loadQdPdDaDtxdByDuAn(item) {
+    this.spinner.show();
+    try {
+      let body = {
+        "idDuAn": item.id,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetduandtxdService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        console.log(this.itemQdPdDaDtxd, '88888');
+        //Check tiếp quyết định phê duyệt bản vẽ
+        if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+          let body = {
+            "idQdPdDtxd": this.itemQdPdDaDtxd.id,
+            "paggingReq": {
+              "limit": 10,
+              "page": 0
+            }
+          }
+          let res1 = await this.quyetdinhpheduyetTktcTdtService.search(body);
+          if (res1.msg == MESSAGE.SUCCESS) {
+            this.itemQdPdTktcTdt = res1.data.content && res1.data.content.length > 0 ? res1.data.content[0] : null;
+            console.log(this.itemQdPdTktcTdt, 'this.itemQdPdTktcTdtthis.itemQdPdTktcTdt')
+          } else {
+            this.notification.error(MESSAGE.ERROR, res1.msg);
+          }
+        } else {
+          this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   convertListData(dataTable: any[]) {
@@ -156,27 +211,38 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     }
   }
 
-  selectRow(data) {
-    this.dataTable.forEach(itemKhoi => {
-      if (itemKhoi.dataChild && itemKhoi.dataChild.length > 0) {
-        itemKhoi.dataChild.forEach(itemNam => {
-          if (itemNam.dataChild && itemNam.dataChild.length > 0) {
-            itemNam.dataChild.forEach(itemChiCuc => {
-              if (itemChiCuc.dataChild && itemChiCuc.dataChild.length > 0) {
-                itemChiCuc.dataChild.forEach(itemDetail => {
-                  itemDetail.selected = false;
-                });
-              }
-            });
-          }
-        });
-      }
-    });
+  async selectRow(data) {
+    if (this.itemSelected) {
+      this.tabSelected = null;
+      this.itemSelected = null;
+      this.dataTable.forEach(itemKhoi => {
+        if (itemKhoi.dataChild && itemKhoi.dataChild.length > 0) {
+          itemKhoi.dataChild.forEach(itemNam => {
+            if (itemNam.dataChild && itemNam.dataChild.length > 0) {
+              itemNam.dataChild.forEach(itemChiCuc => {
+                if (itemChiCuc.dataChild && itemChiCuc.dataChild.length > 0) {
+                  itemChiCuc.dataChild.forEach(itemDetail => {
+                    itemDetail.selected = false;
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+    await this.loadQdPdDaDtxdByDuAn(data);
     data.selected = true;
+    this.itemSelected = data;
+    this.selectTab("01");
   }
 
-  // selectTab(tab) {
-  //   this.tabSelected = tab;
-  // }
+  async selectTab(tab) {
+    if (tab != '01' && (!this.itemQdPdDaDtxd || this.itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH)) {
+      this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
+      return;
+    }
+    this.tabSelected = tab;
+  }
 
 }

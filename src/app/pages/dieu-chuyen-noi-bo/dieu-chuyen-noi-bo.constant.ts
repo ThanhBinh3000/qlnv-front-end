@@ -8,7 +8,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'ke-hoach-dieu-chuyen',
     idHover: 'ke-hoach-dieu-chuyen',
     hasTab: false,
-    caps: [1,2,3],
+    caps: [1, 2, 3],
     accessPermisson: 'DCNB_KHDC'
   },
   {
@@ -18,6 +18,8 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'tong-hop-dieu-chuyen-tai-cuc',
     idHover: 'tong-hop-dieu-chuyen-tai-cuc',
     hasTab: false,
+    caps: [2],
+    accessPermisson: 'DCNB_TONGHOPDC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -26,6 +28,8 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'tong-hop-dieu-chuyen-tai-tong-cuc',
     idHover: 'tong-hop-dieu-chuyen-tai-tong-cuc',
     hasTab: false,
+    caps: [1],
+    accessPermisson: 'DCNB_TONGHOPDC'
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',

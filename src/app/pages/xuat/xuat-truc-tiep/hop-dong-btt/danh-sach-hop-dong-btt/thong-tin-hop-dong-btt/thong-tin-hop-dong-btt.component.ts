@@ -1,21 +1,25 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import dayjs from 'dayjs';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
-import { STATUS } from 'src/app/constants/status';
-import { chain, cloneDeep } from 'lodash';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {HopDongBttService} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
+import {
+  QdPdKetQuaBttService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import {STATUS} from 'src/app/constants/status';
+import {chain, cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -44,8 +48,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
   listTccnChaoGia: any[] = [];
-  listDviTsan: any[] = [];
   listHdDaKy: any[] = [];
+  listDviTsanFilter: any[] = [];
+  listDviTsan: any[] = [];
+  currentListMaDviTsan: any[];
+
 
   constructor(
     httpClient: HttpClient,
@@ -259,7 +266,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       await this.qdPdKetQuaBttService.getDetail(id)
         .then(async (resKq) => {
           const dataKq = resKq.data;
-          this.listDviTsan = dataKq.children
+          await this.setListDviTsan(dataKq.children);
           await this.loadDsHd(dataKq.soQdKq)
           if (resKq.data) {
             this.formData.patchValue({
@@ -275,36 +282,36 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               cloaiVthh: dataKq.cloaiVthh,
               tenCloaiVthh: dataKq.tenCloaiVthh,
               moTaHangHoa: dataKq.moTaHangHoa,
-              trichYeu: dataKq.trichYeu,
             });
+            dataKq.children.forEach((item) => {
+              item.children.flatMap((child) =>
+                child.children.map((grandchild) =>
+                  this.listTccnChaoGia = [...this.listTccnChaoGia, grandchild]))
+            })
             this.formData.patchValue({
               donViTinh: this.listHangHoaAll.find(s => s.ma == dataKq.loaiVthh,)?.maDviTinh
-            })
-            dataKq.children.forEach((item) => {
-              item.children.forEach((child) => as = [...as, child])
-            })
-            as.forEach(s => {
-              s.children.forEach(s1 => {
-                if (s1.luaChon == true) {
-                  this.listTccnChaoGia.push(s1)
-                }
-              })
             })
           }
         })
     }
   }
 
+
   setListTccnChaoGia() {
     this.spinner.hide();
-    let letDataTocChuc = []
-    if (this.listHdDaKy && this.listHdDaKy.length > 0) {
-      this.listHdDaKy.forEach(s => {
-        letDataTocChuc = this.listTccnChaoGia.filter(s1 => s1.id != s.idDviMua)
-      })
-    } else {
-      letDataTocChuc = this.listTccnChaoGia
+    let map = new Map();
+    for (let obj of this.listTccnChaoGia) {
+      let key = obj.tochucCanhan + obj.mst + obj.sdt + obj.luaChon;
+      if (map.has(key)) {
+        // Gộp đối tượng mới với đối tượng đã tồn tại trong Map
+        let existingObj = map.get(key);
+        existingObj.someProperty += obj.someProperty;
+      } else {
+        // Thêm đối tượng mới vào Map
+        map.set(key, obj);
+      }
     }
+    let result = Array.from(map.values());
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN TÊN TỔ CHỨC CÁ NHÂN CHÀO GIÁ',
       nzContent: DialogTableSelectionComponent,
@@ -313,9 +320,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataHeader: ['Tên tổ chức cá nhân', ' Địa điểm chào giá', 'Số lượng'],
-        dataColumn: ['tochucCanhan', 'diaDiemChaoGia', 'soLuong'],
-        dataTable: letDataTocChuc
+        dataHeader: ['Tên tổ chức cá nhân', 'Số điện thoại', 'Mã số thuế'],
+        dataColumn: ['tochucCanhan', 'sdt', 'mst'],
+        dataTable: result.filter(s => s.luaChon == true)
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -324,57 +331,71 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
           .then(async (resKq) => {
             const dataToChuc = resKq.data;
             if (resKq.data) {
+              this.maDviTsan(dataToChuc.tochucCanhan)
               this.formData.patchValue({
-                maDviTsan: dataToChuc.xhKqBttDdiem.maDviTsan,
                 idDviMua: dataToChuc.id,
                 tenDviMua: dataToChuc.tochucCanhan,
                 diaChiDviMua: dataToChuc.diaDiemChaoGia,
                 mstDviMua: dataToChuc.mst,
                 sdtDviMua: dataToChuc.sdt,
-                soLuongBanTrucTiep: dataToChuc.soLuong,
-                donGiaBanTrucTiep: dataToChuc.donGia,
-                thanhTien: dataToChuc.soLuong * dataToChuc.donGia,
-                tongSlXuatBanQdKh: dataToChuc.xhKqBttDdiem.soLuong,
-                tongSlBanttQdkhDakyHd: 0,
-                tongSlBanttQdkhChuakyHd: dataToChuc.xhKqBttDdiem.soLuong - 0
               });
-              if (this.listHdDaKy && this.listHdDaKy.length > 0) {
-                let tongSlKyHd: number = 0
-                this.listHdDaKy.forEach(s => {
-                  if (s.maDviTsan == this.formData.value.maDviTsan) {
-                    tongSlKyHd += s.soLuongBanTrucTiep
-                    this.formData.patchValue({
-                      tongSlBanttQdkhDakyHd: tongSlKyHd,
-                      tongSlBanttQdkhChuakyHd: this.formData.value.tongSlXuatBanQdKh - tongSlKyHd
-                    });
-                  }
-                })
-              }
-              if (this.formData.value.maDviTsan) {
-                this.listDviTsan.forEach((item) => {
-                  let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => ({ maDviTsan: key, children: value })).value();
-                  item.dataDviTsan = dataGroup;
-                  item.dataDviTsan.forEach(x => {
-                    if (x.maDviTsan) {
-                      x.tenDvi = item.tenDvi
-                      x.maDvi = item.maDvi
-                      x.diaChi = item.diaChi
-                      this.listDviTsan = [...this.listDviTsan, x];
-                    }
-                  })
-                })
-                let listAll = this.listDviTsan.filter(s => this.formData.value.maDviTsan.includes(s.maDviTsan));
-                listAll.forEach((child) => {
-                  this.dataTable = [... this.dataTable, child]
-                })
-              } else {
-                this.dataTable = [];
-              }
             }
           })
       }
     });
   }
+
+  setListDviTsan(inputTable) {
+    this.listDviTsan = [];
+    inputTable.forEach((item) => {
+      item.children.forEach(element => {
+        let dataGroup = chain(element.children).groupBy('tochucCanhan').map((value, key) => ({
+          tochucCanhan: key,
+          // toChuc: value
+        })).value();
+        item.dataDviTsan = dataGroup;
+        item.dataDviTsan.forEach(x => {
+          x.tenDvi = item.tenDvi
+          x.maDvi = item.maDvi
+          x.maDviTsan = element.maDviTsan
+          x.children = item.children.filter(s => s.maDviTsan == element.maDviTsan)
+          if (x.maDviTsan) {
+            this.listDviTsan = [...this.listDviTsan, x];
+          }
+        })
+      });
+    })
+  }
+
+  maDviTsan(event) {
+    this.listDviTsanFilter = this.listDviTsan.filter(s => s.tochucCanhan == event)
+  }
+
+
+  selectMaDviTsan() {
+    this.dataTable = [];
+    let currentSelectList = cloneDeep(this.listDviTsanFilter);
+    if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
+      let listAll = currentSelectList.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+      console.log(listAll, 'listAll')
+      listAll.forEach(item => {
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((child) => {
+            if (child.maDvi == item.maDvi) {
+              child.children = [...child.children, ...item.children]
+            } else {
+              this.dataTable = [...this.dataTable, item]
+            }
+          })
+        } else {
+          this.dataTable = [...this.dataTable, item]
+        }
+      });
+    } else {
+      this.dataTable = []
+    }
+  }
+
 
   async loadDsHd(event) {
     let body = {
@@ -419,6 +440,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       },
     });
   }
+
 
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
@@ -484,6 +506,16 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+  calcTong(column) {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur[column];
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
 }

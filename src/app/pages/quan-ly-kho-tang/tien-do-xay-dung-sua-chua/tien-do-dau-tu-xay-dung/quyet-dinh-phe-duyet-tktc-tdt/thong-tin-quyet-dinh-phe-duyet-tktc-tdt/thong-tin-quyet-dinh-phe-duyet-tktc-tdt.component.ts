@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+import {FILETYPE} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-tktc-tdt',
@@ -33,6 +34,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
+  @Input('itemDuAn') itemDuAn: any;
   isVisiblePopDuToanXayDung = false;
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
@@ -42,6 +45,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   rowItemParent: DuToanXayDung = new DuToanXayDung();
   dataEdit: { [key: string]: { edit: boolean; data: DuToanXayDung } } = {};
   mapOfExpandedData: { [key: string]: DuToanXayDung[] } = {};
+  listCcPhapLy: any[] = [];
+  listFileDinhKem: any[] = [];
+  listFile: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -56,10 +62,13 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKh: [null],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayHieuLuc: [null, Validators.required],
       soQdPdDtxd: [null, Validators.required],
+      soQdPdDtxdNam: [null, Validators.required],
       idQdPdDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
@@ -90,6 +99,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       ]);
       if (this.idInput) {
         this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.convertListData();
       this.spinner.hide();
@@ -97,6 +108,23 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  bindingData() {
+    if (this.itemDuAn && this.itemQdPdDaDtxd) {
+      this.formData.patchValue({
+        namKh: this.itemDuAn.namKeHoach,
+        tenDuAn: this.itemDuAn.tenDuAn,
+        idDuAn: this.itemDuAn.id,
+        soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
+        loaiDuAn: this.itemDuAn.loaiDuAn,
+        khoi: this.itemDuAn.khoi,
+        diaDiem: this.itemDuAn.diaDiem,
+        tgKhoiCong: this.itemDuAn.tgKhoiCong,
+        tgHoanThanh: this.itemDuAn.tgHoanThanh,
+        vonNsTw: this.itemDuAn.ncKhNstw
+      })
     }
   }
 
@@ -139,7 +167,14 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null
           })
-          this.fileDinhKem = data.fileDinhKems;
+          data.fileDinhKems.forEach(item => {
+            if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+              this.listFileDinhKem.push(item)
+            } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+              this.listCcPhapLy.push(item)
+            }
+          })
+          this.listFile = data.fileDinhKems;
           this.dataTable = data.listKtXdscQuyetDinhPdTktcTdtDtl;
           this.updateIdVirtual();
         }
@@ -174,19 +209,73 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     this.convertListData();
   }
 
-  async save() {
+
+  async save(isBanHanh?) {
+    return;
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
     }
-    if (this.fileDinhKem && this.fileDinhKem.length > 0) {
-      this.formData.value.fileDinhKems = this.fileDinhKem;
+    this.listFile = [];
+    if (this.listFileDinhKem.length > 0) {
+      this.listFileDinhKem.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     this.formData.value.listKtXdscQuyetDinhPdTktcTdtDtl = this.dataTable;
-    let res = await this.createUpdate(this.formData.value)
-    if (res) {
-      this.goBack()
+    if (isBanHanh) {
+      let res = await this.createUpdate(this.formData.value);
+      if (res) {
+        this.modal.confirm({
+          nzClosable: false,
+          nzTitle: 'Xác nhận',
+          nzContent: "Ban hành quyết định",
+          nzOkText: 'Đồng ý',
+          nzCancelText: 'Không',
+          nzOkDanger: true,
+          nzWidth: 350,
+          nzOnOk: async () => {
+            this.spinner.show();
+            try {
+              let body = {
+                id: res.id,
+                trangThai: STATUS.BAN_HANH,
+              }
+              let res1 = await this.quyetdinhpheduyetduandtxdService.approve(body);
+              if (res1.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
+                this.formData.patchValue({
+                  trangThai: STATUS.BAN_HANH,
+                })
+                this.isViewDetail = true;
+                this.spinner.hide();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res1.msg);
+                this.spinner.hide();
+              }
+            } catch (e) {
+              console.log('error: ', e);
+              this.spinner.hide();
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            } finally {
+              this.spinner.hide();
+            }
+          },
+        });
+      }
+    } else {
+      await this.createUpdate(this.formData.value)
     }
   }
 

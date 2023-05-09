@@ -11,58 +11,61 @@
                     <span>Tổng hợp kế hoạch điều chuyển nội bộ hàng DTQG</span>
                 </div>
             </div>
-            <div class="btn-group tong-hop-dc">
-                <button type="button" class="btn btn-sub" (click)="quayLai()">
-                    <i class="fa fa-arrow-left"></i>
-                    <span>Quay lại</span>
-                </button>
-                <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
-                    *ngIf="!isViewDetail && !daXdinhDiemNhap && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC)">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    <span>Y/c Chi cục xác định điểm nhập ĐC</span>
-                </button>
-                <button
-                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && checkPermission(null)"
-                    type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
-                    <i class="icon htvbdh_tcdt_tuchoi do"></i>
-                    <span>Từ chối</span>
-                </button>
-                <button
-                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && checkPermission(null)"
-                    type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
-                    <i class="icon htvbdh_tcdt_tuchoi do"></i>
-                    <span>Từ chối</span>
-                </button>
-                <button
-                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && checkPermission(null)"
-                    type="button" class="btn btn-sub"
-                    (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
-                    <i class="icon htvbdh_tcdt_pheduyet"></i>
-                    <span>Duyệt</span>
-                </button>
-                <button
-                    *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && checkPermission(null)"
-                    type="button" class="btn btn-sub"
-                    (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
-                    <i class="icon htvbdh_tcdt_pheduyet"></i>
-                    <span>Duyệt</span>
-                </button>
-                <button *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai == STATUS.DU_THAO ||
-                 formData.value.trangThai == STATUS.TU_CHOI_LDV ||
-                  formData.value.trangThai == STATUS.TU_CHOI_LDC ||
-                   formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && checkPermission(null)"
-                    type="button" class="btn btn-sub" (click)="save(true)" [disabled]="!daXdinhDiemNhap">
-                    <i class="icon htvbdh_tcdt_guiduyet"></i>
-                    <span>Lưu và gửi duyệt</span>
-                </button>
-                <button
-                    *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || 
-                    formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && checkPermission(null)"
-                    nz-button type="button" class="modal__button--save" (click)="save(false)">
-                    <i class="icon htvbdh_tcdt_save"></i>
-                    <span>Lưu</span>
-                </button>
-            </div>
+            <nz-affix [nzOffsetTop]="46" class="thdc-btn-affix" *ngIf="!isViewOnModal">
+                <div class="btn-group tong-hop-dc">
+                    <button type="button" class="btn btn-sub" (click)="quayLai()">
+                        <i class="fa fa-arrow-left"></i>
+                        <span>Quay lại</span>
+                    </button>
+                    <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
+                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
+                        formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Y/c Chi cục xác định điểm nhập ĐC</span>
+                    </button>
+                    <button
+                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
+                        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+                        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                        <span>Từ chối</span>
+                    </button>
+                    <button
+                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
+                        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+                        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                        <span>Từ chối</span>
+                    </button>
+                    <button
+                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
+                        type="button" class="btn btn-sub"
+                        (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                        <i class="icon htvbdh_tcdt_pheduyet"></i>
+                        <span>Duyệt</span>
+                    </button>
+                    <button
+                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
+                        type="button" class="btn btn-sub"
+                        (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                        <i class="icon htvbdh_tcdt_pheduyet"></i>
+                        <span>Duyệt</span>
+                    </button>
+                    <button *ngIf="(isTongHop && !isViewDetail)  && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC || formData.value.trangThai==STATUS.TU_CHOI_LDV ||
+                        formData.value.trangThai==STATUS.TU_CHOI_LDC || formData.value.trangThai==STATUS.TU_CHOI_TP) &&
+                        userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')" type="button"
+                        class="btn btn-sub" (click)="saveAndSend()"
+                        [disabled]="formData.value.loaiDieuChuyen=='CHI_CUC' && !daXdinhDiemNhap">
+                        <i class="icon htvbdh_tcdt_guiduyet"></i>
+                        <span>Lưu và gửi duyệt</span>
+                    </button>
+                    <button
+                        *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || 
+                        formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
+                        nz-button type="button" class="modal__button--save" (click)="save()">
+                        <i class="icon htvbdh_tcdt_save"></i>
+                        <span>Lưu</span>
+                    </button>
+                </div>
+            </nz-affix>
         </div>
     </div>
     <nz-alert class="mb-2"
@@ -81,7 +84,7 @@
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn năm kế hoạch">
                                 <nz-select formControlName="namKeHoach" [nzDisabled]="isViewDetail"
-                                    (change)="handleChangeLoaiDC($event)">
+                                    (ngModelChange)="handleChangeLoaiDC()">
                                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
                                         [nzLabel]="p.text"></nz-option>
                                 </nz-select>
@@ -94,7 +97,7 @@
                             </nz-form-label>
                             <nz-form-control nzErrorTip="Vui lòng chọn loại điều chuyển">
                                 <nz-radio-group formControlName="loaiDieuChuyen" nzName="radiogroup" nzRequired
-                                    (change)="handleChangeLoaiDC($event)" [nzDisabled]="isViewDetail">
+                                    (ngModelChange)="handleChangeLoaiDC()" [nzDisabled]="isViewDetail">
                                     <!-- <label nz-radio nzValue="ALL">Tất cả</label> -->
                                     <label nz-radio nzValue="CHI_CUC"> Giữa 2 chi cục trong cùng 1 cục </label>
                                     <label nz-radio nzValue="CUC"> Giữa 2 cục DTNN KV </label>
@@ -335,7 +338,7 @@
                                     <th class="text-center">ĐVT</th>
                                     <th class="text-center">Tồn kho</th>
                                     <th class="text-center">Sl điều chuyển</th>
-                                    <th class="text-center">Dự toán kinh phí (triệu đồng)</th>
+                                    <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                                     <th>Chi cục</th>
                                     <th class="text-center">Điểm kho</th>
                                     <th class="text-center">Lô kho</th>
@@ -542,17 +545,17 @@
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'KẾ HOẠCH ĐIỀU CHUYỂN GIỮA 2 CỤC DỰ TRỮ NHÀ NƯỚC KHU VỰC'"
                     [nzActive]="true">
-                    <div class="pd-10">
+                    <div class="bg-trang">
                         <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="groupData2Cuc"
                             [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                             <thead>
                                 <tr>
-                                    <th width="60px" class="text-center">STT</th>
+                                    <th style="width: 60px" class="text-center">STT</th>
                                     <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
-                                    <th style="width: 10%">Số đề xuất/công văn</th>
-                                    <th style="width: 15%">Ngày trình duyệt tổng cục</th>
-                                    <th style="width: 17%">Tổng dự toán kinh phí(triệu đồng)</th>
-                                    <th>Trích yếu</th>
+                                    <!-- <th style="width: 10%">Số đề xuất/công văn</th> -->
+                                    <!-- <th style="width: 15%">Ngày trình duyệt tổng cục</th> -->
+                                    <th>Tổng dự toán kinh phí(triệu đồng)</th>
+                                    <!-- <th>Trích yếu</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -561,39 +564,38 @@
                                         (click)="selectRow(item, isAddNew)">
                                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                                         <td>{{ item.tenCucNhan }}</td>
-                                        <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
-                                                item.soDxuat }}</a></td>
-                                        <td>{{ item.ngayGduyetTc|date:"dd/MM/yyyy" }}</td>
-                                        <td>{{ item.tongDuToanKp }}</td>
-                                        <td>{{item.trichYeu}}</td>
+                                        <!-- <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
+                                                item.soDxuat }}</a></td> -->
+                                        <!-- <td>{{ item.ngayGduyetTc|date:"dd/MM/yyyy" }}</td> -->
+                                        <td>{{ item.tongDuToanKinhPhi }}</td>
+                                        <!-- <td>{{item.trichYeu}}</td> -->
                                     </tr>
                                 </ng-container>
                             </tbody>
                         </nz-table>
-                    </div>
-                    <div class="pd-10">
-                        <nz-table #basicTable class="nowrap table-chi-tiet" [nzData]="dataTable2Cuc"
+                        <nz-table #basicTable class="nowrap table-chi-tiet mt-8-im" [nzData]="dataTable2Cuc"
                             [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
                             <thead>
                                 <tr>
-                                    <th rowspan="2" width="60px" class="text-center">STT</th>
-                                    <th rowspan="2"></th>
-                                    <th colspan="8">Chi cục đề xuất điều chuyển</th>
-                                    <th rowspan="2" class="text-center"
-                                        style="max-width: 90px; min-width: 90px;  white-space: break-spaces;">Thời
+                                    <th class="text-center" rowspan="2" width="60px" class="text-center">STT</th>
+                                    <th class="text-center" rowspan="2"></th>
+                                    <th class="text-center" colspan="10">Chi cục đề xuất điều chuyển</th>
+                                    <th class="text-center max-w-90 min-w-90 break" rowspan="2">Thời
                                         gian dự kiến điều chuyển</th>
-                                    <th>Chi cục nhận điều chuyển đến</th>
+                                    <th class="text-center">Chi cục nhận điều chuyển đến</th>
                                 </tr>
                                 <tr>
-                                    <th>Chi cục/điểm kho</th>
-                                    <th>Lô kho</th>
-                                    <th>Loại HH</th>
-                                    <th>Chủng loại hàng hóa</th>
-                                    <th>ĐVT</th>
-                                    <th>Tồn kho</th>
-                                    <th>Sl điều chuyển</th>
-                                    <th>Dự toán kinh phí (triệu đồng)</th>
-                                    <th>Chi cục</th>
+                                    <th class="text-center">Chi cục/điểm kho</th>
+                                    <th class="text-center">Số đề xuất/công văn</th>
+                                    <th class="text-center max-w-90 min-w-90 break">Ngày trình duyệt cục</th>
+                                    <th class="text-center">Lô kho</th>
+                                    <th class="text-center">Loại HH</th>
+                                    <th class="text-center">Chủng loại hàng hóa</th>
+                                    <th class="text-center">ĐVT</th>
+                                    <th class="text-center">Tồn kho</th>
+                                    <th class="text-center">Sl điều chuyển</th>
+                                    <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
+                                    <th class="text-center">Chi cục</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -603,6 +605,9 @@
                                         <td *ngIf="item.danhSachHangHoa?.length>0; else tdNormal"
                                             [nzExpand]="item.expand" (nzExpandChange)="item.expand=!item.expand"></td>
                                         <td class="bold">{{ item.tenDvi }}</td>
+                                        <td><a nz-button nzType="link" (click)="openModalKeHoachDC(item.id)">{{
+                                                item.soDxuat }}</a></td>
+                                        <td>{{ item.ngayDuyetLdcc|date:"dd/MM/yyyy" }}</td>
                                         <td colspan="6"></td>
                                         <td class="text-right bold">{{item.duToanKphi}}</td>
                                         <td colspan="3"></td>
@@ -616,6 +621,8 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>{{bb.tenDiemKho}}</td>
+                                                <td></td>
+                                                <td></td>
                                                 <td>{{bb.tenLoKho}}</td>
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
@@ -638,7 +645,7 @@
     </div>
 </ng-container>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewKeHoachDC"
-    (nzOnCancel)="closeModalKeHoachDC()">
+    [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalKeHoachDC()">
     <ng-container *nzModalContent class="modal__content custom-scroll-modal">
         <app-chi-tiet-ke-hoach-dcnb [id]="idKeHoachDC" [isViewOnModal]="true"></app-chi-tiet-ke-hoach-dcnb>
     </ng-container>

@@ -1,16 +1,16 @@
-<ng-container *ngIf="!isViewPhuLuc">
+<ng-container *ngIf="!isViewPhuLuc;else tempPhuLuc">
     <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isQuanLy">
         <div class="btn-group">
             <button type="button" class="btn btn-sub" (click)="back()">
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.trangThai != STATUS.DA_KY" type="button" class="btn btn-sub xanh-nhat"
+            <button *ngIf="formData.value.trangThai != STATUS.DA_KY && !isView" type="button" class="btn btn-sub xanh-nhat"
                 (click)="save(true)">
                 <i class="icon htvbdh_trinh"></i>
                 <span>Ký</span>
             </button>
-            <button *ngIf="formData.value.trangThai != STATUS.DA_KY"
+            <button *ngIf="formData.value.trangThai != STATUS.DA_KY && !isView"
                 class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)">
                 <i class="icon  htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -59,7 +59,7 @@
                                 <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ QĐ phê duyệt kết quả
                                     LCNT</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKQLCNT()">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogKQLCNT()">
                                         <input nz-input [readonly]="true" formControlName="soQdKqLcnt" />
                                     </nz-input-group>
                                 </nz-form-control>
@@ -215,20 +215,12 @@
                         </div>
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> File đính kèm HĐ đã ký</nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <div class="list-file">
-                                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                            <input type="text" nz-input />
-                                        </nz-input-group>
-                                        <ng-template #suffixTemplateInfo>
-                                            <div class="icon-file-dinh-kem">
-                                                <i class="icon htvbdh_tcdt_tep"></i>
-                                                <input class="input-file" (change)="getNameFile($event)" type="file" />
-                                            </div>
-                                        </ng-template>
-                                    </div>
-                                </nz-form-control>
+                                <nz-form-label [nzNoColon]="true">
+                                    File đính kèm HĐ đã ký
+                                </nz-form-label>
+                                <div class="list-file">
+                                    <file-list [isViewDetail]="isDisableForm()" [data]="listFileDinhKem"></file-list>
+                                </div>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="24">
@@ -237,7 +229,7 @@
                                     Căn cứ pháp lý
                                 </nz-form-label>
                                 <div class="list-file">
-                                    <file-list [disabled]="isDisableForm()"></file-list>
+                                    <file-list [isViewDetail]="isDisableForm()" [data]="listCcPhapLy"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -400,8 +392,34 @@
                     </div>
                     <div nz-col [nzSpan]="6">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true"> Số tài khoản</nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Fax</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Fax" formControlName="faxNhaThau" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
                             <input [readonly]="isDisableForm()" nz-input formControlName="stkNhaThau" />
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="6">
+                        <nz-form-item>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Mở tại</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Mở tại"
+                                       formControlName="moTaiNhaThau" />
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền</nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <input [readonly]="isDisableForm()" nz-input placeholder="Thông tin giấy ủy quyền"
+                                       formControlName="giayUyQuyenNhaThau" />
+                            </nz-form-control>
                         </nz-form-item>
                     </div>
                 </div>
@@ -451,7 +469,7 @@
                     </div>
                     <div nz-col [nzSpan]="6">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế</nz-form-label>
+                            <nz-form-label [nzNoColon]="true"> Đơn giá gồm thuế (đ)</nz-form-label>
                             <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" nz-input formControlName="donGia" nzDisabled>
                             </nz-input-number>
@@ -617,10 +635,19 @@
                         <span><i class="icon htvbdh_Untitled-1_line-up" *ngIf="isArrowUp[5]"></i></span>
                         <span>Phụ lục hợp đồng</span>
                     </div>
+                    <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT
+                        && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') :
+                        userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))
+                        && !isQuanLy">
+                        <button type="button" class="btn btn-main" (click)="redirectPhuLuc(false)">
+                            <i class="icon htvbdh_dau-cong"></i>
+                            <span>Thêm PL hợp đồng</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <nz-card class="flex-card p-lr16 card-table" *ngIf="isContentVisible[5]">
-                <nz-table class="nowrap pd-10" #editRowTable nzBordered [nzData]="detail?.hhPhuLucHdongList"
+                <nz-table class="nowrap pd-10" nzBordered [nzData]="dataPl"
                     [nzFrontPagination]="false" [nzShowPagination]="false">
                     <thead>
                         <tr>
@@ -634,18 +661,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of editRowTable.data; let i = index" class="editable-row">
+                        <tr *ngFor="let data of dataPl; let i = index" class="editable-row">
                             <td>{{ i + 1 }}</td>
                             <td>{{data.soPluc}}</td>
                             <td>{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
                             <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{data.veViec}}</td>
+                            <td>{{data.noiDungPl}}</td>
                             <td>{{data.tenTrangThai}}</td>
                             <td>
-                                <a (click)="redirectPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
+                                <a (click)="redirectPhuLuc(true, data.id)" *ngIf="data.trangThai!=globals.prop.DU_THAO">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO">
+                                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
                             </td>
@@ -657,10 +687,11 @@
         <!--    END THÔNG TIN CHỦ ĐẦU TƯ-->
     </div>
 </ng-container>
-<ng-container *ngIf="isViewPhuLuc">
-    <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [detailHopDong]="detail" [loaiVthh]="loaiVthh"
-        (showChiTietEvent)="showChiTiet()"></app-phu-luc>
-</ng-container>
+    <ng-template #tempPhuLuc>
+        <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [detailHopDong]="detail" [loaiVthh]="loaiVthh"
+                     [isView]="onlyViewPhuLuc"
+                     (showChiTietEvent)="showChiTiet()"></app-phu-luc>
+    </ng-template>
 <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
     </ng-container>

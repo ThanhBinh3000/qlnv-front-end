@@ -93,7 +93,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         this.formData = this.fb.group({
             namKeHoach: [''],
             maDvi: [''],
-            maTongHop: [''],
+            id: [''],
             loaiDieuChuyen: [''],
             ngayTongHop: [''],
             tuNgay: [''],
@@ -205,13 +205,21 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         this.isViewDetail = false;
         await this.search();
     };
-    checkRole(trangThai) {
-        let check = true;
-        if ((this.userService.isCuc() && trangThai == STATUS.DU_THAO || this.userService.isCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isCuc() && trangThai == STATUS.TU_CHOI_TP)) {
-            check = false;
-        }
-        return check;
+    checkRoleView(trangThai: string) {
+        return !(this.checkRoleEdit(trangThai) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
+    }
+    checkRoleEdit(trangThai: string) {
+        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_TP)
     };
+    checkRoleApproveDc(trangThai: string) {
+        return this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)
+    };
+    checkRoleDelete(trangThai: string) {
+        return (!trangThai || trangThai == STATUS.DU_THAO) && this.userService.isCuc()
+    }
+    checkPermissonApprove(trangThai: string) {
+        return this.userService.isCuc() && ((trangThai == STATUS.CHO_DUYET_TP && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')) || (trangThai == STATUS.CHO_DUYET_LDC && this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')))
+    }
     async search(roles?) {
         if (!this.checkPermission(roles)) {
             return

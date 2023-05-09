@@ -16,6 +16,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHopDong.service';
 import { HelperService } from "../../../../../../services/helper.service";
 import { STATUS } from "../../../../../../constants/status";
+import { convertTienTobangChu } from "../../../../../../shared/commonFunction";
 
 
 @Component({
@@ -27,13 +28,21 @@ export class PhuLucComponent implements OnInit {
   @Input() idPhuLuc: number;
   @Input() detailHopDong: any = {};
   @Input() isViewPhuLuc: boolean;
+  @Input() isView: boolean;
   @Input() loaiVthh: String;
   @Output()
   showChiTietEvent = new EventEmitter<any>();
-  fileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKem: any[] = [];
   formPhuLuc: FormGroup;
   errorGhiChu: boolean = false;
   errorInputRequired: string = null;
+  isContentVisible: any[] = [true, true, true, true, true, true];
+  isArrowUp: any[] = [false, false, false, false, false, false];
+  dataTable: any[] = [];
+  listChiCuc: any[] = [];
+  listAllChiCuc: any[] = [];
+  maPhuLucSuffix: any;
+  STATUS = STATUS;
 
   constructor(
     private modal: NzModalService,
@@ -50,19 +59,21 @@ export class PhuLucComponent implements OnInit {
       loaiVthh: [null],
       cloaiVthh: [null],
       soPluc: [null, [Validators.required]],
+      maPluc: [null, [Validators.required]],
       ngayKy: [null],
+      ngayHlucHd: [null],
       ngayHluc: [null],
-      veViec: [null],
+      noiDungPl: [null],
       soHd: [null],
       tenHd: [null],
-      tuNgayHlucTrc: [null],
-      denNgayHlucTrc: [null],
-      tuNgayHlucDc: [null],
-      denNgayHlucDc: [null],
+      ngayHlucTrc: [null],
+      ngayHlucDc: [null],
       tgianThienHdTrc: [null],
       tgianThienHdDc: [null],
       noiDung: [null],
       ghiChu: [null],
+      trangThai: [STATUS.DU_THAO],
+      tenTrangThai: ['Dự thảo'],
     });
   }
 
@@ -70,14 +81,16 @@ export class PhuLucComponent implements OnInit {
     this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
     if (this.detailHopDong) {
       this.formPhuLuc.patchValue({
-        loaiVthh: this.detailHopDong.loaiVthh,
-        cloaiVthh: this.detailHopDong.cloaiVthh,
-        soHd: this.detailHopDong.soHd ?? null,
-        tenHd: this.detailHopDong.tenHd ?? null,
-        denNgayHlucTrc: this.detailHopDong.denNgayHluc ?? null,
-        tuNgayHlucTrc: this.detailHopDong.tuNgayHluc ?? null,
-        tgianThienHdTrc: this.detailHopDong.soNgayThien ?? null,
+        loaiVthh: this.detailHopDong.hd.loaiVthh,
+        cloaiVthh: this.detailHopDong.hd.cloaiVthh,
+        soHd: this.detailHopDong.hd.soHd ?? null,
+        tenHd: this.detailHopDong.hd.tenHd ?? null,
+        ngayHlucTrc: this.detailHopDong.hd.ngayKy ?? null,
+        tgianThienHdTrc: this.detailHopDong.hd.soNgayThien ?? null,
       });
+      this.dataTable = this.detailHopDong.diaDiem;
+      let namKh = this.detailHopDong.hd.namHd;
+      this.maPhuLucSuffix = `/${namKh}/PLHĐ`;
     }
     if (!!this.idPhuLuc) {
       this.loadPhuLuc(this.idPhuLuc);
@@ -91,14 +104,12 @@ export class PhuLucComponent implements OnInit {
         if (res.data) {
           const data = res.data;
           this.formPhuLuc.patchValue({
+            maPluc: data.soPluc?.split('/')[0],
             soPluc: data.soPluc ?? null,
             ngayKy: data.ngayKy ?? null,
             ngayHluc: data.ngayHluc ?? null,
-            veViec: data.veViec ?? null,
-            soHd: data.soHd ?? null,
-            tenHd: data.tenHd ?? null,
-            tuNgayHlucDc: data.tuNgayHlucDc ?? null,
-            denNgayHlucDc: data.denNgayHlucDc ?? null,
+            noiDungPl: data.noiDungPl ?? null,
+            ngayHlucDc: data.ngayHlucDc ?? null,
             tgianThienHdDc: data.tgianThienHdDc ?? null,
             noiDung: data.noiDung ?? null,
             ghiChu: data.ghiChu ?? null,
@@ -167,12 +178,12 @@ export class PhuLucComponent implements OnInit {
     try {
       if (this.checkValidForm()) {
         let body = this.formPhuLuc.value;
+        body.soPluc = `${this.formPhuLuc.value.maPluc}${this.maPhuLucSuffix}`
         body.fileDinhKems = this.fileDinhKem;
-        //////////////////////////////////////
         //sua+ky
         if (this.idPhuLuc > 0 && isKy) {
-          this.formPhuLuc.controls['ngayKy'].setValidators(Validators.required);
-          this.helperService.markFormGroupTouched(this.formPhuLuc);
+          // this.formPhuLuc.controls['ngayKy'].setValidators(Validators.required);
+          // this.helperService.markFormGroupTouched(this.formPhuLuc);
           if (this.formPhuLuc.valid) {
             body.id = this.idPhuLuc;
             await this.thongTinPhuLucHopDongService.update(body)
@@ -200,8 +211,8 @@ export class PhuLucComponent implements OnInit {
         }
         //them+ky
         else if (!(this.idPhuLuc > 0) && isKy) {
-          this.formPhuLuc.controls['ngayKy'].setValidators(Validators.required);
-          this.helperService.markFormGroupTouched(this.formPhuLuc);
+          // this.formPhuLuc.controls['ngayKy'].setValidators(Validators.required);
+          // this.helperService.markFormGroupTouched(this.formPhuLuc);
           if (this.formPhuLuc.valid) {
             await this.thongTinPhuLucHopDongService.create(body)
               .then((res) => {
@@ -267,28 +278,32 @@ export class PhuLucComponent implements OnInit {
   }
 
   checkValidForm() {
-    this.formPhuLuc.get('tuNgayHlucDc').setValidators(null);
-    this.formPhuLuc.get('denNgayHlucDc').setValidators(null);
-    this.formPhuLuc.get('tgianThienHdDc').setValidators(null);
-    this.formPhuLuc.get('noiDung').setValidators(null);
-    this.helperService.markFormGroupTouched(this.formPhuLuc);
-    if (this.formPhuLuc.invalid) {
-      return false;
-    }
-    if (
-      !this.formPhuLuc.get('tuNgayHlucDc').value &&
-      !this.formPhuLuc.get('denNgayHlucDc').value &&
-      !this.formPhuLuc.get('tgianThienHdDc').value &&
-      !this.formPhuLuc.get('noiDung').value
-    ) {
-      this.formPhuLuc.get('tuNgayHlucDc').setValidators(Validators.required);
-      this.formPhuLuc.get('denNgayHlucDc').setValidators(Validators.required);
-      this.formPhuLuc.get('tgianThienHdDc').setValidators(Validators.required);
-      this.formPhuLuc.get('noiDung').setValidators(Validators.required);
-      this.helperService.markFormGroupTouched(this.formPhuLuc);
-      this.notification.error(MESSAGE.ERROR, "Cần nhập ít nhất 1 nội dung điều chỉnh");
-      return false;
-    }
+    // this.formPhuLuc.get('noiDung').setValidators(null);
+    // this.helperService.markFormGroupTouched(this.formPhuLuc);
+    // if (this.formPhuLuc.invalid) {
+    //   return false;
+    // }
+    // if (
+    //   !this.formPhuLuc.get('tgianThienHdDc').value &&
+    //   !this.formPhuLuc.get('noiDung').value
+    // ) {
+    //   this.formPhuLuc.get('tgianThienHdDc').setValidators(Validators.required);
+    //   this.formPhuLuc.get('noiDung').setValidators(Validators.required);
+    //   this.helperService.markFormGroupTouched(this.formPhuLuc);
+    //   this.notification.error(MESSAGE.ERROR, "Cần nhập ít nhất 1 nội dung điều chỉnh");
+    //   return false;
+    // }
     return true;
+  }
+
+  toggleContentVisibility(i) {
+    this.isContentVisible[i] = !this.isContentVisible[i];
+    this.isArrowUp[i] = !this.isArrowUp[i];
+  }
+
+  convertTien(tien: number): string {
+    if (tien) {
+      return convertTienTobangChu(tien);
+    }
   }
 }

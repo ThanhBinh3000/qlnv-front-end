@@ -11,7 +11,7 @@
               </nz-select>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4" *ngIf=" userService.isCuc()">
+          <div nz-col nzSpan="4" *ngIf="userService.isCuc()">
             <label class="search__label">Chi cục</label>
             <nz-input-group>
               <nz-select formControlName="maDvi" nzAllowClear>
@@ -157,7 +157,8 @@
                       </tr>
                       <ng-container *ngIf="expandSet.has(itemChiCuc.idVirtual)">
                         <ng-container *ngFor="let itemDetail of itemChiCuc.dataChild, let y2 = index">
-                          <tr [ngClass]="{'bg-selected': itemDetail.selected}" (click)="selectRow(itemDetail)">
+                          <tr style="cursor: pointer" [ngClass]="{'bg-selected': itemDetail.selected}"
+                              (click)="selectRow(itemDetail)">
                             <td></td>
                             <td></td>
                             <td></td>
@@ -169,7 +170,7 @@
                             <td>{{itemDetail.loaiDuAn}}</td>
                             <td class="text-center">{{itemDetail.tgKhoiCong}} - {{itemDetail.tgHoanThanh}}</td>
                             <td>{{itemDetail.soQdDcPd}}</td>
-                            <td>{{itemDetail.soQdPdDtxd}}</td>
+                            <td class="text-blue">{{itemDetail.soQdPdKhNam}}</td>
                             <td>{{itemDetail.ncKhTongSo | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{itemDetail.ncKhNstw | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{itemDetail.ncKhTongSo | number : '1.0-1' : 'vi_VN'}}</td>
@@ -189,54 +190,90 @@
         </nz-card>
       </nz-collapse-panel>
     </nz-collapse>
+    <!--    Code tab process-->
+    <div class="mt-2" *ngIf="itemSelected">
+      <h2>Chi tiết tiến độ dự án: <span style="font-style: italic"> {{itemSelected.tenDuAn}}
+        - {{itemSelected.tenChiCuc}}</span></h2>
+      <nz-card class="flex-card p-lr16 mt-2">
+        <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+          <ul nz-menu nzMode="horizontal">
+            <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
+              Quyết định phê duyệt dự án ĐTXD
+              <img *ngIf="itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '02'"
+                (click)="selectTab('02')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">
+              Quyết định phê duyệt bản vẽ TKTC và tổng dự toán
+              <img *ngIf="itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <img *ngIf="!itemQdPdTktcTdt || itemQdPdTktcTdt.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
+              Quyết định phê duyệt KH lựa chọn nhà thầu
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT') || userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
+              Tổ chức triển khai KH lựa chọn nhà thầu
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"
+                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
+              Hợp đồng và PL hợp đồng
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '06'" (click)="selectTab('06')">
+              Tiến độ công việc
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
+              Biên bản nghiệm thu
+              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+            </li>
+          </ul>
+        </nz-affix>
+        <ng-container *ngIf="tabSelected == '01'">
+          <app-quyet-dinh-phe-duyet-du-an-dtxd [itemDuAn]="itemSelected"
+                                               [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-du-an-dtxd>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == '02'">
+          <app-quyet-dinh-phe-duyet-tktc-tdt [itemDuAn]="itemSelected" [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                             [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-tktc-tdt>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == '03'">
+          <app-quyet-dinh-phe-duyet-khlcnt></app-quyet-dinh-phe-duyet-khlcnt>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == '04'">
+          <app-to-chuc-trien-khai-lua-chon-nha-thau></app-to-chuc-trien-khai-lua-chon-nha-thau>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == '05'">
+          <app-hop-dong></app-hop-dong>
+        </ng-container>
+      </nz-card>
+    </div>
   </div>
 </div>
-
-
-<!--<nz-affix [nzOffsetTop]="69" class="level1">-->
-<!--  <ul nz-menu nzMode="horizontal">-->
-<!--    <li nz-menu-item nzSelected (click)="selectTab('01')"-->
-<!--        *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">-->
-<!--      Quyết định phê duyệt dự án ĐTXD-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('02')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDTKTCTDT')">-->
-<!--      Quyết định phê duyệt bản vẽ TKTC và tổng dự toán-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('03')"  *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">-->
-<!--      Quyết định phê duyệt KH lựa chọn nhà thầu-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('04')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT') || userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">-->
-<!--      Tổ chức triển khai KH lựa chọn nhà thầu-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('05')" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">-->
-<!--      Hợp đồng và PL hợp đồng-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('06')">-->
-<!--      Tiến độ công việc-->
-<!--    </li>-->
-<!--    <li nz-menu-item (click)="selectTab('07')">-->
-<!--      Biên bản nghiệm thu-->
-<!--    </li>-->
-<!--  </ul>-->
-<!--</nz-affix>-->
-<!--<ng-container *ngIf="tabSelected == '01'">-->
-<!--  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '02'">-->
-<!--  <app-quyet-dinh-phe-duyet-tktc-tdt></app-quyet-dinh-phe-duyet-tktc-tdt>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '03'">-->
-<!--  <app-quyet-dinh-phe-duyet-khlcnt></app-quyet-dinh-phe-duyet-khlcnt>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '04'">-->
-<!--  <app-to-chuc-trien-khai-lua-chon-nha-thau></app-to-chuc-trien-khai-lua-chon-nha-thau>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '05'">-->
-<!--  <app-hop-dong></app-hop-dong>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '06'">-->
-<!--  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>-->
-<!--</ng-container>-->
-<!--<ng-container *ngIf="tabSelected == '07'">-->
-<!--  <app-quyet-dinh-phe-duyet-du-an-dtxd></app-quyet-dinh-phe-duyet-du-an-dtxd>-->
-<!--</ng-container>-->

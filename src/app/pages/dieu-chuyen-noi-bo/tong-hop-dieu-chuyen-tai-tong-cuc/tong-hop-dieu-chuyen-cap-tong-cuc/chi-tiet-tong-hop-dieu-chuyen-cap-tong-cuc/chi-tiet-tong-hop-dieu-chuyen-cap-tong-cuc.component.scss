@@ -5,7 +5,8 @@
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 12px;
+    margin-top: 12px;
+    // margin-bottom: 12px;
 
     .btn.mr-12 {
         margin-right: 12px;
@@ -40,6 +41,18 @@
     white-space: break-spaces !important;
 }
 
+.nowrap.table-chi-tiet.mt-8-im {
+    margin-top: 8px;
+}
+
+.max-w-120 {
+    max-width: 120px !important;
+}
+
+.min-w-120 {
+    min-width: 120px !important;
+}
+
 .max-w-90 {
     max-width: 90px !important;
 }
@@ -54,4 +67,11 @@
 
 .tr-cursor {
     cursor: pointer;
+}
+
+.thdc-btn-affixc>div {
+    justify-content: end;
+    display: flex;
+    margin-top: 8px;
+    padding-bottom: 6px;
 }
