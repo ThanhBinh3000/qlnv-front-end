@@ -18,9 +18,10 @@ import { saveAs } from "file-saver";
 import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 import { DonviService } from "../../../../../services/donvi.service";
 import { DxXdTrungHanService } from "../../../../../services/dx-xd-trung-han.service";
-import { STATUS } from "../../../../../constants/status";
+import { CHUC_NANG, STATUS } from "../../../../../constants/status";
 import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
 import { Route, Router } from "@angular/router";
+import { KeHoachComponent } from "../../ke-hoach.component";
 
 @Component({
   selector: "app-de-xuat-ke-hoach",
@@ -32,7 +33,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
   idTongHop: number = 0;
   isViewTh: boolean;
-
+  CHUC_NANG = CHUC_NANG;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -66,7 +67,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     maTongHop: "",
     tenTrangThai: ""
   };
-
+  public vldTrangThai: KeHoachComponent;
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
