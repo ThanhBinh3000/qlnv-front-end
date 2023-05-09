@@ -146,7 +146,7 @@
                   [nzScroll]="tableDuoi && tableDuoi.length > 0 ? { x: '2500px' } : null">
           <thead>
           <tr>
-            <th class="text-center">STT</th>
+            <th class="text-center" nzWidth="45px">STT</th>
             <th class="text-center">Khối dự án/công trình</th>
             <th class="text-center">Tên công trình</th>
             <th class="text-center">Địa điểm</th>
@@ -161,13 +161,13 @@
             <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>
             <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
             <th class="text-center">Ghi chú</th>
-            <th class="text-center" *ngIf="!isViewDetail" nzRight>Hành động</th>
+            <th class="text-center" nzWidth="120px" *ngIf="!isViewDetail" nzRight>Hành động</th>
           </tr>
           <tr>
             <th></th>
             <th>
-              <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemChaDuoi.khoi">
-                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+              <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemChaDuoi.khoi" (ngModelChange)="changeKhoi($event, 'duoi')">
+                <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
             </th>
@@ -183,7 +183,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th nzRight></th>
+            <th></th>
             <th class="text-center" *ngIf="!isViewDetail" nzRight>
               <a (click)="themItemcha('duoi')">
                 <i class="icon htvbdh_dau-cong"></i>
@@ -196,7 +196,7 @@
           <ng-container *ngFor="let data of tableDuoi , let idx = index">
             <tr>
               <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-              <td class="font-weight-bold">{{data.khoi}}</td>
+              <td class="font-weight-bold">{{data.tenKhoi}}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -209,7 +209,7 @@
               <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-              <td nzRight
+              <td
                   class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
                 <a (click)="themMoiItem(data, 'them', idx, tableDuoi[idx])">
@@ -228,15 +228,14 @@
                 <td>{{item.diaDiem}}</td>
                 <td>{{item.loaiDuAn}}</td>
                 <td>{{item.tgKcHt}}</td>
-                <td>{{item.khoi}}</td>
-                <td>{{ item.soQdPd }}</td>
+                <td>{{item.tenKhoi}}</td>
                 <td>{{ item.soQdPd }}</td>
                 <td>{{ item.soQdPd }}</td>
                 <td class="text-right">{{ item.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                 <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                 <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                 <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                <td nzRight class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{ item.ghiChu }}</td>
                 <td class="text-center" nzRight *ngIf="!isViewDetail">
                   <a (click)="themMoiItem(item, 'sua', y, dataTable[idx])">
                     <i class="fa fa-pencil"></i>
@@ -269,7 +268,7 @@
                 style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
             <td class="font-weight-bold text-right"
                 style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-            <td nzRight class="font-weight-bold text-right"
+            <td  class="font-weight-bold text-right"
                 style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
             <td *ngIf="!isViewDetail" nzRight>
           </tr>
@@ -290,7 +289,7 @@
                     [nzScroll]="tableTren &&tableTren.length > 0 ? { x: '2500px' } : null">
             <thead>
             <tr>
-              <th class="text-center">STT</th>
+              <th class="text-center" nzWidth="45px">STT</th>
               <th class="text-center">Khối dự án/công trình</th>
               <th class="text-center">Tên công trình</th>
               <th class="text-center">Địa điểm</th>
@@ -305,13 +304,13 @@
               <th class="text-center">Lũy kế cấp vốn <br> đến thời điểm <br> hiện tại</th>
               <th class="text-center">Kế hoạch vốn <br> năm hiện tại (đ)</th>
               <th class="text-center">Ghi chú</th>
-              <th class="text-center" *ngIf="!isViewDetail" nzRight>Hành động</th>
+              <th class="text-center" nzWidth="120px" *ngIf="!isViewDetail" nzRight>Hành động</th>
             </tr>
             <tr>
               <th></th>
               <th>
-                <nz-select nzPlaceHolder="Chọn danh mục khối" nzAllowClear [(ngModel)]="rowItemChaTren.khoi">
-                  <nz-option *ngFor="let p of listKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
+                <nz-select nzPlaceHolder="Chọn danh mục khối"  nzAllowClear [(ngModel)]="rowItemChaTren.khoi" (ngModelChange)="changeKhoi($event, 'tren')">
+                  <nz-option *ngFor="let p of listKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
               </th>
@@ -327,7 +326,7 @@
               <th></th>
               <th></th>
               <th></th>
-              <th nzRight></th>
+              <th ></th>
               <th class="text-center" *ngIf="!isViewDetail" nzRight>
                 <a (click)="themItemcha('tren')">
                   <i class="icon htvbdh_dau-cong"></i>
@@ -340,7 +339,7 @@
             <ng-container *ngFor="let data of tableTren , let idx = index">
               <tr>
                 <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
-                <td class="font-weight-bold">{{data.khoi}}</td>
+                <td class="font-weight-bold">{{data.tenKhoi}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -353,8 +352,7 @@
                 <td class="font-weight-bold text-right">{{sumSoLuong(data, 'nstwDuKien') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhTongSo') | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="font-weight-bold text-right">{{sumSoLuong(data, 'ncKhNstw') | number : '1.0-1' : 'vi_VN'}}</td>
-                <td nzRight
-                    class="font-weight-bold text-right">{{sumSoLuong(data, 'vonDauTu') | number : '1.0-1' : 'vi_VN'}}</td>
+                <td></td>
                 <td class="font-weight-bold text-right" class="text-center" *ngIf="!isViewDetail" nzRight>
                   <a (click)="themMoiItem(data, 'them', idx, dataTable[idx])">
                     <i class="icon htvbdh_dau-cong"></i>
@@ -372,7 +370,7 @@
                   <td>{{item.diaDiem}}</td>
                   <td>{{item.loaiDuAn}}</td>
                   <td>{{item.tgKcHt}}</td>
-                  <td>{{item.khoi}}</td>
+                  <td>{{item.tenKhoi}}</td>
                   <td>{{ item.soQdPd }}</td>
                   <td>{{ item.soQdPd }}</td>
                   <td>{{ item.soQdPd }}</td>
@@ -380,7 +378,7 @@
                   <td class="text-right">{{ item.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">{{ item.ncKhTongSo | number : '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">{{ item.ncKhNstw | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td nzRight class="text-right">{{ item.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{ item.ghiChu }}</td>
                   <td class="text-center" nzRight *ngIf="!isViewDetail">
                     <a (click)="themMoiItem(item, 'sua', y, tableTren[idx])">
                       <i class="fa fa-pencil"></i>
@@ -413,7 +411,7 @@
                   style="color: blue">{{sumSoLuong(null, 'ncKhTongSo', true) | number : '1.0-1' : 'vi_VN'}}</td>
               <td class="font-weight-bold text-right"
                   style="color: blue">{{sumSoLuong(null, 'ncKhNstw', true) | number : '1.0-1' : 'vi_VN'}}</td>
-              <td nzRight class="font-weight-bold text-right"
+              <td  class="font-weight-bold text-right"
                   style="color: blue">{{sumSoLuong(null, 'vonDauTu', true) | number : '1.0-1' : 'vi_VN'}}</td>
               <td *ngIf="!isViewDetail" nzRight>
             </tr>
