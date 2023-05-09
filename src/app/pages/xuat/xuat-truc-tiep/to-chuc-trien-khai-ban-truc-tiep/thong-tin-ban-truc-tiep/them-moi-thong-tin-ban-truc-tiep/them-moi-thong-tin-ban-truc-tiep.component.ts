@@ -30,8 +30,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Output()
   dataTableChange = new EventEmitter<any>();
 
-  dataTableClone: any[] = [];
-
   radioValue: string = 'Chào giá';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
@@ -220,7 +218,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   addRow(): void {
-
     if (this.idDviDtl) {
       this.rowItem.idDviDtl = this.idDviDtl
       if (this.validateSoLuong(true)) {
@@ -433,7 +430,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.listOfData = item.children;
       this.showFromTT = true;
       this.idDviDtl = item.id;
-      console.log(this.idDviDtl, 999)
       this.emitDataTable()
       this.updateEditCache()
       this.soLuongDeXuat = item.soLuongDeXuat
@@ -444,7 +440,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.listOfData = item[0].children;
       this.showFromTT = true;
       this.idDviDtl = item[0].id;
-      console.log(this.idDviDtl, 888)
       this.emitDataTable()
       this.updateEditCache()
       this.soLuongDeXuat = item[0].soLuongDeXuat
