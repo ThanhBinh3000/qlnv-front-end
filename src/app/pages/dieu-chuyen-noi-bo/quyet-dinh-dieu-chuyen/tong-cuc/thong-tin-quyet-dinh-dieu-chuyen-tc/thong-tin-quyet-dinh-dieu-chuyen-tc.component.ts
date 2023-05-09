@@ -489,6 +489,84 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
           }
 
+          if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
+
+            if (item.thKeHoachDieuChuyenCucKhacCucDtl.thKeHoachDieuChuyenCucKhacCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.thKeHoachDieuChuyenCucKhacCucDtls.map(async itemKH => {
+                listDeXuat.push(itemKH.dcnbKeHoachDcHdr)
+                listQD.push({
+                  keHoachDcHdrId: itemKH.dcnbKeHoachDcHdr.id,
+                })
+                itemKH.dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
+                  listHangHoa.push(itemHH)
+                })
+                let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                let children = dcnbKeHoachDcHdr.danhSachHangHoa.map(itemHH => {
+                  return {
+                    ...itemHH,
+                    key: itemHH.id
+                  }
+                })
+
+                this.listOfMapData.push({
+                  ...dcnbKeHoachDcHdr,
+                  key: `${item.dcnbKeHoachDcHdr.id}`,
+                  isEx: children.length > 0,
+                  children: children,
+                })
+              })
+            }
+
+            if (item.thKeHoachDieuChuyenCucKhacCucDtl.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
+              item.thKeHoachDieuChuyenCucKhacCucDtl.thKeHoachDieuChuyenNoiBoCucDtls.map(async (itemKH, i) => {
+                listDeXuat.push(itemKH.dcnbKeHoachDcHdr)
+                listQD.push({
+                  keHoachDcHdrId: itemKH.dcnbKeHoachDcHdr.id,
+                })
+                let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
+                dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
+                  listHangHoa.push(itemHH)
+                })
+
+
+                let children = []
+
+                const grouped = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
+                const keyarr = Object.keys(grouped);
+
+                keyarr.map((k, j) => {
+                  const valuearr = grouped[k].map(v => {
+                    return {
+                      ...v,
+                      key: v.id
+                    }
+                  })
+                  console.log('keyarr', k, valuearr)
+                  const itemv: any = valuearr[0]
+                  // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
+                  if (valuearr.length > 1) {
+                    children.push({
+                      tenDiemKho: itemv.tenDiemKho,
+                      key: `${i}-${j}`,
+                      isCol: true,
+                      children: valuearr
+                    })
+                  } else {
+                    children.push({ ...itemv, key: itemv.id })
+                  }
+                })
+
+                this.listOfMapData.push({
+                  ...dcnbKeHoachDcHdr,
+                  key: `${dcnbKeHoachDcHdr.id}`,
+                  isEx: children.length > 0,
+                  children: children,
+                })
+              })
+            }
+
+          }
+
         })
         this.listOfMapData.forEach(item => {
           this.mapOfExpandedData[item.key] = this.convertTreeToList(item);

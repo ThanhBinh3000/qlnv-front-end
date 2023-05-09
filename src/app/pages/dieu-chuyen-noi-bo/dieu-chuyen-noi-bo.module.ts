@@ -12,12 +12,22 @@ import { KeHoachDieuChuyenComponent } from "./ke-hoach-dieu-chuyen/ke-hoach-dieu
 import {
   ChiTietKeHoachDcnbComponent
 } from "./ke-hoach-dieu-chuyen/chi-tiet-ke-hoach-dcnb/chi-tiet-ke-hoach-dcnb.component";
+import { TongHopDieuChuyenTaiCuc } from './tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.component';
+import { ChiTietTongHopDieuChuyenTaiCuc } from './tong-hop-dieu-chuyen-tai-cuc/chi-tiet-tong-hop-tai-cuc/chi-tiet-tong-hop-tai-cuc.component';
+import { TongHopDieuChuyenTaiTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component';
+import { TongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc.component';
+import { ChiTietTongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component';
 
 @NgModule({
   declarations: [
     DieuChuyenNoiBoComponent,
     KeHoachDieuChuyenComponent,
-    ChiTietKeHoachDcnbComponent
+    ChiTietKeHoachDcnbComponent,
+    TongHopDieuChuyenTaiCuc,
+    ChiTietTongHopDieuChuyenTaiCuc,
+    TongHopDieuChuyenTaiTongCuc,
+    TongHopDieuChuyenCapTongCuc,
+    ChiTietTongHopDieuChuyenCapTongCuc
   ],
   imports: [
     CommonModule,
@@ -30,7 +40,12 @@ import {
   ],
   exports: [
     KeHoachDieuChuyenComponent,
-    ChiTietKeHoachDcnbComponent
+    ChiTietKeHoachDcnbComponent,
+    TongHopDieuChuyenTaiCuc,
+    ChiTietTongHopDieuChuyenTaiCuc,
+    TongHopDieuChuyenTaiTongCuc,
+    TongHopDieuChuyenCapTongCuc,
+    ChiTietTongHopDieuChuyenCapTongCuc
   ]
 })
 export class DieuChuyenNoiBoModule {

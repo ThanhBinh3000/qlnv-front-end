@@ -1,23 +1,23 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT, STATUS_DA_DUYET} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS, STATUS_LABEL} from 'src/app/constants/status';
-import {UserLogin} from 'src/app/models/userlogin';
-import {BaseService} from 'src/app/services/base.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
-import {saveAs} from 'file-saver';
-import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT, STATUS_DA_DUYET } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
+import { BaseService } from 'src/app/services/base.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { cloneDeep } from 'lodash';
+import { saveAs } from 'file-saver';
+import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-base2',
@@ -314,7 +314,7 @@ export class Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.service.deleteMuti({idList: dataDelete});
+            let res = await this.service.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -552,7 +552,7 @@ export class Base2Component implements OnInit {
             res = await this.service.create(body);
           }
           if (res.msg == MESSAGE.SUCCESS) {
-            let res1 = await this.service.approve({id: res.data.id, trangThai: trangThai});
+            let res1 = await this.service.approve({ id: res.data.id, trangThai: trangThai });
             if (res1.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.SUCCESS);
               this.goBack();

@@ -100,6 +100,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   listDiemKho: any[] = [];
   listDiemKhoNhan: any[] = [];
 
+  listLoaiQD: any[] = [
+    {
+
+    }
+  ];
 
   listOfMapData: any[] = [
     {

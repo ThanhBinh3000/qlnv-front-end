@@ -246,8 +246,6 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   }
 
   async save(isBanHanh?) {
-    console.log(this.formData.value.thoiGianThTu,'hahaha');
-    return;
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
@@ -257,33 +255,33 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.listFileDinhKem.forEach(item => {
         item.fileType = FILETYPE.FILE_DINH_KEM
         this.listFile.push(item)
-      })
+      });
     }
     if (this.listCcPhapLy.length > 0) {
       this.listCcPhapLy.forEach(element => {
         element.fileType = FILETYPE.CAN_CU_PHAP_LY
         this.listFile.push(element)
-      })
+      });
     }
     if (this.listFile && this.listFile.length > 0) {
       this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
-    this.formData.value.listQlDinhMucPvcDxCcdcDtl = this.dataTable;
+    this.formData.value.listKtXdscQuyetDinhPdDtxdDtl = this.dataTable;
     if (isBanHanh) {
-      let res = await this.createUpdate(this.formData.value);
-      if (res) {
-        this.modal.confirm({
-          nzClosable: false,
-          nzTitle: 'Xác nhận',
-          nzContent: "Ban hành quyết định",
-          nzOkText: 'Đồng ý',
-          nzCancelText: 'Không',
-          nzOkDanger: true,
-          nzWidth: 350,
-          nzOnOk: async () => {
-            this.spinner.show();
-            try {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: "Ban hành quyết định",
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.createUpdate(this.formData.value);
+            if (res) {
               let body = {
                 id: res.id,
                 trangThai: STATUS.BAN_HANH,
@@ -300,21 +298,18 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
                 this.notification.error(MESSAGE.ERROR, res1.msg);
                 this.spinner.hide();
               }
-            } catch (e) {
-              console.log('error: ', e);
-              this.spinner.hide();
-              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            } finally {
-              this.spinner.hide();
             }
-          },
-        });
-      }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
     } else {
       await this.createUpdate(this.formData.value)
-      // if (res) {
-      //   this.goBack()
-      // }
     }
   }
 

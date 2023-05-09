@@ -10,12 +10,17 @@ import {DieuChuyenNoiBoRoutingModule} from "../../dieu-chuyen-noi-bo/dieu-chuyen
 import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../layout/main/main.module";
+import { QuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/quyet-dinh-thanh-ly.component';
+import { ThemMoiQuyetDinhThanhLyComponent } from './quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly/them-moi-quyet-dinh-thanh-ly.component';
+import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 
 @NgModule({
   declarations: [
     XuatThanhLyComponent,
-    ThanhLyDanhSachHangComponent
+    ThanhLyDanhSachHangComponent,
+    QuyetDinhThanhLyComponent,
+    ThemMoiQuyetDinhThanhLyComponent
   ],
   imports: [
     CommonModule,
@@ -25,6 +30,7 @@ import {MainModule} from "../../../layout/main/main.module";
     NzPipesModule,
     MainModule,
     ComponentsModule,
+    CuuTroVienTroModule,
   ],
   exports: [
     ThanhLyDanhSachHangComponent
