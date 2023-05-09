@@ -31,4 +31,33 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     caps: [1],
     accessPermisson: 'DCNB_TONGHOPDC'
   },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Quyết định điều chuyển',
+    url: `/quyet-dinh-dieu-chuyen`,
+    dropdown: 'quyet-dinh-dieu-chuyen',
+    idHover: 'quyet-dinh-dieu-chuyen',
+    hasTab: false,
+    accessPermisson: 'DCNB_QUYETDINHDC'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Xuất điều chuyển',
+    url: `/xuat-dieu-chuyen`,
+    dropdown: 'xuat-dieu-chuyen',
+    idHover: 'xuat-dieu-chuyen',
+    hasTab: false,
+    caps: [1,2,3],
+    accessPermisson: 'DCNB_KHDC'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Nhập điều chuyển',
+    url: `/nhap-dieu-chuyen`,
+    dropdown: 'nhap-dieu-chuyen',
+    idHover: 'nhap-dieu-chuyen',
+    hasTab: false,
+    caps: [1,2,3],
+    accessPermisson: 'DCNB_KHDC'
+  },
 ];
