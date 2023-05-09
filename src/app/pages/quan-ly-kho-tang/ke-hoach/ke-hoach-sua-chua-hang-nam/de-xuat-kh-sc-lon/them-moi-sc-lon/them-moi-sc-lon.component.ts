@@ -16,12 +16,6 @@ import { MESSAGE } from "../../../../../../constants/message";
 import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
 import { QuyetDinhKhTrungHanService } from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 import { STATUS } from "../../../../../../constants/status";
-import {
-  DialogThemMoiDxkhthComponent
-} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
-import {
-  DialogQdXdTrungHanComponent
-} from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
 import dayjs from "dayjs";
 import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 
@@ -282,8 +276,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         nzContent: DialogDxScLonComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: "1000px",
-        nzStyle: { top: "200px" },
+        nzWidth: "1200px",
+        nzStyle: { top: "100px" },
         nzFooter: null,
         nzComponentParams: {
           dataTable: list && list.dataChild ? list.dataChild : [],
@@ -427,6 +421,19 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       this.rowItemChaTren.idVirtual = uuidv4();
       this.tableTren.push(this.rowItemChaTren);
       this.rowItemChaTren = new DanhMucKho();
+    }
+  }
+
+  changeKhoi(event, type : string) {
+    if (event) {
+      let result = this.listKhoi.filter(item => item.ma == event);
+      if (result && result.length > 0) {
+        if (type == 'tren') {
+          this.rowItemChaTren.tenKhoi =  result[0].giaTri
+        } else {
+          this.rowItemChaDuoi.tenKhoi =  result[0].giaTri
+        }
+      }
     }
   }
 

@@ -83,6 +83,7 @@ export class DieuChuyenNoiBoComponent implements OnInit {
   }
 
   redirect(url: string) {
+    this.routerUrl = this.defaultUrl + url;
     this.router.navigate([this.defaultUrl + url]);
   }
 }

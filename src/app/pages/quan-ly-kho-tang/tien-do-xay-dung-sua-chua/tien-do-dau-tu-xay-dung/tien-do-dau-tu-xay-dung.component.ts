@@ -128,7 +128,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.quyetdinhpheduyetduandtxdService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        console.log(this.itemQdPdDaDtxd, '88888');
         //Check tiếp quyết định phê duyệt bản vẽ
         if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
           let body = {
@@ -141,7 +140,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           let res1 = await this.quyetdinhpheduyetTktcTdtService.search(body);
           if (res1.msg == MESSAGE.SUCCESS) {
             this.itemQdPdTktcTdt = res1.data.content && res1.data.content.length > 0 ? res1.data.content[0] : null;
-            console.log(this.itemQdPdTktcTdt, 'this.itemQdPdTktcTdtthis.itemQdPdTktcTdt')
           } else {
             this.notification.error(MESSAGE.ERROR, res1.msg);
           }
@@ -161,7 +159,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   convertListData(dataTable: any[]) {
     if (dataTable && dataTable.length > 0) {
       dataTable = chain(dataTable)
-        .groupBy("khoi")
+        .groupBy("tenKhoi")
         .map((value, key) => {
           let rs = chain(value)
             .groupBy("namKeHoach")
@@ -242,6 +240,21 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
       return;
     }
+    // if (tab == '02' && (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH)) {
+    //   let body = {
+    //     "idQdPdDtxd": this.itemQdPdDaDtxd.id,
+    //     "paggingReq": {
+    //       "limit": 10,
+    //       "page": 0
+    //     }
+    //   }
+    //   let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
+    //   if (res.msg == MESSAGE.SUCCESS) {
+    //     this.itemQdPdTktcTdt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+    //   } else {
+    //     this.notification.error(MESSAGE.ERROR, res.msg);
+    //   }
+    // }
     this.tabSelected = tab;
   }
 

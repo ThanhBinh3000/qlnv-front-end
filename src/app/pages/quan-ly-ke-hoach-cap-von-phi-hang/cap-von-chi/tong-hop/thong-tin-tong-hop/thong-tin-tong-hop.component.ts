@@ -223,7 +223,6 @@ export class ThongTinTonghopComponent implements OnInit {
       return;
     }
     this.spinner.show();
-
     try {
       if (this.idInput > 0) {
         let res = await this.tongHopDeNghiCapVonService.sua(body);
@@ -240,6 +239,10 @@ export class ThongTinTonghopComponent implements OnInit {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isGuiDuyet) {
+            this.formData.patchValue({
+              id: res.data.id
+            })
+            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           } else {
             this.guiDuyet();
