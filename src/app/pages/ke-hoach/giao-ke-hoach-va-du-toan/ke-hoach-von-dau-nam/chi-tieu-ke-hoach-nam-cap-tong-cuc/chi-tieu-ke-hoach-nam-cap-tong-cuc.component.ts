@@ -151,7 +151,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async search() {
-    console.log(this.userService.getUserLogin());
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
