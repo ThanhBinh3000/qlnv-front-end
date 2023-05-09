@@ -140,7 +140,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             // await this.loadDetail(this.idInput)
             if (this.formData.value.id) {
                 const data = await this.detail(this.formData.value.id);
-                this.formData.patchValue(data);
+                this.helperService.bidingDataInFormGroup(this.formData, data);
+                this.formData.patchValue({
+                    soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
+                })
                 this.daXdinhDiemNhap = data?.daXdinhDiemNhap
                 this.convertTongHop(data, this.isAddNew)
             }
@@ -314,7 +317,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     async save() {
         try {
 
-            let body = this.formData.value;
+            let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat + '/DCNB' };
             let res;
             await this.spinner.show();
             this.setValidator(false)
@@ -341,7 +344,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                         this.formData.controls['lyDoTuChoi'].setValue(res.data.lyDoTuChoi);
                         this.formData.controls['trangThai'].setValue(res.data.trangThai);
                         this.formData.controls['tenTrangThai'].setValue(res.data.tenTrangThai);
-                        this.formData.controls['soDeXuat'].setValue(res.data.soDeXuat);
+                        this.formData.controls['soDeXuat'].setValue(res.data.soDeXuat ? res.data.soDeXuat.split('/')[0] : null);
                         this.formData.controls['ngayTongHop'].setValue(res.data.ngayTongHop);
                         this.formData.controls['trichYeu'].setValue(res.data.trichYeu);
                         this.formData.controls['ngayDuyetLdc'].setValue(res.data.ngayDuyetLdc);
