@@ -100,7 +100,7 @@ export class AddBaoCaoComponent implements OnInit {
   printStatus = true;
   okStatus = true;
   finishStatus = true;
-  viewRecommendedValue : boolean;
+  viewRecommendedValue: boolean;
 
   baoCao: BaoCao = new BaoCao();
   listAppendix: any[] = [];
@@ -224,7 +224,7 @@ export class AddBaoCaoComponent implements OnInit {
     this.baoCao.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
     await this.getListUser();
-  
+
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
@@ -270,7 +270,7 @@ export class AddBaoCaoComponent implements OnInit {
         });
       } else {
         const isPL = this.baoCao?.lstDchinh.find(item => item.maLoai == "pl01")
-        if (this.userInfo.CAP_DVI == "2" || isPL ) {
+        if (this.userInfo.CAP_DVI == "2" || isPL) {
           this.listAppendix = PHU_LUC
         } else {
           this.listAppendix = PHU_LUC_TH
@@ -306,7 +306,7 @@ export class AddBaoCaoComponent implements OnInit {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
           console.log("this.childUnit: ", this.childUnit);
-          
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -694,268 +694,270 @@ export class AddBaoCaoComponent implements OnInit {
       case 'pl01':
         nzContent = PhuLuc1Component;
         // if (isSynthetic == false) {
-          if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) || Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao)) {
-            dataInfo.extraData = [];
-            const data2 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl02');
-            let dtoanKphiNamTruoc2 = 0;
-            let dtoanKphiNamNay2 = 0;
-            let tong2 = 0;
-            let tongDtoanTrongNam2 = 0;
-            let dtoanDnghiDchinh2 = 0;
-            let dtoanVuTvqtDnghi2 = 0;
-            if (data2?.trangThai != '3') {
-              data2?.lstCtietDchinh?.forEach(item => {
-                dtoanKphiNamTruoc2 += Number(item?.dtoanSuDung);
-                dtoanKphiNamNay2 += Number(item?.dtoanDaGiao);
-                tong2 += Number(item?.tongCongDtoan);
-                tongDtoanTrongNam2 += Number(item?.thanhTienTh);
-                dtoanDnghiDchinh2 += Number(item?.dieuChinhDtoan);
-                dtoanVuTvqtDnghi2 += Number(item?.vuTvqtDnghiDtoan ? item?.vuTvqtDnghiDtoan : 0);
-              })
-              dataInfo.extraData.push({
-                stt: "0.1.1.4.1",
-                maNdung: '0.1.1.4.1',
-                dtoanKphiNamTruoc: dtoanKphiNamTruoc2,
-                dtoanKphiNamNay: dtoanKphiNamNay2,
-                tong: tong2,
-                tongDtoanTrongNam: tongDtoanTrongNam2,
-                dtoanDnghiDchinh: dtoanDnghiDchinh2,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi2,
-              })
-            }
+        if (Utils.statusSave.includes(this.baoCao.trangThaiBaoCao) || Utils.statusTiepNhan.includes(this.baoCao.trangThaiBaoCao)) {
+          dataInfo.extraData = [];
+          const data2 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl02');
+          let dtoanKphiNamTruoc2 = 0;
+          let dtoanKphiNamNay2 = 0;
+          let tong2 = 0;
+          let tongDtoanTrongNam2 = 0;
+          let dtoanDnghiDchinh2 = 0;
+          let dtoanVuTvqtDnghi2 = 0;
+          if (data2?.trangThai != '3') {
+            data2?.lstCtietDchinh?.forEach(item => {
+              dtoanKphiNamTruoc2 += Number(item?.dtoanSuDung);
+              dtoanKphiNamNay2 += Number(item?.dtoanDaGiao);
+              tong2 += Number(item?.tongCongDtoan);
+              tongDtoanTrongNam2 += Number(item?.thanhTienTh);
+              dtoanDnghiDchinh2 += Number(item?.dieuChinhDtoan);
+              dtoanVuTvqtDnghi2 += Number(item?.vuTvqtDnghiDtoan ? item?.vuTvqtDnghiDtoan : 0);
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.4.1",
+              maNdung: '0.1.1.4.1',
+              dtoanKphiNamTruoc: dtoanKphiNamTruoc2,
+              dtoanKphiNamNay: dtoanKphiNamNay2,
+              tong: tong2,
+              tongDtoanTrongNam: tongDtoanTrongNam2,
+              dtoanDnghiDchinh: dtoanDnghiDchinh2,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi2,
+            })
+          }
 
-            const data3 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl03');
-            let dtoanKphiNamTruoc3 = 0;
-            let dtoanKphiNamNay3 = 0;
-            let tong3 = 0;
-            let tongDtoanTrongNam3 = 0;
-            let dtoanDnghiDchinh3 = 0;
-            let dtoanVuTvqtDnghi3 = 0;
-            if (data3?.trangThai != '3') {
-              data3?.lstCtietDchinh?.forEach(item => {
-                dtoanKphiNamTruoc3 += Number(item?.dtoanKphiNtruoc);
-                dtoanKphiNamNay3 += Number(item?.dtoanKphiDaGiao);
-                tong3 += Number(item?.dtoanKphiCong);
-                tongDtoanTrongNam3 += Number(item?.ncauKphi);
-                dtoanDnghiDchinh3 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
-                dtoanVuTvqtDnghi3 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-              })
-              dataInfo.extraData.push({
-                stt: "0.2.1.2",
-                maNdung: '0.2.1.2',
-                dtoanKphiNamTruoc: 0,
-                dtoanKphiNamNay: dtoanKphiNamNay3,
-                tong: tong3,
-                tongDtoanTrongNam: tongDtoanTrongNam3,
-                dtoanDnghiDchinh: dtoanDnghiDchinh3,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi3,
-              })
-            }
+          const data3 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl03');
+          let dtoanKphiNamTruoc3 = 0;
+          let dtoanKphiNamNay3 = 0;
+          let tong3 = 0;
+          let tongDtoanTrongNam3 = 0;
+          let dtoanDnghiDchinh3 = 0;
+          let dtoanVuTvqtDnghi3 = 0;
+          if (data3?.trangThai != '3') {
+            data3?.lstCtietDchinh?.forEach(item => {
+              dtoanKphiNamTruoc3 += Number(item?.dtoanKphiNtruoc);
+              dtoanKphiNamNay3 += Number(item?.dtoanKphiDaGiao);
+              tong3 += Number(item?.dtoanKphiCong);
+              tongDtoanTrongNam3 += Number(item?.ncauKphi);
+              dtoanDnghiDchinh3 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+              dtoanVuTvqtDnghi3 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+            })
+            dataInfo.extraData.push({
+              stt: "0.2.1.2",
+              maNdung: '0.2.1.2',
+              dtoanKphiNamTruoc: 0,
+              dtoanKphiNamNay: dtoanKphiNamNay3,
+              tong: tong3,
+              tongDtoanTrongNam: tongDtoanTrongNam3,
+              dtoanDnghiDchinh: dtoanDnghiDchinh3,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi3,
+            })
+          }
 
-            const data4 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl04');
-            if (data4?.trangThai != '3') {
-              let dtoanKphiNamNay4 = 0;
-              let tong4 = 0;
-              let tongDtoanTrongNam4 = 0;
-              let dtoanDnghiDchinh4 = 0;
-              let dtoanVuTvqtDnghi4 = 0;
-              data4?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamNay4 += Number(item?.dtoanDaGiaoLke);
-                  tong4 += Number(item?.dtoanDaGiaoLke);
-                  tongDtoanTrongNam4 += Number(item?.khoachSauDchinh);
-                  dtoanDnghiDchinh4 += Number(item?.dtoanDchinhDnghiLanNay ? item?.dtoanDchinhDnghiLanNay : 0);
-                  dtoanVuTvqtDnghi4 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-              })
-              dataInfo.extraData.push({
-                stt: "0.1.1.3",
-                maNdung: '0.1.1.3',
-                dtoanKphiNamTruoc: 0,
-                dtoanKphiNamNay: dtoanKphiNamNay4,
-                tong: tong4,
-                tongDtoanTrongNam: tongDtoanTrongNam4,
-                dtoanDnghiDchinh: dtoanDnghiDchinh4,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi4,
-              })
-            }
+          const data4 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl04');
+          if (data4?.trangThai != '3') {
+            let dtoanKphiNamNay4 = 0;
+            let tong4 = 0;
+            let tongDtoanTrongNam4 = 0;
+            let dtoanDnghiDchinh4 = 0;
+            let dtoanVuTvqtDnghi4 = 0;
+            data4?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamNay4 += Number(item?.dtoanDaGiaoLke);
+                tong4 += Number(item?.dtoanDaGiaoLke);
+                tongDtoanTrongNam4 += Number(item?.khoachSauDchinh);
+                dtoanDnghiDchinh4 += Number(item?.dtoanDchinhDnghiLanNay ? item?.dtoanDchinhDnghiLanNay : 0);
+                dtoanVuTvqtDnghi4 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.3",
+              maNdung: '0.1.1.3',
+              dtoanKphiNamTruoc: 0,
+              dtoanKphiNamNay: dtoanKphiNamNay4,
+              tong: tong4,
+              tongDtoanTrongNam: tongDtoanTrongNam4,
+              dtoanDnghiDchinh: dtoanDnghiDchinh4,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi4,
+            })
+          }
 
-            const data5 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl05');
-            if (data5?.trangThai != '3') {
-              let dtoanKphiNamNay5 = 0;
-              let tong5 = 0;
-              let tongDtoanTrongNam5 = 0;
-              let dtoanDnghiDchinh5 = 0;
-              let dtoanVuTvqtDnghi5 = 0;
-              data5?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamNay5 += Number(item?.dtoanDaGiaoLke);
-                  tong5 += Number(item?.dtoanDaGiaoLke);
-                  tongDtoanTrongNam5 += Number(item?.thanhTien);
-                  dtoanDnghiDchinh5 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
-                  dtoanVuTvqtDnghi5 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-              })
-              dataInfo.extraData.push({
-                stt: "0.1.1.2.2",
-                maNdung: '0.1.1.2.2',
-                dtoanKphiNamTruoc: 0,
-                dtoanKphiNamNay: dtoanKphiNamNay5,
-                tong: tong5,
-                tongDtoanTrongNam: tongDtoanTrongNam5,
-                dtoanDnghiDchinh: dtoanDnghiDchinh5,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi5,
-              })
-            }
+          const data5 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl05');
+          if (data5?.trangThai != '3') {
+            let dtoanKphiNamNay5 = 0;
+            let tong5 = 0;
+            let tongDtoanTrongNam5 = 0;
+            let dtoanDnghiDchinh5 = 0;
+            let dtoanVuTvqtDnghi5 = 0;
+            data5?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamNay5 += Number(item?.dtoanDaGiaoLke);
+                tong5 += Number(item?.dtoanDaGiaoLke);
+                tongDtoanTrongNam5 += Number(item?.thanhTien);
+                dtoanDnghiDchinh5 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+                dtoanVuTvqtDnghi5 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.2.2",
+              maNdung: '0.1.1.2.2',
+              dtoanKphiNamTruoc: 0,
+              dtoanKphiNamNay: dtoanKphiNamNay5,
+              tong: tong5,
+              tongDtoanTrongNam: tongDtoanTrongNam5,
+              dtoanDnghiDchinh: dtoanDnghiDchinh5,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi5,
+            })
+          }
 
-            const data6 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl06');
-            if (data6?.trangThai != '3') {
-              let dtoanKphiNamNay6 = 0;
-              let tong6 = 0;
-              let tongDtoanTrongNam6 = 0;
-              let dtoanDnghiDchinh6 = 0;
-              let dtoanVuTvqtDnghi6 = 0;
-              data6?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamNay6 += Number(item?.dtoanGiaoLke);
-                  tong6 += Number(item?.dtoanGiaoLke);
-                  tongDtoanTrongNam6 += Number(item?.sluongThienTtien);
-                  dtoanDnghiDchinh6 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
-                  dtoanVuTvqtDnghi6 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-              })
-              dataInfo.extraData.push({
-                stt: "0.1.1.2.3",
-                maNdung: '0.1.1.2.3',
-                dtoanKphiNamTruoc: 0,
-                dtoanKphiNamNay: dtoanKphiNamNay6,
-                tong: tong6,
-                tongDtoanTrongNam: tongDtoanTrongNam6,
-                dtoanDnghiDchinh: dtoanDnghiDchinh6,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi6,
-              })
-            }
+          const data6 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl06');
+          if (data6?.trangThai != '3') {
+            let dtoanKphiNamNay6 = 0;
+            let tong6 = 0;
+            let tongDtoanTrongNam6 = 0;
+            let dtoanDnghiDchinh6 = 0;
+            let dtoanVuTvqtDnghi6 = 0;
+            data6?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamNay6 += Number(item?.dtoanGiaoLke);
+                tong6 += Number(item?.dtoanGiaoLke);
+                tongDtoanTrongNam6 += Number(item?.sluongThienTtien);
+                dtoanDnghiDchinh6 += Number(item?.dtoanDchinh ? item?.dtoanDchinh : 0);
+                dtoanVuTvqtDnghi6 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.2.3",
+              maNdung: '0.1.1.2.3',
+              dtoanKphiNamTruoc: 0,
+              dtoanKphiNamNay: dtoanKphiNamNay6,
+              tong: tong6,
+              tongDtoanTrongNam: tongDtoanTrongNam6,
+              dtoanDnghiDchinh: dtoanDnghiDchinh6,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi6,
+            })
+          }
 
-            const data7 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl07');
-            if (data7?.trangThai != '3') {
+          const data7 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl07');
+          if (data7?.trangThai != '3') {
 
-              let dtoanKphiNamNay7 = 0;
-              let tong7 = 0;
-              let tongDtoanTrongNam7 = 0;
-              let dtoanDnghiDchinh7 = 0;
-              let dtoanVuTvqtDnghi7 = 0;
-              data7?.lstCtietDchinh?.forEach(item => {
+            let dtoanKphiNamNay7 = 0;
+            let tong7 = 0;
+            let tongDtoanTrongNam7 = 0;
+            let dtoanDnghiDchinh7 = 0;
+            let dtoanVuTvqtDnghi7 = 0;
+            data7?.lstCtietDchinh?.forEach(item => {
+              if (item.level == 0) {
                 dtoanKphiNamNay7 += Number(item?.dtoanLkeDaGiao);
                 tong7 += Number(item?.dtoanLkeDaGiao);
                 tongDtoanTrongNam7 += Number(item?.ncauDtoan);
                 dtoanDnghiDchinh7 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
                 dtoanVuTvqtDnghi7 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-              })
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.2.4",
+              maNdung: '0.1.1.2.4',
+              dtoanKphiNamTruoc: 0,
+              dtoanKphiNamNay: dtoanKphiNamNay7,
+              tong: tong7,
+              tongDtoanTrongNam: tongDtoanTrongNam7,
+              dtoanDnghiDchinh: dtoanDnghiDchinh7,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi7,
+            })
+          }
+
+          const data8 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl08');
+          if (data8?.trangThai != '3') {
+            let dtoanKphiNamTruoc8 = 0;
+            let dtoanKphiNamNay8 = 0;
+            let tong8 = 0;
+            let tongDtoanTrongNam8 = 0;
+            let dtoanDnghiDchinh8 = 0;
+            let dtoanVuTvqtDnghi8 = 0;
+            data8?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamTruoc8 += Number(item?.kphiDtoanNtruoc);
+                dtoanKphiNamNay8 += Number(item?.kphiDtoanGiaoTnam);
+                tong8 += Number(item?.kphiCong);
+                tongDtoanTrongNam8 += item.tongNcauDtoan;
+                dtoanDnghiDchinh8 += Number(item?.dtoanDchinhDnghi ? item?.dtoanDchinhDnghi : 0);
+                dtoanVuTvqtDnghi8 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.1.1.2.1",
+              maNdung: '0.1.1.2.1',
+              dtoanKphiNamTruoc: dtoanKphiNamTruoc8,
+              dtoanKphiNamNay: dtoanKphiNamNay8,
+              tong: tong8,
+              tongDtoanTrongNam: tongDtoanTrongNam8,
+              dtoanDnghiDchinh: dtoanDnghiDchinh8,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi8,
+            })
+          }
+
+          const data9 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl09');
+          if (data9?.trangThai != '3') {
+            let dtoanKphiNamTruoc9 = 0;
+            let dtoanKphiNamNay9 = 0;
+            let tong9 = 0;
+            let tongDtoanTrongNam9 = 0;
+            let dtoanDnghiDchinh9 = 0;
+            let dtoanVuTvqtDnghi9 = 0;
+            data9?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamTruoc9 += Number(item?.dtoanKphiDtoanNtruoc);
+                dtoanKphiNamNay9 += Number(item?.dtoanKphiDaGiao);
+                tong9 += Number(item?.dtoanKphiCong);
+                tongDtoanTrongNam9 += Number(item?.tongNcauTluong);
+                dtoanDnghiDchinh9 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
+                dtoanVuTvqtDnghi9 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
+            })
+            dataInfo.extraData.push({
+              stt: "0.2.1.1",
+              maNdung: '0.2.1.1',
+              dtoanKphiNamTruoc: dtoanKphiNamTruoc9,
+              dtoanKphiNamNay: dtoanKphiNamNay9,
+              tong: tong9,
+              tongDtoanTrongNam: tongDtoanTrongNam9,
+              dtoanDnghiDchinh: dtoanDnghiDchinh9,
+              dtoanVuTvqtDnghi: dtoanVuTvqtDnghi9,
+            })
+          }
+
+          const data10 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl10');
+          if (data10?.trangThai != '3') {
+            let dtoanKphiNamNay10 = 0;
+            let tong10 = 0;
+            let tongDtoanTrongNam10 = 0;
+            let dtoanDnghiDchinh10 = 0;
+            let dtoanVuTvqtDnghi10 = 0;
+            data10?.lstCtietDchinh?.forEach(item => {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
+                dtoanKphiNamNay10 += Number(item?.dtoanGiaoLke);
+                tong10 += Number(item?.dtoanGiaoLke);
+                tongDtoanTrongNam10 += Number(item?.kh2021SauDchinh);
+                dtoanDnghiDchinh10 += Number(item?.dtoanDnghiDchinhLnay ? item?.dtoanDnghiDchinhLnay : 0);
+                dtoanVuTvqtDnghi10 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
+              }
               dataInfo.extraData.push({
-                stt: "0.1.1.2.4",
-                maNdung: '0.1.1.2.4',
+                stt: "0.1.1.1",
+                maNdung: '0.1.1.1',
                 dtoanKphiNamTruoc: 0,
-                dtoanKphiNamNay: dtoanKphiNamNay7,
-                tong: tong7,
-                tongDtoanTrongNam: tongDtoanTrongNam7,
-                dtoanDnghiDchinh: dtoanDnghiDchinh7,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi7,
+                dtoanKphiNamNay: dtoanKphiNamNay10,
+                tong: tong10,
+                tongDtoanTrongNam: tongDtoanTrongNam10,
+                dtoanDnghiDchinh: dtoanDnghiDchinh10,
+                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi10,
               })
-            }
-
-            const data8 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl08');
-            if (data8?.trangThai != '3') {
-              let dtoanKphiNamTruoc8 = 0;
-              let dtoanKphiNamNay8 = 0;
-              let tong8 = 0;
-              let tongDtoanTrongNam8 = 0;
-              let dtoanDnghiDchinh8 = 0;
-              let dtoanVuTvqtDnghi8 = 0;
-              data8?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamTruoc8 += Number(item?.kphiDtoanNtruoc);
-                  dtoanKphiNamNay8 += Number(item?.kphiDtoanGiaoTnam);
-                  tong8 += Number(item?.kphiCong);
-                  tongDtoanTrongNam8 += item.tongNcauDtoan;
-                  dtoanDnghiDchinh8 += Number(item?.dtoanDchinhDnghi ? item?.dtoanDchinhDnghi : 0);
-                  dtoanVuTvqtDnghi8 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-              })
-              dataInfo.extraData.push({
-                stt: "0.1.1.2.1",
-                maNdung: '0.1.1.2.1',
-                dtoanKphiNamTruoc: dtoanKphiNamTruoc8,
-                dtoanKphiNamNay: dtoanKphiNamNay8,
-                tong: tong8,
-                tongDtoanTrongNam: tongDtoanTrongNam8,
-                dtoanDnghiDchinh: dtoanDnghiDchinh8,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi8,
-              })
-            }
-
-            const data9 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl09');
-            if (data9?.trangThai != '3') {
-              let dtoanKphiNamTruoc9 = 0;
-              let dtoanKphiNamNay9 = 0;
-              let tong9 = 0;
-              let tongDtoanTrongNam9 = 0;
-              let dtoanDnghiDchinh9 = 0;
-              let dtoanVuTvqtDnghi9 = 0;
-              data9?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamTruoc9 += Number(item?.dtoanKphiDtoanNtruoc);
-                  dtoanKphiNamNay9 += Number(item?.dtoanKphiDaGiao);
-                  tong9 += Number(item?.dtoanKphiCong);
-                  tongDtoanTrongNam9 += Number(item?.tongNcauTluong);
-                  dtoanDnghiDchinh9 += Number(item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0);
-                  dtoanVuTvqtDnghi9 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-              })
-              dataInfo.extraData.push({
-                stt: "0.2.1.1",
-                maNdung: '0.2.1.1',
-                dtoanKphiNamTruoc: dtoanKphiNamTruoc9,
-                dtoanKphiNamNay: dtoanKphiNamNay9,
-                tong: tong9,
-                tongDtoanTrongNam: tongDtoanTrongNam9,
-                dtoanDnghiDchinh: dtoanDnghiDchinh9,
-                dtoanVuTvqtDnghi: dtoanVuTvqtDnghi9,
-              })
-            }
-
-            const data10 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl10');
-            if (data10?.trangThai != '3') {
-              let dtoanKphiNamNay10 = 0;
-              let tong10 = 0;
-              let tongDtoanTrongNam10 = 0;
-              let dtoanDnghiDchinh10 = 0;
-              let dtoanVuTvqtDnghi10 = 0;
-              data10?.lstCtietDchinh?.forEach(item => {
-                const level = item.stt.split('.').length - 2;
-                if (level == 0) {
-                  dtoanKphiNamNay10 += Number(item?.dtoanGiaoLke);
-                  tong10 += Number(item?.dtoanGiaoLke);
-                  tongDtoanTrongNam10 += Number(item?.kh2021SauDchinh);
-                  dtoanDnghiDchinh10 += Number(item?.dtoanDnghiDchinhLnay ? item?.dtoanDnghiDchinhLnay : 0);
-                  dtoanVuTvqtDnghi10 += Number(item?.dtoanVuTvqtDnghi ? item?.dtoanVuTvqtDnghi : 0);
-                }
-                dataInfo.extraData.push({
-                  stt: "0.1.1.1",
-                  maNdung: '0.1.1.1',
-                  dtoanKphiNamTruoc: 0,
-                  dtoanKphiNamNay: dtoanKphiNamNay10,
-                  tong: tong10,
-                  tongDtoanTrongNam: tongDtoanTrongNam10,
-                  dtoanDnghiDchinh: dtoanDnghiDchinh10,
-                  dtoanVuTvqtDnghi: dtoanVuTvqtDnghi10,
-                })
-              })
-            }
+            })
+          }
 
 
           // }

@@ -24,12 +24,12 @@
             <i class="fa fa-trash-o"></i>
             <span>Xóa</span>
           </button>
-          <ng-container>
-            <button type="button" class="btn btn-main" (click)="addLine(lstCtietBcao.length)" *ngIf="!status">
+          <!-- <ng-container>
+            <button type="button" class="btn btn-main" (click)="handlSelectGoods" *ngIf="!status">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>
-          </ng-container>
+          </ng-container> -->
         </div>
       </div>
 
@@ -41,7 +41,7 @@
               </label>
             </th>
             <th rowSpan="2" nzWidth="50px">STT</th>
-            <th colSpan="3" nzWidth="300px">Kế hoạch được giao</th>
+            <th colSpan="5" nzWidth="300px">Kế hoạch được giao</th>
             <th colSpan="3">Đơn vị đã thực hiện đến thời điểm báo cáo </th>
             <th colSpan="2" nzWidth="400px">Dự kiến thực hiện từ thời điểm báo cáo đến cuối năm</th>
             <th rowSpan="2">Nhu cầu dự toán năm {{namBcao}} </th>
@@ -52,12 +52,15 @@
             <th rowSpan="2">Dự toán năm {{namBcao}} còn thiếu</th>
             <th rowspan="2" *ngIf="!status "></th>
             <th rowspan="2" *ngIf="!status || editRecommendedValue"></th>
+            <th rowspan="2" *ngIf="!status"></th>
           </tr>
           <tr>
             <th>
               Danh mục hàng
             </th>
+            <th>Đơn vị tính</th>
             <th>QĐ giao nhiệm vụ của Tổng cục</th>
+            <th>Địa phương nhận</th>
             <th>Lượng(kg)</th>
             <th>Lượng(kg)</th>
             <th>Dự toán phí</th>
@@ -71,6 +74,8 @@
             <th>B</th>
             <th>C</th>
             <th>D</th>
+            <th>E</th>
+            <th>F</th>
             <th>1</th>
             <th>2</th>
             <th>3</th>
@@ -84,6 +89,7 @@
             <th>11</th>
             <th nzWidth="50px" rowspan="2" *ngIf="!status"></th>
             <th nzWidth="50px" rowspan="2" *ngIf="!status || editRecommendedValue"></th>
+            <th nzWidth="50px" rowspan="2" *ngIf="!status"></th>
           </tr>
         </thead>
         <tbody>
@@ -91,6 +97,8 @@
             <td *ngIf="!status"></td>
             <td></td>
             <td>Tổng cộng</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td>{{displayValue(total.khoachLuong)}}</td>
             <td>{{displayValue(total.tdiemBcaoLuong)}}</td>
@@ -106,11 +114,14 @@
             <td>{{displayValue(total.dtoanNamConThieu)}}</td>
             <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
+            <td *ngIf="!status"></td>
           </tr>
           <tr>
             <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh tăng</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -126,11 +137,14 @@
             <td></td>
             <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
+            <td *ngIf="!status"></td>
           </tr>
           <tr>
             <td *ngIf="!status"></td>
             <td></td>
             <td>Phát sinh điều chỉnh giảm</td>
+            <td></td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -146,6 +160,7 @@
             <td></td>
             <td *ngIf="!status"></td>
             <td *ngIf="!status || editRecommendedValue"></td>
+            <td *ngIf="!status"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
@@ -154,13 +169,17 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
               <td class="text-center">
-                <!-- {{getChiMuc(data.stt)}} -->
-                {{i + 1 }}
+                {{getChiMuc(data.stt)}}
+                <!-- {{i + 1 }} -->
               </td>
               <td>
-                {{data.dmucHang}}
+                {{data.tenHang}}
+              </td>
+              <td>
+                {{data.donViTinh}}
               </td>
               <td>{{data.khoachQdGiaoNvu}}</td>
+              <td>{{data.khoachDpNhan}}</td>
               <td>{{displayValue(data.khoachLuong)}}</td>
               <td>{{displayValue(data.tdiemBcaoLuong)}}</td>
               <td>{{displayValue(data.tdiemBcaoDtoan)}}</td>
@@ -181,6 +200,9 @@
               <td *ngIf="!status || editRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
+              <td *ngIf="!status">
+                <i *ngIf="checkAdd(data.stt)" class="fa fa-plus" (click)="handlSelectGoods(data)"></i>
+              </td>
             </ng-container>
             <ng-template #editTemplate>
               <td *ngIf="!status" class="text-center">
@@ -188,14 +210,25 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
               <td class="text-center">
-                {{i + 1}}
+                {{getChiMuc(editCache[data.id].data.stt)}}
+                <!-- {{i + 1}} -->
               </td>
               <td>
-                <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dmucHang" />
+                <!-- <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dmucHang" />
+                 -->
+                {{editCache[data.id].data.tenHang}}
+              </td>
+              <td>
+                <!-- <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.dmucHang" />
+                 -->
+                {{editCache[data.id].data.donViTinh}}
               </td>
               <td>
                 <input type="text" class="search__input" nz-input
                   [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu" />
+              </td>
+              <td>
+                <input type="text" class="search__input" nz-input [(ngModel)]="editCache[data.id].data.khoachDpNhan" />
               </td>
               <ng-container *ngIf="editRecommendedValue; else editRecommended">
                 <td>{{displayValue(editCache[data.id].data.khoachLuong)}}</td>
@@ -265,11 +298,12 @@
               <td *ngIf="!status">
                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
-              <td [hidden]="status && !viewRecommendedValue">
+              <td *ngIf="!status || editRecommendedValue">
                 <a class="save" (click)="saveEdit(editCache[data.id].data.id)" style="margin-right:15px">Lưu</a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                   (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
               </td>
+              <td *ngIf="!status"></td>
             </ng-template>
           </tr>
         </tbody>
