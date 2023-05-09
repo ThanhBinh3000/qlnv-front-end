@@ -74,12 +74,11 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
+    await Promise.all([
+      this.loadDsHopDong(),
+    ]);
     if (this.idPhuLuc) {
       await this.loadChiTiet(this.idPhuLuc);
-    } else {
-      await Promise.all([
-        this.loadDsHopDong(),
-      ]);
     }
     await this.loadDsDonVi()
   }
@@ -92,8 +91,13 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
     })
     this.dataTable = data.phuLucDtl;
+    if (this.objHopDongHdr) {
+      this.dataTable.forEach(s => {
+        s.donGia = this.objHopDongHdr.donGiaBanTrucTiep ?? null;
+        s.thanhTien = this.objHopDongHdr.thanhTien ?? null;
+      })
+    }
     this.fileDinhKem = data.fileDinhKems;
-
   }
 
   async loadDsDonVi() {
@@ -118,6 +122,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   async loadDsHopDong() {
     if (this.objHopDongHdr) {
+      console.log(this.objHopDongHdr, 999)
       this.formData.patchValue({
         idHd: this.objHopDongHdr.id ?? null,
         soHd: this.objHopDongHdr.soHd ?? null,
@@ -129,21 +134,16 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         // tenTrangThaiPhuLuc: this.objHopDongHdr.tenTrangThaiPhuLuc ?? null,
       });
       this.objHopDongHdr.children.forEach(s => {
-        console.log(this.objHopDongHdr, 1111)
         let row = {
-          // tenDviHd: s.tenDvi,
-          // diaChiHd: s.diaChi,
-          // tongSoLuongHd: s.tongSoLuong,
-          // donGiaVatHd: s.donGiaVat,
           idHdDtl: s.id,
           tenDviHd: s.tenDvi,
           diaChiHd: s.diaChi,
-          soLuong: s.soLuong,
-          donGiaVat: s.donGiaVat,
+          soLuongBanTrucTiepHd: s.soLuongBanTrucTiepHd,
+          donGia: this.objHopDongHdr.donGiaBanTrucTiep ?? null,
+          thanhTien: this.objHopDongHdr.thanhTien ?? null,
         }
         this.dataTable = [...this.dataTable, row]
       });
-
     }
   }
 
