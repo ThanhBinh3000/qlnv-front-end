@@ -224,7 +224,7 @@
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="xoaItem(data)"
-                     *ngIf="(data.trangThai === STATUS.DU_THAO && userService.isChiCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_XOA')">
+                     *ngIf="(data.trangThai === STATUS.DU_THAO && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
