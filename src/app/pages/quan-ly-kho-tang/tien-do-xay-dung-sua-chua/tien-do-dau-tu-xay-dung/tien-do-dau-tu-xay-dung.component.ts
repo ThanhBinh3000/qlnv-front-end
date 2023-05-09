@@ -40,6 +40,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   tabSelected: string = "01";
   itemQdPdDaDtxd: any;
   itemQdPdTktcTdt: any;
+  itemQdPdKhlcnt: any;
 
   constructor(
     httpClient: HttpClient,
@@ -240,7 +241,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
       return;
     }
-    // if (tab == '02' && (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH)) {
+    // if (tab == '02' && (this.itemQdPdTktcTdt && this.itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH)) {
     //   let body = {
     //     "idQdPdDtxd": this.itemQdPdDaDtxd.id,
     //     "paggingReq": {
