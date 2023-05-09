@@ -1,0 +1,25 @@
+<div>
+  <nz-affix>
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab(0)">
+        Trong nội bộ chi cục
+      </li>
+      <li nz-menu-item (click)="selectTab(1)">
+        Giữa 2 chi cục trong cùng 1 cục
+      </li>
+      <li nz-menu-item (click)="selectTab(2)">
+        Giữa 2 cục DTNN KV
+      </li>
+    </ul>
+  </nz-affix>
+
+  <div>
+
+    <app-noi-bo-chi-cuc *ngIf="tabSelected == 0"></app-noi-bo-chi-cuc>
+    <app-giua-hai-chi-cuc *ngIf="tabSelected == 1"></app-giua-hai-chi-cuc>
+    <app-giua-hai-cuc *ngIf="tabSelected == 2"></app-giua-hai-cuc>
+
+  </div>
+
+
+</div>

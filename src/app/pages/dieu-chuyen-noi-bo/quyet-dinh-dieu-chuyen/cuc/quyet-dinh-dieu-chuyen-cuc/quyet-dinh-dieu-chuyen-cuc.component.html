@@ -5,13 +5,13 @@
       <nz-card class="mt16 flex-card p-lr16">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="20">
-            <div nz-col nzSpan="2">
+            <div nz-col nzSpan="3">
               <label class="search__label"> Năm kế hoạch </label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="2">
+            <div nz-col nzSpan="3">
               <label class="search__label">Số quyết định</label>
               <nz-input-group nzAddOnAfter="/DCNB">
                 <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
@@ -28,17 +28,6 @@
               <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
-            <div *ngIf="isTongCuc()" nz-col nzSpan="12">
-              <label class="search__label">Loại điều chuyển</label>
-              <nz-select nzAllowClear formControlName="loaiDc" (ngModelChange)="changeHangHoa($event)"
-                nzPlaceHolder="Chọn loại điều chuyển" nzShowSearch>
-                <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
-              </nz-select>
-            </div>
-            <div *ngIf="isTongCuc()" nz-col nzSpan="24">
-              <label class="search__label">Trích yếu</label>
-              <input nz-input formControlName="trichYeu" />
-            </div>
             <div *ngIf="isCuc()" nz-col nzSpan="24">
               <label class="search__label">Nội dung tổng hợp</label>
               <input nz-input formControlName="trichYeu" />
@@ -59,7 +48,7 @@
         </div>
       </nz-card>
       <div class="group-button">
-        <h3 *ngIf="isTongCuc() || isCuc()" class="text-uppercase">Danh sách quyết định điều chuyển nội bộ hàng DTQG của
+        <h3 *ngIf="isCuc()" class="text-uppercase">Danh sách quyết định điều chuyển nội bộ hàng DTQG của
           Cục DTNN KV</h3>
         <h3 *ngIf="isChiCuc()" class="text-uppercase">Danh sách kế hoạch điều chuyển nội bộ hàng DTQG</h3>
         <div class="buttons">

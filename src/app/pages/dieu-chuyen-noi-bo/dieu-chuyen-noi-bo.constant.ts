@@ -20,14 +20,15 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
     accessPermisson: 'DCNB_QUYETDINHDC'
   },
-  // {
-  //   icon: 'htvbdh_tcdt_chitieukehoachnam',
-  //   title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
-  //   url: `/tong-hop-danh-sach-hang`,
-  //   dropdown: 'tong-hop-danh-sach-hang',
-  //   idHover: 'tong-hop-danh-sach-hang',
-  //   hasTab: false,
-  // },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Nhập điều chuyển',
+    url: `/nhap-dieu-chuyen`,
+    dropdown: 'nhap-dieu-chuyen',
+    idHover: 'nhap-dieu-chuyen',
+    hasTab: false,
+    // accessPermisson: 'DCNB_QUYETDINHDC'
+  },
   // {
   //   icon: 'htvbdh_tcdt_dieu_chuyen',
   //   title: 'Xuất hàng DTQG',

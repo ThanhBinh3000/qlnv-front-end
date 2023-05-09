@@ -24,6 +24,13 @@ const routes: Routes = [
             '../dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module'
           ).then((m) => m.QuyetDinhDieuChuyenModule),
       },
+      {
+        path: 'nhap-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/nhap-dieu-chuyen/nhap-dieu-chuyen.module'
+          ).then((m) => m.NhapDieuChuyenModule),
+      },
     ]
   }]
 
