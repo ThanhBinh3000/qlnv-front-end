@@ -150,10 +150,6 @@
                 </div>
             </div>
         </form>
-        <!-- </nz-collapse-panel>
-        </nz-collapse> -->
-        <!-- <nz-collapse nzAccordion>
-            <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true"> -->
         <nz-card class="mt16 flex-card p-lr16">
             <nz-table class="pd-10" nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
@@ -178,10 +174,10 @@
                         <td>{{data.tenLoKho == null ? data.tenNganKho : data.tenLoKho }},
                             {{data.tenNhaKho}}
                         </td>
-                        <td></td>
-                        <td>{{data.dviTinh}}</td>
-                        <td>{{data.duDau | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{data.tenCloaiVthh}}</td>
+                        <td>{{data.donViTinh}}</td>
+                        <td>{{data.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{data.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>{{data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                     </tr>
                 </tbody>
@@ -194,15 +190,13 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th> {{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN' }}
+                        <th> {{ calcTong('soLuongDeXuat') | number : '1.0-1' : 'vi_VN' }}
                         </th>
                         <th></th>
                     </tr>
                 </tfoot>
             </nz-table>
         </nz-card>
-        <!-- </nz-collapse-panel>
-        </nz-collapse> -->
     </nz-card>
 </div>
 <ng-template #error let-control>

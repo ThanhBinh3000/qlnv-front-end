@@ -124,7 +124,6 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       maDviCha: this.userInfo.MA_DVI
     };
     const res = await this.donViService.getAll(body)
-    console.log(res, 999)
     const dataDk = res.data.filter(item => item.maDvi == dataCha.maDiemKho);
     dataCha.diaChi = dataDk.diaChi
 
