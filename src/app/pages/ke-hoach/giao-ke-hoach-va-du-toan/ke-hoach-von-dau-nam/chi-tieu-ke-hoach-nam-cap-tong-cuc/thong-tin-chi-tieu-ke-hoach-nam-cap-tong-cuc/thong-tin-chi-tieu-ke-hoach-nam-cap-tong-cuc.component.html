@@ -846,9 +846,18 @@
             <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
             <td></td>
           </tr>
-          <tr>
+          <tr *ngIf="userService.isTongCuc()">
             <td></td>
             <td style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td></td>
+          </tr>
+          <tr *ngIf="userService.isCuc()">
+            <td></td>
+            <td style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
             <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
