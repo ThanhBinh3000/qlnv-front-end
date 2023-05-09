@@ -255,17 +255,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    let resDonVi = await this.donViService.getDonVi({str: this.userInfo.MA_DVI?.slice(0, -2)});
-    if (resDonVi.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = [resDonVi.data];
-      if (this.dsDonVi) {
-        let tenDviCuc = this.dsDonVi.find(item => item.maDvi === this.userInfo.MA_DVI?.slice(0, -2));
-        if (tenDviCuc) {
-          this.formData.controls['tenDviCuc'].setValue(tenDviCuc.tenDvi);
+    if(!this.isView){
+      let resDonVi = await this.donViService.getDonVi({str: this.userInfo.MA_DVI?.slice(0, -2)});
+      if (resDonVi.msg == MESSAGE.SUCCESS) {
+        this.dsDonVi = [resDonVi.data];
+        if (this.dsDonVi) {
+          let tenDviCuc = this.dsDonVi.find(item => item.maDvi === this.userInfo.MA_DVI?.slice(0, -2));
+          if (tenDviCuc) {
+            this.formData.controls['tenDviCuc'].setValue(tenDviCuc.tenDvi);
+          }
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 

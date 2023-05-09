@@ -18,7 +18,6 @@ import { TongHopDieuChuyenTaiTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc
 import { TongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChiTietTongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component';
 
-
 @NgModule({
   declarations: [
     DieuChuyenNoiBoComponent,

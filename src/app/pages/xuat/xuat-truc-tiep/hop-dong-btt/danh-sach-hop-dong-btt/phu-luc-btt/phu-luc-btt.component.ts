@@ -49,20 +49,20 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         id: [],
         idHd: [],
         namHd: [dayjs().get('year')],
-        soHd: ['', [Validators.required]],
-        tenHd: ['', [Validators.required]],
-        ngayHluc: [null, [Validators.required]],
-        soPhuLuc: ['', [Validators.required]],
-        ngayHlucPhuLuc: [null, [Validators.required]],
-        noiDungPhuLuc: ['', [Validators.required]],
-        thoiGianDuKien: [null, [Validators.required]],
+        soHd: [''],
+        tenHd: [''],
+        ngayHluc: [null,],
+        soPhuLuc: [''],
+        ngayHlucPhuLuc: [null,],
+        noiDungPhuLuc: [''],
+        thoiGianDuKien: [null],
         tgianGnhanTu: [],
         tgianGnhanDen: [],
-        thoiGianDuKienSauDc: [null, [Validators.required]],
+        thoiGianDuKienSauDc: [null],
         ngayHlucSauDcTu: [],
         ngayHlucSauDcDen: [],
         tgianThienHd: [],
-        tgianThienHdSauDc: [null, [Validators.required]],
+        tgianThienHdSauDc: [null],
         noiDungDcKhac: [],
         ghiChuPhuLuc: [],
         trangThaiPhuLuc: STATUS.DU_THAO,
@@ -147,7 +147,8 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
     }
   }
 
-  async save(isOther: boolean) {
+  async save(isOther?) {
+    this.setValidator(isOther);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -230,6 +231,33 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+
+  setValidator(isOther) {
+    if (isOther) {
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["tenHd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["ngayHlucPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["noiDungPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+      this.formData.controls["thoiGianDuKienSauDc"].setValidators([Validators.required]);
+      this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+      this.formData.controls["tgianThienHdSauDc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["tenHd"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["soPhuLuc"].clearValidators();
+      this.formData.controls["ngayHlucPhuLuc"].clearValidators();
+      this.formData.controls["noiDungPhuLuc"].clearValidators();
+      this.formData.controls["thoiGianDuKien"].clearValidators();
+      this.formData.controls["thoiGianDuKienSauDc"].clearValidators();
+      this.formData.controls["tgianThienHd"].clearValidators();
+      this.formData.controls["tgianThienHdSauDc"].clearValidators();
+    }
   }
 
 }
