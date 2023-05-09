@@ -6,7 +6,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import dayjs from 'dayjs';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -15,9 +14,6 @@ import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-t
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  isQuanLy: boolean;
-  isAddNew: boolean;
-  idQdPdKh: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -64,12 +60,9 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  goDetail(id: number, idPdKhHdr: number, roles?: any, isQuanLy?: boolean) {
+  goDetail(id: number) {
     this.idSelected = id;
-    this.idQdPdKh = idPdKhHdr;
     this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
   }
 
 
