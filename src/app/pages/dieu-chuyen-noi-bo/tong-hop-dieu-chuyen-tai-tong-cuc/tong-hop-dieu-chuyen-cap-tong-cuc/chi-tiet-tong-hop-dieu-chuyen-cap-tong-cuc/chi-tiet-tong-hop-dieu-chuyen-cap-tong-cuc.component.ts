@@ -30,10 +30,10 @@ import { STATUS } from "src/app/constants/status";
 import { chain, cloneDeep, includes, groupBy } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
-import { Router } from '@angular/router';
 import { TongHopDieuChuyenCapTongCucService } from '../../tong-hop-dieu-chuyen-tai-tong-cuc.service';
 import { KeHoachDieuChuyenService } from '../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service';
 import { TongHopDieuChuyenService } from '../../../tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc',
     templateUrl: './chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component.html',
@@ -223,12 +223,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             if (!this.formData.valid) return;
             const res = await this.save();
             if (res.msg == MESSAGE.SUCCESS) {
-                this.router.navigate([
-                    '/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen',
-                    this.formData.value.id,
-                ]);
+                this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id: this.formData.value.id }]);
             }
-
         } catch (error) {
             console.log("error", error)
         }
