@@ -63,15 +63,18 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKh:[null, Validators.required],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
+      ngayHieuLuc: [null, Validators.required],
       soQdPdDaDtxd: [null, Validators.required],
       idQdPdDaDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null, Validators.required],
-      diaChi: [],
+      diaChi: [null],
+      soQdPdTktcTdt:[null],
       idDuAn: [null, Validators.required],
       tienCvDaTh: [0],
       tienCvKad: [0],
@@ -83,7 +86,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       fileDinhKems: [null],
       listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtXdscQuyetDinhPdKhlcntCvKad: null,
-      listKtXdscQuyetDinhPdKhlcntCvKh: null
+      listKtXdscQuyetDinhPdKhlcntCvKh: null,
+      khoi:[null],
+      loaiCapCt:[null],
     });
   }
 
@@ -227,43 +232,43 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     }
   }
 
-  async changeSoQdPdDaDtxd(event) {
-    if (event) {
-      let item = this.listQdPdDaDtxd.filter(item => item.soQd == event)[0];
-      if (item) {
-        this.formData.patchValue({
-          idQdPdDaDtxd: item.id,
-          tenDuAn: item.tenDuAn,
-          chuDauTu: item.chuDauTu,
-          diaChi: item.diaChi,
-          idDuAn: item.idDuAn,
-          tongTien: item.tongMucDt
-        });
-        let body = {
-          "soQdPdDaDtxd": event,
-          "paggingReq": {
-            "limit": 10,
-            "page": this.page - 1
-          },
-        };
-        if (!this.idInput) {
-          let res = await this.quyetdinhpheduyetKhlcntService.getLastRecordBySoQdPdDaDtxd(body);
-          if (res.msg == MESSAGE.SUCCESS && res.data) {
-            this.dataCongViecDaTh = res.data.listKtXdscQuyetDinhPdKhlcntCvDaTh;
-            this.updateEditCongViecDaThCache();
-          } else {
-            this.dataCongViecDaTh = [];
-          }
-        }
-      } else
-        this.formData.patchValue({
-          idQdPdDaDtxd: null,
-          tenDuAn: null,
-          idDuAn: null,
-          tongTien: 0
-        });
-    }
-  }
+  // async changeSoQdPdDaDtxd(event) {
+  //   if (event) {
+  //     let item = this.listQdPdDaDtxd.filter(item => item.soQd == event)[0];
+  //     if (item) {
+  //       this.formData.patchValue({
+  //         idQdPdDaDtxd: item.id,
+  //         tenDuAn: item.tenDuAn,
+  //         chuDauTu: item.chuDauTu,
+  //         diaChi: item.diaChi,
+  //         idDuAn: item.idDuAn,
+  //         tongTien: item.tongMucDt
+  //       });
+  //       let body = {
+  //         "soQdPdDaDtxd": event,
+  //         "paggingReq": {
+  //           "limit": 10,
+  //           "page": this.page - 1
+  //         },
+  //       };
+  //       if (!this.idInput) {
+  //         let res = await this.quyetdinhpheduyetKhlcntService.getLastRecordBySoQdPdDaDtxd(body);
+  //         if (res.msg == MESSAGE.SUCCESS && res.data) {
+  //           this.dataCongViecDaTh = res.data.listKtXdscQuyetDinhPdKhlcntCvDaTh;
+  //           this.updateEditCongViecDaThCache();
+  //         } else {
+  //           this.dataCongViecDaTh = [];
+  //         }
+  //       }
+  //     } else
+  //       this.formData.patchValue({
+  //         idQdPdDaDtxd: null,
+  //         tenDuAn: null,
+  //         idDuAn: null,
+  //         tongTien: 0
+  //       });
+  //   }
+  // }
 
   addAddCongViecDaTh() {
     this.rowItemCongViecDaTh.loai = '00';

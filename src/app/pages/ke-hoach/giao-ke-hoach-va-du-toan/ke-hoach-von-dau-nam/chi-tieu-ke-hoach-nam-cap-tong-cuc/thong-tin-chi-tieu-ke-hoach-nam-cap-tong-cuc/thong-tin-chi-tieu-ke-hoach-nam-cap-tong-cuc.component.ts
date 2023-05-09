@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output
 } from '@angular/core';
@@ -174,7 +174,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.showListEvent, 'showListEvent');
     this.yearNow = dayjs().get('year');
     for (let i = 0; i < 5; i++) {
       this.listNam.push({
@@ -210,7 +209,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
-
 
   async findCanCuByYear(year: number, id?) {
     this.formData.patchValue({

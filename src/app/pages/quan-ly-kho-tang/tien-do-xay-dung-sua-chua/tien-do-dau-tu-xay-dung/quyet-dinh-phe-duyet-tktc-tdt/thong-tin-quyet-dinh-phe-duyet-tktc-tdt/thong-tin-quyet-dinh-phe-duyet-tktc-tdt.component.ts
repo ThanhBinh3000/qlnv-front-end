@@ -115,8 +115,6 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   }
 
   bindingData() {
-    console.log(this.itemDuAn, 'this.itemDuAn');
-    console.log(this.itemQdPdDaDtxd, 'this.itemQdPdDaDtxd');
     if (this.itemDuAn && this.itemQdPdDaDtxd) {
       this.formData.patchValue({
         namKh: this.itemDuAn.namKeHoach,
@@ -179,7 +177,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
             khoi: this.itemDuAn.tenKhoi,
-            namKh : this.itemDuAn.namKeHoach
+            namKh: this.itemDuAn.namKeHoach
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
