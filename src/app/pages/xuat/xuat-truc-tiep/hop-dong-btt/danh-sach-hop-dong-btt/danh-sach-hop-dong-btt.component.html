@@ -50,8 +50,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null,null,null,false)"
-                    *ngIf="!userService.isTongCuc()">
+                <button type="button" class="btn btn-main" (click)="goDetail(null)" *ngIf="!userService.isTongCuc()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm mới</span>
                 </button>
@@ -175,11 +174,11 @@
                         <td>{{ data.tenTrangThaiHd }}</td>
                         <td>{{ data.tenTrangThaiXh }}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id,data.idPdKhHdr,null,true)" *ngIf="data.trangThai=='00'">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a (click)="goDetail(data.id,data.idPdKhHdr,null,true)">
+                            <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
+                            </a>
+                            <a *ngIf="(data.trangThaiHd != STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id)">
+                                <i class="fa fa-pencil"></i>
                             </a>
                         </td>
                     </tr>
@@ -205,10 +204,6 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-thong-tin-hop-dong-btt *ngIf="isAddNew" [id]="idSelected" [idQdPdKh]="idQdPdKh" (showListEvent)="showList()"
-        [loaiVthh]="loaiVthh">
-    </app-thong-tin-hop-dong-btt>
-    <app-quan-ly-hop-dong-btt *ngIf="isQuanLy" [id]="idSelected" [idQdPdKh]="idQdPdKh" (showListEvent)="showList()"
-        [loaiVthh]="loaiVthh">
+    <app-quan-ly-hop-dong-btt [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
     </app-quan-ly-hop-dong-btt>
 </ng-container>
