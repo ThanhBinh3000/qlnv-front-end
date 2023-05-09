@@ -104,6 +104,19 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.filter();
   }
 
+  receivedData(data: any, tab: string) {
+    switch (tab) {
+      case '01':
+        this.itemQdPdDaDtxd = data;
+        break;
+      case '02':
+        this.itemQdPdTktcTdt = data;
+        break;
+      case '03':
+        this.itemQdPdKhlcnt = data;
+        break;
+    }
+  }
 
   async loadDanhSachChiCuc() {
     const body = {

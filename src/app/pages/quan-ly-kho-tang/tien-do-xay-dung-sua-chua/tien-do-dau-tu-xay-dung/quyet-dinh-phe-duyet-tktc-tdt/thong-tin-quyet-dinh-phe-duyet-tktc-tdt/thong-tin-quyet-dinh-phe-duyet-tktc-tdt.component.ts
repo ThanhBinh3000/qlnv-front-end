@@ -33,6 +33,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Output() dataItemTktcTdt = new EventEmitter<object>();
   @Input()
   idInput: number;
   @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
@@ -112,6 +113,10 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  emitDataTktcTdt(data) {
+    this.dataItemTktcTdt.emit(data);
   }
 
   bindingData() {
@@ -274,6 +279,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
                 })
+                this.emitDataTktcTdt(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
@@ -291,7 +297,13 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         },
       });
     } else {
-      await this.createUpdate(this.formData.value)
+      let res = await this.createUpdate(this.formData.value)
+      if (res) {
+        this.formData.patchValue({
+          id: res.id,
+        });
+        this.idInput = res.id;
+      }
     }
   }
 

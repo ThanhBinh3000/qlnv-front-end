@@ -268,10 +268,12 @@
         </nz-affix>
         <ng-container *ngIf="tabSelected == '01'">
           <app-quyet-dinh-phe-duyet-du-an-dtxd [itemDuAn]="itemSelected"
+                                               (dataItemDaDtxd)="receivedData($event,'01')"
                                                [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-du-an-dtxd>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
           <app-quyet-dinh-phe-duyet-tktc-tdt [itemDuAn]="itemSelected" [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                             (dataItemTktcTdt)="receivedData($event,'02')"
                                              [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-tktc-tdt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
