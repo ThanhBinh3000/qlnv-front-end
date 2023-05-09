@@ -33,8 +33,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
-  indexTab: number;
-  currentTabView: string;
+  indexTab: number = 0;
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;

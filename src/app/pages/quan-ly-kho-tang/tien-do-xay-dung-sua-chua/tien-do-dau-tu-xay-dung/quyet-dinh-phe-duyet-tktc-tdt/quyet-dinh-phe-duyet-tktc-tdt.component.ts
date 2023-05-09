@@ -36,6 +36,7 @@ export class QuyetDinhPheDuyetTktcTdtComponent implements OnInit {
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+  @Output() dataItemTktcTdt = new EventEmitter<object>();
 
   constructor(
     public userService: UserService,
@@ -52,6 +53,15 @@ export class QuyetDinhPheDuyetTktcTdtComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
+  }
+
+  receivedData(data: any) {
+    this.itemQdPdTktcTdt = data;
+    this.emitDataTktcTdt(data);
+  }
+
+  emitDataTktcTdt(data) {
+    this.dataItemTktcTdt.emit(data);
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
