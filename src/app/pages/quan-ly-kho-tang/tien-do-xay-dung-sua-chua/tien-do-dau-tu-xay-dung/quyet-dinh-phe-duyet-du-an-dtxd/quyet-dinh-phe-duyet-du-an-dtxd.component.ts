@@ -1,17 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {Base2Component} from "../../../../../components/base2/base2.component";
-import dayjs from "dayjs";
-import {
-  QuyetdinhpheduyetduandtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
 import {STATUS} from "../../../../../constants/status";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {UserService} from 'src/app/services/user.service';
 
 @Component({
@@ -42,7 +30,7 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
     if (this.itemQdPdDaDtxd) {
       this.selectedId = this.itemQdPdDaDtxd.id;
       this.isDetail = true;
-      this.isViewDetail = this.itemQdPdDaDtxd.trangThai == STATUS.DU_THAO ? true : false;
+      this.isViewDetail = this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH ? true : false;
     }
   }
 
