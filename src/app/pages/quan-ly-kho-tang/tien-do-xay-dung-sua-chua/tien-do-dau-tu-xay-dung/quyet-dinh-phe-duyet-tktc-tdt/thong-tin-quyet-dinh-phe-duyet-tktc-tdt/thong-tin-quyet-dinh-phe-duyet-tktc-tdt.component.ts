@@ -177,7 +177,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd: data.soQd ? data.soQd.split('/')[0] : null
+            soQd: data.soQd ? data.soQd.split('/')[0] : null,
+            khoi: this.itemDuAn.tenKhoi,
+            namKh : this.itemDuAn.namKeHoach
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {

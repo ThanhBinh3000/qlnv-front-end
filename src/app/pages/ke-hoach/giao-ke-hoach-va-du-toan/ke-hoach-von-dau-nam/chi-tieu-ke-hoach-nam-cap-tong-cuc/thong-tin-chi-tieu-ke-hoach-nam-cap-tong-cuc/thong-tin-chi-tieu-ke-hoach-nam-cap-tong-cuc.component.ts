@@ -1490,6 +1490,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
     let checkFlag = this.soSanhCtCapTrenGiao('save');
     if (!checkFlag) {
+      this.spinner.hide();
       return;
     }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
@@ -1629,7 +1630,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      console.log(this.thongTinChiTieuKeHoachNamInput);
       // return;
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
