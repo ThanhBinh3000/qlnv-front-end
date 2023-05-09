@@ -1614,7 +1614,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   }
                 })
             } else {
-              this.redirectChiTieuKeHoachNam();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              // this.redirectChiTieuKeHoachNam();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1665,7 +1666,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 })
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectChiTieuKeHoachNam()
+              // this.redirectChiTieuKeHoachNam()
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
