@@ -127,26 +127,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.formData = this.fb.group(
             {
                 id: [''],
-                nam: [dayjs().get("year")],
-                maDvi: [''],
-                maDviCuc: [''],
-                loaiVthh: [''],
-                cloaiVthh: [''],
-                tenVthh: [''],
                 trangThai: [''],
-                idQdPd: [''],
-                soQdPd: [''],
-                nguoiGduyetId: [''],
-                ngayPduyet: [''],
-                nguoiPduyetId: [''],
-                lyDoTuChoi: [''],
-                tenDvi: [''],
-                tenLoaiVthh: [''],
-                tenCloaiVthh: [''],
-                donViTinh: [''],
-                tenTrangThai: [''],
-                // loaiHangHoa: [''],
-                // chungLoaiHangHoa: [''],
 
                 lyDoDc: [''],
                 namKeHoach: [dayjs().get('year'), Validators.required],
@@ -154,10 +135,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                 thoiGianTongHop: [''],
 
                 maTongHop: [''],
-                soDxuat: [''],
                 ngayTongHop: [dayjs().format('YYYY-MM-DD')],
                 trichYeu: [''],
-                ngayTrinhTc: ['']
+                // ngayTrinhTc: ['']
             }
         );
         this.userInfo = this.userService.getUserLogin();
@@ -563,11 +543,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     }
     setValidator(isTaoQD) {
         if (isTaoQD) {
-            this.formData.controls["soDxuat"].setValidators([Validators.required]);
             this.formData.controls["trichYeu"].setValidators([Validators.required]);
         }
         else {
-            this.formData.controls["soDxuat"].clearValidators();
             this.formData.controls["trichYeu"].clearValidators();
         }
     }
