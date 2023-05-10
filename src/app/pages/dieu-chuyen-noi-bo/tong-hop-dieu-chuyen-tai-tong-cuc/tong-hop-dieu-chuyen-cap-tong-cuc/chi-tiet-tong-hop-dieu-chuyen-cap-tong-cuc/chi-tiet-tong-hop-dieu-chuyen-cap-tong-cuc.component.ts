@@ -469,35 +469,56 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                                         children: rsxx
                                     }
                                 }).value()
-                                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                // let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                let duToanKphi = 0;
+                                let soLuongDc = 0;
+                                vs?.forEach(element => {
+                                    duToanKphi += (element.duToanKphi || 0);
+                                    soLuongDc += (element.soLuongDc || 0)
+                                });
                                 return {
                                     ...maLoKho,
                                     idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
                                     children: rsss,
-                                    duToanKphi
+                                    duToanKphi,
+                                    soLuongDc
                                 }
                             }
                             ).value();
 
-                        let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        // let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        let duToanKphi = 0;
+                        let soLuongDc = 0;
+                        v?.forEach(element => {
+                            duToanKphi += (element.duToanKphi || 0);
+                            soLuongDc += (element.soLuongDc || 0)
+                        });
                         let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
                         return {
                             ...rowDiemKho,
                             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
-                            duToanKphi: duToanKphi,
+                            duToanKphi,
+                            soLuongDc,
                             children: rss,
                             expand: true
                         }
                     }
                     ).value();
 
-                let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                // let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let duToanKphi = 0;
+                let soLuongDc = 0;
+                rs?.forEach(element => {
+                    duToanKphi += (element.duToanKphi || 0);
+                    soLuongDc += (element.soLuongDc || 0)
+                });
                 let rowChiCuc = value?.find(s => s.maDvi === key);
                 return {
                     ...rowChiCuc,
                     idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
-                    duToanKphi: duToanKphi,
+                    duToanKphi,
+                    soLuongDc,
                     children: rs,
                     expand: true
                 };
