@@ -361,6 +361,14 @@ export class PhuLuc7Component implements OnInit {
     return lstTemp.every(e => !e.stt.startsWith(stt));
   };
 
+  checkDelete(stt: string) {
+    const level = stt.split('.').length - 2;
+    if (level == 2) {
+      return true;
+    }
+    return false;
+  }
+
   updateSingleChecked(): void {
     if (this.lstCtietBcao.every(item => !item.checked)) {
       this.allChecked = false;

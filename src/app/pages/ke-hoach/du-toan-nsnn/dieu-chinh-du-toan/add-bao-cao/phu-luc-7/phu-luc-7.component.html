@@ -195,7 +195,7 @@
               <td> {{data.ghiChu}} </td>
               <td>{{displayValue(data.dtoanNamConThieu)}}</td>
               <td *ngIf="!status">
-                <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status || editRecommendedValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -296,7 +296,7 @@
                 </td>
               </ng-template>
               <td *ngIf="!status">
-                <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status || editRecommendedValue">
                 <a class="save" (click)="saveEdit(editCache[data.id].data.id)" style="margin-right:15px">Lưu</a>
