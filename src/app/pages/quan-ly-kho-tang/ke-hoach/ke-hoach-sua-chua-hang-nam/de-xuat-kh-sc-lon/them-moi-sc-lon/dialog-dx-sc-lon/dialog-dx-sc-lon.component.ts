@@ -150,7 +150,7 @@ export class DialogDxScLonComponent implements OnInit {
   async getAllLoaiDuAn() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_CONG_TRINH_SCL_KT");
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data.content) {
+      if (res.data) {
         this.listLoaiDuAn = res.data;
       }
     }

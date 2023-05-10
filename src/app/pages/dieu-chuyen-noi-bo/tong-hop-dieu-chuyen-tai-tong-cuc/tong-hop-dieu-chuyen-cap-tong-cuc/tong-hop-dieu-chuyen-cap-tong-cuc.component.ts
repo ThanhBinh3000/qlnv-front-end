@@ -72,24 +72,12 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     ) {
         super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenCapTongCucService);
         this.formData = this.fb.group({
-            // nam: [''],
-            // maTongHop: [''],
-            // loaiDieuChuyen: [''],
-            // ngayTongHop: [''],
-            // ngayTongHopTu: [''],
-            // ngayTongHopDen: [''],
-            // loaiHangHoa: [''],
-            // chungLoaiHangHoa: [''],
-            // noiDungTongHop: ['']
             namKeHoach: [''],
             id: [''],
             loaiDieuChuyen: [''],
-            soDeXuat: [''],
             ngayTongHop: [''],
             thTuNgay: [''],
             thDenNgay: [''],
-            // loaiHangHoa: [''],
-            // chungLoaiHangHoa: [''],
             trichYeu: ['']
 
         })

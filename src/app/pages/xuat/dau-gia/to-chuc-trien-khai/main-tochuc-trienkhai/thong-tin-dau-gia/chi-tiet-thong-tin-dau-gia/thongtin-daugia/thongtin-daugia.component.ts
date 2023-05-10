@@ -187,7 +187,13 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   calendarSoLuong(dviTsan) {
     let soLuong = 0;
-    dviTsan.children.forEach(item => soLuong += item.soLuongDeXuat);
+    //ten cot khong trung khop nen fix nhu vay
+    if (dviTsan.children[0].soLuong) {
+      dviTsan.children.forEach(item => soLuong += item.soLuong);
+    } else {
+      dviTsan.children.forEach(item => soLuong += item.soLuongDeXuat);
+    }
+
     return soLuong
   }
 

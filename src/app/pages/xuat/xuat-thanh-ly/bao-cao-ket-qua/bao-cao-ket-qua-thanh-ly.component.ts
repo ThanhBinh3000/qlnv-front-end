@@ -10,16 +10,14 @@ import {MESSAGE} from "../../../../constants/message";
 import dayjs from "dayjs";
 import {XuatThanhLyComponent} from "../xuat-thanh-ly.component";
 import {CHUC_NANG} from "../../../../constants/status";
-import {
-  QuyetDinhThanhLyService
-} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
+import {BaoCaoKqThanhLyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/BaoCaoKqThanhLy.service";
 
 @Component({
-  selector: 'app-quyet-dinh-thanh-ly',
-  templateUrl: './quyet-dinh-thanh-ly.component.html',
-  styleUrls: ['./quyet-dinh-thanh-ly.component.scss']
+  selector: 'app-bao-cao-ket-qua-thanh-ly',
+  templateUrl: './bao-cao-ket-qua-thanh-ly.component.html',
+  styleUrls: ['./bao-cao-ket-qua-thanh-ly.component.scss']
 })
-export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit {
+export class BaoCaoKetQuaThanhLyComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -29,12 +27,12 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
   listHangHoaAll: any[] = [];
   listLoaiHangHoa: any[] = [];
   listTrangThai: any[] = [
-    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
-    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
-    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
-    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
-    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    {ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - LĐ Vụ'},
+    {ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - LĐ Vụ'},
+    {ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ TC'},
+    {ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ TC'},
+    {ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Ban hành'},
   ];
   idHoSo: number = 0;
   openHoSo = false;
@@ -44,12 +42,12 @@ export class QuyetDinhThanhLyComponent extends Base2Component implements OnInit 
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private quyetDinhThanhLyService: QuyetDinhThanhLyService,
+              private baoCaoKqThanhLyService: BaoCaoKqThanhLyService,
               private danhMucService: DanhMucService,
               private xuatThanhLyComponent: XuatThanhLyComponent,
 
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, baoCaoKqThanhLyService);
     this.vldTrangThai = this.xuatThanhLyComponent;
     this.formData = this.fb.group({
       nam: [''],
