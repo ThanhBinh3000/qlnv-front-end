@@ -1,12 +1,12 @@
 import { Injectable } from "@angular/core";
-import { BaseLocalService } from "../base-local.service";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
+import { BaseService } from "../base.service";
 
 @Injectable({
   providedIn: 'root',
 })
-export class BcBnTt108Service extends BaseLocalService {
+export class BcBnTt108Service extends BaseService {
   GATEWAY = '';
 
   constructor(public httpClient: HttpClient) {
@@ -14,7 +14,7 @@ export class BcBnTt108Service extends BaseLocalService {
   }
 
   bcNguonHinhThanhDtqg(body) {
-    const url = `${environment.SERVICE_API_BC}${this.GATEWAY}/${this.table}/001h`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/001h`;
     return this._httpClient.post(url, body, { responseType: 'blob' }).toPromise();
   }
 }
