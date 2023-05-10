@@ -45,6 +45,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   itemQdPdDaDtxd: any;
   itemQdPdTktcTdt: any;
   itemQdPdKhLcnt: any;
+  itemTtdt: any;
 
   constructor(
     httpClient: HttpClient,
@@ -56,7 +57,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private ktQdXdHangNamService: KtQdXdHangNamService,
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
+    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -120,6 +121,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       case '03':
         this.itemQdPdKhLcnt = data;
         break;
+      case '04':
+        this.itemTtdt = data;
+        break;
     }
   }
 
@@ -161,7 +165,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      console.log(e, '2323232')
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "|22222");
     } finally {
       this.spinner.hide();
@@ -200,6 +203,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.quyetdinhpheduyetKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        this.itemTtdt = this.itemQdPdKhLcnt;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
