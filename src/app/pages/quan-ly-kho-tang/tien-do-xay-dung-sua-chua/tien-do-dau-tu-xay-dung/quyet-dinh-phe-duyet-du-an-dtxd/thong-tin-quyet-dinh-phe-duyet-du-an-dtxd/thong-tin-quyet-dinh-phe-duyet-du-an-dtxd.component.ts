@@ -129,7 +129,6 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
 
   bindingData() {
     if (this.itemDuAn) {
-      console.log(this.itemDuAn, 'itemdUan')
       this.formData.patchValue({
         namKh: this.itemDuAn.namKeHoach,
         tenDuAn: this.itemDuAn.tenDuAn,
