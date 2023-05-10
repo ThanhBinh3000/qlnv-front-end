@@ -111,7 +111,7 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3> DANH SÁCH DỰ ÁN KHO DTQG</h3>
+    <h3> DANH SÁCH DỰ ÁN ĐẦU TƯ XÂY DỰNG KHO DTQG</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub ml-2" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM_DUANDTXD_EXP')">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -249,8 +249,10 @@
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
+            <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                       (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+              <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th nzRight></th>

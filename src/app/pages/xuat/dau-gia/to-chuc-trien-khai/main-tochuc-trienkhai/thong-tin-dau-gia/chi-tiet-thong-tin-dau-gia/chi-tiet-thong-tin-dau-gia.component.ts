@@ -3,7 +3,7 @@ import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { FormArray, Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../../../../constants/message";
+import { MESSAGE } from "src/app/constants/message";
 import * as dayjs from "dayjs";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';

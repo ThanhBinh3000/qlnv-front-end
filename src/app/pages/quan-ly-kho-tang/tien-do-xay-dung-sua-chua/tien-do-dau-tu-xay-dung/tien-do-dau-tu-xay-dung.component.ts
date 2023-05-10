@@ -21,6 +21,10 @@ import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 import {STATUS} from "../../../../constants/status";
+import {QuyetDinhPheDuyetKhlcntComponent} from "./quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component";
+import {
+  QuyetdinhpheduyetKhlcntService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -40,6 +44,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   tabSelected: string = "01";
   itemQdPdDaDtxd: any;
   itemQdPdTktcTdt: any;
+  itemQdPdKhLcnt: any;
 
   constructor(
     httpClient: HttpClient,
@@ -50,7 +55,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private donViService: DonviService,
     private ktQdXdHangNamService: KtQdXdHangNamService,
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
-    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService
+    private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
+    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -103,6 +109,19 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.filter();
   }
 
+  receivedData(data: any, tab: string) {
+    switch (tab) {
+      case '01':
+        this.itemQdPdDaDtxd = data;
+        break;
+      case '02':
+        this.itemQdPdTktcTdt = data;
+        break;
+      case '03':
+        this.itemQdPdKhLcnt = data;
+        break;
+    }
+  }
 
   async loadDanhSachChiCuc() {
     const body = {
@@ -116,6 +135,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
 
 
   async loadQdPdDaDtxdByDuAn(item) {
+    this.itemQdPdTktcTdt = null;
+    this.itemQdPdDaDtxd = null;
+    this.itemQdPdKhLcnt = null;
     this.spinner.show();
     try {
       let body = {
@@ -128,23 +150,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       let res = await this.quyetdinhpheduyetduandtxdService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        console.log(this.itemQdPdDaDtxd, '88888');
         //Check tiếp quyết định phê duyệt bản vẽ
         if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
-          let body = {
-            "idQdPdDtxd": this.itemQdPdDaDtxd.id,
-            "paggingReq": {
-              "limit": 10,
-              "page": 0
-            }
-          }
-          let res1 = await this.quyetdinhpheduyetTktcTdtService.search(body);
-          if (res1.msg == MESSAGE.SUCCESS) {
-            this.itemQdPdTktcTdt = res1.data.content && res1.data.content.length > 0 ? res1.data.content[0] : null;
-            console.log(this.itemQdPdTktcTdt, 'this.itemQdPdTktcTdtthis.itemQdPdTktcTdt')
-          } else {
-            this.notification.error(MESSAGE.ERROR, res1.msg);
-          }
+          await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
+          await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -152,16 +161,55 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e, '2323232')
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "|22222");
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async loadItemQdPdTktcTdt(itemQdPdDaDtxd) {
+    if (itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+      let body = {
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdTktcTdt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadItemQdPdKhLcnt(itemQdPdTktcTdt) {
+    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
+      let body = {
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "idQdPdTktcTdt": itemQdPdTktcTdt.id,
+        "idDuAn": this.itemQdPdDaDtxd.idDuAn,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetKhlcntService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
   convertListData(dataTable: any[]) {
     if (dataTable && dataTable.length > 0) {
       dataTable = chain(dataTable)
-        .groupBy("khoi")
+        .groupBy("tenKhoi")
         .map((value, key) => {
           let rs = chain(value)
             .groupBy("namKeHoach")

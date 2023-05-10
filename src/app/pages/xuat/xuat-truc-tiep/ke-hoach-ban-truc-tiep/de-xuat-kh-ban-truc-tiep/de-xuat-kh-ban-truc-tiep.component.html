@@ -255,10 +255,10 @@
                         </td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a *ngIf="loaiVthh.startsWith('02') ? 
+                            <a *ngIf="loaiVthh.startsWith('02') ?
                                (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
@@ -268,7 +268,7 @@
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC) :
                                (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
@@ -279,7 +279,7 @@
                                 (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf=" loaiVthh.startsWith('02') ? 
+                            <a *ngIf=" loaiVthh.startsWith('02') ?
                                (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.DU_THAO)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_TP)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && data.trangThai == STATUS.TU_CHOI_LDC) :
@@ -297,7 +297,7 @@
                                 (click)="goDetail(data.id)">
                                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                             </a>
-                            <a *ngIf="loaiVthh.startsWith('02') ? 
+                            <a *ngIf="loaiVthh.startsWith('02') ?
                                (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XOA')):
                                (data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XOA')) "
                                 (click)="delete(data)">
@@ -446,10 +446,10 @@
                                 data.idThop}}</a>
                         </td>
                         <td class="text-left">
-                            <a *ngIf="loaiVthh.startsWith('02') ? 
+                            <a *ngIf="loaiVthh.startsWith('02') ?
                                (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
@@ -459,7 +459,7 @@
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.TU_CHOI_LDC) :
                                (userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_XEM') && (data.trangThai == STATUS.DA_DUYET_LDC))
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+                               ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
@@ -484,7 +484,7 @@
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
-                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                             </ng-template>
                         </nz-pagination>
                         <!-- end phân trang  -->

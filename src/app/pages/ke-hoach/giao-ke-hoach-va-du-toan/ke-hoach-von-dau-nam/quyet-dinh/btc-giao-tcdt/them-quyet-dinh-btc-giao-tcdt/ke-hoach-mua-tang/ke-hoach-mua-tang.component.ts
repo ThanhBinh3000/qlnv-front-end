@@ -72,7 +72,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.onChangeLoaiVthh(this.dataEdit[index].data.loaiVthh, 'edit', index);
   }
 
-
   xoaItem(index: number) {
     this.modal.confirm({
       nzClosable: false,

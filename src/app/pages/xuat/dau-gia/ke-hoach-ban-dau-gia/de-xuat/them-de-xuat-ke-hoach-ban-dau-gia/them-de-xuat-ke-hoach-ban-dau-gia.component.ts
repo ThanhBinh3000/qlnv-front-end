@@ -425,10 +425,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
         soQdCtieu: res2.data.soQuyetDinh,
         idSoQdCtieu: res2.data.id
       });
-    } else {
-      this.formData.patchValue({
-        soQdCtieu: 189
-      });
     }
   }
 
