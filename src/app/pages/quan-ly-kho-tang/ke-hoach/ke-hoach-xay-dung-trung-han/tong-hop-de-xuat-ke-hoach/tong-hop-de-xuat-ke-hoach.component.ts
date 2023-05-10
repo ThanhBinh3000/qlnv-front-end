@@ -1,9 +1,9 @@
 
 import {
-  Component,
+  Component, EventEmitter,
   Input,
-  OnInit,
-} from '@angular/core';
+  OnInit, Output
+} from "@angular/core";
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -29,6 +29,7 @@ import { Router } from "@angular/router";
   styleUrls: ['./tong-hop-de-xuat-ke-hoach.component.scss']
 })
 export class TongHopDeXuatKeHoachComponent implements OnInit {
+  @Output() eventTaoQd  = new EventEmitter<any>();
   @Input() typeVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -366,6 +367,10 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       result = dayjs(event).format('DD/MM/YYYY').toString()
     }
     return result;
+  }
+
+  emitEventTaQd(event) {
+    this.eventTaoQd.emit(event)
   }
 }
 
