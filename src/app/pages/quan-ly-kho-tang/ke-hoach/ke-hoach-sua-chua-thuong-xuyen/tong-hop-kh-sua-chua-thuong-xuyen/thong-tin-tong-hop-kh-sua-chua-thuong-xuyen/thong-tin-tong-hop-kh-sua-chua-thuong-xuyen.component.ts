@@ -374,7 +374,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     });
     let body = {
       "namKh": this.formData.value.namKh,
-      "trangThai": STATUS.DA_DUYET_LDC,
+      "trangThai": STATUS.DA_DUYET_CBV,
       "trangThaiTh": STATUS.CHUA_TONG_HOP,
       "capDvi": 1,
       "paggingReq": {"limit": 10000, "page": 0}
