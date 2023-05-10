@@ -188,5 +188,6 @@
 </ng-container>
 
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-sc-tcdt  [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"></app-them-moi-sc-tcdt>
+  <app-them-moi-sc-tcdt  [idInput]="selectedId" (showListEvent)="showList()" [isViewQd]="false"
+                         [isViewDetail]="isViewDetail"></app-them-moi-sc-tcdt>
 </ng-container>
