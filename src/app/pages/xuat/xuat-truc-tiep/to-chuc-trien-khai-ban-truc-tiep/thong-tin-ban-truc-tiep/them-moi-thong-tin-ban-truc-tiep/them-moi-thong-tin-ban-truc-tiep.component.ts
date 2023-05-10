@@ -224,8 +224,11 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         if (!this.listOfData) {
           this.listOfData = [];
         }
-        this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children = [...this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children, this.rowItem];
-        this.dataTable[0].children.find(s => s.id == this.rowItem.idDviDtl).children.idDviDtl = this.rowItem.idDviDtl
+        this.dataTable.forEach((item) => {
+          item.children.filter(s => s.id == this.rowItem.idDviDtl).forEach((child) => {
+            child.children = [...child.children, this.rowItem];
+          })
+        })
         this.listOfData = [...this.listOfData, this.rowItem];
         this.rowItem = new ChiTietThongTinBanTrucTiepChaoGia();
         this.emitDataTable();

@@ -29,6 +29,7 @@ import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
 import {includes} from 'lodash';
+import {kmr_IQ} from "ng-zorro-antd/i18n";
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -502,6 +503,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           maBoNganh: this.formData.value.dviThongTri,
           maTh: this.formData.value.soDnCapVon
         });
+        console.log(res,'resresres');
         if (res.msg == MESSAGE.SUCCESS && res.data) {
           this.listDviThuHuong = res.data;
         }

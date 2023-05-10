@@ -10,6 +10,7 @@ import { Router } from "@angular/router";
 export class KeHoachXayDungTrungHanComponent implements OnInit {
 
   tabSelected: string = "dxkh";
+  dataOutput : any
   constructor(
     public userService : UserService,
     public router : Router
@@ -20,8 +21,10 @@ export class KeHoachXayDungTrungHanComponent implements OnInit {
     }
   }
 
-  selectTab(tab) {
+  selectTab(tab, data? : any) {
     this.tabSelected = tab;
+    if(data) {
+      this.dataOutput = data
+    }
   }
-
 }

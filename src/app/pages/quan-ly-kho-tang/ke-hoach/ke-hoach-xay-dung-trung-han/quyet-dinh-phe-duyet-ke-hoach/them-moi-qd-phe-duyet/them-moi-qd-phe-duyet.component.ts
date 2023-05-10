@@ -35,6 +35,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
+  @Input() dataInput: any;
   @Output()
   showListEvent = new EventEmitter<any>();
   formData: FormGroup;
@@ -98,8 +99,22 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/QĐ-BTC";
+    this.redirectQd();
     this.loadDsNam();
     await this.getDetail(this.idInput);
+  }
+
+  async redirectQd() {
+    if (this.dataInput && this.dataInput.soQuyetDinh) {
+      console.log(this.dataInput);
+      this.formData.patchValue({
+        phuongAnTc: this.dataInput.soQuyetDinh,
+        namBatDau: this.dataInput.namBatDau,
+        namKetThuc: this.dataInput.namKetThuc,
+        loaiDuAn: this.dataInput.loaiDuAn
+      });
+      await this.loadDsChiTiet(this.dataInput.id);
+    }
   }
 
   async getDetail(id) {
@@ -432,8 +447,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   }
 
   themMoiItem(data: any, type: string, idx: number, list?: any) {
-    console.log(list);
-    console.log(data,123);
     let modalQD = this.modal.create({
       nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
       nzContent: DialogThemMoiDxkhthComponent,

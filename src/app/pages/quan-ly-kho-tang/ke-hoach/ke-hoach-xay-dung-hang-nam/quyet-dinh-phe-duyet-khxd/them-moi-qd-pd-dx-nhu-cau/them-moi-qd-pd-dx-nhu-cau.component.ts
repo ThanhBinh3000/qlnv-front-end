@@ -15,13 +15,14 @@ import { v4 as uuidv4 } from "uuid";
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
-import { QuyetDinhKhTrungHanService } from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 import { MESSAGE } from "../../../../../../constants/message";
 import { STATUS } from "../../../../../../constants/status";
 import { UserLogin } from "../../../../../../models/userlogin";
-import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
 import { KtQdXdHangNamService } from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import { KtTongHopXdHnService } from "../../../../../../services/kt-tong-hop-xd-hn.service";
+import {
+  DialogThemMoiDxkhthComponent
+} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 
 
 @Component({
@@ -309,11 +310,11 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         .groupBy("tenChiCuc")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("khoi")
+            .groupBy("tenKhoi")
             .map((v, k) => {
                 return {
                   idVirtual: uuidv4(),
-                  khoi: k,
+                  tenKhoi: k,
                   dataChild: v
                 };
               }
@@ -371,25 +372,6 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     return sl;
   }
 
-  editRow(idx, y, y1, item) {
-    this.isEdit = idx + "-" + y + "-" + y1;
-    this.vonDauTu = item.vonDauTu;
-  }
-
-  saveEdit(item) {
-    this.isEdit = "";
-    let list = this.dataTableReq.filter(item => item.maDuAn == item.maDuAn);
-    if (list && list.length > 0) {
-      let idx = this.dataTableReq.indexOf(list[0]);
-      Object.assign(this.dataTableReq[idx], item);
-    }
-  }
-
-  cancelEdit(data: any) {
-    data.vonDauTu = this.vonDauTu;
-    this.isEdit = "";
-  }
-
   deleteRow(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -417,6 +399,42 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
         } catch (e) {
           console.log("error", e);
         }
+      }
+    });
+  }
+
+  themMoiItem(data: any, type: string, idx: number, list?: any) {
+    let modalQD = this.modal.create({
+      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
+      nzContent: DialogThemMoiDxkhthComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "200px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: "DXTH"
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list[idx], detail);
+          }
+        }
+        this.expandAll(this.dataTable);
       }
     });
   }

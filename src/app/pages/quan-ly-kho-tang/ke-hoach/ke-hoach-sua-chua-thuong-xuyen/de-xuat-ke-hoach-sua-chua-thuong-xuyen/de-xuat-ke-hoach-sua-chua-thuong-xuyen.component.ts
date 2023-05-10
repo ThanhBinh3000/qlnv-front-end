@@ -56,6 +56,8 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
       diaDiem: [''],
       trangThai: [''],
       ngayKy: [''],
+      maDvi: [this.userInfo.MA_DVI],
+      capDvi: [this.userInfo.CAP_DVI],
     });
     this.filter();
   }

@@ -32,10 +32,11 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   @Input() isViewQd: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output() showListEvent = new EventEmitter<any>();
+  @Output() redirectToQd = new EventEmitter<any>();
   expandSet = new Set<number>();
   userInfo: UserLogin;
+  dataDetail : any
   formData: FormGroup;
   listDx: any[] = [];
   dataTable: any[] = [];
@@ -55,7 +56,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   maTt: string;
   soQd: string;
   isEdit: string = "";
-  redirectBtc: boolean = false;
   ncKhTongSoEdit: number;
   ncKhNstwEdit: number;
 
@@ -85,7 +85,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       ngayKyQd: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
-      lyDoTuChoi: []
+      lyDoTuChoi: [],
+      trangThaiQd : []
     });
   }
 
@@ -121,6 +122,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopDxXdTh.getDetail(id);
       const data = res.data;
+      this.dataDetail = cloneDeep(data)
       this.maTt = data.maToTrinh ? "/" + data.maToTrinh.split("/")[1] : null,
         this.soQd = data.soQuyetDinh ? "/" + data.soQuyetDinh.split("/")[1] : null,
         this.formData.patchValue({
@@ -136,7 +138,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           tenTrangThai: data.tenTrangThai,
           lyDoTuChoi: data.lyDoTuChoi,
           loaiDuAn: data.loaiDuAn,
-          tgTongHop: data.tgTongHop
+          tgTongHop: data.tgTongHop,
+          trangThaiQd: data.trangThaiQd
         });
       this.dataTableReq = data.ctiets;
       this.fileDinhKems = data.fileDinhKems;
@@ -540,13 +543,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     });
   }
 
-  redirectToDuThao() {
-    this.redirectBtc = true;
+  redirectToDuThao(event) {
+    this.redirectToQd.emit(event)
   }
-
-  backToTongHop() {
-    this.redirectBtc = false;
-  }
-
 }
 

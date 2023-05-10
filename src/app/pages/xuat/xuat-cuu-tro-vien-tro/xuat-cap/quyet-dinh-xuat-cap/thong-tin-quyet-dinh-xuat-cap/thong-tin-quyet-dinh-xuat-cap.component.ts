@@ -135,6 +135,8 @@ export class ThongTinQuyetDinhXuatCapComponent extends Base2Component implements
       ngayKy: [],
       ngayHluc: [],
       ngayHlucQdPd: [],
+      idQdGiaoNv: [],
+      soQdGiaoNv: [],
       idQdPd: [],
       soQdPd: [],
       trichYeu: [],

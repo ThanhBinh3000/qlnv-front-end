@@ -6,7 +6,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import dayjs from 'dayjs';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
@@ -15,9 +14,6 @@ import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-t
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-  isQuanLy: boolean;
-  isAddNew: boolean;
-  idQdPdKh: number = 0;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -28,15 +24,16 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
     this.formData = this.fb.group({
-      namKh: '',
-      soHd: '',
-      tenHd: '',
-      ngayKy: '',
-      nhaCungCap: '',
-      trangThai: '',
-      loaiVthh: '',
-      maDvi: '',
-      maChiCuc: '',
+      namKh: null,
+      soHd: null,
+      tenHd: null,
+      tenDviMua: null,
+      ngayPduyetTu: null,
+      ngayPduyetDen: null,
+      trangThai: null,
+      loaiVthh: null,
+      maDvi: null,
+      maChiCuc: null,
     });
     this.filterTable = {
       namKh: '',
@@ -64,12 +61,9 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  goDetail(id: number, idPdKhHdr: number, roles?: any, isQuanLy?: boolean) {
+  goDetail(id: number) {
     this.idSelected = id;
-    this.idQdPdKh = idPdKhHdr;
     this.isDetail = true;
-    this.isQuanLy = isQuanLy;
-    this.isAddNew = !isQuanLy;
   }
 
 
@@ -93,4 +87,19 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     this.formData.reset();
     this.timKiem();
   }
+
+
+  disabledNgayPduyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayPduyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayPduyetDen.getTime();
+  };
+
+  disabledNgayPduyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayPduyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayPduyetTu.getTime();
+  };
 }

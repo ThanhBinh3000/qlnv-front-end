@@ -1,13 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {UserService} from "../../../../../../../services/user.service";
-import {NzModalRef} from "ng-zorro-antd/modal";
-import {Globals} from "../../../../../../../shared/globals";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import { DanhMucKho } from "../../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
-import { DanhMucKhoService } from "../../../../../../../services/danh-muc-kho.service";
+import { Component, Input, OnInit } from "@angular/core";
+import { UserLogin } from "../../../../../../../models/userlogin";
+import { UserService } from "../../../../../../../services/user.service";
+import { NzModalRef } from "ng-zorro-antd/modal";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { STATUS } from "../../../../../../../constants/status";
 import dayjs from "dayjs";
@@ -16,21 +14,22 @@ import {
 } from "../../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 
 @Component({
-  selector: 'app-dialog-dx-sc-lon',
-  templateUrl: './dialog-dx-sc-lon.component.html',
-  styleUrls: ['./dialog-dx-sc-lon.component.scss']
+  selector: "app-dialog-dx-sc-lon",
+  templateUrl: "./dialog-dx-sc-lon.component.html",
+  styleUrls: ["./dialog-dx-sc-lon.component.scss"]
 })
 export class DialogDxScLonComponent implements OnInit {
-  @Input() dataInput: any
-  @Input() type: string
-  @Input() sum: number
-  @Input() dataTable: any
-  @Input() page: string
-  item: DanhMucKho = new DanhMucKho();
-  listDmScLon: any[] = []
-  listLoaiDuAn: any[] = []
-  userInfo: UserLogin
-  namKh : number
+  @Input() dataInput: any;
+  @Input() type: string;
+  @Input() sum: number;
+  @Input() dataTable: any;
+  @Input() page: string;
+  item: KhSuaChuaLonDtl = new KhSuaChuaLonDtl();
+  listDmScLon: any[] = [];
+  listLoaiDuAn: any[] = [];
+  listKhoi: any[] = [];
+  listNguonVon: any[] = [];
+  userInfo: UserLogin;
 
   constructor(
     private danhMucService: DanhMucService,
@@ -39,16 +38,17 @@ export class DialogDxScLonComponent implements OnInit {
     public globals: Globals,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private dmSuaChuaService : DanhMucSuaChuaService
+    private dmSuaChuaService: DanhMucSuaChuaService
   ) {
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.namKh = dayjs().get('year')
     this.getAllDmKho();
     this.getAllLoaiDuAn();
-    this.getDetail()
+    this.getDsKhoi();
+    this.getDsNguonVon();
+    this.getDetail();
   }
 
   handleOk() {
@@ -58,28 +58,26 @@ export class DialogDxScLonComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.checkExitsData(this.item, this.dataTable) && this.type == 'them') {
+    if (this.checkExitsData(this.item, this.dataTable) && this.type == "them") {
       this.notification.error(MESSAGE.ERROR, "Không được chọn trùng danh mục dự án");
       this.spinner.hide();
       return;
     }
     this._modalRef.close(this.item);
-    this.item = new DanhMucKho();
+    this.item = new KhSuaChuaLonDtl();
   }
 
   onCancel() {
     this._modalRef.close();
   }
 
-  required(item: DanhMucKho) {
-    let msgRequired = '';
+  required(item: KhSuaChuaLonDtl) {
+    let msgRequired = "";
     //validator
-    if (!item.maDuAn) {
-      msgRequired = "Không được để trống danh mục kho";
-    } else if (!item.ncKhNstw || !item.ncKhTongSo) {
-      msgRequired = "Không được để trống nhu cầu kế hoạch đầu tư";
-    } else if (!item.loaiDuAn) {
-      msgRequired = "Không được để trống loại dự án";
+    if (!item.maCongTrinh) {
+      msgRequired = "Không được để trống danh mục sửa chữa lớn";
+    } else if (!item.loaiCongTrinh) {
+      msgRequired = "Không được để trống loại công trình";
     }
     return msgRequired;
   }
@@ -100,53 +98,129 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "namKeHoach" : "DMK",
-      "maDvi" : this.userInfo.MA_DVI
-    }
+      "namKh": dayjs().get('year'),
+      "maDvi": this.userInfo.MA_DVI,
+      "paggingReq": {
+        limit: 999999,
+        page: 0
+      },
+    };
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmScLon = res.data
+      this.listDmScLon = res.data.content
       if (this.listDmScLon && this.listDmScLon.length > 0) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi)
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi);
       }
     }
   }
 
   getDetail() {
-    if (this.type == 'sua') {
-      this.item.maDuAn = this.dataInput.maDuAn;
+    this.item.khoi = this.dataInput.khoi;
+    if (this.type == "sua") {
+      this.item.namKh = this.dataInput.namKh;
+      this.item.maCongTrinh = this.dataInput.maCongTrinh;
+      this.item.tenCongTrinh = this.dataInput.tenCongTrinh;
       this.item.diaDiem = this.dataInput.diaDiem;
-      this.item.loaiDuAn = this.dataInput.loaiDuAn;
-      this.item.khoi = this.dataInput.khoi;
-      this.item.tgKcHt = this.dataInput.tgKcHt;
-      this.item.soQdPd = this.dataInput.soQdPd;
-      this.item.tmdtDuKien = this.dataInput.tmdtDuKien;
-      this.item.nstwDuKien = this.dataInput.nstwDuKien;
-      this.item.khVonTongSo = this.dataInput.khVonTongSo;
-      this.item.khVonNstw = this.dataInput.khVonNstw;
-      this.item.ncKhTongSo = this.dataInput.ncKhTongSo;
-      this.item.ncKhNstw = this.dataInput.ncKhNstw;
-      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0 ;
-    } else {
-      this.item.namKeHoach = dayjs().get('year')
+      this.item.loaiCongTrinh = this.dataInput.loaiCongTrinh;
+      this.item.tgThucHien = this.dataInput.tgThucHien;
+      this.item.tgHoanThanh = this.dataInput.tgHoanThanh;
+      this.item.tgSuaChua = this.dataInput.tgSuaChua;
+      this.item.tenChiCuc = this.dataInput.tenChiCuc;
+      this.item.tenDiemKho = this.dataInput.tenDiemKho;
+      this.item.ghiChu = this.dataInput.ghiChu;
+      this.item.tmdt = this.dataInput.tmdt;
+      this.item.soQdPheDuyet = this.dataInput.soQdPheDuyet;
+      this.item.ngayQdPd = this.dataInput.ngayQdPd;
+      this.item.giaTriPd = this.dataInput.giaTriPd;
+      this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
+      this.item.tieuChuan = this.dataInput.tieuChuan
+      this.item.lyDo = this.dataInput.lyDo
     }
   }
 
   changeDmucDuAn(event: any) {
     if (event) {
-      let result = this.listDmScLon.filter(item => item.maDuAn == event)
+      let result = this.listDmScLon.filter(item => item.maCongTrinh == event);
       if (result && result.length > 0) {
         this.item = result[0];
-        this.item.tgKcHt = this.item.tgKhoiCong + ' - ' + this.item.tgHoanThanh
       }
     }
   }
 
   async getAllLoaiDuAn() {
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_CONG_TRINH_SCL_KT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiDuAn = res.data;
+      if (res.data) {
+        this.listLoaiDuAn = res.data;
+      }
     }
   }
 
+  async getDsKhoi() {
+    let res = await this.danhMucService.danhMucChungGetAll("KHOI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listKhoi = res.data;
+    }
+  }
+
+  async getDsNguonVon() {
+    let res = await this.danhMucService.danhMucChungGetAll("NGUON_VON");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNguonVon = res.data;
+    }
+  }
+
+}
+
+export class KhSuaChuaLonDtl {
+  id : number;
+
+  maDvi : string;
+
+  namKh : number;
+
+  maCongTrinh: string;
+  tenCongTrinh: string;
+
+  loaiCongTrinh: string;
+
+  maChiCuc: string;
+
+  maDiemKho: string;
+
+  diaDiem: string;
+
+  tgThucHien: number;
+  tgHoanThanh: number;
+
+  nguonVon: string;
+
+  tgSuaChua: number;
+
+  tmdt: number;
+
+  soQdPheDuyet: string;
+
+  ngayQdPd: any;
+
+  giaTriPd: number;
+
+
+  tieuChuan: string;
+
+  ghiChu: string;
+
+  lyDo: string;
+
+  soCv: string;
+
+  loai: string;
+
+  khoi: string;
+
+  tenChiCuc : string;
+
+  tenDiemKho : string;
+
+  vonDauTu : number;
 }

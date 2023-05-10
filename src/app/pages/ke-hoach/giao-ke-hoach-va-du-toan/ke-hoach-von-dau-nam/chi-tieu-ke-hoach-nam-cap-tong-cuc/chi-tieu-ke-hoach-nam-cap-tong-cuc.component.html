@@ -35,11 +35,11 @@
         </div>
       </nz-card>
       <div class="tab-giao-chi-tieu mt12">
-        <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
-          <nz-tab [nzTitle]="title_2" (nzClick)="selectTab('tong-cuc')">
+        <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate"
+                   [nzSelectedIndex]="indexTab">
+          <nz-tab [nzTitle]="title_2" (nzClick)="selectTab(0)">
             <ng-template #title_2>
               QĐ giao chỉ tiêu của Tổng Cục
-              <!--              (<span class="number-title-tab">{{countChiTieu.chiTieuKeHoachNamTongCuc}}</span>)-->
             </ng-template>
             <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
                       [nzShowPagination]="false" nzBordered>
@@ -135,14 +135,14 @@
                                  (nzPageIndexChange)="changePageIndex($event)"
                                  (nzPageSizeChange)="changePageSize($event)">
                     <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                      {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                     </ng-template>
                   </nz-pagination>
                 </div>
               </div>
             </div>
           </nz-tab>
-          <nz-tab [nzTitle]="title_3" (nzClick)="selectTab('cuc')">
+          <nz-tab [nzTitle]="title_3" (nzClick)="selectTab(1)">
             <ng-template #title_3>
               QĐ giao chỉ tiêu của các Cục
               <!--              (<span class="number-title-tab">{{countChiTieu.chiTieuKeHoachNamCuc}}</span>)-->
@@ -214,17 +214,17 @@
                 <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a
-                    *ngIf="(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XEM')"
+                    *ngIf="(data.trangThai !== STATUS.DU_THAO) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_XEM')"
                     (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                     <i class="icon htvbdh_eye"></i>
                   </a>
                   <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                     *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)
-                        && !userService.isTongCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_THEM')">
+                     *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP)
+                    && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a (click)="xoaItem(data)"
-                     *ngIf="(data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_XOA')">
+                     *ngIf="(data.trangThai === STATUS.DU_THAO && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_XOA')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -241,7 +241,7 @@
                                  (nzPageIndexChange)="changePageIndex($event)"
                                  (nzPageSizeChange)="changePageSize($event)">
                     <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                      {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                     </ng-template>
                   </nz-pagination>
                 </div>
@@ -279,7 +279,8 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="selectedId" (showListEvent)="showList()"
+  <app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc [id]="selectedId"
+                                                    (showListEvent)="showList()"
                                                     [isViewDetail]="isViewDetail">
   </app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc>
 </div>
