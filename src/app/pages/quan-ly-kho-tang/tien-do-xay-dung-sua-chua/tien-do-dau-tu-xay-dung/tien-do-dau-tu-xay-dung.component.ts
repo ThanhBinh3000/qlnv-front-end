@@ -91,6 +91,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
+        this.selectRow(this.dataTableRaw[0]);
         this.expandAll(this.dataTable);
       } else {
         this.dataTable = [];
@@ -142,6 +143,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdTktcTdt = null;
     this.itemQdPdDaDtxd = null;
     this.itemQdPdKhLcnt = null;
+    this.itemTtdt = null;
     this.spinner.show();
     try {
       let body = {
