@@ -224,6 +224,7 @@
   <app-thong-tin-quyet-dinh-phe-duyet-khlcnt [id]="selectedId" (showListEvent)="showList()"
                                              [isViewDetail]="isViewDetail"
                                              [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                             (dataItemKhLcnt)="receivedData($event)"
                                              [itemDuAn]="itemDuAn"
                                              [idInput]="selectedId"></app-thong-tin-quyet-dinh-phe-duyet-khlcnt>
 </ng-template>
