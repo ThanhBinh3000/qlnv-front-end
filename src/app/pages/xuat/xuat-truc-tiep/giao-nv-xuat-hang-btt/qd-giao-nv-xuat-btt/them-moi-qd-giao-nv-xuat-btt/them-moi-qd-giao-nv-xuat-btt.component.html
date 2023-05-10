@@ -117,7 +117,7 @@
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Chọn QĐ PD KH BTT </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdPdKhBtt()">
                                         <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true" />
                                     </nz-input-group>
                                 </nz-form-control>
@@ -133,9 +133,16 @@
                         </div>
                         <div nz-col [nzSpan]="6" *ngIf=" radioValue == 'QDDX'">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Mã DVTS </nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="listMaDviTsan" [readonly]="true" />
+                                    <nz-input-group>
+                                        <nz-select nzMode="multiple" formControlName="listMaDviTsan"
+                                            (ngModelChange)="selectMaDviTsan()" [nzDisabled]="isDisabled()">
+                                            <nz-option *ngFor="let item of listDviTsan" [nzValue]="item.maDviTsan"
+                                                [nzLabel]="item.maDviTsan">
+                                            </nz-option>
+                                        </nz-select>
+                                    </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
