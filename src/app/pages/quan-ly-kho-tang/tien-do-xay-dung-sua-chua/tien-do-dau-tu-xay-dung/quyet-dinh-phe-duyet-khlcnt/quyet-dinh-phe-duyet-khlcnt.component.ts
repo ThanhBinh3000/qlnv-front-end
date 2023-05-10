@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
@@ -23,8 +23,6 @@ export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  @Input("itemQdPdKhlcnt")
-  itemQdPdKhlcnt: any;
   @Input()
   itemDuAn: any;
   @Input("itemQdPdTktcTdt") itemQdPdTktcTdt: any;
@@ -34,6 +32,7 @@ export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+  @Output() dataItemKhLcnt = new EventEmitter<object>();
 
   constructor(
     public userService: UserService,
@@ -42,15 +41,24 @@ export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (this.itemQdPdKhlcnt) {
-      this.selectedId = this.itemQdPdKhlcnt.id;
+    if (this.itemQdPdKhLcnt) {
+      this.selectedId = this.itemQdPdKhLcnt.id;
       this.isDetail = true;
-      this.isViewDetail = this.itemQdPdKhlcnt.trangThai == STATUS.BAN_HANH ? true : false;
+      this.isViewDetail = this.itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH ? true : false;
     }
   }
 
   showList() {
     this.isDetail = false;
+  }
+
+  receivedData(data: any) {
+    this.itemQdPdKhLcnt = data;
+    this.emitDataKhLcnt(data);
+  }
+
+  emitDataKhLcnt(data) {
+    this.dataItemKhLcnt.emit(data);
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {

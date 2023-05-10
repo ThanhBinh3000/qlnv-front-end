@@ -148,7 +148,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ PD Dự án ĐTXD
                   </nz-form-label>
-                  <nz-select nzAllowClear (ngModelChange)="changeSoQdPdDtxd($event)" formControlName="soQdPdDtxd"
+                  <nz-select nzAllowClear (ngModelChange)="changeSoQdPdDtxd($event)" formControlName="soQdPdDaDtxd"
                              [nzDisabled]="true">
                     <nz-option *ngFor="let p of listQdPdDtxd" [nzValue]="p.soQd"
                                [nzLabel]="p.soQd"></nz-option>
