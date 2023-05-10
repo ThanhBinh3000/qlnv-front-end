@@ -146,7 +146,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
     }
   }
 
-  emitDataTktcTdt(data) {
+  emitDataDaDtxd(data) {
     this.dataItemDaDtxd.emit(data);
   }
 
@@ -296,8 +296,9 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
                 this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
+                  tenTrangThai: "Ban hành",
                 })
-                this.emitDataTktcTdt(res1.data);
+                this.emitDataDaDtxd(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {

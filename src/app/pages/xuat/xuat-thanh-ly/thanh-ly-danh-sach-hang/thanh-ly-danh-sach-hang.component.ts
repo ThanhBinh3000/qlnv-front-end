@@ -130,7 +130,10 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
           this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
         }*/
     await this.search();
-    this.dataTable.forEach(s => s.idVirtual = uuidv4());
+    this.dataTable.forEach(s => {
+      s.idVirtual = uuidv4();
+      this.expandSetString.add(s.idVirtual);
+    });
     this.buildTableView();
   }
 
@@ -148,8 +151,21 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   async loadDsVthh() {
     let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiVthh = res.data;
-      this.dsCloaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+      this.dsLoaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
+    }
+  }
+
+  async changeHangHoa(event: any) {
+    this.formData.patchValue({cloaiVthh: null})
+    if (event) {
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.dsCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 

@@ -17,6 +17,8 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {KeHoachVonPhiBNCT} from "../../../../../../models/KeHoachVonPhiBNCT";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
+import {FILETYPE} from "../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt',
@@ -30,6 +32,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input('itemQdPdTktcTdt') itemQdPdTktcTdt: any;
+  @Input('itemDuAn') itemDuAn: any;
+  @Output() dataItemKhLcnt = new EventEmitter<object>();
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
   listQdPdDaDtxd: any[] = []
@@ -47,7 +52,10 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   dataCongViecKh: any[] = [];
   rowItemCongViecKh: CongViec = new CongViec();
   dataCongViecKhEdit: { [key: string]: { edit: boolean; data: CongViec } } = {};
-
+  AMOUNT = AMOUNT_NO_DECIMAL;
+  listCcPhapLy: any[] = [];
+  listFileDinhKem: any[] = [];
+  listFile: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -63,32 +71,35 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      namKh:[null, Validators.required],
+      namKh: [null, Validators.required],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
       soQdPdDaDtxd: [null, Validators.required],
       idQdPdDaDtxd: [null, Validators.required],
+      soQdPdTktcTdt: [null, Validators.required],
+      idQdPdTktcTdt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
-      chuDauTu: [null, Validators.required],
+      chuDauTu: [null],
+      tenCongTrinh: [null, Validators.required],
       diaChi: [null],
-      soQdPdTktcTdt:[null],
       idDuAn: [null, Validators.required],
       tienCvDaTh: [0],
       tienCvKad: [0],
       tienCvKhlcnt: [0],
       tienCvChuaDdk: [0],
       tongTien: [0],
+      tongMucDt: [0],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtXdscQuyetDinhPdKhlcntCvKad: null,
       listKtXdscQuyetDinhPdKhlcntCvKh: null,
-      khoi:[null],
-      loaiCapCt:[null],
+      khoi: [null],
+      loaiCapCt: [null],
     });
   }
 
@@ -104,12 +115,34 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       ]);
       if (this.idInput) {
         await this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+
+  bindingData() {
+    if (this.itemDuAn && this.itemQdPdTktcTdt) {
+      this.formData.patchValue({
+        namKh: this.itemDuAn.namKeHoach,
+        tenDuAn: this.itemDuAn.tenDuAn,
+        idDuAn: this.itemDuAn.id,
+        soQdPdTktcTdt: this.itemQdPdTktcTdt.soQd,
+        idQdPdTktcTdt: this.itemQdPdTktcTdt.id,
+        soQdPdDaDtxd: this.itemQdPdTktcTdt.soQdPdDaDtxd,
+        idQdPdDaDtxd: this.itemQdPdTktcTdt.idQdPdDaDtxd,
+        tenCongTrinh: this.itemQdPdTktcTdt.tenCongTrinh,
+        tongMucDt: this.itemQdPdTktcTdt.giaTriDt,
+        loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
+        khoi: this.itemDuAn.tenKhoi,
+        diaDiem: this.itemQdPdTktcTdt.diaDiem,
+      })
     }
   }
 
@@ -155,25 +188,87 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     this.approve(id, trangThai, mesg);
   }
 
-  async save() {
+
+  async save(isBanHanh?) {
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
     }
-    if (this.fileDinhKem && this.fileDinhKem.length > 0) {
-      this.formData.value.fileDinhKems = this.fileDinhKem;
+    this.listFile = [];
+    if (this.listFileDinhKem.length > 0) {
+      this.listFileDinhKem.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     this.formData.value.listKtXdscQuyetDinhPdKhlcntCvDaTh = this.dataCongViecDaTh;
     this.formData.value.listKtXdscQuyetDinhPdKhlcntCvKad = this.dataCongViecKad;
     this.formData.value.listKtXdscQuyetDinhPdKhlcntCvKh = this.dataCongViecKh;
-    this.formData.value.tienCvChuaDdk = this.formData.value.tongTien - (this.formData.value.tienCvKhlcnt + this.formData.value.tienCvKad + this.formData.value.tienCvDaTh);
-    let res = await this.createUpdate(this.formData.value)
-    if (res) {
-      this.goBack()
+    if (isBanHanh) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: "Ban hành quyết định",
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.createUpdate(this.formData.value);
+            if (res) {
+              let body = {
+                id: res.id,
+                trangThai: STATUS.BAN_HANH,
+              }
+              let res1 = await this.quyetdinhpheduyetKhlcntService.approve(body);
+              if (res1.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
+                this.formData.patchValue({
+                  trangThai: STATUS.BAN_HANH,
+                  tenTrangThai: "Ban hành",
+                })
+                this.emitDataKhLcnt(res1.data);
+                this.isViewDetail = true;
+                this.spinner.hide();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res1.msg);
+                this.spinner.hide();
+              }
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      let res = await this.createUpdate(this.formData.value)
+      if (res) {
+        this.formData.patchValue({
+          id: res.id,
+        });
+        this.idInput = res.id;
+      }
     }
   }
-
+  emitDataKhLcnt(data) {
+    this.dataItemKhLcnt.emit(data);
+  }
   async detail(id) {
     this.spinner.show();
     try {
@@ -184,6 +279,12 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
+            namKh: this.itemDuAn.namKeHoach,
+            khoi: this.itemDuAn.tenKhoi,
+            tenCongTrinh: this.itemQdPdTktcTdt.tenCongTrinh,
+            tongMucDt: this.itemQdPdTktcTdt.giaTriDt,
+            loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
+            diaDiem: this.itemQdPdTktcTdt.diaDiem,
           })
           this.fileDinhKem = data.fileDinhKems;
           this.dataCongViecDaTh = data.listKtXdscQuyetDinhPdKhlcntCvDaTh ? data.listKtXdscQuyetDinhPdKhlcntCvDaTh : [];
@@ -275,9 +376,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     this.dataCongViecDaTh = [...this.dataCongViecDaTh, this.rowItemCongViecDaTh];
     this.rowItemCongViecDaTh = new CongViec();
     this.updateEditCongViecDaThCache();
-    this.formData.patchValue({
-      tienCvDaTh: this.sumCT1('giaTri')
-    })
+    this.calCulateTien();
   }
 
   addCongViecKad() {
@@ -285,9 +384,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     this.dataCongViecKad = [...this.dataCongViecKad, this.rowItemCongViecKad];
     this.rowItemCongViecKad = new CongViec();
     this.updateEditCongViecKadCache();
-    this.formData.patchValue({
-      tienCvKad: this.sumCT2('giaTri')
-    })
+    this.calCulateTien();
   }
 
   addAddCongViecKh() {
@@ -295,8 +392,21 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     this.dataCongViecKh = [...this.dataCongViecKh, this.rowItemCongViecKh];
     this.rowItemCongViecKh = new CongViec();
     this.updateEditCongViecKhCache();
+    this.calCulateTien();
+  }
+
+  calCulateTien() {
+    let tien1 = this.sumCT1('giaTri');
+    let tien2 = this.sumCT2('giaTri');
+    let tien3 = this.sumCT3('giaTri');
+    let tongTien = tien1 + tien2 + tien3;
+    let tien4 = (this.formData.value.tongMucDt - tongTien);
     this.formData.patchValue({
-      tienCvKhlcnt: this.sumCT3('giaGoiThau')
+      tienCvDaTh: tien1,
+      tienCvKad: tien2,
+      tienCvKhlcnt: tien3,
+      tongTien: tongTien,
+      tienCvChuaDdk: tien4 <= 0 ? 0 : tien4
     })
   }
 
@@ -370,9 +480,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       nzOnOk: async () => {
         try {
           this.dataCongViecDaTh.splice(index, 1);
-          this.formData.patchValue({
-            tienCvDaTh: this.sumCT1('giaTri')
-          })
+          this.calCulateTien();
           this.updateEditCongViecDaThCache();
         } catch (e) {
           console.log('error', e);
@@ -393,9 +501,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       nzOnOk: async () => {
         try {
           this.dataCongViecKad.splice(index, 1);
-          this.formData.patchValue({
-            tienCvKad: this.sumCT2('giaTri')
-          })
+          this.calCulateTien();
           this.updateEditCongViecKadCache();
         } catch (e) {
           console.log('error', e);
@@ -416,9 +522,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       nzOnOk: async () => {
         try {
           this.dataCongViecKh.splice(index, 1);
-          this.formData.patchValue({
-            tienCvKhlcnt: this.sumCT3('giaTri')
-          })
+          this.calCulateTien();
           this.updateEditCongViecKhCache();
         } catch (e) {
           console.log('error', e);
@@ -429,25 +533,19 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
 
   saveEditCongViecDaTh(idx) {
     Object.assign(this.dataCongViecDaTh[idx], this.dataCongViecDaThEdit[idx].data);
-    this.formData.patchValue({
-      tienCvDaTh: this.sumCT1('giaTri')
-    })
+    this.calCulateTien();
     this.dataCongViecDaThEdit[idx].edit = false;
   }
 
   saveEditCongViecKad(idx) {
     Object.assign(this.dataCongViecKad[idx], this.dataCongViecKadEdit[idx].data);
-    this.formData.patchValue({
-      tienCvKad: this.sumCT2('giaTri')
-    })
+    this.calCulateTien();
     this.dataCongViecKadEdit[idx].edit = false;
   }
 
   saveEditCongViecKh(idx) {
     Object.assign(this.dataCongViecKh[idx], this.dataCongViecKhEdit[idx].data);
-    this.formData.patchValue({
-      tienCvKhlcnt: this.sumCT3('giaTri')
-    })
+    this.calCulateTien();
     this.dataCongViecKhEdit[idx].edit = false;
   }
 
@@ -473,21 +571,27 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   }
 
   sumCT1(key) {
+    let value = 0;
     if (this.dataCongViecDaTh.length > 0) {
-      return this.dataCongViecDaTh.reduce((a, b) => a + (b[key] || 0), 0);
+      value = this.dataCongViecDaTh.reduce((a, b) => a + (b[key] || 0), 0);
     }
+    return value;
   }
 
   sumCT2(key) {
+    let value = 0;
     if (this.dataCongViecKad.length > 0) {
-      return this.dataCongViecKad.reduce((a, b) => a + (b[key] || 0), 0);
+      value = this.dataCongViecKad.reduce((a, b) => a + (b[key] || 0), 0);
     }
+    return value;
   }
 
   sumCT3(key) {
+    let value = 0;
     if (this.dataCongViecKh.length > 0) {
-      return this.dataCongViecKh.reduce((a, b) => a + (b[key] || 0), 0);
+      value = this.dataCongViecKh.reduce((a, b) => a + (b[key] || 0), 0);
     }
+    return value;
   }
 
   changeValueSelect(key, action?, idx?) {
