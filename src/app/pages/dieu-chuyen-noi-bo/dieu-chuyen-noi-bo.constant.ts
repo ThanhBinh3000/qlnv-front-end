@@ -42,11 +42,21 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
+    title: 'Xuất điều chuyển',
+    url: `/xuat-dieu-chuyen`,
+    dropdown: 'xuat-dieu-chuyen',
+    idHover: 'xuat-dieu-chuyen',
+    hasTab: false,
+    caps: [1, 2, 3],
+    accessPermisson: 'DCNB_KHDC'
+  },
+  {
+    icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Nhập điều chuyển',
     url: `/nhap-dieu-chuyen`,
     dropdown: 'nhap-dieu-chuyen',
     idHover: 'nhap-dieu-chuyen',
-    hasTab: true,
-    // accessPermisson: 'DCNB_QUYETDINHDC'
+    hasTab: false,
+    // accessPermisson: 'DCNB_KHDC'
   },
 ];

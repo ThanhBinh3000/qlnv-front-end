@@ -433,7 +433,7 @@
 
 
 
-      <nz-table #expandTable [nzData]="listOfMapData" class="nowrap table-chi-tiet" nzBordered
+      <nz-table #expandTable [nzData]="formData.value.listOfMapData" class="nowrap table-chi-tiet" nzBordered
         [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
@@ -478,25 +478,25 @@
                 <td [nzShowExpand]="item.isCol" [(nzExpand)]="item.expand"
                   (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
                 </td>
-                <td *ngIf="formData.value.loaiDc === 'NOi_BO'">{{ item.chicuc }}</td>
-                <td *ngIf="formData.value.loaiDc !== 'NOi_BO'">{{ item.chicuc }}</td>
-                <td>{{ item.diemkho }}</td>
-                <td>{{ item.lokho }}</td>
-                <td>{{ item.loaihh }}</td>
-                <td>{{ item.clhh }}</td>
-                <td>{{ item.dvt }}</td>
-                <td>{{ item.tonkho }}</td>
-                <td>{{ item.sldc }}</td>
-                <td>{{ item.dtkp }}</td>
-                <td *ngIf="formData.value.loaiDc === 'NOi_BO'">{{ item.thoigian }}</td>
-                <td *ngIf="formData.value.loaiDc !== 'NOi_BO'">{{ item.thoigian }}</td>
-                <td>{{ item.diemkhoden }}</td>
-                <td *ngIf="formData.value.loaiDc === 'CUC'">{{ item.ngankhoden }}</td>
-                <td *ngIf="formData.value.loaiDc === 'CUC'">{{ item.nhakhoden }}</td>
-                <td>{{ item.lokhoden }}</td>
+                <td *ngIf="formData.value.loaiDc === 'NOi_BO'">{{ item.tenDvi }}</td>
+                <td *ngIf="formData.value.loaiDc !== 'NOi_BO'">{{ item.tenDvi }}</td>
+                <td>{{ item.tenDiemKho }}</td>
+                <td>{{ item.tenLoKho }}</td>
+                <td>{{ item.tenLoaiVthh }}</td>
+                <td>{{ item.tenCloaiVthh }}</td>
+                <td>{{ item.donViTinh }}</td>
+                <td>{{ item.tonKho }}</td>
+                <td>{{ item.soLuongDc }}</td>
+                <td>{{ item.duToanKphi }}</td>
+                <td *ngIf="formData.value.loaiDc === 'NOi_BO'">{{ item.thoiGianDkDc }}</td>
+                <td *ngIf="formData.value.loaiDc !== 'NOi_BO'">{{ item.thoiGianDkDc }}</td>
+                <td>{{ item.tenDiemKhoNhan }}</td>
+                <td *ngIf="formData.value.loaiDc === 'CUC'">{{ item.tenNganKhoNhan }}</td>
+                <td *ngIf="formData.value.loaiDc === 'CUC'">{{ item.tenNganKhoNhan }}</td>
+                <td>{{ item.tenLoKhoNhan }}</td>
                 <td>{{ item.tdthukho }}</td>
-                <td>{{ item.tlkd }}</td>
-                <td>{{ item.slpb }}</td>
+                <td>{{ item.tichLuongKd }}</td>
+                <td>{{ item.soLuongPhanBo }}</td>
                 <td class="text-center" *ngIf="formData.value.loaiDc === 'NOi_BO'">
                   <a *ngIf="data.trangThai !== STATUS.DU_THAO">
                     <i class="fa fa-eye"></i>

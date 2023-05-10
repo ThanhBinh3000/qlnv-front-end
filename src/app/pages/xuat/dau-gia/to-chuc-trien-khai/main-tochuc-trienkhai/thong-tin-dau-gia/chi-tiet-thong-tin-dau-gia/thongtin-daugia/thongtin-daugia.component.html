@@ -614,7 +614,6 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
                 <td>
                   <nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
@@ -642,7 +641,8 @@
                   <td nzLeft></td>
                   <td>{{children.tenDiemKho}},{{children.tenNhaKho}},{{children.tenNganKho}},{{children.tenLoKho}}
                   </td>
-                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                  <!--                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+                  <td></td>
                   <td>{{children.dviTinh}}</td>
                   <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}

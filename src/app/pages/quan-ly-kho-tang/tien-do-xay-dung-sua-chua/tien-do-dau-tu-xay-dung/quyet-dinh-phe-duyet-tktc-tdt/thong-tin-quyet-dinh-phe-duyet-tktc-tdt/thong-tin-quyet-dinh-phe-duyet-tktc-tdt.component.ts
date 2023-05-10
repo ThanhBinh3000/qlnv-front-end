@@ -33,6 +33,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Output() dataItemTktcTdt = new EventEmitter<object>();
   @Input()
   idInput: number;
   @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
@@ -69,9 +70,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
-      soQdPdDtxd: [null, Validators.required],
+      soQdPdDaDtxd: [null, Validators.required],
       soQdPdDtxdNam: [null],
-      idQdPdDtxd: [null, Validators.required],
+      idQdPdDaDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null],
@@ -114,17 +115,19 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
   }
 
+  emitDataTktcTdt(data) {
+    this.dataItemTktcTdt.emit(data);
+  }
+
   bindingData() {
-    console.log(this.itemDuAn, 'this.itemDuAn');
-    console.log(this.itemQdPdDaDtxd, 'this.itemQdPdDaDtxd');
     if (this.itemDuAn && this.itemQdPdDaDtxd) {
       this.formData.patchValue({
         namKh: this.itemDuAn.namKeHoach,
         tenDuAn: this.itemDuAn.tenDuAn,
         idDuAn: this.itemDuAn.id,
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
-        soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
-        idQdPdDtxd: this.itemQdPdDaDtxd.id,
+        soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+        idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,
         khoi: this.itemDuAn.tenKhoi,
@@ -177,7 +180,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd: data.soQd ? data.soQd.split('/')[0] : null
+            soQd: data.soQd ? data.soQd.split('/')[0] : null,
+            khoi: this.itemDuAn.tenKhoi,
+            namKh: this.itemDuAn.namKeHoach
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -274,6 +279,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
                 })
+                this.emitDataTktcTdt(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
@@ -291,7 +297,13 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         },
       });
     } else {
-      await this.createUpdate(this.formData.value)
+      let res = await this.createUpdate(this.formData.value)
+      if (res) {
+        this.formData.patchValue({
+          id: res.id,
+        });
+        this.idInput = res.id;
+      }
     }
   }
 
@@ -300,7 +312,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       let item = this.listQdPdDtxd.filter(it => it.soQd == event)[0];
       if (item) {
         this.formData.patchValue({
-          idQdPdDtxd: item.id,
+          idQdPdDaDtxd: item.id,
           tenDuAn: item.tenDuAn,
           chuDauTu: item.chuDauTu,
           diaDiem: item.diaDiem,

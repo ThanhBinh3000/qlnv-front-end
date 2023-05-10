@@ -12,7 +12,7 @@
             <input nz-input formControlName="soHoSo"/>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">TrangThai</label>
+            <label class="search__label">Trạng thái</label>
             <nz-select nzAllowClear formControlName="trangThai" nzShowSearch>
               <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
             </nz-select>
@@ -48,7 +48,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH GIAO NHIỆM VỤ XUẤT HÀNG CỨU TRỢ, VIỆN TRỢ</h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH THANH LÝ HÀNG DTQG</h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDGNVXH_XOA')" type="button"
                 class="btn btn-sub btn-xoa" (click)="deleteMulti()">
@@ -129,7 +129,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soQd }}</td>
@@ -138,18 +138,27 @@
           <td><a nz-button nzType="link" *ngIf="data.soHoSo" (click)="openHoSoModal(data.idHoSo)">{{ data.soHoSo }}</a></td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a *ngIf="(!userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM'))
-              || (userService.isTongCuc() && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XEM') && (data.trangThai == STATUS.BAN_HANH))"
-               (click)="redirectDetail(data.id, true)">
+            <a (click)="redirectDetail(data.id, true)"
+               *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XEM) &&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU'))&&
+                !(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC'))&&
+                userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_THEM') && (data.trangThai == STATUS.DU_THAO))"
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_TAOQDXC')"
               (click)="redirectDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a
-              *ngIf="userService.isTongCuc()&&(userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_QDPDPA_XOA') && (data.trangThai == STATUS.DU_THAO))"
+              *ngIf="(vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDV)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDVU')) ||
+                    (vldTrangThai.checkStatusPermission(data,CHUC_NANG.DUYET_LDTC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_DUYET_LDTC'))"
+              (click)="redirectDetail(data.id, true)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
+            </a>
+            <a
+              *ngIf="vldTrangThai.checkStatusPermission(data,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_QDXC_XOA')"
               (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
@@ -168,7 +177,7 @@
                            (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->

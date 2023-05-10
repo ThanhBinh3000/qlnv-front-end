@@ -321,34 +321,32 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
 
         let children = []
+        if (dcnbKeHoachDcHdr.danhSachHangHoa.length > 0) {
+          const grouped = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
+          const keyarr = Object.keys(grouped);
 
-        const grouped = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
-        const keyarr = Object.keys(grouped);
-
-        keyarr.map((k, j) => {
-          const valuearr = grouped[k].map(v => {
-            return {
-              ...v,
-              key: v.id
+          keyarr.map((k, j) => {
+            const valuearr = grouped[k].map(v => {
+              return {
+                ...v,
+                key: v.id
+              }
+            })
+            console.log('keyarr', k, valuearr)
+            const itemv: any = valuearr[0]
+            // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
+            if (valuearr.length > 1) {
+              children.push({
+                tenDiemKho: itemv.tenDiemKho,
+                key: `${i}-${j}`,
+                isCol: true,
+                children: valuearr
+              })
+            } else {
+              children.push({ ...itemv, key: itemv.id })
             }
           })
-          console.log('keyarr', k, valuearr)
-          const itemv: any = valuearr[0]
-          // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
-          if (valuearr.length > 1) {
-            children.push({
-              tenDiemKho: itemv.tenDiemKho,
-              key: `${i}-${j}`,
-              isCol: true,
-              children: valuearr
-            })
-          } else {
-            children.push({ ...itemv, key: itemv.id })
-          }
-        })
-
-
-
+        }
 
         this.listOfMapData.push({
           ...dcnbKeHoachDcHdr,

@@ -143,7 +143,7 @@
           <td>{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tongSoLuongGao | number: '1.0-1' }}</td>
           <td>{{ data.tongSoLuongThoc | number: '1.0-1' }}</td>
-          <td>{{ data.trichYeu }}</td>`
+          <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectDetail(data.id, true)"
@@ -185,7 +185,7 @@
                            (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang -->

@@ -19,6 +19,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
 
   @Input()
   listVthh: any[] = [];
+  idQdPdDtl: number = 0;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -96,6 +97,15 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     this.formData.reset();
     this.timKiem();
     this.search();
+  }
+
+  async redirectHopDong(id: number, idQdPdDtl: number, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.idSelected = id;
+    this.idQdPdDtl = idQdPdDtl
+    this.isDetail = true;
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {

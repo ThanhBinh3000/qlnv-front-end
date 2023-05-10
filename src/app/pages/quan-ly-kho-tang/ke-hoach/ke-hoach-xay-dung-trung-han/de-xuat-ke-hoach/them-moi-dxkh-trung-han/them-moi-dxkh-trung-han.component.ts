@@ -200,7 +200,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           id: res.data.id,
           trangThai: res.data.trangThai
         });
-        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
           this.duyet()
         } else {
           this.guiDuyet();

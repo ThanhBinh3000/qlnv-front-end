@@ -143,6 +143,7 @@ export class QuyetDinhPhuongAnComponent extends Base2Component implements OnInit
     }
   };
   taoQuyetDinh(data) {
+    console.log(data)
     this.eventTaoQd.emit(data);
   }
 }

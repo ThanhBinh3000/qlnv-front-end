@@ -131,140 +131,140 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   ];
 
   listOfMapData: any[] = [
-    {
-      key: `1`,
-      chicuc: 'chicuc',
-      dtkp: 'dtkp',
-      isEx: true,
-      children: [
-        {
-          key: `1-1`,
-          diemkho: 'diemkho',
-          lokho: 'lokho',
-          loaihh: 'loaihh',
-          clhh: 'clhh',
-          dvt: 'dvt',
-          tonkho: 'tonkho',
-          sldc: 'sldc',
-          dtkp: 'dtkp',
-          thoigian: 'thoigian',
-          diemkhoden: 'diemkhoden',
-          nhakhoden: 'nhakhoden',
-          ngankhoden: 'ngankhoden',
-          lokhoden: 'lokhoden',
-          tdthukho: 'tdthukho',
-          tlkd: 'tlkd',
-          slpb: 'slpb',
-          isCol: false,
-        },
-        {
-          key: `1-2`,
-          diemkho: 'diemkho',
-          isCol: true,
-          children: [
-            {
-              key: `1-2-1`,
-              lokho: 'lokho',
-              loaihh: 'loaihh',
-              clhh: 'clhh',
-              dvt: 'dvt',
-              tonkho: 'tonkho',
-              sldc: 'sldc',
-              dtkp: 'dtkp',
-              thoigian: 'thoigian',
-              diemkhoden: 'diemkhoden',
-              nhakhoden: 'nhakhoden',
-              ngankhoden: 'ngankhoden',
-              lokhoden: 'lokhoden',
-              tdthukho: 'tdthukho',
-              tlkd: 'tlkd',
-              slpb: 'slpb',
-            },
-            {
-              key: `1-2-2`,
-              lokho: 'lokho',
-              loaihh: 'loaihh',
-              clhh: 'clhh',
-              dvt: 'dvt',
-              tonkho: 'tonkho',
-              sldc: 'sldc',
-              dtkp: 'dtkp',
-              thoigian: 'thoigian',
-              diemkhoden: 'diemkhoden',
-              nhakhoden: 'nhakhoden',
-              ngankhoden: 'ngankhoden',
-              lokhoden: 'lokhoden',
-              tdthukho: 'tdthukho',
-              tlkd: 'tlkd',
-              slpb: 'slpb',
-            },
-            {
-              key: `1-2-3`,
-              lokho: 'lokho',
-              loaihh: 'loaihh',
-              clhh: 'clhh',
-              dvt: 'dvt',
-              tonkho: 'tonkho',
-              sldc: 'sldc',
-              dtkp: 'dtkp',
-              thoigian: 'thoigian',
-              diemkhoden: 'diemkhoden',
-              nhakhoden: 'nhakhoden',
-              ngankhoden: 'ngankhoden',
-              lokhoden: 'lokhoden',
-              tdthukho: 'tdthukho',
-              tlkd: 'tlkd',
-              slpb: 'slpb',
-            }
-          ]
-        },
-        {
-          key: `1-3`,
-          diemkho: 'diemkho',
-          isCol: true,
-          children: [
-            {
-              key: `1-3-1`,
-              lokho: 'lokho',
-              loaihh: 'loaihh',
-              clhh: 'clhh',
-              dvt: 'dvt',
-              tonkho: 'tonkho',
-              sldc: 'sldc',
-              dtkp: 'dtkp',
-              thoigian: 'thoigian',
-              diemkhoden: 'diemkhoden',
-              nhakhoden: 'nhakhoden',
-              ngankhoden: 'ngankhoden',
-              lokhoden: 'lokhoden',
-              tdthukho: 'tdthukho',
-              tlkd: 'tlkd',
-              slpb: 'slpb',
-              // children: [
-              //   {
-              //     key: `1-3-1-1`,
-              //     name: '1-3-1-1 Jim Green jr.',
-              //     age: 25,
-              //     address: 'London No. 3 Lake Park'
-              //   },
-              //   {
-              //     key: `1-3-1-2`,
-              //     name: '1-3-1-2 Jimmy Green sr.',
-              //     age: 18,
-              //     address: 'London No. 4 Lake Park'
-              //   }
-              // ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      key: `2`,
-      chicuc: 'chicuc',
-      dtkp: 'dtkp',
-      isEx: false
-    }
+    // {
+    //   key: `1`,
+    //   chicuc: 'chicuc',
+    //   dtkp: 'dtkp',
+    //   isEx: true,
+    //   children: [
+    //     {
+    //       key: `1-1`,
+    //       diemkho: 'diemkho',
+    //       lokho: 'lokho',
+    //       loaihh: 'loaihh',
+    //       clhh: 'clhh',
+    //       dvt: 'dvt',
+    //       tonkho: 'tonkho',
+    //       sldc: 'sldc',
+    //       dtkp: 'dtkp',
+    //       thoigian: 'thoigian',
+    //       diemkhoden: 'diemkhoden',
+    //       nhakhoden: 'nhakhoden',
+    //       ngankhoden: 'ngankhoden',
+    //       lokhoden: 'lokhoden',
+    //       tdthukho: 'tdthukho',
+    //       tlkd: 'tlkd',
+    //       slpb: 'slpb',
+    //       isCol: false,
+    //     },
+    //     {
+    //       key: `1-2`,
+    //       diemkho: 'diemkho',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-2-1`,
+    //           lokho: 'lokho',
+    //           loaihh: 'loaihh',
+    //           clhh: 'clhh',
+    //           dvt: 'dvt',
+    //           tonkho: 'tonkho',
+    //           sldc: 'sldc',
+    //           dtkp: 'dtkp',
+    //           thoigian: 'thoigian',
+    //           diemkhoden: 'diemkhoden',
+    //           nhakhoden: 'nhakhoden',
+    //           ngankhoden: 'ngankhoden',
+    //           lokhoden: 'lokhoden',
+    //           tdthukho: 'tdthukho',
+    //           tlkd: 'tlkd',
+    //           slpb: 'slpb',
+    //         },
+    //         {
+    //           key: `1-2-2`,
+    //           lokho: 'lokho',
+    //           loaihh: 'loaihh',
+    //           clhh: 'clhh',
+    //           dvt: 'dvt',
+    //           tonkho: 'tonkho',
+    //           sldc: 'sldc',
+    //           dtkp: 'dtkp',
+    //           thoigian: 'thoigian',
+    //           diemkhoden: 'diemkhoden',
+    //           nhakhoden: 'nhakhoden',
+    //           ngankhoden: 'ngankhoden',
+    //           lokhoden: 'lokhoden',
+    //           tdthukho: 'tdthukho',
+    //           tlkd: 'tlkd',
+    //           slpb: 'slpb',
+    //         },
+    //         {
+    //           key: `1-2-3`,
+    //           lokho: 'lokho',
+    //           loaihh: 'loaihh',
+    //           clhh: 'clhh',
+    //           dvt: 'dvt',
+    //           tonkho: 'tonkho',
+    //           sldc: 'sldc',
+    //           dtkp: 'dtkp',
+    //           thoigian: 'thoigian',
+    //           diemkhoden: 'diemkhoden',
+    //           nhakhoden: 'nhakhoden',
+    //           ngankhoden: 'ngankhoden',
+    //           lokhoden: 'lokhoden',
+    //           tdthukho: 'tdthukho',
+    //           tlkd: 'tlkd',
+    //           slpb: 'slpb',
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       key: `1-3`,
+    //       diemkho: 'diemkho',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-3-1`,
+    //           lokho: 'lokho',
+    //           loaihh: 'loaihh',
+    //           clhh: 'clhh',
+    //           dvt: 'dvt',
+    //           tonkho: 'tonkho',
+    //           sldc: 'sldc',
+    //           dtkp: 'dtkp',
+    //           thoigian: 'thoigian',
+    //           diemkhoden: 'diemkhoden',
+    //           nhakhoden: 'nhakhoden',
+    //           ngankhoden: 'ngankhoden',
+    //           lokhoden: 'lokhoden',
+    //           tdthukho: 'tdthukho',
+    //           tlkd: 'tlkd',
+    //           slpb: 'slpb',
+    //           // children: [
+    //           //   {
+    //           //     key: `1-3-1-1`,
+    //           //     name: '1-3-1-1 Jim Green jr.',
+    //           //     age: 25,
+    //           //     address: 'London No. 3 Lake Park'
+    //           //   },
+    //           //   {
+    //           //     key: `1-3-1-2`,
+    //           //     name: '1-3-1-2 Jimmy Green sr.',
+    //           //     age: 18,
+    //           //     address: 'London No. 4 Lake Park'
+    //           //   }
+    //           // ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
+    // {
+    //   key: `2`,
+    //   chicuc: 'chicuc',
+    //   dtkp: 'dtkp',
+    //   isEx: false
+    // }
   ];
   mapOfExpandedData: { [key: string]: any[] } = {};
 
@@ -337,9 +337,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   async ngOnInit() {
-    this.listOfMapData.forEach(item => {
-      this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
-    });
+    // this.listOfMapData.forEach(item => {
+    //   this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+    // });
     await this.spinner.show();
 
     // this.loadDsChiCuc()
@@ -554,9 +554,63 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
       }
       const detail = await this.quyetDinhDieuChuyenTCService.getDetail(value)
-      console.log('getListNganKhoNhan', value, qdTC, detail)
+      detail.data.danhSachQuyetDinh.map(async (item, i) => {
+        let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+
+        let children = []
+        if (dcnbKeHoachDcHdr.danhSachHangHoa.length > 0) {
+          const grouped = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
+          const keyarr = Object.keys(grouped);
+
+          keyarr.map((k, j) => {
+            const valuearr = grouped[k].map(v => {
+              return {
+                ...v,
+                key: v.id
+              }
+            })
+            console.log('keyarr', k, valuearr)
+            const itemv: any = valuearr[0]
+            // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
+            if (valuearr.length > 1) {
+              children.push({
+                tenDiemKho: itemv.tenDiemKho,
+                key: `${i}-${j}`,
+                isCol: true,
+                children: valuearr
+              })
+            } else {
+              children.push({ ...itemv, key: itemv.id })
+            }
+          })
+        }
+
+        this.listOfMapData.push({
+          ...dcnbKeHoachDcHdr,
+          key: `${dcnbKeHoachDcHdr.id}`,
+          isEx: children.length > 0,
+          children: children,
+        })
+
+      })
+
+      this.listOfMapData.forEach(item => {
+        this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
+      });
+
+      this.formData.patchValue({
+        listOfMapData: this.listOfMapData
+      });
+      console.log('onChangeCanCuQdTc', this.listOfMapData)
       // this.dsNganKhoNhan = Array.isArray(this.dsNhaKhoNhan) ? this.dsNhaKhoNhan.find(f => f.maDvi === value)?.children : [];
     }
+  }
+
+  groupBy(xs, key) {
+    return xs.reduce(function (rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
   }
 
 
