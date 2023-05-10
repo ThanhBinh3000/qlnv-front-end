@@ -20,6 +20,7 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
     {ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành'},
   ];
+  @Output() dataItemDaDtxd = new EventEmitter<object>();
 
   constructor(
     public userService: UserService,
@@ -36,6 +37,15 @@ export class QuyetDinhPheDuyetDuAnDtxdComponent implements OnInit {
 
   showList() {
     this.isDetail = false;
+  }
+
+  receivedData(data: any) {
+    this.itemQdPdDaDtxd = data;
+    this.emitDataDaDtxd(data);
+  }
+
+  emitDataDaDtxd(data) {
+    this.dataItemDaDtxd.emit(data);
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {

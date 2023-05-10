@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import * as dayjs from 'dayjs';
 import {saveAs} from 'file-saver';
@@ -30,10 +30,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: '',
     namKeHoach: '',
   };
-
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
+  indexTab: number = 0;
   errorMessage: string = '';
   startValue: Date | null = null;
   endValue: Date | null = null;
@@ -440,17 +440,9 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
-  selectTab(cap: string) {
-    switch (cap) {
-      case 'tong-cuc':
-        this.capDvi = 1;
-        break;
-      case 'cuc':
-        this.capDvi = 2;
-        break;
-      default:
-        break;
-    }
+  selectTab(cap: number) {
+    this.capDvi = cap + 1;
+    this.indexTab = cap;
     this.clearFilter();
     this.clearFilterTable();
     this.search();

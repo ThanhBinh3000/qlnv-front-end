@@ -140,7 +140,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             // await this.loadDetail(this.idInput)
             if (this.formData.value.id) {
                 const data = await this.detail(this.formData.value.id);
-                this.formData.patchValue(data);
+                this.helperService.bidingDataInFormGroup(this.formData, data);
+                this.formData.patchValue({
+                    soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
+                })
                 this.daXdinhDiemNhap = data?.daXdinhDiemNhap
                 this.convertTongHop(data, this.isAddNew)
             }
@@ -314,7 +317,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     async save() {
         try {
 
-            let body = this.formData.value;
+            let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat + '/DCNB' };
             let res;
             await this.spinner.show();
             this.setValidator(false)
@@ -341,7 +344,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                         this.formData.controls['lyDoTuChoi'].setValue(res.data.lyDoTuChoi);
                         this.formData.controls['trangThai'].setValue(res.data.trangThai);
                         this.formData.controls['tenTrangThai'].setValue(res.data.tenTrangThai);
-                        this.formData.controls['soDeXuat'].setValue(res.data.soDeXuat);
+                        this.formData.controls['soDeXuat'].setValue(res.data.soDeXuat ? res.data.soDeXuat.split('/')[0] : null);
                         this.formData.controls['ngayTongHop'].setValue(res.data.ngayTongHop);
                         this.formData.controls['trichYeu'].setValue(res.data.trichYeu);
                         this.formData.controls['ngayDuyetLdc'].setValue(res.data.ngayDuyetLdc);
@@ -512,35 +515,56 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                                         children: rsxx
                                     }
                                 }).value()
-                                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                // let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                let duToanKphi = 0;
+                                let soLuongDc = 0;
+                                vs?.forEach(element => {
+                                    duToanKphi += (element.duToanKphi || 0);
+                                    soLuongDc += (element.soLuongDc || 0)
+                                });
                                 return {
                                     ...maLoKho,
                                     idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
                                     children: rsss,
-                                    duToanKphi
+                                    duToanKphi,
+                                    soLuongDc
                                 }
                             }
                             ).value();
 
-                        let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        // let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        let duToanKphi = 0;
+                        let soLuongDc = 0;
+                        v?.forEach(element => {
+                            duToanKphi += (element.duToanKphi || 0);
+                            soLuongDc += (element.soLuongDc || 0)
+                        });
                         let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
                         return {
                             ...rowDiemKho,
                             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
                             duToanKphi: duToanKphi,
+                            soLuongDc,
                             children: rss,
                             expand: true
                         }
                     }
                     ).value();
 
-                let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                // let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let duToanKphi = 0;
+                let soLuongDc = 0;
+                rs?.forEach(element => {
+                    duToanKphi += (element.duToanKphi || 0);
+                    soLuongDc += (element.soLuongDc || 0)
+                });
                 let rowChiCuc = value?.find(s => s.maDvi === key);
                 return {
                     ...rowChiCuc,
                     idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
                     duToanKphi: duToanKphi,
+                    soLuongDc,
                     children: rs,
                     expand: true
                 };

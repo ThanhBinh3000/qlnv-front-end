@@ -51,6 +51,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
   dataEdit: { [key: string]: { edit: boolean; data: TongMucDauTu } } = {};
   mapOfExpandedData: { [key: string]: TongMucDauTu[] } = {};
   AMOUNT = AMOUNT_NO_DECIMAL;
+  @Output() dataItemDaDtxd = new EventEmitter<object>();
 
   constructor(
     httpClient: HttpClient,
@@ -143,6 +144,10 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
         vonNsTw: this.itemDuAn.ncKhNstw
       })
     }
+  }
+
+  emitDataDaDtxd(data) {
+    this.dataItemDaDtxd.emit(data);
   }
 
   goBack() {
@@ -291,7 +296,9 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
                 this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
+                  tenTrangThai: "Ban hành",
                 })
+                this.emitDataDaDtxd(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {

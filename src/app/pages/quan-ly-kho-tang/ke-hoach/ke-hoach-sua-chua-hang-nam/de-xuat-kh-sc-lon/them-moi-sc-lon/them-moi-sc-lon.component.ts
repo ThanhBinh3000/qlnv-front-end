@@ -18,6 +18,9 @@ import { QuyetDinhKhTrungHanService } from "../../../../../../services/quyet-din
 import { STATUS } from "../../../../../../constants/status";
 import dayjs from "dayjs";
 import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {
+  DeXuatScLonService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 
 @Component({
   selector: 'app-them-moi-sc-lon',
@@ -50,11 +53,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService: KtKhXdHangNamService,
-    private dviService: DonviService,
-    private dmKhoService: DanhMucKhoService,
+    private dexuatService: DeXuatScLonService,
     private danhMucService: DanhMucService,
-    private qdTrungHanSv: QuyetDinhKhTrungHanService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dexuatService);
     super.ngOnInit();
@@ -122,14 +122,14 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           namKetThuc: data.namKetThuc,
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
-          soQdTrunghan: data.soQdTrunghan,
           trichYeu: data.trichYeu,
           ngayDuyet: data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
-      this.dataTableRes = data.ctiets;
+      this.dataTableRes = data.chiTiets;
+      this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
     }
   }
@@ -149,7 +149,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   async save(isOther: boolean) {
     this.helperService.removeValidators(this.formData);
     this.formData.controls["soCongVan"].setValidators(Validators.required);
-    this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
     if (isOther || this.idInput > 0) {
       this.setValidators();
     }
@@ -162,8 +161,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.maDvi = this.userInfo.MA_DVI;
     body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
-    body.ctiets = this.dataTableRes;
-    body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
+    this.conVertTreToList()
+    body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -181,7 +180,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
             break;
           }
         }
-        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
           this.duyet()
         } else {
           await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
@@ -269,7 +268,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     return rs;
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(data: any,tmdt : string, type: string, idx: number, list?: any) {
     if (!this.isViewDetail) {
       let modalQD = this.modal.create({
         nzTitle: 'ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM',
@@ -283,11 +282,12 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          page : "DXNC"
+          page : tmdt
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
         if (detail) {
+          console.log(detail, 111111);
           if (!data.dataChild) {
             data.dataChild = [];
           }
@@ -301,15 +301,16 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
               Object.assign(list.dataChild[idx], detail);
             }
           }
-          this.expandAll();
+          this.expandAll(this.tableDuoi);
+          this.expandAll(this.tableTren);
         }
       });
     }
   }
 
-  expandAll() {
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach(s => {
+  expandAll(table : any[]){
+    if (table && table.length > 0) {
+      table.forEach(s => {
         this.expandSet.add(s.idVirtual);
       });
     }
@@ -368,32 +369,43 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
   conVertTreToList() {
     let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data);
-        });
-      }
-    });
+    if (this.tableTren && this.tableTren.length > 0) {
+      this.tableTren.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data);
+          });
+        }
+      });
+    }
+    if (this.tableDuoi && this.tableDuoi.length > 0) {
+      this.tableDuoi.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data);
+          });
+        }
+      });
+    }
     this.dataTableRes = arr;
   }
 
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableRes).groupBy("khoi")
-      .map((value, key) => ({ khoi: key, dataChild: value, idVirtual : uuidv4() }))
-      .value();
-    this.expandAll();
-  }
-
-  async changeSoQdTrunghan(id) {
-    let res = await this.qdTrungHanSv.getDetail(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dataTable = [];
-      let detail = res.data;
-      this.dataTableRes = detail.ctRes?.ctietList;
-      this.convertListToTree() ;
+    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 5000000000)
+     this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 5000000000)
+    if (this.tableTren && this.tableTren.length > 0) {
+      this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
+        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual : uuidv4() }))
+        .value();
     }
+    if (this.tableDuoi && this.tableDuoi.length > 0) {
+      this.tableDuoi = chain(this.tableDuoi).groupBy("tenKhoi")
+        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual : uuidv4() }))
+        .value();
+    }
+    this.expandAll(this.tableTren);
+    this.expandAll(this.tableDuoi);
   }
 
   themItemcha(type : string) {

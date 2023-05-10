@@ -16,7 +16,7 @@
             </nz-input-group>
           </div>
           <div nz-col nzSpan="8">
-            <label class="search__label">Ngày ký</label>
+            <label class="search__label">Ngày ký t</label>
             <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayKy"></nz-range-picker>
           </div>
         </div>
@@ -38,7 +38,7 @@
         <button type="button" *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_EXP')"
                 class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
-          <span>Export</span>
+          <span>Xuất file</span>
         </button>
         <button *ngIf="userService.isCuc() && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD_THEM')"
                 type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
@@ -118,7 +118,7 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td *ngIf="userService.isTongCuc()">{{ data.chuDauTu }}</td>
-          <td class="text-center"  *ngIf="userService.isCuc">
+          <td class="text-center" *ngIf="userService.isCuc">
             <a *ngIf="userService.isCuc && data.trangThai != STATUS.DU_THAO"
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>
@@ -145,7 +145,7 @@
                            (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->
