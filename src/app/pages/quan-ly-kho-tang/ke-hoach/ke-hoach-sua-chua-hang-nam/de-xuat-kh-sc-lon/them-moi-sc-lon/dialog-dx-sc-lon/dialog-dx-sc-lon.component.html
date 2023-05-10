@@ -32,7 +32,7 @@
         <nz-form-item>
           <nz-form-label nzRequired nzNoColon="true">Loại công trình</nz-form-label>
           <nz-select [(ngModel)]="item.loaiCongTrinh" nzAllowClear>
-            <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.ma" [nzValue]="item.giaTri">
+            <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.ma">
             </nz-option>
           </nz-select>
         </nz-form-item>

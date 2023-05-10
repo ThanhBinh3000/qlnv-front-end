@@ -27,6 +27,7 @@ import { Router } from "@angular/router";
 export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   @Input() typeVthh: string;
+  @Input() dataInput: string;
   isDetail: boolean = false;
 
   STATUS = STATUS;
@@ -90,6 +91,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      this.checkRedirect(this.dataInput)
       this.loadDsNam();
       await this.search();
       this.spinner.hide();
@@ -97,6 +99,13 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkRedirect(data) {
+    if (data) {
+      this.isDetail = true;
+      this.selectedId = null;
     }
   }
 
