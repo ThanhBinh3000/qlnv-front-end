@@ -15,13 +15,9 @@
                         <label>Số hợp đồng</label>
                         <input nz-input formControlName="soHd" placeholder="Số hợp đồng" />
                     </div>
-                    <div nz-col [nzSpan]="4">
+                    <div nz-col [nzSpan]="8">
                         <label>Tên hợp đồng</label>
                         <input nz-input formControlName="tenHd" placeholder="Tên hợp đồng" />
-                    </div>
-                    <div nz-col [nzSpan]="10">
-                        <label>Đơn vị mua</label>
-                        <input nz-input formControlName="tenDviMua" placeholder="Nhà cung cấp" />
                     </div>
                     <div nz-col [nzSpan]="4">
                         <label> Ngày duyệt kế hoạch </label>
@@ -79,7 +75,6 @@
                         <th width="60px">STT</th>
                         <th width="100px">Năm KH</th>
                         <th width="130px">QĐ PD KHBTT</th>
-                        <th width="175px">QĐ PD KQ chào giá</th>
                         <th width="175px" class="wrap">SL HĐ cần ký</th>
                         <th width="175px" class="wrap">SL HĐ đã ký</th>
                         <th width="175px" class="wrap">Thời hạn xuất kho</th>
@@ -93,12 +88,6 @@
                     <tr class="search-table">
                         <th></th>
                         <th></th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKq"
-                                    (input)="filterInTable('soQdKq',filterTable.soQdKq)" size="small" />
-                            </nz-input-group>
-                        </th>
                         <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKq"
@@ -174,15 +163,14 @@
                         <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                         <td>{{ data.namKh }}</td>
                         <td>{{ data.soQdPd }}</td>
-                        <td>{{ data.soQdKq }}</td>
                         <td></td>
                         <td></td>
-                        <td>{{ data.ngayMkho | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.tgianGnhan | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td></td>
                         <td>{{ data.tenTrangThaiHd }}</td>
-                        <td>{{ data.tenTrangThaiXh }}</td>
+                        <td></td>
                         <td class="text-left">
                             <a *ngIf="(data.trangThaiHd == STATUS.DA_HOAN_THANH)" (click)="goDetail(data.id,null,true)">
                                 <i class="fa fa-eye"></i>

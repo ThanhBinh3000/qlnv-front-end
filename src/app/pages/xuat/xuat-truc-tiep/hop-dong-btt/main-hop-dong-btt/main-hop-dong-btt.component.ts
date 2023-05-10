@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-main-hop-dong-btt',
@@ -7,7 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class MainHopDongBttComponent implements OnInit {
   @Input() loaiVthh: string;
 
-  constructor() { }
+  constructor(
+    public userService: UserService,
+  ) { }
 
   ngOnInit(): void {
 

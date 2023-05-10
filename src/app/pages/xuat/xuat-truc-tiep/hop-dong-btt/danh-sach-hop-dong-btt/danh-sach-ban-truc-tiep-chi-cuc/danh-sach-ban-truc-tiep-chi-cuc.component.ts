@@ -6,14 +6,16 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
+import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 
 @Component({
-  selector: 'app-danh-sach-hop-dong-btt',
-  templateUrl: './danh-sach-hop-dong-btt.component.html',
-  styleUrls: ['./danh-sach-hop-dong-btt.component.scss']
+  selector: 'app-danh-sach-ban-truc-tiep-chi-cuc',
+  templateUrl: './danh-sach-ban-truc-tiep-chi-cuc.component.html',
+  styleUrls: ['./danh-sach-ban-truc-tiep-chi-cuc.component.scss']
 })
-export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
+export class DanhSachBanTrucTiepChiCucComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   isQuanLy: boolean;
   isAddNew: boolean;
@@ -23,32 +25,29 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qdPdKetQuaBttService: QdPdKetQuaBttService,
+    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
+    super.ngOnInit();
     this.formData = this.fb.group({
       namKh: null,
       soHd: null,
       tenHd: null,
-      tenDviMua: null,
       ngayPduyetTu: null,
       ngayPduyetDen: null,
-      trangThai: null,
       loaiVthh: null,
-      maDvi: null,
-      maChiCuc: null,
+      trangThai: null,
+      phanLoai: null
     });
     this.filterTable = {
       namKh: '',
       soQdPd: '',
-      soQdKq: '',
       ngayMkho: '',
       loaiVthh: '',
       tenLoaiVthh: '',
       cloaiVthh: '',
       tenCloaiVthh: '',
       tenTrangThaiHd: '',
-      tenTrangThaiXh: '',
     }
   }
 
@@ -80,8 +79,8 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   async timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      phanLoai: 'QDDX'
     })
   }
 
