@@ -25,6 +25,10 @@ export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
   isDetail: boolean = false;
   @Input("itemQdPdKhlcnt")
   itemQdPdKhlcnt: any;
+  @Input()
+  itemDuAn: any;
+  @Input("itemQdPdTktcTdt") itemQdPdTktcTdt: any;
+  @Input("itemQdPdKhLcnt") itemQdPdKhLcnt: any;
   STATUS = STATUS;
   listTrangThai: any[] = [
     {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},

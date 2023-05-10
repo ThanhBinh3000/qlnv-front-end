@@ -70,9 +70,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
-      soQdPdDtxd: [null, Validators.required],
+      soQdPdDaDtxd: [null, Validators.required],
       soQdPdDtxdNam: [null],
-      idQdPdDtxd: [null, Validators.required],
+      idQdPdDaDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null],
@@ -126,8 +126,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         tenDuAn: this.itemDuAn.tenDuAn,
         idDuAn: this.itemDuAn.id,
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
-        soQdPdDtxd: this.itemQdPdDaDtxd.soQd,
-        idQdPdDtxd: this.itemQdPdDaDtxd.id,
+        soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+        idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,
         khoi: this.itemDuAn.tenKhoi,
@@ -312,7 +312,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       let item = this.listQdPdDtxd.filter(it => it.soQd == event)[0];
       if (item) {
         this.formData.patchValue({
-          idQdPdDtxd: item.id,
+          idQdPdDaDtxd: item.id,
           tenDuAn: item.tenDuAn,
           chuDauTu: item.chuDauTu,
           diaDiem: item.diaDiem,

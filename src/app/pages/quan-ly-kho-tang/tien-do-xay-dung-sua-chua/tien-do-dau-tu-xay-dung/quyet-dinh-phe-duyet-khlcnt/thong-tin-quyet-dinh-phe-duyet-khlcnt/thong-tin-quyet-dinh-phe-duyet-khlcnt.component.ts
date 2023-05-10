@@ -17,6 +17,7 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
 import {KeHoachVonPhiBNCT} from "../../../../../../models/KeHoachVonPhiBNCT";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt',
@@ -30,6 +31,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input('itemQdPdTktcTdt') itemQdPdTktcTdt: any;
+  @Input('itemDuAn') itemDuAn: any;
+
   STATUS = STATUS;
   maQd: string = '/QĐ-TCDT';
   listQdPdDaDtxd: any[] = []
@@ -47,7 +51,10 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   dataCongViecKh: any[] = [];
   rowItemCongViecKh: CongViec = new CongViec();
   dataCongViecKhEdit: { [key: string]: { edit: boolean; data: CongViec } } = {};
-
+  AMOUNT = AMOUNT_NO_DECIMAL;
+  listCcPhapLy: any[] = [];
+  listFileDinhKem: any[] = [];
+  listFile: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -63,18 +70,20 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
-      namKh:[null, Validators.required],
+      namKh: [null, Validators.required],
       maDvi: [this.userInfo.MA_DVI],
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
       soQdPdDaDtxd: [null, Validators.required],
       idQdPdDaDtxd: [null, Validators.required],
+      soQdPdTktcTdt: [null, Validators.required],
+      idQdPdTktcTdt: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null, Validators.required],
+      tenCongTrinh: [null, Validators.required],
       diaChi: [null],
-      soQdPdTktcTdt:[null],
       idDuAn: [null, Validators.required],
       tienCvDaTh: [0],
       tienCvKad: [0],
@@ -87,8 +96,8 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
       listKtXdscQuyetDinhPdKhlcntCvKad: null,
       listKtXdscQuyetDinhPdKhlcntCvKh: null,
-      khoi:[null],
-      loaiCapCt:[null],
+      khoi: [null],
+      loaiCapCt: [null],
     });
   }
 
@@ -104,12 +113,39 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       ]);
       if (this.idInput) {
         await this.detail(this.idInput)
+      } else {
+        this.bindingData();
       }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+
+  bindingData() {
+    console.log(this.itemDuAn, 'this.itemDuAnthis.itemDuAnthis.itemDuAn');
+    console.log(this.itemQdPdTktcTdt, 'this.itemQdPdTktcTdtthis.itemQdPdTktcTdtthis.itemQdPdTktcTdt')
+    if (this.itemDuAn && this.itemQdPdTktcTdt) {
+      this.formData.patchValue({
+        namKh: this.itemDuAn.namKeHoach,
+        tenDuAn: this.itemDuAn.tenDuAn,
+        idDuAn: this.itemDuAn.id,
+        soQdPdTktcTdt: this.itemQdPdTktcTdt.soQd,
+        idQdPdTktcTdt: this.itemQdPdTktcTdt.id,
+        soQdPdDaDtxd: this.itemQdPdTktcTdt.soQdPdDtxd,
+        idQdPdDaDtxd: this.itemQdPdTktcTdt.soQdPdDtxd,
+        tenCongTrinh: this.itemQdPdTktcTdt.tenCongTrinh,
+        tongTien: this.itemQdPdTktcTdt.giaTriDt,
+        loaiCapCt: this.itemQdPdTktcTdt.loaiCapCt,
+        khoi: this.itemQdPdTktcTdt.tenKhoi,
+        // chuDauTu: this.itemQdPdTktcTdt.chuDauTu,
+        // diaDiem: this.itemQdPdTktcTdt.diaDiem,
+        // giaTriDt: this.itemQdPdTktcTdt.tongMucDt,
+        // nhaThauTk: this.itemQdPdTktcTdt.toChucTvtk
+      })
     }
   }
 
