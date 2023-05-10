@@ -10,8 +10,9 @@ import {XuatThanhLyComponent} from "src/app/pages/xuat/xuat-thanh-ly/xuat-thanh-
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import {CHUC_NANG} from 'src/app/constants/status';
 import {MESSAGE} from "src/app/constants/message";
-import {isEmpty} from "lodash";
+import {chain, isEmpty} from "lodash";
 import {DanhMucService} from "src/app/services/danhmuc.service";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: 'app-thanh-ly-danh-sach-hang',
@@ -23,6 +24,9 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
+  dataTableView: any = [];
+  expandSetString = new Set<string>();
+
   public vldTrangThai: XuatThanhLyComponent;
 
   constructor(httpClient: HttpClient,
@@ -126,6 +130,8 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
           this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
         }*/
     await this.search();
+    this.dataTable.forEach(s => s.idVirtual = uuidv4());
+    this.buildTableView();
   }
 
   async loadDsDonVi() {
@@ -145,5 +151,46 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
       this.dsLoaiVthh = res.data;
       this.dsCloaiVthh = res.data?.filter((x) => (x.ma.length == 2 && !x.ma.match("^01.*")) || (x.ma.length == 4 && x.ma.match("^01.*")));
     }
+  }
+
+  buildTableView() {
+    this.dataTableView = chain(this.dataTable)
+      .groupBy("tenCuc")
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy("tenChiCuc")
+          .map((v, k) => {
+              let rowItem = v.find(s => s.tenChiCuc === k);
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                tenChiCuc: k,
+                maDiaDiem: rowItem.maDiaDiem,
+                tenCloaiVthh: rowItem.tenCloaiVthh,
+                childData: v
+              }
+            }
+          ).value();
+        let rowItem = value.find(s => s.tenChiCuc === key);
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
+        return {
+          idVirtual: idVirtual,
+          tenCuc: key,
+          childData: rs
+        };
+      }).value();
+    console.log(this.dataTableView, 'dataTableView')
+    console.log(this.expandSetString)
+  }
+
+  onExpandStringChange(id: string, checked: boolean) {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+    console.log(this.expandSetString)
   }
 }
