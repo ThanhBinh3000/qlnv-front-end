@@ -1,12 +1,12 @@
-import {NgModule} from '@angular/core';
-import {CommonModule, DatePipe} from "@angular/common";
-import {ComponentsModule} from "../../../components/components.module";
-import {DirectivesModule} from "../../../directives/directives.module";
-import {XuatDieuChuyenRoutingModule} from "./xuat-dieu-chuyen-routing.module";
-import {XuatDieuChuyenComponent} from "./xuat-dieu-chuyen.component";
-import {DcnbXuatNoiBoChiCucComponent} from "./noi-bo-chi-cuc/dcnb-xuat-noi-bo-chi-cuc.component";
-import {DcnbNbccThayDoiThuKhoComponent} from "./noi-bo-chi-cuc/thay-doi-thu-kho/dcnb-nbcc-thay-doi-thu-kho.component";
-import {DcnbNbccKhongThayDoiThuKhoComponent} from "./noi-bo-chi-cuc/khong-thay-doi-thu-kho/dcnb-nbcc-khong-thay-doi-thu-kho.component";
+import { NgModule } from '@angular/core';
+import { CommonModule, DatePipe } from "@angular/common";
+import { ComponentsModule } from "../../../components/components.module";
+import { DirectivesModule } from "../../../directives/directives.module";
+import { XuatDieuChuyenRoutingModule } from "./xuat-dieu-chuyen-routing.module";
+import { XuatDieuChuyenComponent } from "./xuat-dieu-chuyen.component";
+import { DcnbXuatNoiBoChiCucComponent } from "./noi-bo-chi-cuc/dcnb-xuat-noi-bo-chi-cuc.component";
+import { DcnbNbccThayDoiThuKhoComponent } from "./noi-bo-chi-cuc/thay-doi-thu-kho/dcnb-nbcc-thay-doi-thu-kho.component";
+import { DcnbNbccKhongThayDoiThuKhoComponent } from "./noi-bo-chi-cuc/khong-thay-doi-thu-kho/dcnb-nbcc-khong-thay-doi-thu-kho.component";
 import {
   NbccTdtkXuatKhoLuongThucComponent
 } from "./noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/nbcc-tdtk-xuat-kho-luong-thuc.component";
@@ -52,7 +52,10 @@ import {
 import {
   NbccTdtkKiemTraChatLuongLuongThucComponent
 } from "./noi-bo-chi-cuc/thay-doi-thu-kho/kiem-tra-chat-luong-luong-thuc/nbcc-tdtk-kiem-tra-chat-luong-luong-thuc.component";
-import {GhccGiuaHaiChiCucComponent} from "./giua-hai-chi-cuc/ghcc-giua-hai-chi-cuc.component";
+import { GhccGiuaHaiChiCucComponent } from "./giua-hai-chi-cuc/ghcc-giua-hai-chi-cuc.component";
+import { DanhSachBienBanLayMau } from './component-chung/danh-sach-bien-ban-lay-mau/danh-sach-bien-ban-lay-mau.component';
+import { ChiTietDanhSachBienBanLayMau } from './component-chung/danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau.component';
+import { ThanhPhanThamGiaComponent } from './component-chung/danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +78,10 @@ import {GhccGiuaHaiChiCucComponent} from "./giua-hai-chi-cuc/ghcc-giua-hai-chi-c
     NbccTdtkKtclltBienBanLayMauBanGiaoComponent,
     NbccTdtkKtclltPhieuKiemNghiemChatLuongComponent,
     NbccTdtkKiemTraChatLuongLuongThucComponent,
-    GhccGiuaHaiChiCucComponent
+    GhccGiuaHaiChiCucComponent,
+    DanhSachBienBanLayMau,
+    ChiTietDanhSachBienBanLayMau,
+    ThanhPhanThamGiaComponent
   ],
   imports: [
     CommonModule,

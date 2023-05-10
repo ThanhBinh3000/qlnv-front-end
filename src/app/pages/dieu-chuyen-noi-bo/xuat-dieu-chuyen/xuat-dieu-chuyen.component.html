@@ -1,6 +1,6 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)" >
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
       TRONG NỘI BỘ KHU VỰC
     </li>
     <li nz-menu-item (click)="selectTab(1)">
@@ -17,10 +17,10 @@
       <app-dcnb-xuat-noi-bo-chi-cuc></app-dcnb-xuat-noi-bo-chi-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 1">
-<!--      <app-xuat-cap></app-xuat-cap>-->
+      <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
-<!--      <app-xuat-cap></app-xuat-cap>-->
+      <!--      <app-xuat-cap></app-xuat-cap>-->
     </ng-container>
   </div>
 </div>

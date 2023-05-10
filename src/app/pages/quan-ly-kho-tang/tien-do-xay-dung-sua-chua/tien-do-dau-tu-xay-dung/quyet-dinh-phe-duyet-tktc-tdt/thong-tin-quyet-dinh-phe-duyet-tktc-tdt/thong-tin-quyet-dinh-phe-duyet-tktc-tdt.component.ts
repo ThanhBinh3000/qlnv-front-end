@@ -278,6 +278,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
                 this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
+                  tenTrangThai: "Ban hành",
                 })
                 this.emitDataTktcTdt(res1.data);
                 this.isViewDetail = true;
