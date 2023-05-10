@@ -21,6 +21,7 @@ import {
   QuyetdinhpheduyetTktcTdtService
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-tktc-tdt',
@@ -32,6 +33,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Output() dataItemTktcTdt = new EventEmitter<object>();
   @Input()
   idInput: number;
   @Input('itemQdPdDaDtxd') itemQdPdDaDtxd: any;
@@ -47,7 +49,8 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
   mapOfExpandedData: { [key: string]: DuToanXayDung[] } = {};
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
-  listFile: any[] = []
+  listFile: any[] = [];
+  AMOUNT = AMOUNT_NO_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -67,18 +70,19 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
-      soQdPdDtxd: [null, Validators.required],
-      soQdPdDtxdNam: [null, Validators.required],
-      idQdPdDtxd: [null, Validators.required],
+      soQdPdDaDtxd: [null, Validators.required],
+      soQdPdDtxdNam: [null],
+      idQdPdDaDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
       tenDuAn: [null, Validators.required],
       chuDauTu: [null],
-      tenCongTrinh: [null],
+      tenCongTrinh: [null, Validators.required],
       diaDiem: [null],
-      nhaThauBc: [null],
+      nhaThauBc: [null, Validators.required],
+      khoi: [null],
       nhaThauTk: [null],
       giaTriDt: [0],
-      donViTt: [null],
+      donViTt: [null, Validators.required],
       noiDung: [null],
       quyMo: [null],
       loaiCapCt: [null],
@@ -111,6 +115,10 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
   }
 
+  emitDataTktcTdt(data) {
+    this.dataItemTktcTdt.emit(data);
+  }
+
   bindingData() {
     if (this.itemDuAn && this.itemQdPdDaDtxd) {
       this.formData.patchValue({
@@ -118,12 +126,15 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
         tenDuAn: this.itemDuAn.tenDuAn,
         idDuAn: this.itemDuAn.id,
         soQdKhDtxdNam: this.itemDuAn.soQdPdKhNam,
+        soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+        idQdPdDaDtxd: this.itemQdPdDaDtxd.id,
         loaiDuAn: this.itemDuAn.loaiDuAn,
-        khoi: this.itemDuAn.khoi,
-        diaDiem: this.itemDuAn.diaDiem,
-        tgKhoiCong: this.itemDuAn.tgKhoiCong,
-        tgHoanThanh: this.itemDuAn.tgHoanThanh,
-        vonNsTw: this.itemDuAn.ncKhNstw
+        loaiCapCt: this.itemQdPdDaDtxd.loaiCapCt,
+        khoi: this.itemDuAn.tenKhoi,
+        chuDauTu: this.itemQdPdDaDtxd.chuDauTu,
+        diaDiem: this.itemQdPdDaDtxd.diaDiem,
+        giaTriDt: this.itemQdPdDaDtxd.tongMucDt,
+        nhaThauTk: this.itemQdPdDaDtxd.toChucTvtk
       })
     }
   }
@@ -156,6 +167,10 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
   }
 
+  goBack() {
+    this.showListEvent.emit();
+  }
+
   async detail(id) {
     this.spinner.show();
     try {
@@ -165,7 +180,9 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            soQd: data.soQd ? data.soQd.split('/')[0] : null
+            soQd: data.soQd ? data.soQd.split('/')[0] : null,
+            khoi: this.itemDuAn.tenKhoi,
+            namKh: this.itemDuAn.namKeHoach
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {
@@ -211,7 +228,6 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
 
 
   async save(isBanHanh?) {
-    return;
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
@@ -233,49 +249,62 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
-    this.formData.value.listKtXdscQuyetDinhPdTktcTdtDtl = this.dataTable;
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.formData.value.listKtXdscQuyetDinhPdTktcTdtDtl = this.dataTable;
+    } else {
+      this.notification.warning(MESSAGE.WARNING, "Chưa nhập chi tiết dự án xây dựng!");
+      return;
+    }
     if (isBanHanh) {
-      let res = await this.createUpdate(this.formData.value);
-      if (res) {
-        this.modal.confirm({
-          nzClosable: false,
-          nzTitle: 'Xác nhận',
-          nzContent: "Ban hành quyết định",
-          nzOkText: 'Đồng ý',
-          nzCancelText: 'Không',
-          nzOkDanger: true,
-          nzWidth: 350,
-          nzOnOk: async () => {
-            this.spinner.show();
-            try {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: "Ban hành quyết định",
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.createUpdate(this.formData.value);
+            if (res) {
               let body = {
                 id: res.id,
                 trangThai: STATUS.BAN_HANH,
               }
-              let res1 = await this.quyetdinhpheduyetduandtxdService.approve(body);
+              let res1 = await this.quyetdinhpheduyetTktcTdtService.approve(body);
               if (res1.msg == MESSAGE.SUCCESS) {
                 this.notification.success(MESSAGE.NOTIFICATION, "Ban hành quyết định thành công");
                 this.formData.patchValue({
                   trangThai: STATUS.BAN_HANH,
+                  tenTrangThai: "Ban hành",
                 })
+                this.emitDataTktcTdt(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
                 this.notification.error(MESSAGE.ERROR, res1.msg);
                 this.spinner.hide();
               }
-            } catch (e) {
-              console.log('error: ', e);
-              this.spinner.hide();
-              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            } finally {
-              this.spinner.hide();
             }
-          },
-        });
-      }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
     } else {
-      await this.createUpdate(this.formData.value)
+      let res = await this.createUpdate(this.formData.value)
+      if (res) {
+        this.formData.patchValue({
+          id: res.id,
+        });
+        this.idInput = res.id;
+      }
     }
   }
 
@@ -284,7 +313,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       let item = this.listQdPdDtxd.filter(it => it.soQd == event)[0];
       if (item) {
         this.formData.patchValue({
-          idQdPdDtxd: item.id,
+          idQdPdDaDtxd: item.id,
           tenDuAn: item.tenDuAn,
           chuDauTu: item.chuDauTu,
           diaDiem: item.diaDiem,

@@ -54,6 +54,7 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
       maCongTrinh: [null, Validators.required],
       tenCongTrinh: [null, Validators.required],
       maDiemKho: [null, Validators.required],
+      diaDiem : [],
       tgThucHien: [null, Validators.required],
       tgHoanThanh: [null, Validators.required],
       khoi: [null, Validators.required],
@@ -154,5 +155,14 @@ export class ThongTinDmScLonComponent extends Base2Component implements OnInit {
 
   onCancel() {
     this._modalRef.close();
+  }
+
+  changeDiemKho($event: any) {
+    let result = this.dsKho.filter(item => item.maDvi == $event)
+    if (result && result.length > 0) {
+      this.formData.patchValue({
+        diaDiem : result[0].diaChi
+      })
+    }
   }
 }

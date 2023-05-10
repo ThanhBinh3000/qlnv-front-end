@@ -17,15 +17,13 @@ import {FileDinhKem} from "../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {MESSAGE} from "../../../../../constants/message";
 import * as uuid from "uuid";
 import {chain, cloneDeep} from 'lodash';
-import {
-  QuyetDinhXuatCapService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cap/quyet-dinh-xuat-cap.service";
 import {QuanLyHangTrongKhoService} from "../../../../../services/quanLyHangTrongKho.service";
+import {
+  QuyetDinhThanhLyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
 
-export class QuyetDinhDtl {
+export class BaoCaoKqDtl {
   idVirtual: string;
-  idTongHop: number;
-  maTongHop: string;
   maDiaDiem: string;
   loaiVthh: string;
   cloaiVthh: string;
@@ -68,11 +66,11 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     modal: NzModalService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
-    private quyetDinhXuatCapService: QuyetDinhXuatCapService,
+    private quyetDinhThanhLyService: QuyetDinhThanhLyService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhXuatCapService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhThanhLyService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get("year") - i,
@@ -81,29 +79,18 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     }
     this.formData = this.fb.group({
 
-      id: [],
-      maDvi: [],
-      nam: [dayjs().get("year"), [Validators.required]],
-      soQd: ['', [Validators.required]],
-      ngayKy: ['', [Validators.required]],
-      idHoSo: ['', [Validators.required]],
-      soHoSo: ['', [Validators.required]],
-      idKq: [],
-      soKq: [],
-      thoiGianTl: [],
-      thoiGianTlTu: [],
-      thoiGianTlDen: [],
-      trichYeu: [],
+      id:[],
+      maDvi:[],
+      nam:[dayjs().get("year"), [Validators.required]],
+      soBaoCao:['', [Validators.required]],
+      ngayBaoCao:[],
+      idQd:['', [Validators.required]],
+      soQd:['', [Validators.required]],
+      noiDung:['', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
-      tongSoLuongTl: [],
-      tongSoLuongCon: [],
-      tongThanhTien: [],
-      lyDoTuChoi: [],
-      tenDvi: [],
-      tenTrangThai: ['Dự thảo'],
-      fileDinhKem: [new Array<FileDinhKem>()],
-      canCu: [new Array<FileDinhKem>()],
-      quyetDinhDtl: [new Array<QuyetDinhDtl>()],
+      tongSoLuongTl:[],
+      tongSoLuongCon:[],
+      tongThanhTien:[],
       ngayTao: [],
       nguoiTaoId: [],
       ngaySua: [],
@@ -112,6 +99,13 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       nguoiPduyetId: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
+      lyDoTuChoi: [],
+      tenDvi: [],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKem: [new Array<FileDinhKem>()],
+      canCu: [new Array<FileDinhKem>()],
+      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
+
     });
 
   }
@@ -139,7 +133,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
   async loadChiTiet(idInput: number) {
     if (idInput) {
-      await this.quyetDinhXuatCapService.getDetail(idInput)
+      await this.quyetDinhThanhLyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.setValue({
@@ -266,10 +260,10 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     let data = cloneDeep(this.formData.value.quyetDinhDtl);
 
     if (this.userService.isCuc()) {
-      data = data.filter(s => s.maDvi.substring(0, 6) === this.userInfo.MA_DVI);
+      data = data.filter(s => s.maChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
     }
     let dataView = chain(data)
-      .groupBy("maDvi")
+      .groupBy("maChiCuc")
       .map((value, key) => {
         let rs = chain(value)
         return {

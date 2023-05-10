@@ -110,7 +110,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Số hồ sơ đề nghị thanh lý</nz-form-label>
               <nz-form-control [nzErrorTip]="error" nz-col nzSpan="24">
-                <nz-select (ngModelChange)="changeHoSo($event)" [nzDisabled]="isView" formControlName="idQdPd"
+                <nz-select (ngModelChange)="changeHoSo($event)" [nzDisabled]="isView" formControlName="idHoSo"
                            nzAllowClear nzShowSearch>
                   <nz-option *ngFor="let p of listHoSo" [nzLabel]="p.soHoSo" [nzValue]="p.id"></nz-option>
                 </nz-select>
@@ -146,16 +146,16 @@
               </div>
             </nz-form-item>
           </div>
-        </div>
-        <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Tài liệu đính kèm
-            </nz-form-label>
-            <div class="list-file">
-              <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
-            </div>
-          </nz-form-item>
+          <div nz-col [nzSpan]="24">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Tài liệu đính kèm
+              </nz-form-label>
+              <div class="list-file">
+                <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView"></file-list>
+              </div>
+            </nz-form-item>
+          </div>
         </div>
       </form>
 

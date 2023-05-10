@@ -354,12 +354,12 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
           paggingReq: {
             limit: this.pageSize,
             page: this.page - 1,
-          }
-        }
+          },
+        };
         this.quyHoachKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-dieu-chinh-quy-hoach-kho.xlsx'),
+            saveAs(blob, 'quyet-dinh-dc-quy-hoach-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
