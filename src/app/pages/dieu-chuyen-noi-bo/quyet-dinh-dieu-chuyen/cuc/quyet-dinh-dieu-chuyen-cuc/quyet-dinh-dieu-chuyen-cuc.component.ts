@@ -254,6 +254,7 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
     this.showListEvent.emit();
     this.isDetail = false;
     this.isView = false;
+    this.timKiem();
   }
 
 

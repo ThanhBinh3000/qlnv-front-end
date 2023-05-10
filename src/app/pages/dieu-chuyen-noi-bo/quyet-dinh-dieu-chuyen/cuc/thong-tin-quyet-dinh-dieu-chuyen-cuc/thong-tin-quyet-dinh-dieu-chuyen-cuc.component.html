@@ -11,6 +11,7 @@
     </div>
 
     <div class="btn-group">
+
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
@@ -24,6 +25,26 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
+
+      <button
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC || formData.value.trangThai == STATUS.TU_CHOI_LDC"
+        type="button" class="btn btn-sub" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span>Từ chối</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP" type="button" class="btn btn-sub"
+        (click)="pheDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC" type="button" class="btn btn-info ml-2"
+        (click)="banHanh()">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
+      </button>
+
     </div>
   </div>
   <!-- <nz-card class="mg-t-16 flex-card p-lr16"> -->
@@ -46,10 +67,11 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại điều chuyển
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-radio-group formControlName="loaiDc">
-                  <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
+                <nz-radio-group formControlName="loaiDc" (ngModelChange)="onChangeLoaiDc($event)">
+                  <label nz-radio *ngFor="let p of listLoaiDC" [nzValue]="p.value">{{p.text}}</label>
+                  <!-- <label nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
                   <label nz-radio nzValue="CHI_CUC">Giữa 2 chi cục trong cùng 1 cục</label>
-                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label>
+                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label> -->
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
@@ -57,6 +79,7 @@
         </div>
       </nz-card>
       <nz-card class="mg-t-16 flex-card p-lr16">
+
         <div *ngIf="formData.value.loaiDc === 'NOi_BO'" nz-row [nzGutter]="24">
           <div nz-col nzSpan="3">
             <nz-form-item>
@@ -117,7 +140,7 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -176,8 +199,9 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isDisabled()" formControlName="nam" nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [nzDisabled]="isDisabled()" formControlName="canCuQdTc" nzAllowClear
+                  (ngModelChange)="onChangeCanCuQdTc($event)">
+                  <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -189,7 +213,7 @@
                 Số đề xuất/công văn
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -198,7 +222,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày trình duyệt Tổng cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayCanCuQdTc" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -221,7 +245,7 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -245,8 +269,9 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại quyết định
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isDisabled()" formControlName="nam" nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [nzDisabled]="isDisabled()" formControlName="loaiQdinh" nzAllowClear
+                  (ngModelChange)="onChangeLoaiQdinh($event)">
+                  <nz-option *ngFor="let p of listLoaiQD" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -256,8 +281,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                    [nzSize]="'small'">
+                  <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -287,8 +311,9 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isDisabled()" formControlName="nam" nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [nzDisabled]="isDisabled()" formControlName="canCuQdTc" nzAllowClear
+                  (ngModelChange)="onChangeCanCuQdTc($event)">
+                  <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -300,7 +325,7 @@
                 Số QĐ Tổng cục
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="soCanCuQdTc" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -309,7 +334,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày trình duyệt Tổng cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayCanCuQdTc" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -332,7 +357,7 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongtien" [readonly]="true" />
+                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -398,7 +423,8 @@
           </div>
         </div>
         <div class="btn-group">
-          <button *ngIf="!isView && isCuc()" type="button" class="btn btn-main ml-2" (click)="add()">
+          <button *ngIf="!isView && isCuc() && formData.value.loaiDc !== 'CUC'" type="button" class="btn btn-main ml-2"
+            (click)="add()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
