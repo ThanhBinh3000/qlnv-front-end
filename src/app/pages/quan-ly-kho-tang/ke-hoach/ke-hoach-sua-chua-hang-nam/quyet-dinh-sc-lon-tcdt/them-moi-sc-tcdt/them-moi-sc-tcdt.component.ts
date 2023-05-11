@@ -80,7 +80,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
-      loai: []
+      loaiTmdt: []
     });
   }
 
@@ -323,10 +323,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
   async tongHop() {
     this.spinner.show();
     this.formData.patchValue({
-      tgTongHop: new Date()
+      tgTongHop: new Date(),
+      "loaiTmdt": this.formData.value.loaiTmdt ? this.formData.value.loaiTmdt : "ALL"
     });
     let body = {
-      "namKeHoach": this.formData.value.namKeHoach
+      "namKeHoach": this.formData.value.namKeHoach,
+      "loaiTmdt": this.formData.value.loaiTmdt
     };
     let res = await this.tongHopDxScLon.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -337,7 +339,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
       if (list && list.listDxCuc.length > 0) {
         this.isTongHop = true;
         this.dataTableReq = list.listDxCuc;
-        this.dataTableDx = cloneDeep(this.dataTableReq);
+        this.dataTableDx = this.convertListData(this.dataTableReq);
         this.dataTable = cloneDeep(this.dataTableReq);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!");
@@ -374,29 +376,41 @@ export class ThemMoiScTcdtComponent implements OnInit {
     }
   }
 
-  convertListData(table: any[]) {
+  convertListData(table: any[]): any[] {
+    let arr = [];
+    console.log(table);
     if (table && table.length > 0) {
-      table = chain(table)
-        .groupBy("tenChiCuc")
+      arr = chain(table)
+        .groupBy("tenCuc")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenKhoi")
+            .groupBy("tenChiCuc")
             .map((v, k) => {
-                return {
-                  idVirtual: uuidv4(),
-                  tenKhoi: k,
-                  dataChild: v
-                };
-              }
-            ).value();
+              let rs1 = chain(v)
+                .groupBy("tenKhoi")
+                .map((v1, k1) => {
+                    return {
+                      idVirtual: uuidv4(),
+                      tenKhoi: k1,
+                      dataChild: v1
+                    };
+                  }
+                ).value();
+              return {
+                idVirtual: uuidv4(),
+                tenChiCuc: k,
+                dataChild: rs1
+              };
+            }).value();
           return {
             idVirtual: uuidv4(),
-            tenChiCuc: key,
+            tenCuc: key,
             dataChild: rs
           };
         }).value();
     }
-    return table;
+    console.log(arr, 222222);
+    return arr;
   }
 
 
@@ -448,10 +462,10 @@ export class ThemMoiScTcdtComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any,tmdt : string, type: string, idx: number, list?: any) {
+  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
     if (!this.isViewDetail) {
       let modalQD = this.modal.create({
-        nzTitle: 'ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM',
+        nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
         nzContent: DialogDxScLonComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -462,7 +476,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          page : tmdt
+          page: tmdt
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
