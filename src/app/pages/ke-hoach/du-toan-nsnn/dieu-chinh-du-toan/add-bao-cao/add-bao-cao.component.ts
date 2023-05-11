@@ -266,6 +266,7 @@ export class AddBaoCaoComponent implements OnInit {
             tenDm: e.tenDm + 'năm ' + this.baoCao.namBcao,
             trangThai: "3",
             lstCtietDchinh: [],
+            giaoCho: this.userInfo.sub
           });
         });
       } else {
@@ -841,14 +842,14 @@ export class AddBaoCaoComponent implements OnInit {
 
           const data7 = this.baoCao.lstDchinh.find(e => e.maLoai == 'pl07');
           if (data7?.trangThai != '3') {
-
             let dtoanKphiNamNay7 = 0;
             let tong7 = 0;
             let tongDtoanTrongNam7 = 0;
             let dtoanDnghiDchinh7 = 0;
             let dtoanVuTvqtDnghi7 = 0;
             data7?.lstCtietDchinh?.forEach(item => {
-              if (item.level == 0) {
+              const level = item.stt.split('.').length - 2;
+              if (level == 0) {
                 dtoanKphiNamNay7 += Number(item?.dtoanLkeDaGiao);
                 tong7 += Number(item?.dtoanLkeDaGiao);
                 tongDtoanTrongNam7 += Number(item?.ncauDtoan);
