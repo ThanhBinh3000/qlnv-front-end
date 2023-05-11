@@ -17,9 +17,6 @@ import { UserLogin } from "../../../../../../models/userlogin";
 import { STATUS } from "../../../../../../constants/status";
 import { DialogTuChoiComponent } from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 import {
-  DialogThemMoiDxkhthComponent
-} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
-import {
   TongHopDxScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
 import {
@@ -41,9 +38,12 @@ export class ThemMoiScTcdtComponent implements OnInit {
   expandSet = new Set<number>();
   userInfo: UserLogin;
   formData: FormGroup;
-  dataTable: any[] = [];
+  dataTableTren: any[] = [];
+  dataTableDuoi: any[] = [];
   dataTableReq: any[] = [];
-  dataTableDx: any[] = [];
+  dataTableDxReq: any[] = [];
+  dataTableDxTren: any[] = [];
+  dataTableDxDuoi: any[] = [];
   dataTableDxAll: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -131,15 +131,20 @@ export class ThemMoiScTcdtComponent implements OnInit {
           tenTrangThai: data.tenTrangThai,
           lyDoTuChoi: data.lyDoTuChoi,
           loaiDuAn: data.loaiDuAn,
-          tgTongHop: data.tgTongHop
+          tgTongHop: data.tgTongHop,
+          loaiTmdt : data.loaiTmdt
         });
-      this.dataTableReq = data.ctiets;
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLys = data.canCuPhapLys;
-      let listDx = data.listDx;
-      if (listDx) {
-        this.dataTableDxAll = listDx.ctietList;
+
+      this.dataTableReq = data.chiTiets;
+      let resultDx = data.chiTietDxs
+      if (resultDx && resultDx.length > 0) {
+        this.dataTableDxDuoi = this.convertListData(resultDx?.filter(item => item.tmdt <= 5000000000));
+        this.dataTableDxTren = this.convertListData(resultDx?.filter(item => item.tmdt > 5000000000));
       }
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+      this.dataTableDuoi= this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
     }
   }
 
@@ -177,6 +182,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
     body.maToTrinh = body.maToTrinh ? body.maToTrinh + this.maTt : this.maTt;
     body.soQuyetDinh = body.soQuyetDinh ? body.soQuyetDinh + this.soQd : this.soQd;
     body.ctiets = this.dataTableReq;
+    body.ctietsDx = this.dataTableDxReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
     body.maDvi = this.userInfo.MA_DVI;
@@ -324,7 +330,7 @@ export class ThemMoiScTcdtComponent implements OnInit {
     this.spinner.show();
     this.formData.patchValue({
       tgTongHop: new Date(),
-      "loaiTmdt": this.formData.value.loaiTmdt ? this.formData.value.loaiTmdt : "ALL"
+      loaiTmdt: this.formData.value.loaiTmdt ? this.formData.value.loaiTmdt : "ALL"
     });
     let body = {
       "namKeHoach": this.formData.value.namKeHoach,
@@ -333,14 +339,19 @@ export class ThemMoiScTcdtComponent implements OnInit {
     let res = await this.tongHopDxScLon.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dataTableReq = [];
-      this.dataTableDx = [];
-      this.dataTable = [];
+      this.dataTableTren = [];
+      this.dataTableDuoi = [];
+      this.dataTableDxTren = [];
+      this.dataTableDxDuoi = [];
       let list = res.data;
       if (list && list.listDxCuc.length > 0) {
         this.isTongHop = true;
         this.dataTableReq = list.listDxCuc;
-        this.dataTableDx = this.convertListData(this.dataTableReq);
-        this.dataTable = cloneDeep(this.dataTableReq);
+        this.dataTableDxReq = cloneDeep(this.dataTableReq);
+        this.dataTableDxDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
+        this.dataTableDxTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+        this.dataTableTren = cloneDeep(this.dataTableDxTren);
+        this.dataTableDuoi= cloneDeep(this.dataTableDxDuoi);
       } else {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!");
         this.isTongHop = false;
@@ -423,9 +434,9 @@ export class ThemMoiScTcdtComponent implements OnInit {
         sl = sum;
       }
     } else {
-      if (this.dataTable && this.dataTable.length > 0) {
+      if (this.dataTableTren && this.dataTableTren.length > 0) {
         let sum = 0;
-        this.dataTable.forEach(item => {
+        this.dataTableTren.forEach(item => {
           sum += this.sumSoLuong(item, row);
         });
         sl = sum;

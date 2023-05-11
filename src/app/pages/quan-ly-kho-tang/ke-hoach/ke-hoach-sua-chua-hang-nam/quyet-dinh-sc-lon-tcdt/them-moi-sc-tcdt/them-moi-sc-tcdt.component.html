@@ -272,7 +272,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTableDx.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTableDxDuoi.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -295,7 +295,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTableDx , let idx = index">
+              <ng-container *ngFor="let data of dataTableDxDuoi , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -469,7 +469,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTableDx.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTableDxTren.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -492,7 +492,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTableDx , let idx = index">
+              <ng-container *ngFor="let data of dataTableDxTren , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -672,7 +672,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTableDx.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTableDuoi.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -695,7 +695,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTableDx , let idx = index">
+              <ng-container *ngFor="let data of dataTableDuoi , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -869,7 +869,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTableDx.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTableTren.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -892,7 +892,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTableDx , let idx = index">
+              <ng-container *ngFor="let data of dataTableTren , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
