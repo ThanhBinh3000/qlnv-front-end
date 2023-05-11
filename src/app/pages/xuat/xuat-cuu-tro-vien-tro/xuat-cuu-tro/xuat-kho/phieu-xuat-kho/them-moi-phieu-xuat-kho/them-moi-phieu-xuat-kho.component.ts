@@ -308,7 +308,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
       this.formData.enable();
-      await this.loadDetail( res.data.id)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
