@@ -11,11 +11,13 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import { BienBanHaoDoiService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
 import { Validators } from '@angular/forms';
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 
 @Component({

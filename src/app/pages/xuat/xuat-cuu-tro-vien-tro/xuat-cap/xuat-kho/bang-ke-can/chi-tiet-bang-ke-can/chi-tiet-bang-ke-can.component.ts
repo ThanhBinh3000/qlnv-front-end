@@ -27,14 +27,14 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
-  QuyetDinhGiaoNvCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import {
   PhieuKiemNghiemChatLuongService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
   selector: 'app-xc-chi-tiet-bang-ke-can',
