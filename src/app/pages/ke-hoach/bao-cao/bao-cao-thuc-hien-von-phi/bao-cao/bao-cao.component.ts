@@ -210,7 +210,6 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        console.log(this.userInfo);
         this.isOffice = this.userInfo.DON_VI.tenVietTat.indexOf('_VP') != -1;
 
         await this.danhMucService.dMDviCon().toPromise().then(
@@ -253,7 +252,7 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
             this.baoCao.trangThai = "1";
             this.lstBieuMaus = this.baoCao.maLoaiBcao == BAO_CAO_DOT ? LISTBIEUMAUDOT : LISTBIEUMAUNAM;
-            if (this.data?.isSynthetic || (this.isOffice && this.baoCao.dotBcao)) {
+            if (this.data?.isSynthetic || (this.isOffice)) {
                 await this.callSynthetic();
             } else {
                 this.lstBieuMaus.forEach(item => {

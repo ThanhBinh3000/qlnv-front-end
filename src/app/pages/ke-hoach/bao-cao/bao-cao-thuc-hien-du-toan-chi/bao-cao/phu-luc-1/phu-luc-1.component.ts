@@ -151,8 +151,8 @@ export class PhuLucIComponent implements OnInit {
             this.scrollX = (350 + 42 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        this.maCntt = this.data.extraDataPL2?.maNdung;
-        this.maSuaChua = this.data.extraDataPL3?.maNdung;
+        this.maCntt = '0.1.1.1';
+        this.maSuaChua = '0.1.1.2';
 
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
