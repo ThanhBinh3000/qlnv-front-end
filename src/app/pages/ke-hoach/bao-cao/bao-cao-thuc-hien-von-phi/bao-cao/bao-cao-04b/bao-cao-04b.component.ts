@@ -76,6 +76,7 @@ export class BaoCao04bComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+    soLuongTheoQuyetDinh: ItemData;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -113,6 +114,11 @@ export class BaoCao04bComponent implements OnInit {
         await this.getListNdung();
         await this.getDinhMuc();
 
+        if (this.data.isOffice && this.trangThaiPhuLuc == '3') {
+            this.soLuongTheoQuyetDinh = this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1');
+            this.lstCtietBcao = []
+        }
+
         if (this.lstCtietBcao.length == 0) {
             if (this.luyKes.length > 0) {
                 this.luyKes.forEach(item => {
@@ -143,11 +149,22 @@ export class BaoCao04bComponent implements OnInit {
                     })
                 });
             }
-        } else {
-            this.lstCtietBcao.forEach(item => {
-                item.tenNdung = this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri;
-            })
+            if (this.soLuongTheoQuyetDinh) {
+                const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.1')
+                this.lstCtietBcao[index].trongDotTcong = this.soLuongTheoQuyetDinh.trongDotTcong;
+                if (this.data?.dotBcao == 1) {
+                    this.lstCtietBcao[index].luyKeTcong = this.soLuongTheoQuyetDinh.luyKeTcong;
+                }
+                this.lstCtietBcao[index].listCtiet.forEach(item => {
+                    if (item.loaiMatHang == 0 || this.data?.dotBcao == 1) {
+                        item.sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
+                    }
+                })
+            }
         }
+        this.lstCtietBcao.forEach(item => {
+            item.tenNdung = this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri;
+        })
 
         this.lstCtietBcao.forEach(item => {
             item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
@@ -876,8 +893,8 @@ export class BaoCao04bComponent implements OnInit {
                     this.lstCtietBcao[ind1].trongDotTcong = this.lstCtietBcao[index].trongDotTcong;
                     this.lstCtietBcao[ind1].luyKeTcong = this.lstCtietBcao[index].luyKeTcong;
                     if (ind3 != -1) {
-                        this.lstCtietBcao[ind3].trongDotTcong = sumNumber([this.lstCtietBcao[ind1].trongDotTcong, ind2 == -1 ? 0 : this.lstCtietBcao[ind2].trongDotTcong]);
-                        this.lstCtietBcao[ind3].luyKeTcong = sumNumber([this.lstCtietBcao[ind1].luyKeTcong, ind2 == -1 ? 0 : this.lstCtietBcao[ind2].luyKeTcong]);
+                        this.lstCtietBcao[ind3].trongDotTcong = sumNumber([this.lstCtietBcao[ind1].trongDotTcong, ind2 == -1 ? 0 : -this.lstCtietBcao[ind2].trongDotTcong]);
+                        this.lstCtietBcao[ind3].luyKeTcong = sumNumber([this.lstCtietBcao[ind1].luyKeTcong, ind2 == -1 ? 0 : -this.lstCtietBcao[ind2].luyKeTcong]);
                     }
                     this.lstCtietBcao[ind1].listCtiet.forEach(item => {
                         item.sl = this.lstCtietBcao[index].listCtiet.find(e => e.loaiMatHang == item.loaiMatHang && e.maVtu == item.maVtu).sl;
