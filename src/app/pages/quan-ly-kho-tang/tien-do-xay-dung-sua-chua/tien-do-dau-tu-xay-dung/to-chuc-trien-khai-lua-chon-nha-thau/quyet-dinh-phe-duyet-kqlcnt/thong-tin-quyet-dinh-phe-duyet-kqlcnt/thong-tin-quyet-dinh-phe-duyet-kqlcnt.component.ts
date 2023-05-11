@@ -164,38 +164,6 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
     }
   }
 
-  // chonQdPdKhlcnt() {
-  //   let modalQD = this.modal.create({
-  //     nzTitle: 'DANH SÁCH THÔNG TIN ĐẤU THẦU',
-  //     nzContent: DialogQdPdKhlcntComponent,
-  //     nzMaskClosable: false,
-  //     nzClosable: false,
-  //     nzWidth: '700px',
-  //     nzFooter: null,
-  //     nzComponentParams: {
-  //       listQdPdKhlcnt: this.listQdPdKhlcnt,
-  //     },
-  //   });
-  //   modalQD.afterClose.subscribe(async (data) => {
-  //     if (data) {
-  //       this.listGoiThau = [];
-  //       this.formData.patchValue({
-  //         idQdPdKhlcnt: data.id,
-  //         soQdPdKhlcnt: data.soQd,
-  //         chuDauTu: data.chuDauTu,
-  //         diaChi: data.diaChi,
-  //         tenDuAn: data.tenDuAn,
-  //         tongMucDt: data.tongTien
-  //       })
-  //       //get danh sách gói thầu.
-  //       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(data.id);
-  //       if (res.msg == MESSAGE.SUCCESS) {
-  //         this.listGoiThau = res.data.listKtXdscQuyetDinhPdKhlcntCvKh;
-  //       }
-  //     }
-  //   })
-  // }
-
   xoaGoiThau(id) {
     this.modal.confirm({
       nzClosable: false,
@@ -272,7 +240,6 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
                   trangThai: STATUS.BAN_HANH,
                   tenTrangThai: "Ban hành",
                 })
-                // this.emitDataDaDtxd(res1.data);
                 this.isViewDetail = true;
                 this.spinner.hide();
               } else {
@@ -290,7 +257,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
         },
       });
     } else {
-      await this.createUpdate(this.formData.value)
+      let res = await this.createUpdate(this.formData.value)
     }
   }
 
