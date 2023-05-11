@@ -20,9 +20,25 @@
                                 [nzLabel]="p.giaTri"></nz-option>
                         </nz-select>
                     </div>
-                    <div nz-col nzSpan="5" class="mt-16">
+                    <!-- <div nz-col nzSpan="5" class="mt-16">
                         <label class="search__label">Ngày tổng hợp</label>
                         <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    </div> -->
+                    <div nz-col nzSpan="4" class="mt-16">
+                        <label class="search__label">Ngày tổng hợp</label>
+                        <!-- <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                     <!-- <div nz-col nzSpan="6" class="mt-16">
                         <label class="search__label">Loại hàng hóa </label>

@@ -213,7 +213,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       if (this.userService.isCuc()) {
         this.maDviTsan(data.tenDviMua);
       }
-      if (!this.userService.isChiCuc) {
+      if (!this.userService.isChiCuc()) {
         this.dataTable = cloneDeep(data.children);
       } else {
         this.dataTable = cloneDeep(data.xhHopDongBttDviList)
@@ -236,7 +236,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       body.tgianGnhanTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
       body.tgianGnhanDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
     }
-    if (!this.userService.isChiCuc) {
+    if (!this.userService.isChiCuc()) {
       body.children = this.dataTable;
     } else {
       body.xhHopDongBttDviList = this.dataTable;
@@ -602,7 +602,6 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listHdDaKy = data.content;
-      console.log(this.listHdDaKy, 999)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

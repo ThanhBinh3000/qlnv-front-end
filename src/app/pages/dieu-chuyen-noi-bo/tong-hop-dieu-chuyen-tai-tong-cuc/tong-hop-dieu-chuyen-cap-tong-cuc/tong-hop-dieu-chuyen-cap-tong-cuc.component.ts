@@ -75,9 +75,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             namKeHoach: [''],
             id: [''],
             loaiDieuChuyen: [''],
-            ngayTongHop: [''],
-            thTuNgay: [''],
-            thDenNgay: [''],
+            tuNgay: [''],
+            denNgay: [''],
             trichYeu: ['']
 
         })
@@ -201,7 +200,20 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     };
     xoaItem(item: any) {
         this.delete(item)
-    }
+    };
+    disabledTuNgay = (startValue: Date): boolean => {
+        if (startValue && this.formData.value.denNgay) {
+            return startValue.getTime() > this.formData.value.denNgay.getTime();
+        }
+        return false;
+    };
+
+    disabledDenNgay = (endValue: Date): boolean => {
+        if (!endValue || !this.formData.value.tuNgay) {
+            return false;
+        }
+        return endValue.getTime() <= this.formData.value.tuNgay.getTime();
+    };
     deleteSelect() {
         let dataDelete = [];
         if (this.dataTable && this.dataTable.length > 0) {
