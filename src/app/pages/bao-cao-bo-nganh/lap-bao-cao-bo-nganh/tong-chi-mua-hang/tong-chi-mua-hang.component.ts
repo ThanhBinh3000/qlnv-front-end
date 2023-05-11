@@ -1,23 +1,22 @@
-import { Component, OnInit } from "@angular/core";
-import { BcBnTt130Service } from "../../../../services/bao-cao/BcBnTt130.service";
+import { Component, OnInit } from '@angular/core';
+import { Base2LocalComponent } from "../../../../components/base2/base2-local.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
+import { BcBnTt130Service } from "../../../../services/bao-cao/BcBnTt130.service";
 import { UserService } from "../../../../services/user.service";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
-import { Base2Component } from "../../../../components/base2/base2.component";
 import { MESSAGE } from "../../../../constants/message";
-import { Base2LocalComponent } from "../../../../components/base2/base2-local.component";
 
 @Component({
-  selector: "app-nguon-hinh-thanh-dtqg",
-  templateUrl: "./nguon-hinh-thanh-dtqg.component.html",
-  styleUrls: ["./nguon-hinh-thanh-dtqg.component.scss"]
+  selector: 'app-tong-chi-mua-hang',
+  templateUrl: './tong-chi-mua-hang.component.html',
+  styleUrls: ['./tong-chi-mua-hang.component.scss']
 })
-export class NguonHinhThanhDtqgComponent extends Base2LocalComponent implements OnInit {
+export class TongChiMuaHangComponent extends Base2LocalComponent implements OnInit {
   listQuy: any[] = [
     {text: 'Quý I', value: 1},
     {text: 'Quý II', value: 2},
@@ -43,7 +42,7 @@ export class NguonHinhThanhDtqgComponent extends Base2LocalComponent implements 
         tuNgayKyGui: [null],
         denNgayTao: [null],
         denNgayKyGui: [null],
-        bieuSo: ["001.H/BCDTQG-BN"],
+        bieuSo: ["002.H/BCDTQG-BN"],
       }
     );
   }

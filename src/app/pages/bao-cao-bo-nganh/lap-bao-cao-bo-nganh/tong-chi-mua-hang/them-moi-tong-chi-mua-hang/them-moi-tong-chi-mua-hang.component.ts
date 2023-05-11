@@ -1,25 +1,23 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Base2Component } from "../../../../../components/base2/base2.component";
+import { Base2LocalComponent } from "../../../../../components/base2/base2-local.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { BcBnTt130Service } from "../../../../../services/bao-cao/BcBnTt130.service";
+import { DonviService } from "../../../../../services/donvi.service";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
-import { MESSAGE } from "../../../../../constants/message";
-import { DonviService } from "../../../../../services/donvi.service";
-import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
-import { Base2LocalComponent } from "../../../../../components/base2/base2-local.component";
-
+import { MESSAGE } from "../../../../../constants/message";
+import { cloneDeep } from "lodash";
 @Component({
-  selector: "app-them-moi-nguon-hinh-thanh-dtqg",
-  templateUrl: "./them-moi-nguon-hinh-thanh-dtqg.component.html",
-  styleUrls: ["./them-moi-nguon-hinh-thanh-dtqg.component.scss"]
+  selector: 'app-them-moi-tong-chi-mua-hang',
+  templateUrl: './them-moi-tong-chi-mua-hang.component.html',
+  styleUrls: ['./them-moi-tong-chi-mua-hang.component.scss']
 })
-export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent implements OnInit {
+export class ThemMoiTongChiMuaHangComponent extends Base2LocalComponent implements OnInit {
 
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -63,7 +61,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent impl
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
-        bieuSo: ["001.H/BCDTQG-BN"],
+        bieuSo: ["002.H/BCDTQG-BN"],
         tenDonViGui: [null],
         maDonViGui: [null],
         tenDonViNhan: [null],
@@ -177,9 +175,6 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent impl
       return false;
     }
   }
-  deleteRowNguon(index:number){
-    this.dataNguonNsnn.splice(index, 1)
-  }
 
   editRowNguon(index: number) {
     this.dataNguonNsnn[index].edit = true;
@@ -199,9 +194,6 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent impl
 
   cancelEditRowNguon(index: number) {
     this.dataNguonNsnn[index].edit = false;
-  }
-  deleteRowNgoaiNguon(index:number){
-    this.dataNguonNgoaiNsnn.splice(index, 1)
   }
 
   editRowNgoaiNguon(index: number) {
@@ -285,5 +277,11 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent impl
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
+  }
+  deleteRowNguon(index:number){
+    this.dataNguonNsnn.splice(index, 1)
+  }
+  deleteRowNgoaiNguon(index:number){
+    this.dataNguonNgoaiNsnn.splice(index, 1)
   }
 }

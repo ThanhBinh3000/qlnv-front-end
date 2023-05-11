@@ -71,7 +71,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3>DANH SÁCH BÁO CÁO NGUỒN HÌNH THÀNH DỰ TRỮ QUỐC GIA</h3>
+      <h3>DANH SÁCH BÁO CÁO SỐ LƯỢNG GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA</h3>
       <div class="buttons">
         <button nz-button class="search__button--search" (click)="redirectDetail(false)">
           <i class="icon  htvbdh_icon_list"></i>
@@ -103,7 +103,7 @@
           <td>{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="redirectDetail(true, data)">
-            <i class="fa fa-eye"></i>
+              <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO"
                (click)="redirectDetail(false, data)">
@@ -121,9 +121,9 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-nguon-hinh-thanh-dtqg [idInput]="selectedId" [isView]="isView"
-                            (showListEvent)="showList()">
-  </app-them-moi-nguon-hinh-thanh-dtqg>
+  <app-them-moi-sl-gtri-hang-dtqg [idInput]="selectedId" [isView]="isView"
+                                      (showListEvent)="showList()">
+  </app-them-moi-sl-gtri-hang-dtqg>
 </div>
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>

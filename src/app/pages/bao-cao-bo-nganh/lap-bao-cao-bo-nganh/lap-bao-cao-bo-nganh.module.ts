@@ -9,6 +9,11 @@ import { DirectivesModule } from "../../../directives/directives.module";
 import { NzIconModule } from "ng-zorro-antd/icon";
 import { LapBaoCaoBoNganhComponent } from "./lap-bao-cao-bo-nganh.component";
 import { ThemMoiNguonHinhThanhDtqgComponent } from './nguon-hinh-thanh-dtqg/them-moi-nguon-hinh-thanh-dtqg/them-moi-nguon-hinh-thanh-dtqg.component';
+import { TongChiMuaHangComponent } from './tong-chi-mua-hang/tong-chi-mua-hang.component';
+import { ThemMoiTongChiMuaHangComponent } from './tong-chi-mua-hang/them-moi-tong-chi-mua-hang/them-moi-tong-chi-mua-hang.component';
+import { SlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/sl-gtri-hang-dtqg.component';
+import { ThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg.component';
+import { DialogThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component';
 
 
 
@@ -16,7 +21,12 @@ import { ThemMoiNguonHinhThanhDtqgComponent } from './nguon-hinh-thanh-dtqg/them
   declarations: [
     LapBaoCaoBoNganhComponent,
     NguonHinhThanhDtqgComponent,
-    ThemMoiNguonHinhThanhDtqgComponent
+    ThemMoiNguonHinhThanhDtqgComponent,
+    TongChiMuaHangComponent,
+    ThemMoiTongChiMuaHangComponent,
+    SlGtriHangDtqgComponent,
+    ThemMoiSlGtriHangDtqgComponent,
+    DialogThemMoiSlGtriHangDtqgComponent
   ],
   imports: [
     CommonModule,
