@@ -52,7 +52,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="24">
+                            <div nz-col [nzSpan]="24" *ngIf="!userService.isChiCuc()">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ chào giá </nz-form-label>
                                     <nz-form-control>
@@ -151,7 +151,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="24">
+                            <div nz-col [nzSpan]="24" *ngIf="!userService.isChiCuc()">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Số đơn vị chào giá được chọn </nz-form-label>
                                     <nz-form-control>
@@ -244,7 +244,7 @@
                             <td>{{data.soLuongBanTrucTiep * data.donGiaBanTrucTiep | number : '1.0-1' :
                                 'vi_VN' }}</td>
                             <td>{{data.tenTrangThai}}</td>
-                            <td>{{data.soQd}}</td>
+                            <td>{{data.soQdNv}}</td>
                             <td>{{data.tenTrangThaiXh}}</td>
                             <td>
                                 <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="redirectHopDong(true,data.id) ">
@@ -278,14 +278,14 @@
                     </tfoot>
                 </nz-table>
             </nz-card>
-            <app-thong-tin-hop-dong-btt [idKqBtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
+            <app-thong-tin-hop-dong-btt [idBtt]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong"
                 [isQuanLy]="true">
             </app-thong-tin-hop-dong-btt>
         </nz-card>
     </div>
 </ng-container>
 <ng-template #tempHopDong>
-    <app-thong-tin-hop-dong-btt [idKqBtt]="id" [id]="idHopDong" [loaiVthh]="loaiVthh"
+    <app-thong-tin-hop-dong-btt [idBtt]="id" [id]="idHopDong" [loaiVthh]="loaiVthh"
         (showListEvent)="redirectHopDong(false,null)">
     </app-thong-tin-hop-dong-btt>
 </ng-template>

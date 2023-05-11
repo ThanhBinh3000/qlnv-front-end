@@ -163,7 +163,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
-        tongSlNhap: "100000"
+        tongSlNhap: "100000",
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -284,23 +285,31 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
     this.listPhieuXuatKho.forEach(s => {
       s.id = null;
     })
-
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
+    let res ;
+    if (body.id && body.id > 0) {
+      res = await this.bienBanTinhKhoService.update(body);
+    } else {
+      res = await this.bienBanTinhKhoService.create(body);
     }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.formData.get('id').value) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.formData.enable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.formData.enable();
   }
 
   pheDuyet() {
