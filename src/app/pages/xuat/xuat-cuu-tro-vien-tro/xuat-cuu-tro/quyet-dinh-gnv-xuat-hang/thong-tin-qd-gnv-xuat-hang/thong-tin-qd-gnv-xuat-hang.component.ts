@@ -118,7 +118,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       tonKhoChiCuc: [],
       loaiNhapXuat: [''],
       kieuNhapXuat: [''],
-      mucDichXuat:['']
+      mucDichXuat: ['']
     })
   }
 
@@ -146,11 +146,13 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            res.data.soQd = res.data.soQd.split('/')[0]
+            res.data.soQd ? res.data.soQd.split('/')[0] : null;
             this.formData.patchValue(res.data);
 
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
-            this.selectHangHoa(res.data.loaiVthh);
+            if(res.data.loaiVthh){
+              this.selectHangHoa(res.data.loaiVthh);
+            }
             this.buildTableView();
           }
         })
@@ -252,9 +254,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
                   noiDungCuuTro: this.chiTiet,
                   soLuong: this.chiTiet.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0),
                   thanhTien: this.chiTiet.reduce((prev, cur) => prev + cur.thanhTien, 0),
-                  loaiNhapXuat:res.data.loaiNhapXuat,
-                  kieuNhapXuat:res.data.kieuNhapXuat,
-                  mucDichXuat:res.data.mucDichXuat,
+                  loaiNhapXuat: res.data.loaiNhapXuat,
+                  kieuNhapXuat: res.data.kieuNhapXuat,
+                  mucDichXuat: res.data.mucDichXuat,
                 });
               }
               this.selectHangHoa(res.data.loaiVthh);
@@ -295,7 +297,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
-          this.dsQdPd = data.content.filter(item=>item.soQdGiaoNv==null);
+          this.dsQdPd = data.content.filter(item => item.soQdGiaoNv == null);
         }
       } else {
         this.dsQdPd = [];
@@ -306,7 +308,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
 
   async save() {
     this.formData.disable();
-    let body = {...this.formData.value, soQd: this.formData.value.soQd + this.maHauTo}
+    let body = {...this.formData.value, soQd: this.formData.value.soQd ? this.formData.value.soQd + this.maHauTo : null}
     await this.createUpdate(body);
     this.formData.enable();
   }
