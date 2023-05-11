@@ -448,7 +448,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
       this.formData.enable();
-      await this.loadDetail( res.data.id)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

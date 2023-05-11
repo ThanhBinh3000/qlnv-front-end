@@ -315,8 +315,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }
