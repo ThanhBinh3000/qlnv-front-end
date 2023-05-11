@@ -6,7 +6,7 @@
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC  "
-            (click)="save(true)">
+            (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
 
@@ -24,7 +24,7 @@
     </button>
     <button class="btn btn-sub xanh"
             *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC "
-            (click)="save(false)">
+            (click)="save()">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -91,7 +91,7 @@
             <nz-form-label [nzNoColon]="true">
               Số phiếu xuất kho
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
                 <input nz-input formControlName="soPhieuXuatKho" readonly/>
               </nz-input-group>
@@ -100,10 +100,10 @@
         </div>
         <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Ngày tạo phiếu
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTaoPhieu">
                 </nz-date-picker>
@@ -113,7 +113,7 @@
         </div>
         <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Ngày xuất kho
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -145,7 +145,7 @@
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
               Số QĐ giao NV xuất hàng
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -470,8 +470,10 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-            <textarea rows="3" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ghi chú</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <textarea rows="3" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
+            </nz-form-control>
           </nz-form-item>
         </div>
       </div>

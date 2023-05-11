@@ -285,8 +285,6 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

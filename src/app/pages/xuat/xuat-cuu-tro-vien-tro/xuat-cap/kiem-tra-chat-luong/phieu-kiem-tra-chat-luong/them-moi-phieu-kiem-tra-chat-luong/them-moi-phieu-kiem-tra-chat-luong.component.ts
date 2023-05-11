@@ -308,8 +308,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }
