@@ -75,7 +75,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       namKeHoach: [''],
       tenDuAn: [''],
-      maDvi: [''],
+      maDvi: [this.userInfo.MA_DVI],
+      capDvi: [this.userInfo.CAP_DVI],
       soQuyetDinh: [''],
       trangThai: [''],
       ngayKy: [''],
@@ -133,6 +134,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         break;
       case '04':
         this.itemTtdt = data;
+        break;
+      case '05':
+        this.trangThaiQdPdKqLcnt = data;
         break;
     }
   }
