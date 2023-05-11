@@ -31,6 +31,7 @@ export class VonBanTheoHopDongComponent implements OnInit {
     baoCao: Report = new Report();
     lstCtietBcaos: ThanhToan[] = [];
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
+    title: string;
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI;
@@ -173,6 +174,11 @@ export class VonBanTheoHopDongComponent implements OnInit {
         } else {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
+        }
+        if (this.baoCao?.maLoai == 1) {
+            this.title = 'Vốn bán từ đơn vị cấp dưới'
+        } else {
+            this.title = 'Vốn bán nộp lên đơn vị cấp trên'
         }
         this.baoCao.ttGui.fileList = [];
         this.baoCao.ttNhan.fileList = [];
