@@ -98,7 +98,7 @@
                   QĐ giao nhiệm vụ xuất hàng</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisabledQD() ? null :openDialogSoQd()">
-                    <input [readonly]="true" nz-input formControlName="soQd" readonly />
+                    <input [readonly]="true" nz-input formControlName="soQdNv" readonly />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -120,7 +120,7 @@
                 <nz-form-label [nzNoColon]="true">
                   Ngày ký hợp đồng
                 </nz-form-label>
-                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHd" nzDisabled>
+                <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKyHd" nzDisabled>
                 </nz-date-picker>
               </nz-form-item>
             </div>

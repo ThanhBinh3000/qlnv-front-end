@@ -686,15 +686,25 @@
                     </nz-table>
                 </nz-collapse-panel>
             </nz-collapse>
-            <ng-template #extraTpl>
+            <!-- <ng-template #extraTpl>
                 <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(null)"
                     *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
-            </ng-template>
+            </ng-template> -->
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true" [nzExtra]="extraTpl">
+                    <ng-template #extraTpl>
+                        <div class="buttons"
+                            *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY && !isQuanLy">
+                            <button style="background: #353a64;" type="button" class="btn btn-main"
+                                (click)="redirectPhuLuc(null)">
+                                <i class="icon htvbdh_dau-cong"></i>
+                                <span>Thêm PL hợp đồng</span>
+                            </button>
+                        </div>
+                    </ng-template>
                     <nz-table class="pd-10" nzBordered [nzData]="dataTablePhuLuc" [nzFrontPagination]="false"
                         [nzShowPagination]="false">
                         <thead>
@@ -737,24 +747,7 @@
             </nz-collapse>
 
         </nz-card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        <!-- Hợp đồng chi cục ủy Quyền -->
         <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="userService.isChiCuc()">
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
@@ -1325,15 +1318,25 @@
                     </nz-table>
                 </nz-collapse-panel>
             </nz-collapse>
-            <ng-template #extraTpl>
+            <!-- <ng-template #extraTpl>
                 <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(null)"
                     *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
-            </ng-template>
+            </ng-template> -->
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true" [nzExtra]="extraTpl">
+                    <ng-template #extraTpl>
+                        <div class="buttons"
+                            *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY && !isQuanLy">
+                            <button style="background: #353a64;" type="button" class="btn btn-main"
+                                (click)="redirectPhuLuc(null)">
+                                <i class="icon htvbdh_dau-cong"></i>
+                                <span>Thêm PL hợp đồng</span>
+                            </button>
+                        </div>
+                    </ng-template>
                     <nz-table class="pd-10" nzBordered [nzData]="dataTablePhuLuc" [nzFrontPagination]="false"
                         [nzShowPagination]="false">
                         <thead>
@@ -1375,21 +1378,6 @@
                 </nz-collapse-panel>
             </nz-collapse>
         </nz-card>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
     <ng-template #error let-control>
         <app-template-error #error [control]="control"></app-template-error>

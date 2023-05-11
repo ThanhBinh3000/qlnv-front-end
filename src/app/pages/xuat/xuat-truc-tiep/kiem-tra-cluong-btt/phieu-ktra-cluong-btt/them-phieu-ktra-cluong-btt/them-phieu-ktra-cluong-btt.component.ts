@@ -23,9 +23,11 @@ import { DonviService } from 'src/app/services/donvi.service';
 export class ThemPhieuKtraCluongBttComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
+  @Input() isViewOnModal: boolean;
 
   listDiaDiemXh: any[] = [];
   listHinhThucBaoQuan: any[] = [];
+  dsDanhGia: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -52,8 +54,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       maQhns: [''],
       idBienBan: [],
       soBienBan: ['', [Validators.required]],
-      soQd: ['', [Validators.required]],
-      idQd: ['', [Validators.required]],
+      soQdNv: ['', [Validators.required]],
+      idQdNv: ['', [Validators.required]],
       ngayQd: [''],
 
       soPhieu: ['', [Validators.required]],
@@ -115,7 +117,6 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     let res = await this.bienBanLayMauBttService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       data = res.data?.content;
-
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -129,8 +130,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       nzFooter: null,
       nzComponentParams: {
         dataTable: data,
-        dataHeader: ['Số Biên bản', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng'],
-        dataColumn: ['soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuong'],
+        dataHeader: ['Số Biên bản', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng lấy mẫu'],
+        dataColumn: ['soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuongLayMau'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -148,8 +149,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       this.formData.patchValue({
         idBienBan: data.id,
         soBienBan: data.soBienBan,
-        soQd: data.soQd,
-        idQd: data.idQd,
+        soQdNv: data.soQdNv,
+        idQdNv: data.idQdNv,
         ngayQd: data.ngayQd,
         idKtv: data.idKtv,
         tenKtv: data.tenKtv,
@@ -162,7 +163,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        soLuong: data.soLuong,
+        soLuong: data.soLuongLayMau,
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
@@ -214,6 +215,16 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     }).catch(err => {
       this.notification.error(MESSAGE.ERROR, err.msg);
     })
+    this.dsDanhGia = [
+      {
+        ma: 'Đạt',
+        giaTri: 'Đạt',
+      },
+      {
+        ma: 'Không Đạt',
+        giaTri: 'Không Đạt',
+      },
+    ];
   }
 
   async save(isGuiDuyet?: boolean) {
@@ -292,9 +303,9 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
     this.dataTable[index].edit = false;
   }
 
-  editRow(index: number) {
-    this.dataTable[index].edit = true;
-  }
+  // editRow(index: number) {
+  //   this.dataTable[index].edit = true;
+  // }
 
   deleteRow(index: any) {
     this.modal.confirm({
@@ -307,7 +318,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
+          this.dataTable[index].ketQuaKiemTra = null;
+          this.dataTable[index].danhGia = null
         } catch (e) {
           console.log('error', e);
         }
