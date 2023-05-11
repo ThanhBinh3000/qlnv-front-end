@@ -227,7 +227,7 @@
                            (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->
@@ -276,7 +276,7 @@
           nzMaskClosable="true" [(nzVisible)]="openBbTk" (nzOnCancel)="closeSoBbTkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-xc-them-moi-bien-ban-tinh-kho
-      class="modal-content-detail" [idInput]="idBbTk" [loaiVthhInput]="loaiVthh" [isView]="true">
+      class="modal-content-detail" [idInput]="idBbTk" [loaiVthh]="loaiVthh" [isView]="true">
     </app-xc-them-moi-bien-ban-tinh-kho>
   </ng-container>
   <div *nzModalFooter>

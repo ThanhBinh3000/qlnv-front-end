@@ -10,17 +10,17 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
+      <button type="button" class="btn btn-sm ml-2" *ngIf="!idInput" (click)="goBack()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub xanh-nhat ml-2" (click)="banHanh(idInput)"
-              *ngIf="(idInput && idInput > 0) && (formData.value.trangThai == STATUS.DU_THAO) ">
+      <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
+              *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT_THEM') ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Ban hành</span>
       </button>
-      <button (click)="save()"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
+      <button (click)="save(false)"
+              *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT_THEM')  "
               class="btn btn-main btn-sm waves-effect waves-light ml-2">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -60,7 +60,8 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ PD KH LCNT</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ PD KH LCNT
+                  </nz-form-label>
                   <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
                                   nzPlaceHolder="Ngày ký"
                                   formControlName="ngayKy">
@@ -71,7 +72,8 @@
             <div nz-col nzSpan="3">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực QĐ PD KH LCNT</nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực QĐ PD KH LCNT
+                  </nz-form-label>
                   <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
                                   nzPlaceHolder="Ngày ký"
                                   formControlName="ngayHieuLuc">
@@ -88,19 +90,24 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-<!--            <div nz-col nzSpan="8">-->
-<!--              <nz-form-item>-->
-<!--                <nz-form-control [nzErrorTip]="error">-->
-<!--                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ phê duyệt dự án ĐTXD-->
-<!--                  </nz-form-label>-->
-<!--                  <nz-select nzAllowClear (ngModelChange)="changeSoQdPdDaDtxd($event)" formControlName="soQdPdDaDtxd"-->
-<!--                             [nzDisabled]="isViewDetail ||  idInput > 0">-->
-<!--                    <nz-option *ngFor="let p of listQdPdDaDtxd" [nzValue]="p.soQd"-->
-<!--                               [nzLabel]="p.soQd"></nz-option>-->
-<!--                  </nz-select>-->
-<!--                </nz-form-control>-->
-<!--              </nz-form-item>-->
-<!--            </div>-->
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ phê duyệt dự án ĐTXD
+                  </nz-form-label>
+                  <input nz-input formControlName="soQdPdDaDtxd" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên dự án
+                  </nz-form-label>
+                  <input nz-input formControlName="tenCongTrinh" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
@@ -132,7 +139,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Loại, cấp công trình
                   </nz-form-label>
-                  <input nz-input formControlName="khoi" [readonly]="true"/>
+                  <input nz-input formControlName="loaiCapCt" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -141,61 +148,28 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Tổng mức đầu tư
                   </nz-form-label>
-                  <input nz-input formControlName="khoi" [readonly]="true"/>
+                  <input nz-input currencyMask formControlName="tongMucDt" [options]="AMOUNT" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Chủ đầu tư
-                  </nz-form-label>
-                  <input nz-input formControlName="chuDauTu" [readonly]="true"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-
-            <div nz-col nzSpan="4">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc đã thực hiện (đ)
+                <nz-form-label [nzNoColon]="true">
+                  Căn cứ pháp lý
                 </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green" nzDisabled>{{formData.value.tienCvDaTh | number: '1.0-1'}}</span>
-                </nz-form-control>
+                <div class="list-file">
+                  <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="listCcPhapLy"></file-list>
+                </div>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="5">
+            <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc không áp dụng được một trong
-                  các
-                  hình thức lựa chọn nhà thầu (đ)
+                <nz-form-label [nzNoColon]="true">
+                  Tài liệu đính kèm
                 </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green" nzDisabled>{{formData.value.tienCvKad | number: '1.0-1'}}</span>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="5">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc thuộc kế hoạch lựa chọn nhà
-                  thầu
-                  (đ)
-                </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                  <span class="text-green" nzDisabled>{{formData.value.tienCvKhlcnt | number: '1.0-1'}}</span>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="5">
-              <nz-form-item>
-                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc chưa đủ điều kiện lập kế hoạch
-                  lựa
-                  chọn nhà thầu (đ)
-                </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-              <span class="text-green"
-                    nzDisabled>{{formData.value.tongTien - (formData.value.tienCvKhlcnt + formData.value.tienCvKad + formData.value.tienCvDaTh) | number: '1.0-1'}}</span>
-                </nz-form-control>
+                <div class="list-file">
+                  <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
+                </div>
               </nz-form-item>
             </div>
           </div>
@@ -209,6 +183,35 @@
           <div nz-row [nzGutter]="24">
             <div nz-col nzSpan="5">
               <nz-form-item>
+                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc đã thực hiện (đ)
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <span class="text-green" nzDisabled>{{formData.value.tienCvDaTh | number: '1.0-1'}}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc không áp dụng được <br/> một
+                  trong các hình thức lựa chọn nh thầu (đ)
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <span class="text-green" nzDisabled>{{formData.value.tienCvKad | number: '1.0-1'}}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
+                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc thuộc kế hoạch lựa chọn nhà
+                  thầu (đ)
+                </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <span class="text-green" nzDisabled>{{formData.value.tienCvKhlcnt | number: '1.0-1'}}</span>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="5">
+              <nz-form-item>
                 <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tổng hợp giá trị của các phần công việc (đ)
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
@@ -216,19 +219,19 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="24">
+            <div nz-col nzSpan="4">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                  Tài liệu đính kèm
+                <nz-form-label [nzNoColon]="true" class="label-color-kh"> Phần công việc chưa đủ điều kiện<br/> lập kế
+                  hoạch lựa chọn nhà thầu(đ)
                 </nz-form-label>
-                <div class="list-file">
-                  <file-list [data]="fileDinhKem"></file-list>
-                </div>
+                <nz-form-control nz-col [nzSpan]="24">
+                  <span class="text-green" nzDisabled>{{formData.value.tienCvChuaDdk | number: '1.0-1'}}</span>
+                </nz-form-control>
               </nz-form-item>
             </div>
           </div>
         </form>
-        <div class="header-text">
+        <div class="header-text mt-2">
           <div class="title-chi-tieu">
             <span class="text-uppercase font-weight-bold">Phần công việc đã thực hiện</span>
           </div>
@@ -327,7 +330,7 @@
           </tr>
           </tfoot>
         </nz-table>
-        <div class="header-text">
+        <div class="header-text mt-2">
           <div class="title-chi-tieu">
             <span class="text-uppercase font-weight-bold">Phần công việc không áp dụng được một trong các hình thức lựa chọn nhà thầu</span>
           </div>
@@ -417,7 +420,7 @@
           </tr>
           </tfoot>
         </nz-table>
-        <div class="header-text">
+        <div class="header-text mt-2">
           <div class="title-chi-tieu">
             <span class="text-uppercase font-weight-bold">Phần công việc thuộc kế hoạch lựa chọn nhà thầu</span>
           </div>

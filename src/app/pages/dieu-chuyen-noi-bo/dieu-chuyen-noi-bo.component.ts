@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from "@angular/router";
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Event, NavigationEnd, NavigationError, NavigationStart, Router } from "@angular/router";
 import { ROUTE_LIST } from "./dieu-chuyen-noi-bo.constant";
 import { UserService } from "../../services/user.service";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../services/storage.service";
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -11,24 +12,40 @@ import { StorageService } from "../../services/storage.service";
   templateUrl: './dieu-chuyen-noi-bo.component.html',
   styleUrls: ['./dieu-chuyen-noi-bo.component.scss']
 })
-export class DieuChuyenNoiBoComponent implements OnInit {
+export class DieuChuyenNoiBoComponent implements OnInit, OnDestroy {
   @ViewChild('myTab') myTab: ElementRef;
   routes: any[] = ROUTE_LIST;
   routerUrl: string = "";
   defaultUrl: string = '/dieu-chuyen-noi-bo'
   userService: UserService;
+  $routerChange: Subscription;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     private router: Router,
   ) {
     this.userService = new UserService(httpClient, storageService);
+
   }
 
   ngOnInit(): void {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+    this.$routerChange = this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+      }
+
+      if (event instanceof NavigationEnd) {
+        if (event.urlAfterRedirects) {
+          this.routerUrl = event.urlAfterRedirects
+        }
+      }
+
+      if (event instanceof NavigationError) {
+        console.log(event.error);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -85,5 +102,8 @@ export class DieuChuyenNoiBoComponent implements OnInit {
   redirect(url: string) {
     this.routerUrl = this.defaultUrl + url;
     this.router.navigate([this.defaultUrl + url]);
+  }
+  ngOnDestroy(): void {
+    this.$routerChange.unsubscribe();
   }
 }

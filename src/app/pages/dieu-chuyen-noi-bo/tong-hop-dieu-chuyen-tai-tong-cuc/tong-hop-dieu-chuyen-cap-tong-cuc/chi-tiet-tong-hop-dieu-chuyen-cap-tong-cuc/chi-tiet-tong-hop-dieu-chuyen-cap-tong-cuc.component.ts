@@ -30,10 +30,10 @@ import { STATUS } from "src/app/constants/status";
 import { chain, cloneDeep, includes, groupBy } from 'lodash';
 import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
-import { Router } from '@angular/router';
 import { TongHopDieuChuyenCapTongCucService } from '../../tong-hop-dieu-chuyen-tai-tong-cuc.service';
 import { KeHoachDieuChuyenService } from '../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service';
 import { TongHopDieuChuyenService } from '../../../tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc',
     templateUrl: './chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component.html',
@@ -223,12 +223,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             if (!this.formData.valid) return;
             const res = await this.save();
             if (res.msg == MESSAGE.SUCCESS) {
-                this.router.navigate([
-                    '/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen',
-                    this.formData.value.id,
-                ]);
+                this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id: this.formData.value.id }]);
             }
-
         } catch (error) {
             console.log("error", error)
         }
@@ -473,35 +469,56 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                                         children: rsxx
                                     }
                                 }).value()
-                                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                // let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                                let duToanKphi = 0;
+                                let soLuongDc = 0;
+                                vs?.forEach(element => {
+                                    duToanKphi += (element.duToanKphi || 0);
+                                    soLuongDc += (element.soLuongDc || 0)
+                                });
                                 return {
                                     ...maLoKho,
                                     idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
                                     children: rsss,
-                                    duToanKphi
+                                    duToanKphi,
+                                    soLuongDc
                                 }
                             }
                             ).value();
 
-                        let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        // let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                        let duToanKphi = 0;
+                        let soLuongDc = 0;
+                        v?.forEach(element => {
+                            duToanKphi += (element.duToanKphi || 0);
+                            soLuongDc += (element.soLuongDc || 0)
+                        });
                         let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
                         return {
                             ...rowDiemKho,
                             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
-                            duToanKphi: duToanKphi,
+                            duToanKphi,
+                            soLuongDc,
                             children: rss,
                             expand: true
                         }
                     }
                     ).value();
 
-                let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                // let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+                let duToanKphi = 0;
+                let soLuongDc = 0;
+                rs?.forEach(element => {
+                    duToanKphi += (element.duToanKphi || 0);
+                    soLuongDc += (element.soLuongDc || 0)
+                });
                 let rowChiCuc = value?.find(s => s.maDvi === key);
                 return {
                     ...rowChiCuc,
                     idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
-                    duToanKphi: duToanKphi,
+                    duToanKphi,
+                    soLuongDc,
                     children: rs,
                     expand: true
                 };

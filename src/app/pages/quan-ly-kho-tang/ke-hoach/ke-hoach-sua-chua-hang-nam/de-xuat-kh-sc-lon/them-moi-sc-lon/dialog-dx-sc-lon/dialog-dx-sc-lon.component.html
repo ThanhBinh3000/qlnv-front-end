@@ -67,7 +67,7 @@
         <nz-form-item>
           <nz-form-label nzRequired nzNoColon="true">Nguồn vốn</nz-form-label>
           <nz-select [(ngModel)]="item.nguonVon" nzAllowClear>
-            <nz-option *ngFor="let item of listNguonVon" [nzLabel]="item.ma" [nzValue]="item.giaTri">
+            <nz-option *ngFor="let item of listNguonVon" [nzLabel]="item.giaTri" [nzValue]="item.ma">
             </nz-option>
           </nz-select>
         </nz-form-item>
@@ -84,7 +84,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Tổng mức đầu tư khái toán, dự toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.tmdt ? item.tmdt : 0}}</span>
+            <span class="text-blue">{{item.tmdt ? item.tmdt : 0 | number : '1.0-1' : 'vi_VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -108,7 +108,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Giá trị quyết toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.giaTriPd ? item.giaTriPd : 0}}</span>
+            <span class="text-blue">{{item.giaTriPd ? item.giaTriPd : 0  | number : '1.0-1' : 'vi_VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -116,7 +116,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Lũy kế cấp vốn đến thời điểm hiện tại</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">2.000.000.000</span>
+            <span class="text-blue">{{item.luyKeVon ? item.luyKeVon : 0  | number : '1.0-1' : 'vi_VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>

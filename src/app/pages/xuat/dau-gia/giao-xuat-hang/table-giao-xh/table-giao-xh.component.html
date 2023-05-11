@@ -212,7 +212,7 @@
             <td class="text-left">
               <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_XEM') && (data.trangThai == STATUS.BAN_HANH))
               ||(!userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
-              ||(userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)   
+              ||(userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_TP)
               ||(userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.DU_THAO)
               ||(userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_TP') && data.trangThai == STATUS.TU_CHOI_LDC)
               ||(!userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC)
@@ -252,7 +252,7 @@
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->
