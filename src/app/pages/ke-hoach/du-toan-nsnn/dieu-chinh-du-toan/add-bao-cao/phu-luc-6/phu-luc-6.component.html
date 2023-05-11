@@ -49,8 +49,8 @@
             <th rowSpan="2">Dự toán điều chỉnh</th>
             <th rowSpan="2" *ngIf="viewAppraisalValue">Dự toán Vụ TVQT đề nghị (+ tăng) (- giảm)</th>
             <th rowSpan="2">Kinh phí thiếu năm {{namBcao}}</th>
-            <th rowspan="2" *ngIf="!status" style="width: 300px"></th>
-            <th rowspan="2" *ngIf="!status || editAppraisalValue" style="width: 300px"></th>
+            <th rowspan="2" *ngIf="!status"></th>
+            <th rowspan="2" *ngIf="!status || editAppraisalValue"></th>
           </tr>
           <tr>
             <th>Số lượng thực tế đã thực hiện đến thời điểm báo cáo </th>
@@ -136,8 +136,8 @@
             <td *ngIf="!status || !editAppraisalValue"></td>
           </tr>
           <tr *ngFor="let data of lstCtietBcao; let i = index">
-            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate " nzLeft>
-              <td *ngIf="!status " class="text-center">
+            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
+              <td *ngIf="!status " class="text-center" nzLeft>
                 <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
@@ -238,7 +238,7 @@
                     [options]="amount" />
                 </td>
               </ng-template>
-              <td [hidden]="status">
+              <td *ngIf="status">
                 <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               </td>
               <td *ngIf="!status || editAppraisalValue">

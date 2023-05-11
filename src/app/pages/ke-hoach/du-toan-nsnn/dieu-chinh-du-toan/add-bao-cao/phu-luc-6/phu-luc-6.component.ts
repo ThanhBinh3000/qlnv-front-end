@@ -94,7 +94,7 @@ export class PhuLuc6Component implements OnInit {
   total: ItemData = new ItemData();
   namBcao: number;
   scrollX: string;
-  BOX_SIZE = 220;
+  BOX_SIZE = 350;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -162,9 +162,9 @@ export class PhuLuc6Component implements OnInit {
     })
 
     if (this.status) {
-      this.scrollX = (1100 + BOX_NUMBER_WIDTH * 7).toString() + 'px';
+      this.scrollX = (1100 + this.BOX_SIZE * 9).toString() + 'px';
     } else {
-      this.scrollX = (850 + BOX_NUMBER_WIDTH * 7).toString() + 'px';
+      this.scrollX = (850 + this.BOX_SIZE * 9).toString() + 'px';
     }
 
     this.sortByIndex();
