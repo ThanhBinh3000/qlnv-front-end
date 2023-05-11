@@ -12,6 +12,7 @@ import { BienBanTinhKhoBttComponent } from './bien-ban-tinh-kho-btt/bien-ban-tin
 import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho-btt/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 import { BienBanHaoDoiBttComponent } from './bien-ban-hao-doi-btt/bien-ban-hao-doi-btt.component';
 import { ThemMoiBienBanHaoDoiBttComponent } from './bien-ban-hao-doi-btt/them-moi-bien-ban-hao-doi-btt/them-moi-bien-ban-hao-doi-btt.component';
+import { KiemTraCluongBttModule } from '../kiem-tra-cluong-btt/kiem-tra-cluong-btt.module';
 
 
 
@@ -29,6 +30,7 @@ import { ThemMoiBienBanHaoDoiBttComponent } from './bien-ban-hao-doi-btt/them-mo
     ThemMoiBienBanHaoDoiBttComponent,
   ],
   imports: [
+    KiemTraCluongBttModule,
     CommonModule,
     ComponentsModule,
     DirectivesModule,
