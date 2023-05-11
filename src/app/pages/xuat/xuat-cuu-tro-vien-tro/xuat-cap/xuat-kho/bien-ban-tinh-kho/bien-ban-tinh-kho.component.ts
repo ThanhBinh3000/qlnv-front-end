@@ -12,7 +12,6 @@ import { chain } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
-import {CuuTroVienTroComponent} from "../../../xuat-cuu-tro/cuu-tro-vien-tro.component";
 import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
 import {CHUC_NANG} from "../../../../../../constants/status";
 
