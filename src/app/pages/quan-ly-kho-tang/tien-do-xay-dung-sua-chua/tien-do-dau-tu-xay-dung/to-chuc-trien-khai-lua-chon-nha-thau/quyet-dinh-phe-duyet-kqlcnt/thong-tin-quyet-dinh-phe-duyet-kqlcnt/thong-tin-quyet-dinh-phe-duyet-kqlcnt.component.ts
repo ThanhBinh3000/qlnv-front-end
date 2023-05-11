@@ -257,7 +257,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
         },
       });
     } else {
-      let res = await this.createUpdate(this.formData.value)
+      await this.createUpdate(this.formData.value)
     }
   }
 
