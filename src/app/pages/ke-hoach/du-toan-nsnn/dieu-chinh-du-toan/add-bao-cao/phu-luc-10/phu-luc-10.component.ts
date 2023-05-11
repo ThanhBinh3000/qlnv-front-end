@@ -145,9 +145,9 @@ export class PhuLuc10Component implements OnInit {
     })
 
     if (this.status) {
-      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+      this.scrollX = (550 + this.BOX_NUMBER_WIDTH * 10).toString() + 'px';
     } else {
-      this.scrollX = (300 + this.BOX_NUMBER_WIDTH * 11).toString() + 'px';
+      this.scrollX = (500 + this.BOX_NUMBER_WIDTH * 10).toString() + 'px';
     }
 
     this.updateEditCache();
