@@ -69,7 +69,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 id: [0],
                 nam: [dayjs().get("year")],
                 maDvi: [, [Validators.required]],
-                loaiBienBan: [],
+                loaiBienBan: ['ALL'],
                 maQhNs: [],
                 idQdGiaoNvXh: [, [Validators.required]],
                 soQdGiaoNvXh: [, [Validators.required]],
@@ -110,6 +110,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 canCu: [new Array<FileDinhKem>()],
                 fileDinhKemNiemPhong: [new Array<FileDinhKem>()],
 
+                doiThuKho: [true],
+                checked: [true]
             }
         );
         this.maBb = 'BBLM-' + this.userInfo.DON_VI.tenVietTat;
@@ -129,12 +131,11 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         } catch (e) {
             this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
             this.spinner.hide();
+            console.log("error", e)
         } finally {
             this.spinner.hide();
         }
     }
-
-
     async loadDetail(idInput: number) {
         if (idInput > 0) {
             await this.bienBanLayMauBanGiaoMauService.getDetail(idInput)
@@ -157,6 +158,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 });
         } else {
+            console.log("userInfor", this.userInfo)
             let id = await this.userService.getId('XH_CTVT_BB_LAY_MAU_HDR_SEQ')
             this.formData.patchValue({
                 maDvi: this.userInfo.MA_DVI,
@@ -189,7 +191,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         }
     }
 
-    async openDialogSoQd() {
+    async openDialogSoQd(event: MouseEvent, disabled?: boolean) {
+        const elm = event.target as HTMLInputElement;
+        if (disabled || elm?.localName == "input") return;
         const modalQD = this.modal.create({
             nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
             nzContent: DialogTableSelectionComponent,
@@ -256,7 +260,6 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     }
 
     openDialogDdiemNhapHang(event: MouseEvent, disabled?: boolean) {
-        console.log("event", event);
         const elm = event.target as HTMLInputElement;
         if (disabled || elm?.localName == "input") return;
         const modalQD = this.modal.create({
