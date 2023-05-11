@@ -13,6 +13,8 @@ import {MESSAGE} from "../../../../../../../constants/message";
 import {
   CongViec
 } from "../../../quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component";
+import {AMOUNT_NO_DECIMAL} from "../../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-cap-nhat-thong-tin-dau-thau',
@@ -25,6 +27,10 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
   showListEvent = new EventEmitter<any>();
   @Input()
   idInput: number;
+  @Input()
+  itemDuAn: any;
+  @Input()
+  itemQdPdDaDtxd: any;
   STATUS = STATUS;
   listGoiThau: any[] = []
   listNthauNopHs: any[] = [];
@@ -43,6 +49,20 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
   }];
   giaGoiThau: number = 0;
   dataNhaThauGuiHsEdit: { [key: string]: { edit: boolean; data: any } } = {};
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 0,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
+  @Output() dataItemTtdt = new EventEmitter<object>();
 
   constructor(
     httpClient: HttpClient,
@@ -55,14 +75,18 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetKhlcntService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      soQdPdKhlcnt: [],
-      tenDuAn: [],
-      chuDauTu: [],
-      trangThaiDt: [],
+      soQdPdKhlcnt: [null],
+      soQdPdKhDtxd: [null],
+      soQdPdDaDtxd: [null],
+      tenDuAn: [null],
+      chuDauTu: [null],
+      trangThaiDt: [null],
       tongMucDt: [],
       tongSoGt: [],
       tongSoGtTc: [],
-      tenTrangThaiDt: [],
+      tongSoGcTb: [],
+      ghiChu: [null],
+      tenTrangThaiDt: [null],
     });
   }
 
@@ -80,6 +104,10 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     }
   }
 
+  emitDataTtdt(data) {
+    this.dataItemTtdt.emit(data);
+  }
+
   async detail(id) {
     this.spinner.show();
     try {
@@ -89,13 +117,17 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
           const data = res.data;
           this.formData.patchValue({
             soQdPdKhlcnt: data.soQd,
+            soQdPdDaDtxd: this.itemQdPdDaDtxd.soQd,
+            soQdPdKhDtxd: this.itemDuAn.soQdPdKhNam,
             tenDuAn: data.tenDuAn,
-            chuDauTu: data.chuDauTu,
+            chuDauTu: this.itemQdPdDaDtxd.chuDauTu,
             tongMucDt: data.tongTien,
             trangThaiDt: data.trangThaiDt,
             tenTrangThaiDt: data.tenTrangThaiDt,
             tongSoGt: data.soGoiThau ? data.soGoiThau : 0,
             tongSoGtTc: data.soGoiThauTc ? data.soGoiThauTc : 0,
+            tongSoGcTb: data.soGoiThauTb ? data.soGoiThauTb : 0,
+            ghiChu: data.ghiChu,
           })
           this.listGoiThau = data.listKtXdscQuyetDinhPdKhlcntCvKh ? data.listKtXdscQuyetDinhPdKhlcntCvKh : [];
           this.dataNhaThauNopHs = data.listKtXdscQuyetDinhPdKhlcntDsnt ? data.listKtXdscQuyetDinhPdKhlcntDsnt : [];
@@ -113,42 +145,6 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     }
   }
 
-  async hoanThanhCapNhat(id) {
-    let mesg = 'Hoàn thành cập nhật'
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: mesg,
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: id,
-            trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-          }
-          let res = await this.quyetdinhpheduyetKhlcntService.hoanThanhCapNhatTrangThaiDauThau(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.NOTIFICATION, "Đã hoàn thành cập nhật.");
-            this.spinner.hide();
-            this.goBack();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-            this.spinner.hide();
-          }
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        } finally {
-          this.spinner.hide();
-        }
-      },
-    });
-  }
 
   async showDetail(dataGoiThau: any) {
     await this.spinner.show();
@@ -190,19 +186,66 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     };
   }
 
-  async saveGoiThau() {
-    await this.spinner.show()
+  async save(isHoanThanh?) {
+    // await this.spinner.show()
     let body = {
       id: this.idInput,
       listKtXdscQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
     }
-    let res = await this.quyetdinhpheduyetKhlcntService.saveDsNhaThau(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    if (isHoanThanh) {
+      let mesg = 'Hoàn thành'
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: mesg,
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 350,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetdinhpheduyetKhlcntService.saveDsNhaThau(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              let bodyHoanThanh = {
+                id: this.idInput,
+                trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+              }
+              let res1 = await this.quyetdinhpheduyetKhlcntService.hoanThanhCapNhatTrangThaiDauThau(bodyHoanThanh);
+              if (res1.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.NOTIFICATION, "Đã hoàn thành.");
+                this.formData.patchValue({
+                  trangThaiDt: STATUS.HOAN_THANH_CAP_NHAT,
+                  tenTrangThaiDt: "Đã hoàn thành"
+                })
+                this.emitDataTtdt(res1.data);
+                this.spinner.hide();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res1.msg);
+                this.spinner.hide();
+              }
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+              await this.spinner.hide()
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
     } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let res = await this.quyetdinhpheduyetKhlcntService.saveDsNhaThau(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      await this.spinner.hide()
     }
-    await this.spinner.hide()
   }
 
 
@@ -216,7 +259,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
         ...this.dataNhaThauNopHs,
         this.rowItemNtNopHs
       ];
-      this.rowItemNtNopHs = {};
+      this.rowItemNtNopHs = {idGoiThau: this.idGoiThau};
     }
     this.changeTenTrangThaiGoiThau(this.idGoiThau);
     this.updateDataNhaThauNopHsCache();

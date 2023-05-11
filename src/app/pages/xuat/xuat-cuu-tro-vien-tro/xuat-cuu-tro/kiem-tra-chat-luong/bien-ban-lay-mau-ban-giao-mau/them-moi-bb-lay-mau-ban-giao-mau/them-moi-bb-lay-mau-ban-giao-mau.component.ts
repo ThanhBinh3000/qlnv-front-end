@@ -302,8 +302,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

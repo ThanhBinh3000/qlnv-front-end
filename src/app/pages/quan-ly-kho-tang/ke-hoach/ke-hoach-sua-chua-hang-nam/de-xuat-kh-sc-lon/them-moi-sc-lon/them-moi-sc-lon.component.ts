@@ -9,20 +9,19 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { Base2Component } from "../../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../../services/storage.service";
-import { KtKhXdHangNamService } from "../../../../../../services/kt-kh-xd-hang-nam.service";
-import { DonviService } from "../../../../../../services/donvi.service";
 import { DanhMucKho } from "../../../dm-du-an-cong-trinh/danh-muc-du-an/danh-muc-du-an.component";
 import { MESSAGE } from "../../../../../../constants/message";
-import { DanhMucKhoService } from "../../../../../../services/danh-muc-kho.service";
-import { QuyetDinhKhTrungHanService } from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 import { STATUS } from "../../../../../../constants/status";
 import dayjs from "dayjs";
 import { DialogDxScLonComponent } from "./dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {
+  DeXuatScLonService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 
 @Component({
-  selector: 'app-them-moi-sc-lon',
-  templateUrl: './them-moi-sc-lon.component.html',
-  styleUrls: ['./them-moi-sc-lon.component.scss']
+  selector: "app-them-moi-sc-lon",
+  templateUrl: "./them-moi-sc-lon.component.html",
+  styleUrls: ["./them-moi-sc-lon.component.scss"]
 })
 export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
@@ -36,8 +35,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   dataTableDm: any[] = [];
   dataTableRes: any[] = [];
-  tableTren : any[] = [];
-  tableDuoi : any[] = [];
+  tableTren: any[] = [];
+  tableDuoi: any[] = [];
   rowItemChaDuoi: DanhMucKho = new DanhMucKho();
   rowItemChaTren: DanhMucKho = new DanhMucKho();
   listFileDinhKem: any[] = [];
@@ -50,11 +49,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService: KtKhXdHangNamService,
-    private dviService: DonviService,
-    private dmKhoService: DanhMucKhoService,
-    private danhMucService: DanhMucService,
-    private qdTrungHanSv: QuyetDinhKhTrungHanService
+    private dexuatService: DeXuatScLonService,
+    private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dexuatService);
     super.ngOnInit();
@@ -63,7 +59,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       maDvi: [null],
       tenDvi: [null],
       namKeHoach: [dayjs().get("year")],
-      soCongVan: [''],
+      soCongVan: [""],
       soQdTrunghan: [null, Validators.required],
       trichYeu: [null],
       ngayTaoDx: [null],
@@ -88,7 +84,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         await this.getDataDetail(this.idInput);
       } else {
         this.formData.patchValue({
-          tenDvi: this.userInfo.TEN_DVI,
+          tenDvi: this.userInfo.TEN_DVI
         });
       }
     } catch (e) {
@@ -111,7 +107,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     if (id > 0) {
       let res = await this.dexuatService.getDetail(id);
       const data = res.data;
-      this.maQd = data.soCongVan ? "/" +  data.soCongVan.split("/")[1] : "",
+      this.maQd = data.soCongVan ? "/" + data.soCongVan.split("/")[1] : "",
         this.formData.patchValue({
           id: data.id,
           maDvi: data.maDvi,
@@ -122,14 +118,14 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           namKetThuc: data.namKetThuc,
           ngayTaoDx: data.ngayTaoDx,
           loaiDuAn: data.loaiDuAn,
-          soQdTrunghan: data.soQdTrunghan,
           trichYeu: data.trichYeu,
           ngayDuyet: data.ngayDuyet,
           trangThai: data.trangThai,
           tenTrangThai: data.tenTrangThai
         });
       this.fileDinhKem = data.fileDinhKems;
-      this.dataTableRes = data.ctiets;
+      this.dataTableRes = data.chiTiets;
+      this.dataTableDm = data.listDanhMuc;
       await this.convertListToTree();
     }
   }
@@ -149,7 +145,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   async save(isOther: boolean) {
     this.helperService.removeValidators(this.formData);
     this.formData.controls["soCongVan"].setValidators(Validators.required);
-    this.formData.controls["soQdTrunghan"].setValidators(Validators.required);
     if (isOther || this.idInput > 0) {
       this.setValidators();
     }
@@ -160,10 +155,10 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI;
-    body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
+    body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
-    body.ctiets = this.dataTableRes;
-    body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
+    this.conVertTreToList();
+    body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -181,8 +176,8 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
             break;
           }
         }
-        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
-          this.duyet()
+        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
+          this.duyet();
         } else {
           await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
         }
@@ -269,10 +264,10 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     return rs;
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
+  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
     if (!this.isViewDetail) {
       let modalQD = this.modal.create({
-        nzTitle: 'ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM',
+        nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
         nzContent: DialogDxScLonComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -283,12 +278,11 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          page : "DXNC"
+          page: tmdt
         }
       });
       modalQD.afterClose.subscribe(async (detail) => {
         if (detail) {
-          console.log(detail, 111111);
           if (!data.dataChild) {
             data.dataChild = [];
           }
@@ -309,7 +303,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  expandAll(table : any[]){
+  expandAll(table: any[]) {
     if (table && table.length > 0) {
       table.forEach(s => {
         this.expandSet.add(s.idVirtual);
@@ -370,27 +364,47 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
 
   conVertTreToList() {
     let arr = [];
-    this.dataTable.forEach(item => {
-      if (item.dataChild && item.dataChild.length > 0) {
-        item.dataChild.forEach(data => {
-          arr.push(data);
-        });
-      }
-    });
+    if (this.tableTren && this.tableTren.length > 0) {
+      this.tableTren.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data);
+          });
+        }
+      });
+    }
+    if (this.tableDuoi && this.tableDuoi.length > 0) {
+      this.tableDuoi.forEach(item => {
+        if (item.dataChild && item.dataChild.length > 0) {
+          item.dataChild.forEach(data => {
+            arr.push(data);
+          });
+        }
+      });
+    }
     this.dataTableRes = arr;
   }
 
 
   convertListToTree() {
-    this.dataTable = chain(this.dataTableRes).groupBy("khoi")
-      .map((value, key) => ({ khoi: key, dataChild: value, idVirtual : uuidv4() }))
-      .value();
+    this.tableTren = this.dataTableRes.filter(item => item.tmdt > 5000000000);
+    this.tableDuoi = this.dataTableRes.filter(item => item.tmdt <= 5000000000);
+    if (this.tableTren && this.tableTren.length > 0) {
+      this.tableTren = chain(this.tableTren).groupBy("tenKhoi")
+        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .value();
+    }
+    if (this.tableDuoi && this.tableDuoi.length > 0) {
+      this.tableDuoi = chain(this.tableDuoi).groupBy("tenKhoi")
+        .map((value, key) => ({ tenKhoi: key, dataChild: value, idVirtual: uuidv4() }))
+        .value();
+    }
     this.expandAll(this.tableTren);
     this.expandAll(this.tableDuoi);
   }
 
-  themItemcha(type : string) {
-    if (type == 'duoi') {
+  themItemcha(type: string) {
+    if (type == "duoi") {
       if (!this.rowItemChaDuoi.khoi) {
         this.notification.error(MESSAGE.ERROR, "Không được để trống danh mục khối");
         return;
@@ -417,14 +431,14 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  changeKhoi(event, type : string) {
+  changeKhoi(event, type: string) {
     if (event) {
       let result = this.listKhoi.filter(item => item.ma == event);
       if (result && result.length > 0) {
-        if (type == 'tren') {
-          this.rowItemChaTren.tenKhoi =  result[0].giaTri
+        if (type == "tren") {
+          this.rowItemChaTren.tenKhoi = result[0].giaTri;
         } else {
-          this.rowItemChaDuoi.tenKhoi =  result[0].giaTri
+          this.rowItemChaDuoi.tenKhoi = result[0].giaTri;
         }
       }
     }
