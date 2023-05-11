@@ -109,7 +109,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "111");
     } finally {
       await this.spinner.hide();
     }
@@ -227,7 +227,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   }
 
   async loadListItemQdPdKqLcnt(itemTtdt) {
-    console.log(itemTtdt.soGoiThau, 'itemTtdtitemTtdtitemTtdt');
     if (itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT) {
       let body = {
         "namKh": itemTtdt.namKh,
