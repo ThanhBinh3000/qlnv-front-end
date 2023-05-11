@@ -218,7 +218,7 @@
   <nz-collapse *ngIf="isTongHop">
     <nz-collapse-panel [nzHeader]="'ĐỀ XUẤT CẢI TẠO SỬA CHỮA LỚN HÀNG NĂM CỦA DTNN KV'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
-        <nz-collapse *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY'">
+        <nz-collapse class="pd-15" *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY'">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
@@ -415,7 +415,7 @@
             </nz-table>
           </nz-collapse-panel>
         </nz-collapse>
-        <nz-collapse *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY'">
+        <nz-collapse class="pd-15" *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY'">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
@@ -617,52 +617,8 @@
   </nz-collapse>
   <nz-collapse *ngIf="isTongHop">
     <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
-      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-        <div nz-row [nzGutter]="20">
-          <div nz-col nzSpan="24">
-            <nz-form-label nzNoColon="true">Nhu cầu đối với công trin có TMĐT dưới 5 tỷ đồng: &nbsp; <span
-              class="text-blue">{{ 1000000000 | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
-          </div>
-          <div nz-col nzSpan="4">
-            <nz-form-item>
-              <nz-form-label nzNoColon="true">Trả nợ công trình hoàn thành thước 2019 (11 công trình)</nz-form-label>
-              <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="4">
-            <nz-form-item>
-              <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2020 (20 công trình)</nz-form-label>
-              <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="4">
-            <nz-form-item>
-              <nz-form-label nzNoColon="true">Trả nợ công trình khởi công mới 2021 (11 công trình)</nz-form-label>
-              <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="4">
-            <nz-form-item>
-              <nz-form-label nzNoColon="true">Khởi công mới 2022 (13 công trình)</nz-form-label>
-              <nz-form-control>
-                  <span
-                    class="text-blue">{{ 10000000000 | number : '1.0-1' : 'vi_VN'}}</span>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-        </div>
-      </form>
       <nz-card class="mg-t-10 flex-card p-lr16">
-        <nz-collapse *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY'">
+        <nz-collapse class="pd-15" *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'DUOI5TY'">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="false">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">
@@ -859,7 +815,7 @@
             </nz-table>
           </nz-collapse-panel>
         </nz-collapse>
-        <nz-collapse *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY'">
+        <nz-collapse class="pd-15" *ngIf="formData.value.loaiTmdt == 'ALL' || formData.value.loaiTmdt == 'TREN5TY'">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
               <div nz-row [nzGutter]="20">

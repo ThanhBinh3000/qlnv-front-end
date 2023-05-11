@@ -263,63 +263,26 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     }
   }
 
-  chonSoDxCuc() {
-    if (!this.isViewDetail && this.typeQd == 'DX') {
-      this.formData.controls['soTt'].setValidators(Validators.required);
-      this.formData.controls['maTh'].clearValidators()
-      let modalQD = this.modal.create({
-        nzTitle: 'DANH SÁCH ĐỀ XUẤT CỦA CỤC',
-        nzContent: DialogQdScBtcComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '700px',
-        nzFooter: null,
-        nzComponentParams: {
-          type: "02",
-          listTh : this.listDxCuc
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-            this.formData.patchValue({
-              soTt : data.soCongVan
-            })
-          this.changSoTh(data.soCongVan, 'DX')
-        }
-      })
+  sumSoLuong(data: any, row: string, type?: any) {
+    let sl = 0;
+    if (!type) {
+      if (data && data.dataChild && data.dataChild.length > 0) {
+        const sum = data.dataChild.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        let sum = 0;
+        this.dataTable.forEach(item => {
+          sum += this.sumSoLuong(item, row);
+        });
+        sl = sum;
+      }
     }
+    return sl;
   }
 
-  editRow(idx: number) {
-    this.isEdit = idx
-    this.dataEdit = this.dataTable[idx].ncKhVon
-  }
-
-  deleteItem(index: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-        } catch (e) {
-          console.log('error', e);
-        }
-      },
-    });
-  }
-
-  saveEdit() {
-    this.isEdit = -1;
-  }
-
-  cancelEdit(data: any) {
-    data.ncKhVon = this.dataEdit
-    this.isEdit = -1
-  }
 }

@@ -378,7 +378,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
 
   convertListData(table: any[]): any[] {
     let arr = [];
-    console.log(table);
     if (table && table.length > 0) {
       arr = chain(table)
         .groupBy("tenCuc")
@@ -409,7 +408,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
           };
         }).value();
     }
-    console.log(arr, 222222);
     return arr;
   }
 
@@ -481,7 +479,6 @@ export class ThemMoiScTcdtComponent implements OnInit {
       });
       modalQD.afterClose.subscribe(async (detail) => {
         if (detail) {
-          console.log(detail, 111111);
           if (!data.dataChild) {
             data.dataChild = [];
           }
