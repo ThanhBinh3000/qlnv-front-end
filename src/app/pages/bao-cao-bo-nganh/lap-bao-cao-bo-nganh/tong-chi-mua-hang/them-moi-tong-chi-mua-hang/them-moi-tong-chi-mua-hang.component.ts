@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Base2LocalComponent } from "../../../../../components/base2/base2-local.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -12,12 +11,13 @@ import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../constants/status";
 import { MESSAGE } from "../../../../../constants/message";
 import { cloneDeep } from "lodash";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 @Component({
   selector: 'app-them-moi-tong-chi-mua-hang',
   templateUrl: './them-moi-tong-chi-mua-hang.component.html',
   styleUrls: ['./them-moi-tong-chi-mua-hang.component.scss']
 })
-export class ThemMoiTongChiMuaHangComponent extends Base2LocalComponent implements OnInit {
+export class ThemMoiTongChiMuaHangComponent extends Base2Component implements OnInit {
 
   @Input() idInput: number;
   @Input() isView: boolean;

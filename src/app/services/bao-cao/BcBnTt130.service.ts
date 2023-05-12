@@ -6,9 +6,9 @@ import { BaseService } from "../base.service";
   providedIn: 'root',
 })
 export class BcBnTt130Service extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-report';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'bc-dtqg-bn/tt-130', '');
+    super(httpClient, 'bc-dtqg-bn/tt-130', '/qlnv-report');
   }
 }

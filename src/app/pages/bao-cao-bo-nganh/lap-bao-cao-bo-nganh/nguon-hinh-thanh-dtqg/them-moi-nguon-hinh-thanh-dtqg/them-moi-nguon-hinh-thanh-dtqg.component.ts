@@ -12,14 +12,13 @@ import { MESSAGE } from "../../../../../constants/message";
 import { DonviService } from "../../../../../services/donvi.service";
 import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
-import { Base2LocalComponent } from "../../../../../components/base2/base2-local.component";
 
 @Component({
   selector: "app-them-moi-nguon-hinh-thanh-dtqg",
   templateUrl: "./them-moi-nguon-hinh-thanh-dtqg.component.html",
   styleUrls: ["./them-moi-nguon-hinh-thanh-dtqg.component.scss"]
 })
-export class ThemMoiNguonHinhThanhDtqgComponent extends Base2LocalComponent implements OnInit {
+export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implements OnInit {
 
   @Input() idInput: number;
   @Input() isView: boolean;

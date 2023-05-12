@@ -10,14 +10,13 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { MESSAGE } from "../../../../constants/message";
-import { Base2LocalComponent } from "../../../../components/base2/base2-local.component";
 
 @Component({
   selector: "app-nguon-hinh-thanh-dtqg",
   templateUrl: "./nguon-hinh-thanh-dtqg.component.html",
   styleUrls: ["./nguon-hinh-thanh-dtqg.component.scss"]
 })
-export class NguonHinhThanhDtqgComponent extends Base2LocalComponent implements OnInit {
+export class NguonHinhThanhDtqgComponent extends Base2Component implements OnInit {
   listQuy: any[] = [
     {text: 'Quý I', value: 1},
     {text: 'Quý II', value: 2},

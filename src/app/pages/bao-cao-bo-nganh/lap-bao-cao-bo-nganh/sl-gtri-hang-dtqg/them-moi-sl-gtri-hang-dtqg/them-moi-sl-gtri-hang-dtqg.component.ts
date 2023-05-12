@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Base2LocalComponent } from "../../../../../components/base2/base2-local.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -14,13 +13,16 @@ import { MESSAGE } from "../../../../../constants/message";
 import {
   DialogThemMoiSlGtriHangDtqgComponent
 } from "../dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
+import { cloneDeep } from 'lodash';
+import { slGtriHangDtqg } from "../../../../../models/BaoCaoBoNganh";
+import { Base2Component } from "../../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-them-moi-sl-gtri-hang-dtqg',
   templateUrl: './them-moi-sl-gtri-hang-dtqg.component.html',
   styleUrls: ['./them-moi-sl-gtri-hang-dtqg.component.scss']
 })
-export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implements OnInit {
+export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements OnInit {
 
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -41,6 +43,10 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
   dsDonVi: any[] = [];
   listDataGroup: any[] = [];
+  itemRowMatHangEdit: any[] = [];
+  itemRowDonViEdit: any[] = [];
+  itemRowNhomMhEdit: any[] = [];
+  itemRowMatHang: any[] = [];
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
@@ -84,13 +90,8 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
         tenDonViNhan: this.dsDonVi[0].tenDvi,
         maDonViNhan: this.dsDonVi[0].maDvi
       });
-      this.initData();
     }
     this.spinner.hide();
-  }
-
-  initData() {
-
   }
 
   async loadChiTiet(id:number) {
@@ -100,6 +101,15 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+          this.listDataGroup = dataDetail.detail;
+          for (let i = 0; i < this.listDataGroup.length; i++) {
+            this.itemRowMatHang[i] = [];
+            this.itemRowMatHangEdit[i] = [];
+            for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+              this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+              this.itemRowMatHangEdit[i][y] = [];
+            }
+          }
         }})
       .catch((e) => {
         console.log('error: ', e);
@@ -139,6 +149,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
   async save() {
     let body = {
       "hdr" : this.formData.value,
+      "detail": this.listDataGroup
     };
     let res = null;
     if (this.formData.get("id").value) {
@@ -159,7 +170,6 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
   }
 
   themMoiDanhMuc() {
-    debugger
     const modalGT = this.modal.create({
       nzTitle: '',
       nzContent: DialogThemMoiSlGtriHangDtqgComponent,
@@ -176,7 +186,110 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2LocalComponent implemen
       if (!res) {
         return;
       }
-      this.listDataGroup = [...this.listDataGroup, res];
+      let isUpdate = false;
+      this.listDataGroup.forEach(dvi => {
+        if (dvi.danhMuc ==  res.danhMuc) {
+          dvi.children = [...dvi.children, res.children[0]]
+          isUpdate = true;
+        }
+      })
+      if (!isUpdate) {
+        this.listDataGroup = [...this.listDataGroup, res];
+      }
+      for (let i = 0; i < this.listDataGroup.length; i++) {
+        this.itemRowMatHang[i] = [];
+        this.itemRowMatHangEdit[i] = [];
+        for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+          this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+          this.itemRowMatHangEdit[i][y] = [];
+        }
+      }
     });
   }
+
+  editRowMatHang(i: number, y: number, z: number) {
+    for (let i = 0; i < this.listDataGroup.length; i++) {
+      if (this.itemRowMatHangEdit[i] == undefined) {
+        this.itemRowMatHangEdit[i] = [];
+      }
+      for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
+        if (this.itemRowMatHangEdit[i][y] == undefined) {
+          this.itemRowMatHangEdit[i][y] = [];
+        }
+      }
+    }
+    this.listDataGroup[i].children[y].children[z].edit = true;
+    this.itemRowMatHangEdit[i][y][z] = cloneDeep(this.listDataGroup[i].children[y].children[z]);
+  }
+
+  deleteRowMatHang(i: number, y: number, z: number) {
+    this.listDataGroup[i].children[y].children.splice(z, 1)
+  }
+
+  saveEditRowMatHang(i: number, y: number, z: number) {
+    this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z]
+    this.listDataGroup[i].children[y].children[z].edit = false;
+    this.itemRowMatHangEdit[i][y][z] = {}
+  }
+
+  cancelEditRowMatHang(i: number, y: number, z: number) {
+    this.listDataGroup[i].children[y].children[z].edit = false;
+    this.itemRowMatHangEdit[i][y][z] = {}
+  }
+
+  addRowMatHang(i: number, y: number) {
+    this.listDataGroup[i].children[y].children = [
+      ...this.listDataGroup[i].children[y].children,
+      this.itemRowMatHang[i][y]
+    ];
+    this.clearItemRowMatHang(i, y);
+  }
+
+  clearItemRowMatHang(i: number, y: number) {
+    this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+  }
+
+  editRowDvi(i: number) {
+    this.listDataGroup[i].edit = true;
+    this.itemRowDonViEdit[i] = cloneDeep(this.listDataGroup[i]);
+  }
+
+  deleteRowDvi(i: number) {
+    this.listDataGroup.splice(i, 1)
+  }
+  saveEditRowDvi(i: number) {
+    this.listDataGroup[i].danhMuc = this.itemRowDonViEdit[i].danhMuc
+    this.listDataGroup[i].maSo = this.itemRowDonViEdit[i].maSo
+    this.listDataGroup[i].edit = false;
+    this.itemRowDonViEdit[i] = {};
+  }
+
+  cancelEditRowDvi(i: number) {
+    this.listDataGroup[i].edit = false;
+    this.itemRowDonViEdit[i] = {};
+  }
+
+  editRowNhomMh(i: number, y: number) {
+    for (let i = 0; i < this.listDataGroup.length; i++) {
+      this.itemRowNhomMhEdit[i] = [];
+    }
+    this.listDataGroup[i].children[y].edit = true;
+    this.itemRowNhomMhEdit[i][y] = cloneDeep(this.listDataGroup[i].children[y]);
+  }
+
+  deleteRowNhomMh(i: number, y: number) {
+    this.listDataGroup[i].children.splice(y, 1)
+  }
+  saveEditRowNhomMh(i: number, y: number) {
+    this.listDataGroup[i].children[y].danhMuc = this.itemRowNhomMhEdit[i][y].danhMuc
+    this.listDataGroup[i].children[y].maSo = this.itemRowNhomMhEdit[i][y].maSo
+    this.listDataGroup[i].children[y].edit = false;
+    this.itemRowNhomMhEdit[i][y] = {};
+  }
+
+  cancelEditRowNhomMh(i: number, y: number) {
+    this.listDataGroup[i].children[y].edit = false;
+    this.itemRowNhomMhEdit[i][y] = {};
+  }
+
 }

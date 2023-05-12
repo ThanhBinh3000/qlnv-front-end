@@ -43,7 +43,7 @@ export class DialogThemMoiSlGtriHangDtqgComponent implements OnInit {
     let isDuplicated = false;
     this.listDataGroup.forEach(item => {
       if (this.formData.get('tenDvi').value == item.danhMuc) {
-        item.listNhomMatHang.forEach(nhomMh => {
+        item.children.forEach(nhomMh => {
           if (this.formData.get('nhomMatHang').value == nhomMh.danhMuc) {
             isDuplicated = true;
           }
@@ -60,12 +60,13 @@ export class DialogThemMoiSlGtriHangDtqgComponent implements OnInit {
     let res = {
       danhMuc: this.formData.get('tenDvi').value,
       maSo: this.formData.get('maSoDvi').value,
-      listNhomMatHang: null
+      children: []
     }
-    res.listNhomMatHang =[
+    res.children =[
       {
         danhMuc: this.formData.get('nhomMatHang').value,
         maSo: this.formData.get('maSoNhomMatHang').value,
+        children: []
       }
     ]
     this._modalRef.close(res);

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Base2LocalComponent } from "../../../../components/base2/base2-local.component";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -10,13 +9,14 @@ import { UserService } from "../../../../services/user.service";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
+import { Base2Component } from "../../../../components/base2/base2.component";
 
 @Component({
   selector: 'app-tong-chi-mua-hang',
   templateUrl: './tong-chi-mua-hang.component.html',
   styleUrls: ['./tong-chi-mua-hang.component.scss']
 })
-export class TongChiMuaHangComponent extends Base2LocalComponent implements OnInit {
+export class TongChiMuaHangComponent extends Base2Component implements OnInit {
   listQuy: any[] = [
     {text: 'Quý I', value: 1},
     {text: 'Quý II', value: 2},
