@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import dayjs from "dayjs";
-import { UserLogin } from "src/app/models/userlogin";
-import { MESSAGE } from "src/app/constants/message";
-import { chain, isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {UserLogin} from "src/app/models/userlogin";
+import {MESSAGE} from "src/app/constants/message";
+import {chain, isEmpty} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
@@ -39,6 +39,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   dataView: any = [];
   idPhieuXk: number = 0;
   openPhieuXk = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -54,11 +55,17 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       id: [0],
-      nam: dayjs().get('year'),
+      nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
+      loaiVthh: [],
       thoiGianGiaoNhan: [],
+      thoiGianGiaoNhanTu: [],
+      thoiGianGiaoNhanDen: [],
       ngayQdGiaoNvXh: [],
+      ngayXuat: [],
+      ngayXuatTu: [],
+      ngayXuatDen: [],
       maDiemKho: [],
       maNhaKho: [],
       maNganKho: [],
@@ -71,6 +78,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       type: []
     })
   }
+
   disabledStartNgayQd = (startValue: Date): boolean => {
     if (startValue && this.formData.value.thoiGianGiaoNhanDen) {
       return startValue.getTime() >= this.formData.value.thoiGianGiaoNhanDen.getTime();
@@ -98,6 +106,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
   };
+
   async ngOnInit() {
     try {
       this.initData()
@@ -137,8 +146,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     await this.spinner.show()
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CAP"
+    });
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
@@ -189,7 +200,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
               return {
                 id: rowLv2 ? rowLv2.id : null,
                 idVirtual: uuidv4(),
-                maLoKho: k ? k : null,
+                maLoKho: k != "null" ? k : '',
                 tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
                 maDiemKho: rowLv2 ? rowLv2.maDiemKho : null,
                 tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
@@ -207,7 +218,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
         return {
           idVirtual: uuidv4(),
-          soQdGiaoNvXh: key ? key : null,
+          soQdGiaoNvXh: key != "null" ? key : '',
           nam: rowLv1 ? rowLv1.nam : null,
           thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
           childData: rs

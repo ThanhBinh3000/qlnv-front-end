@@ -180,7 +180,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
