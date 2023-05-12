@@ -145,6 +145,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     }
   }
 
+
   async showDetail(dataGoiThau: any) {
     await this.spinner.show();
     this.listGoiThau.forEach(i => i.selected = false);
@@ -258,7 +259,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
         ...this.dataNhaThauNopHs,
         this.rowItemNtNopHs
       ];
-      this.rowItemNtNopHs = {};
+      this.rowItemNtNopHs = {idGoiThau: this.idGoiThau};
     }
     this.changeTenTrangThaiGoiThau(this.idGoiThau);
     this.updateDataNhaThauNopHsCache();

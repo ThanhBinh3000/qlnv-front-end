@@ -52,16 +52,15 @@
             <h3 class="text-uppercase"> THÔNG TIN TRIỂN KHAI KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-sub"
-                    (click)="exportData('danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx')"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
+                    (click)="exportData('danh-sach-thong-tin-trien-khai-ke-hoach-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(723)"
+                <!-- <button type="button" class="btn btn-main" (click)="goDetail(null)"
                     *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
-                </button>
+                </button> -->
             </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">

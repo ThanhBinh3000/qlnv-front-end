@@ -56,6 +56,11 @@ import { GhccGiuaHaiChiCucComponent } from "./giua-hai-chi-cuc/ghcc-giua-hai-chi
 import { DanhSachBienBanLayMau } from './component-chung/danh-sach-bien-ban-lay-mau/danh-sach-bien-ban-lay-mau.component';
 import { ChiTietDanhSachBienBanLayMau } from './component-chung/danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau.component';
 import { ThanhPhanThamGiaComponent } from './component-chung/danh-sach-bien-ban-lay-mau/chi-tiet-danh-sach-bien-ban-lay-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component';
+import { PhieuKiemNghiemChatLuongXuatDieuChuyenComponent } from './component-chung/quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
+import { ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent } from './component-chung/quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { QuyetDinhDieuChuyenModule } from '../quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
+import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/ho-so-ky-thuat.component';
+import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
 
 @NgModule({
   declarations: [
@@ -81,13 +86,18 @@ import { ThanhPhanThamGiaComponent } from './component-chung/danh-sach-bien-ban-
     GhccGiuaHaiChiCucComponent,
     DanhSachBienBanLayMau,
     ChiTietDanhSachBienBanLayMau,
-    ThanhPhanThamGiaComponent
+    ThanhPhanThamGiaComponent,
+    PhieuKiemNghiemChatLuongXuatDieuChuyenComponent,
+    ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent,
+    HoSoKyThuatXuatDieuChuyenComponent,
+    ChiTietHoSoKyThuatXuatDieuChuyenComponent
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     DirectivesModule,
-    XuatDieuChuyenRoutingModule
+    XuatDieuChuyenRoutingModule,
+    QuyetDinhDieuChuyenModule
   ],
   exports: [
     XuatDieuChuyenComponent

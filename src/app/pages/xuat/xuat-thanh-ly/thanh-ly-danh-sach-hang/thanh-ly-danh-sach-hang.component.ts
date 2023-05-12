@@ -140,11 +140,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
   async loadDsDonVi() {
     const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      if (this.userService.isTongCuc()) {
-        this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
-      } else {
-        this.dsDonvi = dsTong.data.filter(s => s.type === 'PB');
-      }
+      this.dsDonvi = dsTong.data.filter(s => s.type === 'DV');
     }
   }
 
@@ -188,7 +184,7 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
               }
             }
           ).value();
-        let rowItem = value.find(s => s.tenChiCuc === key);
+        let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
@@ -207,6 +203,5 @@ export class ThanhLyDanhSachHangComponent extends Base2Component implements OnIn
     } else {
       this.expandSetString.delete(id);
     }
-    console.log(this.expandSetString)
   }
 }

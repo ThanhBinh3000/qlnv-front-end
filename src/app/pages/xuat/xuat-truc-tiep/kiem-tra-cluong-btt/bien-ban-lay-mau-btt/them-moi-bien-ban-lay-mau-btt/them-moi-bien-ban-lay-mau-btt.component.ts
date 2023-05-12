@@ -56,12 +56,12 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       maDvi: ['', [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maQhns: [''],
-      idQd: ['', [Validators.required]],
-      soQd: ['', [Validators.required]],
+      idQdNv: [''],
+      soQdNv: ['', [Validators.required]],
       ngayQd: [''],
       soHd: [''],
       loaiBienBan: ['', [Validators.required]],
-      ngayHd: [''],
+      ngayKyHd: [''],
       idKtv: [''],
       tenKtv: [''],
       soBienBan: ['', [Validators.required]],
@@ -108,7 +108,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   async openDialogSoQd() {
     let dataQd = [];
     let body = {
-      namKh: dayjs().get('year'),
+      namKh: this.formData.value.namKh,
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.BAN_HANH,
       maChiCuc: this.userInfo.MA_DVI
@@ -130,7 +130,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: dataQd,
         dataHeader: ['Số quyết định', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataColumn: ['soQdNv', 'tenLoaiVthh', 'tenCloaiVthh'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
@@ -141,36 +141,38 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
   }
 
   async bindingDataQd(id) {
-    await this.spinner.show();
-    let res = await this.quyetDinhNvXuatBttService.getDetail(id);
-    console.log(res);
-    if (res.data) {
-      const data = res.data;
-      this.formData.patchValue({
-        soQd: data.soQd,
-        idQd: data.id,
-        ngayQd: data.ngayTao,
-        soHd: data.soHd,
-        ngayHd: data.ngayHd,
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
-        tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa
-      });
-      this.listBienBanLayMau(data.soQd)
-      let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
-      if (dataChiCuc && dataChiCuc.length > 0) {
-        this.listDiaDiemXh = dataChiCuc[0].children;
-      }
-    };
-    await this.spinner.hide();
+    if (id > 0) {
+      await this.spinner.show();
+      let res = await this.quyetDinhNvXuatBttService.getDetail(id);
+      console.log(res);
+      if (res.data) {
+        const data = res.data;
+        this.formData.patchValue({
+          soQdNv: data.soQdNv,
+          idQdNv: data.id,
+          ngayQd: data.ngayTao,
+          soHd: data.soHd,
+          ngayKyHd: data.ngayKyHd,
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          moTaHangHoa: data.moTaHangHoa
+        });
+        this.listBienBanLayMau(data.soQdNv)
+        let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
+        if (dataChiCuc && dataChiCuc.length > 0) {
+          this.listDiaDiemXh = dataChiCuc[0].children;
+        }
+      };
+      await this.spinner.hide();
+    }
   }
 
   async listBienBanLayMau(even) {
     await this.spinner.show();
     let body = {
-      soQd: even,
+      soQdNv: even,
       loaiVthh: this.loaiVthh,
       nam: this.formData.value.nam,
     }
@@ -202,7 +204,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
       nzComponentParams: {
         dataTable: this.listDiaDiemXh,
         dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuongDeXuat']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

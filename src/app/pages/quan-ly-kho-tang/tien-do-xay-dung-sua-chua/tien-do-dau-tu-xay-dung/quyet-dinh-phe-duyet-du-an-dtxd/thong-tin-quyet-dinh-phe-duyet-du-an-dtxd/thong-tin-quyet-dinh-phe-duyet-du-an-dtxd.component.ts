@@ -214,6 +214,11 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
             soQd: data.soQd ? data.soQd.split('/')[0] : null,
+            khoi:this.itemDuAn.tenKhoi,
+            loaiDuAn:this.itemDuAn.loaiDuAn,
+            loaiCapCt:this.itemDuAn.loaiCapCt,
+            tgKhoiCong: this.itemDuAn.tgKhoiCong,
+            tgHoanThanh: this.itemDuAn.tgHoanThanh,
           })
           data.fileDinhKems.forEach(item => {
             if (item.fileType == FILETYPE.FILE_DINH_KEM) {

@@ -102,8 +102,10 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CTVT";
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type : "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -165,7 +167,6 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children ");
     this.expandAll()
 
   }
@@ -201,6 +202,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   closePhieuKnClModal() {
     this.idPhieuKnCl = null;
     this.openPhieuKnCl = false;
+  }
+
+  async showList() {
+    this.isDetail = false;
+    await this.search();
   }
 }
 
