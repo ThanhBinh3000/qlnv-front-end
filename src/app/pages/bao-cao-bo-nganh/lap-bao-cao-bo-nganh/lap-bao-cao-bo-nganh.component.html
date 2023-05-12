@@ -71,6 +71,21 @@
         </ng-container>
       </div>
       <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 3">
+          <app-luan-phien-doi-hang-dtqg></app-luan-phien-doi-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 4">
+          <app-kh-nhap-xuat-ct-vt-bq-hang-dtqg></app-kh-nhap-xuat-ct-vt-bq-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 5">
+          <app-nhap-xuat-ton-kho-hang-dtqg></app-nhap-xuat-ton-kho-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 8">
           <app-nguon-hinh-thanh-dtqg></app-nguon-hinh-thanh-dtqg>
         </ng-container>

@@ -16,7 +16,7 @@ import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
-  selector: 'app-them-moi-giam-hang-dtqg',
+  selector: 'app-them-moi-luan-phien-doi-hang-dtqg',
   templateUrl: './them-moi-luan-phien-doi-hang-dtqg.component.html',
   styleUrls: ['./them-moi-luan-phien-doi-hang-dtqg.component.scss']
 })
@@ -26,14 +26,20 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
   @Output()
   showListEvent = new EventEmitter<any>();
   THONG_TU_SO = "145/2023/TT-BTC"
-  TEN_BIEU_SO = "Phụ lục số 3"
-  BIEU_SO = "PL03"
+  TEN_BIEU_SO = "Phụ lục số 4"
+  BIEU_SO = "PL04"
   itemRowUpdate: any = {};
   itemRow: any = {};
+  itemRowUpdateXuat: any = {};
+  itemRowXuat: any = {};
   listData: any;
   thoiGianSx: Date | null = null;
   thoiGianNk: Date | null = null;
+  thoiGianSxXuat: Date | null = null;
+  thoiGianNkXuat: Date | null = null;
   listDataDetail: any[] = [];
+  listDataNhap: any[] = [];
+  listDataXuat: any[] = [];
   listCloaiVthh: any[] = [];
   now: any;
   constructor(httpClient: HttpClient,
@@ -103,6 +109,8 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
           });
           this.listDataDetail = this.listData.detail
+          this.listDataNhap = this.listDataDetail.filter(item => item.type == "1");
+          this.listDataXuat = this.listDataDetail.filter(item => item.type == "2");
         }
       })
       .catch((e) => {
@@ -135,19 +143,18 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
   }
 
   startEdit(index: number): void {
-    this.listDataDetail[index].edit = true;
-    this.itemRowUpdate = cloneDeep(this.listDataDetail[index]);
+    this.listDataNhap[index].edit = true;
+    this.itemRowUpdate = cloneDeep(this.listDataNhap[index]);
   }
 
   cancelEdit(index: number): void {
-    this.listDataDetail[index].edit = false;
+    this.listDataNhap[index].edit = false;
   }
 
   saveEdit(dataUpdate, index: any): void {
-    // if (this.validateItemSave(this.itemRowUpdate, index)) {
-    this.listDataDetail[index] = this.itemRowUpdate;
-    this.listDataDetail[index].edit = false;
-    // };
+    this.itemRowUpdate.type = "1"
+    this.listDataNhap[index] = this.itemRowUpdate;
+    this.listDataNhap[index].edit = false;
   }
 
   clearItemRow() {
@@ -157,6 +164,30 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     this.itemRow.id = null;
     this.thoiGianSx = null;
     this.thoiGianNk = null;
+  }
+
+  startEditXuat(index: number): void {
+    this.listDataXuat[index].edit = true;
+    this.itemRowUpdateXuat = cloneDeep(this.listDataXuat[index]);
+  }
+
+  cancelEditXuat(index: number): void {
+    this.listDataXuat[index].edit = false;
+  }
+
+  saveEditXuat(dataUpdate, index: any): void {
+    this.itemRowUpdateXuat.type = "2"
+    this.listDataXuat[index] = this.itemRowUpdateXuat;
+    this.listDataXuat[index].edit = false;
+  }
+
+  clearItemRowXuat() {
+    let soLuong = this.itemRow.soLuong;
+    this.itemRowXuat = {};
+    this.itemRowXuat.soLuong = soLuong;
+    this.itemRowXuat.id = null;
+    this.thoiGianSxXuat = null;
+    this.thoiGianNkXuat = null;
   }
 
   deleteRow(i) {
@@ -169,19 +200,48 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.listDataDetail.splice(i, 1)
+        this.listDataNhap.splice(i, 1)
+      },
+    });
+  }
+  deleteRowXuat(i) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.listDataXuat.splice(i, 1)
       },
     });
   }
 
   addRow(): void {
-    // if (this.validateItemSave(this.itemRow)) {
-    this.listDataDetail = [
-      ...this.listDataDetail,
+    this.itemRow.type = "1"
+    this.listDataNhap = [
+      ...this.listDataNhap,
       this.itemRow
     ];
     this.clearItemRow();
-    // }
+  }
+  addRowXuat(): void {
+    this.itemRowXuat.type = "2"
+    this.listDataXuat = [
+      ...this.listDataXuat,
+      this.itemRowXuat
+    ];
+    this.clearItemRowXuat();
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 
   async loadDsVthh() {
@@ -197,6 +257,20 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     this.itemRow.dvt = cloaiVthh[0].maDviTinh;
     this.itemRowUpdate.dvt = cloaiVthh[0].maDviTinh;
     this.itemRowUpdate.tenHang = cloaiVthh[0].ten;
+    this.itemRowUpdate.type = "1";
+    this.formData.patchValue({
+      cloaiVthh: cloaiVthh[0].ma,
+      tenHang: cloaiVthh[0].ten,
+    })
+  }
+
+  changeCloaiVthhXuat($event) {
+    let cloaiVthh = this.listCloaiVthh.filter(item => item.ma == $event);
+    this.itemRowXuat.tenHang = cloaiVthh[0].ten;
+    this.itemRowXuat.dvt = cloaiVthh[0].maDviTinh;
+    this.itemRowUpdateXuat.dvt = cloaiVthh[0].maDviTinh;
+    this.itemRowUpdateXuat.tenHang = cloaiVthh[0].ten;
+    this.itemRowUpdateXuat.type = "2";
     this.formData.patchValue({
       cloaiVthh: cloaiVthh[0].ma,
       tenHang: cloaiVthh[0].ten,
@@ -205,6 +279,12 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
 
   async save(isBanHanh?: boolean) {
     await this.spinner.show();
+    console.log(this.listDataNhap)
+    console.log(this.listDataXuat)
+    if (this.listDataNhap != null || this.listDataXuat != null) {
+      this.listDataDetail = this.listDataNhap.concat(this.listDataXuat)
+      console.log(this.listDataDetail)
+    }
     if (this.listDataDetail.length == 0) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin báo cáo");
       await this.spinner.hide();
@@ -214,18 +294,17 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     body.id = this.idInput
     body.dviGui = this.userInfo.MA_DVI
     body.detail = this.listDataDetail
-    body.tgianTao = formatDate(this.now, "dd/MM/yyyy", 'en-US')
     body.boNganh = this.userInfo.TEN_DVI
     let res = null;
     if (this.idInput > 0) {
       res = await this.bcBnTt145Service.update(body);
     } else {
+      // body.tgianTao = formatDate(this.now, "dd-MM-yyyy", 'en-US')
       res = await this.bcBnTt145Service.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isBanHanh) {
-        this.idInput = res.data.id;
-        this.pheDuyet();
+        this.pheDuyet(body);
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -241,7 +320,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     await this.spinner.hide()
   }
 
-  pheDuyet() {
+  pheDuyet(data: any) {
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
@@ -262,11 +341,7 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          let body = {
-            id: this.idInput
-          };
-
-          const res = await this.bcBnTt145Service.approve(body);
+          const res = await this.bcBnTt145Service.approve(data);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
             this.quayLai();
@@ -295,16 +370,16 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
     }
   }
 
-  onDateChangeSx(event: Date): void {
-    // Xử lý logic khi có sự thay đổi ngày
-    this.itemRowUpdate.thoiGianSx = formatDate(event, "dd/MM/yyyy", 'en-US')
-    this.itemRow.thoiGianSx = formatDate(event, "dd/MM/yyyy", 'en-US')
-  }
-
-  onDateChangeNk(event: Date): void {
-    // Xử lý logic khi có sự thay đổi ngày
-    this.itemRowUpdate.thoiGianNk = formatDate(event, "dd/MM/yyyy", 'en-US')
-    this.itemRow.thoiGianNk = formatDate(event, "dd/MM/yyyy", 'en-US')
+  onDateChanged(value: any, type: any) {
+    if (type == 'thoiGianSx') {
+      this.itemRow.thoiGianSx = value
+    } else if (type == 'tgianMthau') {
+      this.formData.get('tgianMthau').setValue(value);
+    } else if (type == 'tgianDthau') {
+      this.formData.get('tgianDthau').setValue(value);
+    } else if (type == 'tgianNhang') {
+      this.formData.get('tgianNhang').setValue(value);
+    }
   }
 
 

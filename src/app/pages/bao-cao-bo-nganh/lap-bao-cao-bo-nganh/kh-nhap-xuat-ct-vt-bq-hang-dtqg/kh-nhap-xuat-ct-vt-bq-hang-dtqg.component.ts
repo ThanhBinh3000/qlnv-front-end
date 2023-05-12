@@ -17,11 +17,11 @@ import { MESSAGE } from "src/app/constants/message";
 import { saveAs } from "file-saver";
 
 @Component({
-  selector: "app-luan-phien-doi-hang-dtqg",
-  templateUrl: "./luan-phien-doi-hang-dtqg.component.html",
-  styleUrls: ["./luan-phien-doi-hang-dtqg.component.scss"]
+  selector: "app-kh-nhap-xuat-ct-vt-bq-hang-dtqg",
+  templateUrl: "./kh-nhap-xuat-ct-vt-bq-hang-dtqg.component.html",
+  styleUrls: ["./kh-nhap-xuat-ct-vt-bq-hang-dtqg.component.scss"]
 })
-export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnInit {
+export class KhNhapXuatCtVtBqHangDtqgComponent extends Base2Component implements OnInit {
   isView: boolean = true
   tGianTaoTuNgay: Date | null = null;
   tGianTaoDenNgay: Date | null = null;
@@ -32,7 +32,7 @@ export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnI
   excelSrc: any;
   pdfBlob: any;
   excelBlob: any;
-  BIEU_SO = "PL04";
+  BIEU_SO = "PL05";
   listQuy: any[] = [
     { text: 'Quý I', value: 1 },
     { text: 'Quý II', value: 2 },
@@ -102,6 +102,7 @@ export class LuanPhienDoiHangDtqgComponent extends Base2Component implements OnI
   }
 
   async goDetail(id: number, isView?: boolean) {
+    console.log(id)
     // if(roles != 'NHDTQG_PTDT_KHLCNT_TONGHOP_XEM'){
     //   if (!this.checkPermission(roles)) {
     //     return

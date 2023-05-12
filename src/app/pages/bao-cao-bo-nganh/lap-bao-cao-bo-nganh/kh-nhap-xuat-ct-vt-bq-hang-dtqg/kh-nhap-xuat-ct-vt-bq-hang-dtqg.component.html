@@ -60,8 +60,9 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3>DANH SÁCH BÁO CÁO KẾ HOẠCH TỔNG HỢP NHẬP, XUẤT HÀNG DỰ TRỮ QUỐC GIA</h3>
+      <h3>DANH SÁCH BÁO CÁO THỰC HIỆN KẾ HOẠCH NHẬP, XUẤT, CỨU TRỢ, VIỆN TRỢ, BẢO QUẢN HÀNG DỰ TRỮ QUỐC GIA</h3>
       <!-- <div class="buttons">
+        
         <button nz-button class="btn btn-sub" (click)="preView()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           Kết xuất báo cáo
@@ -122,6 +123,6 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-luan-phien-doi-hang-dtqg [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
-  </app-them-moi-luan-phien-doi-hang-dtqg>
+  <app-them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
+  </app-them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg>
 </div>

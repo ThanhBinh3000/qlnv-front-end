@@ -16,23 +16,22 @@ import { formatDate } from '@angular/common';
 import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
-  selector: 'app-them-moi-giam-hang-dtqg',
-  templateUrl: './them-moi-giam-hang-dtqg.component.html',
-  styleUrls: ['./them-moi-giam-hang-dtqg.component.scss']
+  selector: 'app-them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg',
+  templateUrl: './them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg.component.html',
+  styleUrls: ['./them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg.component.scss']
 })
-export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnInit {
+export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   THONG_TU_SO = "145/2023/TT-BTC"
-  TEN_BIEU_SO = "Phụ lục số 3"
-  BIEU_SO = "PL03"
+  TEN_BIEU_SO = "Phụ lục số 5"
+  BIEU_SO = "PL05"
   itemRowUpdate: any = {};
   itemRow: any = {};
   listData: any;
   thoiGianSx: Date | null = null;
-  thoiGianNk: Date | null = null;
   listDataDetail: any[] = [];
   listCloaiVthh: any[] = [];
   now: any;
@@ -63,6 +62,11 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
         cloaiVthh: [null],
         trangThai: "00",
         tenTrangThai: "Dự thảo",
+        donVi: [null],
+        tkTienGuiCuaDvi: [null],
+        moTai: [null],
+        soTien: [null],
+        bangChu: [null],
         detail: [],
       }
     );
@@ -101,6 +105,11 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
             tGianTaoDenNgay: this.listData.tGianTaoDenNgay,
             tGianBanHanhTuNgay: this.listData.tGianBanHanhTuNgay,
             tGianBanHanhDenNgay: this.listData.tGianBanHanhDenNgay,
+            donVi: this.listData.donVi,
+            tkTienGuiCuaDvi: this.listData.tkTienGuiCuaDvi,
+            moTai: this.listData.moTai,
+            soTien: this.listData.soTien,
+            bangChu: this.listData.bangChu,
           });
           this.listDataDetail = this.listData.detail
         }
@@ -144,8 +153,10 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
   }
 
   saveEdit(dataUpdate, index: any): void {
+    // if (this.validateItemSave(this.itemRowUpdate, index)) {
     this.listDataDetail[index] = this.itemRowUpdate;
     this.listDataDetail[index].edit = false;
+    // };
   }
 
   clearItemRow() {
@@ -154,7 +165,6 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
     this.itemRow.soLuong = soLuong;
     this.itemRow.id = null;
     this.thoiGianSx = null;
-    this.thoiGianNk = null;
   }
 
   deleteRow(i) {
@@ -173,11 +183,13 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
   }
 
   addRow(): void {
+    // if (this.validateItemSave(this.itemRow)) {
     this.listDataDetail = [
       ...this.listDataDetail,
       this.itemRow
     ];
     this.clearItemRow();
+    // }
   }
 
   async loadDsVthh() {
@@ -210,6 +222,7 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
     body.id = this.idInput
     body.dviGui = this.userInfo.MA_DVI
     body.detail = this.listDataDetail
+
     body.boNganh = this.userInfo.TEN_DVI
     let res = null;
     if (this.idInput > 0) {
