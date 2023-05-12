@@ -146,6 +146,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
@@ -162,8 +166,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
         this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
       }
-      this.formData.value.loaiVthh = this.loaiVthh;
-      this.formData.value.type = "XUAT_CTVT";
+
       await this.search();
     } catch (e) {
       console.log(e)
@@ -198,7 +201,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
               return {
                 id: rowLv2 ? rowLv2.id : null,
                 idVirtual: uuidv4(),
-                maLoKho: k ? k : null,
+                maLoKho: k != "null" ? k : '',
                 tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
                 maDiemKho: rowLv2 ? rowLv2.maDiemKho : null,
                 tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
@@ -216,7 +219,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
         return {
           idVirtual: uuidv4(),
-          soQdGiaoNvXh: key ? key : null,
+          soQdGiaoNvXh: key != "null" ? key : '',
           nam: rowLv1 ? rowLv1.nam : null,
           thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
           childData: rs

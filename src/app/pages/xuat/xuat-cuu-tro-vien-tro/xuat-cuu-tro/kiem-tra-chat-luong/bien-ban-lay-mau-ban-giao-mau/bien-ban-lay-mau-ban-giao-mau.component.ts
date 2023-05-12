@@ -141,7 +141,13 @@ export class BienBanLayMauBanGiaoMauComponent extends Base2Component implements 
         let nam = quyetDinh.nam;
         let idQdGiaoNvXh = quyetDinh.idQdGiaoNvXh;
         let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, idQdGiaoNvXh: idQdGiaoNvXh, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+        return {
+          idVirtual: uuid.v4(),
+          soQdGiaoNvXh: key != "null" ? key : '',
+          idQdGiaoNvXh: idQdGiaoNvXh,
+          nam: nam,
+          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+          childData: value };
       }).value();
     this.children = dataView
     this.expandAll()

@@ -53,8 +53,8 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
       soPhieuKtCl: null,
       soBienBan: null,
       ngayKnMau: null,
-      ngayKnTu: null,
-      ngayKnDen: null,
+      ngayKnMauTu: null,
+      ngayKnMauDen: null,
       soBbXuatDocKho: null,
       loaiVthh: null,
       type: null
@@ -102,6 +102,7 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
 
   ngOnInit(): void {
     try {
+      console.log(this.loaiVthh,"2222")
       this.initData()
       this.timKiem();
     }
@@ -136,6 +137,9 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
       this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
       this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
     }
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
     await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
@@ -148,7 +152,12 @@ export class PhieuKiemTraChatLuongComponent extends Base2Component implements On
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
         let nam = quyetDinh.nam;
         let thoiHanXuatCtVt = quyetDinh.thoiHanXuatCtVt;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, thoiHanXuatCtVt: thoiHanXuatCtVt, childData: value };
+        return {
+          idVirtual: uuid.v4(),
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: nam,
+          thoiHanXuatCtVt: thoiHanXuatCtVt,
+          childData: value };
       }).value();
     this.children = dataView
     this.expandAll()
