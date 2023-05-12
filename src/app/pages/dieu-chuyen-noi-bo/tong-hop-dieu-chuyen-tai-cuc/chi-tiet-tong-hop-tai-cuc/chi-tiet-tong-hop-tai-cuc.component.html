@@ -18,7 +18,7 @@
                         <span>Quay lại</span>
                     </button>
                     <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
-                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
+                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
                         formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Y/c Chi cục xác định điểm nhập ĐC</span>
@@ -49,8 +49,7 @@
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
-                    <button *ngIf="(isTongHop && !isViewDetail)  && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC || formData.value.trangThai==STATUS.TU_CHOI_LDV ||
-                        formData.value.trangThai==STATUS.TU_CHOI_LDC || formData.value.trangThai==STATUS.TU_CHOI_TP) &&
+                    <button *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) &&
                         userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')" type="button"
                         class="btn btn-sub" (click)="saveAndSend()"
                         [disabled]="formData.value.loaiDieuChuyen=='CHI_CUC' && !daXdinhDiemNhap">
@@ -58,9 +57,8 @@
                         <span>Lưu và gửi duyệt</span>
                     </button>
                     <button
-                        *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || 
-                        formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
-                        nz-button type="button" class="modal__button--save" (click)="save()">
+                        *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
+                        nz-button type="button" class="modal__button--save" (click)="save(false, false)">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
@@ -128,7 +126,8 @@
         </nz-card>
     </div>
 </ng-container>
-<ng-container *ngIf="isTongHop">
+<ng-container
+    *ngIf="isTongHop && ((this.formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (this.formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0))">
     <div class="bg-trang">
         <nz-card class="flex-card pd-l-6 pd-r-6">
             <nz-collapse nzAccordion>
@@ -297,7 +296,8 @@
     </nz-card> -->
     <!--thông tin tổng hợp giua 2 chi cuc-->
 </ng-container>
-<ng-container *ngIf="isTongHop && ['ALL', 'CHI_CUC'].includes(this.formData.value.loaiDieuChuyen)">
+<ng-container
+    *ngIf="isTongHop && ['ALL', 'CHI_CUC'].includes(this.formData.value.loaiDieuChuyen) && dataTable2ChiCuc.length>0">
     <div class="bg-trang">
         <nz-card class="flex-card p-lr16">
             <ng-template #extraTpl>
@@ -539,7 +539,8 @@
 </ng-container>
 
 <!-- Thong tin tong hop dieu chuyen giua 2 cuc -->
-<ng-container *ngIf="isTongHop && ['ALL', 'CUC'].includes(this.formData.value.loaiDieuChuyen)">
+<ng-container
+    *ngIf="isTongHop && ['ALL', 'CUC'].includes(this.formData.value.loaiDieuChuyen) && groupData2Cuc.length>0">
     <div class="bg-trang">
         <nz-card class="flex-card p-lr16">
             <nz-collapse nzAccordion>
