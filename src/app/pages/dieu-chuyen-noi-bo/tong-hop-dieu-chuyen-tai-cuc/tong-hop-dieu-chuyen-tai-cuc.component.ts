@@ -208,7 +208,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         return !(this.checkRoleEdit(trangThai) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
     }
     checkRoleEdit(trangThai: string) {
-        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_TP)
+        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC)
     };
     checkRoleApproveDc(trangThai: string) {
         return this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)

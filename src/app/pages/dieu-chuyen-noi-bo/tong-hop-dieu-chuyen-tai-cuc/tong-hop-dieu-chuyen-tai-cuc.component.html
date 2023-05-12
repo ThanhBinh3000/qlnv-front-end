@@ -192,7 +192,7 @@
                             </a>
                             <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-edit"></i>
+                                <i class="fa fa-pencil"></i>
                             </a>
                             <a
                                 *ngIf="!viewOnly && checkPermissonApprove(data.trangThai) && checkRoleApproveDc(data.trangThai)">

@@ -212,7 +212,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         $event.stopPropagation();
         try {
             await this.spinner.show()
-            const res = await this.save();
+            const res = await this.save(false, true);
             if (res.msg == MESSAGE.SUCCESS) {
 
                 const data = await this.tongHopDieuChuyenService.guiYeuCauXacDinhDiemNhap({ id: this.formData.value.id });
@@ -303,7 +303,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             this.setValidator(true);
             this.helperService.markFormGroupTouched(this.formData);
             if (this.formData.valid) {
-                const res = await this.save()
+                const res = await this.save(true, false)
                 if (res.msg == MESSAGE.SUCCESS) {
                     await this.approve(this.formData.value.id, STATUS.CHO_DUYET_TP, "Bạn có chắc chắn muốn gửi duyệt?");
                 }
@@ -314,7 +314,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             await this.spinner.hide();
         }
     }
-    async save() {
+    async save(isGuiDuyet: boolean, isGuiYeuCau: boolean) {
         try {
 
             let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat + '/DCNB' };
@@ -324,7 +324,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             this.helperService.markFormGroupTouched(this.formData);
             if (body.id) {
                 res = await this.tongHopDieuChuyenService.capNhatTHCuc(body);
-                if (res.msg == MESSAGE.SUCCESS) {
+                if (res.msg == MESSAGE.SUCCESS && !isGuiDuyet && !isGuiYeuCau) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
@@ -333,7 +333,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             } else {
                 res = await this.tongHopDieuChuyenService.themTHCuc({ ...body, id: undefined });
                 if (res.msg == MESSAGE.SUCCESS) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    if (!isGuiDuyet && isGuiYeuCau) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                    }
                     this.isAddNew = false;
                     this.isViewDetail = false;
                     this.isDetail = true;

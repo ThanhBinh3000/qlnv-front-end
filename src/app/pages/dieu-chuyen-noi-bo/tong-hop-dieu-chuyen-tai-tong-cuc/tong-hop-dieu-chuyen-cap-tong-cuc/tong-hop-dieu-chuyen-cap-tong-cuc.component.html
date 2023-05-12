@@ -205,7 +205,11 @@
                             </a>
                             <a *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-edit"></i>
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && checkRoleEdit(data.trangThai)"
+                                (click)="taoQuyetDinhDc(data.id)">
+                                <i class="icon htvbdh_tcdt_tao-qd"></i>
                             </a>
                             <a *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_XOA') && checkRoleDelete(data.trangThai)"
                                 (click)="delete(data)">
