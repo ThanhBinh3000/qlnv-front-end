@@ -74,6 +74,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
+      ngayTao:[],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
