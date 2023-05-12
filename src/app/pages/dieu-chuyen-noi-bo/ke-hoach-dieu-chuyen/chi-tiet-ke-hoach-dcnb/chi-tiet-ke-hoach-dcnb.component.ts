@@ -579,6 +579,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     if (this.formDataChiTiet.invalid) {
       return;
     }
+    if (this.isNhanDieuChuyen) {
+      if( this.formDataChiTiet.controls['slDcConLai'].value < 0){
+        this.notification.error(MESSAGE.ERROR, "Số lượng điều chuyển còn lại không thể nhỏ hơn 0!");
+        return;
+      }
+    }
 
     if (!this.formDataChiTiet.value.idVirtual) {
       this.formDataChiTiet.controls['idVirtual'].setValue(uuid.v4());
@@ -1264,7 +1270,15 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   }
 
   changeSoLuongPhanBo(value: any) {
-    this.formDataChiTiet.controls['slDcConLai'].setValue(this.formDataChiTiet.value.soLuongDc - value);
+    this.formDataChiTiet.controls['slDcConLai'].setValue(this.tinhSlDcConLai() - value);
+  }
+
+  tinhSlDcConLai(){
+    let items = this.formData.controls['danhSachHangHoa'].value.filter(item =>(item.maLoKho == this.formDataChiTiet.controls['maLoKho'].value && item.idVirtual != this.formDataChiTiet.controls['idVirtual'].value));
+    const tongSoLuongPhanBo = items.reduce((total,currentValue) => {
+      return total + currentValue.soLuongPhanBo;
+    },0);
+    return this.formDataChiTiet.value.soLuongDc - tongSoLuongPhanBo;
   }
 
   async addDiemKhoNhan(data: any) {
