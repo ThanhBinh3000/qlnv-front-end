@@ -34,6 +34,7 @@ import { ThemDaiDienComponent } from './bien-ban-lay-mau-btt/them-moi-bien-ban-l
   ],
   exports: [
     KiemTraCluongBttComponent,
+    ThemPhieuKtraCluongBttComponent,
 
   ]
 })

@@ -37,7 +37,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongBttService);
     this.formData = this.fb.group({
       namKh: null,
-      soQd: null,
+      soQdNv: null,
       soPhieu: null,
       loaiVthh: null,
       trichYeu: null,
@@ -46,7 +46,7 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     })
 
     this.filterTable = {
-      soQd: '',
+      soQdNv: '',
       namKh: '',
       ngayTao: '',
       soPhieu: '',
@@ -115,9 +115,8 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
-      .groupBy("soQd")
+      .groupBy("soQdNv")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
@@ -146,13 +145,13 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
             }
           }
           ).value();
-        let rowLv1 = value.find(s => s.soQd === key);
+        let rowLv1 = value.find(s => s.soQdNv === key);
         return {
           idVirtual: uuidv4(),
-          soQd: key,
+          soQdNv: key,
           namKh: rowLv1.namKh,
           ngayQd: rowLv1.ngayQd,
-          idQd: rowLv1.idQd,
+          idQdNv: rowLv1.idQdNv,
           childData: rs
         };
       }).value();

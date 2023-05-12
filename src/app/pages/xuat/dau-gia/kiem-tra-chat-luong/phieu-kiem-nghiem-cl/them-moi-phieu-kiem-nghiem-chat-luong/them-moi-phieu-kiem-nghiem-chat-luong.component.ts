@@ -243,28 +243,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async loadDataComboBox() {
-    // Loại biên bản
-    await this.danhMucService.danhMucChungGetAll("LOAI_BIEN_BAN").then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listBienBan = res.data.filter(item => item.ma == 'LBGM');
-      }
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    });
-    // PP lây mẫu
-    this.danhMucService.danhMucChungGetAll("PP_LAY_MAU").then(res => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.phuongPhapLayMaus = res.data;
-      }
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch(err => {
-      this.notification.error(MESSAGE.ERROR, err.msg);
-    })
     // HTHUC_BQUAN
     this.danhMucService.danhMucChungGetAll("HINH_THUC_BAO_QUAN").then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -286,15 +264,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         giaTri: 'Không Đạt',
       },
     ];
-  }
-
-  itemRow: ItemDaiDien = new ItemDaiDien();
-  itemRow2: ItemDaiDien = new ItemDaiDien();
-
-  addDaiDien(data: any, type: string) {
-    data.loaiDaiDien = type;
-    let body = cloneDeep(data);
-    this.dataTable.push(body);
   }
 
   async save(isGuiDuyet?: boolean) {
