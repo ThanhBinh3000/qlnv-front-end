@@ -103,7 +103,7 @@ export class PhuLuc7Component implements OnInit {
   total: ItemData = new ItemData();
   dsDinhMucX: any[] = [];
   scrollX: string;
-  BOX_NUMBER_WIDTH = 350
+  BOX_NUMBER_WIDTH = 400
   noiDungs: any[] = TEN_HANG;
   soLaMa: any[] = LA_MA;
   constructor(

@@ -94,7 +94,7 @@ export class PhuLuc6Component implements OnInit {
   total: ItemData = new ItemData();
   namBcao: number;
   scrollX: string;
-  BOX_SIZE = 350;
+  BOX_SIZE = 400;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

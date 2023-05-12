@@ -77,7 +77,7 @@ export class PhuLuc1Component implements OnInit {
   total: ItemData = new ItemData();
   isSynthetic: any;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 400;
+  BOX_NUMBER_WIDTH = 450;
   constructor(
     private dieuChinhDuToanService: DieuChinhService,
     private _modalRef: NzModalRef,
@@ -128,8 +128,9 @@ export class PhuLuc1Component implements OnInit {
         })
       })
     }
+    console.log(this.isSynthetic);
 
-    if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0 && this.isSynthetic !== true) {
+    if ((this.dataInfo?.extraData && this.dataInfo.extraData.length > 0 && this.isSynthetic !== true) || this.dataInfo?.extraData && this.dataInfo.extraData.length > 0 && this.isSynthetic == true && this.dataInfo.trangThai == "7") {
       console.log(this.dataInfo?.extraData);
       this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
       this.dataInfo.extraData.forEach(item => {

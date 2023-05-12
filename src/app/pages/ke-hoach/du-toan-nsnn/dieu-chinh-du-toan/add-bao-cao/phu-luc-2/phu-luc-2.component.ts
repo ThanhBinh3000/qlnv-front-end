@@ -98,7 +98,7 @@ export class PhuLuc2Component implements OnInit {
   lstTaiSans: any[] = [];
   total: ItemData = new ItemData();
   scrollX: string;
-  BOX_NUMBER_WIDTH = 250;
+  BOX_NUMBER_WIDTH = 350;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
