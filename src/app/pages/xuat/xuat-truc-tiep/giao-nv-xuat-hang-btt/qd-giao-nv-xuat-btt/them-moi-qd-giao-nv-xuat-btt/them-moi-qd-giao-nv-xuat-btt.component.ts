@@ -82,6 +82,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
       listMaDviTsan: [null],
+      ngayKyHd: ['']
 
     })
   }
@@ -194,6 +195,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
               moTaHangHoa: dataHopDong.moTaHangHoa,
               soLuongBanTrucTiep: dataHopDong.soLuongBanTrucTiep,
               donViTinh: dataHopDong.donViTinh,
+              ngayKyHd: dataHopDong.ngayPduyet,
               trichYeu: dataQdCg.trichYeu,
               tgianGnhan: dataQdCg.ngayKthuc
             })

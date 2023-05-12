@@ -134,7 +134,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdNvXh()">
-                                <input nz-input [readonly]="true" formControlName="soQd" />
+                                <input nz-input [readonly]="true" formControlName="soQdNv" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -354,7 +354,7 @@
                         <td>
                             <input nz-input [(ngModel)]="item.maSo" />
                         </td>
-                        <td>{{item.dviTinh}}</td>
+                        <td>{{item.donViTinh}}</td>
                         <td>
                             <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
                                 [nzSize]="'small'" [(ngModel)]="item.soLuongChungTu"></nz-input-number>
@@ -401,13 +401,13 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="24">
+                <div nz-col [nzSpan]="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                             Chứng từ kèm theo
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list></file-list>
+                            <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
                         </div>
                     </nz-form-item>
                 </div>

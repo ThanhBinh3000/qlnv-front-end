@@ -102,8 +102,10 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CTVT";
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -148,7 +150,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
               let diaDiem = v.find(s => s.tenDiemKho === k)
               return {
                 idVirtual: uuid.v4(),
-                tenDiemKho: diaDiem ? k : null,
+                tenDiemKho: k != "null" ? k : '',
                 tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
                 childData: v
               }
@@ -158,14 +160,13 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key ? key : null,
+          soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children ");
     this.expandAll()
 
   }
@@ -201,6 +202,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   closePhieuKnClModal() {
     this.idPhieuKnCl = null;
     this.openPhieuKnCl = false;
+  }
+
+  async showList() {
+    this.isDetail = false;
+    await this.search();
   }
 }
 

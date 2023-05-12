@@ -238,8 +238,7 @@
               </nz-select>
             </th>
             <th *ngIf="formData.value.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT && !isViewDetail">
-              <a disabled="isView" (click)="isViewDetail ? '' : addRow()"
-                 [class.disabled]="(!rowItemNtNopHs.tenNhaThau && !rowItemNtNopHs.maSoThue && !rowItemNtNopHs.diaChi && !rowItemNtNopHs.soDienThoai &&  !rowItemNtNopHs.giaDuThau)">
+              <a (click)="addRow()">
                 <i class="fa fa-plus"></i>
               </a>
               <a (click)="refreshItemNopHs()">

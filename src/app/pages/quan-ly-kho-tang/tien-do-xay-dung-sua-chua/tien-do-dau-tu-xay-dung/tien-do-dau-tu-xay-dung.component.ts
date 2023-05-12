@@ -25,6 +25,9 @@ import {QuyetDinhPheDuyetKhlcntComponent} from "./quyet-dinh-phe-duyet-khlcnt/qu
 import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+import {
+  QuyetdinhpheduyetKqLcntService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -47,6 +50,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   itemQdPdKhLcnt: any;
   itemTtdt: any;
 
+  //trangthai qd pd kết quả lcnt
+  trangThaiQdPdKqLcnt: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -58,6 +64,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -68,7 +75,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.formData = this.fb.group({
       namKeHoach: [''],
       tenDuAn: [''],
-      maDvi: [''],
+      maDvi: [this.userInfo.MA_DVI],
+      capDvi: [this.userInfo.CAP_DVI],
       soQuyetDinh: [''],
       trangThai: [''],
       ngayKy: [''],
@@ -91,7 +99,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
-        this.selectRow(this.dataTableRaw[0]);
+        if (this.dataTableRaw && this.dataTableRaw.length > 0) {
+          this.selectRow(this.dataTableRaw[0]);
+        }
         this.expandAll(this.dataTable);
       } else {
         this.dataTable = [];
@@ -99,7 +109,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "111");
     } finally {
       await this.spinner.hide();
     }
@@ -124,6 +134,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         break;
       case '04':
         this.itemTtdt = data;
+        break;
+      case '05':
+        this.trangThaiQdPdKqLcnt = data;
         break;
     }
   }
@@ -157,9 +170,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         //Check tiếp quyết định phê duyệt bản vẽ
-        if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+        if (this.itemQdPdDaDtxd) {
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
+          await this.loadListItemQdPdKqLcnt(this.itemTtdt);
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -167,7 +181,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "|22222");
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
@@ -206,6 +220,34 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         this.itemTtdt = this.itemQdPdKhLcnt;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadListItemQdPdKqLcnt(itemTtdt) {
+    if (itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT) {
+      let body = {
+        "namKh": itemTtdt.namKh,
+        "soQdPdKhlcnt": itemTtdt.soQd,
+        "idQdPdKhlcnt": itemTtdt.id,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetKqLcntService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.content && res.data.content.length > 0) {
+          let totalSoGcTheoQdKqLcnt = res.data.content.reduce((accumulator, object) => {
+            return accumulator + object.soGoiThau;
+          }, 0);
+          // nếu số gói thầu của qd pd kh lcnt bằng với số gói thầu của qd pd kqlcnt thì tức là đã hoàn thành nhập quyết định
+          if (itemTtdt.soGoiThau == totalSoGcTheoQdKqLcnt) {
+            this.trangThaiQdPdKqLcnt = true;
+          }
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
