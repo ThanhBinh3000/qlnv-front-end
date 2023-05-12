@@ -13,7 +13,6 @@ import * as uuid from "uuid";
 import {
   PhieuKiemNghiemChatLuongService
 } from "../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service";
-import {CuuTroVienTroComponent} from "../../../xuat-cuu-tro/cuu-tro-vien-tro.component";
 import {CHUC_NANG} from "../../../../../../constants/status";
 import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
 
@@ -54,8 +53,8 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       soPhieuKnCl: null,
       soBienBan: null,
       ngayKnMau: null,
-      ngayKnTu: null,
-      ngayKnDen: null,
+      ngayKnMauTu: null,
+      ngayKnMauDen: null,
       soBbXuatDocKho: null,
       loaiVthh: null,
       type: null
@@ -138,6 +137,9 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
       this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
       this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
     }
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh
+    })
     await this.search();
     this.dataTable.forEach(s => s.idVirtual = uuid.v4());
     this.buildTableView();
@@ -150,7 +152,12 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
         let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
         let nam = quyetDinh.nam;
         let thoiHanXuatCtVt = quyetDinh.thoiHanXuatCtVt;
-        return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, nam: nam, thoiHanXuatCtVt: thoiHanXuatCtVt, childData: value };
+        return {
+          idVirtual: uuid.v4(),
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: nam,
+          thoiHanXuatCtVt: thoiHanXuatCtVt,
+          childData: value };
       }).value();
     this.children = dataView
     this.expandAll()

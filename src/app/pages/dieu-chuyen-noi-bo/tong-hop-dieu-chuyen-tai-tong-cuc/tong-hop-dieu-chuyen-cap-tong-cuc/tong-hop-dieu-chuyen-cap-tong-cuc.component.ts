@@ -16,6 +16,7 @@ import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TongHopDieuChuyenCapTongCucService } from './../tong-hop-dieu-chuyen-tai-tong-cuc.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-tong-hop-dieu-chuyen-cap-tong-cuc',
@@ -65,6 +66,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
+        private router: Router,
         private tongHopDieuChuyenCapTongCucService: TongHopDieuChuyenCapTongCucService,
         private donviService: DonviService,
         private danhMucService: DanhMucService,
@@ -180,6 +182,11 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
                     item.checked = false;
                 });
             }
+        }
+    }
+    taoQuyetDinhDc(id: number) {
+        if (id) {
+            this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id }]);
         }
     }
     checkRoleView(trangThai: string): boolean {

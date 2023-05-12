@@ -148,9 +148,18 @@ export class PhieuKiemNghiemChatLuongComponent extends Base2Component implements
           let nam = quyetDinh.nam;
           let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
           let idQdGiaoNvXh = quyetDinh.idQdGiaoNvXh;
-          return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, idQdGiaoNvXh: idQdGiaoNvXh, nam: nam, ngayQdGiaoNvXh: ngayQdGiaoNvXh, childData: value };
+          return {
+            idVirtual: uuid.v4(),
+            soQdGiaoNvXh: key != "null" ? key : '',
+            idQdGiaoNvXh: idQdGiaoNvXh,
+            nam: nam,
+            ngayQdGiaoNvXh: ngayQdGiaoNvXh,
+            childData: value };
         } else {
-          return { idVirtual: uuid.v4(), soQdGiaoNvXh: key, childData: value };
+          return {
+            idVirtual: uuid.v4(),
+            soQdGiaoNvXh: key != "null" ? key : '',
+            childData: value };
         }
       }).value();
     this.children = dataView

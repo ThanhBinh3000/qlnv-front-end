@@ -274,7 +274,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-xc-them-moi-phieu-xuat-kho [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+  <app-xc-them-moi-phieu-xuat-kho [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView" (showListEvent)="showList()">
   </app-xc-them-moi-phieu-xuat-kho>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">

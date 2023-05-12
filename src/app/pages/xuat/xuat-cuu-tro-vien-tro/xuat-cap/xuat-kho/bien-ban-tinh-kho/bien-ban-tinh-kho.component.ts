@@ -1,17 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit, Input} from '@angular/core';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { MESSAGE } from 'src/app/constants/message';
-import { chain } from 'lodash';
+import {UserLogin} from 'src/app/models/userlogin';
+import {MESSAGE} from 'src/app/constants/message';
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { BienBanTinhKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
+import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import {BienBanTinhKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
 import {CHUC_NANG} from "../../../../../../constants/status";
 
@@ -28,6 +28,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   loaiVthhCache: string;
   public vldTrangThai: XuatCuuTroVienTroComponent;
   public CHUC_NANG = CHUC_NANG;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -116,8 +117,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     try {
       this.initData()
       this.timKiem();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -126,8 +126,11 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
 
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
+    await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CAP"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -146,6 +149,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
+
   async timKiem() {
     await this.spinner.show();
     try {
@@ -176,7 +180,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
               let soBb = v.find(s => s.soBbTinhKho === k)
               return {
                 idVirtual: uuid.v4(),
-                soBbTinhKho: k ? k : null,
+                soBbTinhKho: k != "null" ? k : '',
                 tenDiemKho: soBb ? soBb.tenDiemKho : null,
                 tenLoKho: soBb ? soBb.tenLoKho : null,
                 ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
@@ -193,7 +197,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key ? key : null,
+          soQdGiaoNvXh: key != "null" ? key : '',
           nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
