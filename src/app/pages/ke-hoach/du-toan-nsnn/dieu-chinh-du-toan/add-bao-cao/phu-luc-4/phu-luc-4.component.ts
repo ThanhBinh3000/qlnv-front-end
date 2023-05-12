@@ -80,7 +80,7 @@ export class PhuLuc4Component implements OnInit {
   dToanVuTang: number;
   dToanVuGiam: number;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 250
+  BOX_NUMBER_WIDTH = 400
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

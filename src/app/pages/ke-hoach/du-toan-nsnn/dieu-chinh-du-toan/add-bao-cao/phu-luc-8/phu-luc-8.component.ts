@@ -91,7 +91,7 @@ export class PhuLuc8Component implements OnInit {
   linhVucChis: any[] = DANH_MUC;
   isSynthetic: any;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 250;
+  BOX_NUMBER_WIDTH = 400;
   constructor(
     private _modalRef: NzModalRef,
     private notification: NzNotificationService,

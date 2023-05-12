@@ -95,7 +95,7 @@ export class PhuLuc3Component implements OnInit {
   total: ItemData = new ItemData();
   soLaMa: any[] = LA_MA;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 250;
+  BOX_NUMBER_WIDTH = 400;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

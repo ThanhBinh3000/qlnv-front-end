@@ -686,7 +686,8 @@ export class AddBaoCaoComponent implements OnInit {
       status: this.status || !(this.userInfo?.sub == formDetail.giaoCho),
       viewRecommendedValue: this.viewRecommendedValue,
       editRecommendedValue: this.acceptStatus,
-      isSynthetic: isSynthetic
+      isSynthetic: isSynthetic,
+      trangThai: this.baoCao.trangThaiBaoCao
     };
 
     dataInfo.data.maDviTien = "1";
