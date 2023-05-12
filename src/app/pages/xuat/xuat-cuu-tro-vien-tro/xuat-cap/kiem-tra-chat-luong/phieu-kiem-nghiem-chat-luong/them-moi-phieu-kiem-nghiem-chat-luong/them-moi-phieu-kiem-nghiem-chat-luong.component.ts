@@ -161,6 +161,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         truongPhong: this.userInfo.MA_KTBQ,
         soPhieuKnCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.loaiVthh,
       });
     }
 
@@ -194,6 +195,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

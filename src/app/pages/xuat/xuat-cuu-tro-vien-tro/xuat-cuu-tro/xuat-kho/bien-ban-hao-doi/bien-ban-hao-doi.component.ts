@@ -163,8 +163,11 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CTVT";
+    await this.spinner.show()
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -213,7 +216,7 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
               let soBb = v.find(s => s.soBbHaoDoi === k)
               return {
                 idVirtual: uuid.v4(),
-                soBbHaoDoi: k ? k : null,
+                soBbHaoDoi: k != "null" ? k : '',
                 soBbTinhKho: soBb ? soBb.soBbTinhKho : null,
                 tenDiemKho: soBb ? soBb.tenDiemKho : null,
                 tenLoKho: soBb ? soBb.tenLoKho : null,
@@ -231,7 +234,8 @@ export class BienBanHaoDoiComponent extends Base2Component implements OnInit {
         let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key, nam: nam,
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
