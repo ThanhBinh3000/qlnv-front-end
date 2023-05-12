@@ -27,6 +27,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idQdGiaoNvXh: number;
+  @Input() isViewOnModal: boolean;
 
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -38,6 +39,8 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
 
   taiLieuDinhKemList: any[] = [];
   dataTable: any[] = [];
+  phieuXuatKho: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -183,10 +186,10 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
   };
 
   async bindingDataQd(id) {
-    await this.spinner.show();
     if (id > 0) {
+      await this.spinner.show();
       let dataRes = await this.quyetDinhNvXuatBttService.getDetail(id)
-      if (dataRes.data) {
+      if (dataRes.msg == MESSAGE.SUCCESS) {
         const data = dataRes.data;
         this.formData.patchValue({
           idQdNv: data.id,
@@ -203,16 +206,48 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
             donGia: dataHd.data.donGiaBanTrucTiep,
           });
         }
+        this.listPhieuXuatKho(data.soQdNv)
         let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
-        if (dataChiCuc) {
+        if (dataChiCuc && dataChiCuc.length > 0) {
           dataChiCuc.forEach(e => {
             this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
           });
           this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, dataRes.msg);
       }
+      await this.spinner.hide();
     }
-    await this.spinner.hide();
+  }
+
+  async listPhieuXuatKho(even) {
+    await this.spinner.show();
+    let body = {
+      soQdNv: even,
+      loaiVthh: this.loaiVthh,
+      namKh: this.formData.value.namKh,
+      maDvi: this.userInfo.MA_DVI,
+    }
+    let res = await this.phieuXuatKhoBttService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data
+      this.phieuXuatKho = data.content;
+      const diffList = [
+        ...this.listDiaDiemNhap.filter((item) => {
+          return !this.phieuXuatKho.some((child) => {
+            if (child.maNganKho.length > 0 && item.maNganKho.length > 0) {
+              return item.maNganKho === child.maNganKho;
+            } else {
+              return item.maDiemKho === child.maDiemKho;
+            }
+          });
+        }),
+      ];
+      this.listDiaDiemNhap = diffList;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   openDialogDdiemNhapHang() {
@@ -242,9 +277,7 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
         });
-
         await this.loadPhieuKtraCluong(data);
-
       }
     });
   }
@@ -255,35 +288,37 @@ export class ThemMoiPhieuXuatKhoBttComponent extends Base2Component implements O
       trangThai: STATUS.DA_DUYET_LDC,
     }
     let res = await this.phieuKtraCluongBttService.search(body)
-    const list = res.data.content;
-    this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && item.maLoKho == data.maLoKho));
-    const dataPhieu = this.listPhieuKtraCl[0]
-    if (dataPhieu) {
-      let resDetail = await this.phieuKtraCluongBttService.getDetail(dataPhieu.id);
-      if (resDetail.data) {
-        const dataPhieuKn = resDetail.data;
-        this.formData.patchValue({
-          idPhieu: dataPhieuKn.id,
-          soPhieu: dataPhieuKn.soPhieu,
-          loaiVthh: dataPhieuKn.loaiVthh,
-          tenLoaiVthh: dataPhieuKn.tenLoaiVthh,
-          cloaiVthh: dataPhieuKn.cloaiVthh,
-          tenCloaiVthh: dataPhieuKn.tenCloaiVthh,
-          moTaHangHoa: dataPhieuKn.moTaHangHoa,
-          ngayKnghiem: dataPhieuKn.ngayKnghiem,
-          idKtv: dataPhieuKn.idKtv,
-          tenKtv: dataPhieuKn.tenKtv,
-          soLuong: dataPhieuKn.soLuong,
-        });
-        let dataObj = {
-          moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
-          maSo: '',
-          donViTinh: this.formData.value.donViTinh,
-          soLuongChungTu: 0,
-          soLuongThucXuat: this.formData.value.soLuong,
-          donGia: this.formData.value.donGia
+    if (res.data) {
+      const list = res.data.content;
+      this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho && item.maNhaKho == data.maNhaKho && item.maNganKho == data.maNganKho && item.maLoKho == data.maLoKho));
+      const dataPhieu = this.listPhieuKtraCl[0]
+      if (dataPhieu) {
+        let resDetail = await this.phieuKtraCluongBttService.getDetail(dataPhieu.id);
+        if (resDetail.data) {
+          const dataPhieuKn = resDetail.data;
+          this.formData.patchValue({
+            idPhieu: dataPhieuKn.id,
+            soPhieu: dataPhieuKn.soPhieu,
+            loaiVthh: dataPhieuKn.loaiVthh,
+            tenLoaiVthh: dataPhieuKn.tenLoaiVthh,
+            cloaiVthh: dataPhieuKn.cloaiVthh,
+            tenCloaiVthh: dataPhieuKn.tenCloaiVthh,
+            moTaHangHoa: dataPhieuKn.moTaHangHoa,
+            ngayKnghiem: dataPhieuKn.ngayKnghiem,
+            idKtv: dataPhieuKn.idKtv,
+            tenKtv: dataPhieuKn.tenKtv,
+            soLuong: dataPhieuKn.soLuong,
+          });
+          let dataObj = {
+            moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
+            maSo: '',
+            donViTinh: this.formData.value.donViTinh,
+            soLuongChungTu: 0,
+            soLuongThucXuat: this.formData.value.soLuong,
+            donGia: this.formData.value.donGia
+          }
+          this.dataTable.push(dataObj)
         }
-        this.dataTable.push(dataObj)
       }
     }
   }

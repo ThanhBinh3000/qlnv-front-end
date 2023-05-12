@@ -17,6 +17,8 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { L } from '@angular/cdk/keycodes';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { async } from 'rxjs';
+import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 
 @Component({
   selector: 'app-chi-tiet-qd-pd-ket-qua-bdg',
@@ -29,6 +31,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
   fileDinhKems: any[] = []
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
+  loadMaThongBaoQd: any[] = [];
 
   maTrinh: String;
 
@@ -40,7 +43,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
-    private thongTinDauGiaService: ThongTinDauGiaService
+    private thongTinDauGiaService: ThongTinDauGiaService,
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
@@ -92,7 +96,6 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.apDung == 'XUAT_DG');
     }
@@ -218,10 +221,22 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         page: 0,
       }
     }
+    await this.loadMaThongBao();
     let listTb = [];
     let res = await this.thongTinDauGiaService.search(body);
-    if (res.data) {
-      listTb = res.data.content;
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = [
+        ...res.data.content.filter((item) => {
+          return !this.loadMaThongBaoQd.some((child) => {
+            if (child.maThongBao.length > 0 && item.maThongBao.length > 0) {
+              return item.maThongBao === child.maThongBao;
+            }
+          })
+        })
+      ];
+      listTb = data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách thông báo bán đấu giá',
@@ -231,7 +246,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: listTb,
+        dataTable: listTb.filter(s => s.ketQua == 1),
         dataHeader: ['Số quyết định phê duyệt KH BDG', 'Mã thông báo', 'Số biên bản'],
         dataColumn: ['soQdPd', 'maThongBao', 'soBienBan']
       },
@@ -244,15 +259,39 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
   }
 
   async onChangeTtinDgia(idTtinDgia) {
-    let res = await this.thongTinDauGiaService.getDetail(idTtinDgia);
-    console.log(res, 999)
+    if (idTtinDgia > 0) {
+      await this.thongTinDauGiaService.getDetail(idTtinDgia)
+        .then(async (resTb) => {
+          if (resTb.data) {
+            const dataTb = resTb.data
+            let resQdKhDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(dataTb.idQdPdDtl);
+            const dataQdKhDtl = resQdKhDtl.data;
+            this.formData.patchValue({
+              maThongBao: dataTb.maThongBao,
+              soBienBan: dataTb.soBienBan,
+              loaiVthh: dataTb.loaiVthh,
+              tenLoaiVthh: dataTb.tenLoaiVthh,
+              cloaiVthh: dataTb.cloaiVthh,
+              tenCloaiVthh: dataTb.tenCloaiVthh,
+              pthucGnhan: dataQdKhDtl.pthucGnhan,
+              tgianGnhan: dataQdKhDtl.tgianGnhan,
+              tgianGnhanGhiChu: dataQdKhDtl.tgianGnhanGhiChu,
+            })
+            this.dataTable = dataTb.children
+          }
+        })
+    }
+  }
+
+  async loadMaThongBao() {
+    let body = {
+      nam: this.formData.value.nam,
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
+    }
+    let res = await this.qdPdKetQuaBanDauGiaService.search(body)
     if (res.data) {
-      const data = res.data;
-      this.formData.patchValue({
-        maThongBao: data.maThongBao,
-        soBienBan: data.soBienBan,
-      })
-      this.dataTable = data.children
+      this.loadMaThongBaoQd = res.data.content
     }
   }
 
