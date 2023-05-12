@@ -200,6 +200,7 @@ export class PhuLuc2Component implements OnInit {
       this.total.dtoanSuDung = sumNumber([this.total.dtoanSuDung, item.dtoanSuDung]);
       this.total.tongCongDtoan = sumNumber([this.total.tongCongDtoan, item.tongCongDtoan]);
       this.total.dieuChinhDtoan = sumNumber([this.total.dieuChinhDtoan, item.dieuChinhDtoan]);
+      this.total.vuTvqtDnghiDtoan = sumNumber([this.total.vuTvqtDnghiDtoan, item.vuTvqtDnghiDtoan]);
       this.total.kphiConThieu = sumNumber([this.total.kphiConThieu, item.kphiConThieu]);
     })
   };
