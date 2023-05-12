@@ -86,7 +86,7 @@ export class ThemMoiTangHangDtqgComponent extends Base2Component implements OnIn
 
   async getDetail(id?: number, soDx?: string) {
     await this.bcBnTt145Service
-      .bcThopNhapXuatHangDtqgGetDetail(id)
+      .getDetail(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.listData = res.data;

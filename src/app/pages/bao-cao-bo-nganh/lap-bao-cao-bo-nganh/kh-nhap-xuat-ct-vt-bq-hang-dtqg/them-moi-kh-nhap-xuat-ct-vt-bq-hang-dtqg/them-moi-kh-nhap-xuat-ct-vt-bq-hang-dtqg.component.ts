@@ -91,7 +91,7 @@ export class ThemMoiKhNhapXuatCtVtBqHangDtqgComponent extends Base2Component imp
 
   async getDetail(id?: number, soDx?: string) {
     await this.bcBnTt145Service
-      .bcThopNhapXuatHangDtqgGetDetail(id)
+      .getDetail(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.listData = res.data;
