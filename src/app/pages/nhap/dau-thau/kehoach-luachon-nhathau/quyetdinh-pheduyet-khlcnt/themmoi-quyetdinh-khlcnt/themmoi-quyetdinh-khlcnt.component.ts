@@ -328,7 +328,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
-    debugger
     await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
