@@ -31,8 +31,14 @@
     <ng-container *ngIf="tabSelected == 0">
       <app-thanh-ly-danh-sach-hang></app-thanh-ly-danh-sach-hang>
     </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-tong-hop-thanh-ly></app-tong-hop-thanh-ly>
+    </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <app-quyet-dinh-thanh-ly></app-quyet-dinh-thanh-ly>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-thong-bao-ket-qua></app-thong-bao-ket-qua>
     </ng-container>
     <ng-container *ngIf="tabSelected == 7">
       <app-bao-cao-ket-qua-thanh-ly></app-bao-cao-ket-qua-thanh-ly>

@@ -50,6 +50,14 @@
               <span nz-icon nzType="fund"></span>
               <span>Tổng chi cho mua hàng DTQG trong kỳ</span>
             </li>
+            <li nz-menu-item (click)="selectTab(2)">
+              <span nz-icon nzType="fund"></span>
+              <span>KH mua hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(3)">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -88,6 +96,15 @@
       <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 8">
           <app-nguon-hinh-thanh-dtqg></app-nguon-hinh-thanh-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 1">
+          <app-tong-chi-mua-hang></app-tong-chi-mua-hang>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 2">
+          <app-tong-chi-mua-hang></app-tong-chi-mua-hang>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 3">
+          <app-sl-gtri-hang-dtqg></app-sl-gtri-hang-dtqg>
         </ng-container>
       </div>
     </div>

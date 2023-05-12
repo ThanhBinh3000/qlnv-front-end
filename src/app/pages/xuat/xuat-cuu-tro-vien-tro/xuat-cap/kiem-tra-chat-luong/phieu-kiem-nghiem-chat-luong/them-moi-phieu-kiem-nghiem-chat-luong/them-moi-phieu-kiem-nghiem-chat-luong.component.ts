@@ -4,7 +4,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -28,7 +27,7 @@ import {
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss']
 })
 export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -162,6 +161,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         truongPhong: this.userInfo.MA_KTBQ,
         soPhieuKnCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.loaiVthh,
       });
     }
 
@@ -195,6 +195,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -306,8 +308,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

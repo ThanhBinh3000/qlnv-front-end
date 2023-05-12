@@ -28,7 +28,19 @@
                     </div>
                     <div nz-col nzSpan="4" class="mt-16">
                         <label class="search__label">Ngày tổng hợp</label>
-                        <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <!-- <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                     <div nz-col nzSpan="8" class="mt-16">
                         <label class="search__label">Nội dung tổng hợp</label>
@@ -180,7 +192,7 @@
                             </a>
                             <a *ngIf="!viewOnly && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
                                 (click)="viewDetail(data.id, false)">
-                                <i class="fa fa-edit"></i>
+                                <i class="fa fa-pencil"></i>
                             </a>
                             <a
                                 *ngIf="!viewOnly && checkPermissonApprove(data.trangThai) && checkRoleApproveDc(data.trangThai)">

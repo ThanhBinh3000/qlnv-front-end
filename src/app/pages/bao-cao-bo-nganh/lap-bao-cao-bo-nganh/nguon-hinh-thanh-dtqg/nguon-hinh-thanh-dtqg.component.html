@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -73,7 +73,7 @@
     <div class="group-button">
       <h3>DANH SÁCH BÁO CÁO NGUỒN HÌNH THÀNH DỰ TRỮ QUỐC GIA</h3>
       <div class="buttons">
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="redirectDetail(false)">
           <i class="icon  htvbdh_icon_list"></i>
           Lập báo cáo
         </button>
@@ -96,17 +96,34 @@
         <tbody>
         <tr *ngFor="let data of dataTable; let i = index">
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.nam }}</td>
-          <td>{{ data.boNganh }}</td>
-          <td>{{ data.tgianTao | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tgianBhanh | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.namBc }}</td>
+          <td>{{ data.tenDonViGui }}</td>
+          <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.ngayBanHanh | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td></td>
+          <td>
+            <a (click)="redirectDetail(true, data)">
+            <i class="fa fa-eye"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO"
+               (click)="redirectDetail(false, data)">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO"
+               (click)="delete(data)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
         </tr>
         </tbody>
       </nz-table>
     </nz-card>
   </div>
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-them-moi-nguon-hinh-thanh-dtqg [idInput]="selectedId" [isView]="isView"
+                            (showListEvent)="showList()">
+  </app-them-moi-nguon-hinh-thanh-dtqg>
 </div>
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>

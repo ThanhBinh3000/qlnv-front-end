@@ -22,6 +22,7 @@ import { STATUS } from 'src/app/constants/status';
 import { chain, cloneDeep } from 'lodash';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { Validators } from '@angular/forms';
+import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 
 @Component({
   selector: 'app-thong-tin-hop-dong-btt',
@@ -33,7 +34,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   @Input() id: number;
   @Input() loaiVthh: string;
-  @Input() idKqBtt: number;
+  @Input() idBtt: number;
   @Input() isQuanLy: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -54,7 +55,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   listDviTsan: any[] = [];
   currentListMaDviTsan: any[];
   fileDinhKems: any[] = [];
-  canCuPhapLy
+  canCuPhapLy: any[] = [];
+  listAllDviTsan: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -66,6 +68,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
     private qdPdKetQuaBttService: QdPdKetQuaBttService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
     private danhMucService: DanhMucService,
+    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongBttService);
 
@@ -74,8 +77,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         id: [],
         namHd: [dayjs().get('year')],
         idQdKq: [],
-        soQdKq: ['', [Validators.required]],
-        ngayKyQdKq: [''],
+        soQdKq: ['',],
+        ngayKyQd: [''],
         ngayMkho: [''],
         ngayKyQdPd: [''],
         soQdPd: [''],
@@ -133,6 +136,8 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         trangThai: STATUS.DU_THAO,
         tenTrangThai: ['Dự thảo'],
         listMaDviTsan: [null],
+        idQdNv: [],
+        soQdNv: [''],
       }
     );
   }
@@ -148,8 +153,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes) {
-      if (this.idKqBtt) {
-        await this.onChangeKqBTT(this.idKqBtt);
+      if (this.idBtt) {
+        await this.onChangeKqBTT(this.idBtt);
+      }
+      if (this.idBtt) {
+        await this.onChangeQdKhBtt(this.idBtt);
       }
       await this.loadChiTiet(this.id);
     };
@@ -202,8 +210,14 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       })
       this.fileDinhKems = data.fileDinhKems;
       this.canCuPhapLy = data.canCuPhapLy;
-      this.maDviTsan(data.tenDviMua);
-      this.dataTable = cloneDeep(data.children);
+      if (this.userService.isCuc()) {
+        this.maDviTsan(data.tenDviMua);
+      }
+      if (!this.userService.isChiCuc()) {
+        this.dataTable = cloneDeep(data.children);
+      } else {
+        this.dataTable = cloneDeep(data.xhHopDongBttDviList)
+      }
       this.dataTablePhuLuc = data?.phuLuc || [];
       this.objHopDongHdr = data || {};
     }
@@ -222,7 +236,11 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       body.tgianGnhanTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
       body.tgianGnhanDen = dayjs(this.formData.get('thoiGianDuKien').value[1]).format('YYYY-MM-DD')
     }
-    body.children = this.dataTable;
+    if (!this.userService.isChiCuc()) {
+      body.children = this.dataTable;
+    } else {
+      body.xhHopDongBttDviList = this.dataTable;
+    }
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLy = this.canCuPhapLy;
     let data = await this.createUpdate(body);
@@ -238,37 +256,35 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   async openDialogKqBTT() {
     this.spinner.show()
     let listQdKq: any[] = [];
-    if (this.userService.isCuc()) {
-      let body = {
-        loaiVthh: this.loaiVthh,
-        namKh: this.formData.value.namHd,
-        maDvi: this.userInfo.MA_DVI,
-        trangThai: STATUS.BAN_HANH
-      };
-      let res = await this.qdPdKetQuaBttService.search(body)
-      if (res.data) {
-        listQdKq = res.data?.content;
-      }
-      this.spinner.hide();
-      const modalQD = this.modal.create({
-        nzTitle: 'THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ',
-        nzContent: DialogTableSelectionComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '900px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataHeader: ['Số QĐ PD KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
-          dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
-          dataTable: listQdKq
-        },
-      });
-      modalQD.afterClose.subscribe(async (data) => {
-        if (data) {
-          this.onChangeKqBTT(data.id);
-        }
-      });
+    let body = {
+      loaiVthh: this.loaiVthh,
+      namKh: this.formData.value.namHd,
+      maDvi: this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH
+    };
+    let res = await this.qdPdKetQuaBttService.search(body)
+    if (res.data) {
+      listQdKq = res.data?.content;
     }
+    this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHeader: ['Số QĐ PD KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soQdKq', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataTable: listQdKq
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.onChangeKqBTT(data.id);
+      }
+    });
   }
 
   async onChangeKqBTT(id) {
@@ -285,7 +301,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
               idQdKq: dataKq.id,
               soQdKq: dataKq.soQdKq,
               ngayMkho: dataKq.ngayMkho,
-              ngayKyQdKq: dataKq.ngayKy,
+              ngayKyQd: dataKq.ngayKy,
               soQdPd: dataKq.soQdPd,
               loaiHinhNx: dataKq.loaiHinhNx,
               kieuNx: dataKq.kieuNx,
@@ -445,14 +461,144 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
 
-  async loadDsHd(event) {
+
+  async openDialogQdKhBtt() {
+    this.spinner.show()
+    let listQdKq: any[] = [];
     let body = {
+      loaiVthh: this.loaiVthh,
+      namKh: this.formData.value.namHd,
+      maChiCuc: this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH
+    };
+    let res = await this.quyetDinhNvXuatBttService.search(body)
+    if (res.data) {
+      listQdKq = res.data?.content;
+    }
+    this.spinner.hide();
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHeader: ['Số QĐ PD KQ chào giá', ' Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soQdNv', 'tenLoaiVthh', 'tenCloaiVthh'],
+        dataTable: listQdKq
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.onChangeQdKhBtt(data.id);
+      }
+    });
+  }
+
+  async onChangeQdKhBtt(id) {
+    if (id > 0) {
+      await this.quyetDinhNvXuatBttService.getDetail(id)
+        .then(async (resKq) => {
+          if (resKq.data) {
+            const dataQdNv = resKq.data;
+            let resQdPd = await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(dataQdNv.idQdPdDtl);
+            const dataQdPd = resQdPd.data;
+            await this.loadDsHd(dataQdNv.soQdNv)
+            await this.setMaDviTsan(dataQdNv.children);
+            let tongSlXuatBanQdKh: number = 0
+            dataQdNv.children.forEach(item => {
+              tongSlXuatBanQdKh += item.soLuongChiCuc
+            })
+            this.formData.patchValue({
+              idQdPd: dataQdNv.idQdPd,
+              soQdPd: dataQdNv.soQdPd,
+              idQdNv: dataQdNv.id,
+              soQdNv: dataQdNv.soQdNv,
+              ngayKyQd: dataQdPd.xhQdPdKhBttHdr.ngayKyQd,
+              ngayMkho: dataQdPd.ngayMkho,
+              loaiHinhNx: dataQdPd.xhQdPdKhBttHdr.loaiHinhNx,
+              kieuNx: dataQdPd.xhQdPdKhBttHdr.kieuNx,
+              loaiVthh: dataQdNv.loaiVthh,
+              tenLoaiVthh: dataQdNv.tenLoaiVthh,
+              cloaiVthh: dataQdNv.cloaiVthh,
+              tenCloaiVthh: dataQdNv.tenCloaiVthh,
+              moTaHangHoa: dataQdNv.moTaHangHoa,
+              tongSlXuatBanQdKh: tongSlXuatBanQdKh
+            });
+            this.formData.patchValue({
+              donViTinh: this.listHangHoaAll.find(s => s.ma == dataQdNv.loaiVthh,)?.maDviTinh
+            })
+          }
+        })
+    }
+  }
+
+  setMaDviTsan(inputTable) {
+    this.listDviTsan = [];
+    inputTable.forEach((item) => {
+      item.children.forEach((child) => {
+        if (child.maDviTsan) {
+          this.listDviTsan = [...this.listDviTsan, child];
+        }
+      })
+    })
+    this.listAllDviTsan = this.listDviTsan;
+    this.listDviTsan = this.listDviTsan.filter(s => !this.listHdDaKy.some(s1 => {
+      return s1.maDviTsan.split(',').includes(s.maDviTsan);
+    })
+    );
+  }
+
+  selectMaDviTsanQd() {
+    this.dataTable = [];
+    let currentSelectList = cloneDeep(this.listDviTsan);
+    if (this.formData.value.listMaDviTsan && this.formData.value.listMaDviTsan.length > 0) {
+      let listAll = currentSelectList.filter(s => this.formData.value.listMaDviTsan.includes(s.maDviTsan));
+      listAll.forEach(item => {
+        this.dataTable = [...this.dataTable, item]
+      });
+      this.calculatorTableChiCuc();
+    } else {
+      this.dataTable = []
+    }
+  }
+
+  calculatorTableChiCuc() {
+    let soLuongBanTrucTiep: number = 0;
+    let donGiaBanTrucTiep: number = 0;
+    let tongSlBanttQdkhDakyHd: number = 0;
+    this.dataTable.forEach((item) => {
+      soLuongBanTrucTiep += item.soLuongDeXuat
+      donGiaBanTrucTiep = item.donGiaDuocDuyet
+
+    });
+    this.listHdDaKy.forEach(y => {
+      tongSlBanttQdkhDakyHd += y.soLuongBanTrucTiep
+    })
+    this.formData.patchValue({
+      soLuongBanTrucTiep: soLuongBanTrucTiep,
+      donGiaBanTrucTiep: donGiaBanTrucTiep,
+      tongSlBanttQdkhChuakyHd: this.formData.value.tongSlXuatBanQdKh - (soLuongBanTrucTiep + tongSlBanttQdkhDakyHd),
+      thanhTien: soLuongBanTrucTiep * donGiaBanTrucTiep
+    });
+  }
+
+  async loadDsHd(event) {
+    let bodyCuc = {
       soQdKq: event,
       trangThai: STATUS.DA_KY,
       loaiVthh: this.loaiVthh,
       namHd: this.formData.value.namHd,
     }
-    let res = await this.hopDongBttService.search(body);
+
+    let bodyChiCuc = {
+      soQdNv: event,
+      trangThai: STATUS.DA_KY,
+      loaiVthh: this.loaiVthh,
+      namHd: this.formData.value.namHd,
+    }
+    let res = await this.hopDongBttService.search(this.userService.isCuc() ? bodyCuc : bodyChiCuc);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listHdDaKy = data.content;
@@ -566,92 +712,178 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   setValidator(isOther) {
-    if (isOther) {
-      this.formData.controls["namHd"].setValidators([Validators.required]);
-      this.formData.controls["ngayKyQdKq"].setValidators([Validators.required]);
-      this.formData.controls["ngayMkho"].setValidators([Validators.required]);
-      this.formData.controls["soQdPd"].setValidators([Validators.required]);
-      this.formData.controls["tenDviMua"].setValidators([Validators.required]);
-      this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
-      this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
-      this.formData.controls["soHd"].setValidators([Validators.required]);
-      this.formData.controls["tenHd"].setValidators([Validators.required]);
-      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-      this.formData.controls["ghiChuNgayHluc"].setValidators([Validators.required]);
-      this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-      this.formData.controls["ghiChuLoaiHdong"].setValidators([Validators.required]);
-      this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
-      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
-      this.formData.controls["ghiChuTgianGnhan"].setValidators([Validators.required]);
-      this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
-      this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
-      this.formData.controls["maDvi"].setValidators([Validators.required]);
-      this.formData.controls["tenDvi"].setValidators([Validators.required]);
-      this.formData.controls["diaChiDvi"].setValidators([Validators.required]);
-      this.formData.controls["mst"].setValidators([Validators.required]);
-      this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
-      this.formData.controls["chucVu"].setValidators([Validators.required]);
-      this.formData.controls["sdt"].setValidators([Validators.required]);
-      this.formData.controls["fax"].setValidators([Validators.required]);
-      this.formData.controls["stk"].setValidators([Validators.required]);
-      this.formData.controls["moTai"].setValidators([Validators.required]);
-      this.formData.controls["ttinGiayUyQuyen"].setValidators([Validators.required]);
-      this.formData.controls["tenDviMua"].setValidators([Validators.required]);
-      this.formData.controls["diaChiDviMua"].setValidators([Validators.required]);
-      this.formData.controls["mstDviMua"].setValidators([Validators.required]);
-      this.formData.controls["tenNguoiDdienDviMua"].setValidators([Validators.required]);
-      this.formData.controls["chucVuDviMua"].setValidators([Validators.required]);
-      this.formData.controls["sdtDviMua"].setValidators([Validators.required]);
-      this.formData.controls["faxDviMua"].setValidators([Validators.required]);
-      this.formData.controls["stkDviMua"].setValidators([Validators.required]);
-      this.formData.controls["moTaiDviMua"].setValidators([Validators.required]);
-      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    if (this.userService.isCuc) {
+      if (isOther) {
+        this.formData.controls["namHd"].setValidators([Validators.required]);
+        this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+        this.formData.controls["ngayMkho"].setValidators([Validators.required]);
+        this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
+        this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+        this.formData.controls["soHd"].setValidators([Validators.required]);
+        this.formData.controls["tenHd"].setValidators([Validators.required]);
+        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuNgayHluc"].setValidators([Validators.required]);
+        this.formData.controls["loaiHdong"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuLoaiHdong"].setValidators([Validators.required]);
+        this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+        this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuTgianGnhan"].setValidators([Validators.required]);
+        this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
+        this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
+        this.formData.controls["maDvi"].setValidators([Validators.required]);
+        this.formData.controls["tenDvi"].setValidators([Validators.required]);
+        this.formData.controls["diaChiDvi"].setValidators([Validators.required]);
+        this.formData.controls["mst"].setValidators([Validators.required]);
+        this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+        this.formData.controls["chucVu"].setValidators([Validators.required]);
+        this.formData.controls["sdt"].setValidators([Validators.required]);
+        this.formData.controls["fax"].setValidators([Validators.required]);
+        this.formData.controls["stk"].setValidators([Validators.required]);
+        this.formData.controls["moTai"].setValidators([Validators.required]);
+        this.formData.controls["ttinGiayUyQuyen"].setValidators([Validators.required]);
+        this.formData.controls["tenDviMua"].setValidators([Validators.required]);
+        this.formData.controls["diaChiDviMua"].setValidators([Validators.required]);
+        this.formData.controls["mstDviMua"].setValidators([Validators.required]);
+        this.formData.controls["tenNguoiDdienDviMua"].setValidators([Validators.required]);
+        this.formData.controls["chucVuDviMua"].setValidators([Validators.required]);
+        this.formData.controls["sdtDviMua"].setValidators([Validators.required]);
+        this.formData.controls["faxDviMua"].setValidators([Validators.required]);
+        this.formData.controls["stkDviMua"].setValidators([Validators.required]);
+        this.formData.controls["moTaiDviMua"].setValidators([Validators.required]);
+        this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["namHd"].clearValidators();
+        this.formData.controls["ngayKyQd"].clearValidators();
+        this.formData.controls["ngayMkho"].clearValidators();
+        this.formData.controls["listMaDviTsan"].clearValidators();
+        this.formData.controls["loaiHinhNx"].clearValidators();
+        this.formData.controls["soHd"].clearValidators();
+        this.formData.controls["tenHd"].clearValidators();
+        this.formData.controls["ngayHluc"].clearValidators();
+        this.formData.controls["ghiChuNgayHluc"].clearValidators();
+        this.formData.controls["loaiHdong"].clearValidators();
+        this.formData.controls["ghiChuLoaiHdong"].clearValidators();
+        this.formData.controls["tgianThienHd"].clearValidators();
+        this.formData.controls["thoiGianDuKien"].clearValidators();
+        this.formData.controls["ghiChuTgianGnhan"].clearValidators();
+        this.formData.controls["noiDungHdong"].clearValidators();
+        this.formData.controls["dkienHanTtoan"].clearValidators();
+        this.formData.controls["maDvi"].clearValidators();
+        this.formData.controls["tenDvi"].clearValidators();
+        this.formData.controls["diaChiDvi"].clearValidators();
+        this.formData.controls["mst"].clearValidators();
+        this.formData.controls["tenNguoiDdien"].clearValidators();
+        this.formData.controls["chucVu"].clearValidators();
+        this.formData.controls["sdt"].clearValidators();
+        this.formData.controls["fax"].clearValidators();
+        this.formData.controls["stk"].clearValidators();
+        this.formData.controls["moTai"].clearValidators();
+        this.formData.controls["ttinGiayUyQuyen"].clearValidators();
+        this.formData.controls["tenDviMua"].clearValidators();
+        this.formData.controls["diaChiDviMua"].clearValidators();
+        this.formData.controls["mstDviMua"].clearValidators();
+        this.formData.controls["tenNguoiDdienDviMua"].clearValidators();
+        this.formData.controls["chucVuDviMua"].clearValidators();
+        this.formData.controls["sdtDviMua"].clearValidators();
+        this.formData.controls["faxDviMua"].clearValidators();
+        this.formData.controls["stkDviMua"].clearValidators();
+        this.formData.controls["moTaiDviMua"].clearValidators();
+        this.formData.controls["loaiVthh"].clearValidators();
+        this.formData.controls["tenLoaiVthh"].clearValidators();
+        this.formData.controls["cloaiVthh"].clearValidators();
+        this.formData.controls["tenCloaiVthh"].clearValidators();
+      }
     } else {
-      this.formData.controls["namHd"].clearValidators();
-      this.formData.controls["ngayKyQdKq"].clearValidators();
-      this.formData.controls["ngayMkho"].clearValidators();
-      this.formData.controls["soQdPd"].clearValidators();
-      this.formData.controls["tenDviMua"].clearValidators();
-      this.formData.controls["listMaDviTsan"].clearValidators();
-      this.formData.controls["loaiHinhNx"].clearValidators();
-      this.formData.controls["soHd"].clearValidators();
-      this.formData.controls["tenHd"].clearValidators();
-      this.formData.controls["ngayHluc"].clearValidators();
-      this.formData.controls["ghiChuNgayHluc"].clearValidators();
-      this.formData.controls["loaiHdong"].clearValidators();
-      this.formData.controls["ghiChuLoaiHdong"].clearValidators();
-      this.formData.controls["tgianThienHd"].clearValidators();
-      this.formData.controls["thoiGianDuKien"].clearValidators();
-      this.formData.controls["ghiChuTgianGnhan"].clearValidators();
-      this.formData.controls["noiDungHdong"].clearValidators();
-      this.formData.controls["dkienHanTtoan"].clearValidators();
-      this.formData.controls["maDvi"].clearValidators();
-      this.formData.controls["tenDvi"].clearValidators();
-      this.formData.controls["diaChiDvi"].clearValidators();
-      this.formData.controls["mst"].clearValidators();
-      this.formData.controls["tenNguoiDdien"].clearValidators();
-      this.formData.controls["chucVu"].clearValidators();
-      this.formData.controls["sdt"].clearValidators();
-      this.formData.controls["fax"].clearValidators();
-      this.formData.controls["stk"].clearValidators();
-      this.formData.controls["moTai"].clearValidators();
-      this.formData.controls["ttinGiayUyQuyen"].clearValidators();
-      this.formData.controls["tenDviMua"].clearValidators();
-      this.formData.controls["diaChiDviMua"].clearValidators();
-      this.formData.controls["mstDviMua"].clearValidators();
-      this.formData.controls["tenNguoiDdienDviMua"].clearValidators();
-      this.formData.controls["chucVuDviMua"].clearValidators();
-      this.formData.controls["sdtDviMua"].clearValidators();
-      this.formData.controls["faxDviMua"].clearValidators();
-      this.formData.controls["stkDviMua"].clearValidators();
-      this.formData.controls["moTaiDviMua"].clearValidators();
-      this.formData.controls["loaiVthh"].clearValidators();
-      this.formData.controls["tenLoaiVthh"].clearValidators();
-      this.formData.controls["cloaiVthh"].clearValidators();
-      this.formData.controls["tenCloaiVthh"].clearValidators();
+      if (isOther) {
+        this.formData.controls["namHd"].setValidators([Validators.required]);
+        this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
+        this.formData.controls["ngayMkho"].setValidators([Validators.required]);
+        this.formData.controls["soQdPd"].setValidators([Validators.required]);
+        this.formData.controls["tenDviMua"].setValidators([Validators.required]);
+        this.formData.controls["listMaDviTsan"].setValidators([Validators.required]);
+        this.formData.controls["loaiHinhNx"].setValidators([Validators.required]);
+        this.formData.controls["soHd"].setValidators([Validators.required]);
+        this.formData.controls["tenHd"].setValidators([Validators.required]);
+        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuNgayHluc"].setValidators([Validators.required]);
+        this.formData.controls["loaiHdong"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuLoaiHdong"].setValidators([Validators.required]);
+        this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+        this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+        this.formData.controls["ghiChuTgianGnhan"].setValidators([Validators.required]);
+        this.formData.controls["noiDungHdong"].setValidators([Validators.required]);
+        this.formData.controls["dkienHanTtoan"].setValidators([Validators.required]);
+        this.formData.controls["maDvi"].setValidators([Validators.required]);
+        this.formData.controls["tenDvi"].setValidators([Validators.required]);
+        this.formData.controls["diaChiDvi"].setValidators([Validators.required]);
+        this.formData.controls["mst"].setValidators([Validators.required]);
+        this.formData.controls["tenNguoiDdien"].setValidators([Validators.required]);
+        this.formData.controls["chucVu"].setValidators([Validators.required]);
+        this.formData.controls["sdt"].setValidators([Validators.required]);
+        this.formData.controls["fax"].setValidators([Validators.required]);
+        this.formData.controls["stk"].setValidators([Validators.required]);
+        this.formData.controls["moTai"].setValidators([Validators.required]);
+        this.formData.controls["ttinGiayUyQuyen"].setValidators([Validators.required]);
+        this.formData.controls["tenDviMua"].setValidators([Validators.required]);
+        this.formData.controls["diaChiDviMua"].setValidators([Validators.required]);
+        this.formData.controls["mstDviMua"].setValidators([Validators.required]);
+        this.formData.controls["tenNguoiDdienDviMua"].setValidators([Validators.required]);
+        this.formData.controls["chucVuDviMua"].setValidators([Validators.required]);
+        this.formData.controls["sdtDviMua"].setValidators([Validators.required]);
+        this.formData.controls["faxDviMua"].setValidators([Validators.required]);
+        this.formData.controls["stkDviMua"].setValidators([Validators.required]);
+        this.formData.controls["moTaiDviMua"].setValidators([Validators.required]);
+        this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["tenLoaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+        this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["namHd"].clearValidators();
+        this.formData.controls["ngayKyQd"].clearValidators();
+        this.formData.controls["ngayMkho"].clearValidators();
+        this.formData.controls["soQdPd"].clearValidators();
+        this.formData.controls["tenDviMua"].clearValidators();
+        this.formData.controls["listMaDviTsan"].clearValidators();
+        this.formData.controls["loaiHinhNx"].clearValidators();
+        this.formData.controls["soHd"].clearValidators();
+        this.formData.controls["tenHd"].clearValidators();
+        this.formData.controls["ngayHluc"].clearValidators();
+        this.formData.controls["ghiChuNgayHluc"].clearValidators();
+        this.formData.controls["loaiHdong"].clearValidators();
+        this.formData.controls["ghiChuLoaiHdong"].clearValidators();
+        this.formData.controls["tgianThienHd"].clearValidators();
+        this.formData.controls["thoiGianDuKien"].clearValidators();
+        this.formData.controls["ghiChuTgianGnhan"].clearValidators();
+        this.formData.controls["noiDungHdong"].clearValidators();
+        this.formData.controls["dkienHanTtoan"].clearValidators();
+        this.formData.controls["maDvi"].clearValidators();
+        this.formData.controls["tenDvi"].clearValidators();
+        this.formData.controls["diaChiDvi"].clearValidators();
+        this.formData.controls["mst"].clearValidators();
+        this.formData.controls["tenNguoiDdien"].clearValidators();
+        this.formData.controls["chucVu"].clearValidators();
+        this.formData.controls["sdt"].clearValidators();
+        this.formData.controls["fax"].clearValidators();
+        this.formData.controls["stk"].clearValidators();
+        this.formData.controls["moTai"].clearValidators();
+        this.formData.controls["ttinGiayUyQuyen"].clearValidators();
+        this.formData.controls["tenDviMua"].clearValidators();
+        this.formData.controls["diaChiDviMua"].clearValidators();
+        this.formData.controls["mstDviMua"].clearValidators();
+        this.formData.controls["tenNguoiDdienDviMua"].clearValidators();
+        this.formData.controls["chucVuDviMua"].clearValidators();
+        this.formData.controls["sdtDviMua"].clearValidators();
+        this.formData.controls["faxDviMua"].clearValidators();
+        this.formData.controls["stkDviMua"].clearValidators();
+        this.formData.controls["moTaiDviMua"].clearValidators();
+        this.formData.controls["loaiVthh"].clearValidators();
+        this.formData.controls["tenLoaiVthh"].clearValidators();
+        this.formData.controls["cloaiVthh"].clearValidators();
+        this.formData.controls["tenCloaiVthh"].clearValidators();
+      }
     }
   }
 }

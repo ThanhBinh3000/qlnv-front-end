@@ -12,7 +12,6 @@ import {
   KtKhSuaChuaBtcService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 import dayjs from "dayjs";
-import {STATUS} from "../../../../../../constants/status";
 import {
   DeXuatScLonService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
@@ -212,36 +211,25 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       })
   }
 
-  editRow(idx: number) {
-    this.isEdit = idx
-    this.dataEdit = this.dataTable[idx].ncKhVon
-  }
-
-  deleteItem(index: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 400,
-      nzOnOk: async () => {
-        try {
-          this.dataTable.splice(index, 1);
-        } catch (e) {
-          console.log('error', e);
-        }
-      },
-    });
-  }
-
-  saveEdit() {
-    this.isEdit = -1;
-  }
-
-  cancelEdit(data: any) {
-    data.ncKhVon = this.dataEdit
-    this.isEdit = -1
+  sumSoLuong(data: any, row: string, type?: any) {
+    let sl = 0;
+    if (!type) {
+      if (data && data.dataChild && data.dataChild.length > 0) {
+        const sum = data.dataChild.reduce((prev, cur) => {
+          prev += cur[row];
+          return prev;
+        }, 0);
+        sl = sum;
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        let sum = 0;
+        this.dataTable.forEach(item => {
+          sum += this.sumSoLuong(item, row);
+        });
+        sl = sum;
+      }
+    }
+    return sl;
   }
 }

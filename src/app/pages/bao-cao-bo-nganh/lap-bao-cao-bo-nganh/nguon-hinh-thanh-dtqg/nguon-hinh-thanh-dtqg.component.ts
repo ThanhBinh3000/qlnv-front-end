@@ -1,17 +1,15 @@
 import { Component, OnInit } from "@angular/core";
-import { BcBnTt108Service } from "../../../../services/bao-cao/BcBnTt108.service";
+import { BcBnTt130Service } from "../../../../services/bao-cao/BcBnTt130.service";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { BcCLuongHangDTQGService } from "../../../../services/bao-cao/BcCLuongHangDTQG.service";
 import { UserService } from "../../../../services/user.service";
-import { DonviService } from "../../../../services/donvi.service";
-import { Globals } from "../../../../shared/globals";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { Base2Component } from "../../../../components/base2/base2.component";
+import { MESSAGE } from "../../../../constants/message";
 
 @Component({
   selector: "app-nguon-hinh-thanh-dtqg",
@@ -25,13 +23,15 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
     {text: 'Quý III', value: 3},
     {text: 'Quý IV', value: 4},
   ]
+  selectedId: number = 0;
+  isView: boolean = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private bcBnTt108Service: BcBnTt108Service,
+              private bcBnTt108Service: BcBnTt130Service,
               public userService: UserService,) {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
@@ -42,6 +42,7 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
         tuNgayKyGui: [null],
         denNgayTao: [null],
         denNgayKyGui: [null],
+        bieuSo: ["001.H/BCDTQG-BN"],
       }
     );
   }
@@ -78,6 +79,33 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
   };
 
   ngOnInit(): void {
+    this.search();
+  }
+
+  async search() {
+    this.spinner.show();
+    this.formData.patchValue({
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      tuNgayKyGui: this.tuNgayKyGui != null ? dayjs(this.tuNgayKyGui).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59" : null,
+      denNgayKyGui: this.denNgayKyGui != null ? dayjs(this.denNgayKyGui).format('YYYY-MM-DD') + " 23:59:59" : null,
+    })
+    let body = this.formData.value;
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
+    }
+    let res = await this.bcBnTt108Service.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 
   async clearFilter() {
@@ -93,4 +121,11 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
     this.denNgayKyGui = null;
   }
 
+  redirectDetail(isView, data?) {
+    this.selectedId = data?.id;
+    this.isDetail = true;
+    if (isView != null) {
+      this.isView = isView;
+    }
+  }
 }

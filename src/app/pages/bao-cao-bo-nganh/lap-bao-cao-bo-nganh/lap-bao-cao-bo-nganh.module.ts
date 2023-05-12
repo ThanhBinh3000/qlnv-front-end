@@ -23,6 +23,11 @@ import { KhNhapXuatCtVtBqHangDtqgComponent } from './kh-nhap-xuat-ct-vt-bq-hang-
 import { ThemMoiKhNhapXuatCtVtBqHangDtqgComponent } from './kh-nhap-xuat-ct-vt-bq-hang-dtqg/them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg/them-moi-kh-nhap-xuat-ct-vt-bq-hang-dtqg.component';
 import { NhapXuatTonKhoHangDtqgComponent } from './nhap-xuat-ton-kho-hang-dtqg/nhap-xuat-ton-kho-hang-dtqg.component';
 import { ThemMoiNhapXuatTonKhoHangDtqgComponent } from './nhap-xuat-ton-kho-hang-dtqg/them-moi-nhap-xuat-ton-kho-hang-dtqg/them-moi-nhap-xuat-ton-kho-hang-dtqg.component';
+import { TongChiMuaHangComponent } from './tong-chi-mua-hang/tong-chi-mua-hang.component';
+import { ThemMoiTongChiMuaHangComponent } from './tong-chi-mua-hang/them-moi-tong-chi-mua-hang/them-moi-tong-chi-mua-hang.component';
+import { SlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/sl-gtri-hang-dtqg.component';
+import { ThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg.component';
+import { DialogThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component';
 
 
 
@@ -42,7 +47,13 @@ import { ThemMoiNhapXuatTonKhoHangDtqgComponent } from './nhap-xuat-ton-kho-hang
     KhNhapXuatCtVtBqHangDtqgComponent,
     ThemMoiKhNhapXuatCtVtBqHangDtqgComponent,
     NhapXuatTonKhoHangDtqgComponent,
-    ThemMoiNhapXuatTonKhoHangDtqgComponent
+    ThemMoiNhapXuatTonKhoHangDtqgComponent,
+    ThemMoiNguonHinhThanhDtqgComponent,
+    TongChiMuaHangComponent,
+    ThemMoiTongChiMuaHangComponent,
+    SlGtriHangDtqgComponent,
+    ThemMoiSlGtriHangDtqgComponent,
+    DialogThemMoiSlGtriHangDtqgComponent
   ],
   imports: [
     CommonModule,

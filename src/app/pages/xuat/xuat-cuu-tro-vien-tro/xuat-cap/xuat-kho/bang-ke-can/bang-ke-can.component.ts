@@ -1,22 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import dayjs from "dayjs";
-import { UserLogin } from "src/app/models/userlogin";
-import { MESSAGE } from "src/app/constants/message";
-import { chain, isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {UserLogin} from "src/app/models/userlogin";
+import {MESSAGE} from "src/app/constants/message";
+import {chain, isEmpty} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
+import {XuatCuuTroVienTroComponent} from "../../../xuat-cuu-tro-vien-tro.component";
+import {CHUC_NANG} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-xc-bang-ke-can',
@@ -25,7 +27,8 @@ import {
 })
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  public vldTrangThai: XuatCuuTroVienTroComponent;
+  public CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -34,6 +37,8 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   isView = false;
   expandSetString = new Set<string>();
   dataView: any = [];
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
 
   constructor(
     httpClient: HttpClient,
@@ -43,16 +48,24 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-    private bangKeCanCtvtService: BangKeCanCtvtService
+    private bangKeCanCtvtService: BangKeCanCtvtService,
+    private xuatCuuTroVienTroComponent: XuatCuuTroVienTroComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanCtvtService);
+    this.vldTrangThai = xuatCuuTroVienTroComponent;
     this.formData = this.fb.group({
       id: [0],
-      nam: dayjs().get('year'),
+      nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
+      loaiVthh: [],
       thoiGianGiaoNhan: [],
+      thoiGianGiaoNhanTu: [],
+      thoiGianGiaoNhanDen: [],
       ngayQdGiaoNvXh: [],
+      ngayXuat: [],
+      ngayXuatTu: [],
+      ngayXuatDen: [],
       maDiemKho: [],
       maNhaKho: [],
       maNganKho: [],
@@ -65,6 +78,34 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       type: []
     })
   }
+
+  disabledStartNgayQd = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.thoiGianGiaoNhanDen) {
+      return startValue.getTime() >= this.formData.value.thoiGianGiaoNhanDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayQd = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.thoiGianGiaoNhanTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.thoiGianGiaoNhanTu.getTime();
+  };
+
+  disabledStartNgayXk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayXuatDen) {
+      return startValue.getTime() >= this.formData.value.ngayXuatDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayXk = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayXuatTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
+  };
 
   async ngOnInit() {
     try {
@@ -105,8 +146,10 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     await this.spinner.show()
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CAP";
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CAP"
+    });
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
@@ -153,38 +196,35 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("maLoKho")
           .map((v, k) => {
-            let rowLv2 = v.find(s => s.maLoKho === k);
-            return {
-              id: rowLv2.id,
-              idVirtual: uuidv4(),
-              maLoKho: k,
-              tenLoKho: rowLv2.tenLoKho,
-              maDiemKho: rowLv2.maDiemKho,
-              tenDiemKho: rowLv2.tenDiemKho,
-              maNganKho: rowLv2.maNganKho,
-              tenNganKho: rowLv2.tenNganKho,
-              soPhieuXuatKho: rowLv2.soPhieuXuatKho,
-              maKho: rowLv2.maKho,
-              tenKho: rowLv2.tenKho,
-              trangThai: rowLv2.trangThai,
-              tenTrangThai: rowLv2.tenTrangThai,
-              childData: v
+              let rowLv2 = v.find(s => s.maLoKho === k);
+              return {
+                id: rowLv2 ? rowLv2.id : null,
+                idVirtual: uuidv4(),
+                maLoKho: k != "null" ? k : '',
+                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
+                maDiemKho: rowLv2 ? rowLv2.maDiemKho : null,
+                tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
+                maNganKho: rowLv2 ? rowLv2.maNganKho : null,
+                tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
+                soPhieuXuatKho: rowLv2 ? rowLv2.soPhieuXuatKho : null,
+                maKho: rowLv2 ? rowLv2.maKho : null,
+                tenKho: rowLv2 ? rowLv2.tenKho : null,
+                trangThai: rowLv2 ? rowLv2.trangThai : null,
+                tenTrangThai: rowLv2 ? rowLv2.tenTrangThai : null,
+                childData: v
+              }
             }
-          }
           ).value();
-        // let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
-        // let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
         let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
         return {
           idVirtual: uuidv4(),
-          soQdGiaoNvXh: key,
-          nam: rowLv1.nam,
-          thoiGianGiaoNhan: rowLv1.thoiGianGiaoNhan,
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: rowLv1 ? rowLv1.nam : null,
+          thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
           childData: rs
         };
       }).value();
     this.dataView = dataView
-    console.log(this.dataView, 'dataView')
     this.expandAll()
   }
 
@@ -196,5 +236,23 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async deleteRow(lv2: any) {
     await this.delete(lv2);
+  }
+
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = b;
+    // this.isViewDetail = isView ?? false;
+  }
+
+  openPhieuXkModal(id: number) {
+    console.log(id, 'id');
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
   }
 }

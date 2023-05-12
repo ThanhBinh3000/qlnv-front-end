@@ -18,39 +18,38 @@
                         <span>Quay lại</span>
                     </button>
                     <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
-                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
+                        *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
                         formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Y/c Chi cục xác định điểm nhập ĐC</span>
                     </button>
                     <button
-                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
                         type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
                     <button
-                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
                         type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
                     <button
-                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
                         type="button" class="btn btn-sub"
                         (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
                     <button
-                        *ngIf="!isViewDetail && formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
+                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
                         type="button" class="btn btn-sub"
                         (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
-                    <button *ngIf="(isTongHop && !isViewDetail)  && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC || formData.value.trangThai==STATUS.TU_CHOI_LDV ||
-                        formData.value.trangThai==STATUS.TU_CHOI_LDC || formData.value.trangThai==STATUS.TU_CHOI_TP) &&
+                    <button *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) &&
                         userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')" type="button"
                         class="btn btn-sub" (click)="saveAndSend()"
                         [disabled]="formData.value.loaiDieuChuyen=='CHI_CUC' && !daXdinhDiemNhap">
@@ -58,9 +57,8 @@
                         <span>Lưu và gửi duyệt</span>
                     </button>
                     <button
-                        *ngIf="(isTongHop && !isViewDetail)  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || 
-                        formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
-                        nz-button type="button" class="modal__button--save" (click)="save()">
+                        *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
+                        nz-button type="button" class="modal__button--save" (click)="save(false, false)">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
@@ -128,7 +126,8 @@
         </nz-card>
     </div>
 </ng-container>
-<ng-container *ngIf="isTongHop">
+<ng-container
+    *ngIf="isTongHop && ((this.formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (this.formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0))">
     <div class="bg-trang">
         <nz-card class="flex-card pd-l-6 pd-r-6">
             <nz-collapse nzAccordion>
@@ -198,7 +197,7 @@
                             </div>
                             <div nz-col nzSpan="4">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày trình duyệt tổng cục
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Ngày trình duyệt Tổng cục
                                     </nz-form-label>
                                     <nz-form-control>
                                         <nz-date-picker class="search__input" formControlName="ngayDuyetLdc"
@@ -297,7 +296,8 @@
     </nz-card> -->
     <!--thông tin tổng hợp giua 2 chi cuc-->
 </ng-container>
-<ng-container *ngIf="isTongHop && ['ALL', 'CHI_CUC'].includes(this.formData.value.loaiDieuChuyen)">
+<ng-container
+    *ngIf="isTongHop && ['ALL', 'CHI_CUC'].includes(this.formData.value.loaiDieuChuyen) && dataTable2ChiCuc.length>0">
     <div class="bg-trang">
         <nz-card class="flex-card p-lr16">
             <ng-template #extraTpl>
@@ -337,13 +337,13 @@
                                     <th class="text-center">Chủng loại hàng hóa</th>
                                     <th class="text-center">ĐVT</th>
                                     <th class="text-center">Tồn kho</th>
-                                    <th class="text-center">Sl điều chuyển</th>
+                                    <th class="text-center">SL điều chuyển</th>
                                     <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                                     <th>Chi cục</th>
                                     <th class="text-center">Điểm kho</th>
                                     <th class="text-center">Lô kho</th>
                                     <th class="text-center">Tích lượng khả dụng</th>
-                                    <th class="text-center">Sl nhập ĐC</th>
+                                    <th class="text-center">SL nhập ĐC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -539,7 +539,8 @@
 </ng-container>
 
 <!-- Thong tin tong hop dieu chuyen giua 2 cuc -->
-<ng-container *ngIf="isTongHop && ['ALL', 'CUC'].includes(this.formData.value.loaiDieuChuyen)">
+<ng-container
+    *ngIf="isTongHop && ['ALL', 'CUC'].includes(this.formData.value.loaiDieuChuyen) && groupData2Cuc.length>0">
     <div class="bg-trang">
         <nz-card class="flex-card p-lr16">
             <nz-collapse nzAccordion>
@@ -554,7 +555,7 @@
                                     <th style="width: 20%">Cục DTNN KV nhận ĐC</th>
                                     <!-- <th style="width: 10%">Số đề xuất/công văn</th> -->
                                     <!-- <th style="width: 15%">Ngày trình duyệt tổng cục</th> -->
-                                    <th>Tổng dự toán kinh phí(triệu đồng)</th>
+                                    <th>Tổng dự toán kinh phí (triệu đồng)</th>
                                     <!-- <th>Trích yếu</th> -->
                                 </tr>
                             </thead>
@@ -587,13 +588,13 @@
                                 <tr>
                                     <th class="text-center">Chi cục/điểm kho</th>
                                     <th class="text-center">Số đề xuất/công văn</th>
-                                    <th class="text-center max-w-90 min-w-90 break">Ngày trình duyệt cục</th>
+                                    <th class="text-center max-w-90 min-w-90 break">Ngày trình duyệt Cục</th>
                                     <th class="text-center">Lô kho</th>
                                     <th class="text-center">Loại HH</th>
                                     <th class="text-center">Chủng loại hàng hóa</th>
                                     <th class="text-center">ĐVT</th>
                                     <th class="text-center">Tồn kho</th>
-                                    <th class="text-center">Sl điều chuyển</th>
+                                    <th class="text-center">SL điều chuyển</th>
                                     <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
                                     <th class="text-center">Chi cục</th>
                                 </tr>

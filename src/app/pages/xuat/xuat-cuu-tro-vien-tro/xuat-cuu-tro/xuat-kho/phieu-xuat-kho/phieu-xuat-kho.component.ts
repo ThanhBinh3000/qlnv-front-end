@@ -1,18 +1,18 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {Component, OnInit, Input} from '@angular/core';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from 'src/app/services/storage.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
 import dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { MESSAGE } from 'src/app/constants/message';
-import { chain } from 'lodash';
+import {UserLogin} from 'src/app/models/userlogin';
+import {MESSAGE} from 'src/app/constants/message';
+import {chain} from 'lodash';
 import * as uuid from "uuid";
-import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
-import { CHUC_NANG } from 'src/app/constants/status';
-import { CuuTroVienTroComponent } from '../../cuu-tro-vien-tro.component';
+import {PhieuXuatKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
+import {CHUC_NANG} from 'src/app/constants/status';
+import {CuuTroVienTroComponent} from '../../cuu-tro-vien-tro.component';
 
 @Component({
   selector: 'app-phieu-xuat-kho',
@@ -27,6 +27,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   loaiVthhCache: string;
   CHUC_NANG = CHUC_NANG;
   public vldTrangThai: CuuTroVienTroComponent;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -87,13 +88,13 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     }
     return endValue.getTime() <= this.formData.value.ngayXuatKhoTu.getTime();
   };
+
   ngOnInit(): void {
     try {
       this.initData()
       this.timKiem();
       console.log(this.loaiVthh, 55555);
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -101,8 +102,10 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   }
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
-    this.formData.value.type = "XUAT_CTVT";
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      type: "XUAT_CTVT"
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -121,6 +124,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   isBelong(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
   }
+
   async timKiem() {
     await this.spinner.show();
     try {
@@ -143,26 +147,26 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("tenDiemKho")
           .map((v, k) => {
-            let diaDiem = v.find(s => s.tenDiemKho === k)
-            return {
-              idVirtual: uuid.v4(),
-              tenDiemKho: k,
-              tenLoKho: diaDiem.tenLoKho,
-              childData: v
+              let diaDiem = v.find(s => s.tenDiemKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                tenDiemKho: k != "null" ? k : '',
+                tenLoKho: diaDiem ? diaDiem.tenLoKho : null,
+                childData: v
+              }
             }
-          }
           ).value();
-        let nam = quyetDinh.nam;
-        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
+        let nam = quyetDinh ? quyetDinh.nam : null;
+        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key, nam: nam,
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
       }).value();
     this.children = dataView
-    console.log(this.children, "this.children ");
     this.expandAll()
 
   }
@@ -188,6 +192,7 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
     this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
+
   openPhieuKnClModal(id: number) {
     console.log(id, 'id');
     this.idPhieuKnCl = id;
@@ -197,6 +202,11 @@ export class PhieuXuatKhoComponent extends Base2Component implements OnInit {
   closePhieuKnClModal() {
     this.idPhieuKnCl = null;
     this.openPhieuKnCl = false;
+  }
+
+  async showList() {
+    this.isDetail = false;
+    await this.search();
   }
 }
 

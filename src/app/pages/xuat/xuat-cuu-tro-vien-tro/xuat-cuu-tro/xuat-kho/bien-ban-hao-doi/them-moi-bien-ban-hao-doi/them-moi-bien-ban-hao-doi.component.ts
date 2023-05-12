@@ -20,8 +20,6 @@ import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {BienBanTinhKhoService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanTinhKho.service';
 import {BienBanHaoDoiService} from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanHaoDoi.service';
 import {Validators} from '@angular/forms';
-import {CurrencyMaskInputMode} from "ngx-currency";
-
 
 @Component({
   selector: 'app-them-moi-bien-ban-hao-doi',
@@ -116,10 +114,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho: [],
-        tenDiemKho: [],
+        tenNhaKho:['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
-        tenNganKho: [],
+        tenNganKho: ['', [Validators.required]],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
       }
@@ -156,7 +154,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
           this.fileDinhKems = data.fileDinhKems;
           this.dataTable = data.listPhieuXuatKho;
         }
-        console.log(this.dataTable, "555")
       } catch (e) {
         console.log('error: ', e);
         await this.spinner.hide();
@@ -172,6 +169,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
         type: "XUAT_CTVT",
+        loaiVThh:this.loaiVthh
 
       });
     }
@@ -185,7 +183,8 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: this.loaiVthh
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -305,20 +304,14 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   }
 
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     console.log(body, 555);
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
-    }
+    await this.createUpdate(body);
+    this.formData.enable();
   }
 
   pheDuyet() {
