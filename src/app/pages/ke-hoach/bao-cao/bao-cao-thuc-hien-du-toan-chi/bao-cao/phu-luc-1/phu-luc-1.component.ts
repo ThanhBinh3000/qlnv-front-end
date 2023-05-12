@@ -154,12 +154,6 @@ export class PhuLucIComponent implements OnInit {
 
         this.maCntt = '0.1.1.1';
         this.maSuaChua = '0.1.1.2';
-        if (!this.data.extraDataPL2?.maNdung) {
-            this.noiDungs = this.noiDungs.filter(e => e.ma != this.maCntt)
-        }
-        if (!this.data.extraDataPL3?.maNdung) {
-            this.noiDungs = this.noiDungs.filter(e => e.ma != this.maSuaChua)
-        }
 
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
@@ -500,9 +494,16 @@ export class PhuLucIComponent implements OnInit {
 
     addLine(id: string) {
         const maNdung: string = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+        let lstNdung = this.noiDungs;
+        if (!this.data.extraDataPL2?.maNdung) {
+            lstNdung = lstNdung.filter(e => e.ma != this.maCntt)
+        }
+        if (!this.data.extraDataPL3?.maNdung) {
+            lstNdung = lstNdung.filter(e => e.ma != this.maSuaChua)
+        }
         const obj = {
             ma: maNdung,
-            lstDanhMuc: this.noiDungs,
+            lstDanhMuc: lstNdung,
         }
 
         const modalIn = this.modal.create({
