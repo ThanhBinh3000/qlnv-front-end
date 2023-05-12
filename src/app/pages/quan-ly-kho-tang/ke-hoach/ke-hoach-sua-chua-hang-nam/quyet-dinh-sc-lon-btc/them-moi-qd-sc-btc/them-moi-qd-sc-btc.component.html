@@ -15,8 +15,8 @@
         <span>Quay lại</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && idInput > 0 && userService.isTongCuc()" type="button"
-              class="btn btn-sub ml -2"
-              (click)="approve(idInput, STATUS.BAN_HANH,'Bạn có chắc chắn muốn ban hành?')">
+              class="btn btn-sub ml-2"
+              (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Ban hành</span>
       </button>
@@ -50,7 +50,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-group nzAddOnAfter="{{maQd}}">
-                    <input nz-input formControlName="soQd" [readonly]="isViewDetail" />
+                    <input nz-input formControlName="soQuyetDinh" [readonly]="isViewDetail" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -58,7 +58,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngày trình BTC</nz-form-label>
-                <nz-date-picker formControlName="ngayTrinhBtc" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <nz-date-picker formControlName="ngayTrinhBtc" [nzDisabled]="isViewDetail" nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
@@ -66,7 +66,7 @@
                 <nz-form-label [nzNoColon]="true" nzRequired>Căn cứ trên quyết định Tổng cục trưởng đã duyệt</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="chonMaTongHop()">
-                    <input [readonly]="true" nz-input formControlName="maTh" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="soTt" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -75,7 +75,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item class="form-item">
                 <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-                <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="24">
@@ -114,10 +114,10 @@
     </nz-collapse>
   </nz-card>
   <nz-collapse>
-    <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="false">
+    <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="false">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
@@ -125,7 +125,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="tablePaTc && tablePaTc.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -269,7 +269,7 @@
           </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse class="pd-15">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="false">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
@@ -277,7 +277,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" tablePaTc && tablePaTc.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -424,10 +424,10 @@
     </nz-collapse-panel>
   </nz-collapse>
   <nz-collapse>
-    <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH'" [nzActive]="false">
+    <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
         <nz-collapse class="pd-15">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="false">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: #ff0000">Đơn vị : Đồng</h2>
@@ -435,7 +435,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -579,7 +579,7 @@
           </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse class="pd-15">
-          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="false">
+          <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
       <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Đồng</h2>
@@ -587,7 +587,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
