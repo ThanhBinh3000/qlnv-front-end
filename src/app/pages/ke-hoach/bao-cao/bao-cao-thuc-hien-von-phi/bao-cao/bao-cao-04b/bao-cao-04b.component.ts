@@ -152,12 +152,13 @@ export class BaoCao04bComponent implements OnInit {
             if (this.soLuongTheoQuyetDinh) {
                 const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.1')
                 this.lstCtietBcao[index].trongDotTcong = this.soLuongTheoQuyetDinh.trongDotTcong;
-                if (this.data?.dotBcao == 1) {
-                    this.lstCtietBcao[index].luyKeTcong = this.soLuongTheoQuyetDinh.luyKeTcong;
-                }
+                this.lstCtietBcao[index].luyKeTcong += this.soLuongTheoQuyetDinh.trongDotTcong;
                 this.lstCtietBcao[index].listCtiet.forEach(item => {
-                    if (item.loaiMatHang == 0 || this.data?.dotBcao == 1) {
-                        item.sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == item.loaiMatHang)?.sl;
+                    const sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl
+                    if (item.loaiMatHang == 0) {
+                        item.sl = sl;
+                    } else {
+                        item.sl += sl
                     }
                 })
             }
