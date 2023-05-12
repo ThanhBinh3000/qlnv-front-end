@@ -28,7 +28,10 @@ import { ThemMoiTongChiMuaHangComponent } from './tong-chi-mua-hang/them-moi-ton
 import { SlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/sl-gtri-hang-dtqg.component';
 import { ThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg/them-moi-sl-gtri-hang-dtqg.component';
 import { DialogThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component';
-
+import { SlGtriHangDtqgNhapComponent } from './sl-gtri-hang-dtqg-nhap/sl-gtri-hang-dtqg-nhap.component';
+import { ThemMoiSlGtriHangDtqgNhapComponent } from './sl-gtri-hang-dtqg-nhap/them-moi-sl-gtri-hang-dtqg-nhap/them-moi-sl-gtri-hang-dtqg-nhap.component';
+import { SlGtriHangDtqgXuatComponent } from './sl-gtri-hang-dtqg-xuat/sl-gtri-hang-dtqg-xuat.component';
+import { ThemMoiSlGtriHangDtqgXuatComponent } from './sl-gtri-hang-dtqg-xuat/them-moi-sl-gtri-hang-dtqg-xuat/them-moi-sl-gtri-hang-dtqg-xuat.component';
 
 
 @NgModule({
@@ -53,7 +56,11 @@ import { DialogThemMoiSlGtriHangDtqgComponent } from './sl-gtri-hang-dtqg/dialog
     ThemMoiTongChiMuaHangComponent,
     SlGtriHangDtqgComponent,
     ThemMoiSlGtriHangDtqgComponent,
-    DialogThemMoiSlGtriHangDtqgComponent
+    DialogThemMoiSlGtriHangDtqgComponent,
+    SlGtriHangDtqgNhapComponent,
+    ThemMoiSlGtriHangDtqgNhapComponent,
+    SlGtriHangDtqgXuatComponent,
+    ThemMoiSlGtriHangDtqgXuatComponent,
   ],
   imports: [
     CommonModule,

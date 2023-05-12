@@ -58,6 +58,14 @@
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG</span>
             </li>
+            <li nz-menu-item (click)="selectTab(4)">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG nhập trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(5)">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -105,6 +113,12 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 3">
           <app-sl-gtri-hang-dtqg></app-sl-gtri-hang-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 4">
+          <app-sl-gtri-hang-dtqg-nhap></app-sl-gtri-hang-dtqg-nhap>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 5">
+          <app-sl-gtri-hang-dtqg-xuat></app-sl-gtri-hang-dtqg-xuat>
         </ng-container>
       </div>
     </div>
