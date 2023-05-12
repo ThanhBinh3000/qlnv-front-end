@@ -507,6 +507,10 @@ export class PhuLucIIComponent implements OnInit {
         return this.lstCtietBcao.findIndex(e => getHead(e.stt) == str) != -1;
     }
 
+    getDeleteStatus(data: ItemData) {
+        return this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1;
+    }
+
     sum(stt: string) {
         stt = getHead(stt);
         while (stt != '0') {
