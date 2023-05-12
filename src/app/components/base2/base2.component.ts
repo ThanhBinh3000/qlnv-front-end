@@ -18,6 +18,7 @@ import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { endOfMonth } from 'date-fns';
 
 @Component({
   selector: 'app-base2',
@@ -60,6 +61,7 @@ export class Base2Component implements OnInit {
   spinner: NgxSpinnerService
   notification: NzNotificationService
   uploadFileService: UploadFileService
+  ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
 
   constructor(
     httpClient: HttpClient,

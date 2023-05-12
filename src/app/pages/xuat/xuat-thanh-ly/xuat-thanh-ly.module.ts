@@ -16,6 +16,8 @@ import {BaoCaoKetQuaThanhLyComponent} from "./bao-cao-ket-qua/bao-cao-ket-qua-th
 import {
   ThemMoiBaoCaoKetQuaThanhLyComponent
 } from "./bao-cao-ket-qua/them-moi-bao-ket-qua-thanh-ly/them-moi-bao-cao-ket-qua-thanh-ly.component";
+import { TongHopThanhLyComponent } from './tong-hop-thanh-ly/tong-hop-thanh-ly.component';
+import { ChiTietTongHopThanhLyComponent } from './tong-hop-thanh-ly/chi-tiet-tong-hop-thanh-ly/chi-tiet-tong-hop-thanh-ly.component';
 
 
 @NgModule({
@@ -25,7 +27,9 @@ import {
     QuyetDinhThanhLyComponent,
     ThemMoiQuyetDinhThanhLyComponent,
     BaoCaoKetQuaThanhLyComponent,
-    ThemMoiBaoCaoKetQuaThanhLyComponent
+    ThemMoiBaoCaoKetQuaThanhLyComponent,
+    TongHopThanhLyComponent,
+    ChiTietTongHopThanhLyComponent
   ],
   imports: [
     CommonModule,
