@@ -42,14 +42,14 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'dauthau',
     hasTab: false,
   },
-  {
+  /*{
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Hợp đồng/Bảng kê, phiếu bán (bán lẻ)',
     url: `/cuu-tro-ho-tro`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,
-  },
+  },*/
   // {
   //   icon: 'htvbdh_tcdt_baocao2',
   //   title: 'Báo cáo',

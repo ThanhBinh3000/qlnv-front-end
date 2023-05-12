@@ -15,6 +15,7 @@ import {v4 as uuidv4} from "uuid";
 import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import dayjs from "dayjs";
+import {NumberToRoman} from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-thanh-ly',
@@ -23,7 +24,7 @@ import dayjs from "dayjs";
 })
 export class ChiTietTongHopThanhLyComponent extends Base2Component implements OnInit {
   @Input() loaiVthhInput: string;
-  @Input() idInput: number;
+  @Input() selectedItem: any = {};
   @Input() isView: boolean;
   @Input() eventOk: boolean;
   @Input() eventCancel: boolean;
@@ -37,8 +38,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
   expandSetString = new Set<string>();
-  stepModal: any = '50%';
-  isVisibleModal = false;
+  numberToRoman = NumberToRoman;
   maHauTo: any;
   public vldTrangThai: XuatThanhLyComponent;
 
@@ -74,13 +74,14 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       nguoiGduyetId: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
-      ngayTao:[],
+      ngayTao: [],
       lyDoTuChoi: [],
       tongSlHienTai: [],
       tongSlDeXuat: [],
       tongSlDaDuyet: [],
       tenTrangThai: [],
       tenDvi: [],
+      tenCuc: [],
       tongHopDtl: [new Array()]
     })
     this.userInfo = this.userService.getUserLogin();
@@ -90,11 +91,12 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   async ngOnInit(): Promise<void> {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.loadDsDonVi(),
-        this.loadDsVthh()
-      ]);
-      await this.loadDetail(this.idInput);
+      /*   await Promise.all([
+           this.loadDsDonVi(),
+           this.loadDsVthh()
+         ]);*/
+      // this.formData.patchValue(this.selectedItem)
+      // await this.loadDetail(this.selectedItem);
     } catch (e) {
       console.log('error: ', e)
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -104,7 +106,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
     }
   }
 
-  async loadDetail(idInput: number) {
+  async loadDetail(idInput: any) {
     if (idInput > 0) {
       await this.tongHopThanhLyService.getDetail(idInput)
         .then(async (res) => {
@@ -236,7 +238,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             res.data.content.forEach(s => s.id = null);
             this.formData.patchValue({
-              maDanhSach: this.idInput > 0 ? this.idInput + this.maHauTo : this.maHauTo,
+              maDanhSach: this.selectedItem ?? this.maHauTo,
               tongHopDtl: res.data.content
             });
             this.createUpdate(this.formData.value);
@@ -255,11 +257,10 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
 
   @Input() categoryId: string;
 
-  ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstInit) {
-      console.log(changes);
       if (changes.eventOk) {
-        this.tongHopDanhSach();
+        await this.tongHopDanhSach();
       }
       if (changes.eventCancel) {
         // this.quayLai();
