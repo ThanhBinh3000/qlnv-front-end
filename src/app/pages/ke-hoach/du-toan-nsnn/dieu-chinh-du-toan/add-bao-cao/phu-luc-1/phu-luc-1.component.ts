@@ -75,7 +75,7 @@ export class PhuLuc1Component implements OnInit {
   noiDungs: any[] = DANH_MUC_PL10;
   soLaMa: any[] = LA_MA;
   total: ItemData = new ItemData();
-
+  isSynthetic: any;
   scrollX: string;
   BOX_NUMBER_WIDTH = 400;
   constructor(
@@ -95,6 +95,7 @@ export class PhuLuc1Component implements OnInit {
   async initialization() {
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
+    this.isSynthetic = this.dataInfo?.isSynthetic;
     this.namBcao = this.dataInfo?.namBcao;
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
@@ -128,7 +129,7 @@ export class PhuLuc1Component implements OnInit {
       })
     }
 
-    if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+    if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0 && this.isSynthetic !== true) {
       console.log(this.dataInfo?.extraData);
       this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
       this.dataInfo.extraData.forEach(item => {
