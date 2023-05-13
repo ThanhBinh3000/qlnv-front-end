@@ -1,15 +1,11 @@
 import { Component, Input, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {  Validators } from '@angular/forms';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { BaseComponent } from 'src/app/components/base/base.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
 import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
-import { Globals } from 'src/app/shared/globals';
 import * as dayjs from 'dayjs';
 import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import { UserService } from 'src/app/services/user.service';
 import { cloneDeep } from 'lodash';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -365,6 +361,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData() {
     this.rowItem = new TienDoThucHien();
+    this.dataTable = []
   }
 
   emitDataTable() {
@@ -394,7 +391,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
   }
-
+  clearData1() {
+    this.rowItem1 = new NghiemThuThanhLy();
+    this.dataTable1 = []
+  }
   sortTableId1() {
     this.dataTable1.forEach((lt, i) => {
       lt.stt = i + 1;
