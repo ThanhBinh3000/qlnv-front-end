@@ -238,20 +238,22 @@
 
 </div>
 
-<nz-modal [nzWidth]="modalWidth"  [nzVisible]="isVisibleModal" [nzFooter]="modalFooter"
+<nz-modal [nzWidth]="modalWidth" [nzVisible]="isVisibleModal" [nzFooter]="modalFooter"
           (nzOnCancel)="handleCancel()"
           [nzClosable]="false"
           [nzBodyStyle]="{ 'overflow-y': 'auto' }"
           nzMaskClosable="true"
           nzTitle="TỔNG HỢP DANH SÁCH HÀNG CẦN THANH LÝ">
   <ng-container *nzModalContent>
-    <app-chi-tiet-tong-hop-thanh-ly [selectedItem]="selectedItem" (isViewOnModal)="showModal($event)"
+    <app-chi-tiet-tong-hop-thanh-ly [selectedItem]="selectedItem" (step)="changeStep($event)"
                                     [eventOk]="clickOk">
 
     </app-chi-tiet-tong-hop-thanh-ly>
   </ng-container>
   <ng-template #modalFooter>
-    <button nz-button (click)="handleCancel()">Đóng</button>
-    <button nz-button class="btn btn-main" (click)="handleOk()">Lưu</button>
+    <ng-container>
+      <button nz-button (click)="handleCancel()">Đóng</button>
+      <button nz-button class="btn btn-main" (click)="handleOk()">{{step == 1 ? 'Lưu' : 'Gửi duyệt'}}</button>
+    </ng-container>
   </ng-template>
 </nz-modal>

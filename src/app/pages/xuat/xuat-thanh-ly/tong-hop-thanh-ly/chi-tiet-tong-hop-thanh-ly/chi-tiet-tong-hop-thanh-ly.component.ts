@@ -10,7 +10,7 @@ import {DanhMucService} from "src/app/services/danhmuc.service";
 import {MESSAGE} from "src/app/constants/message";
 import {Base2Component} from "src/app/components/base2/base2.component";
 import {CHUC_NANG} from 'src/app/constants/status';
-import {chain, isEmpty} from "lodash";
+import {chain, cloneDeep, isEmpty} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
@@ -30,6 +30,8 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   @Input() eventCancel: boolean;
   @Output()
   isViewOnModal = new EventEmitter<any>();
+  @Output()
+  step = new EventEmitter<any>();
 
   isFirstInit = true;
   CHUC_NANG = CHUC_NANG;
@@ -118,7 +120,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
               s.idVirtual = uuidv4();
               this.expandSetString.add(s.idVirtual);
             });
-            this.buildTableView();
+            await this.buildTableView();
           }
         })
         .catch((e) => {
@@ -143,7 +145,7 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       s.idVirtual = uuidv4();
       this.expandSetString.add(s.idVirtual);
     });
-    this.buildTableView();
+    await this.buildTableView();
   }
 
   async loadDsDonVi() {
@@ -178,36 +180,23 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
     }
   }
 
-  buildTableView() {
-    this.dataTableView = chain(this.dataTable)
-      .groupBy("tenCuc")
-      .map((value, key) => {
-        let rs = chain(value)
-          .groupBy("tenChiCuc")
-          .map((v, k) => {
-              let rowItem = v.find(s => s.tenChiCuc === k);
-              let idVirtual = uuidv4();
-              this.expandSetString.add(idVirtual);
-              return {
-                idVirtual: idVirtual,
-                tenChiCuc: k,
-                maDiaDiem: rowItem.maDiaDiem,
-                tenCloaiVthh: rowItem.tenCloaiVthh,
-                childData: v
-              }
-            }
-          ).value();
-        let rowItem = value.find(s => s.tenChiCuc === key);
-        let idVirtual = uuidv4();
-        this.expandSetString.add(idVirtual);
-        return {
-          idVirtual: idVirtual,
-          tenCuc: key,
-          childData: rs
-        };
-      }).value();
-    console.log(this.dataTableView, 'dataTableView')
-    console.log(this.expandSetString)
+  async buildTableView(data?: any) {
+    this.selectedItem.childData = chain(data)
+      .groupBy("tenChiCuc")
+      .map((v, k) => {
+          let rowItem = v.find(s => s.tenChiCuc === k);
+          let idVirtual = uuidv4();
+          this.expandSetString.add(idVirtual);
+          return {
+            idVirtual: idVirtual,
+            tenChiCuc: k,
+            tenCuc: rowItem?.tenCuc,
+            maDiaDiem: rowItem?.maDiaDiem,
+            tenCloaiVthh: rowItem?.tenCloaiVthh,
+            childData: v
+          }
+        }
+      ).value();
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -234,14 +223,19 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachThanhLyService.search({}).then(res => {
+        await this.danhSachThanhLyService.search({}).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             res.data.content.forEach(s => s.id = null);
             this.formData.patchValue({
               maDanhSach: this.selectedItem ?? this.maHauTo,
               tongHopDtl: res.data.content
             });
-            this.createUpdate(this.formData.value);
+            let result = await this.createUpdate(this.formData.value);
+            if (result) {
+              this.selectedItem = cloneDeep(result);
+              await this.buildTableView(result.tongHopDtl);
+              this.step.emit({step: 2, item: this.selectedItem});
+            }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -260,11 +254,22 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   async ngOnChanges(changes: SimpleChanges) {
     if (!this.isFirstInit) {
       if (changes.eventOk) {
-        await this.tongHopDanhSach();
+        //tao moi
+        if (!this.selectedItem) {
+          await this.tongHopDanhSach();
+        }
+        //gui duyet
+        else {
+          await this.approve(this.selectedItem.id,
+            this.STATUS.DA_TONG_HOP,
+            'Bạn có chắc muốn gửi duyệt bản tổng hợp này ?',
+            null,
+            'Gửi duyệt tổng hợp thành công.');
+        }
       }
       if (changes.eventCancel) {
         // this.quayLai();
-        this.isViewOnModal.emit(false);
+        this.step.emit({step: 0});
       }
     }
 

@@ -40,6 +40,7 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   numberToRoman = NumberToRoman;
   selectedItem: any;
   modalWidth: any;
+  step: any = 1;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -236,7 +237,6 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
 
   handleOk() {
     this.clickOk = !this.clickOk;
-
   }
 
   handleCancel() {
@@ -247,5 +247,14 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
     this.modalWidth = item ? '100vw' : '30vw';
+  }
+
+  changeStep($event: any) {
+    //1 = man hinh dau tien  2 man hinh chi tiet
+    if ($event.step == 1) {
+      this.showModal(false);
+    } else if ($event.step == 2) {
+      this.showModal(true, $event.item);
+    }
   }
 }
