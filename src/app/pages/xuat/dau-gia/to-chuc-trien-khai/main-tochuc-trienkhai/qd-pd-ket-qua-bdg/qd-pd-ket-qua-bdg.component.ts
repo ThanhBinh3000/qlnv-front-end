@@ -51,8 +51,8 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
       cloaiVthh: [null],
       soQdKq: [null],
       trichYeu: [null],
-      ngayPduyetTu: [null],
-      ngayPduyetDen: [null],
+      ngayKyTu: [null],
+      ngayKyDen: [null],
       maDvi: [null]
     });
     this.filterTable = {
@@ -123,17 +123,17 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   }
 
   disabledNgayKyTu = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayPduyetDen) {
+    if (!startValue || !this.formData.value.ngayKyDen) {
       return false;
     }
-    return startValue.getTime() > this.formData.value.ngayPduyetDen.getTime();
+    return startValue.getTime() > this.formData.value.ngayKyDen.getTime();
   };
 
   disabledNgayKyDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayPduyetTu) {
+    if (!endValue || !this.formData.value.ngayKyTu) {
       return false;
     }
-    return endValue.getTime() <= this.formData.value.ngayPduyetTu.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKyTu.getTime();
   };
 
 }

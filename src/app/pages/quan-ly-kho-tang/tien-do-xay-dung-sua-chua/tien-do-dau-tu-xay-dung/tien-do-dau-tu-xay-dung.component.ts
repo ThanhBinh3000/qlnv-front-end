@@ -28,6 +28,7 @@ import {
 import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -49,6 +50,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   itemQdPdTktcTdt: any;
   itemQdPdKhLcnt: any;
   itemTtdt: any;
+  itemHopDong: any;
 
   //trangthai qd pd kết quả lcnt
   trangThaiQdPdKqLcnt: boolean = false;
@@ -64,7 +66,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
-    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService
+    private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
+    private hopdongService: HopdongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
     super.ngOnInit()
@@ -138,6 +141,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       case '05':
         this.trangThaiQdPdKqLcnt = data;
         break;
+      case '06':
+        this.itemHopDong = data;
+        break;
     }
   }
 
@@ -174,6 +180,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
+          // await this.loadItemHopDong();
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }

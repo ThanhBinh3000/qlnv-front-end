@@ -144,8 +144,7 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     if (id > 0) {
       await this.spinner.show();
       let res = await this.quyetDinhNvXuatBttService.getDetail(id);
-      console.log(res);
-      if (res.data) {
+      if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.formData.patchValue({
           soQdNv: data.soQdNv,
@@ -164,7 +163,9 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
         if (dataChiCuc && dataChiCuc.length > 0) {
           this.listDiaDiemXh = dataChiCuc[0].children;
         }
-      };
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       await this.spinner.hide();
     }
   }
@@ -174,23 +175,27 @@ export class ThemMoiBienBanLayMauBttComponent extends Base2Component implements 
     let body = {
       soQdNv: even,
       loaiVthh: this.loaiVthh,
-      nam: this.formData.value.nam,
+      namKh: this.formData.value.nam,
     }
     let res = await this.bienBanLayMauBttService.search(body)
-    const data = res.data;
-    this.bienBanLayMau = data.content;
-    const diffList = [
-      ...this.listDiaDiemXh.filter((item) => {
-        return !this.bienBanLayMau.some((child) => {
-          if (child.maNganKho.length > 0 && item.maNganKho.length > 0) {
-            return item.maNganKho === child.maNganKho;
-          } else {
-            return item.maDiemKho === child.maDiemKho;
-          }
-        });
-      }),
-    ];
-    this.listDiaDiemXh = diffList;
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      this.bienBanLayMau = data.content;
+      const diffList = [
+        ...this.listDiaDiemXh.filter((item) => {
+          return !this.bienBanLayMau.some((child) => {
+            if (child.maNganKho.length > 0 && item.maNganKho.length > 0) {
+              return item.maNganKho === child.maNganKho;
+            } else {
+              return item.maDiemKho === child.maDiemKho;
+            }
+          });
+        }),
+      ];
+      this.listDiaDiemXh = diffList;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   openDialogDdiemNhapHang() {

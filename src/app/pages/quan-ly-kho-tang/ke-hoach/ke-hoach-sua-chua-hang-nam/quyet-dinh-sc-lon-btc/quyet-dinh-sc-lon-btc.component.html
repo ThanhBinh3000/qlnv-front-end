@@ -13,19 +13,27 @@
             <label class="search__label">Số quyết định</label>
             <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd"/>
           </div>
-          <div nz-col nzSpan="9">
+          <div nz-col nzSpan="8">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" placeholder="Nhập text" nz-input formControlName="trichYeu"/>
           </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Ngày ký</label>
-            <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-col nzSpan="5">
+            <label class="search__label">Ngày ký quyết định</label>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày ký từ" formControlName="ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày ký đến"formControlName="ngayKyDen"nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+              </div>
+            </div>
           </div>
           <div nz-col nzSpan="4">
             <label class="search__label">Trạng thái</label>
             <nz-select formControlName="trangThai">
-              <nz-option nzValue="00" nzLabel="Dự thảo"></nz-option>
-              <nz-option nzValue="29" nzLabel="Ban hành"></nz-option>
+              <nz-option *ngFor="let item of listTrangThai" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
             </nz-select>
           </div>
         </div>
@@ -56,7 +64,7 @@
         </button>
         <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
+          <span>Dự thảo QĐ của BTC</span>
         </button>
       </div>
     </div>
@@ -70,12 +78,11 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th class="text-center" nzWidth="40px">STT</th>
+          <th class="text-center" nzWidth="100px">Năm KH</th>
           <th class="text-center" nzWidth="150px">Số quyết định</th>
-          <th class="text-center" nzWidth="120px">Ngày ký</th>
-          <th class="text-center" nzWidth="120px">Năm kế hoạch</th>
+          <th class="text-center" nzWidth="120px">Ngày ký QĐ của BTC</th>
           <th class="text-center" nzWidth="">Trích yếu</th>
-          <th class="text-center" nzWidth="120px">Số đề xuất</th>
-          <th class="text-center" nzWidth="120px">Mã tổng hợp</th>
+          <th class="text-center" nzWidth="120px">Số tờ trình</th>
           <th class="text-center" nzWidth="120px">Trạng thái</th>
           <th class="text-center" nzWidth="150px">Hành động</th>
         </tr>
@@ -84,34 +91,28 @@
           <th></th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
-                               [(ngModel)]="filterTable.ngayKy"
-                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
-              ></nz-date-picker>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
                      (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                     (input)="filterInTable('soQuyetDinh',filterTable.soQuyetDinh)" size="small"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTh"
-                     (input)="filterInTable('maTh',filterTable.maTh)" size="small"/>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày ký"
+                               [(ngModel)]="filterTable.ngayTao"
+                               (ngModelChange)="filterInTable('ngayTao', convertDateToString(filterTable.ngayTao))"
+              ></nz-date-picker>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -138,12 +139,11 @@
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-          <td>{{ data.soQd }}</td>
-          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.namKeHoach }}</td>
+          <td>{{ data.soQuyetDinh }}</td>
+          <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.soTt }}</td>
-          <td>{{ data.maTh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.BAN_HANH">
