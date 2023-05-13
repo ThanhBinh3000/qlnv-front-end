@@ -236,9 +236,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       thoiHanXuatCtVt: data.ngayKy,
+      loaiVthh: data.loaiVthh,
+      tenLoaiVthh: data.tenLoaiVthh,
     });
+
     this.listDiaDiemNhap = data.noiDungCuuTro;
-    console.log(this.listDiaDiemNhap, 555555);
     await this.spinner.hide();
   }
 
@@ -264,7 +266,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async bindingDataDdNhap(data, isChiTiet) {
-    console.log(data, 123);
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
@@ -275,23 +276,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         thuKho: data.tenThuKho,
       })
       if (!isChiTiet) {
-        console.log(data.cloaiVthh, 321);
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        console.log(dmTieuChuan, 666);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = dmTieuChuan.data.children;
           this.dataTableChiTieu.forEach(element => {
             element.edit = false
           });
-          console.log(this.dataTableChiTieu, 666);
         }
       }
     }
