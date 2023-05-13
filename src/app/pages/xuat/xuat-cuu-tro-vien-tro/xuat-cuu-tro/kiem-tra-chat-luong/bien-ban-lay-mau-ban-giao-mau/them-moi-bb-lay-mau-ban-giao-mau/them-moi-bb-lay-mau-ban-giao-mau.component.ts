@@ -115,6 +115,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh(),
+        // this.loadSoBbLayMau(),
         this.loadPhuongPhapLayMau(),
       ])
       await this.loadDetail(this.idInput)
@@ -177,6 +178,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -221,7 +223,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (dataChiCuc) {
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
     }
-    this.listBienBan(data.soQd)
+    await this.listBienBan(data.soQd)
     await this.spinner.hide();
   }
 
