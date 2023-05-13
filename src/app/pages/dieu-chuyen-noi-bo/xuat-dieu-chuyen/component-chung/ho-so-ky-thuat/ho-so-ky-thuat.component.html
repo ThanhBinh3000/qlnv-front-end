@@ -10,36 +10,51 @@
             </nz-select>
           </div> -->
           <div nz-col nzSpan="4">
-            <label class="search__label">Điểm kho</label>
-            <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn điểm kho" nzShowSearch>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            <label>Điểm kho</label>
+            <nz-select nzAllowClear formControlName="maDiemKho" nzPlaceHolder="Chọn điểm kho" nzShowSearch
+              (ngModelChange)="handleChangeDiemKho($event)">
+              <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi" [nzLabel]="p.title"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Nhà kho</label>
-            <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn nhà kho" nzShowSearch>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            <label>Nhà kho</label>
+            <nz-select nzAllowClear formControlName="maNhaKho" nzPlaceHolder="Chọn nhà kho" nzShowSearch
+              (ngModelChange)="handleChangeNhaKho($event)">
+              <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.maDvi" [nzLabel]="p.title"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Ngăn kho</label>
-            <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn ngăn kho" nzShowSearch>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            <label>Ngăn kho</label>
+            <nz-select nzAllowClear formControlName="maNganKho" nzPlaceHolder="Chọn ngăn kho" nzShowSearch
+              (ngModelChange)="handleChangeNganKho($event)">
+              <nz-option *ngFor="let p of listNganKho" [nzValue]="p.maDvi" [nzLabel]="p.title"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Lô kho</label>
-            <nz-select nzAllowClear formControlName="loaiVthh" nzPlaceHolder="Chọn lô kho" nzShowSearch>
-              <nz-option *ngFor="let p of listNam" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            <label>Lô kho</label>
+            <nz-select nzAllowClear formControlName="maLoKho" nzPlaceHolder="Chọn lô kho" nzShowSearch>
+              <nz-option *ngFor="let p of listLoKho" [nzValue]="p.maDvi" [nzLabel]="p.title"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Số hồ sơ kỹ thuật</label>
+            <label>Số hồ sơ kỹ thuật</label>
             <input nz-input formControlName="soQd" />
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Ngày tạo HSKT</label>
-            <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <label>Ngày tạo HSKT</label>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy" formControlName="ngayTaoTu"
+                  nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy" formControlName="ngayTaoDen"
+                  nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
+              </div>
+            </div>
+            <!-- <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker> -->
           </div>
         </div>
       </form>

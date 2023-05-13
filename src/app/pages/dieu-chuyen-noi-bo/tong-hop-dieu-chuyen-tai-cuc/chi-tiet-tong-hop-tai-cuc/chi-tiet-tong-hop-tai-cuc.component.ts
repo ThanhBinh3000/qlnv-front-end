@@ -31,6 +31,8 @@ import * as uuid from "uuid";
 import { Utils } from 'src/app/Utility/utils';
 import { TongHopDieuChuyenService } from '../tong-hop-dieu-chuyen-tai-cuc.service';
 import { KeHoachDieuChuyenService } from '../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service';
+import { BaseService } from 'src/app/services/base.service';
+import { DialogTuChoiTongHopDieuChuyenComponent } from '../components/dialog-tu-choi/dialog-tu-choi.component';
 @Component({
     selector: 'app-chi-tiet-tong-hop-dieu-chuyen-tai-cuc',
     templateUrl: './chi-tiet-tong-hop-tai-cuc.component.html',
@@ -84,6 +86,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     dataTable2ChiCuc: any[];
     dataTable2Cuc: any[];
     groupData2Cuc: any[];
+
+    listCCNhan: any[];
     listTenTrangThai = {
         "00": "Dự thảo",
         "01": "Chờ duyệt - tp",
@@ -107,7 +111,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
         private tongHopDieuChuyenService: TongHopDieuChuyenService,
         private keHoachDieuChuyenService: KeHoachDieuChuyenService,
-        private cdr: ChangeDetectorRef,) {
+        private cdr: ChangeDetectorRef,
+    ) {
         super(httpClient, storageService, notification, spinner, modal, tongHopDieuChuyenService);
         this.formData = this.fb.group(
             {
@@ -313,6 +318,50 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         } finally {
             await this.spinner.hide();
         }
+    };
+    async reject2ChiCuc(id: number, trangThai: string, roles?) {
+        if (!this.checkPermission(roles)) {
+            return
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Từ chối phê duyệt',
+            nzContent: DialogTuChoiTongHopDieuChuyenComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: { data: this.listCCNhan },
+        });
+        modalTuChoi.afterClose.subscribe(async (data) => {
+            const listTuChoi = Array.isArray(data?.listTuChoi) ? data.listTuChoi.filter(f => f.checked).map(f => f.value) : []
+            const listTuChoiStr = listTuChoi.join(",")
+            if (data.lyDoTuChoi && listTuChoi.length > 0) {
+                this.spinner.show();
+                try {
+                    let body = {
+                        id: id,
+                        lyDoTuChoi: data.lyDoTuChoi,
+                        maChiCucNhan: listTuChoiStr,
+                        trangThai: trangThai,
+                    };
+                    const res = await this.tongHopDieuChuyenService.approve(body);
+                    if (res.msg == MESSAGE.SUCCESS) {
+                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+                        this.spinner.hide();
+                        this.goBack();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, res.msg);
+                        this.spinner.hide();
+                    }
+                } catch (e) {
+                    console.log('error: ', e);
+                    this.spinner.hide();
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                } finally {
+                    this.spinner.hide();
+                }
+            }
+        });
     }
     async save(isGuiDuyet: boolean, isGuiYeuCau: boolean) {
         try {
@@ -324,8 +373,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             this.helperService.markFormGroupTouched(this.formData);
             if (body.id) {
                 res = await this.tongHopDieuChuyenService.capNhatTHCuc(body);
-                if (res.msg == MESSAGE.SUCCESS && !isGuiDuyet && !isGuiYeuCau) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                if (res.msg == MESSAGE.SUCCESS) {
+                    if (!isGuiDuyet && !isGuiYeuCau) { this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS) };
                 } else {
                     this.notification.error(MESSAGE.ERROR, res.msg);
                 };
@@ -444,16 +493,21 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                     });
 
                 }
-                let flatArray = []
+                let flatArray = [];
+                let arrCCucNhan = [];
                 if (Array.isArray(data?.thKeHoachDieuChuyenNoiBoCucDtls)) {
                     data.thKeHoachDieuChuyenNoiBoCucDtls.forEach((item) => {
                         Array.isArray(item?.dcnbKeHoachDcHdr?.danhSachHangHoa) && item?.dcnbKeHoachDcHdr?.danhSachHangHoa.forEach(element => {
                             const newItem = cloneDeep(item);
                             delete newItem.dcnbKeHoachDcHdr.danhSachHangHoa;
-                            flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element })
+                            flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element });
+                            if (!arrCCucNhan.find(f => f.value == element.maChiCucNhan)?.value) {
+                                arrCCucNhan.push({ label: element.tenChiCucNhan, value: element.maChiCucNhan, checked: false })
+                            }
                         });
                     })
-                }
+                };
+                this.listCCNhan = cloneDeep(arrCCucNhan)
                 const buildData2ChiCuc = this.buildTableView(flatArray)
                 this.dataTable2ChiCuc = cloneDeep(buildData2ChiCuc);
             }

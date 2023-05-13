@@ -147,6 +147,19 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isView = isView;
         this.idBbLayMau = idBbLayMau;
     }
+    disabledTuNgay = (startValue: Date): boolean => {
+        if (startValue && this.formData.value.ngayLayMauDen) {
+            return startValue.getTime() > this.formData.value.ngayLayMauDen.getTime();
+        }
+        return false;
+    };
+
+    disabledDenNgay = (endValue: Date): boolean => {
+        if (!endValue || !this.formData.value.ngayLayMauTu) {
+            return false;
+        }
+        return endValue.getTime() <= this.formData.value.ngayLayMauTu.getTime();
+    };
     checkPermissonAdd(): boolean {
         return true
     }

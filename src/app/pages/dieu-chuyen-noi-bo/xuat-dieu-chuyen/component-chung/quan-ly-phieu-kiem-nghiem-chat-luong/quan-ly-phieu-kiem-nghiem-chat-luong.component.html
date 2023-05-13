@@ -10,24 +10,36 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label>Số QĐ giao NV XH</label>
+            <label>Số QĐ ĐC của Cục</label>
             <input placeholder="Nhập số quyết định" nz-input formControlName="soQdinh" />
           </div>
           <div nz-col nzSpan="4">
             <label>Số phiếu kiểm nghiệm chất lượng</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="soPhieu" />
+            <input placeholder="Nhập số phiếu" nz-input formControlName="soPhieu" />
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày kiểm nghiệm chất lượng</label>
-            <nz-range-picker formControlName="ngayKnghiemTu" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <!-- <nz-range-picker formControlName="ngayKnghiemTu" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy" formControlName="ngayKnghiemTu"
+                  nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                  formControlName="ngayKnghiemDen" nzPlaceHolder="Ngày kết thúc">
+                </nz-date-picker>
+              </div>
+            </div>
           </div>
           <div nz-col nzSpan="4">
             <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
-            <input placeholder="" nz-input formControlName="soBbLayMau" />
+            <input placeholder="Nhập số biên bản lấy mẫu" nz-input formControlName="soBbLayMau" />
           </div>
           <div nz-col nzSpan="4">
             <label>Số biên bản tịnh kho</label>
-            <input placeholder="" nz-input formControlName="soBbXuatDocKho" />
+            <input placeholder="Nhập số biên bản tịnh kho" nz-input formControlName="soBbXuatDocKho" />
           </div>
         </div>
       </form>
