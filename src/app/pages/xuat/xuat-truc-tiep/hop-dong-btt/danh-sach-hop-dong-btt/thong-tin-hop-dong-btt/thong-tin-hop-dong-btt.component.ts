@@ -38,6 +38,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   @Input() isQuanLy: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isViewOnModal: boolean;
 
   listLoaiHopDong: any[] = [];
   dataTablePhuLuc: any[] = [];
@@ -713,6 +714,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
 
   setValidator(isOther) {
     if (this.userService.isCuc) {
+      this.formData.controls["soQdKq"].setValidators([Validators.required]);
       if (isOther) {
         this.formData.controls["namHd"].setValidators([Validators.required]);
         this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
@@ -797,6 +799,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
         this.formData.controls["tenCloaiVthh"].clearValidators();
       }
     } else {
+      this.formData.controls["soQdPd"].setValidators([Validators.required]);
       if (isOther) {
         this.formData.controls["namHd"].setValidators([Validators.required]);
         this.formData.controls["ngayKyQd"].setValidators([Validators.required]);

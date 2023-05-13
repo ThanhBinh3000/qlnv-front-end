@@ -90,18 +90,27 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   }
 
   setValidator(isGuiDuyet?) {
-    if (isGuiDuyet) {
-      this.formData.controls["soQdNv"].setValidators([Validators.required]);
-    } else {
-      this.formData.controls["soQdNv"].clearValidators();
-    }
     if (this.radioValue == 'HD' && isGuiDuyet) {
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["idHd"].setValidators([Validators.required]);
       this.formData.controls["soHd"].setValidators([Validators.required]);
       this.formData.controls["idQdPd"].clearValidators();
       this.formData.controls["soQdPd"].clearValidators();
     }
     if (this.radioValue == 'QDDX' && isGuiDuyet) {
+      this.formData.controls["idHd"].clearValidators();
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["idQdPd"].setValidators([Validators.required]);
+      this.formData.controls["soQdPd"].setValidators([Validators.required]);
+      this.formData.controls["soQdNv"].setValidators([Validators.required]);
+    }
+    if (this.radioValue == 'HD') {
+      this.formData.controls["idHd"].setValidators([Validators.required]);
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["idQdPd"].clearValidators();
+      this.formData.controls["soQdPd"].clearValidators();
+    }
+    if (this.radioValue == 'QDDX') {
       this.formData.controls["idHd"].clearValidators();
       this.formData.controls["soHd"].clearValidators();
       this.formData.controls["idQdPd"].setValidators([Validators.required]);

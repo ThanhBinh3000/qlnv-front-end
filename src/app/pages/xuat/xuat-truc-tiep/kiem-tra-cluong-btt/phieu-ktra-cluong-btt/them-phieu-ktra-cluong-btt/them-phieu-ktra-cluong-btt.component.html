@@ -37,13 +37,13 @@
             </div>
         </div>
     </div>
-    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
+    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC " nzShowIcon nzType="error"
         nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
     </nz-alert>
 
     <nz-card class="mt-16 flex-card p-lr16">
         <nz-collapse>
-            <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung">
+            <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN CHUNG">
                 <form nzLayout="vertical" nz-form [formGroup]="formData">
                     <div nz-row [nzGutter]="[24]">
                         <div nz-col [nzSpan]="2">
@@ -264,7 +264,7 @@
         </nz-collapse>
         <nz-collapse>
             <nz-collapse-panel nzActive="true"
-                nzHeader="Kết quả đánh giá cảm quan: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
+                nzHeader="KẾT QUẢ ĐÁNH GIÁ CẢM QUAN: (Về màu sắc, mùi, vị, tạp chất, đánh bóng, sinh vật hại)">
                 <form nzLayout="vertical" nz-form [formGroup]="formData">
                     <div nz-row [nzGutter]="[24]">
                         <div nz-col nzSpan="24">
@@ -280,7 +280,7 @@
             </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse>
-            <nz-collapse-panel nzActive="true" nzHeader="Kết quả phân tích chỉ tiêu chất lượng">
+            <nz-collapse-panel nzActive="true" nzHeader="KẾT QUẢ PHÂN TÍCH CHỈ TIÊU CHẤT LƯỢNG">
                 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
                     <nz-table class="pd-10" #basicTable class="nowrap" [nzFrontPagination]="false"
                         [nzShowPagination]="false" [nzData]="dataTable">
