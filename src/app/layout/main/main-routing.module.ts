@@ -60,6 +60,12 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: MAIN_ROUTES.baoCaoBoNganh,
+        loadChildren: () =>
+          import('../../pages/bao-cao-bo-nganh/bao-cao-bo-nganh.module').then((m) => m.BaoCaoBoNganhModule),
+        canActivate: [AuthGuard],
+      },
+      {
         path: MAIN_ROUTES.kehoach,
         loadChildren: () =>
           import('../../pages/ke-hoach/ke-hoach.module').then(

@@ -15,6 +15,7 @@ import {
 import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-hop-dong',
@@ -30,7 +31,24 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   tongMucDt: number = 0;
   @Input()
   flagThemMoi: string;
+  @Input()
+  itemQdPdKhLcnt: any;
   listHopDong: any[] = []
+  itemSelected: any;
+  openPopThemMoiHd = false;
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 0,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(
     httpClient: HttpClient,
@@ -78,8 +96,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (this.idInput) {
-        await this.detail(this.idInput)
+      if (this.idInput && this.itemQdPdKhLcnt) {
+        await this.detail()
       }
       this.spinner.hide();
     } catch (e) {
@@ -93,25 +111,18 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
 
   }
 
-  async detail(id) {
+  async detail() {
     this.spinner.show();
     try {
-      let res = await this.quyetdinhpheduyetKhlcntService.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          const data = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData, data);
-          this.tongMucDt = data.tongTien;
-          let resp = await this.hopdongService.danhSachHdTheoKhlcnt(id);
-          if (resp.msg == MESSAGE.SUCCESS) {
-            this.listHopDong = resp.data;
-          }
+      if (this.itemQdPdKhLcnt) {
+        this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
+        this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+        if (this.listHopDong && this.listHopDong.length > 0) {
+          this.selectRow(this.listHopDong[0]);
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
       }
-    } catch (e) {
+    } catch
+      (e) {
       this.notification.error(MESSAGE.ERROR, e);
       this.spinner.hide();
     } finally {
@@ -119,7 +130,30 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
-  delete(item: any) {
+  async selectRow(data) {
+    this.listHopDong.forEach(item => item.selected = false);
+    data.selected = true;
+    this.itemSelected = data;
+  }
+
+  closeThemHopDong() {
+    this.openPopThemMoiHd = false;
+  }
+
+  openThemMoiHd(id?, isView?: boolean) {
+    if (!id) {
+      this.flagThemMoi = 'addnew';
+    }
+    this.idInput = id;
+    this.isDetail = true;
+    this.isViewDetail = isView ?? false;
+    this.openPopThemMoiHd = true;
+  }
+
+  delete(item
+           :
+           any
+  ) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',

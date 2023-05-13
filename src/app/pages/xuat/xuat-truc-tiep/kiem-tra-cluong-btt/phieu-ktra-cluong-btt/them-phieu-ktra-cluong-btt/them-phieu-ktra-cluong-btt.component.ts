@@ -29,6 +29,8 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   listHinhThucBaoQuan: any[] = [];
   dsDanhGia: any[] = [];
 
+  loadPhieuKnghiemCluong: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -107,16 +109,26 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
   }
 
   async openDialogBbLm() {
-    let data = [];
     let body = {
       namKh: dayjs().get('year'),
       loaiVthh: this.loaiVthh,
       trangThai: this.STATUS.DA_DUYET_LDCC,
       // maDvi: this.userInfo.MA_DVI
     }
+    await this.loadPhieuKnCluong();
+    let dataBbLM = [];
     let res = await this.bienBanLayMauBttService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      data = res.data?.content;
+      const data = [
+        ...res.data?.content.filter((item) => {
+          return !this.loadPhieuKnghiemCluong.some((child) => {
+            if (item.soBienBan.length > 0 && child.soBienBan.length > 0) {
+              return item.soBienBan === child.soBienBan;
+            }
+          })
+        })
+      ];
+      dataBbLM = data
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -129,7 +141,7 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: data,
+        dataTable: dataBbLM,
         dataHeader: ['Số Biên bản', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng lấy mẫu'],
         dataColumn: ['soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuongLayMau'],
       },
@@ -139,6 +151,20 @@ export class ThemPhieuKtraCluongBttComponent extends Base2Component implements O
         await this.bindingDataQd(dataChose.id);
       }
     });
+  }
+
+  async loadPhieuKnCluong() {
+    let body = {
+      nameKh: this.formData.value.nameKh,
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
+    }
+    let res = await this.phieuKtraCluongBttService.search(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.loadPhieuKnghiemCluong = res.data?.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async bindingDataQd(id) {

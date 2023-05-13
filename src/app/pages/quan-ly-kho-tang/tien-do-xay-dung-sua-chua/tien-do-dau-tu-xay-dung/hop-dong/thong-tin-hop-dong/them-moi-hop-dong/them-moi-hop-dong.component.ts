@@ -43,6 +43,10 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   idInput: number;
   @Input()
   flagThemMoi: string;
+  @Input()
+  itemGoiThau: any;
+  @Input()
+  itemQdPdKhlcnt: any;
   STATUS = STATUS;
   idPhuLuc: number;
   isViewPl: boolean
@@ -50,6 +54,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   hauToSoHd = "/" + dayjs().get('year') + "/HĐMB";
   listQdPdKqlcnt: any[] = [];
   listHinhThucHopDong: any[] = []
+  listHinhThucThanhToan: any[] = []
   listCcPhapLy: any[] = [];
   listFileDinhKem: any[] = [];
   listGoiThau: any[] = [];
@@ -60,7 +65,6 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   dataKlcvEdit: { [key: string]: { edit: boolean; data: KhoiLuongCongViec } } = {};
   rowItemKlcv: KhoiLuongCongViec = new KhoiLuongCongViec();
   thanhTien: number = 0;
-  thanhTienBangChu: string;
 
   constructor(
     httpClient: HttpClient,
@@ -106,6 +110,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       cdtSdt: [null, Validators.required],
       cdtStk: [null, Validators.required],
       dvccTen: [],
+      phuongThucTt: [],
       dvccDiaChi: [],
       dvccMst: [],
       dvccNguoiDaiDien: [],
@@ -123,14 +128,16 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      await Promise.all([
-        this.loadQdPdKqlcnt(),
-        // this.loadNguonVon(),
-        // this.loadPhuongThucLcnt(),
-        // this.loadHinhThucLcnt(),
-        this.loadLoaiHd()
-      ]);
-      if (this.idInput) {
+      // await Promise.all([
+      //   this.loadQdPdKqlcnt(),
+      //   this.loadNguonVon(),
+      //   this.loadPhuongThucLcnt(),
+      //   this.loadHinhThucLcnt(),
+      //   this.loadLoaiHd()
+      // ]);
+      if (!this.idInput || !this.itemGoiThau.hopDong) {
+        this.bindingData();
+      } else {
         await this.detail(this.idInput)
       }
       this.spinner.hide();
@@ -138,6 +145,20 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  bindingData() {
+    if (this.itemGoiThau && this.itemQdPdKhlcnt) {
+      console.log(this.itemGoiThau,'this.itemGoiThauthis.itemGoiThauthis.itemGoiThau')
+      console.log(this.itemQdPdKhlcnt,'this.itemQdPdKhlcnt.itemQdPdKhlcnt.itemQdPdKhlcnt')
+      this.formData.patchValue({
+        soQdPdKhlcnt:this.itemQdPdKhlcnt.soQd,
+        idQdPdKhlcnt:this.itemQdPdKhlcnt.id,
+        soQdPdKqlcnt:this.itemGoiThau.soQdPdKqlcnt,
+        idGoiThau:this.itemGoiThau.id,
+        tenGoiThau : this.itemGoiThau.noiDung
+      });
     }
   }
 
@@ -204,6 +225,15 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
+  async loadHinhThucThanhToan() {
+    // List loại hợp đồng
+    this.listHinhThucThanhToan = [];
+    let resNv = await this.danhMucService.danhMucChungGetAll('PHUONG_THUC_TT');
+    if (resNv.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucThanhToan = resNv.data;
+    }
+  }
+
   changeGoiThau(event) {
     let item = this.listGoiThau.find(item => item.id == event);
     if (item) {
@@ -247,7 +277,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
           soQdPdKqlcnt: data.soQd,
           ngayKyKqlcnt: data.ngayKy,
           cdtTen: data.chuDauTu,
-          tenDuAn:data.tenDuAn,
+          tenDuAn: data.tenDuAn,
           cdtDiaChi: data.diaChi
         })
         //get danh sách gói thầu thành công (đã có đơn vị trúng thầu).
@@ -277,7 +307,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
-  async detail(id) {
+  async detail(data) {
     //   this.spinner.show();
     //   try {
     //     let res = await this.hopDongService.getDetail(id);

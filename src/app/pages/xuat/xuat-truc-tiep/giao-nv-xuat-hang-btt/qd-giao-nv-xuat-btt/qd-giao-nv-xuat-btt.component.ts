@@ -20,6 +20,8 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
   @Input()
   listVthh: any[] = [];
   idQdPdDtl: number = 0;
+  idHd: number = 0;
+  isViewHd: boolean = false;
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
@@ -54,6 +56,7 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       trichYeu: null,
       ngayTaoTu: null,
       ngayTaoDen: null,
+      trangThai: null,
     })
 
     this.filterTable = {
@@ -89,7 +92,8 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+      maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 
@@ -122,4 +126,13 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
     return endValue.getTime() <= this.formData.value.ngayTaoTu.getTime();
   };
 
+  openModalHd(id: number) {
+    this.idHd = id;
+    this.isViewHd = true;
+  }
+
+  closeModalHd() {
+    this.idHd = null;
+    this.isViewHd = false;
+  }
 }

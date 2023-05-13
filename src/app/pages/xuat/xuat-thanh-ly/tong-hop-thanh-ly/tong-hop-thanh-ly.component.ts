@@ -15,6 +15,7 @@ import {v4 as uuidv4} from "uuid";
 import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import {FormGroup} from "@angular/forms";
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
+import {NumberToRoman} from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-tong-hop-thanh-ly',
@@ -36,6 +37,10 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   clickOk = false;
   clickCancel = false;
   flatDataTable: any;
+  numberToRoman = NumberToRoman;
+  selectedItem: any;
+  modalWidth: any;
+  step: any = 1;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -55,6 +60,8 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
       maCuc: [],
       maChiCuc: [],
       ngayTao: [],
+      ngayTaoTu: [],
+      ngayTaoDen: [],
     })
     this.formDataDetail = this.fb.group({
       id: [],
@@ -99,34 +106,20 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     }
   }
 
-  disabledNgayDeXuatTu = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayDeXuatDen) {
-      return startValue.getTime() > this.formData.value.ngayDeXuatDen.getTime();
-    } else {
+  disabledNgayTaoTu = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.NgayTaoTu) {
       return false;
     }
+    return endValue.getTime() <= this.formData.value.NgayTaoTu.getTime();
   };
 
-  disabledNgayDeXuatDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayDeXuatTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayDeXuatTu.getTime();
-  };
-
-  disabledNgayTongHopTu = (startValue: Date): boolean => {
-    if (startValue && this.formData.value.ngayTongHopDen) {
-      return startValue.getTime() > this.formData.value.ngayTongHopDen.getTime();
+  disabledNgayTaoDen = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.NgayTaoDen) {
+      return startValue.getTime() > this.formData.value.NgayTaoDen.getTime();
     }
     return false;
   };
 
-  disabledNgayTongHopDen = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayTongHopTu) {
-      return false;
-    }
-    return endValue.getTime() <= this.formData.value.ngayTongHopTu.getTime();
-  };
 
   flattenTree(tree) {
     return tree.flatMap((item) => {
@@ -194,7 +187,7 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.flatDataTable,'this.flatDataTable');
+    console.log(this.flatDataTable, 'this.flatDataTable');
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {
@@ -220,7 +213,12 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
-          tenCuc: key,
+          id: rowItem.id,
+          nam: rowItem.nam,
+          tenCuc: rowItem.tenCuc,
+          maDanhSach: rowItem.maDanhSach,
+          tenDanhSach: rowItem.tenDanhSach,
+          ngayTao: rowItem.ngayTao,
           childData: rs
         };
       }).value();
@@ -245,7 +243,18 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     this.showModal(false);
   }
 
-  showModal(isVisibleModal: boolean) {
+  showModal(isVisibleModal: boolean, item?: any) {
     this.isVisibleModal = isVisibleModal;
+    this.selectedItem = item;
+    this.modalWidth = item ? '100vw' : '30vw';
+  }
+
+  changeStep($event: any) {
+    //1 = man hinh dau tien  2 man hinh chi tiet
+    if ($event.step == 1) {
+      this.showModal(false);
+    } else if ($event.step == 2) {
+      this.showModal(true, $event.item);
+    }
   }
 }

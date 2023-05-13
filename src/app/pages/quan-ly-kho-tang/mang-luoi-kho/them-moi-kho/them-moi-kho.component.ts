@@ -249,66 +249,45 @@ export class ThemMoiKhoComponent implements OnInit {
         }
       });
       //tự động gen mã kho mới
-      let type = '';
-      switch (this.levelNode) {
-        case 4: {
-          type = 'ngan-lo'
-          break;
-        }
-        case 3 : {
-          type = 'ngan-kho'
-          break;
-        }
-        case 2 : {
-          type = 'nha-kho'
-          break;
-        }
-        case 1 : {
-          type = 'diem-kho'
-          break;
-        }
-      }
-      if (this.levelNode < 5 && type && idMlk) {
-        await this.khoService.getMaKhoLonNhatTheoIdCha(type, idMlk).then((res: OldResponseData) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            let charLast = "00";
-            let maxMaKho = dataNode.origin.key;
-            if (res.data) {
-              charLast = res.data.slice(-2);
-              maxMaKho = res.data;
+      let maDvi = dataNode.origin.key
+      await this.donviService.getLastMadvi(maDvi).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let charLast = "00";
+          let lastDvi = dataNode.origin.key ;
+          if (res.data) {
+            charLast = res.data.slice(-2);
+            lastDvi = res.data;
+          }
+          let valueNext = this.convertNumberToString(parseInt(charLast) + 1);
+          let maDviMoi = res.data ? lastDvi.slice(0, -2) + valueNext : lastDvi + valueNext;
+          switch (this.levelNode) {
+            case 4: {
+              this.formKho.patchValue({
+                maNganlo : maDviMoi
+              })
+              break;
             }
-            let valueNext = this.convertNumberToString(parseInt(charLast) + 1);
-            let maKhoMoi = res.data ? maxMaKho.slice(0, -2) + valueNext : maxMaKho + valueNext;
-            switch (this.levelNode) {
-              case 4: {
-                this.formKho.patchValue({
-                  maNganlo: maKhoMoi
-                });
-                break;
-              }
-              case 3 : {
-                this.formKho.patchValue({
-                  maNgankho: maKhoMoi
-                });
-                break;
-              }
-              case 2 : {
-                this.formKho.patchValue({
-                  maNhakho: maKhoMoi
-                });
-                break;
-              }
-              case 1 : {
-                this.formKho.patchValue({
-                  maDiemkho: maKhoMoi
-                });
-                break;
-              }
+            case 3 : {
+              this.formKho.patchValue({
+                maNgankho : maDviMoi
+              })
+              break;
+            }
+            case 2 : {
+              this.formKho.patchValue({
+                maNhakho : maDviMoi
+              })
+              break;
+            }
+            case 1 : {
+              this.formKho.patchValue({
+                maDiemkho : maDviMoi
+              })
+              break;
             }
           }
-        });
-      }
-    }
+        }
+      })    }
   }
 
   onChangeLoaiVthh(event) {

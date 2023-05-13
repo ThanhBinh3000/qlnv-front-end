@@ -32,16 +32,15 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private PhieuXuatKhoBttService: PhieuXuatKhoBttService,
+    private phieuXuatKhoBttService: PhieuXuatKhoBttService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, PhieuXuatKhoBttService);
+    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoBttService);
     this.formData = this.fb.group({
       namKh: null,
       soBienBan: null,
       soQd: null,
       trichYeu: null,
       ngayLayMau: null,
-      maChiCuc: null,
       loaiVthh: null,
     })
 
@@ -94,7 +93,7 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
           let body = {
             id: item.id
           };
-          this.PhieuXuatKhoBttService.delete(body).then(async () => {
+          this.phieuXuatKhoBttService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
