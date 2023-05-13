@@ -6,7 +6,7 @@
           [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Báo cáo nguồn hình thành dự trữ quốc gia</span>
+        <span>BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA</span>
       </div>
     </div>
     <div class="btn-group">
@@ -129,7 +129,7 @@
     </form>
   </nz-card>
   <div class="group-button">
-    <h3>DANH SÁCH BÁO CÁO NGUỒN HÌNH THÀNH DỰ TRỮ QUỐC GIA</h3>
+    <h3>DANH SÁCH BÁO CÁO SỐ LƯỢNG VÀ GIÁ TRỊ HÀNG DỰ TRỮ QUỐC GIA</h3>
     <div class="buttons" *ngIf="!isView">
       <button type="button" class="btn btn-main" (click)="themMoiDanhMuc()">
         <i class="icon htvbdh_dau-cong"></i>
@@ -143,9 +143,7 @@
       <thead>
       <tr>
         <th rowSpan="3" class="text-center multi-line" nzWidth="60px" nzLeft>STT</th>
-        <th rowSpan="3" class="text-center multi-line" nzWidth="200px" nzLeft>Danh mục/Đơn vị
-          bảo quản từng mặt hàng
-        </th>
+        <th rowSpan="3" class="text-center multi-line" nzWidth="200px" nzLeft>Danh mục/Đơn vị bảo quản</th>
         <th rowSpan="3" class="text-center multi-line" nzWidth="150px" nzLeft>Mặt hàng</th>
         <th rowSpan="3" class="text-center multi-line" nzWidth="100px">Mã số</th>
         <th rowSpan="3" class="text-center multi-line" nzWidth="100px">ĐVT</th>

@@ -44,7 +44,7 @@
     </div>
   </div>
 
-  <nz-alert class="mg-t-10" *ngIf="!isDisabled() && formData.value.trangThai != STATUS.DU_THAO" nzShowIcon
+  <nz-alert class="mg-t-10" *ngIf=" formData.value.trangThai == STATUS.TU_CHOI_TP && formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon
     nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 

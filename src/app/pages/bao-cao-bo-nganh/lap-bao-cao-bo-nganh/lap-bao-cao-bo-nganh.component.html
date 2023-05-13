@@ -2,13 +2,51 @@
   <div nz-row nzGutter="24">
     <div nz-col nzspan="4">
       <ul nz-menu nzMode="inline" style="max-width: 300px">
-        <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC">
+        <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 145/2013/TT-BTC">
           <ul>
             <li nz-menu-item nzSelected (click)="selectTab(0)">
               <span nz-icon nzType="fund"></span>
-              <span>Nguồn hình thành DTQG</span>
+              <span>KH tổng hợp nhập, xuất hàng DTQG</span>
             </li>
             <li nz-menu-item (click)="selectTab(1)">
+              <span nz-icon nzType="fund"></span>
+              <span>KH tăng hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(2)">
+              <span nz-icon nzType="fund"></span>
+              <span>KH giảm hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(3)">
+              <span nz-icon nzType="fund"></span>
+              <span>KH luân phiên đổi hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(4)">
+              <span nz-icon nzType="fund"></span>
+              <span>Thực hiện KH hoạch nhập, xuất, cứu trợ, viện trợ, bảo quản hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(5)">
+              <span nz-icon nzType="fund"></span>
+              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(6)">
+              <span nz-icon nzType="fund"></span>
+              <span>Nhập dữ liệu chi tiết nhập, xuất, tồn kho hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(7)">
+              <span nz-icon nzType="fund"></span>
+              <span>Chi tiết nhập, xuất, tồn kho hàng DTQG</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul nz-menu nzMode="inline" style="max-width: 300px">
+        <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC">
+          <ul>
+            <li nz-menu-item (click)="selectTab(8)">
+              <span nz-icon nzType="fund"></span>
+              <span>Nguồn hình thành DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(9)">
               <span nz-icon nzType="fund"></span>
               <span>Tổng chi cho mua hàng DTQG trong kỳ</span>
             </li>
@@ -20,6 +58,14 @@
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG</span>
             </li>
+            <li nz-menu-item (click)="selectTab(4)">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG nhập trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(5)">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
+            </li>
           </ul>
         </li>
       </ul>
@@ -27,6 +73,36 @@
     <div nz-col nzSpan="19">
       <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 0">
+          <app-thop-nhap-xuat-hang-dtqg></app-thop-nhap-xuat-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 1">
+          <app-tang-hang-dtqg></app-tang-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 2">
+          <app-giam-hang-dtqg></app-giam-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 3">
+          <app-luan-phien-doi-hang-dtqg></app-luan-phien-doi-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 4">
+          <app-kh-nhap-xuat-ct-vt-bq-hang-dtqg></app-kh-nhap-xuat-ct-vt-bq-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 5">
+          <app-nhap-xuat-ton-kho-hang-dtqg></app-nhap-xuat-ton-kho-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 8">
           <app-nguon-hinh-thanh-dtqg></app-nguon-hinh-thanh-dtqg>
         </ng-container>
         <ng-container *ngIf="tabSelected == 1">
@@ -37,6 +113,12 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 3">
           <app-sl-gtri-hang-dtqg></app-sl-gtri-hang-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 4">
+          <app-sl-gtri-hang-dtqg-nhap></app-sl-gtri-hang-dtqg-nhap>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 5">
+          <app-sl-gtri-hang-dtqg-xuat></app-sl-gtri-hang-dtqg-xuat>
         </ng-container>
       </div>
     </div>
