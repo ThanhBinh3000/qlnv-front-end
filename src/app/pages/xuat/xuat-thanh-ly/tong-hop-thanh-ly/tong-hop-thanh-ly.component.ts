@@ -15,7 +15,8 @@ import {v4 as uuidv4} from "uuid";
 import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/TongHopThanhLy.service";
 import {FormGroup} from "@angular/forms";
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
-import {NumberToRoman } from 'src/app/shared/commonFunction';
+import {NumberToRoman} from 'src/app/shared/commonFunction';
+
 @Component({
   selector: 'app-tong-hop-thanh-ly',
   templateUrl: './tong-hop-thanh-ly.component.html',
@@ -37,6 +38,9 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   clickCancel = false;
   flatDataTable: any;
   numberToRoman = NumberToRoman;
+  selectedItem: any;
+  modalWidth: any;
+  step: any = 1;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -183,7 +187,7 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.flatDataTable,'this.flatDataTable');
+    console.log(this.flatDataTable, 'this.flatDataTable');
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {
@@ -209,9 +213,12 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
         this.expandSetString.add(idVirtual);
         return {
           idVirtual: idVirtual,
+          id: rowItem.id,
           nam: rowItem.nam,
           tenCuc: rowItem.tenCuc,
           maDanhSach: rowItem.maDanhSach,
+          tenDanhSach: rowItem.tenDanhSach,
+          ngayTao: rowItem.ngayTao,
           childData: rs
         };
       }).value();
@@ -236,7 +243,18 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     this.showModal(false);
   }
 
-  showModal(isVisibleModal: boolean) {
+  showModal(isVisibleModal: boolean, item?: any) {
     this.isVisibleModal = isVisibleModal;
+    this.selectedItem = item;
+    this.modalWidth = item ? '100vw' : '30vw';
+  }
+
+  changeStep($event: any) {
+    //1 = man hinh dau tien  2 man hinh chi tiet
+    if ($event.step == 1) {
+      this.showModal(false);
+    } else if ($event.step == 2) {
+      this.showModal(true, $event.item);
+    }
   }
 }
