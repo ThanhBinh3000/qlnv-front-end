@@ -30,6 +30,7 @@ import { DanhSachBanTrucTiepChiCucComponent } from './danh-sach-hop-dong-btt/dan
   ],
   exports: [
     HopDongBttComponent,
+    ThongTinHopDongBttComponent,
 
   ]
 })

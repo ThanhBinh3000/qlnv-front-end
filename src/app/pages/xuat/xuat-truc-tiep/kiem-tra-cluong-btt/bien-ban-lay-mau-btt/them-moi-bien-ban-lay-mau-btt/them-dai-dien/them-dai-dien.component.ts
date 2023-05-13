@@ -56,7 +56,7 @@ export class ThemDaiDienComponent implements OnInit {
     if (this.itemRow.daiDien) {
       return true
     } else {
-      this.notification.error(MESSAGE.ERROR, "Danh sách ngưởi đại diện không được để trống")
+      this.notification.error(MESSAGE.ERROR, "Danh sách người đại diện không được để trống")
       return false;
     }
   }
