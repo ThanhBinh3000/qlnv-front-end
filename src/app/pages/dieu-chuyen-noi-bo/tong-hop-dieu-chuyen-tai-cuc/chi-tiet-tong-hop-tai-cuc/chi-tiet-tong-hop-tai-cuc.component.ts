@@ -521,9 +521,16 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                         if (item.dcnbKeHoachDcHdr.some(cur => !cur.daXdinhDiemNhap)) {
                             this.daXdinhDiemNhap = false
                         };
-                        Array.isArray(item.dcnbKeHoachDcHdr) && item.dcnbKeHoachDcHdr.forEach(element => {
-                            this.deXuatPheDuyet[element.id] = true;
-                        });
+                        if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
+                            Array.isArray(item.dcnbKeHoachDcHdr) && item.dcnbKeHoachDcHdr.forEach(element => {
+                                this.deXuatPheDuyet[element.id] = true;
+                            });
+
+                        } else if (this.formData.value.trangThai && this.formData.value.trangThai != STATUS.DU_THAO && typeof item.dcnbKeHoachDcHdrId == "string") {
+                            item.dcnbKeHoachDcHdrId?.split(",")?.forEach(element => {
+                                this.deXuatPheDuyet[element] = true
+                            });
+                        }
                         this.renderListDcnbKeHoachDcHdrId(this.deXuatPheDuyet)
                     })
                     this.selectRow(this.groupData2Cuc[0], isNew)
