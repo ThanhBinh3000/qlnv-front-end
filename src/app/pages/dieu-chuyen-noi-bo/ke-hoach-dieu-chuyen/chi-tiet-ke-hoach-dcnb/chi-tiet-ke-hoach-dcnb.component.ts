@@ -256,7 +256,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    if(!this.isView){
+    if (!this.isView) {
       let resDonVi = await this.donViService.getDonVi({str: this.userInfo.MA_DVI?.slice(0, -2)});
       if (resDonVi.msg == MESSAGE.SUCCESS) {
         this.dsDonVi = [resDonVi.data];
@@ -280,12 +280,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if(value && value.type == 'DC'){
+      if (value && value.type == 'DC') {
         this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
           return f.maDvi !== this.userInfo.MA_DVI
         }) : [];
-      }else {
-        this.listChiCucNhan = Array.isArray(res.data) ? res.data: [];
+      } else {
+        this.listChiCucNhan = Array.isArray(res.data) ? res.data : [];
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -347,7 +347,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 this.listDiemKhoBq = [];
                 this.listDiemKhoBq = [
                   ...this.listDiemKhoBq,
-                  ...element.children.filter(item =>item.type =='MLK')
+                  ...element.children.filter(item => item.type == 'MLK')
                 ]
               }
             });
@@ -585,7 +585,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
       return;
     }
     if (this.isNhanDieuChuyen) {
-      if( this.formDataChiTiet.controls['slDcConLai'].value < 0){
+      if (this.formDataChiTiet.controls['slDcConLai'].value < 0) {
         this.notification.error(MESSAGE.ERROR, "Số lượng điều chuyển còn lại không thể nhỏ hơn 0!");
         return;
       }
@@ -832,41 +832,44 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
 
   async saveAndSend(message: string) {
     this.setValidForm();
+    let isInvalid = false;
     if (!this.formData.value.danhSachHangHoa || (this.formData.value.danhSachHangHoa && this.formData.value.danhSachHangHoa.length === 0)) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền thông tin hàng DTQG cần điều chuyển! ');
-      for (let r of this.rows.controls) {
-        this.helperService.markFormGroupTouched(r);
-        if (r.invalid) {
-          return;
-        }
-      }
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        return;
-      }
-    } else {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: message,
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 350,
-        nzOnOk: async () => {
-          let result = await this.save(false, true, false);
-          if (result) {
-            this.idInput = result.id;
-            if (this.formData.value.type == 'DC') {
-              await this.approve(this.idInput, STATUS.CHODUYET_TBP_TVQT, message);
-            } else if (this.formData.value.type == 'NDC') {
-              await this.approve(this.idInput, STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT, message);
-            }
-          }
-        },
-      });
-
+      isInvalid = true;
     }
+    for (let r of this.rows.controls) {
+      this.helperService.markFormGroupTouched(r);
+      if (r.invalid) {
+        isInvalid = true;
+      }
+    }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      isInvalid = true;
+    }
+    if (isInvalid) {
+      return;
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: message,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        let result = await this.save(false, true, false);
+        if (result) {
+          this.idInput = result.id;
+          if (this.formData.value.type == 'DC') {
+            await this.approve(this.idInput, STATUS.CHODUYET_TBP_TVQT, message);
+          } else if (this.formData.value.type == 'NDC') {
+            await this.approve(this.idInput, STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT, message);
+          }
+        }
+      },
+    });
   }
 
   async approve(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
@@ -1301,11 +1304,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     this.formDataChiTiet.controls['slDcConLai'].setValue(this.tinhSlDcConLai() - value);
   }
 
-  tinhSlDcConLai(){
-    let items = this.formData.controls['danhSachHangHoa'].value.filter(item =>(item.maLoKho == this.formDataChiTiet.controls['maLoKho'].value && item.idVirtual != this.formDataChiTiet.controls['idVirtual'].value));
-    const tongSoLuongPhanBo = items.reduce((total,currentValue) => {
+  tinhSlDcConLai() {
+    let items = this.formData.controls['danhSachHangHoa'].value.filter(item => (item.maLoKho == this.formDataChiTiet.controls['maLoKho'].value && item.idVirtual != this.formDataChiTiet.controls['idVirtual'].value));
+    const tongSoLuongPhanBo = items.reduce((total, currentValue) => {
       return total + currentValue.soLuongPhanBo;
-    },0);
+    }, 0);
     return this.formDataChiTiet.value.soLuongDc - tongSoLuongPhanBo;
   }
 
