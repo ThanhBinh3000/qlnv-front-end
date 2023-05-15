@@ -451,18 +451,18 @@ export class PhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends BaseCompone
     }
   }
 
-  disabledStartngayKnghiem = (startValue: Date): boolean => {
-    if (!startValue || !this.formData.value.ngayKnghiem) {
-      return false;
+  disabledTuNgay = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKnghiemDen) {
+      return startValue.getTime() > this.formData.value.ngayKnghiemDen.getTime();
     }
-    return startValue?.getTime() > this.formData.value.ngayKnghiemDen?.getTime();
+    return false;
   };
 
-  disabledEndngayKnghiem = (endValue: Date): boolean => {
-    if (!endValue || !this.formData.value.ngayKnghiem) {
+  disabledDenNgay = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKnghiemTu) {
       return false;
     }
-    return endValue?.getTime() <= this.formData.value.ngayKnghiemDen?.getTime();
+    return endValue.getTime() <= this.formData.value.ngayKnghiemTu.getTime();
   };
   openModalQdDc(id: number) {
     this.idQdDc = id;
