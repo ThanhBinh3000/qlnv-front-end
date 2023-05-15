@@ -22,6 +22,9 @@ import {
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import {
+  DialogDxScLonComponent
+} from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 @Component({
   selector: "app-them-moi-qd-sc-btc",
   templateUrl: "./them-moi-qd-sc-btc.component.html",
@@ -314,4 +317,61 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
     return sl;
   }
 
+  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
+    let modalQD = this.modal.create({
+      nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
+      nzContent: DialogDxScLonComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "100px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: tmdt
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+      }
+    });
+  }
+
+  deleteItem(index: any, y: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn xóa?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
+            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
+              this.dataTable[index].dataChild.splice(y, 1);
+            }
+          }
+        } catch (e) {
+          console.log("error", e);
+        }
+      }
+    });
+  }
 }

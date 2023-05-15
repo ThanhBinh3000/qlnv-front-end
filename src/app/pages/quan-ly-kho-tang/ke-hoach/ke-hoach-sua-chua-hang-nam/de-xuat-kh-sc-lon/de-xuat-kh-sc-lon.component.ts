@@ -15,6 +15,7 @@ import {
   DeXuatScLonService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
 import { STATUS } from "../../../../../constants/status";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-de-xuat-kh-sc-lon',
@@ -39,6 +40,7 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
 
   constructor(
     private httpClient: HttpClient,
+    private router: Router,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
@@ -61,6 +63,9 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
