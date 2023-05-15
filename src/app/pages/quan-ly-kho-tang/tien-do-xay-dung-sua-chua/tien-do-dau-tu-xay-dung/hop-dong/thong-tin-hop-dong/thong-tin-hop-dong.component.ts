@@ -49,6 +49,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     max: 100000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+  viewHopDong: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -111,14 +112,37 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
 
   }
 
-  async detail() {
+  async detail(isBackFromHd?) {
     this.spinner.show();
     try {
-      if (this.itemQdPdKhLcnt) {
+      if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
         this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
+        }
+      } else {
+        //Load lại page thông tin hợp đồng khi back lại từ trang thêm mới hợp đồng.
+        let body = {
+          "namKh": this.itemQdPdKhLcnt.namKh,
+          "idDuAn": this.itemQdPdKhLcnt.idDuAn,
+          "idQdPdDaDtxd": this.itemQdPdKhLcnt.idQdPdDaDtxd,
+          "idQdPdKhLcnt": this.itemQdPdKhLcnt.id,
+        }
+        let res = await this.hopdongService.detailQdPdKhLcnt(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res.data) {
+            this.itemQdPdKhLcnt = res.data;
+            this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
+            this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+            if (this.listHopDong && this.listHopDong.length > 0) {
+              this.selectRow(this.listHopDong[0]);
+            }
+          } else {
+            this.notification.warning(MESSAGE.WARNING, "Không tìm thấy thông tin hợp đồng cho dự án này, vui lòng kiểm tra lại.");
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
       }
     } catch
@@ -131,18 +155,29 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   }
 
   async selectRow(data) {
-    this.listHopDong.forEach(item => item.selected = false);
-    data.selected = true;
-    this.itemSelected = data;
+    if (data) {
+      this.listHopDong.forEach(item => item.selected = false);
+      data.selected = true;
+      this.itemSelected = data;
+      this.viewHopDong = true
+      this.idInput = data.idHopDong;
+    }
   }
 
   closeThemHopDong() {
     this.openPopThemMoiHd = false;
   }
 
+  async receivedData(data: any) {
+    await this.detail(true);
+    this.openPopThemMoiHd = false;
+  }
+
   openThemMoiHd(id?, isView?: boolean) {
     if (!id) {
       this.flagThemMoi = 'addnew';
+    } else {
+      this.flagThemMoi = 'edit';
     }
     this.idInput = id;
     this.isDetail = true;
