@@ -243,6 +243,30 @@
             </ng-template>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td class=" text-blue">Cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('keHoachSl', null,
+              'tong') |
+              number:
+              '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('uocThienSl', null,
+              'tong') |
+              number: '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslKho('namKhSl', null,
+              'tong') |
+              number: '1.0-3'}}
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </nz-table>
     </nz-card>
   </nz-card>
