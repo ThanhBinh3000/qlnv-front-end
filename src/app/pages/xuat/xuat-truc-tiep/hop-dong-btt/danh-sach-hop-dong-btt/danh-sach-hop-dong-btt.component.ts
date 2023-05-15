@@ -7,6 +7,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
+
 @Component({
   selector: 'app-danh-sach-hop-dong-btt',
   templateUrl: './danh-sach-hop-dong-btt.component.html',
@@ -14,6 +15,8 @@ import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-t
 })
 export class DanhSachHopDongBttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  isQuanLy: boolean;
+  isAddNew: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -50,10 +53,13 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     try {
       this.timKiem();
-      this.spinner.hide();
+      await Promise.all([
+        this.search(),
+      ]);
+      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
@@ -61,33 +67,29 @@ export class DanhSachHopDongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  goDetail(id: number) {
+  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.idSelected = id;
     this.isDetail = true;
+    this.isQuanLy = isQuanLy;
+    this.isAddNew = !isQuanLy;
   }
 
-
   async timKiem() {
-    if (this.userService.isCuc() || this.userService.isTongCuc()) {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-        trangThai: this.STATUS.BAN_HANH
-      })
-    } else {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      })
-    }
-    await this.search();
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.STATUS.BAN_HANH
+    })
   }
 
   clearFilter() {
     this.formData.reset();
     this.timKiem();
+    this.search();
   }
-
 
   disabledNgayPduyetTu = (startValue: Date): boolean => {
     if (!startValue || !this.formData.value.ngayPduyetDen) {

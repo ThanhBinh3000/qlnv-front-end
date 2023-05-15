@@ -56,7 +56,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_THEM')">
+          *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_KTCL_LT_BBLMBGM_THEM') && userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -239,7 +239,7 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-phieu-kiem-tra-chat-luong [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+  <app-them-moi-phieu-kiem-tra-chat-luong [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView" (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-tra-chat-luong>
 </div>
 <nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
@@ -259,7 +259,7 @@
           nzMaskClosable="true" [(nzVisible)]="openBbTk" (nzOnCancel)="closeSoBbTkModal()">
   <ng-container *nzModalContent class="modal__content custom-scroll-modal">
     <app-xc-them-moi-bien-ban-tinh-kho
-      class="modal-content-detail" [idInput]="idBbTk" [loaiVthhInput]="loaiVthh" [isView]="true">
+      class="modal-content-detail" [idInput]="idBbTk" [loaiVthh]="loaiVthh" [isView]="true">
     </app-xc-them-moi-bien-ban-tinh-kho>
   </ng-container>
   <div *nzModalFooter>

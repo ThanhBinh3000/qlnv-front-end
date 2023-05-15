@@ -27,7 +27,7 @@ import { PhieuXuatKhoService } from './../../../../../../services/qlnv-hang/xuat
 import { BangKeCanService } from './../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
 
 @Component({
-  selector: 'app-chi-tiet-bang-ke-can',
+  selector: 'app-bdg-chi-tiet-bang-ke-can',
   templateUrl: './chi-tiet-bang-ke-can.component.html',
   styleUrls: ['./chi-tiet-bang-ke-can.component.scss']
 })

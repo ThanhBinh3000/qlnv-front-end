@@ -6,9 +6,9 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
-
+import { v4 as uuidv4 } from 'uuid';
+import { chain } from 'lodash';
 @Component({
   selector: 'app-phieu-xuat-kho-btt',
   templateUrl: './phieu-xuat-kho-btt.component.html',
@@ -21,6 +21,10 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
   isView: boolean = false;
   isTatCa: boolean = false;
   idQdGiaoNvXh: number = 0;
+  dataView: any = [];
+  expandSetString = new Set<string>();
+  idPhieu: number = 0;
+  isViewPhieu: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -28,19 +32,16 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhNvXuatBttService: QuyetDinhNvXuatBttService,
-    private PhieuXuatKhoBttService: PhieuXuatKhoBttService,
+    private phieuXuatKhoBttService: PhieuXuatKhoBttService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhNvXuatBttService);
+    super(httpClient, storageService, notification, spinner, modal, phieuXuatKhoBttService);
     this.formData = this.fb.group({
       namKh: null,
       soBienBan: null,
       soQd: null,
       trichYeu: null,
       ngayLayMau: null,
-      maChiCuc: null,
       loaiVthh: null,
-      trangThai: this.STATUS.BAN_HANH
     })
 
     this.filterTable = {
@@ -64,7 +65,7 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     try {
       this.formData.patchValue({
         loaiVthh: this.loaiVthh,
-        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+        maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
     } catch (e) {
@@ -92,7 +93,7 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
           let body = {
             id: item.id
           };
-          this.PhieuXuatKhoBttService.delete(body).then(async () => {
+          this.phieuXuatKhoBttService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -105,13 +106,89 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
     });
   }
 
+  async search(roles?): Promise<void> {
+    await this.spinner.show()
+    await super.search(roles);
+    this.buildTableView();
+    await this.spinner.hide()
+  }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvXh?: number) {
-    this.selectedId = id;
+
+  buildTableView() {
+    let dataView = chain(this.dataTable)
+      .groupBy("soQdNv")
+      .map((value, key) => {
+        let rs = chain(value)
+          .groupBy("maDiemKho")
+          .map((v, k) => {
+            let rowLv2 = v.find(s => s.maDiemKho === k);
+            return {
+              id: rowLv2.id,
+              maDiemKho: k,
+              idVirtual: uuidv4(),
+              maLoKho: rowLv2.maLoKho,
+              tenDiemKho: rowLv2.tenDiemKho,
+              maNhaKho: rowLv2.maNhaKho,
+              tenNhaKho: rowLv2.tenNhaKho,
+              maNganKho: rowLv2.maNganKho,
+              tenNganKho: rowLv2.tenNganKho,
+              tenLoKho: rowLv2.tenLoKho,
+              soPhieuXuat: rowLv2.soPhieuXuat,
+              ngayXuatKho: rowLv2.ngayXuatKho,
+              soPhieu: rowLv2.soPhieu,
+              ngayKnghiem: rowLv2.ngayKnghiem,
+              trangThai: rowLv2.trangThai,
+              tenTrangThai: rowLv2.tenTrangThai,
+              childData: v
+            }
+          }
+          ).value();
+        let rowLv1 = value.find(s => s.soQdNv === key);
+        return {
+          idVirtual: uuidv4(),
+          soQdNv: key,
+          namKh: rowLv1.namKh,
+          ngayQdNv: rowLv1.ngayQdNv,
+          idQdNv: rowLv1.idQdNv,
+          childData: rs
+        };
+      }).value();
+    this.dataView = dataView
+    this.expandAll()
+  }
+
+  expandAll() {
+    this.dataView.forEach(s => {
+      this.expandSetString.add(s.idVirtual);
+    })
+  }
+
+  onExpandStringChange(id: string, checked: boolean): void {
+    if (checked) {
+      this.expandSetString.add(id);
+    } else {
+      this.expandSetString.delete(id);
+    }
+  }
+
+  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+    this.selectedId = lv2.id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
+
+
+  openModalPhieuXuatKho(id: number) {
+    this.idPhieu = id;
+    this.isViewPhieu = true;
+  }
+
+  closeModalPhieuXuatKho() {
+    this.idPhieu = null;
+    this.isViewPhieu = false;
+  }
+
 
 }
 

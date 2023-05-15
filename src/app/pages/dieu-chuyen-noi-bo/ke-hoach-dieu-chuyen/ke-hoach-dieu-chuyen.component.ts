@@ -39,7 +39,18 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     {ma: this.STATUS.TUCHOI_TBP_TVQT, giaTri: 'Từ chối - TBP TVQT'},
     {ma: this.STATUS.CHO_DUYET_LDCC, giaTri: 'Chờ duyệt - LĐ Chi Cục'},
     {ma: this.STATUS.TU_CHOI_LDCC, giaTri: 'Từ chối - LĐ Chi Cục'},
-    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Chi Cục'}
+    {ma: this.STATUS.DA_DUYET_LDCC, giaTri: 'Đã duyệt - LĐ Chi Cục'},
+    {ma: this.STATUS.YC_CHICUC_PHANBO_DC, giaTri: 'Y/c Chi cục xác định điểm nhập ĐC'},
+    {ma: this.STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT, giaTri: 'Đã xác định điểm nhập, chờ duyệt – TBP TVQT'},
+    {ma: this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT, giaTri: 'Đã xác định điểm nhập, từ chối – TBP TVQT'},
+    {ma: this.STATUS.DA_PHANBO_DC_CHODUYET_LDCC, giaTri: 'Đã xác định điểm nhập, chờ duyệt – LĐ Chi cục'},
+    {ma: this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC, giaTri: 'Đã xác định điểm nhập, từ chối – LĐ Chi cục'},
+    {ma: this.STATUS.DA_PHANBO_DC_DADUYET_LDCC, giaTri: 'Đã xác định điểm nhập, đã duyệt – LĐ Chi cục'},
+    {ma: this.STATUS.DA_PHANBO_DC_CHODUYET_TP, giaTri: 'Đã xác định điểm nhập, chờ duyệt – TP'},
+    {ma: this.STATUS.DA_PHANBO_DC_TUCHOI_TP, giaTri: 'Đã xác định điểm nhập, từ chối – TP'},
+    {ma: this.STATUS.DA_PHANBO_DC_CHODUYET_LDC, giaTri: 'Đã xác định điểm nhập, chờ duyệt – LĐ Cục'},
+    {ma: this.STATUS.DA_PHANBO_DC_TUCHOI_LDC, giaTri: 'Đã xác định điểm nhập, từ chối – LĐ Cục'},
+    {ma: this.STATUS.DA_PHANBO_DC_DADUYET_LDC, giaTri: 'Đã xác định điểm nhập, đã duyệt – LĐ Cục'},
   ];
 
   constructor(
@@ -224,7 +235,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
 
   checkAllowEdit(data: any): boolean {
     return (data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.TU_CHOI_LDCC
-        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC)
+        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC || (data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!data.xdLaiDiemNhap) || (data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!data.xdLaiDiemNhap))
       && this.userService.isAccessPermisson('DCNB_KHDC_THEM');
   }
 

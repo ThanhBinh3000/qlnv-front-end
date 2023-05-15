@@ -16,6 +16,7 @@ import { isEmpty, cloneDeep } from 'lodash';
 import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TongHopDieuChuyenCapTongCucService } from './../tong-hop-dieu-chuyen-tai-tong-cuc.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-tong-hop-dieu-chuyen-cap-tong-cuc',
@@ -65,6 +66,7 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
+        private router: Router,
         private tongHopDieuChuyenCapTongCucService: TongHopDieuChuyenCapTongCucService,
         private donviService: DonviService,
         private danhMucService: DanhMucService,
@@ -75,9 +77,8 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             namKeHoach: [''],
             id: [''],
             loaiDieuChuyen: [''],
-            ngayTongHop: [''],
-            thTuNgay: [''],
-            thDenNgay: [''],
+            tuNgay: [''],
+            denNgay: [''],
             trichYeu: ['']
 
         })
@@ -183,6 +184,11 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
             }
         }
     }
+    taoQuyetDinhDc(id: number) {
+        if (id) {
+            this.router.navigate(['dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen', { id }]);
+        }
+    }
     checkRoleView(trangThai: string): boolean {
         return !(this.checkRoleEdit(trangThai) || this.checkRoleDelete(trangThai))
     }
@@ -201,7 +207,20 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     };
     xoaItem(item: any) {
         this.delete(item)
-    }
+    };
+    disabledTuNgay = (startValue: Date): boolean => {
+        if (startValue && this.formData.value.denNgay) {
+            return startValue.getTime() > this.formData.value.denNgay.getTime();
+        }
+        return false;
+    };
+
+    disabledDenNgay = (endValue: Date): boolean => {
+        if (!endValue || !this.formData.value.tuNgay) {
+            return false;
+        }
+        return endValue.getTime() <= this.formData.value.tuNgay.getTime();
+    };
     deleteSelect() {
         let dataDelete = [];
         if (this.dataTable && this.dataTable.length > 0) {

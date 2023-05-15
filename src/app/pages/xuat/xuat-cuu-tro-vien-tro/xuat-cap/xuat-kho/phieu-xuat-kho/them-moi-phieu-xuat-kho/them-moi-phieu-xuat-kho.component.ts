@@ -11,19 +11,21 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemNghiemChatLuong.service';
 import { Validators } from '@angular/forms';
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
-  selector: 'app-them-moi-phieu-xuat-kho',
+  selector: 'app-xc-them-moi-phieu-xuat-kho',
   templateUrl: './them-moi-phieu-xuat-kho.component.html',
   styleUrls: ['./them-moi-phieu-xuat-kho.component.scss']
 })
 export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -99,9 +101,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChiDvi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho: [],
-        tenNhaKho: [],
-        tenNganKho: [],
+        tenDiemKho:  ['', [Validators.required]],
+        tenNhaKho:  ['', [Validators.required]],
+        tenNganKho:  ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
 
@@ -120,12 +122,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         this.loadSoQuyetDinh()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -156,6 +158,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
         type: "XUAT_CAP",
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -167,6 +170,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -249,6 +254,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
+        loaiVthh: this.loaiVthh
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content;
@@ -287,18 +293,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     });
   }
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
-    }
+    await this.createUpdate(body);
+    this.formData.enable();
   }
 
   pheDuyet() {

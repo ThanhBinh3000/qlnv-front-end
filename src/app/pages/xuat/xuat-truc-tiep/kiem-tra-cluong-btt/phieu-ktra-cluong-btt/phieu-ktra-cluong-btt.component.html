@@ -11,7 +11,7 @@
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Số QĐ giao NV xuất hàng</label>
-                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQd" />
+                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQdNv" />
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Số phiếu kiểm nghiệm chất lượng</label>
@@ -47,7 +47,8 @@
         <div class="group-button">
             <h3> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub"
+                    (click)="exportData('Danh-sach-phieu-kiem-nghiem-chat-luong-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
@@ -87,9 +88,9 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>
-                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link"
-                                    (click)="openModalQdNv(item.idQd)">{{
-                                    item.soQd}}</a>
+                                <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
+                                    (click)="openModalQdNv(item.idQdNv)">{{
+                                    item.soQdNv}}</a>
                             </td>
                             <td>{{item.namKh}}</td>
                             <td>{{item.ngayQd}}</td>

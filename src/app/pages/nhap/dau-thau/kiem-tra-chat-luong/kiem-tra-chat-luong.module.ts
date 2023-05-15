@@ -46,14 +46,15 @@ import { ThemMoiHoSoKyThuatComponent } from './ho-so-ky-thuat/them-moi-ho-so-ky-
     ComponentsModule,
     DirectivesModule,
   ],
-  exports: [
-    KiemTraChatLuongComponent,
-    ChucNangKiemTraComponent,
-    LapBienBanNghiemThuBaoQuanComponent,
-    QuanLyPhieuKiemTraChatLuongHangComponent,
-    QuanLyBienBanLayMauComponent,
-    BienBanChuanBiKhoComponent,
-    HoSoKyThuatComponent,
-  ]
+    exports: [
+        KiemTraChatLuongComponent,
+        ChucNangKiemTraComponent,
+        LapBienBanNghiemThuBaoQuanComponent,
+        QuanLyPhieuKiemTraChatLuongHangComponent,
+        QuanLyBienBanLayMauComponent,
+        BienBanChuanBiKhoComponent,
+        HoSoKyThuatComponent,
+        ThemMoiPhieuKiemNghiemChatLuongComponent,
+    ]
 })
 export class KiemTraChatLuongModule { }

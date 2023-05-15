@@ -57,11 +57,11 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
     }
     LIST_TRANG_THAI = {
         "00": "Dự thảo",
-        "01": "Chờ duyệt - tp",
-        "02": "Từ chối -tp",
-        "03": "Chờ duyệt - lđ cục",
-        "04": "Từ chối - lđ cục",
-        "05": "Đã duyệt - lđ cục",
+        "01": "Chờ duyệt - TP",
+        "02": "Từ chối -TP",
+        "03": "Chờ duyệt - LĐ CỤC",
+        "04": "Từ chối - LĐ CỤC",
+        "05": "Đã duyệt - LĐ CỤC",
         "65": "Y/c chi cục xác định điểm nhập"
     }
     isViewDetail: boolean = false;
@@ -95,7 +95,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
             maDvi: [''],
             id: [''],
             loaiDieuChuyen: [''],
-            ngayTongHop: [''],
+            // ngayTongHop: [''],
             tuNgay: [''],
             denNgay: [''],
             trichYeu: [''],
@@ -116,19 +116,18 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
 
 
 
-    disabledStartNgayLapKh = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayLapKhDen) {
-            return startValue.getTime() > this.formData.value.ngayLapKhDen.getTime();
-        } else {
-            return false;
+    disabledTuNgay = (startValue: Date): boolean => {
+        if (startValue && this.formData.value.denNgay) {
+            return startValue.getTime() > this.formData.value.denNgay.getTime();
         }
+        return false;
     };
 
-    disabledEndNgayLapKh = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayLapKhTu) {
+    disabledDenNgay = (endValue: Date): boolean => {
+        if (!endValue || !this.formData.value.tuNgay) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.ngayLapKhDen.getTime();
+        return endValue.getTime() <= this.formData.value.tuNgay.getTime();
     };
 
     disabledStartNgayDuyetLdc = (startValue: Date): boolean => {
@@ -171,10 +170,10 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         await this.search()
     }
     async timKiem() {
-        if (this.formData.value.ngayTongHop) {
-            this.formData.value.tuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
-            this.formData.value.denNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
-        }
+        // if (this.formData.value.ngayTongHop) {
+        //     this.formData.value.tuNgay = dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD')
+        //     this.formData.value.denNgay = dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD')
+        // }
         await this.search();
     }
     async loadDsCuc() {
@@ -209,7 +208,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         return !(this.checkRoleEdit(trangThai) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
     }
     checkRoleEdit(trangThai: string) {
-        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC || trangThai == STATUS.TU_CHOI_LDC || trangThai == STATUS.TU_CHOI_TP)
+        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC)
     };
     checkRoleApproveDc(trangThai: string) {
         return this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)

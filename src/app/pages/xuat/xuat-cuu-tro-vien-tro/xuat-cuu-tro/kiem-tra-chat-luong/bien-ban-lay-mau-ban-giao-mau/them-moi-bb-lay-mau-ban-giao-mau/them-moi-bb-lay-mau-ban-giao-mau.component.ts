@@ -12,12 +12,9 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { isEmpty } from 'lodash';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ItemDaiDien } from 'src/app/pages/nhap/dau-thau/kiem-tra-chat-luong/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
 import { Validators } from '@angular/forms';
-import { ChiTietList } from 'src/app/models/QdPheDuyetKHBanDauGia';
 
 @Component({
   selector: 'app-them-moi-bb-lay-mau-ban-giao-mau',
@@ -118,6 +115,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh(),
+        // this.loadSoBbLayMau(),
         this.loadPhuongPhapLayMau(),
       ])
       await this.loadDetail(this.idInput)
@@ -160,7 +158,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         maQhNs: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         soBienBan: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -180,6 +178,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -224,7 +223,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
     if (dataChiCuc) {
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
     }
-    this.listBienBan(data.soQd)
+    await this.listBienBan(data.soQd)
     await this.spinner.hide();
   }
 
@@ -302,8 +301,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

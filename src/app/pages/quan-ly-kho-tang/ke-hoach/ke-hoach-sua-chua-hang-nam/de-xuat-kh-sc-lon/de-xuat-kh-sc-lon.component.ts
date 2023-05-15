@@ -14,6 +14,8 @@ import { DonviService } from "../../../../../services/donvi.service";
 import {
   DeXuatScLonService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
+import { STATUS } from "../../../../../constants/status";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-de-xuat-kh-sc-lon',
@@ -28,17 +30,17 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
   idTongHop: number = 0;
 
   listTrangThai = [{ "ma": "00", "giaTri": "Dự thảo" },
-    { "ma": "01", "giaTri": "Chờ duyệt TP" },
-    { "ma": "02", "giaTri": "Từ chối TP" },
-    { "ma": "03", "giaTri": "Chờ duyệt LĐ Cục" },
-    { "ma": "04", "giaTri": "Từ chối LĐ Cục" },
-    { "ma": "05", "giaTri": "Đã duyệt LĐ Cục" },
-    { "ma": "18", "giaTri": "Chờ duyệt CB Vụ" },
-    { "ma": "19", "giaTri": "Từ chối CB Vụ" },
-    { "ma": "20", "giaTri": "Đã duyệt CB Vụ" }];
+    { "ma": STATUS.CHO_DUYET_TP, "giaTri": "Chờ duyệt TP" },
+    { "ma": STATUS.TU_CHOI_TP, "giaTri": "Từ chối TP" },
+    { "ma": STATUS.CHO_DUYET_LDC, "giaTri": "Chờ duyệt LĐ Cục" },
+    { "ma": STATUS.TU_CHOI_LDC, "giaTri": "Từ chối LĐ Cục" },
+    { "ma": STATUS.DA_DUYET_LDC, "giaTri": "Đã duyệt LĐ Cục" },
+    { "ma": STATUS.TU_CHOI_CBV, "giaTri": "Từ chối CB Vụ" },
+    { "ma": STATUS.DA_DUYET_CBV, "giaTri": "Đã duyệt CB Vụ" }];
 
   constructor(
     private httpClient: HttpClient,
+    private router: Router,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
@@ -53,14 +55,17 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
       diaDiem: [null],
       namKeHoach: [null],
       soCongVan: [null],
-      ngayDuyetTu: [null],
-      ngayDuyetDen: [null],
-      tenCongTrinh: [null],
+      ngayKyTu: [null],
+      ngayKyDen: [null],
+      tenCongTrinh: [null]
     });
     this.filterTable = {};
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -95,7 +100,7 @@ export class DeXuatKhScLonComponent extends Base2Component implements OnInit {
 
   async filter() {
     this.formData.patchValue({
-      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI :  this.formData.value.maDvi
     });
     await this.search();
   }

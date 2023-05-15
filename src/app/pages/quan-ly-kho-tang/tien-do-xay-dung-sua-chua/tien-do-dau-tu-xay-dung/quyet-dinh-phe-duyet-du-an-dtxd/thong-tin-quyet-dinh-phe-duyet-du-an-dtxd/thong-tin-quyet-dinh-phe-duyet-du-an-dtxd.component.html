@@ -243,7 +243,7 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nguồn vốn đầu tư</nz-form-label>
-                  <input nz-input formControlName="nguonVonDt"/>
+                  <input nz-input formControlName="nguonVonDt" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -252,7 +252,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh"> Hình thức quản lý dự án
                   </nz-form-label>
-                  <input nz-input formControlName="hinhThucQlDa"/>
+                  <input nz-input formControlName="hinhThucQlDa" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>

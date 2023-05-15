@@ -1,9 +1,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormGroup, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
 import { UserLogin } from "src/app/models/userlogin";
 import { DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan } from "src/app/models/KeHoachBanDauGia";
 import { DatePipe } from "@angular/common";
-import { DiaDiemNhapKho } from "src/app/models/CuuTro";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -28,28 +27,26 @@ import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
 import {
-  QuyetDinhGiaoNvCuuTroService
-} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import {
   PhieuKiemNghiemChatLuongService
 } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuKiemNghiemChatLuong.service';
 import { PhieuXuatKhoService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service";
 import { BangKeCanCtvtService } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
-  selector: 'app-chi-tiet-bang-ke-can',
+  selector: 'app-xc-chi-tiet-bang-ke-can',
   templateUrl: './chi-tiet-bang-ke-can.component.html',
   styleUrls: ['./chi-tiet-bang-ke-can.component.scss']
 })
 export class ChiTietBangKeCanComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  formData: FormGroup;
-  cacheData: any[] = [];
   fileDinhKem: any[] = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -68,8 +65,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   bangPhanBoList: Array<any> = [];
   khBanDauGia: KeHoachBanDauGia = new KeHoachBanDauGia();
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
-  diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
-  phanLoTaiSanList: Array<PhanLoTaiSan> = [];
   listChungLoaiHangHoa: any[] = [];
   maDeXuat: string;
   listLoaiHopDong: any[] = [];
@@ -77,18 +72,11 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listLoaiHinhNhapXuat: any[] = [];
   listKieuNhapXuat: any[] = [];
   datePipe = new DatePipe('en-US');
-  tongSLbangKeDtl = 0;
-  tongSLCuuTro = 0;
+  tongSl = 0;
   tongTien = 0;
-  tongSLCuuTroDtl = 0;
-  tongTienDtl = 0;
   diaDiemNhapKho: any[] = [];
   bangKeDtlCreate: any = {};
   bangKeDtlClone: any = {};
-  phuongAnXuatList: DiaDiemNhapKho[];
-  idDxuatDtlSelect = 0;
-  rowDxuatDtlSelect: any;
-  tongSoLuongDtl: number;
   dsDonVi: any = [];
   dsQdGnv: any = [];
   dsPhieuXuatKho: any = [];
@@ -103,6 +91,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listSoLuong: any;
   errorInputComponent: any[] = [];
   flagInit: Boolean = true;
+  listDiaDiemKho: any[] = [];
 
 
   constructor(
@@ -144,7 +133,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDiemKho: ['', Validators.required],
         maNhaKho: [''],
         maNganKho: [''],
-        maLoKho: ['', Validators.required],
+        maLoKho: [''],
         maKho: [''],
         idPhieuXuatKho: ['', Validators.required],
         soPhieuXuatKho: [''],
@@ -175,9 +164,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenCloaiVthh: [''],
         tenTrangThai: ['Dự thảo'],
         tenChiCuc: [''],
-        tenDiemKho: [''],
-        tenNhaKho: [''],
-        tenNganKho: [''],
+        tenDiemKho:  ['', [Validators.required]],
+        tenNhaKho:  ['', [Validators.required]],
+        tenNganKho:  ['', [Validators.required]],
         tenLoKho: [''],
         nguoiPduyet: [''],
         nguoiGduyet: [''],
@@ -192,7 +181,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadDsVthh(),
         this.loadDsDonVi(),
@@ -203,22 +192,22 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
     } finally {
       this.flagInit = false;
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
   async loadDsLoaiHinhNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'XUAT_CTVT');
+      this.listLoaiHinhNhapXuat = res.data.filter(item => item.phanLoai == 'XUAT_CAP');
     }
   }
 
   async loadDsKieuNhapXuat() {
     let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listKieuNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CTVT');
-      ;
+      this.listKieuNhapXuat = res.data.filter(item => item.apDung == 'XUAT_CAP');
+
     }
   }
 
@@ -247,6 +236,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async loadDsQdGnv() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -258,7 +248,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async loadDetail(idInput: number) {
-    console.log(idInput, 'idInput')
     if (idInput > 0) {
       await this.bangKeCanCtvtService.getDetail(idInput)
         .then((res) => {
@@ -280,6 +269,8 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         tenDvi: this.userInfo.TEN_DVI,
         maQhns: this.userInfo.DON_VI.maQhns,
         type: "XUAT_CAP",
+        thuKho: this.userInfo.TEN_DAY_DU,
+        loaiVthh: this.loaiVthh,
       })
     }
 
@@ -337,24 +328,23 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async buildTableView() {
-    console.log(JSON.stringify(this.formData.value.deXuatPhuongAn), 'raw')
     let dataView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("tenCuc")
           .map((v, k) => {
-            let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
-            let rowCuc = v.find(s => s.tenCuc === k);
-            return {
-              idVirtual: uuidv4(),
-              tenCuc: k,
-              soLuongXuatCuc: rowCuc.soLuongXuatCuc,
-              soLuongXuatCucThucTe: soLuongXuatCucThucTe,
-              tenCloaiVthh: v[0].tenCloaiVthh,
-              childData: v
+              let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+              let rowCuc = v.find(s => s.tenCuc === k);
+              return {
+                idVirtual: uuidv4(),
+                tenCuc: k,
+                soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+                soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+                tenCloaiVthh: v[0].tenCloaiVthh,
+                childData: v
+              }
             }
-          }
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
         let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
@@ -369,7 +359,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     this.phuongAnView = dataView
     this.expandAll()
 
-    //
     if (this.formData.value.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
@@ -444,21 +433,27 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   }
 
   async save() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      return;
+    this.formData.disable()
+    let body = this.formData.value;
+    let res ;
+    if (body.id && body.id > 0) {
+      res = await this.bangKeCanCtvtService.update(body);
+    } else {
+      res = await this.bangKeCanCtvtService.create(body);
     }
-    let result = await this.createUpdate(this.formData.value);
-    if (result) {
-      this.quayLai();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.formData.get('id').value) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.formData.enable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.formData.enable();
   }
 
-  async saveAndSend() {
-    await this.createUpdate(this.formData.value);
-    await this.approve(this.idInput, STATUS.CHO_DUYET_LDCC, 'Bạn có muốn gửi duyệt ?');
-  }
 
   async flattenTree(tree) {
     return tree.flatMap((item) => {
@@ -611,11 +606,26 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         })
         let body = {
           trangThai: STATUS.DA_DUYET_LDCC,
-          type: "XUAT_CAP"
+          type: "XUAT_CAP",
+          loaiVthh: this.loaiVthh,
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
         this.dsPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
+        let body1 = {
+          trangThai: "01",
+          maDviCha: this.userInfo.MA_DVI
+        };
+        const res1 = await this.donViService.getAll(body1)
+        const dataDk = res1.data;
+        if (dataDk) {
+          this.listDiaDiemKho = dataDk.filter(item => item.maDvi == data.maDiemKho);
+          this.listDiaDiemKho.forEach(s => {
+            this.formData.patchValue({
+              diaDiemKho: s.diaChi,
+            })
+          })
+        }
       }
     });
   }
@@ -653,6 +663,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           donViTinh: data.donViTinh,
           bangKeDtl: this.formData.value.bangKeDtl
         });
+        this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == data.loaiVthh)?.maDviTinh })
       }
     });
   }
@@ -669,15 +680,21 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   async tinhTong() {
     let dtl = cloneDeep(this.formData.value.bangKeDtl);
     let tongTrongLuongCaBi = dtl.reduce((prev, cur) => prev + cur.trongLuongCaBi, 0);
-    let tongTrongLuongBaoBi = dtl.reduce((prev, cur) => prev + cur.trongLuongBaoBi, 0);
-    let tongTrongLuongHang = tongTrongLuongCaBi - tongTrongLuongBaoBi;
 
     this.formData.patchValue({
       tongTrongLuong: tongTrongLuongCaBi,
-      tongTrongLuongBaoBi: tongTrongLuongBaoBi,
-      tongTrongLuongHang: tongTrongLuongHang,
       bangKeDtl: this.formData.value.bangKeDtl
     });
+  }
+  async trongLuongTruBi() {
+    let data = cloneDeep(this.formData.value);
+    if (data.tongTrongLuongBaoBi) {
+      let tongTrongLuongHang = data.tongTrongLuong - data.tongTrongLuongBaoBi;
+      this.formData.patchValue({
+        tongTrongLuongHang: tongTrongLuongHang,
+        tongTrongLuongBaoBi: data.tongTrongLuongBaoBi,
+      });
+    }
   }
 
   convertTienTobangChu(tien: number) {

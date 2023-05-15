@@ -263,7 +263,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.thongTinChiCuc.soLuongDaMua = soLuongDaLenKh.data;
       this.thongTinChiCuc.soLuongTheoChiTieu = chiCuc.soLuongNhap;
       this.thongTinChiCuc.tenDvi = chiCuc.tenDonVi;
-      debugger
       for (let i = 0; i < res.data[0].children.length; i++) {
         const item = {
           'value': res.data[0].children[i].maDvi,

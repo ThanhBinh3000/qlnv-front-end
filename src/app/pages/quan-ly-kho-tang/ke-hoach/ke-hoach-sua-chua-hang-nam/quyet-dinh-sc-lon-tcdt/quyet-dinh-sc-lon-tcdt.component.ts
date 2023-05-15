@@ -7,10 +7,10 @@ import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
 import { saveAs } from 'file-saver';
-import {DeXuatNhuCauBaoHiemService} from "../../../../../services/dinhmuc-maymoc-baohiem/de-xuat-nhu-cau-bao-hiem.service";
 import {
-  DeXuatScLonService
-} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/de-xuat-sc-lon.service";
+  TongHopDxScLonService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-tcdt',
@@ -38,24 +38,27 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : DeXuatScLonService
+    private tongHopDxScLon : TongHopDxScLonService,
+    private router : Router,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService)
+    super(httpClient, storageService, notification, spinner, modal, tongHopDxScLon)
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
-      maTh: [''],
+      maTongHop: [''],
       noiDung: [''],
-      ngayKy: [''],
-      ngayKyTu: [''],
-      ngayKyDen: [''],
+      ngayTongHopTu: [''],
+      ngayTongHopDen: [''],
       trangThai: [''],
     });
     this.filterTable = {};
   }
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       await this.filter();
@@ -74,12 +77,6 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   }
 
   async filter() {
-    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.patchValue({
-        ngayKyTu : this.formData.value.ngayKy[0],
-        ngayKyDen : this.formData.value.ngayKy[1]
-      })
-    }
     this.formData.patchValue({
       maDvi :this.userInfo.MA_DVI ,
       capDvi :this.userInfo.CAP_DVI
@@ -111,10 +108,10 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
           limit: this.pageSize,
           page: this.page - 1
         }
-        this.dexuatService
+        this.tongHopDxScLon
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'tong-hop-phuong-an-sua-chua-cuc.xlsx'),
+            saveAs(blob, 'tong-hop-sua-chua-lon.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

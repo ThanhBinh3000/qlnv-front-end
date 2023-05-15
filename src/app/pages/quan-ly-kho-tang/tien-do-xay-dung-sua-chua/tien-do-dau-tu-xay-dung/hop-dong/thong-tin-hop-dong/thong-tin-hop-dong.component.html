@@ -10,10 +10,10 @@
       </div>
     </div>
     <div class="btn-group">
-      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">
-        <i class="fa fa-arrow-left"></i>
-        <span>Quay lại</span>
-      </button>
+      <!--      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">-->
+      <!--        <i class="fa fa-arrow-left"></i>-->
+      <!--        <span>Quay lại</span>-->
+      <!--      </button>-->
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -89,7 +89,7 @@
                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
-                    <span class="text-blue">{{tongMucDt | number}}</span>
+                    <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -116,7 +116,7 @@
             </div>
             <div nz-col nzSpan="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Số gói thầu đã trượt</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Số gói thầu trượt</nz-form-label>
                 <nz-form-control>
                   <nz-input-group>
                     <input nz-input formControlName="soGoiThauTb" readonly/>
@@ -146,47 +146,48 @@
           <span class="text-uppercase font-weight-bold">Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
         </div>
       </div>
-      <div class="btn-group">
+      <!--<div class="btn-group">
         <div class="buttons">
           <button type="button" class="btn btn-main" (click)="themMoiHopDong()">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
         </div>
-      </div>
+      </div>-->
     </div>
     <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered>
+              [nzShowPagination]="false" nzBordered class="mt-2">
       <thead>
       <tr>
         <th width="40px" class="text-center">STT</th>
+        <th>Gói thầu</th>
         <th width="150px">Số hợp đồng</th>
         <th width="130px">Tên hợp đồng</th>
         <th width="130px">Ngày ký hợp đồng</th>
-        <th>Gói thầu</th>
-        <th width="200px">Tên dự án</th>
         <th width="130px">Giá trị hợp đồng</th>
         <th width="130px">Trạng thái HĐ</th>
         <th width="100px" class="text-center">Hành động</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of listHopDong; let i = index">
+      <tr *ngFor="let data of listHopDong; let i = index"
+          style="cursor: pointer" [ngClass]="{'bg-selected': data.selected}"
+          (click)="selectRow(data)">
         <td>{{ i + 1}}</td>
-        <td>{{ data.soHd }}</td>
-        <td>{{ data.tenHd }}</td>
-        <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-        <td>{{ data.tenGoiThau }}</td>
-        <td>{{ data.tenDuAn }}</td>
-        <td>{{ data.thanhTien | number }}</td>
-        <td class="text-left">{{ data.tenTrangThai }}</td>
+        <td>{{ data.noiDung }}</td>
+        <td>{{ data.hopDong?.soHd }}</td>
+        <td>{{ data.hopDong?.tenHd }}</td>
+        <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.hopDong?.thanhTien | number }}</td>
+        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
         <td class="text-center">
-          <a
-            *ngIf="(data.trangThai == STATUS.DU_THAO )">
-            <i class="fa fa-pencil"></i>
+          <a (click)="openThemMoiHd(data.idHopDong,true)"
+             *ngIf="(data.hopDong && data.hopDong?.trangThai == STATUS.DA_KY )">
+            <i class=" icon htvbdh_eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="delete(data)">
-            <i class="fa fa-trash-o do"></i>
+          <a (click)="openThemMoiHd(!data.hopDong ? null : data.idHopDong)"
+             *ngIf="(!data.hopDong || data.hopDong?.trangThai == STATUS.DU_THAO )">
+            <i class="fa fa-pencil"></i>
           </a>
         </td>
       </tr>
@@ -194,8 +195,37 @@
     </nz-table>
   </nz-card>
 </div>
-<!--<ng-template >-->
-<!--  <app-thong-tin-hop-dong [id]="selectedId" (showListEvent)="showList()"-->
-<!--                          [isViewDetail]="isViewDetail"-->
-<!--                          [idInput]="selectedId" [flagThemMoi]="flagInfo"></app-thong-tin-hop-dong>-->
-<!--</ng-template>-->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPopThemMoiHd" (nzOnCancel)="closeThemHopDong()"
+          [nzBodyStyle]="{ 'overflow-y': 'auto' }">
+  <div *nzModalTitle>
+    <p style="font-size: 18px" class="text-uppercase">Hợp đồng</p>
+  </div>
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-them-moi-hop-dong [isViewDetail]="isViewDetail"
+                           [flagThemMoi]="flagThemMoi"
+                           (dataItemHopDong)="receivedData($event)"
+                           [itemQdPdKhlcnt]="itemQdPdKhLcnt"
+                           [itemGoiThau]="itemSelected"
+                           [idInput]="idInput"></app-them-moi-hop-dong>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeThemHopDong()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<!--<div *ngIf="viewHopDong">-->
+<!--  <nz-card class="mt16 flex-card p-lr16 mg-t-10">-->
+<!--    <nz-collapse>-->
+<!--      <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN HỢP ĐỒNG">-->
+<!--        <app-them-moi-hop-dong [isViewDetail]="true"-->
+<!--                               [flagThemMoi]="'viewHD'"-->
+<!--                               (dataItemHopDong)="receivedData($event)"-->
+<!--                               [itemQdPdKhlcnt]="itemQdPdKhLcnt"-->
+<!--                               [itemGoiThau]="itemSelected"-->
+<!--                               [idInput]="idInput"></app-them-moi-hop-dong>-->
+<!--      </nz-collapse-panel>-->
+<!--    </nz-collapse>-->
+<!--  </nz-card>-->
+<!--</div>-->

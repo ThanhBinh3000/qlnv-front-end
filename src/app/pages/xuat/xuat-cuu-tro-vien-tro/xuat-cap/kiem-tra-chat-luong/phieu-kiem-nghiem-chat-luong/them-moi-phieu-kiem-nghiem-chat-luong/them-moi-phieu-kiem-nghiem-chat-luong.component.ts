@@ -4,7 +4,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -28,7 +27,7 @@ import {
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss']
 })
 export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -162,6 +161,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         truongPhong: this.userInfo.MA_KTBQ,
         soPhieuKnCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.loaiVthh,
       });
     }
 
@@ -195,6 +195,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -234,9 +236,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
       thoiHanXuatCtVt: data.ngayKy,
+      loaiVthh: data.loaiVthh,
+      tenLoaiVthh: data.tenLoaiVthh,
     });
+
     this.listDiaDiemNhap = data.noiDungCuuTro;
-    console.log(this.listDiaDiemNhap, 555555);
     await this.spinner.hide();
   }
 
@@ -262,7 +266,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   async bindingDataDdNhap(data, isChiTiet) {
-    console.log(data, 123);
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
@@ -273,23 +276,18 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
-        loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
-        tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
         moTaHangHoa: data.moTaHangHoa,
         thuKho: data.tenThuKho,
       })
       if (!isChiTiet) {
-        console.log(data.cloaiVthh, 321);
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        console.log(dmTieuChuan, 666);
         if (dmTieuChuan.data) {
           this.dataTableChiTieu = dmTieuChuan.data.children;
           this.dataTableChiTieu.forEach(element => {
             element.edit = false
           });
-          console.log(this.dataTableChiTieu, 666);
         }
       }
     }
@@ -306,8 +304,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

@@ -36,7 +36,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBttService);
     this.formData = this.fb.group({
       soBienBan: null,
-      soQd: null,
+      soQdNv: null,
       dviKnghiem: null,
       ngayLayMauTu: null,
       ngayLayMauDen: null,
@@ -46,7 +46,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     })
 
     this.filterTable = {
-      soQd: '',
+      soQdNv: '',
       namKh: '',
       ngayTao: '',
       soHd: '',
@@ -94,9 +94,8 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   }
 
   buildTableView() {
-    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
-      .groupBy("soQd")
+      .groupBy("soQdNv")
       .map((value, key) => {
         let rs = chain(value)
           .groupBy("maDiemKho")
@@ -124,13 +123,13 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
             }
           }
           ).value();
-        let rowLv1 = value.find(s => s.soQd === key);
+        let rowLv1 = value.find(s => s.soQdNv === key);
         return {
           idVirtual: uuidv4(),
-          soQd: key,
+          soQdNv: key,
           namKh: rowLv1.namKh,
           ngayQd: rowLv1.ngayQd,
-          idQd: rowLv1.idQd,
+          idQdNv: rowLv1.idQdNv,
           childData: rs
         };
       }).value();

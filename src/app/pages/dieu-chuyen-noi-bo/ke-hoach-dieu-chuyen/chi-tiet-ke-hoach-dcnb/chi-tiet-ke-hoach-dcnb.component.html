@@ -111,7 +111,7 @@
     </div>
   </div>
   <nz-alert class="mg-t-16 mb-2"
-            *ngIf="formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT"
+            *ngIf="formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TP || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDC"
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="flex-card pd-l-6 pd-r-6">
@@ -286,7 +286,7 @@
               <th [rowspan]="2">Chi cục nhận điều chuyển</th>
               <th [rowspan]="2">Thời gian dự kiến điều chuyển</th>
               <th [colspan]="8">Ngăn kho đang bảo quản hàng cần điều chuyển</th>
-              <th [colspan]="6">Ngăn kho nhận điều chuyển</th>
+              <th [colspan]="4">Ngăn kho nhận điều chuyển</th>
               <th [rowspan]="2" style="width: 10%">Hành động</th>
             </tr>
             <tr>
@@ -299,8 +299,8 @@
               <th>SL điều chuyển</th>
               <th>Dự toán kinh phí (triệu đồng)</th>
               <th>Điểm kho</th>
-              <th>Nhà kho</th>
-              <th>Ngăn kho</th>
+<!--              <th>Nhà kho</th>-->
+<!--              <th>Ngăn kho</th>-->
               <th>Lô kho</th>
               <th>Tích lượng khả dụng</th>
               <th>SL phân bổ nhập điều chuyển</th>
@@ -323,8 +323,8 @@
                 <td></td>
                 <td></td>
                 <td><strong>{{item.duToanKphi|number:'1.0-1' : 'vi_VN'}}</strong></td>
-                <td></td>
-                <td></td>
+<!--                <td></td>-->
+<!--                <td></td>-->
                 <td></td>
                 <td></td>
                 <td></td>
@@ -357,8 +357,8 @@
                     <td><strong>{{lv1.duToanKphi|number:'1.0-1' : 'vi_VN'}}</strong></td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+<!--                    <td></td>-->
+<!--                    <td></td>-->
                     <td></td>
                     <td></td>
                     <td *ngIf="!isNhanDieuChuyen">
@@ -381,7 +381,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td>{{lv2.tenLoKho}}</td>
+                        <td>{{lv2.tenLoKho ? lv2.tenLoKho + "/": ""}}{{lv2.tenNganKho}}/{{lv2.tenNhaKho}}</td>
                         <td>{{lv2.tenLoaiVthh}}</td>
                         <td>{{lv2.tenCloaiVthh}}</td>
                         <td>{{lv2.tenDonViTinh}}</td>
@@ -390,8 +390,8 @@
                         <td>{{lv2.duToanKphi|number:'1.0-1' : 'vi_VN'}}</td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
+<!--                        <td></td>-->
+<!--                        <td></td>-->
                         <td></td>
                         <td></td>
                         <td *ngIf="!isNhanDieuChuyen">
@@ -426,8 +426,8 @@
                             <td></td>
                             <td><strong>{{lv3.tenDiemKhoNhan}}</strong></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
+<!--                            <td></td>-->
+<!--                            <td></td>-->
                             <td></td>
                             <td></td>
                             <td *ngIf="!isNhanDieuChuyen"></td>
@@ -458,9 +458,9 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>{{lv4.tenNhaKhoNhan}}</td>
-                                <td>{{lv4.tenNganKhoNhan}}</td>
-                                <td>{{lv4.tenLoKhoNhan}}</td>
+<!--                                <td>{{lv4.tenNhaKhoNhan}}</td>-->
+<!--                                <td>{{lv4.tenNganKhoNhan}}</td>-->
+                                <td>{{lv4.tenLoKhoNhan ? lv4.tenLoKhoNhan + "/": ""}}{{lv4.tenNganKhoNhan}}/{{lv4.tenNhaKhoNhan}}</td>
                                 <td>{{lv4.tichLuongKd}}</td>
                                 <td>{{lv4.soLuongPhanBo}}</td>
                                 <td *ngIf="!isNhanDieuChuyen"></td>

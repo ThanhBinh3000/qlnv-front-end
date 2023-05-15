@@ -180,7 +180,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
   setValidators() {
     this.helperService.removeValidators(this.formData)
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV) {
-      this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+      this.formData.controls["soToTrinh"].setValidators([Validators.required]);
     }
     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC) {
       this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
@@ -374,7 +374,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
     });
     let body = {
       "namKh": this.formData.value.namKh,
-      "trangThai": STATUS.DA_DUYET_LDC,
+      "trangThai": STATUS.DA_DUYET_CBV,
       "trangThaiTh": STATUS.CHUA_TONG_HOP,
       "capDvi": 1,
       "paggingReq": {"limit": 10000, "page": 0}

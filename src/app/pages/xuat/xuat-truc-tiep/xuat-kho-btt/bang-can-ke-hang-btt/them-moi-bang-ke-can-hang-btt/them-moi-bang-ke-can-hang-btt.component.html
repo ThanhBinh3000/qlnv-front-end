@@ -92,7 +92,7 @@
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdNvXh()">
-                                <input nz-input [readonly]="true" formControlName="soQd" />
+                                <input nz-input [readonly]="true" formControlName="soQdNv" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -237,10 +237,11 @@
                 </div>
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                        <nz-form-label [nzNoColon]="true"> Thời gian giao/nhận hàng </nz-form-label>
-                        <nz-form-control>
-                            <input nz-input formControlName="tgianGiaoNhan" readonly />
-                        </nz-form-control>
+                        <nz-form-label [nzNoColon]="true">
+                            Thời gian giao/nhận hàng
+                        </nz-form-label>
+                        <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="tgianGiaoNhan" nzDisabled>
+                        </nz-date-picker>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="6">
@@ -271,7 +272,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
                         <nz-form-control>
-                            <input nz-input formControlName="dviTinh" readonly="true" />
+                            <input nz-input formControlName="donViTinh" readonly="true" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>

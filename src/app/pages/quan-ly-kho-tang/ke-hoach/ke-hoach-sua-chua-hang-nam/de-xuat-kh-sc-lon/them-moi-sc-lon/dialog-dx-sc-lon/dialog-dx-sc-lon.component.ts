@@ -98,18 +98,18 @@ export class DialogDxScLonComponent implements OnInit {
 
   async getAllDmKho() {
     let body = {
-      "namKh": dayjs().get('year'),
-      "maDvi": this.userInfo.MA_DVI,
+      "namKh": dayjs().get("year"),
+      "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
         page: 0
-      },
+      }
     };
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDmScLon = res.data.content
-      if (this.listDmScLon && this.listDmScLon.length > 0) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi);
+      this.listDmScLon = res.data.content;
+      if (this.page == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
       }
     }
   }
@@ -133,8 +133,9 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.ngayQdPd = this.dataInput.ngayQdPd;
       this.item.giaTriPd = this.dataInput.giaTriPd;
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
-      this.item.tieuChuan = this.dataInput.tieuChuan
-      this.item.lyDo = this.dataInput.lyDo
+      this.item.tieuChuan = this.dataInput.tieuChuan;
+      this.item.lyDo = this.dataInput.lyDo;
+      this.item.nguonVon = this.dataInput.nguonVon;
     }
   }
 
@@ -173,11 +174,11 @@ export class DialogDxScLonComponent implements OnInit {
 }
 
 export class KhSuaChuaLonDtl {
-  id : number;
+  id: number;
 
-  maDvi : string;
+  maDvi: string;
 
-  namKh : number;
+  namKh: number;
 
   maCongTrinh: string;
   tenCongTrinh: string;
@@ -198,6 +199,7 @@ export class KhSuaChuaLonDtl {
   tgSuaChua: number;
 
   tmdt: number;
+  luyKeVon: number;
 
   soQdPheDuyet: string;
 
@@ -218,9 +220,9 @@ export class KhSuaChuaLonDtl {
 
   khoi: string;
 
-  tenChiCuc : string;
+  tenChiCuc: string;
 
-  tenDiemKho : string;
+  tenDiemKho: string;
 
-  vonDauTu : number;
+  vonDauTu: number;
 }

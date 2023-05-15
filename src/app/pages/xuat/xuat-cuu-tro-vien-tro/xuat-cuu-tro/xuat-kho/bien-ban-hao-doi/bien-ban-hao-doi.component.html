@@ -19,19 +19,59 @@
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày lập BB hao dôi</label>
-            <nz-range-picker formControlName="ngayTaoBb" Format="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayBb" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayTaoBbTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayBb" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayTaoBbDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày bắt đầu xuất</label>
-            <nz-range-picker formControlName="ngayBatDauXuat" Format="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayBd" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayBatDauXuatTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayBd" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayBatDauXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
           <div nz-col nzSpan="4">
             <label>Ngày kết thúc xuất</label>
-            <nz-range-picker formControlName="ngayKetThucXuat" Format="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayKt" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKetThucXuatTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayKt" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayKetThucXuatDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
           <div nz-col nzSpan="4">
             <label>Thời hạn xuất hàng</label>
-            <nz-range-picker formControlName="ngayQdGiaoNvXh" Format="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledStartNgayQd" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayQdGiaoNvXhTu" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledEndNgayQd" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayQdGiaoNvXhDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
         </div>
       </form>
@@ -238,13 +278,16 @@
                 <td></td>
                 <td>{{lv1.tenTrangThai}}</td>
                 <td class="text-left">
-                  <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) &&
-                                            !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA) &&
-                                            userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XEM')">
+                  <a (click)="redirectDetail(lv1.id, true)" *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM)
+                     &&!(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM'))
+                     &&!(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_KT)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_DUYET'))
+                     &&!(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_LDCCUC'))
+                     && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_PXK_XEM')">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM'))"
-                     (click)="redirectDetail(lv1.id, false)">
+                  <a
+                    *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_THEM'))"
+                    (click)="redirectDetail(lv1.id, false)">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_KTVBQ) && !vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_DUYET_KTVBQ'))||
@@ -253,8 +296,9 @@
                      (click)="redirectDetail(lv1.id, true)">
                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                   </a>
-                  <a *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XOA')"
-                     (click)="delete(lv1)">
+                  <a
+                    *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BBHD_XOA')"
+                    (click)="delete(lv1)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>

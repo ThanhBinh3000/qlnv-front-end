@@ -90,7 +90,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         thucXuat: [],
         donGia: [],
         thanhTien: [],
-        ghiChu: [],
+        ghiChu:  ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
         lyDoTuChoi: [],
@@ -99,9 +99,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChiDvi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho: [],
-        tenNhaKho: [],
-        tenNganKho: [],
+        tenDiemKho:  ['', [Validators.required]],
+        tenNhaKho:  ['', [Validators.required]],
+        tenNganKho:  ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
 
@@ -114,18 +114,18 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
 
       await Promise.all([
         this.loadSoQuyetDinh()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -156,6 +156,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
         type: "XUAT_CTVT",
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -166,8 +167,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
   async loadSoQuyetDinh() {
     let body = {
+      trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
       listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
-      loaiVthh: this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -290,18 +292,29 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     });
   }
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
+    let res ;
+    if (body.id && body.id > 0) {
+      res = await this.phieuXuatKhoService.update(body);
+    } else {
+      res = await this.phieuXuatKhoService.create(body);
     }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.formData.get('id').value) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.formData.enable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+
+    this.formData.enable();
+
   }
 
   pheDuyet() {
