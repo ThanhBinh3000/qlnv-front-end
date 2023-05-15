@@ -44,7 +44,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   tabSelected: string = "01";
   itemQdPdDaDtxd: any;
   itemQdPdTktcTdt: any;
-  itemQdPdKhlcnt: any;
   itemQdPdKhLcnt: any;
 
   constructor(
@@ -119,7 +118,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.itemQdPdTktcTdt = data;
         break;
       case '03':
-        this.itemQdPdKhlcnt = data;
+        this.itemQdPdKhLcnt = data;
         break;
     }
   }
@@ -136,6 +135,9 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
 
 
   async loadQdPdDaDtxdByDuAn(item) {
+    this.itemQdPdTktcTdt = null;
+    this.itemQdPdDaDtxd = null;
+    this.itemQdPdKhLcnt = null;
     this.spinner.show();
     try {
       let body = {
@@ -150,19 +152,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         //Check tiếp quyết định phê duyệt bản vẽ
         if (this.itemQdPdDaDtxd && this.itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
-          let body = {
-            "idQdPdDtxd": this.itemQdPdDaDtxd.id,
-            "paggingReq": {
-              "limit": 10,
-              "page": 0
-            }
-          }
-          let res1 = await this.quyetdinhpheduyetTktcTdtService.search(body);
-          if (res1.msg == MESSAGE.SUCCESS) {
-            this.itemQdPdTktcTdt = res1.data.content && res1.data.content.length > 0 ? res1.data.content[0] : null;
-          } else {
-            this.notification.error(MESSAGE.ERROR, res1.msg);
-          }
+          await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
+          await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -170,9 +161,48 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e, '2323232')
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "|22222");
     } finally {
       this.spinner.hide();
+    }
+  }
+
+  async loadItemQdPdTktcTdt(itemQdPdDaDtxd) {
+    if (itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+      let body = {
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdTktcTdt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadItemQdPdKhLcnt(itemQdPdTktcTdt) {
+    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
+      let body = {
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "idQdPdTktcTdt": itemQdPdTktcTdt.id,
+        "idDuAn": this.itemQdPdDaDtxd.idDuAn,
+        "paggingReq": {
+          "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetKhlcntService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -259,23 +289,6 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     if (tab != '01' && (!this.itemQdPdDaDtxd || this.itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH)) {
       this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
       return;
-    }
-    if (tab == '03' && (this.itemQdPdTktcTdt && this.itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH)) {
-      let body = {
-        "idQdPdDtxd": this.itemQdPdDaDtxd.id,
-        "idQdPdTktcTdt": this.itemQdPdTktcTdt.id,
-        "idDuAn": this.itemSelected.id,
-        "paggingReq": {
-          "limit": 10,
-          "page": 0
-        }
-      }
-      let res = await this.quyetdinhpheduyetKhlcntService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdKhlcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
     }
     this.tabSelected = tab;
   }

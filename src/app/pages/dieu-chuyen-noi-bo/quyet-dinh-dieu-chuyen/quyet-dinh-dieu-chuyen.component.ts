@@ -15,6 +15,7 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chuyen',
@@ -54,6 +55,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donviService: DonviService,
+    private routerActive: ActivatedRoute,
     private danhMucService: DanhMucService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
   ) {
@@ -78,7 +80,7 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     };
   }
 
-
+  idTongHop: number
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -119,6 +121,10 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
+    console.log("idTongHop", this.idTongHop)
+
 
     if (this.isChiCuc()) this.tabSelected = 1;
     if (this.tabSelected == 0) {

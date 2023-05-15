@@ -31,6 +31,7 @@ import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-b
 import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/ma-tong-hop-quyet-dinh-dieu-chinh.service";
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { KeHoachDieuChuyenService } from "../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service";
+import * as uuid from "uuid";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -55,7 +56,8 @@ export class QuyetDinhPdDtl {
   styleUrls: ['./thong-tin-quyet-dinh-dieu-chuyen-tc.component.scss']
 })
 export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
-
+  @Input()
+  idTHop: number;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -200,47 +202,13 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       type: ['TH', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      // idTongHop: [, [Validators.required]],
-      // maTongHop: [, [Validators.required]],
-      // id: [0],
-      // maDvi: [],
-      // nam: [dayjs().get("year"), [Validators.required]],
-      // soQd: [, [Validators.required]],
-      // ngayKy: [, [Validators.required]],
-      // ngayHluc: [, [Validators.required]],
-      // idTongHop: [, [Validators.required]],
-      // maTongHop: [, [Validators.required]],
-      // ngayThop: [, [Validators.required]],
-      // idDx: [, [Validators.required]],
-      // soDx: [, [Validators.required]],
-      // ngayDx: [, [Validators.required]],
-      // tongSoLuongDx: [],
-      // tongSoLuong: [],
-      // soLuongXuaCap: [],
-      // loaiVthh: [],
-      // cloaiVthh: [],
-      // loaiNhapXuat: [],
-      // trichYeu: [],
-      // lyDoTuChoi: [],
-      // type: ['TH', [Validators.required]],
-      // xuatCap: [false],
-      // ngayPduyet: [],
-      // fileDinhKem: [FileDinhKem],
-      // canCu: [new Array<FileDinhKem>()],
-      // tenDvi: [],
-      // tenLoaiVthh: [],
-      // tenCloaiVthh: [],
       quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      // danhSachHangHoa: [new Array<any>(),],
-      // danhSachQuyetDinh: [new Array<any>(),],
       listOfMapData: [new Array<any>(),],
     }
     );
   }
 
   async ngOnInit() {
-
-    console.log('isDisabled', this.isDisabled())
 
     await this.spinner.show();
     try {
@@ -249,6 +217,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         await this.loadChiTiet(this.idInput)
       } else {
         this.initForm();
+        if (this.idTHop) {
+          this.formData.patchValue({
+            idThop: this.idTHop
+          })
+          this.selectMaTongHop(this.idTHop)
+        }
       }
     } catch (e) {
       console.log('error: ', e);
@@ -322,36 +296,70 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         let children = []
         if (dcnbKeHoachDcHdr.danhSachHangHoa.length > 0) {
-          const grouped = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
-          const keyarr = Object.keys(grouped);
+          const groupedDK = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
 
-          keyarr.map((k, j) => {
-            const valuearr = grouped[k].map(v => {
-              return {
-                ...v,
-                key: v.id
+          console.log('groupedDK', groupedDK)
+          const keyarrDK = Object.keys(groupedDK);
+
+          keyarrDK.map((k, j) => {
+
+            // let valuearrDK = []
+            const groupedLoKho = this.groupBy(groupedDK[k], "maLoKho");
+            console.log('groupedLoKho', groupedLoKho)
+            const keyarrLoKho = Object.keys(groupedLoKho);
+            let childrenDiemKho = []
+            keyarrLoKho.map((keyLoKho, j) => {
+
+              const valuearrLoKho = groupedLoKho[keyLoKho].map(lokho => {
+                return {
+                  ...lokho,
+                  key: lokho.id
+                }
+              })
+
+              const itemLoKho: any = valuearrLoKho[0]
+              if (valuearrLoKho.length > 1) {
+                childrenDiemKho.push({
+                  tenLoKho: itemLoKho.tenLoKho,
+                  key: itemLoKho.maLoKho,
+                  isLoKho: true,
+                  children: valuearrLoKho
+                })
+              } else {
+                childrenDiemKho.push({ ...itemLoKho, key: itemLoKho.maLoKho })
               }
             })
-            console.log('keyarr', k, valuearr)
-            const itemv: any = valuearr[0]
-            // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
-            if (valuearr.length > 1) {
+
+            console.log('childrenDiemKho', childrenDiemKho)
+
+            const valuearrDK = groupedDK[k].map(diemkho => {
+
+              return {
+                ...diemkho,
+                key: diemkho.id
+              }
+            })
+
+            const itemDK: any = valuearrDK[0]
+            if (valuearrDK.length > 1) {
               children.push({
-                tenDiemKho: itemv.tenDiemKho,
-                key: `${i}-${j}`,
-                isCol: true,
-                children: valuearr
+                tenDiemKho: itemDK.tenDiemKho,
+                key: itemDK.maDiemKho,
+                isDiemKho: true,
+                children: valuearrDK
               })
             } else {
-              children.push({ ...itemv, key: itemv.id })
+              children.push({ ...itemDK, key: itemDK.maDiemKho })
             }
           })
+
+          console.log('danhSachHangHoa', listDeXuat, this.listOfMapData)
         }
 
         this.listOfMapData.push({
           ...dcnbKeHoachDcHdr,
           key: `${dcnbKeHoachDcHdr.id}`,
-          isEx: children.length > 0,
+          isChiCuc: children.length > 0,
           children: children,
         })
 
@@ -388,6 +396,42 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.hide();
   }
 
+  // convertTableData(danhsach) {
+  //   let children = []
+  //   if (danhsach.length > 0) {
+  //     const groupedDK = this.groupBy(danhsach, "maDiemKho");
+  //     const groupedLK = this.groupBy(danhsach, "maLoKho");
+  //     // const groupedDK = this.groupBy(dcnbKeHoachDcHdr.danhSachHangHoa, "maDiemKho");
+
+  //     const keyarr = Object.keys(groupedDK);
+
+  //     keyarr.map((k, j) => {
+  //       const valuearr = groupedDK[k].map(v => {
+  //         return {
+  //           ...v,
+  //           key: v.id
+  //         }
+  //       })
+  //       console.log('keyarr', k, valuearr)
+  //       const itemv: any = valuearr[0]
+  //       // console.log('grouped', grouped, valuearr.length, itemv, valuearr)
+  //       if (valuearr.length > 1) {
+  //         children.push({
+  //           tenDiemKho: itemv.tenDiemKho,
+  //           key: `${i}-${j}`,
+  //           isCol: true,
+  //           children: valuearr
+  //         })
+  //       } else {
+  //         children.push({ ...itemv, key: itemv.id })
+  //       }
+  //     })
+
+
+  //   }
+  //   return children
+  // }
+
   groupBy(xs, key) {
     return xs.reduce(function (rv, x) {
       (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -407,9 +451,14 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         let listDeXuat = []
         let listHangHoa = []
         let listQD = []
+        let loaiDC = data.loaiDieuChuyen || this.formData.value.loaiDc
+        this.formData.patchValue({
+          loaiDc: data.loaiDieuChuyen
+        })
+
 
         data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
-          if (this.formData.value.loaiDc === "CHI_CUC") {
+          if (loaiDC === "CHI_CUC") {
             if (item.thKeHoachDieuChuyenCucHdr) {
 
               if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
@@ -442,12 +491,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                       if (valuearr.length > 1) {
                         children.push({
                           tenDiemKho: itemv.tenDiemKho,
-                          key: `${i}-${j}`,
-                          isCol: true,
+                          key: itemv.maDiemKho,
+                          isDiemKho: true,
                           children: valuearr
                         })
                       } else {
-                        children.push({ ...itemv, key: itemv.id })
+                        children.push({ ...itemv, key: itemv.maDiemKho })
                       }
                     })
                   }
@@ -455,16 +504,19 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                   this.listOfMapData.push({
                     ...dcnbKeHoachDcHdr,
                     key: `${dcnbKeHoachDcHdr.id}`,
-                    isEx: children.length > 0,
+                    isChiCuc: children.length > 0,
                     children: children,
                   })
                 })
               }
 
             }
+
+            const data = this.buildTableView(listHangHoa)
+            console.log('buildTableView', data)
           }
 
-          if (this.formData.value.loaiDc === "CUC") {
+          if (loaiDC === "CUC") {
             listDeXuat.push(item)
             if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
 
@@ -477,6 +529,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                   // let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
                   itemKH.danhSachHangHoa.map(async itemHH => {
                     listHangHoa.push(itemHH)
+
                   })
 
 
@@ -499,7 +552,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                         children.push({
                           tenDiemKho: itemv.tenDiemKho,
                           key: `${i}-${j}`,
-                          isCol: true,
+                          isDiemKho: true,
                           children: valuearr
                         })
                       } else {
@@ -512,7 +565,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
                   this.listOfMapData.push({
                     ...itemKH,
                     key: `${itemKH.id}`,
-                    isEx: children.length > 0,
+                    isChiCuc: children.length > 0,
                     children: children,
                   })
                 })
@@ -531,6 +584,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           this.mapOfExpandedData[item.key] = this.convertTreeToList(item);
         });
 
+        console.log('listHangHoa', listHangHoa)
+
         console.log('listDeXuat', this.listOfMapData, this.mapOfExpandedData)
 
         this.formData.patchValue({
@@ -545,6 +600,149 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
     await this.spinner.hide()
   }
+
+  buildTableView(data: any[] = []) {
+    let dataView = chain(data).groupBy("maDiemKho")?.map((valueMaDiemKho, keyMaDiemKho) => {
+      console.log('maDiemKho', data, keyMaDiemKho, valueMaDiemKho)
+      const diemKho = data.find(dk => dk.maDiemKho === keyMaDiemKho)
+
+      let childrenMaDiemKho = chain(valueMaDiemKho).groupBy("maLoKho")?.map((vmaLoKho, kmaLoKho) => {
+        const loKho = data.find(dk => dk.maLoKho === kmaLoKho)
+        // let rss = chain(vmaLoKho)
+        //   .groupBy("maLoKho")
+        //   ?.map((vs, ks) => {
+        //     // const maLoKho = vs.find(s => s?.maLoKho == ks);
+        //     // const rsss = chain(vs).groupBy("id").map((x, ix) => {
+        //     //   const ids = x.find(f => f.id == ix);
+
+        //     //   const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
+        //     //   if (!hasmaChiCucNhan) return {
+        //     //     ...ids
+        //     //   }
+        //     //   const rsxx = chain(x).groupBy("maChiCucNhan")?.map((m, im) => {
+        //     //     const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
+        //     //     const hasMaDiemKhoNhan = x.some(f => f.maDiemKhoNhan);
+        //     //     if (!hasMaDiemKhoNhan) return {
+        //     //       ...maChiCucNhan
+        //     //     }
+
+        //     //     const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+        //     //       const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+        //     //       return {
+        //     //         ...maDiemKhoNhan,
+        //     //         children: n
+        //     //       }
+        //     //     }).value()
+        //     //     return {
+        //     //       ...maChiCucNhan,
+        //     //       children: rssx
+        //     //     }
+        //     //   }).value()
+
+
+        //     //   return {
+        //     //     ...ids,
+        //     //     children: rsxx
+        //     //   }
+        //     // }).value()
+        //     // let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+        //     return {
+        //       // ...maLoKho,
+        //       // idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+        //       tenLoKho: vs.tenLoKho,
+        //       children: rsss,
+        //       // duToanKphi
+        //     }
+        //   }
+        //   ).value();
+
+        // let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+        // let rowDiemKho = v?.find(s => s.maDiemKho === k);
+
+        return {
+          // ...rowDiemKho,
+          // idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuid.v4() : uuid.v4(),
+          // duToanKphi: duToanKphi,
+          ...loKho,
+          key: kmaLoKho,
+          children: vmaLoKho,
+          // expand: true
+        }
+      }
+      ).value();
+
+      // let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      // let rowChiCuc = value?.find(s => s.maDvi === key);
+      // console.log('maDiemKho', value)
+      return {
+        // ...rowChiCuc,
+        // idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuid.v4() : uuid.v4(),
+        // duToanKphi: duToanKphi,
+        key: keyMaDiemKho,
+        ...diemKho,
+        children: childrenMaDiemKho,
+      };
+    }).value();
+    // this.tableView = dataView;
+    // this.expandAll()
+
+    if (data?.length !== 0) {
+      // this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+    };
+    return dataView
+  }
+
+  // buildTableView(data) {
+  //   let dataView = chain(data)
+  //     .groupBy("maDvi")
+  //     .map((value, key) => {
+  //       let rs = chain(value)
+  //         .groupBy("maDiemKho")
+  //         .map((v, k) => {
+  //           let soLuongXuatCucThucTe = v.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
+  //           let thanhTienXuatCucThucTe = v.reduce((prev, cur) => prev + cur.thanhTien, 0);
+  //           let rowCuc = v.find(s => s.tenCuc === k);
+  //           if (this.userService.isCuc()) {
+  //             rowCuc.tonKhoCuc = this.formData.value.tonKho;
+  //           }
+  //           return {
+  //             idVirtual: uuid.v4(),
+  //             tenCuc: k,
+  //             maDviCuc: rowCuc.maDviCuc,
+  //             soLuongXuatCuc: rowCuc.soLuongXuatCuc,
+  //             soLuongXuatCucThucTe: soLuongXuatCucThucTe,
+  //             thanhTienXuatCucThucTe: thanhTienXuatCucThucTe,
+  //             tenCloaiVthh: rowCuc.tenCloaiVthh,
+  //             tonKhoCuc: rowCuc.tonKhoCuc,
+  //             childData: v
+  //           }
+  //         }
+  //         ).value();
+  //       let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0);
+  //       let soLuongXuatThucTe = rs.reduce((prev, cur) => prev + cur.soLuongXuatCucThucTe, 0);
+  //       let thanhTienXuatThucTe = rs.reduce((prev, cur) => prev + cur.thanhTienXuatCucThucTe, 0);
+
+  //       return {
+  //         idVirtual: uuid.v4(),
+  //         noiDung: key,
+  //         soLuongXuat: soLuongXuat,
+  //         soLuongXuatThucTe: soLuongXuatThucTe,
+  //         thanhTienXuatThucTe: thanhTienXuatThucTe,
+  //         childData: rs
+  //       };
+  //     }).value();
+  //   this.phuongAnView = dataView
+  //   console.log(this.phuongAnView, "phuongAnView")
+  //   this.expandAll()
+
+
+  // }
+
+  // expandAll() {
+  //   this.phuongAnView.forEach(s => {
+  //     this.expandSetString.add(s.idVirtual);
+  //   })
+  // }
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
@@ -619,15 +817,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       // this.formData.controls["ngayThop"].clearValidators();
       this.formData.controls["idDxuat"].setValidators([Validators.required]);
       // this.formData.controls["maDxuat"].setValidators([Validators.required]);
-    }
-  }
-
-  isDisabled() {
-    if (this.isView) return true
-    if (this.formData.value.trangThai == STATUS.DU_THAO) {
-      return false;
-    } else {
-      return true;
     }
   }
 

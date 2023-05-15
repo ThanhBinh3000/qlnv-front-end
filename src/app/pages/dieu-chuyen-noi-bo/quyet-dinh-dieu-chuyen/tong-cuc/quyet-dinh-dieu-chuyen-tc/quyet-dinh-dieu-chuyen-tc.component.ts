@@ -25,6 +25,8 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
+  @Input()
+  idTHop: number;
 
   @Input()
   loaiVthh: string;
@@ -127,6 +129,9 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
+
+    if (this.idTHop)
+      this.redirectDetail(0, false)
 
     try {
       this.initData()

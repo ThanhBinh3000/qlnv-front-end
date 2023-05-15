@@ -212,7 +212,6 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
   }
 
   exportDataCuc() {
-    debugger
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {

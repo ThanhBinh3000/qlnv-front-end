@@ -376,6 +376,7 @@ export class ThongTinTongHopKhSuaChuaThuongXuyenComponent implements OnInit {
       "namKh": this.formData.value.namKh,
       "trangThai": STATUS.DA_DUYET_LDC,
       "trangThaiTh": STATUS.CHUA_TONG_HOP,
+      "capDvi": 1,
       "paggingReq": {"limit": 10000, "page": 0}
     };
     let res = await this.deXuatScThuongXuyenService.search(body);
