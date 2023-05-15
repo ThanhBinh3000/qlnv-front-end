@@ -22,6 +22,8 @@ import {KeHoachDieuChuyenService} from "../ke-hoach-dieu-chuyen.service";
 import {DanhMucDungChungService} from "../../../../services/danh-muc-dung-chung.service";
 import {MangLuoiKhoService} from "../../../../services/qlnv-kho/mangLuoiKho.service";
 import {OldResponseData} from "../../../../interfaces/response";
+import {AMOUNT_THREE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-chi-tiet-ke-hoach-dcnb',
@@ -75,6 +77,19 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
   listNganKhoNhanBq: any[] = [];
   listLoKhoBq: any[] = [];
   listLoKhoNhanBq: any[] = [];
+  AMOUNT =  {
+    allowZero: true,
+    allowNegative: false,
+    precision: 2,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "left",
+    nullable: true,
+    min: 0,
+    max: 100000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,

@@ -694,10 +694,11 @@
               đồng)
             </nz-form-label>
             <nz-form-control>
-              <nz-input-number [nzDisabled]="isView" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999"
-                               [nzStep]="0.1"
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+              <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT" />
+<!--              <nz-input-number [nzDisabled]="isView" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999"-->
+<!--                               [nzStep]="0.1"-->
+<!--                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--              </nz-input-number>-->
             </nz-form-control>
           </nz-form-item>
         </nz-card>
@@ -824,10 +825,12 @@
                   đồng)
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="duToanKphi" [nzMin]="0"
-                                   [nzMax]="999999999999" [nzStep]="0.1"
-                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                  </nz-input-number>
+                  <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT"
+                        />
+<!--                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="duToanKphi" [nzMin]="0"-->
+<!--                                   [nzMax]="999999999999" [nzStep]="0.1"-->
+<!--                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                  </nz-input-number>-->
                 </nz-form-control>
               </nz-form-item>
             </nz-card>
