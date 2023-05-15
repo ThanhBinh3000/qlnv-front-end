@@ -187,7 +187,7 @@ export class KeHoachDieuChuyenComponent extends Base2Component implements OnInit
     if (data) {
       this.selectedId = data.id;
       if (!(data.trangThai == this.STATUS.DU_THAO || data.trangThai == this.STATUS.TUCHOI_TBP_TVQT || data.trangThai == this.STATUS.TU_CHOI_LDCC
-        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT)) {
+        || data.trangThai == this.STATUS.YC_CHICUC_PHANBO_DC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDCC || data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT  || (data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!data.xdLaiDiemNhap) || (data.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!data.xdLaiDiemNhap))) {
         this.isView = true;
       }
     } else {
