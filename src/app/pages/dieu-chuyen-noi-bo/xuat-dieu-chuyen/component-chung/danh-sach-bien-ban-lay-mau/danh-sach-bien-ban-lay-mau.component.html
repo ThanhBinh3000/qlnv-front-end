@@ -3,21 +3,40 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
-                    <div nz-col nzSpan="4">
-                        <label class="search__label">Biên bản lấy mẫu/bàn giao mẫu</label>
-                        <input placeholder="Nhập số quyết định" nz-input formControlName="soBienBan" />
+                    <div nz-col nzSpan="2">
+                        <!-- <label class="search__label"> Năm kế hoạch </label> -->
+                        <label> Năm kế hoạch </label>
+                        <nz-select formControlName="namKeHoach">
+                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                        </nz-select>
                     </div>
                     <div nz-col nzSpan="4">
-                        <label class="search__label">Số QĐ giao nhiệm vụ xuất hàng</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="soQd" />
+                        <label>Biên bản lấy mẫu/bàn giao mẫu</label>
+                        <input placeholder="Nhập số biên bản lấy mẫu" nz-input formControlName="soBienBan" />
+                    </div>
+                    <div nz-col nzSpan="4">
+                        <label>Số QĐ ĐC của Cục</label>
+                        <input placeholder="Nhập số quyết định điều chuyển" nz-input formControlName="soQd" />
                     </div>
                     <div nz-col nzSpan="10">
-                        <label class="search__label">Đơn vị kiểu nghiệm</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="dviKnghiem" />
+                        <label>Đơn vị kiểu nghiệm</label>
+                        <input placeholder="Nhập đơn vị kiểm nghiệm" nz-input formControlName="dviKnghiem" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label class="search__label">Ngày lấy mẫu</label>
-                        <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label>Ngày lấy mẫu</label>
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauDen" nzPlaceHolder="Ngày kết thúc">
+                                </nz-date-picker>
+                            </div>
+                        </div>
+                        <!-- <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
                     </div>
                 </div>
             </form>

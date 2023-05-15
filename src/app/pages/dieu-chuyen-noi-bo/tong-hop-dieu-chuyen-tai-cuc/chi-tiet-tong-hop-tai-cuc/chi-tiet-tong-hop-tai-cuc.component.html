@@ -25,16 +25,23 @@
                     </button>
                     <button
                         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
-                        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
+                        type="button" class="btn btn-sub"
+                        (click)="formData.value.loaiDieuChuyen=='CUC'? reject(idInput,STATUS.TU_CHOI_LDC): reject2ChiCuc(idInput, STATUS.TU_CHOI_LDC)">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
                     <button
                         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
-                        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+                        type="button" class="btn btn-sub"
+                        (click)="formData.value.loaiDieuChuyen=='CUC'? reject(idInput,STATUS.TU_CHOI_TP): reject2ChiCuc(idInput, STATUS.TU_CHOI_TP)">
                         <i class="icon htvbdh_tcdt_tuchoi do"></i>
                         <span>Từ chối</span>
                     </button>
+                    <!-- <button type="button" class="btn btn-sub"
+                        (click)="formData.value.loaiDieuChuyen=='CUC'? reject(idInput,STATUS.TU_CHOI_TP): reject2ChiCuc(idInput, STATUS.TU_CHOI_TP)">
+                        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                        <span>Từ chối</span>
+                    </button> -->
                     <button
                         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
                         type="button" class="btn btn-sub"

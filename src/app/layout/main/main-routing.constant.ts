@@ -90,7 +90,7 @@ export const LIST_PAGES: RouteInfo[] = [
     code: 'QLKT'
   },
   {
-    title: 'Báo cáo Bộ, ngành',
+    title: 'Báo cáo Bộ/Ngành',
     route: MAIN_ROUTES.baoCaoBoNganh,
     code: 'DCNB'
   },

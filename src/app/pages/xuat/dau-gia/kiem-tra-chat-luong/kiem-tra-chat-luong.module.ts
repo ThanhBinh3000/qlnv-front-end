@@ -14,29 +14,29 @@ import { GiaoXuatHangModule } from '../giao-xuat-hang/giao-xuat-hang.module';
 import { CreateDaiDienComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-dai-dien/create-dai-dien.component';
 
 @NgModule({
-  declarations: [
-    KiemTraChatLuongComponent,
-    ChucNangKiemTraComponent,
-    TableBienBanLayMauComponent,
-    CreateBienBanLayMauComponent,
-    HoSoKyThuatComponent,
-    ThongTinHoSoKyThuatComponent,
-    QuanLyPhieuKiemNghiemChatLuongComponent,
-    ThemMoiPhieuKiemNghiemChatLuongComponent,
-    CreateDaiDienComponent,
-  ],
-  imports: [
-    GiaoXuatHangModule,
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
-  exports: [
-    KiemTraChatLuongComponent,
-    ChucNangKiemTraComponent,
-    TableBienBanLayMauComponent,
-    CreateBienBanLayMauComponent,
-    HoSoKyThuatComponent,
-  ]
+  // declarations: [
+  //   KiemTraChatLuongComponent,
+  //   ChucNangKiemTraComponent,
+  //   TableBienBanLayMauComponent,
+  //   CreateBienBanLayMauComponent,
+  //   HoSoKyThuatComponent,
+  //   ThongTinHoSoKyThuatComponent,
+  //   QuanLyPhieuKiemNghiemChatLuongComponent,
+  //   ThemMoiPhieuKiemNghiemChatLuongComponent,
+  //   CreateDaiDienComponent,
+  // ],
+  // imports: [
+  //   GiaoXuatHangModule,
+  //   CommonModule,
+  //   ComponentsModule,
+  //   DirectivesModule,
+  // ],
+  // exports: [
+  //   KiemTraChatLuongComponent,
+  //   ChucNangKiemTraComponent,
+  //   TableBienBanLayMauComponent,
+  //   CreateBienBanLayMauComponent,
+  //   HoSoKyThuatComponent,
+  // ]
 })
 export class KiemTraChatLuongModule { }

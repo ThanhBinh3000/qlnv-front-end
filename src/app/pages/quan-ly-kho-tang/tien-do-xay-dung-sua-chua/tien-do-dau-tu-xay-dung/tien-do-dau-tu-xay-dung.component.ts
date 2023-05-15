@@ -54,6 +54,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
 
   //trangthai qd pd kết quả lcnt
   trangThaiQdPdKqLcnt: boolean = false;
+  //trang thái hợp đồng, nếu có 1 hd đã ký thì icon success màu xanh
+  trangThaiHopDong: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -163,6 +165,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdDaDtxd = null;
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
+    this.trangThaiQdPdKqLcnt = false;
     this.spinner.show();
     try {
       let body = {
@@ -220,6 +223,27 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         "idDuAn": this.itemQdPdDaDtxd.idDuAn,
         "paggingReq": {
           "limit": 10,
+          "page": 0
+        }
+      }
+      let res = await this.quyetdinhpheduyetKhlcntService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        this.itemTtdt = this.itemQdPdKhLcnt;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async loadItemHopDong(itemQdPdTktcTdt) {
+    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
+      let body = {
+        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "idQdPdTktcTdt": itemQdPdTktcTdt.id,
+        "idDuAn": this.itemQdPdDaDtxd.idDuAn,
+        "paggingReq": {
+          "limit": 100,
           "page": 0
         }
       }

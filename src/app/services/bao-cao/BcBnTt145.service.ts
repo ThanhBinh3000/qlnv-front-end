@@ -8,10 +8,10 @@ import { OldResponseData } from "src/app/interfaces/response";
   providedIn: 'root',
 })
 export class BcBnTt145Service extends BaseService {
-  GATEWAY = '';
+  GATEWAY = '/qlnv-report';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'tt-btc-145-bn', '');
+    super(httpClient, 'tt-btc-145-bn', '/qlnv-report');
   }
 
   ketXuat(body) {
