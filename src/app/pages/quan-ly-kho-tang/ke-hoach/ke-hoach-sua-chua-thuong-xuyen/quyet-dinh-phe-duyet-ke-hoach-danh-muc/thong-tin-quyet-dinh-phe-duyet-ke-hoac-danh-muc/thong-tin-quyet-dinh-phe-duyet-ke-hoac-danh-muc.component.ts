@@ -23,6 +23,9 @@ import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh
 import {
   DialogThemMoiDxkhthComponent
 } from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
+import {
+  DialogThemMoiKehoachDanhmucChitietComponent
+} from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc',
@@ -47,17 +50,13 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   listToTrinh: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   fileDinhKems: any[] = [];
   canCuPhapLys: any[] = [];
+  listDmSuaChua: any[] = [];
   listNam: any[] = [];
   userInfo: UserLogin;
 
   STATUS = STATUS;
-  isEdit: string = "";
-  ncKhTongSoEdit: number;
-  ncKhNstwEdit: number;
 
   constructor(
     private router: Router,
@@ -392,27 +391,6 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     return sl;
   }
 
-  editRow(idx, y, y1, item) {
-    this.isEdit = idx + "-" + y + "-" + y1;
-    this.ncKhTongSoEdit = item.ncKhTongSo;
-    this.ncKhNstwEdit = item.ncKhNstw;
-  }
-
-  saveEdit(item) {
-    this.isEdit = "";
-    let list = this.dataTableReq.filter(item => item.maDuAn == item.maDuAn);
-    if (list && list.length > 0) {
-      let idx = this.dataTableReq.indexOf(list[0]);
-      Object.assign(this.dataTableReq[idx], item);
-    }
-  }
-
-  cancelEdit(data: any) {
-    data.ncKhTongSo = this.ncKhTongSoEdit;
-    data.ncKhNstw = this.ncKhNstwEdit;
-    this.isEdit = "";
-  }
-
   deleteRow(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -444,39 +422,38 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     });
   }
 
-  themMoiItem(data: any, type: string, idx: number, list?: any) {
-    let modalQD = this.modal.create({
-      nzTitle :  "Chỉnh sửa chi tiết kế hoạch",
-      nzContent: DialogThemMoiDxkhthComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: "1200px",
-      nzStyle: { top: "200px" },
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: list && list.dataChild ? list.dataChild : [],
-        dataInput: data,
-        type: type,
-        page: "DXTH"
-      }
-    });
-    modalQD.afterClose.subscribe(async (detail) => {
-      if (detail) {
-        if (!data.dataChild) {
-          data.dataChild = [];
+  updateItemDetail(data: any, type: string, idx: number, list?: any) {
+    if (!this.isViewDetail) {
+      let modalQD = this.modal.create({
+        nzTitle: "Chỉnh sửa kế hoạch, danh mục chi tiết",
+        nzContent: DialogThemMoiKehoachDanhmucChitietComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: "1000px",
+        nzFooter: null,
+        nzComponentParams: {
+          dataTable: list && list.dataChild ? list.dataChild : [],
+          dataInput: data,
+          type: type,
+          listDmSuaChua: this.listDmSuaChua,
+          dataHeader: this.formData.value,
         }
-        if (!data.idVirtual) {
-          data.idVirtual = uuidv4();
-        }
-        if (type == "them") {
-          data.dataChild.push(detail);
-        } else {
+      });
+      modalQD.afterClose.subscribe(async (detail) => {
+        if (detail) {
+          if (!data.dataChild) {
+            data.dataChild = [];
+          }
+          if (!data.idVirtual) {
+            data.idVirtual = uuidv4();
+          }
           if (list) {
             Object.assign(list[idx], detail);
           }
+          this.expandAll(this.dataTable);
         }
-        this.expandAll(this.dataTable);
-      }
-    });
+      });
+    }
   }
+
 }
