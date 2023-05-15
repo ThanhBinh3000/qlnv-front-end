@@ -240,12 +240,15 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         sl = sum;
       }
     } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        let sum = 0;
-        this.dataTable.forEach(item => {
-          sum += this.sumSoLuong(item, row);
-        });
-        sl = sum;
+      if(type == 'duoi') {
+        if (this.dataTable && this.dataTable.length > 0) {
+          let sum = 0;
+          this.dataTable.forEach(item => {
+            sum += this.sumSoLuong(item, row);
+          });
+          sl = sum;
+        }
+
       }
     }
     return sl;

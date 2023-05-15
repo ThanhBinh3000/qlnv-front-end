@@ -77,20 +77,20 @@
                 [nzData]="dataTable">
         <thead>
         <tr>
-          <th width="45px">
+          <th nzWidth="45px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th width="45px">STT</th>
-          <th width="130px">Năm kế hoạch</th>
-          <th width="130px">Mã tổng hợp</th>
-          <th width="130px">Ngày tổng hợp</th>
+          <th nzWidth="45px">STT</th>
+          <th nzWidth="130px">Năm kế hoạch</th>
+          <th nzWidth="130px">Mã tổng hợp</th>
+          <th nzWidth="130px">Ngày tổng hợp</th>
           <th>Nội dung tổng hợp/Trích yếu</th>
-          <th>Giá trị dự toán hoặc <br> khái toán TMĐT</th>
-          <th width="130px">Số quyết định BTC</th>
-          <th width="130px">Số quyết định TCDT</th>
-          <th width="130px">Trạng thái</th>
-          <th width="120px">Hành động</th>
+          <th nzWidth="120px">Giá trị dự toán hoặc <br> khái toán TMĐT</th>
+          <th nzWidth="130px">Số quyết định BTC</th>
+          <th nzWidth="130px">Số quyết định TCDT</th>
+          <th nzWidth="130px">Trạng thái</th>
+          <th nzWidth="120px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -155,7 +155,7 @@
         <tbody>
 
         <tr *ngFor="let data of basicTable.data; let i = index">
-          <td width="45px">
+          <td nzWidth="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                    [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
           </td>

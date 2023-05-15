@@ -14,7 +14,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && idInput > 0 && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')" type="button"
+      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')" type="button"
               class="btn btn-sub ml-2"
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>

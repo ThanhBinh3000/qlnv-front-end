@@ -14,10 +14,10 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && idInput > 0 && userService.isTongCuc()" type="button"
+      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
               class="btn btn-sub"
-              (click)="approve(idInput, STATUS.BAN_HANH,'Bạn có chắc chắn muốn ban hành?')">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
+              (click)="save(true)">
+        <i class="icon htvbdh_tcdt_guiduyet ml-2"></i>
         <span>Ban hành</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
