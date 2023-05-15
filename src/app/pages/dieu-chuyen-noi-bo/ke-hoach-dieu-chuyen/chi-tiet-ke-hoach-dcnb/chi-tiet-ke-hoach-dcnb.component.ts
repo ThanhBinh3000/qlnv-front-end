@@ -129,7 +129,8 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
         loaiDc: ['CHI_CUC', [Validators.required]],
         tenLoaiDc: ['Giữa 2 chi cục trong cùng 1 cục', [Validators.required]],
         type: ['DC', [Validators.required]],
-        trachNhiemDviTh: ['', [Validators.required]]
+        trachNhiemDviTh: ['', [Validators.required]],
+        xdLaiDiemNhap: [''],
       }
     );
     this.formDataChiTiet = this.fb.group(
@@ -279,9 +280,13 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
-        return f.maDvi !== this.userInfo.MA_DVI
-      }) : [];
+      if(value && value.type == 'DC'){
+        this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
+          return f.maDvi !== this.userInfo.MA_DVI
+        }) : [];
+      }else {
+        this.listChiCucNhan = Array.isArray(res.data) ? res.data: [];
+      }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -342,7 +347,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
                 this.listDiemKhoBq = [];
                 this.listDiemKhoBq = [
                   ...this.listDiemKhoBq,
-                  ...element.children
+                  ...element.children.filter(item =>item.type =='MLK')
                 ]
               }
             });
@@ -890,6 +895,29 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     } finally {
       this.spinner.hide();
     }
+  }
+
+  async approveConfirm(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        let result = await this.save(false, true, false);
+        if (result) {
+          this.idInput = result.id;
+          if (this.formData.value.type == 'DC') {
+            await this.approve(this.idInput, trangThai, msgSuccess);
+          } else if (this.formData.value.type == 'NDC') {
+            await this.approve(this.idInput, trangThai, msgSuccess);
+          }
+        }
+      },
+    });
   }
 
   xoaHangHoa(data: any, dataParent?: any) {
