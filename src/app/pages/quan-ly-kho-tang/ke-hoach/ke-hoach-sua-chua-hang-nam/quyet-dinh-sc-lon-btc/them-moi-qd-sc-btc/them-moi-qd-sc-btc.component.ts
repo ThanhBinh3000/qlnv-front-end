@@ -168,17 +168,19 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       let detailTh = result[0];
       let res = await this.tongHopDxScLon.getDetail(detailTh.id);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataTableTren = [];
+        this.dataTableDuoi = [];
+        this.tablePaTcTren = [];
+        this.tablePaTcDuoi = [];
         if (res.data) {
-          this.dataTableTren = [];
-          this.dataTableDuoi = [];
-          this.tablePaTcTren = [];
-          this.tablePaTcDuoi = [];
           const data = res.data;
           this.dataTableReq = data.chiTiets;
-          this.tablePaTcTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
-          this.tablePaTcDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
-          this.dataTableTren = cloneDeep(this.tablePaTcDuoi);
-          this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
+          if (this.dataTableReq && this.dataTableReq.length > 0) {
+            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
+            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+            this.dataTableTren = cloneDeep(this.tablePaTcTren);
+            this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -302,7 +304,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           this.formData.patchValue({
             soTt: data.soQuyetDinh
           });
-          this.changSoTh(data.id);
+          await this.changSoTh(data.id);
         }
       });
     }

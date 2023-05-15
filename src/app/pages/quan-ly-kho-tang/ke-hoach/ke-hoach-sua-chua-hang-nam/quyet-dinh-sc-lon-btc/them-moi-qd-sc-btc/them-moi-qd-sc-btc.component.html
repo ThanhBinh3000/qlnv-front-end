@@ -300,7 +300,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of tablePaTcDuoi , let idx = index">
+              <ng-container *ngFor="let data of tablePaTcTren , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
