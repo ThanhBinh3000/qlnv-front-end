@@ -96,7 +96,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         "04": "Từ chối - lđ cục",
         "05": "Đã duyệt - lđ cục",
         "65": "Y/c chi cục xác định điểm nhập"
-    }
+    };
+    deXuatPheDuyet: { [key: string]: boolean } = {};
+    dcnbKeHoachDcHdrId: number[] = [];
     constructor(httpClient: HttpClient,
         storageService: StorageService,
         notification: NzNotificationService,
@@ -518,7 +520,11 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                     this.groupData2Cuc.forEach((item, id) => {
                         if (item.dcnbKeHoachDcHdr.some(cur => !cur.daXdinhDiemNhap)) {
                             this.daXdinhDiemNhap = false
-                        }
+                        };
+                        Array.isArray(item.dcnbKeHoachDcHdr) && item.dcnbKeHoachDcHdr.forEach(element => {
+                            this.deXuatPheDuyet[element.id] = true;
+                        });
+                        this.renderListDcnbKeHoachDcHdrId(this.deXuatPheDuyet)
                     })
                     this.selectRow(this.groupData2Cuc[0], isNew)
                 }
@@ -653,5 +659,60 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             this.isViewKeHoachDC = true;
         }
 
+    }
+    checkDxuatDuyet(check: boolean, data: any): void {
+        this.deXuatPheDuyet[data.id] = check;
+        this.renderListDcnbKeHoachDcHdrId(this.deXuatPheDuyet)
+    };
+    renderListDcnbKeHoachDcHdrId(listObj = {}) {
+        const arr = []
+        for (const [key, value] of Object.entries(listObj)) {
+            if (value) {
+                arr.push(Number(key))
+            }
+        }
+        this.dcnbKeHoachDcHdrId = cloneDeep(arr)
+    }
+    async approve(id: number, trangThai: string, msg: string, dcnbKeHoachDcHdrId?: number[], roles?: any, msgSuccess?: string) {
+        if (!this.checkPermission(roles)) {
+            return
+        }
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: msg,
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 350,
+            nzOnOk: async () => {
+                this.spinner.show();
+                try {
+                    let body = {
+                        id: id,
+                        trangThai: trangThai,
+                        dcnbKeHoachDcHdrId
+                    }
+                    let res = await this.tongHopDieuChuyenService.approve(body);
+                    if (res.msg == MESSAGE.SUCCESS) {
+                        this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
+                        this.spinner.hide();
+                        this.goBack();
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, res.msg);
+                        this.spinner.hide();
+                    }
+                } catch (e) {
+                    console.log('error: ', e);
+                    this.spinner.hide();
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                } finally {
+                    this.spinner.hide();
+                }
+            },
+        });
+    };
+    roleCheckXuatDuyet(id: number, trangThai: string) {
+        return this.userService.isCuc() && ((this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP') && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.TU_CHOI_LDC)) || (this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC') && trangThai == STATUS.CHO_DUYET_LDC && !this.deXuatPheDuyet[id]))
     }
 }

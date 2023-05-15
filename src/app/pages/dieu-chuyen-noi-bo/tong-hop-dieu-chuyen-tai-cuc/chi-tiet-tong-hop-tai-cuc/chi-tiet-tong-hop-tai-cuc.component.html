@@ -45,14 +45,14 @@
                     <button
                         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
                         type="button" class="btn btn-sub"
-                        (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                        (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
                     <button
-                        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
+                        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai==STATUS.TU_CHOI_LDC) && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
                         type="button" class="btn btn-sub"
-                        (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')">
+                        (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
@@ -335,6 +335,7 @@
                                     <th rowspan="2" class="text-center break max-w-90 min-w-90">Trạng thái xác định điểm
                                         nhập
                                     </th>
+                                    <th rowspan="2">Từ chối</th>
                                 </tr>
                                 <tr>
                                     <th>Chi cục</th>
@@ -381,6 +382,7 @@
                                         <ng-template #tdNormal>
                                             <td></td>
                                         </ng-template>
+                                        <td></td>
                                     </tr>
                                     <ng-container *ngIf="item.expand">
                                         <ng-container *ngFor="let bb of item.children, let y = index">
@@ -391,6 +393,7 @@
                                                 </td>
                                                 <td></td>
                                                 <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -443,6 +446,7 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
+                                                        <td></td>
                                                     </tr>
                                                     <ng-container *ngFor="let d of c.children, let y = index">
                                                         <tr>
@@ -471,6 +475,10 @@
                                                                 <label nz-checkbox [(ngModel)]="c.daXdinhDiemNhap"
                                                                     nzDisabled="true"></label>
                                                             </td>
+                                                            <td class="text-center">
+                                                                <label nz-checkbox [(ngModel)]="c.trangThai"
+                                                                    nzDisabled="true"></label>
+                                                            </td>
                                                         </tr>
                                                         <ng-container *ngFor="let e of d.children, let y = index">
                                                             <tr>
@@ -492,6 +500,7 @@
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td>{{(e.tenDiemKhoNhan || "")}}</td>
+                                                                <td></td>
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -525,6 +534,7 @@
                                                                         {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                                                                     <td class="text-right">
                                                                         {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+                                                                    <td></td>
                                                                     <td></td>
                                                                 </tr>
                                                             </ng-container>
@@ -591,6 +601,8 @@
                                     <th class="text-center max-w-90 min-w-90 break" rowspan="2">Thời
                                         gian dự kiến điều chuyển</th>
                                     <th class="text-center">Chi cục nhận điều chuyển đến</th>
+                                    <th *ngIf="formData.value.trangThai && formData.value.trangThai!==STATUS.DU_THAO"
+                                        class="text-center" rowspan="2">Phê duyệt</th>
                                 </tr>
                                 <tr>
                                     <th class="text-center">Chi cục/điểm kho</th>
@@ -618,10 +630,16 @@
                                         <td>{{ item.ngayDuyetLdcc|date:"dd/MM/yyyy" }}</td>
                                         <td colspan="6"></td>
                                         <td class="text-right bold">{{item.duToanKphi}}</td>
-                                        <td colspan="3"></td>
+                                        <td colspan="2"></td>
                                         <ng-template #tdNormal>
                                             <td></td>
                                         </ng-template>
+                                        <td *ngIf="formData.value.trangThai && formData.value.trangThai!==STATUS.DU_THAO"
+                                            class="text-center">
+                                            <label nz-checkbox [(ngModel)]="deXuatPheDuyet[item.id]"
+                                                (ngModelChange)="checkDxuatDuyet($event, item)"
+                                                [nzDisabled]="!roleCheckXuatDuyet(item.id, formData.value.trangThai)"></label>
+                                        </td>
                                     </tr>
                                     <ng-container *ngIf="item.expand">
                                         <ng-container *ngFor="let bb of item.danhSachHangHoa, let y=index">
@@ -640,6 +658,9 @@
                                                 <td class="text-right">{{bb.duToanKphi}}</td>
                                                 <td>{{bb.thoiGianDkDc|date:"dd/MM/yyyy"}}</td>
                                                 <td>{{bb.tenChiCucNhan}}</td>
+                                                <td
+                                                    *ngIf="formData.value.trangThai && formData.value.trangThai!==STATUS.DU_THAO">
+                                                </td>
                                             </tr>
                                         </ng-container>
                                     </ng-container>
