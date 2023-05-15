@@ -53,7 +53,7 @@
             </button>
             <button
               *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
-              type="button" class="btn btn-main ml-2" (click)="save()">
+              type="button" class="btn btn-main ml-2" (click)="save(false)">
               <i class="icon htvbdh_tcdt_save"></i>
               <span>Lưu</span>
             </button>
@@ -102,7 +102,7 @@
             </button>
             <button
               *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
-              type="button" class="btn btn-main ml-2" (click)="save()">
+              type="button" class="btn btn-main ml-2" (click)="save(false)">
               <i class="icon htvbdh_tcdt_save"></i>
               <span>Lưu</span>
             </button>
