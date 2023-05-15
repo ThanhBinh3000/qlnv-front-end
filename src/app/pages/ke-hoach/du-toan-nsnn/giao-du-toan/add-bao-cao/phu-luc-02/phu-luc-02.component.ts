@@ -63,6 +63,8 @@ export class PhuLuc02Component implements OnInit {
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   userInfo: any;
+  BOX_NUMBER_WIDTH = 450;
+  scrollX: string;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -124,6 +126,13 @@ export class PhuLuc02Component implements OnInit {
 
     console.log(this.lstCtietBcao);
     // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+
+    if (this.status) {
+      this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 3).toString() + 'px';
+    } else {
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 3).toString() + 'px';
+    }
+
     this.sortByIndex();
     this.getTotal();
     this.sum1();

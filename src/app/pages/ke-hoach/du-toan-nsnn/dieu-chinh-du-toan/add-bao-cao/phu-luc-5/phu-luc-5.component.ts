@@ -143,12 +143,16 @@ export class PhuLuc5Component implements OnInit {
         item.dinhMuc = dinhMuc?.tongDmuc;
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
+        item.dtoanDchinh = item.dtoanDaGiaoLke - item.thanhTien;
+        item.dtoanVuTvqtDnghi = item.dtoanDchinh
       } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
         // item.noiDung = dinhMuc?.tenDinhMuc;
         item.dinhMuc = dinhMuc?.tongDmuc;
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
+        item.dtoanDchinh = item.dtoanDaGiaoLke - item.thanhTien;
+        item.dtoanVuTvqtDnghi = item.dtoanDchinh
       }
     })
 
