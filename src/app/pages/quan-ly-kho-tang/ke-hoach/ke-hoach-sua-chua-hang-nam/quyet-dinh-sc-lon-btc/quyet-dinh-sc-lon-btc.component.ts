@@ -12,6 +12,7 @@ import {MESSAGE} from "../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-btc',
@@ -28,6 +29,7 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
+    private router: Router,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
@@ -50,6 +52,9 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -71,12 +76,6 @@ export class QuyetDinhScLonBtcComponent extends Base2Component implements OnInit
   }
 
   async filter() {
-    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.patchValue({
-        ngayKyTu: this.formData.value.ngayKy[0],
-        ngayKyDen: this.formData.value.ngayKy[1]
-      })
-    }
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI
     })

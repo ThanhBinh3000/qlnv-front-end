@@ -164,7 +164,7 @@
           <td>{{ data.id }}</td>
           <td>{{ data.tgTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.noiDung }}</td>
-          <td>{{ data.loaiTmdt }}</td>
+          <td>{{ data.loaiTmdt == 'TREN5TY' ? '> 5 tỷ' :  data.loaiTmdt == 'DUOI5TY' ? '<= 5 tỷ' : 'Tất cả'  }}</td>
           <td>{{ data.soQdBtc }}</td>
           <td>{{ data.soQdTcdt }}</td>
           <td>{{ data.tenTrangThai }}</td>
