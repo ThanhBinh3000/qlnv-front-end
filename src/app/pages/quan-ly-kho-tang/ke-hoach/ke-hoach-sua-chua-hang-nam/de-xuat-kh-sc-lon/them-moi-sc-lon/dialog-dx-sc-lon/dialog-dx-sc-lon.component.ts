@@ -99,7 +99,7 @@ export class DialogDxScLonComponent implements OnInit {
   async getAllDmKho() {
     let body = {
       "namKh": dayjs().get("year"),
-      "maDvi": this.userInfo.MA_DVI,
+      "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
         page: 0
@@ -135,6 +135,7 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
       this.item.tieuChuan = this.dataInput.tieuChuan;
       this.item.lyDo = this.dataInput.lyDo;
+      this.item.nguonVon = this.dataInput.nguonVon;
     }
   }
 
