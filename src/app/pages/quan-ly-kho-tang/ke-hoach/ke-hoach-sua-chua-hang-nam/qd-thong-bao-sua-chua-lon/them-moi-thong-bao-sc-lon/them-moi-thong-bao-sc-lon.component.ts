@@ -1,4 +1,6 @@
 import { cloneDeep } from 'lodash';
+import { chain } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import {Component, Input, OnInit, } from '@angular/core';
 import {Validators} from "@angular/forms";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -31,6 +33,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   maQd: string;
   dataEdit : any
   listQdBtc: any[] = [];
+  dataTableReq: any[] = [];
   isEdit : number = -1
 
   constructor(
@@ -48,7 +51,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       id: [null],
       maDvi : [null],
       tenDvi : [null],
-      soQd : [null, Validators.required],
+      soQuyetDinh : [null, Validators.required],
       namKeHoach : [dayjs().get('year'), Validators.required],
       trichYeu : [null],
       ngayKy : [null, Validators.required],
@@ -62,7 +65,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = '/TCDT-TVQT';
+      this.maQd = '/QĐ-TCDT';
       await Promise.all([
       ]);
       if (this.idInput > 0) {
@@ -95,7 +98,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         this.listQdBtc = data.content;
         if (this.listQdBtc) {
           this.listQdBtc = this.listQdBtc.filter(
-            (item) => (item.trangThai == this.STATUS.BAN_HANH)
+            (item) => (item.trangThai == this.STATUS.BAN_HANH && !item.qdTcdt )
           )
         }
       } else {
@@ -111,9 +114,9 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     }
   }
 
-  async changSoTh(event, type?: string) {
+  async changSoTh(event) {
     let result;
-    result = this.listQdBtc.filter(item => item.soQd = event)
+    result = this.listQdBtc.filter(item => item.soQuyetDinh = event)
     if (result && result.length > 0) {
       let detailTh = result[0]
       let res = await this.qdScBtcService.getDetail(detailTh.id);
@@ -121,7 +124,8 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         if (res.data) {
           this.dataTable = []
           const data = res.data;
-          this.dataTable = data.chiTiets;
+          this.dataTableReq = data.chiTiets;
+          this.dataTable = this.convertListData(this.dataTableReq)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg)
@@ -138,7 +142,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQd : data.soQd ? data.soQd.split("/")[0] : ''
+        soQuyetDinh : data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : ''
       })
       this.fileDinhKem = data.fileDinhKems
       this.dataTable = data.ctiets;
@@ -156,15 +160,13 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
-    body.soQd = body.soQd + this.maQd
+    body.soQuyetDinh = body.soQuyetDinh + this.maQd
     body.fileDinhKems = this.fileDinhKem
-    body.ctietList = this.dataTable
+    body.chiTiets = this.dataTableReq
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
-      } else {
-        this.goBack()
+        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành ?")
       }
     }
   }
@@ -197,19 +199,55 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         nzWidth: '700px',
         nzFooter: null,
         nzComponentParams: {
-          type: "03",
+          type: "00",
           listTh : this.listQdBtc
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            maTh : data.id
+            qdBtc : data.soQuyetDinh
           })
-          this.changSoTh(data.id, 'TH')
+          this.changSoTh(data.id)
         }
       })
   }
+
+  convertListData(table: any[]): any[] {
+    let arr = [];
+    if (table && table.length > 0) {
+      arr = chain(table)
+        .groupBy("tenCuc")
+        .map((value, key) => {
+          let rs = chain(value)
+            .groupBy("tenChiCuc")
+            .map((v, k) => {
+              let rs1 = chain(v)
+                .groupBy("tenKhoi")
+                .map((v1, k1) => {
+                    return {
+                      idVirtual: uuidv4(),
+                      tenKhoi: k1,
+                      dataChild: v1
+                    };
+                  }
+                ).value();
+              return {
+                idVirtual: uuidv4(),
+                tenChiCuc: k,
+                dataChild: rs1
+              };
+            }).value();
+          return {
+            idVirtual: uuidv4(),
+            tenCuc: key,
+            dataChild: rs
+          };
+        }).value();
+    }
+    return arr;
+  }
+
 
   sumSoLuong(data: any, row: string, type?: any) {
     let sl = 0;

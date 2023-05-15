@@ -14,9 +14,9 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && idInput > 0 && userService.isTongCuc()" type="button"
-              class="btn btn-sub"
-              (click)="approve(idInput, STATUS.BAN_HANH,'Bạn có chắc chắn muốn ban hành?')">
+      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
+              class="btn btn-sub ml-2"
+              (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Ban hành</span>
       </button>
@@ -50,7 +50,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-group nzAddOnAfter="{{maQd}}">
-                    <input nz-input formControlName="soQd" [readonly]="isViewDetail"/>
+                    <input nz-input formControlName="soQuyetDinh" [readonly]="isViewDetail"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -117,7 +117,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -269,7 +269,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>

@@ -162,9 +162,7 @@
                         <i class="fa fa-pencil"></i>
                       </a>
                       <a
-                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)
-                        && !vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM)
-                        && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC'))"
+                        *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_XK_LT_BKCH_DUYET_LDCCUC'))"
                         (click)="redirectDetail(lv2.id, true)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                       </a>

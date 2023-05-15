@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import {
   TongHopDxScLonService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-tcdt',
@@ -37,7 +38,8 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private tongHopDxScLon : TongHopDxScLonService
+    private tongHopDxScLon : TongHopDxScLonService,
+    private router : Router,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDxScLon)
     super.ngOnInit()
@@ -45,16 +47,18 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
       maDvi: [''],
       capDvi: [''],
       namKeHoach: [''],
-      maTh: [''],
+      maTongHop: [''],
       noiDung: [''],
-      ngayKy: [''],
-      ngayKyTu: [''],
-      ngayKyDen: [''],
+      ngayTongHopTu: [''],
+      ngayTongHopDen: [''],
       trangThai: [''],
     });
     this.filterTable = {};
   }
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       await this.filter();
@@ -73,12 +77,6 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
   }
 
   async filter() {
-    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.patchValue({
-        ngayKyTu : this.formData.value.ngayKy[0],
-        ngayKyDen : this.formData.value.ngayKy[1]
-      })
-    }
     this.formData.patchValue({
       maDvi :this.userInfo.MA_DVI ,
       capDvi :this.userInfo.CAP_DVI

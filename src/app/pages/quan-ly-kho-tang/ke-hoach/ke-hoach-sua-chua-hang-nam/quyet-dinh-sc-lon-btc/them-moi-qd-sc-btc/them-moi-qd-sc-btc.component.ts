@@ -22,6 +22,9 @@ import {
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
 import { chain } from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import {
+  DialogDxScLonComponent
+} from "../../de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
 @Component({
   selector: "app-them-moi-qd-sc-btc",
   templateUrl: "./them-moi-qd-sc-btc.component.html",
@@ -35,7 +38,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   maQd: string;
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  tablePaTc: any[] = [];
+  tablePaTcTren: any[] = [];
+  tablePaTcDuoi: any[] = [];
+  dataTableTren: any[] = [];
+  dataTableDuoi: any[] = [];
   dataEdit: any;
   listLoaiDuAn: any[] = [];
   listDxCuc: any[] = [];
@@ -162,12 +168,19 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       let detailTh = result[0];
       let res = await this.tongHopDxScLon.getDetail(detailTh.id);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataTableTren = [];
+        this.dataTableDuoi = [];
+        this.tablePaTcTren = [];
+        this.tablePaTcDuoi = [];
         if (res.data) {
-          this.dataTable = [];
           const data = res.data;
           this.dataTableReq = data.chiTiets;
-          this.dataTable = this.convertListData(this.dataTableReq);
-          this.tablePaTc = cloneDeep(this.dataTable);
+          if (this.dataTableReq && this.dataTableReq.length > 0) {
+            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
+            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+            this.dataTableTren = cloneDeep(this.tablePaTcTren);
+            this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -223,8 +236,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTableReq = data.chiTiets;
-      this.dataTable = this.convertListData(this.dataTableReq);
-      this.tablePaTc = this.convertListData(data.chiTietDxs);
+      let listDx = data.chiTietDxs;
+      if (listDx && listDx.length > 0) {
+        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 5000000000));
+        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 5000000000));
+      }
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
     }
   }
 
@@ -286,7 +304,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           this.formData.patchValue({
             soTt: data.soQuyetDinh
           });
-          this.changSoTh(data.id);
+          await this.changSoTh(data.id);
         }
       });
     }
@@ -312,6 +330,64 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       }
     }
     return sl;
+  }
+
+  themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
+    let modalQD = this.modal.create({
+      nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
+      nzContent: DialogDxScLonComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: "1200px",
+      nzStyle: { top: "100px" },
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: list && list.dataChild ? list.dataChild : [],
+        dataInput: data,
+        type: type,
+        page: tmdt
+      }
+    });
+    modalQD.afterClose.subscribe(async (detail) => {
+      if (detail) {
+        if (!data.dataChild) {
+          data.dataChild = [];
+        }
+        if (!data.idVirtual) {
+          data.idVirtual = uuidv4();
+        }
+        if (type == "them") {
+          data.dataChild.push(detail);
+        } else {
+          if (list) {
+            Object.assign(list.dataChild[idx], detail);
+          }
+        }
+      }
+    });
+  }
+
+  deleteItem(index: any, y: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn xóa?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
+            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
+              this.dataTable[index].dataChild.splice(y, 1);
+            }
+          }
+        } catch (e) {
+          console.log("error", e);
+        }
+      }
+    });
   }
 
 }

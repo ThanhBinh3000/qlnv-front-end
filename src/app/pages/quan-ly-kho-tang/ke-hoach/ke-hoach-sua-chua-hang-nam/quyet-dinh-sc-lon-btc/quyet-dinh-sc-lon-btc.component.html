@@ -54,15 +54,15 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH KẾ HOẠCH SỬA CHỮA LỚN CỦA BTC</h3>
       <div class="buttons">
-        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Dự thảo QĐ của BTC</span>
         </button>
@@ -146,14 +146,14 @@
           <td>{{ data.soTt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.BAN_HANH">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XEM')">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(data.id,true)"  *ngIf="( data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()  ">
+              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')  ">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() " (click)="delete(data)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_XOA')" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
