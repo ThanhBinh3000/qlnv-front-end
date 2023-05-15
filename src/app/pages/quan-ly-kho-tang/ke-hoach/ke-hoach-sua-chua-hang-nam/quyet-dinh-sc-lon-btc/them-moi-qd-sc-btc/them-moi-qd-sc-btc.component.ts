@@ -374,4 +374,5 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       }
     });
   }
+
 }
