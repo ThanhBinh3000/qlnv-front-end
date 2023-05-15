@@ -265,7 +265,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
   }
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-    if (!this.isViewDetail) {
       let modalQD = this.modal.create({
         nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
         nzContent: DialogDxScLonComponent,
@@ -300,7 +299,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
           this.expandAll(this.tableTren);
         }
       });
-    }
   }
 
   expandAll(table: any[]) {

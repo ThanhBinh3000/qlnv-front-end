@@ -215,7 +215,8 @@ import { DialogDxScLonComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de
     ThemMoiQdPdDxNhuCauComponent,
     ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
     TienDoSuaChuaThuongXuyenComponent,
-    DialogDxScLonComponent
+    DialogDxScLonComponent,
+    ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

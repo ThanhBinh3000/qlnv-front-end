@@ -50,7 +50,7 @@
                 </nz-form-label>
                 <nz-form-control>
                   <nz-input-group nzAddOnAfter="{{maQd}}">
-                    <input nz-input formControlName="soQd" [readonly]="isViewDetail"/>
+                    <input nz-input formControlName="soQuyetDinh" [readonly]="isViewDetail"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -117,7 +117,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -269,7 +269,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
