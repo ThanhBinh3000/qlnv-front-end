@@ -381,6 +381,49 @@ export class ThemMoiLuanPhienDoiHangDtqgComponent extends Base2Component impleme
       this.formData.get('tgianNhang').setValue(value);
     }
   }
+  sumslXuat(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    if (this.listDataXuat.length > 0) {
+      this.listDataXuat.forEach(item => {
+        arr.push(item)
+      })
+    }
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          if (cur[column]) {
+            prev += Number.parseInt(cur[column]);
+          }
+          return prev;
+        }, 0);
+        result = sum
+      }
+    }
+    return result;
+  }
 
+  sumslNhap(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    if (this.listDataNhap.length > 0) {
+      this.listDataNhap.forEach(item => {
+        debugger
+        arr.push(item)
+      })
+    }
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          if (cur[column]) {
+            prev += Number.parseInt(cur[column]);
+          }
+          return prev;
+        }, 0);
+        result = sum
+      }
+    }
+    return result;
+  }
 
 }
