@@ -15,6 +15,41 @@ import { ToChucTrienKhaiModule } from "./to-chuc-trien-khai/to-chuc-trien-khai.m
 import { DieuchinhKhbdgComponent } from './dieuchinh-khbdg/dieuchinh-khbdg.component';
 import { DieuchinhKhbdgModule } from "./dieuchinh-khbdg/dieuchinh-khbdg.module";
 import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
+import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.component";
+import {ChucNangKiemTraComponent} from "./kiem-tra-chat-luong/main/chuc-nang-kiem-tra.component";
+import {TableBienBanLayMauComponent} from "./kiem-tra-chat-luong/bien-ban-lay-mau/table-bien-ban-lay-mau.component";
+import {
+  CreateBienBanLayMauComponent
+} from "./kiem-tra-chat-luong/bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component";
+import {HoSoKyThuatComponent} from "./kiem-tra-chat-luong/ho-so-ky-thuat/ho-so-ky-thuat.component";
+import {
+  ThongTinHoSoKyThuatComponent
+} from "./kiem-tra-chat-luong/ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component";
+import {
+  QuanLyPhieuKiemNghiemChatLuongComponent
+} from "./kiem-tra-chat-luong/phieu-kiem-nghiem-cl/quan-ly-phieu-kiem-nghiem-chat-luong.component";
+import {
+  ThemMoiPhieuKiemNghiemChatLuongComponent
+} from "./kiem-tra-chat-luong/phieu-kiem-nghiem-cl/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component";
+import {MainXuatKhoComponent} from "./xuat-kho/main-xuat-kho/main-xuat-kho.component";
+import {PhieuXuatKhoComponent} from "./xuat-kho/phieu-xuat-kho/phieu-xuat-kho.component";
+import {
+  ThemMoiPhieuXuatKhoComponent
+} from "./xuat-kho/phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component";
+import {BangKeCanComponent} from "./xuat-kho/bang-ke-can/bang-ke-can.component";
+import {BienBanTinhKhoComponent} from "./xuat-kho/bien-ban-tinh-kho/bien-ban-tinh-kho.component";
+import {
+  ThemMoiBienBanTinhKhoComponent
+} from "./xuat-kho/bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component";
+import {BienBanHaoDoiComponent} from "./xuat-kho/bien-ban-hao-doi/bien-ban-hao-doi.component";
+import {
+  ThemMoiBienBanHaoDoiComponent
+} from "./xuat-kho/bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component";
+import {XuatKhoComponent} from "./xuat-kho/xuat-kho.component";
+import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component";
+import {
+  CreateDaiDienComponent
+} from "./kiem-tra-chat-luong/bien-ban-lay-mau/create-bien-ban-lay-mau/create-dai-dien/create-dai-dien.component";
 
 @NgModule({
   declarations: [
@@ -22,6 +57,54 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
     KeHoachBanDauGiaComponent,
     ToChucTrienKhaiComponent,
     DieuchinhKhbdgComponent,
+
+    KiemTraChatLuongComponent,
+    ChucNangKiemTraComponent,
+    TableBienBanLayMauComponent,
+    CreateBienBanLayMauComponent,
+    CreateDaiDienComponent,
+    HoSoKyThuatComponent,
+    ThongTinHoSoKyThuatComponent,
+    QuanLyPhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent,
+
+    MainXuatKhoComponent,
+    PhieuXuatKhoComponent,
+    ThemMoiPhieuXuatKhoComponent,
+    BangKeCanComponent,
+    ChiTietBangKeCanComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    ThemMoiBienBanHaoDoiComponent,
+    XuatKhoComponent
+  ],
+  exports: [
+    DauGiaComponent,
+    KeHoachBanDauGiaComponent,
+    ToChucTrienKhaiComponent,
+    DieuchinhKhbdgComponent,
+
+    KiemTraChatLuongComponent,
+    ChucNangKiemTraComponent,
+    TableBienBanLayMauComponent,
+    CreateBienBanLayMauComponent,
+    CreateDaiDienComponent,
+    HoSoKyThuatComponent,
+    ThongTinHoSoKyThuatComponent,
+    QuanLyPhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKiemNghiemChatLuongComponent,
+
+    MainXuatKhoComponent,
+    PhieuXuatKhoComponent,
+    ThemMoiPhieuXuatKhoComponent,
+    BangKeCanComponent,
+    ChiTietBangKeCanComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    ThemMoiBienBanHaoDoiComponent,
+    XuatKhoComponent
   ],
   imports: [
     CommonModule,
@@ -35,8 +118,10 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
     KeHoachBanDauGiaModule,
     ToChucTrienKhaiModule,
     DieuchinhKhbdgModule,
-    XuatKhoModule
-  ],
+    XuatKhoModule,
+
+
+  ]
 })
 export class DauGiaModule {
 }
