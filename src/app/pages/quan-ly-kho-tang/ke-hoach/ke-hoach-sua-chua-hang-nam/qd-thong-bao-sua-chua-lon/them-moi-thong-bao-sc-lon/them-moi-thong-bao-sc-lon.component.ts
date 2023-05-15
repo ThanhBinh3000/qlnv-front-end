@@ -65,7 +65,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = '/TCDT-TVQT';
+      this.maQd = '/QĐ-TCDT';
       await Promise.all([
       ]);
       if (this.idInput > 0) {

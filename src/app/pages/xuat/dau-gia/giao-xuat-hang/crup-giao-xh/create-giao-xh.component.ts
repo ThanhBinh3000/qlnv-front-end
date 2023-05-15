@@ -95,7 +95,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = this.userInfo.MA_QD;
+      this.maQd = '/'+this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
       } else {
@@ -218,7 +218,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + "/" + this.maQd;
+      body.soQd = this.formData.value.soQd + this.maQd;
     }
     body.fileDinhKems = this.fileDinhKems;
     body.fileDinhKem = this.fileDinhKem;
@@ -277,15 +277,14 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async loadChiTiet(id: number) {
     if (id > 0) {
       let data = await this.detail(id);
-      this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0]
-      })
+      this.formData.patchValue(data)
+      this.maQd = data.soQd.split("/")[1];
+      data.soQd = data.soQd.split("/")[0];
       this.dataTable = data.children;
       this.fileDinhKems = data.fileDinhKems;
       this.fileDinhKem = data.fileDinhKem;
       await this.loadDataComboBox(data);
     }
-    ;
   }
 
   isDisabled() {

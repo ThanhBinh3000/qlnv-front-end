@@ -263,6 +263,29 @@
 
           <tr>
             <td></td>
+            <td class=" text-blue">Cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslNhap('keHoachSl', null,
+              'tong') |
+              number:
+              '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslNhap('uocThienSl', null,
+              'tong') |
+              number: '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslNhap('namKhSl', null,
+              'tong') |
+              number: '1.0-3'}}
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td></td>
             <td style=" font-weight: bold; ">II/- Xuất</td>
             <td></td>
             <td></td>
@@ -354,7 +377,7 @@
               </td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.keHoachSl" /></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.keHoachTt" /></td>
-              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.uoctdienSl" /></td>
+              <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.uocthienSl" /></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.uocThienTt" /></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.namKhSl" /></td>
               <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdateXuat.namKhDt" /></td>
@@ -370,6 +393,30 @@
             </ng-template>
           </tr>
         </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td class=" text-blue">Cộng</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslXuat('keHoachSl', null,
+              'tong') |
+              number:
+              '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslXuat('uocThienSl', null,
+              'tong') |
+              number: '1.0-3'}}</td>
+            <td></td>
+            <td class="text-blue" style="text-align: right;">{{sumslXuat('namKhSl', null,
+              'tong') |
+              number: '1.0-3'}}
+            </td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
       </nz-table>
     </nz-card>
   </nz-card>
