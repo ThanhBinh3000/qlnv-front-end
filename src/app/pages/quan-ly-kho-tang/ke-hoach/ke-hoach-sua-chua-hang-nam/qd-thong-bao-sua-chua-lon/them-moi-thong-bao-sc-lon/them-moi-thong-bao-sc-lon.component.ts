@@ -98,7 +98,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
         this.listQdBtc = data.content;
         if (this.listQdBtc) {
           this.listQdBtc = this.listQdBtc.filter(
-            (item) => (item.trangThai == this.STATUS.BAN_HANH)
+            (item) => (item.trangThai == this.STATUS.BAN_HANH && !item.qdTcdt )
           )
         }
       } else {
@@ -166,7 +166,7 @@ export class ThemMoiThongBaoScLonComponent extends Base2Component implements OnI
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
+        this.approve(data.id, this.STATUS.BAN_HANH, "Bạn có muốn ban hành ?")
       }
     }
   }
