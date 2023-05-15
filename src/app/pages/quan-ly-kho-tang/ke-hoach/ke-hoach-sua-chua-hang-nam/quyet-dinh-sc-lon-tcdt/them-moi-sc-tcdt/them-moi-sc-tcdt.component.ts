@@ -472,9 +472,8 @@ export class ThemMoiScTcdtComponent implements OnInit {
   }
 
   themMoiItem(data: any, tmdt: string, type: string, idx: number, list?: any) {
-    if (!this.isViewDetail) {
       let modalQD = this.modal.create({
-        nzTitle: "ĐỀ XUẤT KẾ HOẠCH SỬA CHỮA LỚN HÀNG NĂM",
+        nzTitle: "CHI TIẾT DANH MỤC SỬA CHỮA LỚN",
         nzContent: DialogDxScLonComponent,
         nzMaskClosable: false,
         nzClosable: false,
@@ -505,6 +504,28 @@ export class ThemMoiScTcdtComponent implements OnInit {
           }
         }
       });
-    }
   }
+  deleteItem(index: any, y: any, table : any[]) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn xóa?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          if (table && table.length > 0 && table[index]) {
+            if (table[index] && table[index].dataChild && table[index].dataChild[y]) {
+              table[index].dataChild.splice(y, 1);
+            }
+          }
+        } catch (e) {
+          console.log("error", e);
+        }
+      }
+    });
+  }
+
 }

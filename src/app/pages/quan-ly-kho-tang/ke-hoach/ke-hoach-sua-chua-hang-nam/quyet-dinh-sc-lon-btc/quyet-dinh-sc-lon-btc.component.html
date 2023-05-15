@@ -146,11 +146,11 @@
           <td>{{ data.soTt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.BAN_HANH">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == STATUS.BAN_HANH">
               <i class="fa fa-eye"></i>
             </a>
             <a
-              (click)="redirectToChiTiet(data.id,true)"  *ngIf="( data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()  ">
+              (click)="redirectToChiTiet(data.id,false)"  *ngIf="( data.trangThai == STATUS.DU_THAO) && userService.isTongCuc()  ">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc() " (click)="delete(data)">
