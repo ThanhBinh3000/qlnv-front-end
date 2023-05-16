@@ -84,7 +84,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Tổng mức đầu tư khái toán, dự toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.tmdt ? item.tmdt : 0 | number : '1.0-1' : 'vi_VN'}}</span>
+            <span class="text-blue">{{item.tmdt | number : '1.0-1' : 'vi-VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -100,7 +100,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Ngày ký QĐ PD TMĐT khái toán, dự toán</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.ngayQdPd ? item.ngayQdPd : ''}}</span>
+            <span class="text-blue">{{item.ngayQdPd ? item.ngayQdPd : ''  | date: 'dd/MM/YYYY'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -108,7 +108,7 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Giá trị quyết toán được duyệt (đ)</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.giaTriPd ? item.giaTriPd : 0  | number : '1.0-1' : 'vi_VN'}}</span>
+            <span class="text-blue">{{item.giaTriPd ? item.giaTriPd : 0  | number : '1.0-1' : 'vi-VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
@@ -116,13 +116,13 @@
         <nz-form-item>
           <nz-form-label nzNoColon="true">Lũy kế cấp vốn đến thời điểm hiện tại</nz-form-label>
           <nz-input-group>
-            <span class="text-blue">{{item.luyKeVon ? item.luyKeVon : 0  | number : '1.0-1' : 'vi_VN'}}</span>
+            <span class="text-blue">{{item.luyKeVon ? item.luyKeVon : 0  | number : '1.0-1' : 'vi-VN'}}</span>
           </nz-input-group>
         </nz-form-item>
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Kế hoạch vốn năm hiện tại (đ)</nz-form-label>
+          <nz-form-label nzRequired nzNoColon="true">Kế hoạch vốn năm hiện tại (đ)</nz-form-label>
           <nz-input-group>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.vonDauTu" [nzMin]="0"
                              [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" class="text-blue"

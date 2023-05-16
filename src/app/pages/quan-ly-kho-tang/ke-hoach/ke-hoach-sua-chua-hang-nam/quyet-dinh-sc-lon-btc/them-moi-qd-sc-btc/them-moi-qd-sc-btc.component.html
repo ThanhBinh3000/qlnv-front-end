@@ -14,7 +14,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && idInput > 0 && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')" type="button"
+      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC_THEM')" type="button"
               class="btn btn-sub ml-2"
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -116,7 +116,7 @@
   <nz-collapse>
     <nz-collapse-panel [nzHeader]="'PHƯƠNG ÁN CỦA TỔNG CỤC'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
-        <nz-collapse class="pd-15">
+        <nz-collapse class="pd-15" *ngIf="tablePaTcDuoi && tablePaTcDuoi.length > 0">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
@@ -125,7 +125,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="tablePaTc && tablePaTc.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="tablePaTcDuoi && tablePaTcDuoi.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -148,7 +148,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTable , let idx = index">
+              <ng-container *ngFor="let data of tablePaTcDuoi , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -268,7 +268,7 @@
             </nz-table>
           </nz-collapse-panel>
         </nz-collapse>
-        <nz-collapse class="pd-15">
+        <nz-collapse class="pd-15" *ngIf="tablePaTcTren && tablePaTcTren.length > 0 ">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
@@ -277,7 +277,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]=" tablePaTc && tablePaTc.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" tablePaTcTren && tablePaTcTren.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -300,7 +300,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTable , let idx = index">
+              <ng-container *ngFor="let data of tablePaTcTren , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -426,7 +426,7 @@
   <nz-collapse>
     <nz-collapse-panel [nzHeader]="'QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH'" [nzActive]="true">
       <nz-card class="mg-t-10 flex-card p-lr16">
-        <nz-collapse class="pd-15">
+        <nz-collapse class="pd-15" *ngIf="dataTableDuoi && dataTableDuoi.length > 0">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình dưới 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
@@ -435,7 +435,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]="dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]="dataTableDuoi && dataTableDuoi.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -459,7 +459,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTable , let idx = index">
+              <ng-container *ngFor="let data of dataTableDuoi , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -548,10 +548,10 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight *ngIf="!isViewDetail">
-                                <a (click)="themMoiItem(child1,'tren', 'sua', y, child)">
+                                <a (click)="themMoiItem(child1,'tren', 'sua', y1, child)">
                                   <i class="fa fa-pencil"></i>
                                 </a>
-                                <a (click)="deleteItem(idx, y)">
+                                <a (click)="deleteItem(idx, y1)">
                                   <i class="fa fa-trash-o do"></i>
                                 </a>
                               </td>
@@ -590,7 +590,7 @@
             </nz-table>
           </nz-collapse-panel>
         </nz-collapse>
-        <nz-collapse class="pd-15">
+        <nz-collapse class="pd-15" *ngIf="dataTableTren && dataTableTren.length > 0">
           <nz-collapse-panel [nzHeader]="'Dự án/công trình trên 5 tỷ đồng'" [nzActive]="true">
             <div>
     <span class="text-right">
@@ -599,7 +599,7 @@
             </div>
             <nz-table nzBordered class="pd-10"
                       [nzFrontPagination]="false" [nzShowPagination]="false"
-                      [nzScroll]=" dataTable && dataTable.length > 0 ? { x: '2500px' } : null">
+                      [nzScroll]=" dataTableTren && dataTableTren.length > 0 ? { x: '2500px' } : null">
               <thead>
               <tr>
                 <th class="text-center" nzWidth="45px">STT</th>
@@ -623,7 +623,7 @@
               </tr>
               </thead>
               <tbody>
-              <ng-container *ngFor="let data of dataTable , let idx = index">
+              <ng-container *ngFor="let data of dataTableTren , let idx = index">
                 <tr>
                   <td [nzExpand]="expandSet.has(data.idVirtual)"
                       (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
@@ -712,10 +712,10 @@
                               <td class="text-right">{{ child1.vonDauTu | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ child1.ghiChu }}</td>
                               <td class="text-center" nzRight *ngIf="!isViewDetail">
-                                <a (click)="themMoiItem(child1,'duoi', 'sua', y, child)">
+                                <a (click)="themMoiItem(child1,'duoi', 'sua', y1, child)">
                                   <i class="fa fa-pencil"></i>
                                 </a>
-                                <a (click)="deleteItem(idx, y)">
+                                <a (click)="deleteItem(idx, y1)">
                                   <i class="fa fa-trash-o do"></i>
                                 </a>
                               </td>

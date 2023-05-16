@@ -89,8 +89,8 @@
           <th style="width: 35px">STT</th>
           <th></th>
           <th>Số QĐ giao NVXH</th>
-          <th>Năm kế hoạch</th>
-          <th>Thời hạn xuất hàng trước ngày</th>
+          <th>Năm KH</th>
+          <th>Thời hạn XH trước ngày</th>
           <th>Điểm kho</th>
           <th>Lô kho</th>
           <th>Số bảng kê XLT</th>
@@ -126,7 +126,7 @@
                   <td></td>
                   <td></td>
                   <td class="bold">{{lv1.tenDiemKho}}</td>
-                  <td class="bold">{{lv1.tenKho}}</td>
+                  <td class="bold">{{ (lv1.tenLoKho ? lv1.tenLoKho + '-' : '') + lv1.tenNganKho }}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -162,9 +162,7 @@
                           <i class="fa fa-pencil"></i>
                         </a>
                         <a
-                          *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC)
-                        && !vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.XEM)
-                        && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC'))"
+                          *ngIf="(vldTrangThai.checkStatusPermission(lv2,CHUC_NANG.DUYET_LDCC) && userService.isAccessPermisson('XHDTQG_XCTVTXC_XC_XK_LT_BKCH_DUYET_LDCCUC'))"
                           (click)="redirectDetail(lv2.id, true)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>

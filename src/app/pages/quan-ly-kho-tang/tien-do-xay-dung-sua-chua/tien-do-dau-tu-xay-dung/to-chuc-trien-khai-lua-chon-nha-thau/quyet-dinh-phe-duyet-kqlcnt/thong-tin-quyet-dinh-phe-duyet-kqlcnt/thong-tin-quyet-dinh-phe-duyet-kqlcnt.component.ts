@@ -84,10 +84,10 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       soQdPdKhlcnt: [null, Validators.required],
       idQdPdKhlcnt: [null, Validators.required],
       trichYeu: [null, Validators.required],
-      tenDuAn: [],
-      chuDauTu: [],
-      diaChi: [],
-      ghiChu: [],
+      tenDuAn: [null],
+      chuDauTu: [null],
+      diaChi: [null],
+      ghiChu: [null],
       tongMucDt: [0],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
@@ -126,7 +126,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listGoiThau = res.data.listKtXdscQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt);
+        this.listGoiThau = res.data.listKtXdscQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt && !item.idQdPdKqlcnt);
       }
     }
   }

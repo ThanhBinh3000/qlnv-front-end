@@ -133,7 +133,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         maDiemKho: ['', Validators.required],
         maNhaKho: [''],
         maNganKho: [''],
-        maLoKho: ['', Validators.required],
+        maLoKho: [''],
         maKho: [''],
         idPhieuXuatKho: ['', Validators.required],
         soPhieuXuatKho: [''],

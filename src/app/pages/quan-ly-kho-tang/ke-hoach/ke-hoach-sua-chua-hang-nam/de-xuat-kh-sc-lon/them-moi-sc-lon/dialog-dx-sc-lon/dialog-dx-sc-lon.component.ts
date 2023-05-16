@@ -78,6 +78,10 @@ export class DialogDxScLonComponent implements OnInit {
       msgRequired = "Không được để trống danh mục sửa chữa lớn";
     } else if (!item.loaiCongTrinh) {
       msgRequired = "Không được để trống loại công trình";
+    }else if (!item.nguonVon) {
+      msgRequired = "Không được để trống nguồn vốn";
+    }else if (!item.vonDauTu) {
+      msgRequired = "Không được để trống kế hoạch vốn đầu tư";
     }
     return msgRequired;
   }
@@ -99,17 +103,18 @@ export class DialogDxScLonComponent implements OnInit {
   async getAllDmKho() {
     let body = {
       "namKh": dayjs().get("year"),
-      "maDvi": this.userInfo.MA_DVI,
+      "maDvi" : this.userService.isCuc() ? this.userInfo.MA_DVI  :null,
       "paggingReq": {
         limit: 999999,
         page: 0
-      }
+      },
+      "type" : '00'
     };
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
-      if (this.listDmScLon && this.listDmScLon.length > 0) {
-        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
+      if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
+        this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
       }
     }
   }
@@ -135,6 +140,7 @@ export class DialogDxScLonComponent implements OnInit {
       this.item.vonDauTu = this.dataInput.vonDauTu ? this.dataInput.vonDauTu : 0;
       this.item.tieuChuan = this.dataInput.tieuChuan;
       this.item.lyDo = this.dataInput.lyDo;
+      this.item.nguonVon = this.dataInput.nguonVon;
     }
   }
 

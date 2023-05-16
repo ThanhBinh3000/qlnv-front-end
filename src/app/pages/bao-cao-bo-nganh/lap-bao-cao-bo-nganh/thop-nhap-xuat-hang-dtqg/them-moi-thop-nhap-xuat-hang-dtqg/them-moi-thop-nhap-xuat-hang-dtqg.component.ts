@@ -291,14 +291,15 @@ export class ThemMoiThopNhapXuatHangDtqgComponent extends Base2Component impleme
     let arr = [];
     if (this.listDataDetail.length > 0) {
       this.listDataDetail.forEach(item => {
-        debugger
         arr.push(item)
       })
     }
     if (arr && arr.length > 0) {
       if (type) {
         const sum = arr.reduce((prev, cur) => {
-          prev += Number.parseInt(cur[column]);
+          if (cur[column]) {
+            prev += Number.parseInt(cur[column]);
+          }
           return prev;
         }, 0);
         result = sum

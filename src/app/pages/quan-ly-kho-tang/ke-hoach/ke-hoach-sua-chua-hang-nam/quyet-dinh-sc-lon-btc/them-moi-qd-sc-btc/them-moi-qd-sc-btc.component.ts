@@ -38,7 +38,10 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
   maQd: string;
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  tablePaTc: any[] = [];
+  tablePaTcTren: any[] = [];
+  tablePaTcDuoi: any[] = [];
+  dataTableTren: any[] = [];
+  dataTableDuoi: any[] = [];
   dataEdit: any;
   listLoaiDuAn: any[] = [];
   listDxCuc: any[] = [];
@@ -165,12 +168,19 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       let detailTh = result[0];
       let res = await this.tongHopDxScLon.getDetail(detailTh.id);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataTableTren = [];
+        this.dataTableDuoi = [];
+        this.tablePaTcTren = [];
+        this.tablePaTcDuoi = [];
         if (res.data) {
-          this.dataTable = [];
           const data = res.data;
           this.dataTableReq = data.chiTiets;
-          this.dataTable = this.convertListData(this.dataTableReq);
-          this.tablePaTc = cloneDeep(this.dataTable);
+          if (this.dataTableReq && this.dataTableReq.length > 0) {
+            this.tablePaTcTren = this.convertListData(this.dataTableReq.filter(item => item.tmdt > 5000000000));
+            this.tablePaTcDuoi = this.convertListData(this.dataTableReq.filter(item => item.tmdt <= 5000000000));
+            this.dataTableTren = cloneDeep(this.tablePaTcTren);
+            this.dataTableDuoi = cloneDeep(this.tablePaTcDuoi);
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -226,8 +236,13 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       });
       this.fileDinhKem = data.fileDinhKems;
       this.dataTableReq = data.chiTiets;
-      this.dataTable = this.convertListData(this.dataTableReq);
-      this.tablePaTc = this.convertListData(data.chiTietDxs);
+      let listDx = data.chiTietDxs;
+      if (listDx && listDx.length > 0) {
+        this.tablePaTcTren = this.convertListData(listDx?.filter(item => item.tmdt > 5000000000));
+        this.tablePaTcDuoi = this.convertListData(listDx?.filter(item => item.tmdt <= 5000000000));
+      }
+      this.dataTableTren = this.convertListData(this.dataTableReq?.filter(item => item.tmdt > 5000000000));
+      this.dataTableDuoi = this.convertListData(this.dataTableReq?.filter(item => item.tmdt <= 5000000000));
     }
   }
 
@@ -289,7 +304,7 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
           this.formData.patchValue({
             soTt: data.soQuyetDinh
           });
-          this.changSoTh(data.id);
+          await this.changSoTh(data.id);
         }
       });
     }
@@ -374,4 +389,5 @@ export class ThemMoiQdScBtcComponent extends Base2Component implements OnInit {
       }
     });
   }
+
 }

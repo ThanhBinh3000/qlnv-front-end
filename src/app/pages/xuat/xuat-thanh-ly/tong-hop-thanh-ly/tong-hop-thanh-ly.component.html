@@ -147,11 +147,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td>{{item.tenTrangThai}}</td>
                 <td></td>
                 <td class="text-left">
                   <a (click)="showModal(true, item)">
                     <i class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="item.trangThai==STATUS.DU_THAO" (click)="delete(item)">
+                    <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
               </tr>
@@ -201,8 +204,10 @@
                         <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
                         <td>{{lv2.lyDo}}</td>
                         <td>{{lv2.ngayDeXuat|date:globals.dateFormat}}</td>
-                        <td>{{lv2.tenTrangThai}}</td>
-                        <td>{{lv2.tenTrangThaiTl}}</td>
+                        <td></td>
+                        <td></td>
+                        <!--                        <td>{{lv2.tenTrangThai}}</td>-->
+                        <!--                        <td>{{lv2.tenTrangThaiTl}}</td>-->
                         <td></td>
                       </tr>
                     </ng-container>
@@ -252,8 +257,20 @@
   </ng-container>
   <ng-template #modalFooter>
     <ng-container>
-      <button nz-button (click)="handleCancel()">Đóng</button>
-      <button nz-button class="btn btn-main" (click)="handleOk()">{{step == 1 ? 'Lưu' : 'Gửi duyệt'}}</button>
+      <button nz-button class="btn btn-sub" (click)="handleCancel()">
+        <i class="icon htvbdh_dongtat"></i>
+        <span>Đóng</span>
+      </button>
+      <button class="btn btn-main" *ngIf="!!!this.selectedItem"
+              (click)="handleOk()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+      <button class="btn btn-main" *ngIf="this.selectedItem && this.selectedItem.trangThai != STATUS.DA_TONG_HOP"
+              (click)="handleOk()">
+        <i class="icon htvbdh_trinh"></i>
+        <span>Gửi duyệt</span>
+      </button>
     </ng-container>
   </ng-template>
 </nz-modal>

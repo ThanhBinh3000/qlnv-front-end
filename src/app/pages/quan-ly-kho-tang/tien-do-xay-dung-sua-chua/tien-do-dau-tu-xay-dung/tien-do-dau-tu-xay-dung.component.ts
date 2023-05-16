@@ -54,6 +54,10 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
 
   //trangthai qd pd kết quả lcnt
   trangThaiQdPdKqLcnt: boolean = false;
+  //trang thái hợp đồng, nếu có 1 hd đã ký thì icon success màu xanh
+  trangThaiHopDong: boolean = false;
+  //trang thái tiến độ công việc -- hỏi lại cách tính trạng thái của tab này.
+  trangThaiTienDoCv: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -142,7 +146,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.trangThaiQdPdKqLcnt = data;
         break;
       case '06':
-        this.itemHopDong = data;
+        this.trangThaiHopDong = data;
         break;
     }
   }
@@ -163,6 +167,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdDaDtxd = null;
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
+    this.trangThaiQdPdKqLcnt = false;
     this.spinner.show();
     try {
       let body = {
@@ -180,7 +185,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
-          // await this.loadItemHopDong();
+          await this.loadItemHopDong();
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -230,6 +235,19 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
+  }
+
+  async loadItemHopDong() {
+    let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
+          this.trangThaiHopDong = true;
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
