@@ -78,7 +78,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       ngayKy: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
-      loai: ["00", Validators.required],
+      loai: ["01", Validators.required],
     });
   }
 
@@ -109,27 +109,20 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
-        phuongAnTc: data.phuongAnTc,
+        namKh: data.namKh,
+        soToTrinh: data.soToTrinh,
         soQuyetDinh: data.soQuyetDinh ? data.soQuyetDinh.split("/")[0] : null,
-        ngayTrinhBtc: data.ngayTrinhBtc,
-        ngayKyBtc: data.ngayKyBtc,
-        ngayHieuLuc: data.ngayKyBtc,
+        ngayKy: data.ngayKy,
         trichYeu: data.trichYeu,
-        namBatDau: data.namBatDau,
-        namKetThuc: data.namKetThuc,
-        loaiDuAn: data.loaiDuAn,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
-      let listDx = data.ctRes;
-      if (listDx) {
-        this.dataTableReq = listDx.ctietList;
-        this.listDx = listDx.dtlList;
+      this.listDx = data.listDX;
+        this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl
         if (this.listDx && this.listDx.length > 0) {
           this.selectRow(this.listDx[0]);
         }
-      }
     }
   }
 
@@ -298,7 +291,12 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     let res = await this.quyetDinhService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       let detailTh = res.data;
+      this.listDx = detailTh.listDx
       this.dataTableReq = detailTh.listKtKhThkhScThuongXuyenDtl;
+      this.dataTableReq.forEach(item => {
+        item.id = null;
+        item.idHdr = null;
+      })
       if (this.listDx.length > 0) {
         this.selectRow(this.listDx[0]);
       }
@@ -313,7 +311,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
       });
       item.selected = true;
       // phg án tổng cục
-      this.dataTable = this.dataTableReq.filter(data => data.soCv == item.soCongVan);
+      this.dataTable = this.dataTableReq.filter(data => data.idHdrDx == item.id);
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable = this.convertListData(this.dataTable);
         this.expandAll(this.dataTable);
@@ -327,11 +325,12 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         .groupBy("tenChiCuc")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenKhoi")
+            .groupBy("khoi")
             .map((v, k) => {
                 return {
                   idVirtual: uuidv4(),
-                  tenKhoi: k,
+                  khoi: k,
+                  tenKhoi: v[0].tenKhoi,
                   dataChild: v
                 };
               }
