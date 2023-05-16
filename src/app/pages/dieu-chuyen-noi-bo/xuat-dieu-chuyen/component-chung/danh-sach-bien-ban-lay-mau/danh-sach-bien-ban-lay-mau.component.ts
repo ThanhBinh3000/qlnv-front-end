@@ -141,11 +141,12 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     viewDetail(id: number, isView: boolean) {
 
     }
-    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number) {
-        this.selectedId = lv2.id;
+    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number, idQdDc?: number) {
+        this.selectedId = lv2?.id;
         this.isDetail = true;
         this.isView = isView;
         this.idBbLayMau = idBbLayMau;
+        this.idQdDc = idQdDc;
     }
     disabledTuNgay = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLayMauDen) {
@@ -167,6 +168,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return true
     }
     checkPermissonDelete(): boolean {
+        return true
+    }
+    checkRoleAdd(trangThai: string): boolean {
         return true
     }
     checkRoleView(trangThai: string): boolean {

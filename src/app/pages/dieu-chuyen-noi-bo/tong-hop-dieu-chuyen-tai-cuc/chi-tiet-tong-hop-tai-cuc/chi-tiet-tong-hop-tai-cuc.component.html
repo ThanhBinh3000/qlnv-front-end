@@ -19,7 +19,7 @@
                     </button>
                     <button type="button" class="btn btn-sub" (click)=" yeuCauXacDinhDiemNhap($event)"
                         *ngIf="isTongHop && !isViewDetail && !daXdinhDiemNhap && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && formData.value.loaiDieuChuyen=='CHI_CUC' && (!formData.value.trangThai || formData.value.trangThai==STATUS.DU_THAO || 
-                        formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
+                        formData.value.trangThai==STATUS.YC_CHICUC_PHANBO_DC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_YCPHANBO')">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Y/c Chi cục xác định điểm nhập ĐC</span>
                     </button>
@@ -45,18 +45,18 @@
                     <button
                         *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC')"
                         type="button" class="btn btn-sub"
-                        (click)="approve(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
+                        (click)="duyet(idInput,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
                     <button
                         *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai==STATUS.TU_CHOI_LDC) && userService.isCuc()  && userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP')"
                         type="button" class="btn btn-sub"
-                        (click)="approve(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
+                        (click)="duyet(idInput,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này', dcnbKeHoachDcHdrId)">
                         <i class="icon htvbdh_tcdt_pheduyet"></i>
                         <span>Duyệt</span>
                     </button>
-                    <button *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) &&
+                    <button *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (!formData.value.trangThai || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.YC_CHICUC_PHANBO_DC) &&
                         userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')" type="button"
                         class="btn btn-sub" (click)="saveAndSend()"
                         [disabled]="formData.value.loaiDieuChuyen=='CHI_CUC' && !daXdinhDiemNhap">
@@ -64,7 +64,7 @@
                         <span>Lưu và gửi duyệt</span>
                     </button>
                     <button
-                        *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.DA_PHANBO_DC_CHODUYET_LDC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
+                        *ngIf="(isTongHop && !isViewDetail) && ((formData.value.loaiDieuChuyen=='CUC' && groupData2Cuc.length>0) || (formData.value.loaiDieuChuyen=='CHI_CUC' && dataTable2ChiCuc.length>0)) && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai==STATUS.YC_CHICUC_PHANBO_DC) && userService.isCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
                         nz-button type="button" class="modal__button--save" (click)="save(false, false)">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
@@ -167,7 +167,7 @@
                             </div>
                             <div nz-col nzSpan="3">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Số đề xuất công
+                                    <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Số đề xuất/công
                                         văn
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập số đề xuất">
@@ -472,11 +472,11 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td class="text-center">
-                                                                <label nz-checkbox [(ngModel)]="c.daXdinhDiemNhap"
+                                                                <label nz-checkbox [(ngModel)]="d.daXdinhDiemNhap"
                                                                     nzDisabled="true"></label>
                                                             </td>
                                                             <td class="text-center">
-                                                                <label nz-checkbox [(ngModel)]="c.trangThai"
+                                                                <label nz-checkbox [(ngModel)]="d.xdLaiDiemNhap"
                                                                     nzDisabled="true"></label>
                                                             </td>
                                                         </tr>

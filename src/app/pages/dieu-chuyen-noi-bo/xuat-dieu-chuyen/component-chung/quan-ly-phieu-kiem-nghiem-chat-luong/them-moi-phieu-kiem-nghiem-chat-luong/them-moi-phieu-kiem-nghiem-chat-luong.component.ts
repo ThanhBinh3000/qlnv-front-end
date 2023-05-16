@@ -41,7 +41,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
 export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Component implements OnInit {
-  @Input() id: number;
+  @Input() idInput: number;
   @Input() typeVthh: string;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
@@ -65,6 +65,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   listSoQuyetDinh = [];
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
+  id: number;
 
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
@@ -141,6 +142,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     this.spinner.show();
     super.ngOnInit()
     try {
+      this.id = this.idInput;
+      this.loaiVthh = this.typeVthh
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDanhMucPhuongThucBaoQuan(),
