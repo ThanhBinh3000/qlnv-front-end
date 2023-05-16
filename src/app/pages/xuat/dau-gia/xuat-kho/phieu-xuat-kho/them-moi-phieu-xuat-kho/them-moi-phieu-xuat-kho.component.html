@@ -11,7 +11,8 @@
       <span>Lưu và gửi duyệt</span>
 
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled() "
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && isDisabled()
+     && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_PXK_DUYET')"
             (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
@@ -378,7 +379,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -389,7 +390,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="kieuNhapXuat" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -446,7 +447,9 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input formControlName="maSo" [readonly]="isView"/>
+                    <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser" formControlName="maSo" [nzDisabled]="isView">
+                    </nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -457,7 +460,9 @@
             <td>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input formControlName="theoChungTu" [readonly]="isView"/>
+                  <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                         [nzParser]="globals.parser" formControlName="theoChungTu" [nzDisabled]="isView">
+                  </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
             </td>
@@ -522,7 +527,7 @@
               Chứng từ kèm theo
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKems"></file-list>
+              <file-list [data]="fileDinhKems" [isViewDetail]="isView"></file-list>
             </div>
           </nz-form-item>
         </div>
