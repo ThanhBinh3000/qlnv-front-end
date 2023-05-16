@@ -330,7 +330,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(idx, 1);
+          table.splice(idx, 1);
         } catch (e) {
           console.log("error", e);
         }
@@ -338,7 +338,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(index: any, y: any, table : any[]) {
+  deleteItem(y: any, table : any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -349,11 +349,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          if (this.dataTable && this.dataTable.length > 0 && this.dataTable[index]) {
-            if (this.dataTable[index] && this.dataTable[index].dataChild && this.dataTable[index].dataChild[y]) {
-              this.dataTable[index].dataChild.splice(y, 1);
-            }
-          }
+          table.splice(y, 1);
         } catch (e) {
           console.log("error", e);
         }
