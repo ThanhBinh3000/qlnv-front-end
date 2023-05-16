@@ -32,28 +32,28 @@
             <button
               *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_DUYET_LDCCUC')"
               type="button" class="btn btn-sub ml-2"
-              (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              (click)="approveConfirm(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
               <span>Duyệt</span>
             </button>
             <button
               *ngIf="(formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_DUYET_TBPTVQT')"
               type="button" class="btn btn-sub ml-2"
-              (click)="approve(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              (click)="approveConfirm(idInput,STATUS.CHO_DUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
               <span>Duyệt</span>
             </button>
             <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ||
         formData.value.trangThai == STATUS.TU_CHOI_LDCC ||
-         formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
+         formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
                     type="button" class="btn btn-sub ml-2"
                     (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
               <i class="icon htvbdh_tcdt_guiduyet"></i>
               <span>Lưu và gửi duyệt</span>
             </button>
             <button
-              *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
-              type="button" class="btn btn-main ml-2" (click)="save()">
+              *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TUCHOI_TBP_TVQT || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_THEM')"
+              type="button" class="btn btn-main ml-2" (click)="save(false)">
               <i class="icon htvbdh_tcdt_save"></i>
               <span>Lưu</span>
             </button>
@@ -81,28 +81,28 @@
             <button
               *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDCC) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_LDCCUC')"
               type="button" class="btn btn-sub ml-2"
-              (click)="approve(idInput,STATUS.DA_PHANBO_DC_DADUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              (click)="approveConfirm(idInput,STATUS.DA_PHANBO_DC_DADUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
               <span>Duyệt</span>
             </button>
             <button
               *ngIf="(formData.value.trangThai == STATUS.DA_PHANBO_DC_CHODUYET_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC_DUYET_TBPTVQT')"
               type="button" class="btn btn-sub ml-2"
-              (click)="approve(idInput,STATUS.DA_PHANBO_DC_CHODUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
+              (click)="approveConfirm(idInput,STATUS.DA_PHANBO_DC_CHODUYET_LDCC,'Bạn có muốn duyệt quyết định này')">
               <i class="icon htvbdh_tcdt_pheduyet"></i>
               <span>Duyệt</span>
             </button>
             <button *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC ||
         formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC ||
-         formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
+         formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT  || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
                     type="button" class="btn btn-sub ml-2"
                     (click)="saveAndSend('Bạn có muốn gửi duyệt ?')">
               <i class="icon htvbdh_tcdt_guiduyet"></i>
               <span>Lưu và gửi duyệt</span>
             </button>
             <button
-              *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
-              type="button" class="btn btn-main ml-2" (click)="save()">
+              *ngIf="(formData.value.trangThai == STATUS.YC_CHICUC_PHANBO_DC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_LDCC || formData.value.trangThai == STATUS.DA_PHANBO_DC_TUCHOI_TBP_TVQT || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_TP && !!formData.value.xdLaiDiemNhap) || (formData.value.trangThai == this.STATUS.DA_PHANBO_DC_TUCHOI_LDC && !!formData.value.xdLaiDiemNhap)) && userService.isAccessPermisson('DCNB_KHDC_PHANBODC')"
+              type="button" class="btn btn-main ml-2" (click)="save(false)">
               <i class="icon htvbdh_tcdt_save"></i>
               <span>Lưu</span>
             </button>
@@ -156,7 +156,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Số đề xuất/công văn</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="'Vui lòng nhập số đề xuất/công văn'">
               <nz-input-group nzAddOnAfter="/DCNB">
                 <input nz-input formControlName="soDxuat" [readOnly]="isView || isNhanDieuChuyen"/>
               </nz-input-group>
@@ -167,7 +167,7 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày lập KH</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="'Vui lòng nhập Ngày lập KH'">
               <nz-date-picker class="search__input" formControlName="ngayLapKh"
                               [nzDisabled]="isView || isNhanDieuChuyen"
                               nzFormat="dd/MM/yyyy">
@@ -200,7 +200,7 @@
         <div nz-col [nzSpan]="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>Lý do điều chuyển</nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="'Vui lòng nhập Lý do điều chuyển'">
               <nz-form-control nz-col [nzSpan]="24">
                 <input nz-input formControlName="lyDoDc" [readOnly]="isView || isNhanDieuChuyen"/>
               </nz-form-control>
@@ -694,10 +694,11 @@
               đồng)
             </nz-form-label>
             <nz-form-control>
-              <nz-input-number [nzDisabled]="isView" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999"
-                               [nzStep]="0.1"
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-              </nz-input-number>
+              <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT" />
+<!--              <nz-input-number [nzDisabled]="isView" formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999"-->
+<!--                               [nzStep]="0.1"-->
+<!--                               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--              </nz-input-number>-->
             </nz-form-control>
           </nz-form-item>
         </nz-card>
@@ -824,10 +825,12 @@
                   đồng)
                 </nz-form-label>
                 <nz-form-control>
-                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="duToanKphi" [nzMin]="0"
-                                   [nzMax]="999999999999" [nzStep]="0.1"
-                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                  </nz-input-number>
+                  <input class="money-input" currencyMask formControlName="duToanKphi" [options]="AMOUNT"
+                        />
+<!--                  <nz-input-number [nzDisabled]="isView || isNhanDieuChuyen" formControlName="duToanKphi" [nzMin]="0"-->
+<!--                                   [nzMax]="999999999999" [nzStep]="0.1"-->
+<!--                                   [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">-->
+<!--                  </nz-input-number>-->
                 </nz-form-control>
               </nz-form-item>
             </nz-card>

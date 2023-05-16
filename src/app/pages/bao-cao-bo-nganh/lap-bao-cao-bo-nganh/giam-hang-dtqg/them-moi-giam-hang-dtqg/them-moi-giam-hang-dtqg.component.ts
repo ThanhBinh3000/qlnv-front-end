@@ -286,4 +286,26 @@ export class ThemMoiGiamHangDtqgComponent extends Base2Component implements OnIn
     }
   }
 
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    if (this.listDataDetail.length > 0) {
+      this.listDataDetail.forEach(item => {
+        arr.push(item)
+      })
+    }
+    if (arr && arr.length > 0) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          if (cur[column]) {
+            prev += Number.parseInt(cur[column]);
+          }
+          return prev;
+        }, 0);
+        result = sum
+      }
+    }
+    return result;
+  }
+
 }
