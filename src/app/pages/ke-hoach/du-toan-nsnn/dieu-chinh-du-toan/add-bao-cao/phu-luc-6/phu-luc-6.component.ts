@@ -142,7 +142,7 @@ export class PhuLuc6Component implements OnInit {
         item.sluongThienDmuc = dinhMuc?.tongDmuc;
         item.maDviTinh = dinhMuc?.donViTinh;
         item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
-        item.dtoanDchinh = item.dtoanGiaoLke - item.sluongThienTtien;
+        item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
         item.dtoanVuTvqtDnghi = item.dtoanDchinh;
       } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
@@ -150,7 +150,7 @@ export class PhuLuc6Component implements OnInit {
         item.sluongThienDmuc = dinhMuc?.tongDmuc;
         item.maDviTinh = dinhMuc?.donViTinh;
         item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
-        item.dtoanDchinh = item.dtoanGiaoLke - item.sluongThienTtien;
+        item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
         item.dtoanVuTvqtDnghi = item.dtoanDchinh;
       }
     })
