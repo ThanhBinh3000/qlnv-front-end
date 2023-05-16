@@ -118,7 +118,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         tenTrangThai: data.tenTrangThai
       });
       this.fileDinhKems = data.fileDinhKems;
-      this.listDx = data.listDX;
+      this.listDx = data.listDx;
         this.dataTableReq = data.listKtKhThkhScThuongXuyenDtl
         if (this.listDx && this.listDx.length > 0) {
           this.selectRow(this.listDx[0]);
@@ -190,11 +190,10 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   }
 
   setValidators() {
-    this.formData.controls["phuongAnTc"].setValidators([Validators.required]);
-    this.formData.controls["ngayKyBtc"].setValidators([Validators.required]);
+    this.formData.controls["soToTrinh"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
     this.formData.controls["soQuyetDinh"].setValidators([Validators.required]);
-    this.formData.controls["namKeHoach"].setValidators([Validators.required]);
-    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+    this.formData.controls["namKh"].setValidators([Validators.required]);
   }
 
 

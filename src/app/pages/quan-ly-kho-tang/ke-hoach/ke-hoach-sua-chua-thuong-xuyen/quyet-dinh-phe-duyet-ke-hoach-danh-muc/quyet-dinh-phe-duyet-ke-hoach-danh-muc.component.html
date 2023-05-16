@@ -188,18 +188,19 @@
     ></app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc>
   </div>
 </ng-template>
-<!--<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"-->
-<!--          [(nzVisible)]="isViewTh" (nzOnCancel)="closeDxPaModal()">-->
-<!--  <ng-container *nzModalContent>-->
-<!--    <app-them-moi-tong-hop-khxd-trung-han-->
-<!--      [idInput]="idTongHop" (showListEvent)="showList()" [isViewQd]="true"-->
-<!--      [isViewDetail]="isViewTh"-->
-<!--    ></app-them-moi-tong-hop-khxd-trung-han>-->
-<!--  </ng-container>-->
-<!--  <div *nzModalFooter>-->
-<!--    <button nz-button (click)="closeDxPaModal()" class="modal__button&#45;&#45;cancel">-->
-<!--      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>-->
-<!--      Đóng-->
-<!--    </button>-->
-<!--  </div>-->
-<!--</nz-modal>-->
+<nz-modal [nzWidth]="'100%'" [nzBodyStyle]="{ 'overflow-y': 'auto' }"
+          [(nzVisible)]="isViewTh" (nzOnCancel)="closeDxPaModal()">
+  <ng-container *nzModalContent>
+    <app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen
+      (showListEvent)="showList()" [isViewQd]="true"
+      [isViewDetail]="isViewTh"
+      [idInput]="idTongHop"
+    ></app-thong-tin-tong-hop-kh-sua-chua-thuong-xuyen>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeDxPaModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
