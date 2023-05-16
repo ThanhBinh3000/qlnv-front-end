@@ -179,6 +179,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     } else {
       this.flagThemMoi = 'edit';
     }
+   console.log(id,' data.idHopDong data.idHopDong data.idHopDong data.idHopDong data.idHopDong')
     this.idInput = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

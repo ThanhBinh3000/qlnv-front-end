@@ -148,14 +148,10 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      await Promise.all([
-        // this.loadQdPdKqlcnt(),
-        // this.loadNguonVon(),
-        this.loadHinhThucThanhToan(),
-        // this.loadHinhThucLcnt(),
-        // this.loadLoaiHd()
-      ]);
+      await this.loadHinhThucThanhToan();
+      console.log(this.idInput, 'hihihi')
       if (!this.idInput || !this.itemGoiThau.hopDong) {
+        console.log(this.idInput, 'hahaha')
         this.bindingData();
       } else {
         await this.detail(this.idInput)
