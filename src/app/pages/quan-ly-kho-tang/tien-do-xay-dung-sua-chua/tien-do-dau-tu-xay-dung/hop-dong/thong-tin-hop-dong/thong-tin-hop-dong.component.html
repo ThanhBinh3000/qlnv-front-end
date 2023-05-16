@@ -185,7 +185,7 @@
              *ngIf="(data.hopDong && data.hopDong?.trangThai == STATUS.DA_KY )">
             <i class=" icon htvbdh_eye"></i>
           </a>
-          <a (click)="openThemMoiHd(!data.hopDong ? null : data.idHopDong)"
+          <a (click)="openThemMoiHd(data.idHopDong)"
              *ngIf="(!data.hopDong || data.hopDong?.trangThai == STATUS.DU_THAO )">
             <i class="fa fa-pencil"></i>
           </a>
