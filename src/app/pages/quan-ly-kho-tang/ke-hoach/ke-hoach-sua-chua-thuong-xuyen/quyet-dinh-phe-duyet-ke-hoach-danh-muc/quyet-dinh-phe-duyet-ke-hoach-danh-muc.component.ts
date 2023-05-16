@@ -84,19 +84,25 @@ export class QuyetDinhPheDuyetKeHoachDanhMucComponent extends Base2Component imp
     let body = {
       namKeHoach : data.namKeHoach,
       paggingReq: {
-        limit: 100,
-        page: this.page - 1,
-      }
+        limit: 1000,
+        page: 0,
+      },
+      loai : '00'
     };
     let res = await this.qdScThuongXuyen.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let listData = res.data.content;
-      let result = listData.filter(item => item.soQuyetDinh == data.soQdTrunghan);
+      let result = listData.filter(item => item.soToTrinh == data.soToTrinh);
       if (result && result.length > 0) {
         this.idTongHop = result[0].id;
         this.isViewTh = true;
       }
     }
   }
+  closeDxPaModal() {
+    this.idTongHop = null;
+    this.isViewTh = false;
+  }
+
 
 }
