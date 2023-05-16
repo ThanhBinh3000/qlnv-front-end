@@ -42,7 +42,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="namKeHoach" [nzDisabled]="isViewDetail">
+                <nz-select nzAllowClear formControlName="namKh" [nzDisabled]="isViewDetail">
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-input-group>
@@ -86,7 +86,7 @@
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
                 <input class="search__input" nz-input readonly
-                       formControlName="phuongAnTc" />
+                       formControlName="soToTrinh" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

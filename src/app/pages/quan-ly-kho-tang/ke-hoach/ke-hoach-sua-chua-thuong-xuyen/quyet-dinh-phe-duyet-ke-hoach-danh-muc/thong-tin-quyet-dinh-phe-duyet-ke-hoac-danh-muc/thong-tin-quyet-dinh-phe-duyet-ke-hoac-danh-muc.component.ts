@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -15,14 +14,10 @@ import { v4 as uuidv4 } from "uuid";
 import {
   DialogQdXdTrungHanComponent
 } from "../../../../../../components/dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component";
-import { QuyetDinhKhTrungHanService } from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 import { MESSAGE } from "../../../../../../constants/message";
 import { STATUS } from "../../../../../../constants/status";
 import { UserLogin } from "../../../../../../models/userlogin";
 import { TongHopKhTrungHanService } from "../../../../../../services/tong-hop-kh-trung-han.service";
-import {
-  DialogThemMoiDxkhthComponent
-} from "../../../ke-hoach-xay-dung-trung-han/de-xuat-ke-hoach/them-moi-dxkh-trung-han/dialog-them-moi-dxkhth/dialog-them-moi-dxkhth.component";
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
@@ -76,13 +71,11 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      ngayTaoTt: [null],
-      thoiGianTh: [null],
       namKh: [dayjs().get("year")],
-      noiDungTh: [null],
       soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
-      ngayKyQd: [null],
+      trichYeu: [null],
+      ngayKy: [null],
       trangThai: ["00"],
       tenTrangThai: ["Dự thảo"],
       loai: ["00", Validators.required],
@@ -94,12 +87,12 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     this.maQd = "/QĐ-BTC";
     this.redirectQd();
     this.loadDsNam();
+    this.loadDsToTrinh();
     await this.getDetail(this.idInput);
   }
 
   async redirectQd() {
     if (this.dataInput && this.dataInput.soQuyetDinh) {
-      console.log(this.dataInput);
       this.formData.patchValue({
         phuongAnTc: this.dataInput.soQuyetDinh,
         namBatDau: this.dataInput.namBatDau,
@@ -168,7 +161,7 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
-    body.ctiets = this.dataTableReq;
+    body.listKtKhThkhScThuongXuyenDtl = this.dataTableReq;
     body.fileDinhKems = this.fileDinhKems;
     body.canCuPhapLys = this.canCuPhapLys;
     body.maDvi = this.userInfo.MA_DVI;
@@ -257,6 +250,25 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
 
   }
 
+  async loadDsToTrinh() {
+    let body = {
+      "namKh" : this.formData.value.namKh,
+      "loai" : "00",
+      "paggingReq": {
+        "limit": 1000,
+        "page": 0
+      }
+    }
+    let res = await this.quyetDinhService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listToTrinh = data.content;
+      if (this.listToTrinh && this.listToTrinh.length >0 ) {
+        this.listToTrinh  = this.listToTrinh.filter(item => item.trangThai == STATUS.DA_DUYET_LDTC && !item.soQdPdKhDm)
+      }
+    }
+  }
+
   async openDialogToTrinh() {
     if (!this.isViewDetail) {
       const modal = this.modal.create({
@@ -267,17 +279,14 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
         nzWidth: "900px",
         nzFooter: null,
         nzComponentParams: {
-          type: "QDTH",
+          type: "QDTX",
           dsPhuongAn: this.listToTrinh
         }
       });
       modal.afterClose.subscribe(async (data) => {
         if (data) {
           this.formData.patchValue({
-            phuongAnTc: data.soQuyetDinh,
-            namBatDau: data.namBatDau,
-            namKetThuc: data.namKetThuc,
-            loaiDuAn: data.loaiDuAn
+            soToTrinh : data.soToTrinh
           });
           await this.loadDsChiTiet(data.id);
         }
@@ -286,16 +295,10 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
   }
 
   async loadDsChiTiet(id: number) {
-    let res = await this.tongHopDxXdTh.getDetail(id);
+    let res = await this.quyetDinhService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       let detailTh = res.data;
-      this.formData.patchValue({
-        loaiDuAn: detailTh.loaiDuAn,
-        namBatDau: detailTh.namBatDau,
-        namKetThuc: detailTh.namKetThuc
-      });
-      this.listDx = detailTh.listDx.dtlList;
-      this.dataTableReq = detailTh.listDx.ctietList;
+      this.dataTableReq = detailTh.listKtKhThkhScThuongXuyenDtl;
       if (this.listDx.length > 0) {
         this.selectRow(this.listDx[0]);
       }

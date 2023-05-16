@@ -10,9 +10,6 @@ import {
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
 import { HttpClient } from "@angular/common/http";
 import { StorageService } from "../../../../../services/storage.service";
-import {
-  DeXuatScThuongXuyenService
-} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
 import { Base2Component } from "../../../../../components/base2/base2.component";
 import { MESSAGE } from "../../../../../constants/message";
 
