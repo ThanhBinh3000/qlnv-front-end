@@ -149,9 +149,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       await this.loadHinhThucThanhToan();
-      console.log(this.idInput, 'hihihi')
       if (!this.idInput || !this.itemGoiThau.hopDong) {
-        console.log(this.idInput, 'hahaha')
         this.bindingData();
       } else {
         await this.detail(this.idInput)

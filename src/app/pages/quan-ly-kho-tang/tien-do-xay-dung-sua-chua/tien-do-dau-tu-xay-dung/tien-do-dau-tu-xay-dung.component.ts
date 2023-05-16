@@ -56,6 +56,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   trangThaiQdPdKqLcnt: boolean = false;
   //trang thái hợp đồng, nếu có 1 hd đã ký thì icon success màu xanh
   trangThaiHopDong: boolean = false;
+  //trang thái tiến độ công việc -- hỏi lại cách tính trạng thái của tab này.
+  trangThaiTienDoCv: boolean = false;
 
   constructor(
     httpClient: HttpClient,
