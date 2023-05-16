@@ -108,7 +108,7 @@ export class DialogDxScLonComponent implements OnInit {
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
-      if (this.page == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
+      if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
         this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
       }
     }

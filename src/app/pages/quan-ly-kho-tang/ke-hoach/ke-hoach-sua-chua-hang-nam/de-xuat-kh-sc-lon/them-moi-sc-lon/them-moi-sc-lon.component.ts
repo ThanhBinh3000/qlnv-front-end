@@ -161,6 +161,10 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     body.chiTiets = this.dataTableRes;
     let data = await this.createUpdate(body);
     if (data) {
+      this.idInput = data.id;
+      this.formData.patchValue({
+        id: data.id,
+      });
       if (isOther) {
         let trangThai;
         switch (this.formData.value.trangThai) {
@@ -181,12 +185,6 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
         } else {
           await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
         }
-      } else {
-        this.idInput = data.id;
-        this.formData.patchValue({
-          id: data.id,
-          trangThai: data.trangThai
-        });
       }
     }
   }
@@ -321,7 +319,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     }
   }
 
-  deleteItemCha(idx) {
+  deleteItemCha(idx, table : any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
@@ -340,7 +338,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     });
   }
 
-  deleteItem(index: any, y: any) {
+  deleteItem(index: any, y: any, table : any[]) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: "Xác nhận",
