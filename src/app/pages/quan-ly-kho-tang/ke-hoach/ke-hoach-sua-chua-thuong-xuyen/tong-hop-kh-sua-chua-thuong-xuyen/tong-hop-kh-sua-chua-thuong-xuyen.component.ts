@@ -11,6 +11,7 @@ import {Base2Component} from "../../../../../components/base2/base2.component";
 import {
   TongHopScThuongXuyenService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-tong-hop-kh-sua-chua-thuong-xuyen',
@@ -37,7 +38,8 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
     spinner: NgxSpinnerService,
     modal: NzModalService,
     deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
-    tongHopScThuongXuyenService: TongHopScThuongXuyenService
+    tongHopScThuongXuyenService: TongHopScThuongXuyenService,
+    public router  :Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopScThuongXuyenService)
     super.ngOnInit()
@@ -45,12 +47,16 @@ export class TongHopKhSuaChuaThuongXuyenComponent extends Base2Component impleme
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.formData = this.fb.group({
       namKh: [''],
       maTongHop: [''],
       noiDungTh: [''],
       trangThai: [''],
       thoiGianTh: [''],
+      loai : ['00']
     });
     this.filter();
   }

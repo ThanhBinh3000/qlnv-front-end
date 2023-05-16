@@ -619,7 +619,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNhakho" nz-input [readonly]="true" />
+                            <input formControlName="tenNhakho" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -885,7 +885,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNgankho" nz-input [readonly]="true" />
+                            <input formControlName="tenNgankho" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1249,7 +1249,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNganlo" nz-input [readonly]="true" />
+                            <input formControlName="tenNganlo" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
