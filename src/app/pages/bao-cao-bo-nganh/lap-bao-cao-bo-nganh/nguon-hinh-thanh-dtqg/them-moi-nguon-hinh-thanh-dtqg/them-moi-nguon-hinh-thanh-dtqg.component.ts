@@ -12,6 +12,7 @@ import { MESSAGE } from "../../../../../constants/message";
 import { DonviService } from "../../../../../services/donvi.service";
 import { cloneDeep } from "lodash";
 import { STATUS } from "../../../../../constants/status";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: "app-them-moi-nguon-hinh-thanh-dtqg",
@@ -43,6 +44,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
   itemRowNgoaiNguon: any = {};
   itemRowNguonEdit: any[] = [];
   itemRowNgoaiNguonEdit: any[] = [];
+  listNguonVon: any[] = [];
   ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
 
   constructor(httpClient: HttpClient,
@@ -51,7 +53,8 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
               spinner: NgxSpinnerService,
               modal: NzModalService,
               private bcBnTt108Service: BcBnTt130Service,
-              private donViService: DonviService
+              private donViService: DonviService,
+              private danhMucService: DanhMucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
@@ -81,7 +84,8 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
       await this.loadChiTiet(this.idInput)
     } else {
       await Promise.all([
-        this.loadDsDonVi()
+        this.loadDsDonVi(),
+        this.nguonVonGetAll()
       ]);
       this.formData.patchValue({
         tenDonViGui: this.userInfo.TEN_DVI,
@@ -108,18 +112,26 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     }
   }
 
+  async nguonVonGetAll() {
+    this.listNguonVon = [];
+    let res = await this.danhMucService.nguonVonGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNguonVon = res.data;
+    }
+  }
+
   changeLoaiBc(event) {
     this.formData.get("thoiHanGuiBc").setValue(this.listLoaiBc.find(item => item.value == event).thoiHanGuiBc);
   }
 
   initData() {
-    this.dataNguonNsnn = [
-      { "noiDung": "I. Nguồn NSNN", "maSo": "01" },
-      { "noiDung": "1. Chi DTQG", "maSo": "02" },
-      { "noiDung": "2. Chi thường xuyên", "maSo": "03" },
-      { "noiDung": "3. Chi khác", "maSo": "04" }
-    ];
-    this.dataNguonNgoaiNsnn = [{ "noiDung": "II. Nguồn lực hợp pháp ngoài NSNN", "maSo": "05" }];
+    let lstCha = this.listNguonVon.filter(i => i.maCha == null);
+    let lstCon = this.listNguonVon.filter(i => i.maCha != null);
+    this.dataNguonNsnn.push({ "noiDung": "I. " + lstCha[0].giaTri, "maSo": "01" , "dmLevel": 1})
+    for (let i = 0; i < lstCon.length; i++) {
+      this.dataNguonNsnn.push({ "noiDung": (i+1) + ". " + lstCon[i].giaTri, "maSo": "0" + (i+1) , "dmLevel": 2})
+    }
+    this.dataNguonNgoaiNsnn = [{ "noiDung": "II. Nguồn lực hợp pháp ngoài NSNN", "maSo": "05" , "dmLevel": 1}];
   }
 
   addRowNguon(): void {
@@ -128,6 +140,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         + this.nvl(this.itemRowNguon.muaBsungTrongKy) + this.nvl(this.itemRowNguon.khacTrongKy);
       this.itemRowNguon.tongLuyKe = this.nvl(this.itemRowNguon.muaTangLuyKe) + this.nvl(this.itemRowNguon.muaBuLuyKe)
         + this.nvl(this.itemRowNguon.muaBsungLuyKe) + this.nvl(this.itemRowNguon.khacLuyKe);
+      this.itemRowNguon.dmLevel = 2;
       this.dataNguonNsnn = [
         ...this.dataNguonNsnn,
         this.itemRowNguon
@@ -155,6 +168,7 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
         + this.nvl(this.itemRowNgoaiNguon.muaBsungTrongKy) + this.nvl(this.itemRowNgoaiNguon.khacTrongKy);
       this.itemRowNgoaiNguon.tongLuyKe = this.nvl(this.itemRowNgoaiNguon.muaTangLuyKe) + this.nvl(this.itemRowNgoaiNguon.muaBuLuyKe)
         + this.nvl(this.itemRowNgoaiNguon.muaBsungLuyKe) + this.nvl(this.itemRowNgoaiNguon.khacLuyKe);
+      this.itemRowNgoaiNguon.dmLevel = 2;
       this.dataNguonNgoaiNsnn = [
         ...this.dataNguonNgoaiNsnn,
         this.itemRowNgoaiNguon
