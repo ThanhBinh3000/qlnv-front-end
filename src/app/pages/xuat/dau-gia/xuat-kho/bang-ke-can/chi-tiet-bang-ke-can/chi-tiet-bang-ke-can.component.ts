@@ -32,7 +32,7 @@ import { BangKeCanService } from './../../../../../../services/qlnv-hang/xuat-ha
   styleUrls: ['./chi-tiet-bang-ke-can.component.scss']
 })
 export class ChiTietBangKeCanComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
