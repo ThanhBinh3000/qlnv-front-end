@@ -261,7 +261,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         }
       }
     } else {
-      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
