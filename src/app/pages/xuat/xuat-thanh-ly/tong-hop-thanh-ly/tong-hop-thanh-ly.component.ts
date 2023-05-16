@@ -187,7 +187,6 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
-    console.log(this.flatDataTable, 'this.flatDataTable');
     this.dataTableView = chain(this.flatDataTable)
       .groupBy("header")
       .map((value, key) => {
@@ -208,7 +207,6 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
             }
           ).value();
         let rowItem = value.find(s => s.header === key);
-        console.log(rowItem)
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
@@ -218,12 +216,12 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
           tenCuc: rowItem.tenCuc,
           maDanhSach: rowItem.maDanhSach,
           tenDanhSach: rowItem.tenDanhSach,
+          trangThai: rowItem.trangThai,
+          tenTrangThai: rowItem.tenTrangThai,
           ngayTao: rowItem.ngayTao,
           childData: rs
         };
       }).value();
-    console.log(this.dataTableView, 'dataTableView')
-    console.log(this.expandSetString)
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -232,7 +230,6 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     } else {
       this.expandSetString.delete(id);
     }
-    console.log(this.expandSetString)
   }
 
   handleOk() {
@@ -247,14 +244,44 @@ export class TongHopThanhLyComponent extends Base2Component implements OnInit {
     this.isVisibleModal = isVisibleModal;
     this.selectedItem = item;
     this.modalWidth = item ? '100vw' : '30vw';
+    // this.step = item ? '1' : '2';
   }
 
-  changeStep($event: any) {
-    //1 = man hinh dau tien  2 man hinh chi tiet
-    if ($event.step == 1) {
+  async changeStep($event: any) {
+    //0=dong 1=guiduyet 2=luu(chuyen tiep sang trang2)
+    if ($event.step == 0 || $event.step == 1) {
       this.showModal(false);
     } else if ($event.step == 2) {
       this.showModal(true, $event.item);
     }
+    this.timKiem();
+  }
+
+  async delete(item: any, roles?) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: item.id
+          };
+          this.tongHopThanhLyService.delete(body).then(async () => {
+            await this.timKiem();
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          });
+
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }
