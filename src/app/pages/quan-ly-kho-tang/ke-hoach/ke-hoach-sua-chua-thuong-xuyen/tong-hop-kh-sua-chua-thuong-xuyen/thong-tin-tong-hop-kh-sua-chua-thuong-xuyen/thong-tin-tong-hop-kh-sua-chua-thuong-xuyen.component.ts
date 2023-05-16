@@ -3,7 +3,6 @@ import {UserLogin} from "../../../../../../models/userlogin";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {Router} from "@angular/router";
-import {cloneDeep} from "lodash";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -11,7 +10,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {UserService} from "../../../../../../services/user.service";
 import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {TongHopKhTrungHanService} from "../../../../../../services/tong-hop-kh-trung-han.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
 import dayjs from "dayjs";
@@ -29,7 +27,6 @@ import {
   DanhMucSuaChuaService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/danh-muc-kho/danh-muc-sua-chua.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
-import {ParentPositionTracker} from "@angular/cdk/drag-drop/parent-position-tracker";
 import {
   TongHopScThuongXuyenService
 } from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";

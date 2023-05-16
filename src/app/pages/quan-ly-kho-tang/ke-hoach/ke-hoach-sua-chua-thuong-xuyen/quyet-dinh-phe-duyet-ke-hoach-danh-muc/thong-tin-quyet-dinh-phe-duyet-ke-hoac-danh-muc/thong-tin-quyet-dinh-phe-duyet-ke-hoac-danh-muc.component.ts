@@ -26,6 +26,9 @@ import {
 import {
   DialogThemMoiKehoachDanhmucChitietComponent
 } from "../../de-xuat-ke-hoach-sua-chua-thuong-xuyen/thong-tin-de-xuat-ke-hoach-sua-chua-thuong-xuyen/dialog-them-moi-kehoach-danhmuc-chitiet/dialog-them-moi-kehoach-danhmuc-chitiet.component";
+import {
+  TongHopScThuongXuyenService
+} from "../../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
 
 @Component({
   selector: 'app-thong-tin-quyet-dinh-phe-duyet-ke-hoac-danh-muc',
@@ -66,31 +69,24 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private tongHopDxXdTh: TongHopKhTrungHanService,
-    private quyetDinhService: QuyetDinhKhTrungHanService,
+    private quyetDinhService: TongHopScThuongXuyenService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService
   ) {
     this.formData = this.fb.group({
       id: [null],
-      namKeHoach: [dayjs().get("year")],
+      ngayTaoTt: [null],
+      thoiGianTh: [null],
+      namKh: [dayjs().get("year")],
+      noiDungTh: [null],
+      soToTrinh: [null, Validators.required],
       soQuyetDinh: [null],
-      ngayKy: [null],
-      phuongAnTc: [null, Validators.required],
-      namBatDau: [null],
-      namKetThuc: [null],
-      loaiDuAn: [null],
-      trichYeu: [null],
+      ngayKyQd: [null],
       trangThai: ["00"],
-      tenTrangThai: ["Dự thảo"]
+      tenTrangThai: ["Dự thảo"],
+      loai: ["00", Validators.required],
     });
-  }
-
-  async getListTt() {
-    let result = await this.quyetDinhService.getListToTrinh();
-    if (result.msg == MESSAGE.SUCCESS) {
-      this.listToTrinh = result.data;
-    }
   }
 
   async ngOnInit() {
@@ -263,7 +259,6 @@ export class ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent implements OnInit {
 
   async openDialogToTrinh() {
     if (!this.isViewDetail) {
-      await this.getListTt();
       const modal = this.modal.create({
         nzTitle: "Danh sách Phương án của Tổng cục",
         nzContent: DialogQdXdTrungHanComponent,

@@ -11,6 +11,7 @@ import {
 import {
   DeXuatScThuongXuyenService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/de-xuat-sc-thuong-xuyen.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-de-xuat-ke-hoach-sua-chua-thuong-xuyen',
@@ -41,7 +42,8 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    deXuatScThuongXuyenService: DeXuatScThuongXuyenService
+    deXuatScThuongXuyenService: DeXuatScThuongXuyenService,
+    public  router : Router
   ) {
     super(httpClient, storageService, notification, spinner, modal, deXuatScThuongXuyenService)
     super.ngOnInit()
@@ -49,6 +51,9 @@ export class DeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Component imp
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.formData = this.fb.group({
       namKh: [''],
       soCv: [''],
