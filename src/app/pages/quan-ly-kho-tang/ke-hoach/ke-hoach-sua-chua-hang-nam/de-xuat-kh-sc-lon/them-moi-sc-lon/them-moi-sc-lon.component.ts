@@ -77,7 +77,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     await this.spinner.show();
     try {
       if (!this.idInput) {
-        this.maQd = "/" + this.userInfo.MA_QD;
+        this.maQd = "/" + this.userInfo.MA_TCKT;
       }
       this.getDsKhoi();
       if (this.idInput) {

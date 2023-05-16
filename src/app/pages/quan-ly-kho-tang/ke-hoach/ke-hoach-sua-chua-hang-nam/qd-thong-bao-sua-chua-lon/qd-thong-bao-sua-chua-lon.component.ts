@@ -12,6 +12,7 @@ import {MESSAGE} from "../../../../../constants/message";
 import {
   KtKhSuaChuaBtcService
 } from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-qd-thong-bao-sua-chua-lon',
@@ -28,6 +29,7 @@ export class QdThongBaoSuaChuaLonComponent extends Base2Component implements OnI
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
+    private router: Router,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
@@ -50,6 +52,9 @@ export class QdThongBaoSuaChuaLonComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
