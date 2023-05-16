@@ -16,8 +16,15 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
-        class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+
+      <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && formData.value.loaiQdinh == '01'" type="button"
+        class="btn btn-sub xanh-nhat ml-2" (click)="ycXDDiemNhap()">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Y/C xác định điểm nhập</span>
+      </button>
+
+      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO && formData.value.loaiQdinh !== '01'"
+        type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -137,7 +144,8 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
+                <!-- <input nz-input formControlName="tongDuToanKp" [readonly]="true" /> -->
+                <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -219,7 +227,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày trình duyệt Tổng cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="true" formControlName="ngayCanCuQdTc" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayTrinhDuyetTc" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -242,7 +250,7 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
+                <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -332,7 +340,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true">Ngày trình duyệt Tổng cục</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzDisabled]="true" formControlName="ngayCanCuQdTc" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="true" formControlName="ngayTrinhDuyetTc" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -355,7 +363,7 @@
                 Tổng dự toán kinh phí(triệu đồng)
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="tongDuToanKp" [readonly]="true" />
+                <input nz-input currencyMask formControlName="tongDuToanKp" [options]="AMOUNT" [readonly]="true" />
               </nz-form-control>
             </nz-form-item>
           </div>

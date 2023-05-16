@@ -33,7 +33,7 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
 
   CHUC_NANG = CHUC_NANG;
   listLoaiDieuChuyen: any[] = [
-    { ma: "NOi_BO", ten: "Trong nội bộ chi cục" },
+    { ma: "DCNB", ten: "Trong nội bộ chi cục" },
     { ma: "CHI_CUC", ten: "Giữa 2 chi cục trong cùng 1 cục" },
     { ma: "CUC", ten: "Giữa 2 cục DTNN KV" }
   ];
@@ -77,7 +77,7 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
       loaiDc: '',
       maThop: '',
       trichYeu: '',
-      maDxuat: '',
+      soDxuat: '',
       tenTrangThai: '',
     };
   }

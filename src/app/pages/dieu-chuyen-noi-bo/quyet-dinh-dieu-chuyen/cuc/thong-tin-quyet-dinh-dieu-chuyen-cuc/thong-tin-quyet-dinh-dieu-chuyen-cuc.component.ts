@@ -30,6 +30,7 @@ import { STATUS } from "src/app/constants/status";
 import { ThongTinHangCanDieuChuyenCucComponent } from "../thong-tin-hang-can-dieu-chuyen-cuc/thong-tin-hang-can-dieu-chuyen-cuc.component";
 import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
 import { QuyetDinhDieuChuyenCucService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service";
+import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -98,7 +99,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   isVisible = false;
   listNoiDung = []
   listChungLoaiHangHoa: any[] = [];
-  quyetDinhPdDtlCache: any[] = [];
+  // quyetDinhPdDtlCache: any[] = [];
   deXuatSelected: any = []
 
   listDiemKho: any[] = [];
@@ -273,6 +274,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   dataTableView: any[] = [
     // { "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "00222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "7cc45619-d7a4-4d05-8c41-1510e80fa301", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "561c3c8a-40eb-40d3-b474-2b4125f862f4", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "0222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "idVirtual": "a0ab431c-0b28-4db4-8ca9-e14f5d515e4b", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333", "children": [{ "maChiCucNhan": "01010202", "tenChiCucNhan": "Chi cục Dự trữ Nhà nước Phong Châu", "maDiemKho": "0101020201", "tenDiemKho": "Điểm kho Dục Mỹ", "maNhaKho": "010102020101", "tenNhaKho": "Nhà kho C1", "maNganKho": "01010202010101", "tenNganKho": "Ngăn kho C1/1", "maLoKho": "0101020201010111", "tenLoKho": "Lô kho test cũ", "thuKho": null, "loaiVthh": null, "cloaiVthh": null, "tonKho": null, "soLuongDc": "111", "duToanKphi": "222", "thoiGianDkDc": "2023-05-15T04:48:26.266Z", "maDiemKhoNhan": "0101020201", "tenDiemKhoNhan": "Điểm kho Dục Mỹ", "maNhaKhoNhan": "010102020105", "tenNhaKhoNhan": "Nhà kho Q.a", "maNganKhoNhan": "01010202010501", "tenNganKhoNhan": "Ngăn kho test", "maLoKhoNhan": "0101020201050107", "tenLoKhoNhan": "lô kho 6", "thuKhoNhan": null, "thayDoiThuDo": null, "slDcConLai": null, "tichLuongKd": null, "slNhapDc": "333" }] }] }], "expand": true }], "expand": true }
   ]
+  AMOUNT = AMOUNT_NO_DECIMAL;
 
   constructor(
     httpClient: HttpClient,
@@ -302,10 +304,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       tenTrangThai: ['Dự thảo'],
       canCuQdTc: [],
       soCanCuQdTc: [],
-      ngayCanCuQdTc: [],
+      ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
-      quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
-      listOfMapData: [new Array<any>(),],
+      // quyetDinhPdDtl: [new Array<QuyetDinhPdDtl>(),],
+      // listOfMapData: [new Array<any>(),],
       danhSachQuyetDinh: [new Array<any>(),],
     }
     );
@@ -349,9 +351,25 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       let data = await this.detail(id);
       this.danhSachKeHoach = []
       this.formData.patchValue(data);
-      data.danhSachQuyetDinh.map(qd => (
-        this.danhSachKeHoach = this.danhSachKeHoach.concat(qd.danhSachKeHoach)
-      ))
+      // data.danhSachQuyetDinh.map(qd => (
+
+      //   this.danhSachKeHoach = this.danhSachKeHoach.concat(qd.danhSachKeHoach)
+      // ))
+      data.danhSachQuyetDinh.map(async (item, i) => {
+        let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+
+        dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+          this.danhSachKeHoach.push({
+            ...element,
+            maDvi: dcnbKeHoachDcHdr.maDvi,
+            tenDvi: dcnbKeHoachDcHdr.tenDvi,
+          })
+        });
+
+
+
+      })
+
       console.log('loadChiTiet', this.danhSachKeHoach)
       this.canCu = data.canCu;
       this.quyetDinh = data.quyetDinh;
@@ -482,7 +500,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (qdTC) {
         this.formData.patchValue({
           soCanCuQdTc: qdTC.soQdinh,
-          ngayCanCuQdTc: qdTC.ngayPduyet
+          ngayTrinhDuyetTc: qdTC.ngayPduyet
         })
       }
       let tong = 0
@@ -565,38 +583,38 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           })
           tong = tong + itemHH.duToanKphi
         })
-        let children = []
+        // let children = []
 
-        const grouped = this.groupBy(item.danhSachHangHoa, "maDiemKho");
-        const keyarr = Object.keys(grouped);
-        keyarr.map((k, j) => {
-          const valuearr = grouped[k].map(v => {
-            return {
-              ...v,
-              tenChiCucNhan: '',
-              key: v.id
-            }
-          })
-          console.log('keyarr', k, valuearr)
-          const itemv: any = valuearr[0]
+        // const grouped = this.groupBy(item.danhSachHangHoa, "maDiemKho");
+        // const keyarr = Object.keys(grouped);
+        // keyarr.map((k, j) => {
+        //   const valuearr = grouped[k].map(v => {
+        //     return {
+        //       ...v,
+        //       tenChiCucNhan: '',
+        //       key: v.id
+        //     }
+        //   })
+        //   console.log('keyarr', k, valuearr)
+        //   const itemv: any = valuearr[0]
 
-          if (valuearr.length > 1) {
-            children.push({
-              tenDiemKhoChuyen: itemv.tenDiemKho,
-              key: uuidv4(),
-              isDiemKho: true,
-              children: valuearr
-            })
-          } else {
-            children.push({ ...itemv, key: itemv.id })
-          }
-        })
-        return {
-          ...item,
-          key: uuidv4(),
-          isChiCuc: item.danhSachHangHoa.length > 0,
-          children: children
-        }
+        //   if (valuearr.length > 1) {
+        //     children.push({
+        //       tenDiemKhoChuyen: itemv.tenDiemKho,
+        //       key: uuidv4(),
+        //       isDiemKho: true,
+        //       children: valuearr
+        //     })
+        //   } else {
+        //     children.push({ ...itemv, key: itemv.id })
+        //   }
+        // })
+        // return {
+        //   ...item,
+        //   key: uuidv4(),
+        //   isChiCuc: item.danhSachHangHoa.length > 0,
+        //   children: children
+        // }
       })
 
       this.dataTableView = this.formData.value.loaiDc === "CHI_CUC" ? this.buildTableViewChiCUC(dsHH, "maDvi") : this.buildTableViewCUC(dsHH, "maDvi")
@@ -714,9 +732,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     // this.tableView = dataView;
     // this.expandAll()
 
-    // if (data?.length !== 0) {
-    //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    // };
+    if (data?.length !== 0) {
+      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      this.formData.patchValue({
+        tongDuToanKp: tongDuToanChiPhi,
+      })
+    };
     return dataView
   }
 
@@ -806,9 +827,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     // this.tableView = dataView;
     // this.expandAll()
 
-    // if (data?.length !== 0) {
-    //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    // };
+    if (data?.length !== 0) {
+      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      this.formData.patchValue({
+        tongDuToanKp: tongDuToanChiPhi,
+      })
+    };
     return dataView
   }
 
@@ -898,9 +922,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     // this.tableView = dataView;
     // this.expandAll()
 
-    // if (data?.length !== 0) {
-    //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    // };
+    if (data?.length !== 0) {
+      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      this.formData.patchValue({
+        tongDuToanKp: tongDuToanChiPhi,
+      })
+    };
     return dataView
   }
 
@@ -1093,7 +1120,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     // }
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
-    if (this.idInput) this.idInput
+    if (this.idInput) body.id = this.idInput
     // if (this.idInput) {
     //   body.id = this.idInput
     //   let dsQDItem = body.danhSachQuyetDinh[0]
@@ -1118,6 +1145,22 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }
     }
     await this.spinner.hide();
+  }
+
+  async ycXDDiemNhap() {
+    await this.spinner.show();
+    let body = this.formData.value;
+    body.canCu = this.canCu;
+    body.quyetDinh = this.quyetDinh;
+    let data = await this.createUpdate(body);
+    if (data) {
+      this.idInput = data.id;
+      let trangThai = STATUS.YC_CHICUC_PHANBO_DC;
+      let mesg = 'Bạn muốn yêu cầu xác định điểm nhập?'
+      this.approve(this.idInput, trangThai, mesg);
+    }
+    await this.spinner.hide();
+
   }
 
   async guiDuyet() {

@@ -80,10 +80,12 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
       nam: '',
       soQdinh: '',
       ngayKyQdinh: '',
-      loaiDc: '',
+      tenLoaiDc: '',
       trichYeu: '',
       maDxuat: '',
       maThop: '',
+      soQdinhXuatCuc: '',
+      soQdinhNhapCuc: '',
       tenTrangThai: '',
     };
   }

@@ -152,14 +152,14 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiDc"
-                    (input)="filterInTable('loaiDc',filterTable.loaiDc)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinhXuatCuc"
+                    (input)="filterInTable('soQdinhXuatCuc',filterTable.soQdinhXuatCuc)" size="small" />
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiDc"
-                    (input)="filterInTable('loaiDc',filterTable.loaiDc)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinhNhapCuc"
+                    (input)="filterInTable('soQdinhNhapCuc',filterTable.soQdinhNhapCuc)" size="small" />
                 </nz-input-group>
               </th>
               <th>
@@ -181,7 +181,7 @@
               <td>{{ data.nam }}</td>
               <td>{{ data.soQdinh }}</td>
               <td>{{ data.ngayKyQdinh | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.loaiDc }}</td>
+              <td>{{ data.tenLoaiDc }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.maDxuat }}</td>
               <td>{{ data.maThop }}</td>
