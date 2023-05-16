@@ -9,10 +9,10 @@
     </div>
   </div>
   <div class="btn-group">
-    <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO" type="button" (click)="delete(formData.value)"
+    <button *ngIf="idInput && formData.value.trangThai == STATUS.DU_THAO " type="button" (click)="delete(formData.value)"
             class="btn btn-sub btn-xoa">
       <i class="fa fa-trash-o do"></i>
-      <span>Xóa</span>
+      <span>Xóa {{idInput}}</span>
     </button>
     <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
             *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
