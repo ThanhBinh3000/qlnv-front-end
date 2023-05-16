@@ -791,6 +791,7 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
 
     let result = await this.createUpdate(body, undefined, isValid, !!isShowMsg ? isShowMsg : true);
+    this.formData.controls['id'].setValue(result.id);
     if (isBack === false) {
       return result;
     }
