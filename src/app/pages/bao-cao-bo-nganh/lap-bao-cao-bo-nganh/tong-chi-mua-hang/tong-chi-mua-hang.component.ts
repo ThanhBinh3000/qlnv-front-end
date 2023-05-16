@@ -10,6 +10,7 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-tong-chi-mua-hang',
@@ -25,6 +26,10 @@ export class TongChiMuaHangComponent extends Base2Component implements OnInit {
   ]
   selectedId: number = 0;
   isView: boolean = false;
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -126,6 +131,52 @@ export class TongChiMuaHangComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     if (isView != null) {
       this.isView = isView;
+    }
+  }
+  async download(id: any, type: any) {
+    if (type == 'pdf') {
+      await this.downloadPdf(id)
+    } else {
+      await this.downloadExcel(id)
+    }
+  }
+
+  async downloadExcel(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.idHdr = id;
+      body.typeFile = "xlsx";
+      body.fileName = "bcbn_tong_chi_mua_hang_dtqg_trong_ky.jrxml";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bcbn_tong_chi_mua_hang_dtqg_trong_ky.xlsx");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
+  async downloadPdf(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.id = id;
+      body.typeFile = "pdf";
+      body.fileName = "bcbn_tong_chi_mua_hang_dtqg_trong_ky.jrxml";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      saveAs(this.pdfBlob, "bcbn_tong_chi_mua_hang_dtqg_trong_ky.pdf");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
     }
   }
 }
