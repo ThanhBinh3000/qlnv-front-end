@@ -316,7 +316,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
   pheDuyet() {
     let trangThai = '';
-    let msg = '';123123
+    let msg = '';
     switch (this.formData.value.trangThai) {
       case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
