@@ -63,6 +63,14 @@ import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-t
 import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
 import { ThemMoiPhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
 import { PhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/phieu-xuat-kho.component';
+import { BangKeCanXuatDieuChuyenComponent } from './component-chung/bang-ke-can/bang-ke-can.component';
+import { ChiTietBangKeCanDieuChuyenComponent } from './component-chung/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component';
+import { NbccTdtkXkltBangKeCanHangComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bang-ke-can-hang/nbcc-tdtk-xklt-bang-ke-can-hang.component';
+import { BienBanTinhKhoDieuChuyenComponent } from './component-chung/bien-ban-tinh-kho/bien-ban-tinh-kho.component';
+import { ThemMoiBienBanTinhKhoDieuChuyenComponent } from './component-chung/bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
+import { BienBanHaoDoiDieuChuyenComponent } from './component-chung/bien-ban-hao-doi/bien-ban-hao-doi.component';
+import { ThemMoiBienBanHaoDoiDieuChuyenComponent } from './component-chung/bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component';
+import { NbccTdtkXkltBienBanHaoDoiComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/xuat-kho-luong-thuc/bien-ban-hao-doi/nbcc-tdtk-xklt-bien-ban-hao-doi.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +93,9 @@ import { PhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/phie
     NbccTdtkKtclltBienBanLayMauBanGiaoComponent,
     NbccTdtkKtclltPhieuKiemNghiemChatLuongComponent,
     NbccTdtkKiemTraChatLuongLuongThucComponent,
+    NbccTdtkXkltBangKeCanHangComponent,
+    NbccTdtkXkltBienBanHaoDoiComponent,
+
     GhccGiuaHaiChiCucComponent,
     DanhSachBienBanLayMau,
     ChiTietDanhSachBienBanLayMau,
@@ -94,7 +105,13 @@ import { PhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/phie
     HoSoKyThuatXuatDieuChuyenComponent,
     ChiTietHoSoKyThuatXuatDieuChuyenComponent,
     PhieuXuatKhoDCNBComponent,
-    ThemMoiPhieuXuatKhoDCNBComponent
+    ThemMoiPhieuXuatKhoDCNBComponent,
+    BangKeCanXuatDieuChuyenComponent,
+    ChiTietBangKeCanDieuChuyenComponent,
+    BienBanTinhKhoDieuChuyenComponent,
+    ThemMoiBienBanTinhKhoDieuChuyenComponent,
+    BienBanHaoDoiDieuChuyenComponent,
+    ThemMoiBienBanHaoDoiDieuChuyenComponent
   ],
   imports: [
     CommonModule,
