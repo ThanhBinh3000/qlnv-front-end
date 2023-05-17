@@ -117,7 +117,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-
   async showFirstRow($event, data: any) {
     await this.showDetail($event, data);
   }
@@ -193,13 +192,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       if (isTaoQd) {
         this.taoQdinh();
       } else {
-        this.quayLai();
+        this.goBack();
       }
     }
-  }
-
-  quayLai() {
-    this.showListEvent.emit();
   }
 
   isDisable(): boolean {

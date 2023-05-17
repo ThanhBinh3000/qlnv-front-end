@@ -43,7 +43,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
         { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
         { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' },
-        { ma: this.STATUS.DA_PHANBO_DC_CHODUYET_LDC, giaTri: "Y/c chi cục xác định điểm nhập" }
+        { ma: this.STATUS.YC_CHICUC_PHANBO_DC, giaTri: "Y/c chi cục xác định điểm nhập" }
     ];
     listLoaiDieuChuyen: any[] = [
         // { value: "ALL", giaTri: "Tất cả" },
@@ -59,10 +59,10 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         "00": "Dự thảo",
         "01": "Chờ duyệt - TP",
         "02": "Từ chối -TP",
-        "03": "Chờ duyệt - LĐ CỤC",
-        "04": "Từ chối - LĐ CỤC",
-        "05": "Đã duyệt - LĐ CỤC",
-        "65": "Y/c chi cục xác định điểm nhập"
+        "03": "Chờ duyệt - LĐ Cục",
+        "04": "Từ chối - LĐ Cục",
+        "05": "Đã duyệt - LĐ Cục",
+        "59": "Y/c chi cục xác định điểm nhập"
     }
     isViewDetail: boolean = false;
     isAddNew: boolean = false;
@@ -208,7 +208,7 @@ export class TongHopDieuChuyenTaiCuc extends Base2Component implements OnInit {
         return !(this.checkRoleEdit(trangThai) || this.checkRoleApproveDc(trangThai) || this.checkRoleDelete(trangThai)) && this.userService.isCuc()
     }
     checkRoleEdit(trangThai: string) {
-        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.DA_PHANBO_DC_CHODUYET_LDC)
+        return this.userService.isCuc() && (trangThai == STATUS.DU_THAO || trangThai == STATUS.YC_CHICUC_PHANBO_DC)
     };
     checkRoleApproveDc(trangThai: string) {
         return this.userService.isCuc() && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC)
