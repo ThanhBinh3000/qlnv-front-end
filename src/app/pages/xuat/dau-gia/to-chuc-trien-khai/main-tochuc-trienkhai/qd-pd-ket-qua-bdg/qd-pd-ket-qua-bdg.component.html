@@ -209,8 +209,13 @@
             <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="goDetail(data.id)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="goDetail(data.id)">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP ||  data.trangThai == STATUS.TU_CHOI_LDC"
+              (click)="goDetail(data.id)">
               <i class="fa fa-pencil"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC "
+              (click)=" goDetail(data.id)">
+              <i class="icon htvbdh_tcdt_pheduyet"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
