@@ -116,7 +116,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "111");
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -168,6 +168,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
     this.trangThaiQdPdKqLcnt = false;
+    this.trangThaiTienDoCv = false;
+    this.trangThaiHopDong = false;
     this.spinner.show();
     try {
       let body = {
@@ -193,7 +195,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e, 'aaaaaaaaaaaaaa')
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
     }
@@ -239,15 +242,17 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   }
 
   async loadItemHopDong() {
-    let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
-          this.trangThaiHopDong = true;
+    if (this.itemQdPdKhLcnt) {
+      let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
+            this.trangThaiHopDong = true;
+          }
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
