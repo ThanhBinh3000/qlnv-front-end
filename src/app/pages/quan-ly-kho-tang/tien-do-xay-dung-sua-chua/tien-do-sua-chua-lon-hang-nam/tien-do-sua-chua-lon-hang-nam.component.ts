@@ -28,6 +28,9 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
 import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+import {
+  KtKhSuaChuaBtcService
+} from "../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-lon-hang-nam',
@@ -65,7 +68,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private ktQdXdHangNamService: KtQdXdHangNamService,
+    private ktQdXdHangNamService: KtKhSuaChuaBtcService,
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
@@ -73,11 +76,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     private hopdongService: HopdongService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
-    super.ngOnInit()
-    this.filterTable = {};
-  }
-
-  async ngOnInit() {
+    super.ngOnInit();
     this.formData = this.fb.group({
       namKeHoach: [''],
       tenDuAn: [''],
@@ -85,8 +84,13 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       capDvi: [this.userInfo.CAP_DVI],
       soQuyetDinh: [''],
       trangThai: [''],
-      ngayKy: [''],
+      ngayKyTu: [''],
+      ngayKyDen: [''],
     });
+    this.filterTable = {};
+  }
+
+  async ngOnInit() {
     if (this.userService.isCuc()) {
       await this.loadDanhSachChiCuc();
     }
@@ -96,10 +100,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   async filter() {
     await this.spinner.show();
     try {
-      if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-        this.formData.value.ngayKyTu = this.formData.value.ngayKy[0];
-        this.formData.value.ngayKyDen = this.formData.value.ngayKy[1];
-      }
       let body = this.formData.value
       let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -289,7 +289,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         .groupBy("tenKhoi")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("namKeHoach")
+            .groupBy("namKh")
             .map((v, k) => {
                 let rs1 = chain(v)
                   .groupBy("tenChiCuc")
@@ -303,7 +303,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
                   ).value();
                 return {
                   idVirtual: uuidv4(),
-                  namKeHoach: k,
+                  namKh: k,
                   dataChild: rs1
                 };
               }
