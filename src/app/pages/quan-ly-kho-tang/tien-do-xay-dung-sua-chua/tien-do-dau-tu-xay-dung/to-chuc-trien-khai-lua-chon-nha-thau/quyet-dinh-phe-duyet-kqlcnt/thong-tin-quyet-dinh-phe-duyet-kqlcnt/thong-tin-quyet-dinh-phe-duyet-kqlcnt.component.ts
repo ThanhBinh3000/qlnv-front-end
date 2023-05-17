@@ -10,14 +10,14 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {
   DialogMmMuaSamComponent
 } from "../../../../../../../components/dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component";

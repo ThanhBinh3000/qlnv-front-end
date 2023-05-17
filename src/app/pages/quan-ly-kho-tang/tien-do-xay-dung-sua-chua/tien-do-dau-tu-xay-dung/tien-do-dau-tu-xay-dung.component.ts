@@ -12,23 +12,23 @@ import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.service";
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../services/donvi.service";
 import {MESSAGE} from "../../../../constants/message";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {STATUS} from "../../../../constants/status";
 import {QuyetDinhPheDuyetKhlcntComponent} from "./quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',

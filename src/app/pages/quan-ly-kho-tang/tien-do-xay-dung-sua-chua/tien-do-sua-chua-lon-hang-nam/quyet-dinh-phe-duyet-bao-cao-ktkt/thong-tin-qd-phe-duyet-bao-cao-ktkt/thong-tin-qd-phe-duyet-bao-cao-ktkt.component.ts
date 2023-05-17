@@ -7,18 +7,13 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {chain} from 'lodash';
 import * as uuid from "uuid";
+import {cloneDeep} from "lodash";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DxChiCucPvcService} from "../../../../../../services/dinh-muc-nhap-xuat-bao-quan/pvc/dx-chi-cuc-pvc.service";
-import {DanhMucCongCuDungCuService} from "../../../../../../services/danh-muc-cong-cu-dung-cu.service";
-import dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import {
-  PvcDxChiCucCtiet
-} from "../../../../../dinh-muc/mang-pvc-cong-cu-dung-cu/de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
-import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
@@ -61,7 +56,6 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
     modal: NzModalService,
     private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
     private ktQdXdHangNamService: KtQdXdHangNamService,
-    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetdinhpheduyetduandtxdService)
     super.ngOnInit()
@@ -72,10 +66,12 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
       soQd: [null, Validators.required],
       ngayKy: [null, Validators.required],
       ngayHieuLuc: [null, Validators.required],
-      soQdKhDtxd: [null, Validators.required],
+      soQdPdKhScl: [null, Validators.required],
       idQdKhDtxd: [null, Validators.required],
       trichYeu: [null, Validators.required],
-      tenDuAn: [null, Validators.required],
+      tenCongTrinh: [null, Validators.required],
+      loaiCongTrinh: [null, Validators.required],
+      tieuChuanDm: [null, Validators.required],
       idDuAn: [null, Validators.required],
       chuDauTu: [this.userInfo.TEN_DVI, Validators.required],
       diaChi: [this.userInfo.DON_VI.diaChi],
@@ -131,9 +127,9 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
     if (this.itemDuAn) {
       this.formData.patchValue({
         namKh: this.itemDuAn.namKeHoach,
-        tenDuAn: this.itemDuAn.tenDuAn,
+        tenCongTrinh: this.itemDuAn.tenCongTrinh,
         idDuAn: this.itemDuAn.id,
-        soQdKhDtxd: this.itemDuAn.soQdPdKhNam,
+        soQdPdKhScl: this.itemDuAn.soQdPdTcdt,
         idQdKhDtxd: this.itemDuAn.idType,
         loaiDuAn: this.itemDuAn.loaiDuAn,
         khoi: this.itemDuAn.khoi,
@@ -324,7 +320,7 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
     }
   }
 
-  changeSoQdKhDtxd(event) {
+  changesoQdPdKhScl(event) {
     if (event) {
       let item = this.listQdKhDtxd.filter(item => item.soQd == event)[0];
       if (item) {
@@ -373,12 +369,11 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
         idVirtual: uuid.v4(),
         chiMuc: [null, Validators.required],
         noiDung: [null, Validators.required],
+        giaTri: [null, Validators.required],
         chiMucCha: item.chiMuc,
         capChiMuc: item.capChiMuc + 1,
-        giaTri: [null, Validators.required],
+        kyHieu: [null, Validators.required],
         expand: true,
-        thueVat: 0,
-        chiPhiSauThue: 0,
       });
       this.isVisiblePopTongMucDauTu = true;
     } else {
@@ -389,8 +384,6 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
         return;
       }
       this.rowItemParent.idVirtual = uuid.v4();
-      this.rowItemParent.thueVat = this.rowItemParent.giaTri ? (this.rowItemParent.giaTri * 10) / 100 : this.rowItemParent.giaTri;
-      this.rowItemParent.chiPhiSauThue = this.rowItemParent.thueVat + this.rowItemParent.giaTri;
       this.rowItemParent.expand = true;
       this.dataTable = [...this.dataTable, this.rowItemParent];
       this.dataTreeTable = this.dataTable;
@@ -540,20 +533,16 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
       if (itemChild.id && itemChild.id > 0) {
         this.dataTable = this.dataTable.map(obj => {
           if (obj.id == itemChild.id) {
-            itemChild.thueVat = itemChild.giaTri ? (itemChild.giaTri * 10) / 100 : itemChild.giaTri;
-            itemChild.chiPhiSauThue = itemChild.thueVat + itemChild.giaTri;
             itemChild.expand = true;
             return itemChild;
           }
           return obj;
         });
       } else {
-        itemChild.thueVat = itemChild.giaTri ? (itemChild.giaTri * 10) / 100 : itemChild.giaTri;
-        itemChild.chiPhiSauThue = itemChild.thueVat + itemChild.giaTri;
         itemChild.expand = true;
         this.dataTable = [...this.dataTable, itemChild];
       }
-      this.dataTreeTable = this.dataTable;
+      this.dataTreeTable = cloneDeep(this.dataTable)
       this.formDataDetail.reset();
       this.convertListData();
       this.tinhTongMucDauTu();
@@ -567,6 +556,7 @@ export class TongMucDauTu {
   idVirtual: string;
   id: number;
   chiMuc: string;
+  kyHieu: string;
   noiDung: string;
   chiMucCha: string;
   expand: boolean;
