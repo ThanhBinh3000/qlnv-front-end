@@ -18,7 +18,7 @@ import {
 } from "../../../../../dinh-muc/mang-pvc-cong-cu-dung-cu/de-xuat-nc-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc/them-moi-dx-chi-cuc-pvc.component";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";

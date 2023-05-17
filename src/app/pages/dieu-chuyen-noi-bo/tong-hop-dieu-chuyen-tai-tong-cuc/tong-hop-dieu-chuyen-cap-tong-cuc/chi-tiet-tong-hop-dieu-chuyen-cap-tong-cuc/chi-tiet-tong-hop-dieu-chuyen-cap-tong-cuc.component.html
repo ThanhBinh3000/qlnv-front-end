@@ -23,8 +23,8 @@
                         <span>Tạo quyết định</span>
                     </button>
                     <button
-                        *ngIf="(isTongHop && !isViewDetail) && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
-                        nz-button type="button" class="modal__button--save" (click)="save()">
+                        *ngIf="isTongHop  && (formData.value.trangThai =='' || formData.value.trangThai == STATUS.CHUA_TAO_QD) && userService.isTongCuc() && userService.isAccessPermisson('DCNB_TONGHOPDC_SUA')"
+                        nz-button type="button" class="modal__button--save" (click)="luu()">
                         <i class="icon htvbdh_tcdt_save"></i>
                         <span>Lưu</span>
                     </button>
@@ -172,7 +172,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col nzSpan="8">
+                            <div nz-col nzSpan="15">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh">Trích yếu (Nội
                                         dung tổng
@@ -180,7 +180,7 @@
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập trích yếu">
                                         <textarea nz-input formControlName="trichYeu"
-                                            [readonly]="isViewDetail"></textarea>
+                                            [readonly]="formData.value.trangThai==STATUS.DA_DU_THAO_QD ||formData.value.trangThai==STATUS.DA_BAN_HANH_QD"></textarea>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>

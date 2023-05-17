@@ -7,11 +7,11 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {STATUS} from "../../../../../constants/status";
 import {UserService} from "../../../../../services/user.service";
 

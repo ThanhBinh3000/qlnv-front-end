@@ -5,10 +5,10 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+import {HopdongService} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 
 @Component({
   selector: 'app-tien-do-cong-viec',

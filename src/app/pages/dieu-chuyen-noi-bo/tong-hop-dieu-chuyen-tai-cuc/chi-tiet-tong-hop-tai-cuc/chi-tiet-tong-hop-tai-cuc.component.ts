@@ -316,7 +316,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         this.disableInputComponent = new ModalInput();
     };
     duyet(id: number, trangThai: string, msg: string, dcnbKeHoachDcHdrId?: number[], roles?: any, msgSuccess?: string) {
-        if ((this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) && (!dcnbKeHoachDcHdrId || !Array.isArray(dcnbKeHoachDcHdrId) || dcnbKeHoachDcHdrId.length <= 0)) {
+        if (this.formData.value.loaiKeHoach == 'CUC' && (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) && (!dcnbKeHoachDcHdrId || !Array.isArray(dcnbKeHoachDcHdrId) || dcnbKeHoachDcHdrId.length <= 0)) {
             this.notification.error(MESSAGE.NOTIFICATION, 'Chưa có kế hoạch điều chuyển nào được duyệt.');
             return;
         }
@@ -507,7 +507,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                 if (Array.isArray(data.thKeHoachDieuChuyenNoiBoCucDtls) && data.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
                     this.daXdinhDiemNhap = true;
                     data.thKeHoachDieuChuyenNoiBoCucDtls?.forEach(element => {
-                        if (!element.dcnbKeHoachDcHdr.daXdinhDiemNhap) {
+                        if (!element?.dcnbKeHoachDcHdr?.daXdinhDiemNhap) {
                             this.daXdinhDiemNhap = false;
                         }
                     });

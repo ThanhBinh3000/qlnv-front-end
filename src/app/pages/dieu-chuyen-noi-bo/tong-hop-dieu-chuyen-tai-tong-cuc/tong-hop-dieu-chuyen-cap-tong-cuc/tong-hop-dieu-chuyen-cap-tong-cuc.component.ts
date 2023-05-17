@@ -190,11 +190,12 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         }
     }
     checkRoleView(trangThai: string): boolean {
-        return !(this.checkRoleEdit(trangThai) || this.checkRoleDelete(trangThai))
+        // return !(this.checkRoleEdit(trangThai) || this.checkRoleDelete(trangThai))
+        return !this.checkRoleDelete(trangThai)
     }
-    checkRoleEdit(trangThai: string): boolean {
-        return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
-    };
+    // checkRoleEdit(trangThai: string): boolean {
+    //     return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
+    // };
     checkRoleDelete(trangThai: string): boolean {
         return this.userService.isTongCuc() && trangThai == STATUS.CHUA_TAO_QD
     }
