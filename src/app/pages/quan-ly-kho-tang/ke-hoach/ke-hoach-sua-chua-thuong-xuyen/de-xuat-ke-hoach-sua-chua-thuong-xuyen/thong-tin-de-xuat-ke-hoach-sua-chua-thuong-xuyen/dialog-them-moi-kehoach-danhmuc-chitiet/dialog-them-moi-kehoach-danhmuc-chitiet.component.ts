@@ -187,7 +187,7 @@ export class DialogThemMoiKehoachDanhmucChitietComponent extends Base2Component 
           this.formData.patchValue({
             maDm: result.maCongTrinh,
             tenDm: result.tenCongTrinh,
-            maChiCuc: result.maChiCuc,
+            maCNhiCuc: result.maChiCuc,
             tenChiCuc: result.tenChiCuc,
             maDiemKho: result.maDiemKho,
             tenDiemKho: result.tenDiemKho,

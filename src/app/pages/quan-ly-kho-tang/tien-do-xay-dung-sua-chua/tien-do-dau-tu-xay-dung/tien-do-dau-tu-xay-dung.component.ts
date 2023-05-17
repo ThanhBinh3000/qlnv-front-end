@@ -56,6 +56,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   trangThaiQdPdKqLcnt: boolean = false;
   //trang thái hợp đồng, nếu có 1 hd đã ký thì icon success màu xanh
   trangThaiHopDong: boolean = false;
+  //trang thái tiến độ công việc -- hỏi lại cách tính trạng thái của tab này.
+  trangThaiTienDoCv: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -114,7 +116,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "111");
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -144,7 +146,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.trangThaiQdPdKqLcnt = data;
         break;
       case '06':
-        this.itemHopDong = data;
+        this.trangThaiHopDong = data;
         break;
     }
   }
@@ -166,6 +168,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
     this.trangThaiQdPdKqLcnt = false;
+    this.trangThaiTienDoCv = false;
+    this.trangThaiHopDong = false;
     this.spinner.show();
     try {
       let body = {
@@ -183,7 +187,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
           await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
           await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
           await this.loadListItemQdPdKqLcnt(this.itemTtdt);
-          // await this.loadItemHopDong();
+          await this.loadItemHopDong();
         } else {
           this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
         }
@@ -191,7 +195,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e, 'aaaaaaaaaaaaaa')
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
     }
@@ -236,21 +241,15 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     }
   }
 
-  async loadItemHopDong(itemQdPdTktcTdt) {
-    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
-      let body = {
-        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
-        "idQdPdTktcTdt": itemQdPdTktcTdt.id,
-        "idDuAn": this.itemQdPdDaDtxd.idDuAn,
-        "paggingReq": {
-          "limit": 100,
-          "page": 0
-        }
-      }
-      let res = await this.quyetdinhpheduyetKhlcntService.search(body);
+  async loadItemHopDong() {
+    if (this.itemQdPdKhLcnt) {
+      let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        this.itemTtdt = this.itemQdPdKhLcnt;
+        if (res.data && res.data.length > 0) {
+          if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
+            this.trangThaiHopDong = true;
+          }
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

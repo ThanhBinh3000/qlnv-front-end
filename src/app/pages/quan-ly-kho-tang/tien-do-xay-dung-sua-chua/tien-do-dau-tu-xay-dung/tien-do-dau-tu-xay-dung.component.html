@@ -90,7 +90,7 @@
             </thead>
             <tbody>
             <ng-container *ngFor="let data of dataTable , let idx = index">
-              <tr>
+              <tr class="bg-parent">
                 <td [nzExpand]="expandSet.has(data.idVirtual)"
                     (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
                 <td class="font-weight-bold">{{data.khoi}}</td>
@@ -114,23 +114,23 @@
                   <tr>
                     <td></td>
                     <td></td>
-                    <td class="font-weight-bold" [nzExpand]="expandSet.has(item.idVirtual)"
+                    <td class="font-weight-bold bg-parent1" [nzExpand]="expandSet.has(item.idVirtual)"
                         (nzExpandChange)="onExpandChange(item.idVirtual, $event)">
                       {{item.namKeHoach}}
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
+                    <td class="bg-parent1"></td>
                   </tr>
                   <ng-container *ngIf="expandSet.has(item.idVirtual)">
                     <ng-container *ngFor="let itemChiCuc of item.dataChild, let y1 = index">
@@ -138,22 +138,22 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="font-weight-bold" [nzExpand]="expandSet.has(itemChiCuc.idVirtual)"
+                        <td class="font-weight-bold bg-parent2" [nzExpand]="expandSet.has(itemChiCuc.idVirtual)"
                             (nzExpandChange)="onExpandChange(itemChiCuc.idVirtual, $event)">
                           {{itemChiCuc.tenChiCuc}}
                         </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
+                        <td class="bg-parent2"></td>
                       </tr>
                       <ng-container *ngIf="expandSet.has(itemChiCuc.idVirtual)">
                         <ng-container *ngFor="let itemDetail of itemChiCuc.dataChild, let y2 = index">
@@ -255,28 +255,28 @@
                 [nzSelected]="tabSelected == '06'" (click)="selectTab('06')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_HD')">
               Hợp đồng và PL hợp đồng
-              <img *ngIf="!trangThaiQdPdKqLcnt" class="ml-1"
+              <img *ngIf="!trangThaiHopDong" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
-              <img *ngIf="trangThaiQdPdKqLcnt" class="ml-1"
+              <img *ngIf="trangThaiHopDong" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
             <li nz-menu-item
-                [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
+                [ngClass]="{'disabled-tab': !trangThaiHopDong}"
                 [nzSelected]="tabSelected == '07'" (click)="selectTab('07')">
               Tiến độ công việc
-              <img *ngIf="!itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai == STATUS.DU_THAO" class="ml-1"
-                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
-              <img *ngIf="itemQdPdKhLcnt && itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH" class="ml-1"
-                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
+              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
             </li>
             <li nz-menu-item
-                [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
+                [ngClass]="{'disabled-tab': !trangThaiTienDoCv}"
                 [nzSelected]="tabSelected == '08'" (click)="selectTab('08')">
               Biên bản nghiệm thu
-              <img *ngIf="!itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai == STATUS.DU_THAO" class="ml-1"
-                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
-              <img *ngIf="itemQdPdKhLcnt && itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH" class="ml-1"
-                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+              <!--              <img *ngIf="!trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
+              <!--              <img *ngIf="trangThaiHopDong" class="ml-1"-->
+              <!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
             </li>
           </ul>
         </nz-affix>
@@ -309,10 +309,10 @@
                         [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-hop-dong>
         </ng-container>
         <ng-container *ngIf="tabSelected == '07'">
-          <app-hop-dong></app-hop-dong>
+          <app-tien-do-cong-viec [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-tien-do-cong-viec>
         </ng-container>
         <ng-container *ngIf="tabSelected == '08'">
-          <app-hop-dong></app-hop-dong>
+          <app-bien-ban-nghiem-thu></app-bien-ban-nghiem-thu>
         </ng-container>
       </nz-card>
     </div>

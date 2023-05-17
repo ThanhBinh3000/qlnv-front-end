@@ -8,11 +8,12 @@
 </div>
 <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="20">
+    <div nz-col [nzSpan]="20" class="pd-t-10">
       <nz-form-item>
         <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Tên đơn vị</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <input nz-input formControlName="tenDvi" [nzAutocomplete]="auto">
+          <input nz-input formControlName="tenDvi" [nzAutocomplete]="auto" [disabled]="isViewDanhMuc"
+                 [readonly]="isViewDanhMuc">
           <nz-autocomplete #auto (selectionChange)="changeDvi($event)">
             <nz-auto-option *ngFor="let option of listDataGroup" [nzValue]="option.danhMuc">{{ option.danhMuc }}
             </nz-auto-option>
@@ -20,15 +21,16 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="4">
+    <div nz-col [nzSpan]="4" class="pd-t-10">
       <nz-form-item>
         <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Mã số</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <input nz-input formControlName="maSoDvi">
+          <input nz-input formControlName="maSoDvi" [disabled]="isViewDanhMuc"
+                 [readonly]="isViewDanhMuc">
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="20">
+    <div nz-col [nzSpan]="20" class="pd-t-10">
       <nz-form-item>
         <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Nhóm mặt hàng</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -36,13 +38,16 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="4">
+    <div nz-col [nzSpan]="4" class="pd-t-10">
       <nz-form-item>
         <nz-form-label nz-col [nzSpan]="24" nzRequired [nzNoColon]="true">Mã số</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
           <input nz-input formControlName="maSoNhomMatHang">
         </nz-form-control>
       </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" class="pd-t-10">
+      <label nz-checkbox formControlName="coNhieuMatHang" class="bold-text">Có nhiều mặt hàng</label>
     </div>
   </div>
 </form>

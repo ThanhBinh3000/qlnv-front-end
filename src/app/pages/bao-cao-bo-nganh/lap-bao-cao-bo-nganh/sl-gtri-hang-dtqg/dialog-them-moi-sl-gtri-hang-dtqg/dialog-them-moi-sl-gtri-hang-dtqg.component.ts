@@ -13,6 +13,8 @@ import { NzNotificationService } from "ng-zorro-antd/notification";
 export class DialogThemMoiSlGtriHangDtqgComponent implements OnInit {
   formData: FormGroup;
   listDataGroup = [];
+  danhMuc: string;
+  isViewDanhMuc: boolean = false;
   constructor(private _modalRef: NzModalRef,
               private fb: FormBuilder,
               public globals: Globals,
@@ -22,10 +24,20 @@ export class DialogThemMoiSlGtriHangDtqgComponent implements OnInit {
       maSoDvi: [null],
       nhomMatHang: [null],
       maSoNhomMatHang: [null],
+      coNhieuMatHang: [false]
     });
   }
 
   ngOnInit(): void {
+    if (this.danhMuc != null) {
+      this.listDataGroup.forEach(item => {
+        if (this.danhMuc == item.danhMuc) {
+          this.formData.get('maSoDvi').setValue(item.maSo);
+          this.formData.get('tenDvi').setValue(item.danhMuc)
+        }
+      });
+      this.isViewDanhMuc = true;
+    }
   }
 
   changeDvi(event?: any) {
@@ -64,6 +76,8 @@ export class DialogThemMoiSlGtriHangDtqgComponent implements OnInit {
     }
     res.children =[
       {
+        coNhieuMatHang: this.formData.get('coNhieuMatHang').value,
+        edit: !this.formData.get('coNhieuMatHang').value,
         danhMuc: this.formData.get('nhomMatHang').value,
         maSo: this.formData.get('maSoNhomMatHang').value,
         children: []

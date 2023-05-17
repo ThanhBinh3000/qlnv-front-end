@@ -217,6 +217,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
     if (res) {
       if (isGuiDuyet) {
         this.idInput = res.id;
+        this.guiDuyet();
       } else {
         // this.goBack()
       }
