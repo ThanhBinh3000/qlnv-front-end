@@ -39,6 +39,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listSoQuyetDinh: any[] = []
   listDiaDiemNhap: any[] = [];
   listPhieuKtraCl: any[] = [];
+  listPhieuXk: any[] = [];
   fileDinhKems: any[] = [];
   listDiemKho: any[] = [];
   listBbLayMau: any[] = [];
@@ -223,7 +224,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
     console.log(data, "donViTinh")
-    this.loadDataComboBox(data),
+    await this.loadDataComboBox(data);
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
       idQdGiaoNvXh: data.id,
@@ -236,18 +237,42 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       kieuNhapXuat: data.kieuNx,
 
     });
-    console.log(data.children, 55)
+    await this.loadDsHd(data.soQd);
     let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
       dataChiCuc.forEach(e => {
         this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
       });
       this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
+      console.log( this.listDiaDiemNhap ," this.listDiaDiemNhap ");
+      console.log( this.listPhieuXk ," this.listPhieuXk ");
+      this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
+        return this.listPhieuXk.some(phieuXk => {
+          return (
+            item.maLoKho !== phieuXk.maLoKho ||
+            item.maNganKho !== phieuXk.maNganKho
+          );
+        });
+      });
+
+      console.log( this.listDiaDiemNhap ," this. ");
     }
     await this.spinner.hide();
   }
 
+  async loadDsHd(event) {
+    let body = {
+      soQdGiaoNvXh: event,
 
+    }
+    let res = await this.phieuXuatKhoService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listPhieuXk = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
@@ -283,14 +308,14 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        soQdGiaoNvXh:this.formData.value.soQdGiaoNvXh,
       }
       let res = await this.xhPhieuKnghiemCluongService.search(body)
       const list = res.data.content;
       this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
     }
   }
-
   openDialogPhieuKnCl() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',

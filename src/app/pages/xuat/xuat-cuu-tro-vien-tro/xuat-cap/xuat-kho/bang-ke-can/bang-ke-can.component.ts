@@ -200,17 +200,11 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
               return {
                 id: rowLv2 ? rowLv2.id : null,
                 idVirtual: uuidv4(),
-                maLoKho: k != "null" ? k : '',
-                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
-                maDiemKho: rowLv2 ? rowLv2.maDiemKho : null,
+                maDiemKho: k != "null" ? k : '',
                 tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
-                maNganKho: rowLv2 ? rowLv2.maNganKho : null,
+                tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
                 tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
-                soPhieuXuatKho: rowLv2 ? rowLv2.soPhieuXuatKho : null,
-                maKho: rowLv2 ? rowLv2.maKho : null,
-                tenKho: rowLv2 ? rowLv2.tenKho : null,
-                trangThai: rowLv2 ? rowLv2.trangThai : null,
-                tenTrangThai: rowLv2 ? rowLv2.tenTrangThai : null,
+                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
                 childData: v
               }
             }
