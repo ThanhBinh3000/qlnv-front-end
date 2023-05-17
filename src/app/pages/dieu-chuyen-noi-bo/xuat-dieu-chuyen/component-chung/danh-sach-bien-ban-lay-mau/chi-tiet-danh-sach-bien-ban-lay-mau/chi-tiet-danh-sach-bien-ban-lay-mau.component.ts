@@ -30,7 +30,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     @Input() isView: boolean;
 
     @Input() isEdit: boolean;
-    @Input() isViewDetail: boolean;
+    // @Input() isViewDetail: boolean;
     @Input() isAddNew: boolean;
     @Input() isViewOnModal: boolean;
     @Output()
