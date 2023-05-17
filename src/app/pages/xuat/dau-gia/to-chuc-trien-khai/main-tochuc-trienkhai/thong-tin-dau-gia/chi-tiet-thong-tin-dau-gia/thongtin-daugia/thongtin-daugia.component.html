@@ -451,7 +451,7 @@
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemKhach.hoVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemKhach.hoaVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemKhach.chucVu" /></th>
                           <th><input nz-input [(ngModel)]="rowItemKhach.diaChi" /></th>
                           <th>
@@ -468,7 +468,7 @@
                         <ng-container *ngFor="let data of findTableName('KM')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoVaTen}}</td>
+                            <td>{{data.hoaVaTen}}</td>
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -482,7 +482,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.chucVu" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -512,7 +512,7 @@
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemDgv.hoVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemDgv.hoaVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemDgv.chucVu" /></th>
                           <th><input nz-input [(ngModel)]="rowItemDgv.diaChi" /></th>
                           <th>
@@ -529,7 +529,7 @@
                         <ng-container *ngFor="let data of findTableName('DGV')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoVaTen}}</td>
+                            <td>{{data.hoaVaTen}}</td>
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -543,7 +543,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.chucVu" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -566,14 +566,14 @@
                       <thead>
                         <tr>
                           <th nzWidth="30px">STT</th>
-                          <th>Họ và tên/ Tên tổ chức</th>
+                          <th>Họ và tên/Tên tổ chức</th>
                           <th>Mã số thuế/CMTND/CCCD/Hộ chiếu</th>
                           <th>Địa chỉ</th>
                           <th nzWidth="50px" *ngIf="!isDisabled()">Hành động</th>
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemToChuc.hoVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemToChuc.hoaVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemToChuc.soCccd" /></th>
                           <th><input nz-input [(ngModel)]="rowItemToChuc.diaChi" /></th>
                           <th>
@@ -590,7 +590,7 @@
                         <ng-container *ngFor="let data of findTableName('NTG')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoVaTen}}</td>
+                            <td>{{data.hoaVaTen}}</td>
                             <td>{{data.soCccd}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -604,7 +604,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.soCccd" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -627,113 +627,84 @@
                     <nz-table class="pd-10 " [nzScroll]="{ x: '1400px' }" nzBordered [nzData]="dataTable">
                       <thead>
                         <tr>
-                          <th nzLeft nzWidth="50px"></th>
-                          <th nzLeft nzWidth="200px" class="text-center wrap" class="kaka">Chi cục</th>
-                          <th nzLeft nzWidth="70px" class="text-center wrap">Mã đơn vị tài sản</th>
-                          <th nzWidth="250px" class="text-center wrap">Địa điểm</th>
-                          <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
-                          <th nzWidth="50px" class="text-center wrap">ĐVT</th>
-                          <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-                          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-                          <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
-                          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
-                          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
-                          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
-                          <th nzWidth="100px" class="text-center wrap">Số lần trả giá</th>
-                          <th nzWidth="100px" class="text-center wrap">Đơn giá cao nhất ( đồng )</th>
-                          <th nzWidth="100px" class="text-center wrap">Thành tiền đồng</th>
-                          <th nzWidth="100px" class="text-center wrap">Tổ chức/ cá nhân trả giá cao nhất</th>
+                          <th nzWidth="30px"></th>
+                          <th nzWidth="150px" class="text-center wrap"> Chi cục </th>
+                          <th nzWidth="150px" class="text-center wrap"> Điểm kho </th>
+                          <th nzWidth="150px" class="text-center wrap"> Lô kho </th>
+                          <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS </th>
+                          <th nzWidth="120px" class="text-center wrap"> SL bán đấu giá </th>
+                          <th nzWidth="50px" class="text-center wrap"> ĐVT </th>
+                          <th nzWidth="120px" class="text-center wrap"> Đơn giá chưa VAT(đ) </th>
+                          <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ) </th>
+                          <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ) </th>
+                          <th nzWidth="120px" class="text-center wrap"><span style='color: red;'>*</span> Số lần trả giá
+                          </th>
+                          <th nzWidth="150px" class="text-center wrap"><span style='color: red;'>*</span> Đơn giá cao
+                            nhất (đ) </th>
+                          <th nzWidth="120px" class="text-center wrap"> Thành tiền (đ)</th>
+                          <th nzWidth="200px" class="text-center wrap"><span style='color: red;'>*</span> Tổ chức/cá
+                            nhân đấu giá </th>
                         </tr>
                       </thead>
                       <tbody>
                         <ng-container *ngFor="let item of dataTable , let i = index">
                           <tr>
-                            <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)">
-                            </td>
-                            <td nzLeft>{{item.tenDvi}}</td>
-                            <td nzLeft></td>
+                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                            <td> {{item.tenDvi}} </td>
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc | number : '1.0-1' :
+                              'vi_VN'}} </td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td style="color: black ;font-weight: bold;"> {{item.soTienDatTruocChiCuc | number : '1.0-1'
+                              : 'vi_VN'}} </td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                           </tr>
                           <ng-container *ngIf="expandSet.has(i)">
-                            <ng-container *ngFor="let dviTsan of item.dataDviTsan, let y = index">
-                              <tr>
-                                <td nzLeft></td>
-                                <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
-                                </td>
-                                <td nzLeft>{{dviTsan.maDviTsan}}</td>
-                                <td></td>
-                                <td>{{ calendarSoLuong(dviTsan) | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>
-                                  <nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                    [(ngModel)]="dviTsan.soLanTraGia"></nz-input-number>
-                                </td>
-                                <td>
-                                  <nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
-                                    [(ngModel)]="dviTsan.donGiaTraGia"></nz-input-number>
-                                </td>
-                                <td>{{ calendarSoLuong(dviTsan) * dviTsan.donGiaTraGia | number : '1.0-1' :
-                                  'vi_VN'}}</td>
-                                <td>
-                                  <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
-                                    [(ngModel)]="dviTsan.toChucCaNhan" (ngModelChange)="changeNTG(i,y)">
-                                    <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
-                                      [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
-                                  </nz-select>
-                                </td>
-                              </tr>
-                              <ng-container *ngIf="expandSet2.has(y)">
-                                <tr *ngFor="let children of dviTsan.children, let z = index">
-                                  <td nzLeft></td>
-                                  <td nzLeft></td>
-                                  <td nzLeft></td>
-                                  <td>
-                                    {{children.tenDiemKho}},{{children.tenNhaKho}},{{children.tenNganKho}},{{children.tenLoKho}}
-                                  </td>
-                                  <!--                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
-                                  <td></td>
-                                  <td>{{children.dviTinh}}</td>
-                                  <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                                  <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}
-                                  </td>
-                                  <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                  <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                  <td>{{ (children.soLuong * children.donGiaDeXuat) + (children.soLuong *
-                                    children.donGiaDeXuat *
-                                    formData.value.khoanTienDatTruoc /
-                                    100) | number : '1.0-1' : 'vi_VN'}}</td>
-                                  <td>{{ (children.soLuong * children.donGiaVat) + (children.soLuong *
-                                    children.donGiaVat
-                                    *
-                                    formData.value.khoanTienDatTruoc / 100) |
-                                    number : '1.0-1' : 'vi_VN'}}</td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                              </ng-container>
-                            </ng-container>
+                            <tr *ngFor="let children of item.children, let y = index">
+                              <td></td>
+                              <td></td>
+                              <td> {{children.tenDiemKho}} </td>
+                              <td> {{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
+                                {{children.tenNhaKho}} </td>
+                              <td> {{children.maDviTsan}} </td>
+                              <td> {{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}} </td>
+                              <td> {{children.donViTinh}} </td>
+                              <td> {{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }} </td>
+                              <td> {{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }} </td>
+                              <td> {{(children.soLuongDeXuat * children.donGiaDuocDuyet *
+                                formData.value.khoanTienDatTruoc
+                                / 100 ) |
+                                number
+                                :
+                                '1.0-1' : 'vi_VN' }} </td>
+                              <td>
+                                <nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                  [(ngModel)]="children.soLanTraGia"></nz-input-number>
+                              </td>
+                              <td>
+                                <nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                  [(ngModel)]="children.donGiaTraGia"></nz-input-number>
+                              </td>
+                              <td>{{ children.soLuongDeXuat * children.donGiaTraGia | number : '1.0-1' :
+                                'vi_VN'}}</td>
+
+                              <td>
+                                <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                  [(ngModel)]="children.toChucCaNhan" (ngModelChange)="changeNTG(i, y)">
+                                  <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
+                                    [nzValue]="data.hoaVaTen" [nzLabel]="data.hoaVaTen"></nz-option>
+                                </nz-select>
+                              </td>
+                            </tr>
                           </ng-container>
                         </ng-container>
                       </tbody>
@@ -747,7 +718,7 @@
                         File đính kèm biên bản đã ký
                       </nz-form-label>
                       <div class="list-file">
-                        <file-list [disabled]="isDisabled()" [data]="fileDinhKem"></file-list>
+                        <file-list [disabled]="isDisabled()" [data]="fileDinhKems"></file-list>
                       </div>
                     </nz-form-item>
                   </div>
