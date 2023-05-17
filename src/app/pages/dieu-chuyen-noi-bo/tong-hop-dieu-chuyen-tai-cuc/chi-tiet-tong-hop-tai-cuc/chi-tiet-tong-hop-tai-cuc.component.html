@@ -172,7 +172,12 @@
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập số đề xuất">
                                         <nz-input-group nzAddOnAfter="/DCNB">
-                                            <input nz-input formControlName="soDeXuat" [readonly]="isViewDetail" />
+                                            <input nz-input formControlName="soDeXuat"
+                                                [readonly]="formData.value.trangThai==STATUS.DA_DUYET_LDC" />
+                                            <!-- <nz-input-number formControlName="soDeXuat" [nzDisabled]="isViewDetail"
+                                                [nzParser]="value.replace(/[^\d]/g, '')
+                                            .replace(/,(?=.*,)/, '')
+                                            .replace(/(\.)/g, '')"></nz-input-number> -->
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -198,7 +203,7 @@
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập trích yếu">
                                         <textarea nz-input formControlName="trichYeu"
-                                            [readonly]="isViewDetail"></textarea>
+                                            [readonly]="formData.value.trangThai==STATUS.DA_DUYET_LDC"></textarea>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
