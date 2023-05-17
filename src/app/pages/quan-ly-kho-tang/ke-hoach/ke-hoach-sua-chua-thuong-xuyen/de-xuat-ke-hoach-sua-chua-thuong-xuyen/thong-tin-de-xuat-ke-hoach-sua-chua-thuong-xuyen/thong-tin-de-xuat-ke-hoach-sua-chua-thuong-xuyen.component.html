@@ -40,7 +40,7 @@
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
-              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_THEM') &&  ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc())" >
+              *ngIf=" userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX_DX_THEM') &&  ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP  || formData.value.trangThai == STATUS.TU_CHOI_CBV ) && userService.isCuc())">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

@@ -136,7 +136,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
       this.formData.controls["ngayDuyet"].setValidators(Validators.required);
     }
   }
@@ -180,7 +180,7 @@ export class ThemMoiScLonComponent extends Base2Component implements OnInit {
             break;
           }
         }
-        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
+        if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
           this.duyet();
         } else {
           await this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");

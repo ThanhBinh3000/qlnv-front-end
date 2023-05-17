@@ -12,23 +12,23 @@ import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.service";
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../services/donvi.service";
 import {MESSAGE} from "../../../../constants/message";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {STATUS} from "../../../../constants/status";
 import {QuyetDinhPheDuyetKhlcntComponent} from "./quyet-dinh-phe-duyet-khlcnt/quyet-dinh-phe-duyet-khlcnt.component";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 
 @Component({
   selector: 'app-tien-do-dau-tu-xay-dung',
@@ -116,7 +116,7 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + "111");
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -168,6 +168,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
     this.trangThaiQdPdKqLcnt = false;
+    this.trangThaiTienDoCv = false;
+    this.trangThaiHopDong = false;
     this.spinner.show();
     try {
       let body = {
@@ -193,7 +195,8 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      console.log(e, 'aaaaaaaaaaaaaa')
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
     }
@@ -239,15 +242,17 @@ export class TienDoDauTuXayDungComponent extends Base2Component implements OnIni
   }
 
   async loadItemHopDong() {
-    let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
-          this.trangThaiHopDong = true;
+    if (this.itemQdPdKhLcnt) {
+      let res = await this.hopdongService.danhSachHdTheoKhlcnt(this.itemQdPdKhLcnt.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length > 0) {
+          if (res.data.filter(item => item.trangThai == STATUS.DA_KY).length > 0) {
+            this.trangThaiHopDong = true;
+          }
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
