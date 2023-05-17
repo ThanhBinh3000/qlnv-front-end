@@ -163,7 +163,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (this.formData.value.trangThai == STATUS.DU_THAO) {
       this.formData.controls["ngayTaoDx"].setValidators(Validators.required);
     }
-    if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC) {
+    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
       this.formData.controls["ngayDuyet"].setValidators(Validators.required);
     }
   }
@@ -200,7 +200,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           id: res.data.id,
           trangThai: res.data.trangThai
         });
-        if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
+        if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
           this.duyet()
         } else {
           this.guiDuyet();
