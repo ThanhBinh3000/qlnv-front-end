@@ -10,6 +10,7 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { Base2Component } from "../../../../components/base2/base2.component";
 import { MESSAGE } from "../../../../constants/message";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: "app-nguon-hinh-thanh-dtqg",
@@ -25,6 +26,10 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
   ]
   selectedId: number = 0;
   isView: boolean = false;
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -126,6 +131,56 @@ export class NguonHinhThanhDtqgComponent extends Base2Component implements OnIni
     this.isDetail = true;
     if (isView != null) {
       this.isView = isView;
+    }
+  }
+  async download(id: any, type: any) {
+    if (type == 'pdf') {
+      await this.downloadPdf(id)
+    } else {
+      await this.downloadExcel(id)
+    }
+  }
+
+  async downloadExcel(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.idHdr = id;
+      body.typeFile = "xlsx";
+      body.fileName = "bcbn_nguon_hinh_thanh_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo nguồn hình thành DTQG";
+      body.trangThai = "01";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bcbn_nguon_hinh_thanh_dtqg.xlsx");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
+  async downloadPdf(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.id = id;
+      body.typeFile = "pdf";
+      body.fileName = "bcbn_nguon_hinh_thanh_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo nguồn hình thành DTQG";
+      body.trangThai = "01";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      saveAs(this.pdfBlob, "bcbn_nguon_hinh_thanh_dtqg.pdf");
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
     }
   }
 }

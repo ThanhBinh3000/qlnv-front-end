@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TienDoCongViecComponent } from './tien-do-cong-viec.component';
+import { TiepNhanHangDtqgComponent } from './tiep-nhan-hang-dtqg.component';
 
-describe('TienDoCongViecComponent', () => {
-  let component: TienDoCongViecComponent;
-  let fixture: ComponentFixture<TienDoCongViecComponent>;
+describe('TiepNhanHangDtqgComponent', () => {
+  let component: TiepNhanHangDtqgComponent;
+  let fixture: ComponentFixture<TiepNhanHangDtqgComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TienDoCongViecComponent ]
+      declarations: [ TiepNhanHangDtqgComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TienDoCongViecComponent);
+    fixture = TestBed.createComponent(TiepNhanHangDtqgComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

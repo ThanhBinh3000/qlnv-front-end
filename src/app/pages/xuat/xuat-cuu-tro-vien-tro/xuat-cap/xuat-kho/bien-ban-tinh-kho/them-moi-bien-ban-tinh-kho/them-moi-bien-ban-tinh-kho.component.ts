@@ -115,18 +115,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async ngOnInit() {
     try {
-      this.spinner.show();
-
+      await this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -412,7 +411,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
 
   openPhieuKnClModal(id: number) {
-    console.log(id, "id")
     this.idPhieuKnCl = id;
     this.openPhieuKnCl = true;
   }
@@ -423,7 +421,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openPhieuXkModal(id: number) {
-    console.log(id, "id")
     this.idPhieuXk = id;
     this.openPhieuXk = true;
   }
@@ -434,7 +431,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openBangKeModal(id: number) {
-    console.log(id, "id")
     this.idBangKe = id;
     this.openBangKe = true;
   }

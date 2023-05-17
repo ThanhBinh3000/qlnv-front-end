@@ -113,6 +113,12 @@
                (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">
+              <i class="icon htvbdh_file-pdf"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'xlsx')">
+              <i class="icon htvbdh_file-excel"></i>
+            </a>
           </td>
         </tr>
         </tbody>

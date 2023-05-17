@@ -5,8 +5,9 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isChiCuc">
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" type="button" class="btn btn-sub"
-        (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+      <button
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BKCH_DUYET_LDCCUC')"
+        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
@@ -18,12 +19,12 @@
         <span>Duyệt</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.DU_THAO ||formData.value.trangThai == STATUS.TU_CHOI_LDCC"
-        type="button" class="btn btn-sub" (click)="saveAndSend()">
+              type="button" class="btn btn-sub" (click)="saveAndSend(formData.value,STATUS.CHO_DUYET_LDCC,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC"
-        type="button" class="btn btn-main" (click)="save()">
+              type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -38,7 +39,7 @@
           <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
-          <span>Đề xuất phương án xuất viện trợ, cứu trợ</span>
+          <span>BẢNG KÊ CÂN HÀNG</span>
         </div>
       </div>
     </div>
@@ -263,119 +264,108 @@
       </div>
     </form>
   </nz-card>
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="header header-green-background mg-t-16">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span></span>
-          <span>Thông tin chi tiết viện trợ, cứu trợ</span>
-        </div>
-      </div>
-    </div>
+  <nz-card class="mt16 flex-card p-lr16" *ngIf="loaiVthh != '02'">
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.bangKeDtl">
         <thead>
-          <tr>
-            <th style="width: 35px">STT</th>
-            <th>Mã cân (A)</th>
-            <th>Trọng lượng bao bì (1)</th>
-            <th>Trọng lượng cả bì (2)</th>
-            <th style="width: 100px">Hành động</th>
-          </tr>
-          <!--create row-->
-          <tr>
-            <th></th>
-            <th>
-              <input nz-input [(ngModel)]="bangKeDtlCreate.maCan" />
-            </th>
-            <th>
-              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                [(ngModel)]="bangKeDtlCreate.trongLuongBaoBi">
-              </nz-input-number>
-            </th>
-            <th>
-              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                [(ngModel)]="bangKeDtlCreate.trongLuongCaBi">
-              </nz-input-number>
-            </th>
-            <th>
-              <a (click)="addRow()" *ngIf="!isView">
-                <i class="icon htvbdh_dau-cong"></i>
-              </a>
-              <a (click)="clearRow()" *ngIf="!isView">
-                <i class="fa fa-refresh"></i>
-              </a>
-            </th>
-          </tr>
+        <tr>
+          <th nzWidth="5%">STT</th>
+          <th nzWidth="20%">Mã cân (A)</th>
+          <th>Số bao bì (1)</th>
+          <th>Trọng lượng cả bì (2)</th>
+          <th nzWidth="15%">Hành động</th>
+        </tr>
+        <!--create row-->
+        <tr>
+          <th></th>
+          <th>
+            <input nz-input [(ngModel)]="bangKeDtlCreate.maCan"/>
+          </th>
+          <th>
+            <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [(ngModel)]="bangKeDtlCreate.trongLuongBaoBi">
+            </nz-input-number>
+          </th>
+          <th>
+            <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [(ngModel)]="bangKeDtlCreate.trongLuongCaBi">
+            </nz-input-number>
+          </th>
+          <th>
+            <a (click)="addRow()" *ngIf="!isView">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="clearRow()" *ngIf="!isView">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </th>
+        </tr>
         </thead>
         <tbody>
 
-          <tr *ngFor="let item of formData.value.bangKeDtl, let i = index">
-            <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
-              <td>{{i + 1}}</td>
-              <td>{{item.maCan}}</td>
-              <td>{{item.trongLuongBaoBi|number: '1.0-1'}}</td>
-              <td>{{item.trongLuongCaBi|number: '1.0-1'}}</td>
-              <td>
-                <a (click)="editRow(i)" *ngIf="!isView">
-                  <i class="fa fa-pencil"></i>
-                </a>
-                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
-                  *ngIf="!isView">
-                  <i class="fa fa-trash-o do"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate>
-              <td></td>
-              <td><input nz-input [(ngModel)]="item.maCan" /></td>
-              <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                  [(ngModel)]="item.trongLuongBaoBi">
-                </nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                  [(ngModel)]="item.trongLuongCaBi">
-                </nz-input-number>
-              </td>
-              <td>
-                <a (click)="saveRow(i)">
-                  <i class="icon htvbdh_tcdt_save"></i>
-                </a>
-                <a (click)="cancelRow(i)">
-                  <i class="icon htvbdh_arrow-left2"></i>
-                </a>
-              </td>
-            </ng-template>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
+        <tr *ngFor="let item of formData.value.bangKeDtl, let i = index">
+          <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
+            <td>{{i + 1}}</td>
+            <td>{{item.maCan}}</td>
+            <td>{{item.trongLuongBaoBi|number: '1.0-1' : 'vi_VN'}}</td>
+            <td>{{item.trongLuongCaBi|number: '1.0-1' : 'vi_VN'}}</td>
+            <td>
+              <a (click)="editRow(i)" *ngIf="!isView">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
+                 *ngIf="!isView">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
             <td></td>
-            <td>Mã cân</td>
-            <td>{{formData.value.tongTrongLuong|number:'1.0-0'}}</td>
-            <td>{{formData.value.tongTrongLuongBaoBi|number:'1.0-0'}}</td>
-          </tr>
-        </tfoot>
+            <td><input nz-input [(ngModel)]="item.maCan"/></td>
+            <td>
+              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                               [(ngModel)]="item.trongLuongBaoBi">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                               [(ngModel)]="item.trongLuongCaBi">
+              </nz-input-number>
+            </td>
+            <td>
+              <a (click)="saveRow(i)">
+                <i class="icon htvbdh_tcdt_save"></i>
+              </a>
+              <a (click)="cancelRow(i)">
+                <i class="icon htvbdh_arrow-left2"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+        </tbody>
       </nz-table>
     </nz-card>
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label class="label-color-kh"> Tổng trọng lượng kể cả bao bì
+          <nz-form-label class="label-color-kh"> Tổng trọng lượng bao bì (kg)
           </nz-form-label>
-          <nz-form-control nz-col style="margin-top: 4px;">
-            <span>{{formData.value.tongTrongLuong|number:'1.0-0'}}</span>
+          <nz-form-control nz-col style="margin-top: 5px;">
+            <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
+                             [(ngModel)]="bangKeDtlCreate.soLuong"
+                             [(ngModel)]="formData.value.tongTrongLuongBaoBi" (ngModelChange)="trongLuongTruBi()"
+                             [nzDisabled]="isView">
+            </nz-input-number>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label class="label-color-kh"> Tổng trọng lượng bao bì
+          <nz-form-label class="label-color-kh"> Tổng trọng lượng kể cả bao bì(kg)
           </nz-form-label>
-          <nz-form-control style="margin-top: 4px;">
-            <span>{{formData.value.tongTrongLuongBaoBi|number:'1.0-0'}}</span>
+          <nz-form-control style="margin-top: 5px;">
+            <span>{{formData.value.tongTrongLuong|number:'1.0-0'}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -383,7 +373,7 @@
         <nz-form-item>
           <nz-form-label class="label-color-kh"> Tổng trọng lượng hàng đã trừ bì (viết bằng số)
           </nz-form-label>
-          <nz-form-control nz-col style="margin-top: 4px;">
+          <nz-form-control nz-col style="margin-top: 5px;">
             <span>{{formData.value.tongTrongLuongHang|number:'1.0-0'}}</span>
           </nz-form-control>
         </nz-form-item>
@@ -392,11 +382,91 @@
         <nz-form-item>
           <nz-form-label class="label-color-kh"> Tổng trọng lượng hàng đã trì bì (viết bằng chữ)
           </nz-form-label>
-          <nz-form-control nz-col style="margin-top: 4px;">
+          <nz-form-control nz-col style="margin-top: 5px;">
             <span>{{convertTienTobangChu(formData.value.tongTrongLuongHang)}}</span>
           </nz-form-control>
         </nz-form-item>
       </div>
     </div>
+  </nz-card>
+  <nz-card class="mt16 flex-card p-lr16" *ngIf="loaiVthh == '02'">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="formData.value.bangKeDtl">
+        <thead>
+        <tr>
+          <th style="width: 35px">STT</th>
+          <th>Số serial/mã sản phẩm</th>
+          <th>Số lượng</th>
+          <th style="width: 100px">Hành động</th>
+        </tr>
+        <!--create row-->
+        <tr>
+          <th></th>
+          <th>
+            <input nz-input [(ngModel)]="bangKeDtlCreate.soSerial"/>
+          </th>
+          <th>
+            <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                             [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
+                             [(ngModel)]="bangKeDtlCreate.soLuong">
+            </nz-input-number>
+          </th>
+          <th>
+            <a (click)="addRow()" *ngIf="!isView">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="clearRow()" *ngIf="!isView">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let item of formData.value.bangKeDtl, let i = index">
+          <ng-container *ngIf="!formData.value.bangKeDtl[i]?.isEdit; else editTemplate">
+            <td>{{i + 1}}</td>
+            <td>{{item.soSerial}}</td>
+            <td>{{item.soLuong|number: '1.0-1' : 'vi_VN'}}</td>
+            <td>
+              <a (click)="editRow(i)" *ngIf="!isView">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa ?" (nzOnConfirm)="deleteRow(i)"
+                 *ngIf="!isView">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td><input nz-input [(ngModel)]="item.soSerial"/></td>
+            <td>
+              <nz-input-number [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                               [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
+                               [(ngModel)]="item.soLuong">
+              </nz-input-number>
+            </td>
+            <td>
+              <a (click)="saveRow(i)">
+                <i class="icon htvbdh_tcdt_save"></i>
+              </a>
+              <a (click)="cancelRow(i)">
+                <i class="icon htvbdh_arrow-left2"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td></td>
+          <td>Tổng</td>
+          <td>{{tongSl|number: '1.0-1' : 'vi_VN'}}</td>
+          <td></td>
+        </tr>
+        </tfoot>
+      </nz-table>
+    </nz-card>
   </nz-card>
 </div>

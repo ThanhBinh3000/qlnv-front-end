@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BienBanNghiemThuComponent } from './bien-ban-nghiem-thu.component';
+import { KhMuaHangDtqgComponent } from './kh-mua-hang-dtqg.component';
 
-describe('BienBanNghiemThuComponent', () => {
-  let component: BienBanNghiemThuComponent;
-  let fixture: ComponentFixture<BienBanNghiemThuComponent>;
+describe('KhMuaHangDtqgComponent', () => {
+  let component: KhMuaHangDtqgComponent;
+  let fixture: ComponentFixture<KhMuaHangDtqgComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BienBanNghiemThuComponent ]
+      declarations: [ KhMuaHangDtqgComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BienBanNghiemThuComponent);
+    fixture = TestBed.createComponent(KhMuaHangDtqgComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

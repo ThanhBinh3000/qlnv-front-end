@@ -10,6 +10,6 @@ export class KtKhSuaChuaBtcService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'kt-kh-sc-btc/de-xuat','/qlnv-kho');
+    super(httpClient, 'kt-kh-sc-lon/quyet-dinh','/qlnv-kho');
   }
 }
