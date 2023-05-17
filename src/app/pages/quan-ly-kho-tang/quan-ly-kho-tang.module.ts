@@ -141,6 +141,7 @@ import { TienDoSuaChuaThuongXuyenComponent } from './tien-do-xay-dung-sua-chua/t
 import { DialogDxScLonComponent } from './ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component';
 import { TienDoCongViecComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/tien-do-cong-viec.component';
 import { BienBanNghiemThuComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/bien-ban-nghiem-thu.component';
+import { QuyetDinhPheDuyetBaoCaoKtktComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-bao-cao-ktkt/quyet-dinh-phe-duyet-bao-cao-ktkt.component';
 
 
 @NgModule({
@@ -220,7 +221,8 @@ import { BienBanNghiemThuComponent } from './tien-do-xay-dung-sua-chua/tien-do-d
     DialogDxScLonComponent,
     ThongTinQuyetDinhPheDuyetKeHoacDanhMucComponent,
     TienDoCongViecComponent,
-    BienBanNghiemThuComponent
+    BienBanNghiemThuComponent,
+    QuyetDinhPheDuyetBaoCaoKtktComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

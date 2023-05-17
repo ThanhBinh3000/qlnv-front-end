@@ -40,8 +40,9 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         id: [],
-        nam: [dayjs().get("year"), [Validators.required]],
-        soQdPd: [],
+        nam: [],
+        soQdPd: [''],
+        soQdPdKqBdg: [''],
         maDvi: [],
         loaiVthh: [],
         tenLoaiVthh: [],
@@ -103,11 +104,12 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
             await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
               const dataHdr = hdr.data;
               this.formData.patchValue({
-                soQdPd: dataHdr.soQdPd,
                 nam: dataHdr.nam,
+                soQdPd: dataHdr.soQdPd,
+                soQdPdKqBdg: dataDtl.soQdPdKqBdg,
+                tenDvi: dataDtl.tenDvi,
                 trangThai: dataDtl.trangThai,
                 tenTrangThai: dataDtl.tenTrangThai,
-                tenDvi: dataDtl.tenDvi,
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
               })
@@ -191,7 +193,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     }
 
     const modalQD = this.modal.create({
-      nzTitle: 'Cập nhật thông tin đấu giá',
+      nzTitle: 'CẬP NHẬP THÔNG TIN ĐẤU GIÁ',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -61,6 +61,8 @@ import { ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent } from './compon
 import { QuyetDinhDieuChuyenModule } from '../quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
 import { HoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/ho-so-ky-thuat.component';
 import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component';
+import { ThemMoiPhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
+import { PhieuXuatKhoDCNBComponent } from './component-chung/phieu-xuat-kho/phieu-xuat-kho.component';
 
 @NgModule({
   declarations: [
@@ -90,7 +92,9 @@ import { ChiTietHoSoKyThuatXuatDieuChuyenComponent } from './component-chung/ho-
     PhieuKiemNghiemChatLuongXuatDieuChuyenComponent,
     ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent,
     HoSoKyThuatXuatDieuChuyenComponent,
-    ChiTietHoSoKyThuatXuatDieuChuyenComponent
+    ChiTietHoSoKyThuatXuatDieuChuyenComponent,
+    PhieuXuatKhoDCNBComponent,
+    ThemMoiPhieuXuatKhoDCNBComponent
   ],
   imports: [
     CommonModule,

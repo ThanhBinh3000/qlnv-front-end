@@ -61,7 +61,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM')" type="button"
-                    class="btn btn-main" (click)="redirectToChiTiet(false, null, null)">
+                    class="btn btn-main" (click)="redirectToChiTiet(null, false, null, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -129,12 +129,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td class="text-left">
-                                        <a (click)="redirectToChiTiet(false, null,item.idQd)"
-                                            *ngIf="userService.isChiCuc()">
-                                            <i class="fa fa-plus"></i>
-                                        </a>
-                                    </td>
+                                    <td></td>
 
                                 </tr>
                                 <ng-container *ngIf="expandSetString.has(item.idVirtual)">
@@ -156,24 +151,23 @@
                                             <td>{{lv2.soBbHaoDoi}}</td>
                                             <td>{{lv2.tenTrangThai}}</td>
                                             <td class="text-left">
-                                                <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_XEM') && (lv2.trangThai == STATUS.DA_DUYET_LDCC))
-                            ||(!userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)
-                            ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.TU_CHOI_LDCC)
-                            ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.DU_THAO)"
+                                                <a *ngIf="checkRoleAdd(lv2.trangThai)"
+                                                    (click)="redirectToChiTiet(lv2, false, null,item.idQd)">
+                                                    <i class="fa fa-plus"></i>
+                                                </a>
+                                                <a *ngIf="checkRoleView(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, true, null)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.DU_THAO)
-                            ||(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDCC)"
+                                                <a *ngIf="checkRoleEdit(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, null)">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)"
+                                                <!-- <a *ngIf="checkRoleDuyet(lv2.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, null)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
-                                                </a>
-                                                <a *ngIf="(lv2.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_BBLM_XOA')) "
-                                                    (click)="delete(lv2)">
+                                                </a> -->
+                                                <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="delete(lv2)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>
