@@ -139,7 +139,7 @@ export class PhuLuc1Component implements OnInit {
             this.lstCtietBcao[index].dtoanKphiNamTruoc = item?.dtoanKphiNamTruoc ? item?.dtoanKphiNamTruoc : 0;
             this.lstCtietBcao[index].dtoanKphiNamNay = item?.dtoanKphiNamNay ? item?.dtoanKphiNamNay : 0;
             this.lstCtietBcao[index].tong = item?.tong ? item?.tong : 0;
-            // this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
+            this.lstCtietBcao[index].tongDtoanTrongNam = item.tongDtoanTrongNam ? item.tongDtoanTrongNam : 0;
             if (item?.dtoanDnghiDchinh) {
               this.lstCtietBcao[index].dtoanDnghiDchinh = item?.dtoanDnghiDchinh ? item?.dtoanDnghiDchinh : 0;
             } else {
@@ -155,7 +155,7 @@ export class PhuLuc1Component implements OnInit {
               dtoanKphiNamTruoc: item.dtoanKphiNamTruoc,
               dtoanKphiNamNay: item.dtoanKphiNamNay,
               tong: item.tong,
-              // tongDtoanTrongNam: item.tongDtoanTrongNam,
+              tongDtoanTrongNam: item.tongDtoanTrongNam,
               dtoanDnghiDchinh: item?.dtoanDnghiDchinh,
               dtoanVuTvqtDnghi: item?.dtoanVuTvqtDnghi,
             })
