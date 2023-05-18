@@ -172,4 +172,12 @@ export class DieuChinhService extends BaseService {
             request
         );
     }
+
+    getDataVp(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/dieu-chinh-du-toan-chi/get-data',
+            // 'http://192.168.1.105:8094/dieu-chinh-du-toan-chi/get-data',
+            request
+        );
+    }
 }
