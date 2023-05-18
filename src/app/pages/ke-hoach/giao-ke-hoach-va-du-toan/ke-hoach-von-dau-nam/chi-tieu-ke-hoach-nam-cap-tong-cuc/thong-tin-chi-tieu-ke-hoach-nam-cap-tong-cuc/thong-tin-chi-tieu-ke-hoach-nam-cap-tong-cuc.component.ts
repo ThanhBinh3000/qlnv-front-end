@@ -1916,7 +1916,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.loaiVthh == '0101') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
@@ -1924,7 +1924,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
                     tonKho.duDau;
                   break;
                 default:
@@ -1933,7 +1933,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             } else if (tonKho.loaiVthh == '0102') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong =
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
@@ -1941,7 +1941,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
                     tonKho.duDau;
                   break;
                 default:
