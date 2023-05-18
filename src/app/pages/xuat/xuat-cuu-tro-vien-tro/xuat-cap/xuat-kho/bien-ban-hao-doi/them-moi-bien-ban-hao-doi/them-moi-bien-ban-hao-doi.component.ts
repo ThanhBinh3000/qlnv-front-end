@@ -303,7 +303,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async save() {
     this.formData.disable()
     let body = this.formData.value;
-    console.log(body, 555);
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
     await this.createUpdate(body);
@@ -340,6 +339,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     switch (this.formData.value.trangThai) {
       case STATUS.CHO_DUYET_LDCC: {
         trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
         break;
       }
       case STATUS.CHO_DUYET_KTVBQ: {

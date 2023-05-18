@@ -33,7 +33,7 @@ import {
   styleUrls: ['./them-moi-bien-ban-hao-doi.component.scss']
 })
 export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -48,6 +48,13 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   checked: boolean = false;
   listFileDinhKem: any = [];
   listTiLe: any = []
+  tongSoLuongXk: number
+  idPhieuKnCl: number = 0;
+  openPhieuKnCl = false;
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
+  idBangKe: number = 0;
+  openBangKe = false;
 
   constructor(
     httpClient: HttpClient,
@@ -113,10 +120,10 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho: [],
-        tenDiemKho: [],
+        tenNhaKho: ['', [Validators.required]],
+        tenDiemKho:  ['', [Validators.required]],
         tenLoKho: [],
-        tenNganKho: [],
+        tenNganKho: ['', [Validators.required]],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
         soHdong: [],
@@ -129,18 +136,18 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh(),
         this.loadSoBbTinhKho()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -169,7 +176,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        type: "XUAT_CAP",
+        loaiVThh:this.loaiVthh
 
       });
     }
@@ -183,6 +190,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
     }
     let res = await this.quyetDinhGiaoNvXuatHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -197,6 +205,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
   async loadSoBbTinhKho() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.bienBanTinhKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -240,18 +249,11 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
       ngayKyHd: data.ngayKyHd,
 
     });
-    console.log(data)
-    /*let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+
+    let dataChiCuc = data.noiDungCuuTro.filter(item => item.maDviChiCuc == this.userInfo.MA_DVI);
     if (dataChiCuc) {
       this.listDiaDiemNhap = dataChiCuc
-    }*/
-    let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
-    if (dataChiCuc) {
-      dataChiCuc.forEach(e => {
-        this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children]
-      });
     }
-    this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
     await this.spinner.hide();
   }
 
@@ -297,30 +299,27 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     }
   }
 
-  onSelectSoBbTinhKho(selectedValue: any): void {
-    this.listBbTinhKho.forEach(f => {
-      this.dataTable = f.listPhieuXuatKho;
-      this.formData.patchValue({
-        ngayBatDauXuat: f.ngayKetThucXuat,
-        ngayKetThucXuat: f.ngayKetThucXuat
-      })
-    });
+  onSelectSoBbTinhKho(event: any): void {
+    console.log(event, "event")
+    let bienBan = this.listBbTinhKho.find(f => f.soBbTinhKho == event);
+    if (this.listBbTinhKho) {
+      this.dataTable = bienBan.listPhieuXuatKho
+    }
+    this.tongSoLuongXk = this.dataTable.reduce((prev, cur) => prev + cur.slXuat, 0);
+    this.formData.patchValue({
+      ngayKetThucXuat: this.dataTable[0].ngayXuatKho,
+      ngayBatDauXuat: this.dataTable[this.dataTable.length - 1].ngayXuatKho,
+    })
   }
 
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     body.listPhieuXuatKho = this.dataTable;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
-    }
+    await this.createUpdate(body);
+    this.formData.enable();
   }
 
   pheDuyet() {
@@ -335,11 +334,6 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         msg = MESSAGE.GUI_DUYET_CONFIRM;
         break;
       }
-      // case STATUS.CHO_DUYET_KT: {
-      //   trangThai = STATUS.CHO_DUYET_KT;
-      //   msg = MESSAGE.GUI_DUYET_CONFIRM;
-      //   break;
-      // }
       case STATUS.CHO_DUYET_KTVBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         msg = MESSAGE.GUI_DUYET_CONFIRM;
@@ -390,23 +384,41 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     })
   }
 
-  calcTong() {
-    if (this.dataTable) {
-      const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.slXuat;
-        return prev;
-      }, 0);
-      return sum;
-    }
-  }
-
   convertTien(tien: number): string {
     return convertTienTobangChu(tien);
   }
 
-  flattenTree(tree) {
-    return tree.flatMap((item) => {
-      return item.childData ? this.flattenTree(item.childData) : item;
-    });
+  openPhieuKnClModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuKnCl = id;
+    this.openPhieuKnCl = true;
   }
+
+  closePhieuKnClModal() {
+    this.idPhieuKnCl = null;
+    this.openPhieuKnCl = false;
+  }
+
+  openPhieuXkModal(id: number) {
+    console.log(id, "id")
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
+  }
+
+  openBangKeModal(id: number) {
+    console.log(id, "id")
+    this.idBangKe = id;
+    this.openBangKe = true;
+  }
+
+  closeBangKeModal() {
+    this.idBangKe = null;
+    this.openBangKe = false;
+  }
+
 }
