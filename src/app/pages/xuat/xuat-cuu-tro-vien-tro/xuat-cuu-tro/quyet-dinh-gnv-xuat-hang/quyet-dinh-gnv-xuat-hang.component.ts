@@ -101,18 +101,13 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
   async ngOnInit() {
     await this.spinner.show();
     try {
-      // this.formData.patchValue({
-      //   loaiVthh: this.loaiVthh
-      // })
-      await Promise.all([
-        this.timKiem(),
-        this.loadDsVthh(),
-      ])
-      this.spinner.hide();
+      await this.timKiem()
     } catch (e) {
       console.log('error: ', e);
-      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    finally {
+      await this.spinner.hide();
     }
   }
   redirectDetail(id, b: boolean) {
@@ -141,7 +136,10 @@ export class QuyetDinhGnvXuatHangComponent extends Base2Component implements OnI
     } catch (e) {
       console.log(e)
     }
-    await this.spinner.hide();
+    finally {
+      await this.spinner.hide();
+    }
+
   }
 
   openQdPdModal(id: any) {
