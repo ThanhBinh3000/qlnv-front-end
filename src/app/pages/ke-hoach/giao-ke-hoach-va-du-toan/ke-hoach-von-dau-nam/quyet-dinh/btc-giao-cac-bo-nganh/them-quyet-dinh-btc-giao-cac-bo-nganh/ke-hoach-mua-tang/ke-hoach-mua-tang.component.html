@@ -30,7 +30,7 @@
           <!--          </nz-input-number>-->
         </nz-input-group>
       </td>
-      <td style="text-align: center;">
+      <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
         <a (click)="themMoiItem()" *ngIf="!isView">
           <i class="fa fa-plus"></i>
         </a>
@@ -47,7 +47,7 @@
         <td>{{ data.tenLoaiChi }}</td>
         <td>{{ data.tenNguonChi }}</td>
         <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
-        <td style="text-align: center;">
+        <td style="text-align: center;" *ngIf="trangThai != STATUS.BAN_HANH">
           <a (click)="editItem(idx)" *ngIf="!isView">
             <i class=" fa fa-pencil"></i>
           </a>
@@ -73,7 +73,7 @@
             <input class="money-input" currencyMask [(ngModel)]="dataEdit[idx].data.sluongDtoan" [options]="amount"/>
           </nz-input-group>
         </td>
-        <td class="text-center">
+        <td class="text-center" *ngIf="trangThai != STATUS.BAN_HANH">
           <a (click)="luuEdit(idx)" class="save">
             <i class="fa fa-save"></i>
           </a>

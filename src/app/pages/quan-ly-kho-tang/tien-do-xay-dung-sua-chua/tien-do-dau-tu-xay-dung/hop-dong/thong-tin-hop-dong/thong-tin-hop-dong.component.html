@@ -10,20 +10,10 @@
       </div>
     </div>
     <div class="btn-group">
-      <!--      <button type="button" class="btn btn-sm ml-2" (click)="goBack()">-->
-      <!--        <i class="fa fa-arrow-left"></i>-->
-      <!--        <span>Quay lại</span>-->
-      <!--      </button>-->
       <button class="btn btn-sub xanh-nhat ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO) ">
+              *ngIf="(formData.value.trangThaiHd != STATUS.DA_HOAN_THANH) ">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Hoàn thành</span>
-      </button>
-      <button (click)="save()"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  "
-              class="btn btn-main btn-sm waves-effect waves-light ml-2">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
       </button>
     </div>
   </div>

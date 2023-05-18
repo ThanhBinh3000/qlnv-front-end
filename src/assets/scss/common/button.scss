@@ -90,9 +90,9 @@
 .group-button .xanh,
 .group-button .btn-sub.xanh,
 .xanh {
-  border-color: #4e5484;
-  background-color: #4E5484;
-  color: #fff;
+  border-color: #4e5484 !important;
+  background-color: #4E5484 !important;
+  color: #fff !important;
 
   &:hover {
     background: #363b65;

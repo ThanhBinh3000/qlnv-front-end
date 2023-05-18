@@ -7,7 +7,7 @@
         <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd"/>
       </div>
       <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
-        <label class="search__label">Khối</label>
+        <label class="search__label">Khối dự án/Công trình</label>
         <nz-select  nzAllowClear  formControlName="khoi">
           <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
@@ -127,7 +127,7 @@
         <th class="text-center" >Mã dự án</th>
         <th class="text-center" >Tên dự án</th>
         <th class="text-center" >Địa điểm xây dựng</th>
-        <th class="text-center" >Khối dự án, công trình</th>
+        <th class="text-center" >Khối dự án/công trình</th>
         <th class="text-center" >Thuộc Chi cục</th>
         <th class="text-center" >Điểm kho</th>
         <th class="text-center" >Thời gian <br> khởi công</th>

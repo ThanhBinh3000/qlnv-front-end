@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -23,21 +22,21 @@ import { STATUS } from 'src/app/constants/status';
   templateUrl: './thongtin-daugia.component.html',
 })
 export class ThongtinDaugiaComponent extends Base2Component implements OnInit, OnChanges {
-
   @Input() data
   @Input() isView: boolean
-  idDtl: number;
-  dataDetail: any;
-  soQdPd: string;
   isModal = false;
+  idDtl: number;
+  soQdPd: string;
+  dataDetail: any;
+
+  fileDinhKems: any[] = []
+
   rowItemKhach: any = {};
   rowItemDgv: any = {};
   rowItemToChuc: any = {};
 
   dataNguoiTgia: any[] = [];
   dataNguoiShow: any[] = [];
-
-  dataTableGroup: any[] = [];
 
   listHinhThucLucChonToChucBDG: any[] = [];
   listHinhThucBDG: any[] = [];
@@ -108,6 +107,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       loaiVthh: [''],
       cloaiVthh: [''],
       moTaHangHoa: [''],
+      khoanTienDatTruoc: [],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
     })
@@ -130,37 +130,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       if (!this.isView) {
         this.spinner.show();
         let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
-        let res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
-        console.log("🚀 ~ file: thongtin-daugia.component.ts:121 ~ ngOnInit ~ res", res)
-        if (res.data) {
-          const data = res.data
-          this.formData.patchValue({
-            loaiVthh: data.loaiVthh,
-            cloaiVthh: data.cloaiVthh,
-            moTaHangHoa: data.moTaHangHoa
-          })
-          if (data.listTtinDg && data.listTtinDg.length > 0) {
-            // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
-            let tTinDthauLastest = data.listTtinDg.pop();
-            let tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
-            this.dataTable = tTinDthau.data?.children;
-          } else {
-            this.dataTable = data.children;
-          }
-          this.convertDataTable();
-          // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
-          this.dataTable.forEach(item => {
-            item.dataDviTsan.forEach((dvi, index) => {
-              if (dvi.soLanTraGia) {
-                item.dataDviTsan = item.dataDviTsan.filter(x => x.maDviTsan != dvi.maDviTsan);
-                item.children = item.children.filter(x => x.maDviTsan != dvi.maDviTsan);
-              }
-            });
-            if (item.dataDviTsan.length == 0) {
-              this.dataTable = this.dataTable.filter(x => x.id != item.id);
-            }
-          });
-        }
+        this.onChangeQdKhBdgDtl(this.idDtl)
         this.formData.patchValue({
           maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
           idQdPdDtl: this.idDtl,
@@ -170,7 +140,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         this.spinner.hide();
       }
     }
-
     await Promise.all([
       this.loadDataComboBox(),
     ]);
@@ -198,6 +167,54 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     }
   }
 
+  async onChangeQdKhBdgDtl(id) {
+    this.spinner.show()
+    if (id > 0) {
+      let res = await this.quyetDinhPdKhBdgService.getDtlDetail(id);
+      if (res.data) {
+        const data = res.data
+        this.formData.patchValue({
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh,
+          moTaHangHoa: data.moTaHangHoa,
+          khoanTienDatTruoc: data.khoanTienDatTruoc
+        })
+        if (data.listTtinDg && data.listTtinDg.length > 0) {
+          // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
+          let tTinDthauLastest = data.listTtinDg.pop();
+          let tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
+          this.dataTable = tTinDthau.data?.children;
+        } else {
+          this.dataTable = data.children;
+        }
+        // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
+        this.dataTable.forEach((item) => {
+          item.soLuongChiCuc = 0
+          item.soTienDatTruocChiCuc = 0
+          item.children.forEach((child) => {
+            if (child.soLanTraGia) {
+              item.children = item.children.filter(x => x.maDviTsan != child.maDviTsan);
+            }
+          })
+          if (item.children.length == 0) {
+            this.dataTable = this.dataTable.filter(x => x.id != item.id);
+          }
+        });
+        this.calculatorTable()
+      }
+    }
+  }
+
+  calculatorTable() {
+    this.dataTable.forEach((item) => {
+      item.children.forEach((child) => {
+        item.soLuongChiCuc += child.soLuongDeXuat;
+        item.soTienDatTruocChiCuc += child.soLuongDeXuat * child.donGiaDuocDuyet *
+          this.formData.value.khoanTienDatTruoc / 100
+      })
+    })
+  }
+
   async getDetail(id) {
     let res = await this.thongTinDauGiaService.getDetail(id)
     if (res.data) {
@@ -212,46 +229,18 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       })
       this.dataTable = data.children;
       this.dataNguoiTgia = data.listNguoiTgia
-      this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem = data.fileDinhKem;
+      this.fileDinhKems = data.fileDinhKems;
       this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
         loai: key,
         dataChild: value
       })).value();
-      this.convertDataTable();
-    }
-  }
 
-  calendarSoLuong(dviTsan) {
-    let soLuong = 0;
-    //ten cot khong trung khop nen fix nhu vay
-    if (dviTsan.children[0].soLuong) {
-      dviTsan.children.forEach(item => soLuong += item.soLuong);
-    } else {
-      dviTsan.children.forEach(item => soLuong += item.soLuongDeXuat);
     }
-
-    return soLuong
   }
 
   async handleCancel() {
     this.modal.closeAll();
-  }
-
-  convertDataTable() {
-    this.dataTable.forEach((item) => {
-      let dataGroup = chain(item.children).groupBy('maDviTsan').map((value, key) => {
-        let current = value.find(s => s.maDviTsan == key);
-        return {
-          maDviTsan: key,
-          children: value,
-          soLanTraGia: current.soLanTraGia,
-          donGiaTraGia: current.donGiaTraGia,
-          toChucCaNhan: current.toChucCaNhan,
-          id: current.id
-        }
-      }).value();
-      item.dataDviTsan = dataGroup;
-    })
   }
 
   isDisabled() {
@@ -282,25 +271,18 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       body.tgianDauGiaTu = body.tgianDauGia[0];
       body.tgianDauGiaDen = body.tgianDauGia[1];
     }
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKem = this.fileDinhKem;
     body.listNguoiTgia = this.dataNguoiTgia;
+    body.children = this.dataTable;
     body.trangThai = isHoanThanh ? this.STATUS.DA_HOAN_THANH : this.STATUS.DU_THAO
     let soLuongDviTsan = 0
     let soLuongTrung = 0
     this.dataTable.forEach(item => {
-      soLuongTrung += item.dataDviTsan.filter(item => item.soLanTraGia > 0).length;
-      soLuongDviTsan += item.dataDviTsan.length;
+      soLuongTrung += item.children.filter(item => item.soLanTraGia > 0 && item.toChucCaNhan != null).length;
+      soLuongDviTsan += item.children.length;
     });
-    body.children = this.dataTable;
     body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
-    body.children.forEach(s => {
-      s.children.forEach(s1 => {
-        let dataDviTsanCurrent = s.dataDviTsan.find(s2 => s1.id === s2.id);
-        s1.soLanTraGia = dataDviTsanCurrent.soLanTraGia;
-        s1.donGiaTraGia = dataDviTsanCurrent.donGiaTraGia;
-        s1.toChucCaNhan = dataDviTsanCurrent.toChucCaNhan;
-      })
-    });
     let data = await this.createUpdate(body);
     if (data) {
       this.modal.closeAll();
@@ -308,28 +290,54 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   addRow(item, name) {
-    let data = cloneDeep(item)
-    data.loai = name;
-    data.idVirtual = new Date().getTime();
+    if (this.validateThanhPhanThamDu(item, name)) {
+      let data = cloneDeep(item)
+      data.loai = name;
+      data.idVirtual = new Date().getTime();
 
-    this.dataNguoiTgia.push(data)
-    this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
-      loai: key,
-      dataChild: value
-    })).value();
-    if (name == 'KM') {
-      this.rowItemKhach = {};
-    } else if (name == 'DGV') {
-      this.rowItemDgv = {};
-    } else {
-      this.rowItemToChuc = {};
+      this.dataNguoiTgia.push(data)
+      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({
+        loai: key,
+        dataChild: value
+      })).value();
+      if (name == 'KM') {
+        this.rowItemKhach = {};
+      } else if (name == 'DGV') {
+        this.rowItemDgv = {};
+      } else {
+        this.rowItemToChuc = {};
+      }
     }
-
   }
 
   findTableName(name) {
     let data = this.dataNguoiShow ? this.dataNguoiShow.find(({ loai }) => loai == name) : [];
     return data
+  }
+
+  validateThanhPhanThamDu(data, name): boolean {
+    if (name == 'KM') {
+      if (data.hoaVaTen && data.chucVu && data.diaChi) {
+        return true
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin khách mời chứng kiến")
+        return false;
+      }
+    } else if (name == 'DGV') {
+      if (data.hoaVaTen && data.chucVu && data.diaChi) {
+        return true
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin đấu giá viên")
+        return false;
+      }
+    } else {
+      if (data.hoaVaTen && data.soCccd && data.diaChi) {
+        return true
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin tổ chức cá nhân tham giá đấu giá")
+        return false;
+      }
+    }
   }
 
   clearRow(name) {
@@ -341,7 +349,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       this.rowItemToChuc = {};
     }
   }
-
 
   confirmDone() {
     this.modal.confirm({
@@ -407,9 +414,21 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   changeNTG(index, indexLv2) {
-    let currentRow = this.dataTable[index].dataDviTsan[indexLv2];
-    if (currentRow.toChucCaNhan && (currentRow.soLanTraGia == null || currentRow.soLanTraGia == 0)) {
-      this.dataTable[index].dataDviTsan[indexLv2].soLanTraGia = 1
+    if (this.validateDonGiaCaoNhat(index, indexLv2)) {
+      let currentRow = this.dataTable[index].children[indexLv2];
+      if (currentRow.toChucCaNhan && (currentRow.soLanTraGia == null || currentRow.soLanTraGia == 0)) {
+        this.dataTable[index].children[indexLv2].soLanTraGia = 1
+      }
+    }
+  }
+
+  validateDonGiaCaoNhat(index, indexLv2): boolean {
+    if (this.dataTable[index].children[indexLv2].donGiaTraGia > this.dataTable[index].children[indexLv2].donGiaDuocDuyet) {
+      return true
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá cao nhất phải lớn hơn hoặc bằng đơn giá chưa VAT")
+      this.dataTable[index].children[indexLv2].toChucCaNhan = null
+      return false;
     }
   }
 }

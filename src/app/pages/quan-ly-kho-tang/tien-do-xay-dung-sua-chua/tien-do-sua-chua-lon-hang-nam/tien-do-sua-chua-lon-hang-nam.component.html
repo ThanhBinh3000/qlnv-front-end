@@ -32,11 +32,20 @@
               <input nz-input formControlName="soQuyetDinh"/>
             </nz-input-group>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="5">
             <label class="search__label">Ngày ký QĐ PD KH sửa chữa lớn hàng năm</label>
-            <nz-range-picker nzFormat="yyyy-MM-dd" formControlName="ngayKy"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày bắt đầu" formControlName="ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+              </div>
+              <div nz-col nzSpan="1">
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-date-picker nzPlaceHolder="Ngày kết thúc" formControlName="ngayKyDen" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
+              </div>
+            </div>
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <label class="search__label">Trạng thái</label>
             <nz-select formControlName="trangThai">
               <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -110,7 +119,7 @@
                     <td></td>
                     <td class="font-weight-bold bg-parent1" [nzExpand]="expandSet.has(item.idVirtual)"
                         (nzExpandChange)="onExpandChange(item.idVirtual, $event)">
-                      {{item.namKeHoach}}
+                      {{item.namKh}}
                     </td>
                     <td class="bg-parent1"></td>
                     <td class="bg-parent1"></td>
@@ -158,18 +167,18 @@
                             <td></td>
                             <td></td>
                             <td>
-                              {{itemDetail.tenDuAn}}
+                              {{itemDetail.tenCongTrinh}}
                             </td>
                             <td>{{itemDetail.diaDiem}}</td>
-                            <td>{{itemDetail.loaiDuAn}}</td>
-                            <td class="text-center">{{itemDetail.tgKhoiCong}} - {{itemDetail.tgHoanThanh}}</td>
-                            <td>{{itemDetail.soQdDcPd}}</td>
-                            <td class="text-blue">{{itemDetail.soQdPdKhNam}}</td>
-                            <td>{{itemDetail.ncKhTongSo | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{itemDetail.ncKhNstw | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{itemDetail.ncKhTongSo | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{itemDetail.ncKhNstw | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{itemDetail.vonDauTu | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{itemDetail.tenLoaiCongTrinh}}</td>
+                            <td class="text-center">{{itemDetail.tgThucHien}} - {{itemDetail.tgHoanThanh}}</td>
+                            <td >{{itemDetail.tenNguonVon}}</td>
+                            <td  class="text-center">{{itemDetail.tgSuaChua}}</td>
+                            <td class="text-blue">{{itemDetail.soQdPdTcdt}}</td>
+                            <td class="text-right">{{itemDetail.tmdt | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{itemDetail.giaTriPd | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{itemDetail.luyKeVon | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{itemDetail.vonDauTu | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{itemDetail.tenTrangThai}}</td>
                           </tr>
                         </ng-container>
@@ -186,7 +195,7 @@
     </nz-collapse>
     <!--    Code tab process-->
     <div class="mt-2" *ngIf="itemSelected">
-      <h2>Chi tiết tiến độ dự án: <span style="font-style: italic"> {{itemSelected.tenDuAn}}
+      <h2>Chi tiết tiến độ dự án: <span style="font-style: italic"> {{itemSelected.tenCongTrinh}}
         - {{itemSelected.tenChiCuc}}</span></h2>
       <nz-card class="flex-card p-lr16 mt-2">
         <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">

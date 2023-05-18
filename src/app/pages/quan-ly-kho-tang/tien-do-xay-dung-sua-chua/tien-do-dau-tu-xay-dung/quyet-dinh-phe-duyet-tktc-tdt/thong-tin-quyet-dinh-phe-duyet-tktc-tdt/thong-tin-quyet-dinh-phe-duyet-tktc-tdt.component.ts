@@ -12,14 +12,14 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
@@ -91,7 +91,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       child: [null],
-      listKtXdscQuyetDinhPdTktcTdtDtl: null
+      listKtTdxdQuyetDinhPdTktcTdtDtl: null
     });
   }
 
@@ -192,7 +192,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
             }
           })
           this.listFile = data.fileDinhKems;
-          this.dataTable = data.listKtXdscQuyetDinhPdTktcTdtDtl;
+          this.dataTable = data.listKtTdxdQuyetDinhPdTktcTdtDtl;
           this.updateIdVirtual();
         }
       } else {
@@ -250,7 +250,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.dataTable && this.dataTable.length > 0) {
-      this.formData.value.listKtXdscQuyetDinhPdTktcTdtDtl = this.dataTable;
+      this.formData.value.listKtTdxdQuyetDinhPdTktcTdtDtl = this.dataTable;
     } else {
       this.notification.warning(MESSAGE.WARNING, "Chưa nhập chi tiết dự án xây dựng!");
       return;

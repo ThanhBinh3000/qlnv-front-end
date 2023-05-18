@@ -8,7 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../../../services/storage.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
 import {
   CongViec
@@ -129,8 +129,8 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
             tongSoGcTb: data.soGoiThauTb ? data.soGoiThauTb : 0,
             ghiChu: data.ghiChu,
           })
-          this.listGoiThau = data.listKtXdscQuyetDinhPdKhlcntCvKh ? data.listKtXdscQuyetDinhPdKhlcntCvKh : [];
-          this.dataNhaThauNopHs = data.listKtXdscQuyetDinhPdKhlcntDsnt ? data.listKtXdscQuyetDinhPdKhlcntDsnt : [];
+          this.listGoiThau = data.listKtTdxdQuyetDinhPdKhlcntCvKh ? data.listKtTdxdQuyetDinhPdKhlcntCvKh : [];
+          this.dataNhaThauNopHs = data.listKtTdxdQuyetDinhPdKhlcntDsnt ? data.listKtTdxdQuyetDinhPdKhlcntDsnt : [];
           await this.showDetail(this.listGoiThau[0]);
         }
       } else {
@@ -190,7 +190,7 @@ export class CapNhatThongTinDauThauComponent extends Base2Component implements O
     // await this.spinner.show()
     let body = {
       id: this.idInput,
-      listKtXdscQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
+      listKtTdxdQuyetDinhPdKhlcntDsnt: this.dataNhaThauNopHs,
     }
     if (isHoanThanh) {
       let mesg = 'Hoàn thành'

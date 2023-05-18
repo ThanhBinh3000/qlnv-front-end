@@ -39,15 +39,6 @@ export class QuyetDinhPheDuyetBaoCaoKtktComponent implements OnInit {
     this.isDetail = false;
   }
 
-  receivedData(data: any) {
-    this.itemQdPdDaDtxd = data;
-    this.emitDataDaDtxd(data);
-  }
-
-  emitDataDaDtxd(data) {
-    this.dataItemDaDtxd.emit(data);
-  }
-
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;

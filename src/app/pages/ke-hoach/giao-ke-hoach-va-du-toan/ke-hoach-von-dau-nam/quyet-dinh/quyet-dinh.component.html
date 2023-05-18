@@ -4,7 +4,7 @@
       TTCP
     </li>
     <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN')" nz-menu-item (click)="selectTab(1)">
-      BTC giao các bộ ngành
+      BTC giao các Bộ/Ngành
     </li>
     <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT')" nz-menu-item (click)="selectTab(2)">
       BTC giao TCDT
@@ -28,7 +28,7 @@
       <app-ttcp></app-ttcp>
     </ng-template>
   </nz-tab>
-  <nz-tab [nzTitle]="'BTC giao các bộ ngành'">
+  <nz-tab [nzTitle]="'BTC giao các Bộ/Ngành'">
     <ng-template nz-tab>
       <app-btc-giao-cac-bo-nganh></app-btc-giao-cac-bo-nganh>
     </ng-template>

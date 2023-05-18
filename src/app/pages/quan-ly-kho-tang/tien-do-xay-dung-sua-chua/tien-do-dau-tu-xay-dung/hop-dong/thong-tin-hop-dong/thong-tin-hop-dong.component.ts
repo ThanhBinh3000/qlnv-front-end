@@ -8,11 +8,11 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
@@ -87,9 +87,9 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
-      listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
-      listKtXdscQuyetDinhPdKhlcntCvKad: null,
-      listKtXdscQuyetDinhPdKhlcntCvKh: null
+      listKtTdxdQuyetDinhPdKhlcntCvDaTh: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKad: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKh: null
     });
     super.ngOnInit()
   }
@@ -117,7 +117,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     try {
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-        this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+        this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
+        console.log( this.itemQdPdKhLcnt,' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -134,7 +135,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
           if (res.data) {
             this.itemQdPdKhLcnt = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }
