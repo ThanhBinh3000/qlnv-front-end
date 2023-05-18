@@ -544,15 +544,13 @@
   <!--    -->
   <!--  </form>-->
   <nz-collapse>
-    <nz-collapse-panel nzActive="true" nzHeader="PHỤ LỤC HỢP ĐỒNG">
-      <div class="text-right mt-2" *ngIf="formData.value.trangThai == STATUS.DA_KY && isViewDetail">
-        <div class="btn-group">
-          <button type="button" class="btn xanh" (click)="redirectToPhuLuc(false, null)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm PL hợp đồng</span>
-          </button>
-        </div>
-      </div>
+    <nz-collapse-panel nzActive="true" nzHeader="PHỤ LỤC HỢP ĐỒNG" [nzExtra]="extraTplPhuLuc">
+      <ng-template #extraTplPhuLuc >
+        <button *ngIf="formData.value.trangThai == STATUS.DA_KY && isViewDetail" type="button" class="btn xanh" (click)="redirectToPhuLuc(false, null)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm PL hợp đồng</span>
+        </button>
+      </ng-template>
       <nz-table class="nowrap pd-10" [nzData]="listPhuLuc" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered>
         <thead>
