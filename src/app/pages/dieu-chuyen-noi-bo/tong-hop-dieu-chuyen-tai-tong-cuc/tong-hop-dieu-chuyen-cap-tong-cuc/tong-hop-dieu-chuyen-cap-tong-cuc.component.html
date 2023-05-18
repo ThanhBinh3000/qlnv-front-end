@@ -200,14 +200,18 @@
                         <td>{{ LIST_TRANG_THAI[data.trangThai] }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, true)"
-                                *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_XEM') && checkRoleView(data.trangThai)">
+                                *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_XEM')">
                                 <i class=" fa fa-eye"></i>
                             </a>
-                            <a *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
+                            <!-- <a *ngIf="userService.isAccessPermisson('DCNB_TONGHOPDC_SUA') && checkRoleEdit(data.trangThai)"
                                 (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
-                            </a>
-                            <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && checkRoleEdit(data.trangThai)"
+                            </a> -->
+                            <!-- <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && checkRoleEdit(data.trangThai)"
+                                (click)="taoQuyetDinhDc(data.id)">
+                                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                            </a> -->
+                            <a *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA')"
                                 (click)="taoQuyetDinhDc(data.id)">
                                 <i class="icon htvbdh_tcdt_tao-qd"></i>
                             </a>

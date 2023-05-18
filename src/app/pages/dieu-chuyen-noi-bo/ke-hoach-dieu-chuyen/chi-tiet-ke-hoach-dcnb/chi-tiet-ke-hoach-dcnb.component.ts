@@ -295,12 +295,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (value && value.type == 'DC') {
+      if (value && value.type == 'NDC') {
+        this.listChiCucNhan = Array.isArray(res.data) ? res.data : [];
+      } else {
         this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
           return f.maDvi !== this.userInfo.MA_DVI
         }) : [];
-      } else {
-        this.listChiCucNhan = Array.isArray(res.data) ? res.data : [];
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

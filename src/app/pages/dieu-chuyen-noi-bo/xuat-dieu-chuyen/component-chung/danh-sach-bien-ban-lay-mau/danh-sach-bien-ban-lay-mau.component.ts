@@ -6,8 +6,11 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { chain } from 'lodash';
+import { chain, cloneDeep } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
+import { MESSAGE } from 'src/app/constants/message';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { BienBanLayMauDieuChuyenService } from '../services/dcnb-bien-ban-lay-mau.service';
 
 @Component({
     selector: 'app-danh-sach-bien-ban-lay-mau',
@@ -32,13 +35,19 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     isViewQdDc: boolean = false;
     idQdDc: number;
 
+    page: number = 1;
+    pageSize: number = PAGE_SIZE_DEFAULT;
+    totalRecord: number = 0;
+    dataTable: any[];
+
     constructor(httpClient: HttpClient,
         storageService: StorageService,
         notification: NzNotificationService,
         spinner: NgxSpinnerService,
         modal: NzModalService,
+        private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService,
         private cdr: ChangeDetectorRef,) {
-        super(httpClient, storageService, notification, spinner, modal, undefined);
+        super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
         this.formData = this.fb.group({
             namKeHoach: [null],
             soBienBan: [null],
@@ -67,13 +76,38 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
 
     ngOnInit(): void {
+        this.timKiem()
     }
     async timKiem() {
         if (this.formData.value.ngayLayMau) {
             this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
             this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
         }
-        await this.search();
+        try {
+
+            const res = await this.bienBanLayMauDieuChuyenService.search({
+                trangThai: this.STATUS.BAN_HANH,
+                loaiDc: "DCNB",
+                paggingReq: {
+                    // limit: this.globals.prop.MAX_INTERGER,
+                    limit: this.pageSize,
+                    page: this.page - 1
+                },
+            });
+            if (res.msg == MESSAGE.SUCCESS) {
+                let data = res.data;
+                console.log("data", data.content)
+                if (data && data.content && data.content.length > 0) {
+                    this.dataTable = cloneDeep(data.content);
+                    this.totalRecord = data.totalElements;
+                    this.buildTableView()
+                }
+            } else {
+                this.notification.error(MESSAGE.ERROR, res.msg)
+            }
+        } catch (error) {
+            console.log("error", error)
+        }
     }
     clearFilter() {
         this.formData.reset();
@@ -88,6 +122,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         let dataView = chain(this.dataTable).groupBy("soQd").map((value, key) => {
             let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
                 let rowLv2 = v.find(s => s.maDiemKho === k);
+                if (!rowLv2) {
+                    return;
+                }
                 return {
                     id: rowLv2.id,
                     idVirtual: uuidv4(),
@@ -112,6 +149,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             }
             ).value();
             let rowLv1 = value.find(s => s.soQd === key);
+            if (!rowLv1) {
+                return;
+            }
             return {
                 idVirtual: uuidv4(),
                 soQd: key,
@@ -141,11 +181,12 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     viewDetail(id: number, isView: boolean) {
 
     }
-    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number) {
-        this.selectedId = lv2.id;
+    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number, idQdDc?: number) {
+        this.selectedId = lv2?.id;
         this.isDetail = true;
         this.isView = isView;
         this.idBbLayMau = idBbLayMau;
+        this.idQdDc = idQdDc;
     }
     disabledTuNgay = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLayMauDen) {
@@ -167,6 +208,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return true
     }
     checkPermissonDelete(): boolean {
+        return true
+    }
+    checkRoleAdd(trangThai: string): boolean {
         return true
     }
     checkRoleView(trangThai: string): boolean {

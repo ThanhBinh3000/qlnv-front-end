@@ -422,7 +422,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
-            this.notification.error(MESSAGE.SUCCESS, "Cập nhật thành công");
+            this.notification.success(MESSAGE.SUCCESS, "Cập nhật thành công");
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -433,7 +433,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
           } else
-            this.notification.error(MESSAGE.SUCCESS, "Dự thảo thành công");
+            this.notification.success(MESSAGE.SUCCESS, "Dự thảo thành công");
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }

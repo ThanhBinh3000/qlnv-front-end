@@ -4,6 +4,10 @@
     <nz-card class="mt16 flex-card p-lr16">
       <div>
         <form nzLayout="vertical" nz-form [formGroup]="formData">
+          <ng-template #error let-control>
+            <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+            </ng-container>
+          </ng-template>
           <nz-form-item>
             <nz-form-label>Mã danh sách</nz-form-label>
             <nz-form-control>
@@ -16,7 +20,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label>Tên danh sách</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <input nz-input formControlName="tenDanhSach" [readonly]="isView">
             </nz-form-control>
           </nz-form-item>
@@ -28,7 +32,7 @@
           </nz-form-item>
           <nz-form-item>
             <nz-form-label>Thời gian đề xuất thanh lý</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-range-picker [nzRanges]="ranges" ngModel formControlName="thoiGianTl"
                                [nzFormat]="globals.dateFormat"
                                (ngModelChange)="chonNgayXuatThanhLy($event)" [nzDisabled]="isView"></nz-range-picker>
@@ -50,7 +54,8 @@
     </div>
     <div class="d-flex justify-content-center">
       <div style="width: fit-content;border-style: none none dotted none">
-        <p style="font-size: 16px;margin: 0px"><strong>{{selectedItem.tenCuc}}</strong></p>
+        <p style="font-size: 16px;margin: 0px">
+          <strong>{{selectedItem.tenCuc ? selectedItem.tenCuc : selectedItem.tenDvql}}</strong></p>
       </div>
     </div>
 
@@ -124,7 +129,3 @@
 
   </ng-container>
 </div>
-<ng-template #error let-control>
-  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-  </ng-container>
-</ng-template>

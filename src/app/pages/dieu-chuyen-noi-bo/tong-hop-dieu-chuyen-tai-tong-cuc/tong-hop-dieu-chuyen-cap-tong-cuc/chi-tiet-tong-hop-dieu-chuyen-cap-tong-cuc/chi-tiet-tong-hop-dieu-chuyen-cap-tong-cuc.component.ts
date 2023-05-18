@@ -152,6 +152,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             if (this.formData.value.id) {
                 const data = await this.detail(this.formData.value.id);
                 this.formData.patchValue(data);
+                this.formData.patchValue({ maTongHop: data.id ? Number(data.id) : '' })
                 this.convertTongHop(data, this.isAddNew)
             }
         } catch (e) {
@@ -218,7 +219,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
     async taoQuyetDinh() {
         //save record-->redirect page tao quyet dinh
         try {
-            this.setValidator(true)
+            // this.setValidator(true)
+            this.formData.controls['trichYeu'].setValidators([Validators.required])
             this.helperService.markFormGroupTouched(this.formData);
             if (!this.formData.valid) return;
             const res = await this.save();
@@ -229,10 +231,19 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             console.log("error", error)
         }
     }
+    async luu() {
+        try {
+            this.formData.controls['trichYeu'].setValidators([Validators.required])
+            this.helperService.markFormGroupTouched(this.formData);
+            if (!this.formData.valid) return;
+            await this.save()
+        } catch (error) {
+            console.log("error", error)
+        }
+    }
     async save() {
         try {
-            this.setValidator(false)
-            this.helperService.markFormGroupTouched(this.formData);
+            // this.setValidator(false)
             await this.spinner.show();
             let body = { ...this.formData.value, ngayTongHop: dayjs(this.formData.value.ngayTongHop, 'DD/MM/YYYY').format("YYYY-MM-DD") };
             let data;
@@ -276,7 +287,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.dataTable2Cuc = [];
         this.dataTable2ChiCuc = [];
         this.formData.value.ngayTongHop = dayjs().format("YYYY-MM-DD")
-        this.setValidator(false);
+        // this.setValidator(false);
         this.helperService.markFormGroupTouched(this.formData);
         try {
             if (this.formData.valid) {
@@ -558,12 +569,12 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
         this.idKeHoachDC = null;
         this.isViewKeHoachDC = false;
     }
-    setValidator(isTaoQD) {
-        if (isTaoQD) {
-            this.formData.controls["trichYeu"].setValidators([Validators.required]);
-        }
-        else {
-            this.formData.controls["trichYeu"].clearValidators();
-        }
-    }
+    // setValidator(isTaoQD) {
+    //     if (isTaoQD) {
+    //         this.formData.controls["trichYeu"].setValidators([Validators.required]);
+    //     }
+    //     else {
+    //         this.formData.controls["trichYeu"].clearValidators();
+    //     }
+    // }
 }

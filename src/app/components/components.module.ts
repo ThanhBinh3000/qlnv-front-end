@@ -179,6 +179,10 @@ import {
   DialogQdPdKhlcntComponent
 } from "./dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
 import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatSelectModule} from "@angular/material/select";
 @NgModule({
   declarations: [
     //components
@@ -363,7 +367,11 @@ import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcn
     NzPopconfirmModule,
     NzResultModule,
     NzStatisticModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   exports: [
     FormsModule,
@@ -436,7 +444,7 @@ import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcn
     DialogThemMoiSoDuDauKyComponent,
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
-    Base2Component
+    Base2Component,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

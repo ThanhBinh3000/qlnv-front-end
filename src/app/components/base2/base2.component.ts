@@ -383,6 +383,7 @@ export class Base2Component implements OnInit {
           this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
+        this.formData.patchValue({id:res.data.id});
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
         return null;

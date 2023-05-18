@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 import { STATUS } from 'src/app/constants/status';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
   templateUrl: './them-moi-tong-hop-kh-ban-truc-tiep.component.html',
@@ -45,6 +46,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
@@ -56,7 +58,8 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayPduyet: [null, [Validators.required]],
+        ngayDuyetTu: [null],
+        ngayDuyetDen: [null],
       }
     );
 
@@ -85,6 +88,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       await Promise.all([
         this.loadChiTiet(),
       ]);
+      this.loadDanhMucHang()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -123,6 +127,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
 
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
+    this.setValidator();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
@@ -130,10 +135,6 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         return;
       }
       let body = this.formTraCuu.value;
-      if (body.ngayPduyet) {
-        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
-        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
-      }
       delete body.ngayDx;
       let res = await this.tongHopKhBanTrucTiepService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -162,11 +163,39 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async save() {
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+  };
+
+  setValidator() {
+    if (this.formTraCuu.value.ngayDuyetTu == null) {
+      this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
+    } else {
+      this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
+    }
+  }
+
+  async save(isTaoQd?) {
     let body = this.formData.value;
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
     if (data) {
-      this.goBack();
+      if (isTaoQd) {
+        this.taoQdinh();
+      } else {
+        this.goBack();
+      }
     }
   }
 
@@ -206,6 +235,21 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         });
       }
     });
+  }
+
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach((element) => {
+          if (element.ma == this.loaiVthh) {
+            this.formTraCuu.patchValue({
+              tenLoaiVthh: element.giaTri,
+            })
+          }
+        });
+      }
+    }
   }
 
   taoQdinh() {

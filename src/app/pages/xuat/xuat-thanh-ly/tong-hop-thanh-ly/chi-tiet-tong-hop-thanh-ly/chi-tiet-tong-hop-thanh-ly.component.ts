@@ -16,6 +16,7 @@ import {TongHopThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-t
 import {DanhSachThanhLyService} from "src/app/services/qlnv-hang/xuat-hang/xuat-thanh-ly/DanhSachThanhLy.service";
 import dayjs from "dayjs";
 import {NumberToRoman} from 'src/app/shared/commonFunction';
+import {Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-chi-tiet-tong-hop-thanh-ly',
@@ -62,10 +63,10 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
       nam: [dayjs().get('year')],
       maDvi: [],
       maDanhSach: [],
-      tenDanhSach: [],
-      thoiGianTl: [],
-      thoiGianTlTu: [],
-      thoiGianTlDen: [],
+      tenDanhSach: [, [Validators.required]],
+      thoiGianTl: [, [Validators.required]],
+      thoiGianTlTu: [, [Validators.required]],
+      thoiGianTlDen: [, [Validators.required]],
       trangThai: [],
       idHoSo: [],
       soHoSo: [],
@@ -197,6 +198,8 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
           }
         }
       ).value();
+    console.log(data, 'raw');
+    console.log(this.selectedItem, 'view');
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -205,7 +208,6 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
     } else {
       this.expandSetString.delete(id);
     }
-    console.log(this.expandSetString)
   }
 
   handleCancel() {
@@ -219,22 +221,34 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
   async tongHopDanhSach() {
     try {
       await this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
         return;
       } else {
-        await this.danhSachThanhLyService.search({}).then(async res => {
+        await this.danhSachThanhLyService.search({
+          type: 'TH',
+          ngayDeXuatTu: this.formData.value.thoiGianTlTu,
+          ngayDeXuatDen: this.formData.value.thoiGianTlDen
+        }).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
-            res.data.content.forEach(s => s.id = null);
-            this.formData.patchValue({
-              maDanhSach: this.selectedItem ?? this.maHauTo,
-              tongHopDtl: res.data.content
-            });
-            let result = await this.createUpdate(this.formData.value);
-            if (result) {
-              this.selectedItem = cloneDeep(result);
-              await this.buildTableView(result.tongHopDtl);
-              this.step.emit({step: 2, item: this.selectedItem});
+            if (res.data.numberOfElements == 0) {
+              this.notification.warning(MESSAGE.ALERT, 'Không tìm thấy hàng hóa cần thanh lý trong danh sách.');
+            } else {
+              res.data.content.forEach(s => {
+                s.idDsHdr = cloneDeep(s.id);
+                s.id = null;
+              });
+              this.formData.patchValue({
+                maDanhSach: this.selectedItem ?? this.maHauTo,
+                tongHopDtl: res.data.content
+              });
+              let result = await this.createUpdate(this.formData.value);
+              if (result) {
+                this.selectedItem = cloneDeep(result);
+                await this.buildTableView(result.tongHopDtl);
+                this.step.emit({step: 2, item: this.selectedItem});
+              }
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -260,11 +274,36 @@ export class ChiTietTongHopThanhLyComponent extends Base2Component implements On
         }
         //gui duyet
         else {
-          await this.approve(this.selectedItem.id,
-            this.STATUS.DA_TONG_HOP,
-            'Bạn có chắc muốn gửi duyệt bản tổng hợp này ?',
-            null,
-            'Gửi duyệt tổng hợp thành công.');
+          this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc muốn gửi duyệt bản tổng hợp này ?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 350,
+            nzOnOk: async () => {
+              await this.spinner.show();
+              try {
+                let body = {
+                  id: this.selectedItem.id,
+                  trangThai: this.STATUS.DA_TONG_HOP,
+                }
+                let res = await this.tongHopThanhLyService.approve(body);
+                if (res.msg == MESSAGE.SUCCESS) {
+                  this.notification.success(MESSAGE.NOTIFICATION, 'Gửi duyệt tổng hợp thành công.');
+                  this.step.emit({step: 1});
+                } else {
+                  this.notification.error(MESSAGE.ERROR, res.msg);
+                }
+              } catch (e) {
+                console.log('error: ', e);
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+              } finally {
+                await this.spinner.hide();
+              }
+            },
+          });
         }
       }
       if (changes.eventCancel) {

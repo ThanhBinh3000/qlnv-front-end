@@ -31,6 +31,7 @@ import {
     DeXuatComponent,
     MainKeHoachBanDauGiaComponent,
     ThemQuyetDinhBanDauGiaComponent,
+    ThemDeXuatKeHoachBanDauGiaComponent
   ],
   imports: [
     CommonModule,

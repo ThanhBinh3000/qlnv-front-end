@@ -7,7 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {DonviService} from "../../../../../../services/donvi.service";
 import {Base2Component} from "../../../../../../components/base2/base2.component";
@@ -174,7 +174,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
           dataTable: list && list.dataChild ? list.dataChild : [],
           dataInput: data,
           type: type,
-          listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN || item.trangThai == STATUS.DANG_THUC_HIEN) && item.khoi == data.khoi) : [],
+          listDmSuaChua: (this.listDmSuaChua && this.listDmSuaChua.length > 0) ? this.listDmSuaChua.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == data.khoi) : [],
           dataHeader: this.formData.value,
         }
       });
@@ -261,7 +261,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
         }
       }
     } else {
-      this.notification.error(MESSAGE.ERROR, "Có lỗi xảy ra.");
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -425,7 +425,9 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     this.formData.controls["soCv"].setValidators(Validators.required);
     this.formData.controls["trichYeu"].setValidators(Validators.required);
     this.formData.controls["ngayKy"].setValidators(Validators.required);
-    this.formData.controls["ngayDuyet"].setValidators(Validators.required);
+    if (this.formData.value.trangThai == STATUS.DA_DUYET_LDC) {
+      this.formData.controls["ngayDuyet"].setValidators(Validators.required);
+    }
   }
 
   expandAll() {

@@ -8,13 +8,13 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {KeHoachVonPhiBNCT} from "../../../../../../models/KeHoachVonPhiBNCT";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";

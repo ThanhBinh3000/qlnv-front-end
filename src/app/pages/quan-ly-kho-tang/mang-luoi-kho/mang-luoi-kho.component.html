@@ -1767,10 +1767,10 @@
                                   <ng-container *ngIf="expandSet.has(item3.idVirtual)">
                                     <ng-container *ngFor="let item4 of item3.childData">
                                       <tr>
-                                        <td></td>
-                                        <td style="padding-left: 100px">{{item4.tenCloaiVthh}}</td>
-                                        <td class="text-right">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
-                                        <td>{{item4.tenDonViTinh}}</td>
+                                        <td  class="bg-selected"></td>
+                                        <td  class="font-weight-bold bg-selected" style="padding-left: 125px">{{item4.tenCloaiVthh}}</td>
+                                        <td class="font-weight-bold text-right bg-selected">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
+                                        <td class="font-weight-bold bg-selected">{{item4.tenDonViTinh}}</td>
                                       </tr>
                                     </ng-container>
                                   </ng-container>

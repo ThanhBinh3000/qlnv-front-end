@@ -12,7 +12,9 @@
       <td class="text-center">{{i + 1}}</td>
       <td *ngFor="let column of dataColumn;">
         {{ (column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
-        : (column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY') : data[column])) }}
+        : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
+          : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
+            : data[column]) }}
       </td>
       <td class="text-center">
         <a (click)="handleOk(data)">

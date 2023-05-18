@@ -12,14 +12,14 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
 import {
   QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetduandtxd.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {KtQdXdHangNamService} from "../../../../../../services/kt-qd-xd-hang-nam.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
 import dayjs from "dayjs";
 import {
   QuyetdinhpheduyetTktcTdtService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetTktcTdt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 
