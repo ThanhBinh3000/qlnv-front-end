@@ -126,15 +126,15 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
   }
 
   isTongCuc() {
-    return false//this.userService.isTongCuc()
+    return this.userService.isTongCuc()
   }
 
   isCuc() {
-    return true//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   isChiCuc() {
-    return false//this.userService.isChiCuc()
+    return this.userService.isChiCuc()
   }
 
   selectTab(tab: number) {
@@ -183,20 +183,20 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
   //   }
   // }
 
-  async changeHangHoa(event: any) {
-    // if (event) {
-    //   this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+  // async changeHangHoa(event: any) {
+  // if (event) {
+  //   this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
 
-    //   let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-    //   if (res.msg == MESSAGE.SUCCESS) {
-    //     if (res.data) {
-    //       this.listChungLoaiHangHoa = res.data;
-    //     }
-    //   } else {
-    //     this.notification.error(MESSAGE.ERROR, res.msg);
-    //   }
-    // }
-  }
+  //   let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     if (res.data) {
+  //       this.listChungLoaiHangHoa = res.data;
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
+  // }
 
   async timKiem() {
     if (this.formData.value.ngayDuyetTc) {
@@ -207,7 +207,6 @@ export class QuyetDinhDieuChuyenCucComponent extends Base2Component implements O
       this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
     }
-    console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     await this.search();
   }
 

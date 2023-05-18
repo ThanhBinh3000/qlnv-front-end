@@ -7,18 +7,15 @@ import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.s
 import { DonviService } from "src/app/services/donvi.service";
 import { MESSAGE } from "src/app/constants/message";
 import { NgxSpinnerService } from "ngx-spinner";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { Base2Component } from "src/app/components/base2/base2.component";
+import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
 
 @Component({
-  selector: 'app-thong-tin-hang-can-dieu-chuyen-cuc',
-  templateUrl: './thong-tin-hang-can-dieu-chuyen-cuc.component.html',
-  styleUrls: ['./thong-tin-hang-can-dieu-chuyen-cuc.component.scss']
+  selector: 'app-thong-tin-hang-can-dieu-chuyen-chi-cuc',
+  templateUrl: './thong-tin-hang-can-dieu-chuyen-chi-cuc.component.html',
+  styleUrls: ['./thong-tin-hang-can-dieu-chuyen-chi-cuc.component.scss']
 })
-export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implements OnInit {
-
+export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
+  AMOUNT = AMOUNT_NO_DECIMAL;
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
@@ -35,8 +32,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   dsNganKhoNhan: any[] = [];
   dsLoKhoNhan: any[] = [];
 
-  maChiCucNhan: string;
-  tenChiCucNhan: string;
+  maDvi: string;
+  tenDvi: string;
   maDiemKho: string;
   tenDiemKho: string;
   maNhaKho: string;
@@ -66,24 +63,18 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   thayDoiThuDo: string;
   slDcConLai: string;
   tichLuongKd: string;
-  slNhapDc: string;
+  soLuongPhanBo: string;
 
   constructor(
-    httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
     private _modalRef: NzModalRef,
+    private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
-      maChiCucNhan: [],
-      tenChiCucNhan: [],
+      maDvi: [],
+      tenDvi: [],
       maDiemKho: [],
       tenDiemKho: [],
       maNhaKho: [],
@@ -111,7 +102,9 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       maLoKhoNhan: [],
       tenLoKhoNhan: [],
       thuKhoNhan: [],
-      thayDoiThuKho: [],
+      thayDoiThuDo: [],
+      tonKhoNhan: [],
+      tenDonViTinhNhan: [],
       slDcConLai: [],
       tichLuongKd: [],
       soLuongPhanBo: [],
@@ -126,7 +119,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   handleOk(item: any) {
     this._modalRef.close({
       ...item,
-      isUpdate: !!this.maChiCucNhan
+      isUpdate: !!this.maDvi
     });
   }
 
@@ -136,7 +129,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   async handleData() {
     await this.spinner.show()
-    if (this.maChiCucNhan) await this.getListDiemKho(this.maChiCucNhan)
+    if (this.maDvi) await this.getListDiemKho(this.maDvi)
     if (this.maDiemKho) await this.getListNhaKho(this.maDiemKho)
     if (this.maNhaKho) await this.getListNganKho(this.maNhaKho)
     if (this.maNganKho) await this.getListLoKho(this.maNganKho)
@@ -146,11 +139,14 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.maNganKhoNhan) await this.getListLoKhoNhan(this.maNganKhoNhan)
 
     this.formData.patchValue({
-      maChiCucNhan: this.maChiCucNhan,
+      maDvi: this.maDvi,
+      thoiGianDkDc: this.thoiGianDkDc,
       maDiemKho: this.maDiemKho,
       maNhaKho: this.maNhaKho,
       maNganKho: this.maNganKho,
       maLoKho: this.maLoKho,
+      soLuongDc: this.soLuongDc,
+      duToanKphi: this.duToanKphi,
       maDiemKhoNhan: this.maDiemKhoNhan,
       maNhaKhoNhan: this.maNhaKhoNhan,
       maNganKhoNhan: this.maNganKhoNhan,
@@ -165,7 +161,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     this.getListDiemKho(value)
     if (chiCuc) {
       this.formData.patchValue({
-        tenChiCucNhan: chiCuc.tenDvi
+        tenDvi: chiCuc.tenDvi
       })
     }
   }
@@ -294,25 +290,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           }
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
-          else {
-            const body = {
-              maDvi: value,
-              tenLoKho: nganKho.tenDvi
-            }
-            const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-            if (res.statusCode == 0) {
-              if (res.data.length > 0) {
-                this.formData.patchValue({
-                  loaiVthh: res.data[0].loaiVthh,
-                  tenLoaiVthh: res.data[0].tenLoaiVthh,
-                  cloaiVthh: res.data[0].cloaiVthh,
-                  tenCloaiVthh: res.data[0].tenCloaiVthh,
-                  tonKho: res.data[0].slHienThoi,
-                  tenDonViTinh: res.data[0].tenDonViTinh,
-                })
-              }
-            }
-          }
         }
 
       }
@@ -328,6 +305,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           tenLoKho: loKho.tenDvi
         })
         console.log('onChangeLoKho', loKho)
+        // return
         const body = {
           maDvi: value,
           tenLoKho: loKho.tenDvi
@@ -379,23 +357,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
               thuKhoNhan: detailThuKho.hoTen
             })
           }
-          if (coLoKho) {
+          if (coLoKho)
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
-          } else {
-            if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-              this.formData.value.maLoKho === this.formData.value.maLoKhoNhan) {
-              this.formData.patchValue({
-                thayDoiThuKho: "Không"
-              })
-            } else {
-              this.formData.patchValue({
-                thayDoiThuKho: "Có"
-              })
-            }
-          }
-
         }
 
         console.log('getListLoKhoNhan', value, this.dsLoKhoNhan)
@@ -411,17 +374,18 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKhoNhan: loKhoNhan.tenDvi
         })
-        if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          this.formData.value.maLoKho === this.formData.value.maLoKhoNhan) {
-          this.formData.patchValue({
-            thayDoiThuKho: "Không"
-          })
-        } else {
-          this.formData.patchValue({
-            thayDoiThuKho: "Có"
-          })
+        const body = {
+          maDvi: value,
+          tenLoKho: this.formData.value.tenLoKhoNhan
+        }
+        const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
+        if (res.statusCode == 0) {
+          if (res.data.length > 0) {
+            this.formData.patchValue({
+              tonKhoNhan: res.data[0].slHienThoi,
+              tenDonViTinhNhan: res.data[0].tenDonViTinh
+            })
+          }
         }
       }
     }
@@ -430,13 +394,12 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   onChangeSLNhapDc(value) {
-    const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
-    if (slDcConLai > 0) {
+    console.log('onChangeSLNhapDc', value)
+    if (value && value <= this.soLuongDc) {
       this.formData.patchValue({
-        slDcConLai: slDcConLai
+        slDcConLai: Number(this.soLuongDc) - (value)
       })
     }
-    console.log('onChangeSLNhapDc', value, this.formData.value.soLuongDc, slDcConLai)
   }
 
 

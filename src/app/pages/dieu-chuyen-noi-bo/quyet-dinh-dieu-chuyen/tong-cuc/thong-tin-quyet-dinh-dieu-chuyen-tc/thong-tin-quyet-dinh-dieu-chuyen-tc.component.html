@@ -228,14 +228,14 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}">
+            <tr>
               <td>{{i + 1}}</td>
-              <td>{{item.tenDviCuc}}</td>
-              <td>{{item.tenCucNhan}}</td>
-              <td>{{item.soDxuat}}</td>
-              <td>{{item.ngayGduyet}}</td>
-              <td>{{item.tongDuToanKp|number: '1.0-1'}}</td>
-              <td>{{item.trichYeu}}</td>
+              <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+              <td>{{item.tenCucNhan || ""}}</td>
+              <td>{{item.soDxuat || ""}}</td>
+              <td>{{item.ngayGduyet || ""}}</td>
+              <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
+              <td>{{item.trichYeu || ""}}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -249,8 +249,7 @@
         <div class="title-card">
           <div class="title-chi-tieu">
             <span></span>
-            <span *ngIf="isTongCuc()">Quyết định của TCDTNN</span>
-            <!-- <span *ngIf="isCuc()"> QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG TRONG CÙNG 1 CHI CỤC DTNN</span> -->
+            <span>Quyết định của TCDTNN</span>
           </div>
         </div>
 

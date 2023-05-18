@@ -29,8 +29,7 @@
 
             <div nz-col nzSpan="10">
               <label class="search__label">Loại điều chuyển</label>
-              <nz-select nzAllowClear formControlName="loaiDc" (ngModelChange)="changeHangHoa($event)"
-                nzPlaceHolder="Chọn loại điều chuyển" nzShowSearch>
+              <nz-select nzAllowClear formControlName="loaiDc" nzPlaceHolder="Chọn loại điều chuyển" nzShowSearch>
                 <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </div>

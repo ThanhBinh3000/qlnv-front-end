@@ -80,7 +80,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
       nam: '',
       soQdinh: '',
       ngayKyQdinh: '',
-      tenLoaiDc: '',
+      loaiDc: '',
       trichYeu: '',
       maDxuat: '',
       maThop: '',
@@ -157,12 +157,12 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   }
 
   isTongCuc() {
-    return true//this.userService.isTongCuc()
+    return this.userService.isTongCuc()
   }
 
-  // isCuc() {
-  //   return false//this.userService.isCuc()
-  // }
+  isCuc() {
+    return false//this.userService.isCuc()
+  }
 
   // isChiCuc() {
   //   return false//this.userService.isChiCuc()
@@ -189,20 +189,20 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   //   }
   // }
 
-  async changeHangHoa(event: any) {
-    if (event) {
-      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+  // async changeHangHoa(event: any) {
+  //   if (event) {
+  //     this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listChungLoaiHangHoa = res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
+  //     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       if (res.data) {
+  //         this.listChungLoaiHangHoa = res.data;
+  //       }
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //   }
+  // }
 
   async timKiem() {
     if (this.formData.value.ngayDuyetTc) {

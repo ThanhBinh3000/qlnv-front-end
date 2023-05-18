@@ -169,15 +169,15 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
   }
 
   isTongCuc() {
-    return false//this.userService.isTongCuc()
+    return this.userService.isTongCuc()
   }
 
   isCuc() {
-    return true//this.userService.isCuc()
+    return this.userService.isCuc()
   }
 
   isChiCuc() {
-    return false//this.userService.isChiCuc()
+    return this.userService.isChiCuc()
   }
 
   selectTab(tab: number) {

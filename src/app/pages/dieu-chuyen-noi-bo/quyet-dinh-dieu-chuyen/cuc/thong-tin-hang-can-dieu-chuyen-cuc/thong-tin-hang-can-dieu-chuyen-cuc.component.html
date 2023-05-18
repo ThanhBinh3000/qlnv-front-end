@@ -69,7 +69,7 @@
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
+            <div *ngIf="dsLoKho.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span>Lô kho</span>
               </div>
@@ -117,7 +117,8 @@
                 <span>Tồn kho</span>
               </div>
               <div nz-col nzSpan="14">
-                <span class="text-blue">{{formData.value.tonKho}}</span>
+                <span class="text-blue">{{formData.value.tonKho | number:'1.0-1':'vi_VN'}}</span>
+                <span>({{formData.value.tenDonViTinh}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -127,7 +128,9 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <input nz-input formControlName="soLuongDc" />
+                    <nz-input-number formControlName="soLuongDc" [nzMin]="1" [nzMax]="formData.value.tonKho || 99"
+                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -139,8 +142,9 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <!-- <input nz-input class="money-input" currencyMask formControlName="tongTien" /> -->
-                    <input nz-input formControlName="duToanKphi" />
+                    <nz-input-number formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
+                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -207,7 +211,7 @@
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
+            <div *ngIf="dsLoKhoNhan.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span>Lô kho</span>
               </div>
@@ -238,7 +242,7 @@
                 <span>Thay đổi thủ kho</span>
               </div>
               <div nz-col nzSpan="14">
-                <span>Không</span>
+                <span>{{formData.value.thayDoiThuKho}}</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -246,7 +250,7 @@
                 <span>SL điều chuyển còn lại</span>
               </div>
               <div nz-col nzSpan="14">
-                <span>{{formData.value.slDcConLai}}</span>
+                <span>{{formData.value.slDcConLai | number:'1.0-1':'vi_VN'}}</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -264,12 +268,16 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <input nz-input formControlName="slNhapDc" />
+                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1"
+                      [nzMax]="(formData.value.soLuongDc > formData.value.tichLuongKd ? formData.value.tichLuongKd : formData.value.soLuongDc) || 99"
+                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      (ngModelChange)="onChangeSLNhapDc($event)">
+                    </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
+            <!-- <div nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span></span>
               </div>
@@ -280,7 +288,7 @@
                   </nz-form-control>
                 </nz-form-item>
               </div>
-            </div>
+            </div> -->
             <div nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span></span>
