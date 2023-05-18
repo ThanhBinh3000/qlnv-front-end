@@ -17,6 +17,7 @@ import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khm
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { convertTrangThai } from "../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-themmoi-tonghop-khmtt',
@@ -30,6 +31,8 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewOnModal: boolean;
+  @Input() isDetail: boolean = false
+  @Input() isView: boolean
 
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
@@ -40,6 +43,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -80,6 +84,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   }
 
   async ngOnInit() {
+    console.log(this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
@@ -93,7 +98,12 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
     }
   }
 
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
+
   async loadChiTiet() {
+    debugger
     if (this.id > 0) {
       const data = await this.detail(this.id);
       if (data) {
@@ -103,12 +113,15 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
           idTh: data.id
         })
         this.dataTable = data.children;
+        console.log(this.dataTable)
+        await this.showDetail(event, data.children[0].idDxHdr)
       }
       else {
         this.isTongHop = false;
       }
     }
   }
+
 
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
@@ -215,8 +228,13 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
   idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }

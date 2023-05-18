@@ -16,7 +16,10 @@ import { saveAs } from 'file-saver';
 })
 export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
+  dxMttId: number = 0;
+  openDxMtt = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -31,11 +34,13 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKeHoachMTTService);
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
+      namKh: null,
       soQd: null,
       trichYeu: null,
       ngayQd: null,
-      lastest: 0
+      lastest: 0,
+      ngayQdTu: null,
+      ngayQdDen: null
     })
     this.filterTable = {
       soQd: '',
@@ -65,6 +70,14 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     }
   }
 
+  async timKiem() {
+    if (this.tuNgayKy || this.denNgayKy) {
+      this.formData.value.ngayQdTu = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
+      this.formData.value.ngayQdDen = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
+    }
+    await this.search();
+  }
+
   export() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -85,5 +98,28 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     }
   }
 
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
+
+  openDxMttModal(id: number) {
+    this.dxMttId = id;
+    this.openDxMtt = true;
+  }
+
+  closeDxMttModal() {
+    this.dxMttId = null;
+    this.openDxMtt = false;
+  }
 
 }

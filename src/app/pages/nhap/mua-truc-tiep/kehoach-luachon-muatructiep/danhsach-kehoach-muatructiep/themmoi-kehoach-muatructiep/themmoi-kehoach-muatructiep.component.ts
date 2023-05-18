@@ -40,6 +40,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
   idInput: number;
   @Input()
   showFromTH: boolean;
+  @Input() isViewOnModal: boolean;
   @Input()
   isView: boolean;
   @Output()
