@@ -162,7 +162,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.dsNam.push({
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
