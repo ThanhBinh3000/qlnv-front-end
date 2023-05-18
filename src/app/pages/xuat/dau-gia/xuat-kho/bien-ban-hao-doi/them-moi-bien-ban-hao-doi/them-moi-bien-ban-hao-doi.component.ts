@@ -28,7 +28,7 @@ import {
 
 
 @Component({
-  selector: 'app-them-moi-bien-ban-hao-doi',
+  selector: 'app-bdg-them-moi-bien-ban-hao-doi',
   templateUrl: './them-moi-bien-ban-hao-doi.component.html',
   styleUrls: ['./them-moi-bien-ban-hao-doi.component.scss']
 })
