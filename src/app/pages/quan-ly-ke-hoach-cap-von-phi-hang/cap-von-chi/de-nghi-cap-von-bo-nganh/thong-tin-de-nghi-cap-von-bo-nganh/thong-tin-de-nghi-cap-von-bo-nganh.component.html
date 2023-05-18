@@ -25,7 +25,7 @@
         <div class="header-text">
           <div class="title-chi-tieu">
             <span [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span>
-            <span>Đề nghị cấp vốn chi dự trữ quốc gia của bộ ngành</span>
+            <span>Đề nghị cấp vốn chi dự trữ quốc gia của Bộ/Ngành</span>
           </div>
         </div>
       </div>
@@ -42,7 +42,7 @@
         </div>
         <div nz-col [nzSpan]="5">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Bộ ngành</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Bộ/Ngành</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="boNganh" [nzDisabled]="chiTietList && chiTietList.length > 0"
                          (ngModelChange)="changeBoNganh()">

@@ -354,7 +354,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Kế hoạch dự trữ quốc gia - TTCP giao bộ ngành',
+      nzTitle: 'Kế hoạch dự trữ quốc gia - TTCP giao Bộ/Ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -389,7 +389,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
+      nzContent: 'Bạn có muốn xóa kế hoạch giao Bộ/Ngành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,

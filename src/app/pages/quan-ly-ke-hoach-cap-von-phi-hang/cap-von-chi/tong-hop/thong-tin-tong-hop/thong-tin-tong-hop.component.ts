@@ -72,7 +72,7 @@ export class ThongTinTonghopComponent implements OnInit {
     },
     {
       id: "BN",
-      value: "Bộ, ngành"
+      value: "Bộ/Ngành"
     },
     {
       id: "ALL",
