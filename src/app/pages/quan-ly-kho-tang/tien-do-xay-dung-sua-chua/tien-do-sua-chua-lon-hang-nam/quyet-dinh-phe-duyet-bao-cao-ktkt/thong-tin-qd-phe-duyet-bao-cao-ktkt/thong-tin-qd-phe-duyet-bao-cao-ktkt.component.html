@@ -115,7 +115,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Loại công trình
                   </nz-form-label>
-                  <input nz-input formControlName="loaiCongTrinh" [readonly]="true"/>
+                  <input nz-input formControlName="tenLoaiCongTrinh" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -148,7 +148,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Tổng mức đầu tư (khái toán/dự toán) (đ)
                   </nz-form-label>
-                  <input currencyMask nz-input formControlName="vonNsTw" [options]="AMOUNT"
+                  <input currencyMask nz-input formControlName="giaTriDt" [options]="AMOUNT"
                          [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
@@ -157,7 +157,7 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Nguồn vốn đầu tư</nz-form-label>
-                  <input nz-input formControlName="diaDiem" [readonly]="true"/>
+                  <input nz-input formControlName="tenNguonVon" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -166,7 +166,7 @@
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Tổ chức tư vấn lập báo cáo kinh tế kỹ thuật
                   </nz-form-label>
-                  <input nz-input formControlName="diaDiem" [readonly]="isViewDetail"/>
+                  <input nz-input formControlName="nhaThauBc" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -174,7 +174,7 @@
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-form-label [nzNoColon]="true" class="label-color-kh">Hình thức quản lý dự án</nz-form-label>
-                  <input nz-input formControlName="diaDiem" [readonly]="isViewDetail"/>
+                  <input nz-input formControlName="hinhThucQl" [readonly]="isViewDetail"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -217,7 +217,7 @@
                   <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Quy mô, chỉ tiêu kỹ thuật và giải
                     pháp thiết kế chủ yếu của công trình
                   </nz-form-label>
-                  <textarea formControlName="mucTieuDt" rows="3" nz-input placeholder="Nhập text"
+                  <textarea formControlName="quyMo" rows="3" nz-input placeholder="Nhập text"
                             [readonly]="isViewDetail"></textarea></nz-form-control>
               </nz-form-item>
             </div>
@@ -233,7 +233,7 @@
         </form>
         <div class="header-text mt-2">
           <div class="title-chi-tieu">
-            <span class="text-uppercase font-weight-bold">Tổng mức đầu tư</span>
+            <span class="text-uppercase font-weight-bold">DỰ TOÁN SỬA CHỮA CÔNG TRÌNH</span>
           </div>
         </div>
         <nz-table class="nowrap mt-2" #expandTable [nzData]="dataTreeTable" [nzFrontPagination]="false"
@@ -242,8 +242,8 @@
           <tr>
             <th nzWidth="150px" class="text-center">Chỉ mục</th>
             <th class="text-center">Nội dung chi phí</th>
-            <th class="text-center" nzWidth="120px">Chi phí sau thuế</th>
-            <th class="text-center" nzWidth="120px">Ký hiệu</th>
+            <th class="text-center" nzWidth="120px">Giá trị sau thuế</th>
+            <th class="text-center" nzWidth="100px">Ký hiệu</th>
             <th class="text-center" nzWidth="140px" *ngIf="!isViewDetail">Hành động</th>
           </tr>
           <tr *ngIf="!isViewDetail">
@@ -254,8 +254,7 @@
               <input type="text" [(ngModel)]="rowItemParent.noiDung" nz-input/>
             </th>
             <th>
-              <nz-input-number [(ngModel)]="rowItemParent.giaTri" [nzSize]="'small'"
-                               [nzFormatter]="globals.formatter"
+              <nz-input-number [(ngModel)]="rowItemParent.giaTri" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                [nzMin]="0"
                                [nzParser]="globals.parser"></nz-input-number>
             </th>
@@ -311,9 +310,9 @@
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
   </ng-container>
 </ng-template>
-<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisiblePopTongMucDauTu" nzTitle="The first Modal"
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisiblePopDuToanXayDung" nzTitle="The first Modal"
           (nzOnCancel)="handleCancel()"
-          (nzOnOk)="handleOk()" nzTitle="Thêm chi tiết tổng mức đầu tư.">
+          (nzOnOk)="handleOk()" nzTitle="Thêm chi tiết dự toán sửa chữa lớn">
   <ng-container *nzModalContent>
     <form nz-form nzLayout="vertical" [formGroup]="formDataDetail">
       <nz-card class="pd-2">
@@ -326,7 +325,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="17">
+          <div nz-col nzSpan="13">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
                 <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Nội dung</nz-form-label>
@@ -347,10 +346,8 @@
           <div nz-col nzSpan="4">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
-                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Ký hiệu</nz-form-label>
-                <nz-input-number formControlName="kyHieu" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                 [nzMin]="0"
-                                 [nzParser]="globals.parser"></nz-input-number>
+                <nz-form-label [nzNoColon]="true" class="label-color-kh">Ký hiệu</nz-form-label>
+                <input nz-input formControlName="kyHieu"/>
               </nz-form-control>
             </nz-form-item>
           </div>

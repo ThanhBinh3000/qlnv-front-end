@@ -50,6 +50,8 @@ import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke
 import {
   CreateDaiDienComponent
 } from "./kiem-tra-chat-luong/bien-ban-lay-mau/create-bien-ban-lay-mau/create-dai-dien/create-dai-dien.component";
+import {XuatCapModule} from "../xuat-cuu-tro-vien-tro/xuat-cap/xuat-cap.module";
+import {CuuTroVienTroModule} from "../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 @NgModule({
   declarations: [
@@ -119,6 +121,8 @@ import {
     ToChucTrienKhaiModule,
     DieuchinhKhbdgModule,
     XuatKhoModule,
+    XuatCapModule,
+    CuuTroVienTroModule,
 
 
   ]

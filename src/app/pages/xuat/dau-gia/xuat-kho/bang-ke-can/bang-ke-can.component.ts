@@ -22,7 +22,7 @@ import {DauGiaComponent} from "../../dau-gia.component";
 import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-bang-ke-can',
+  selector: 'app-bdg-bang-ke-can',
   templateUrl: './bang-ke-can.component.html',
   styleUrls: ['./bang-ke-can.component.scss']
 })
@@ -55,7 +55,7 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
       id: [],
-      nam: dayjs().get('year'),
+      nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
       thoiGianGiaoNhan: [],

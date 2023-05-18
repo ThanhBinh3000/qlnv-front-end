@@ -7,7 +7,7 @@
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soKeHoach"/>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Bộ ngành</label>
+          <label class="search__label">Bộ/Ngành</label>
           <nz-select nzAllowClear [(ngModel)]="searchFilter.maBoNganh" [nzDisabled]="isView">
             <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi"></nz-option>
           </nz-select>
@@ -35,7 +35,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách đề nghị cấp vốn bộ, ngành</h3>
+      <h3 class="text-uppercase">Danh sách đề nghị cấp vốn Bộ/Ngành</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
                 *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')">
@@ -67,7 +67,7 @@
           </th>
           <th width="60px" class="text-center">STT</th>
           <th width="">Số đề nghị</th>
-          <th width="">Bộ ngành</th>
+          <th width="">Bộ/Ngành</th>
           <th width="">Ngày đề nghị</th>
           <th width="">Năm</th>
           <th width="">Tổng tiền</th>

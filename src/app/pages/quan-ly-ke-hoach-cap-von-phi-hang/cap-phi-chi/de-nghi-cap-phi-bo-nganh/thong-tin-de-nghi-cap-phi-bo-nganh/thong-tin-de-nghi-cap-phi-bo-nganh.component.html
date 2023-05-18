@@ -23,7 +23,7 @@
                         [ngClass]="(detail.trangThai == globals.prop.NHAP_DU_THAO )? 'du-thao-va-lanh-dao-duyet':'da-ban-hanh' ">
                         {{detail.tenTrangThai}}
                     </span>
-                    <span>Đề nghị cấp phí chi nghiệp vụ dự trữ quốc gia của bộ ngành</span>
+                    <span>Đề nghị cấp phí chi nghiệp vụ dự trữ quốc gia của Bộ/Ngành</span>
                 </div>
             </div>
         </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Bộ Ngành </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Bộ/Ngành </nz-form-label>
                         <nz-select formControlName="maBoNganh">
                             <nz-option *ngFor="let item of listBoNganh" [nzValue]="item.code" [nzLabel]="item.tenDvi">
                             </nz-option>
