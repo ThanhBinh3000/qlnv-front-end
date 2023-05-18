@@ -139,12 +139,22 @@ export class BaoCao04bComponent implements OnInit {
                 })
             } else {
                 this.noiDungChis.forEach(item => {
+                    const lstCtiet: vatTu[] = [];
+                    if (this.soLuongTheoQuyetDinh) {
+                        this.soLuongTheoQuyetDinh.listCtiet.forEach(e => {
+                            lstCtiet.push({
+                                ...e,
+                                id: uuid.v4() + 'FE',
+                                sl: null,
+                            })
+                        })
+                    }
                     this.lstCtietBcao.push({
                         ...new ItemData(),
                         maNdungChi: item.ma,
                         tenNdung: item.giaTri,
                         stt: item.ma,
-                        listCtiet: [],
+                        listCtiet: lstCtiet,
                         id: uuid.v4() + "FE",
                     })
                 });
@@ -152,13 +162,13 @@ export class BaoCao04bComponent implements OnInit {
             if (this.soLuongTheoQuyetDinh) {
                 const index = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.1')
                 this.lstCtietBcao[index].trongDotTcong = this.soLuongTheoQuyetDinh.trongDotTcong;
-                this.lstCtietBcao[index].luyKeTcong += this.soLuongTheoQuyetDinh.trongDotTcong;
+                this.lstCtietBcao[index].luyKeTcong = sumNumber([this.lstCtietBcao[index].luyKeTcong, this.soLuongTheoQuyetDinh.trongDotTcong]);
                 this.lstCtietBcao[index].listCtiet.forEach(item => {
                     const sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl
                     if (item.loaiMatHang == 0) {
                         item.sl = sl;
                     } else {
-                        item.sl += sl
+                        item.sl = sumNumber([item.sl, sl]);
                     }
                 })
             }
