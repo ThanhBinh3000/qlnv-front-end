@@ -61,7 +61,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách quyết định của Bộ Tài Chính giao các Bộ ngành</h3>
+      <h3 class="text-uppercase">Danh sách quyết định của Bộ Tài Chính giao các Bộ/Ngành</h3>
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_XOA')"
                 type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -93,7 +93,7 @@
           <th class="text-left">STT</th>
           <th class="text-left">Số quyết định</th>
           <th class="text-left">Ngày quyết định</th>
-          <th class="text-left">Bộ ngành</th>
+          <th class="text-left">Bộ/Ngành</th>
           <th class="text-left">Trích yếu</th>
           <th class="text-left">Trạng thái</th>
           <th class="text-left">Hành động</th>

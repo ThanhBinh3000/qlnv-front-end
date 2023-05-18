@@ -23,7 +23,7 @@
           <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
             {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
           </span>
-        <span>Quyết định của BTC giao bộ ngành</span>
+        <span>Quyết định của BTC giao Bộ/Ngành</span>
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@
         </div>
         <div nz-col [nzSpan]="13">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ/Ngành</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="idTtcpBoNganh" (ngModelChange)="onChangeBoNganh($event)" [nzDisabled]="isView"
                          nzAllowClear="true">
