@@ -141,7 +141,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     }
     if (this.validateData()) {
       this._modalRef.close(this.keHoach);
-      console.log(this.keHoach);
     }
   }
 

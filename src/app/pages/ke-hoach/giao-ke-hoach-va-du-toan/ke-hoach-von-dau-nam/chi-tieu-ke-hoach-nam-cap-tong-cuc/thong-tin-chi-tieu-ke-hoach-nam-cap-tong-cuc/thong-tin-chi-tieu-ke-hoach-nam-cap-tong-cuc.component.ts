@@ -175,7 +175,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.listNam.push({
         value: this.yearNow + i,
         text: this.yearNow + i,
