@@ -422,17 +422,17 @@
         </div>
       </form>
       <nz-table #groupingTable nzBordered [nzData]="dataKlcv" class="mt-2"
-                [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1200px' }">
+                [nzFrontPagination]="false" [nzShowPagination]="false" >
         <thead>
         <tr>
-          <th width="40px">STT</th>
+          <th nzWitdth="40px">STT</th>
           <th class="text-center">Tên công việc</th>
-          <th width="150px">Đơn vị tính</th>
-          <th width="150px">Khối lượng</th>
-          <th width="150px">Đơn giá</th>
-          <th width="200px">Thành tiền</th>
+          <th nzWitdth="150px">Đơn vị tính</th>
+          <th nzWitdth="150px">Khối lượng</th>
+          <th nzWitdth="150px">Đơn giá</th>
+          <th nzWitdth="200px">Thành tiền</th>
           <th>Ghi chú</th>
-          <th width="100px" class="text-center" *ngIf="!isViewDetail">Hành động</th>
+          <th nzWitdth="100px" class="text-center" *ngIf="!isViewDetail">Hành động</th>
         </tr>
         <tr *ngIf="!isViewDetail">
           <th class="text-center"></th>
