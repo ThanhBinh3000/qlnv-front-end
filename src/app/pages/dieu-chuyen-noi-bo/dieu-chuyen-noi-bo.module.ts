@@ -18,6 +18,7 @@ import { TongHopDieuChuyenTaiTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc
 import { TongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { ChiTietTongHopDieuChuyenCapTongCuc } from './tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc/chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc.component';
 import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-tai-cuc/components/dialog-tu-choi/dialog-tu-choi.component';
+import { QuyetDinhDieuChuyenModule } from './quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { DialogTuChoiTongHopDieuChuyenComponent } from './tong-hop-dieu-chuyen-t
     NzPipesModule,
     MainModule,
     ComponentsModule,
+    QuyetDinhDieuChuyenModule
   ],
   exports: [
     KeHoachDieuChuyenComponent,

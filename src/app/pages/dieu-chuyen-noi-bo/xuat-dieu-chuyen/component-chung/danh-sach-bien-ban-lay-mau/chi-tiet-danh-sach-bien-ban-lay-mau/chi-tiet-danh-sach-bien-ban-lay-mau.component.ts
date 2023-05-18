@@ -1,3 +1,4 @@
+import { BienBanLayMauDieuChuyenService } from './../../services/dcnb-bien-ban-lay-mau.service';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -33,6 +34,10 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     // @Input() isViewDetail: boolean;
     @Input() isAddNew: boolean;
     @Input() isViewOnModal: boolean;
+    @Input() passData: {
+        idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
+        maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string
+    }
     @Output()
     showListEvent = new EventEmitter<any>();
 
@@ -60,9 +65,10 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         modal: NzModalService,
         private danhMucService: DanhMucService,
         private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-        private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService
+        private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
+        private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
     ) {
-        super(httpClient, storageService, notification, spinner, modal, bienBanLayMauBanGiaoMauService);
+        super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
 
         this.formData = this.fb.group(
             {
@@ -71,8 +77,8 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 maDvi: [, [Validators.required]],
                 loaiBienBan: ['ALL'],
                 maQhNs: [],
-                idQdGiaoNvXh: [, [Validators.required]],
-                soQdGiaoNvXh: [, [Validators.required]],
+                qdinhDccId: [, [Validators.required]],
+                soQdinhDcc: [, [Validators.required]],
                 ngayQdGiaoNvXh: [, [Validators.required]],
                 ktvBaoQuan: [],
                 soBienBan: [, [Validators.required]],
@@ -122,6 +128,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     async ngOnInit() {
         try {
             this.spinner.show();
+            this.formData.patchValue({ ...this.passData });
             await Promise.all([
                 this.loadSoQuyetDinh(),
                 this.loadPhuongPhapLayMau(),
@@ -134,6 +141,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             console.log("error", e)
         } finally {
             this.spinner.hide();
+            console.log("sfsđ", this.passData, this.formData.value)
         }
     }
     async loadDetail(idInput: number) {
@@ -180,12 +188,18 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         let body = {
             trangThai: STATUS.BAN_HANH,
             loaiVthh: this.loaiVthh,
-            listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+            // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
         }
-        let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
+        let res = await this.bienBanLayMauDieuChuyenService.search(body);
         if (res.msg == MESSAGE.SUCCESS) {
             let data = res.data;
-            this.listSoQuyetDinh = data.content;
+            console.log("dataaa", data.content)
+            this.listSoQuyetDinh = data.content.reduce((arr, cur) => {
+                if (arr.findIndex(f => f.soQdinhDcc == cur.soQdinhDcc) < 0) {
+                    arr.push(cur)
+                }
+                return arr
+            }, []);
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -195,7 +209,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         const elm = event.target as HTMLInputElement;
         if (disabled || elm?.localName == "input") return;
         const modalQD = this.modal.create({
-            nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+            nzTitle: 'Danh sách số quyết định xuất điều chuyển',
             nzContent: DialogTableSelectionComponent,
             nzMaskClosable: false,
             nzClosable: false,
@@ -204,7 +218,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             nzComponentParams: {
                 dataTable: this.listSoQuyetDinh,
                 dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa'],
-                dataColumn: ['soQd', 'ngayKy', 'tenLoaiVthh'],
+                dataColumn: ['soQdinhDcc', 'ngayPDuyet', 'tenLoaiVthh'],
             },
         })
         modalQD.afterClose.subscribe(async (data) => {

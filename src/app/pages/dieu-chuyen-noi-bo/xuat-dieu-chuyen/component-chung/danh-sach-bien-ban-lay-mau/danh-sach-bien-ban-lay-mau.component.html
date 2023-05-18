@@ -96,9 +96,9 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>
-                                <a *ngIf="item.soQd && item.idQd" nz-button nzType="link"
-                                    (click)="openModalQdDc(item.idQdDc)">{{
-                                    item.soQd}}</a>
+                                <a *ngIf="item.soQdinhDcc && item.id" nz-button nzType="link"
+                                    (click)="openModalQdDc(item.id)">{{
+                                    item.soQdinhDcc}}</a>
                             </td>
                             <td>{{item.nam}}</td>
                             <td>{{item.ngayQd | date: 'dd/MM/YYYY'}}</td>
@@ -141,7 +141,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
+                                            <td>{{lv2.tenLoKho}},
                                                 {{lv2.tenNhaKho}}
                                             </td>
                                             <td>{{lv2.soBienBan}}</td>
@@ -152,7 +152,8 @@
                                             <td>{{lv2.tenTrangThai}}</td>
                                             <td class="text-left">
                                                 <a *ngIf="checkRoleAdd(lv2.trangThai)"
-                                                    (click)="redirectToChiTiet(lv2, false, null,item.idQd)">
+                                                    (click)="redirectToChiTiet(lv2, false, null,item.qdinhDccId,  item.soQdinhDcc,
+                                                    lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
                                                 <a *ngIf="checkRoleView(lv2.trangThai)"
@@ -201,7 +202,8 @@
 </div>
 <ng-template #templateThemmoi>
     <app-chi-tiet-danh-sach-bien-ban-lay-mau [idInput]="selectedId" [isEdit]="isEdit" [isView]="isView"
-        [isAddNew]="isAddNew" (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
+        [isAddNew]="isAddNew" [passData]="this.passData"
+        (showListEvent)="showList()"></app-chi-tiet-danh-sach-bien-ban-lay-mau>
 </ng-template>
 
 <!-- Modal view -->

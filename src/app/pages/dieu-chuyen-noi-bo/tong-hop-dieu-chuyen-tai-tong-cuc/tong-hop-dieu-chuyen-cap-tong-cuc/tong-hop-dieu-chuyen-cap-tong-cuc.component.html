@@ -196,7 +196,8 @@
                         <td>{{ LIST_DIEU_CHUYEN[data.loaiDieuChuyen]}}</td>
                         <td>{{ data.ngayTongHop |date: globals.dateFormat}}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{data.soQdDC}}</td>
+                        <td><a nz-button nzType="link" (click)="openModalQdDc($event, data.qdDcId)">{{
+                                data.soQddc }}</a></td>
                         <td>{{ LIST_TRANG_THAI[data.trangThai] }}</td>
                         <td>
                             <a (click)="viewDetail(data.id, true)"
@@ -248,3 +249,16 @@
         [isViewDetail]="isViewDetail" [isAddNew]="isAddNew"
         (showListEvent)="showList()"></app-chi-tiet-tong-hop-dieu-chuyen-cap-tong-cuc>
 </ng-template>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewModalQdDc"
+    [nzBodyStyle]="{ 'overflow-y': 'auto' }" (nzOnCancel)="closeModalQdDc()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-thong-tin-quyet-dinh-dieu-chuyen-tc [idInput]="idQdDcSelect"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdDc()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

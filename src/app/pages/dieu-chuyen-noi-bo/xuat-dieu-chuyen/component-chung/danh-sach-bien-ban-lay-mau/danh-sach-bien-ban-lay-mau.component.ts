@@ -39,6 +39,13 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
     dataTable: any[];
+    passData: {
+        idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
+        maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string
+    } = {
+        idBbLayMau: null, qdinhDccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '',
+            maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: ''
+        }
 
     constructor(httpClient: HttpClient,
         storageService: StorageService,
@@ -119,49 +126,32 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isAddNew = b;
     }
     buildTableView() {
-        let dataView = chain(this.dataTable).groupBy("soQd").map((value, key) => {
+        let dataView = chain(this.dataTable).groupBy("soQdinhDcc").map((value, key) => {
             let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
                 let rowLv2 = v.find(s => s.maDiemKho === k);
                 if (!rowLv2) {
                     return;
                 }
                 return {
-                    id: rowLv2.id,
+                    ...rowLv2,
                     idVirtual: uuidv4(),
                     maDiemKho: k,
-                    tenDiemKho: rowLv2.tenDiemKho,
-                    maNhaKho: rowLv2.maNhaKho,
-                    tenNhaKho: rowLv2.tenNhaKho,
-                    maNganKho: rowLv2.maNganKho,
-                    tenNganKho: rowLv2.tenNganKho,
-                    tenLoKho: rowLv2.tenLoKho,
-                    maLoKho: rowLv2.maLoKho,
-                    soPhieu: rowLv2.soPhieu,
-                    soBienBan: rowLv2.soBienBan,
-                    ngayLayMau: rowLv2.ngayLayMau,
-                    soBbTinhKho: rowLv2.soBbTinhKho,
-                    ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-                    soBbHaoDoi: rowLv2.soBbHaoDoi,
-                    trangThai: rowLv2.trangThai,
-                    tenTrangThai: rowLv2.tenTrangThai,
                     childData: v
                 }
             }
             ).value();
-            let rowLv1 = value.find(s => s.soQd === key);
+            let rowLv1 = value.find(s => s.soQdinhDcc === key);
             if (!rowLv1) {
                 return;
             }
             return {
+                ...rowLv1,
                 idVirtual: uuidv4(),
-                soQd: key,
-                nam: rowLv1.nam,
-                ngayQd: rowLv1.ngayQd,
-                idQd: rowLv1.idQd,
                 childData: rs
             };
         }).value();
-        this.dataView = dataView
+        this.dataView = dataView;
+        console.log("dataView", this.dataView)
         this.expandAll()
     }
 
@@ -181,12 +171,19 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     viewDetail(id: number, isView: boolean) {
 
     }
-    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number, idQdDc?: number) {
-        this.selectedId = lv2?.id;
+    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number, qdinhDccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
+        maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string) {
+        this.selectedId = idBbLayMau;
         this.isDetail = true;
         this.isView = isView;
-        this.idBbLayMau = idBbLayMau;
-        this.idQdDc = idQdDc;
+        this.passData = {
+            idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
+            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho
+        }
+        console.log("idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho", idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
+            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho);
+        console.log("=========================================================")
+        console.log("passData", this.passData)
     }
     disabledTuNgay = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLayMauDen) {
