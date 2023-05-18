@@ -53,7 +53,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   ) {
     this.radioData = [
       {label: 'Bộ Tài chính', value: 'BTC'},
-      {label: 'Bộ - Ngành khác', value: 'Khac'},
+      {label: 'Bộ/Ngành khác', value: 'Khac'},
     ];
     this.radioValue = 'BTC';
   }

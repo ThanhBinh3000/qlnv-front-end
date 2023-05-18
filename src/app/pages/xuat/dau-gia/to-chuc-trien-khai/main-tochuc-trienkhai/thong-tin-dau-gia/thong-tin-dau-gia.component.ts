@@ -89,8 +89,6 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       })
       console.log(arr)
       this.dataTable = cloneDeep(dt);
-      console.log(this.dataTable, 999)
-      console.log(dt)
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();

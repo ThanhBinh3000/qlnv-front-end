@@ -28,8 +28,10 @@ import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khm
 export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
+  @Input() id: number = 0;
   @Input() dataTongHop: any;
   @Input() isViewOnModal: boolean;
+  @Input() isView: boolean = false;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -42,7 +44,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
 
   dataInput: any;
   dataInputCache: any;
-
+  selected: boolean;
   isTongHop: boolean
 
   constructor(
@@ -198,6 +200,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       this.danhsachDx = data.children;
       this.fileDinhKem = data.fileDinhKems;
     }
+    this.showDetail(event, this.danhsachDx[0]);
     this.spinner.hide()
   }
 
@@ -265,8 +268,8 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
             }
           })
         };
-        this.dataInput = null;
-        this.dataInputCache = null;
+        // this.dataInput = null;
+        // this.dataInputCache = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -351,17 +354,21 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
   }
 
   index = 0;
-  async showDetail($event, index) {
+  async showDetail($event, data) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
+    if ($event != undefined && $event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.isTongHop = this.formData.value.phanLoai == 'TH';
-    this.dataInput = this.danhsachDx[index];
-    if (this.dataInput) {
-      let res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
+    if (data) {
+      this.dataInput = data;
+      let res = await this.danhSachMuaTrucTiepService.getDetail(data.idDxHdr);
       this.dataInputCache = res.data;
     }
-    this.index = index;
     await this.spinner.hide();
   }
 

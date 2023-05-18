@@ -6,27 +6,27 @@
         </button>
         <ng-container *ngIf="userService.isCuc() && !isView">
             <button
-                *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))
-                || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC')) "
+                *ngIf="!isView && ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC'))) "
                 type="button" class="btn btn-sub do" (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))
-                || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC')) "
+                *ngIf="!isView && ((formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))
+                || (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC'))) "
                 type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
+                *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
             <button
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV ) "
+                *ngIf="!isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV )"
                 type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -145,7 +145,8 @@
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập kế hoạch </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-date-picker [nzDisabled]="isDisable()" formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+                                    <nz-date-picker [nzDisabled]="isDisable()" formControlName="ngayTao"
+                                        nzFormat="dd/MM/yyyy">
                                     </nz-date-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -354,12 +355,10 @@
                                     <a (click)="downloadFile(data.children[0])">
                                         <i class="icon htvbdh_tcdt_import"></i>
                                     </a>
-                                    <a *ngIf="!isDisable()"
-                                        (click)="editRowCoSo(data.id)">
+                                    <a *ngIf="!isDisable()" (click)="editRowCoSo(data.id)">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a *ngIf="!isDisable()"
-                                        (click)="deleteRowCoSo(data)">
+                                    <a *ngIf="!isDisable()" (click)="deleteRowCoSo(data)">
                                         <i class="fa fa-trash-o do"></i>
                                     </a>
                                 </td>
@@ -408,8 +407,8 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'
-                                        }}</span>
+                            <span class="text-green">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'
+                                }}</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -417,9 +416,8 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Tổng SL đề xuất mua trực tiếp </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
-                                    <span class="text-green">{{formData.value.tongSoLuong | number : '1.0-1' :
-                                      'vi_VN'}}
-                                        (tấn)</span>
+                            <span class="text-green">{{formData.value.tongSoLuong }}
+                                (Kg)</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -458,7 +456,7 @@
                     <tbody>
                         <ng-container *ngFor="let item of dataTable , let i = index">
                             <tr>
-                                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="3">{{item.tenDvi}}</td>
                                 <td class="text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
@@ -469,7 +467,7 @@
                                 <td></td>
                                 <td *ngIf="userService.isCuc() "></td>
                             </tr>
-                            <ng-container *ngIf="expandSet.has(i)">
+                            <ng-container>
                                 <tr *ngFor="let children of item.children, let y = index">
                                     <td></td>
                                     <td></td>
@@ -511,7 +509,7 @@
         <ng-template #extraTpl>
             <div>
                 <button type="button" class="btn btn-main-important" *ngIf="!isDisable()"
-                        (click)="themMoiBangPhanLoTaiSan($event)">
+                    (click)="themMoiBangPhanLoTaiSan($event)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>

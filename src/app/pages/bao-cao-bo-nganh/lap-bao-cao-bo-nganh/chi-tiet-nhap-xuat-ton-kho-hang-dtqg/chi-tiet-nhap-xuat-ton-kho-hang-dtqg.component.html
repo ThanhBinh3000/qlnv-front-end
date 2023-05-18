@@ -60,7 +60,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3>DANH SÁCH BÁO CÁO KẾ HOẠCH TỔNG HỢP NHẬP, XUẤT HÀNG DỰ TRỮ QUỐC GIA</h3>
+      <h3>DANH SÁCH CHI TIẾT BÁO CÁO NHẬP, XUẤT, TỒN KHO HÀNG DỰ TRỮ QUỐC GIA</h3>
       <!-- <div class="buttons">
         <button nz-button class="btn btn-sub" (click)="preView()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -80,7 +80,7 @@
           <tr>
             <th class="text-center" nzWidth="5%">STT</th>
             <th class="text-center" nzWidth="10%">Năm</th>
-            <th class="text-center" nzWidth="40%">Bộ/Ngành</th>
+            <th class="text-center" nzWidth="40%">Bộ ngành</th>
             <th class="text-center" nzWidth="10%">Thời gian tạo</th>
             <th class="text-center" nzWidth="10%">Thời gian ban hành</th>
             <th class="text-center" nzWidth="10%">Trạng thái</th>
@@ -92,7 +92,7 @@
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.nam }}</td>
             <td>{{ data.boNganh }}</td>
-            <td>{{ data.tgianTao | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.thoiGianTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tgianBanHanh | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
@@ -122,6 +122,7 @@
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
 <div class="chi-tiet" *ngIf="isDetail">
-  <app-them-moi-luan-phien-doi-hang-dtqg [idInput]="idSelected" [isView]="isView" (showListEvent)="showList()">
-  </app-them-moi-luan-phien-doi-hang-dtqg>
+  <app-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg [idInput]="idSelected" [isView]="isView"
+    (showListEvent)="showList()">
+  </app-them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg>
 </div>
