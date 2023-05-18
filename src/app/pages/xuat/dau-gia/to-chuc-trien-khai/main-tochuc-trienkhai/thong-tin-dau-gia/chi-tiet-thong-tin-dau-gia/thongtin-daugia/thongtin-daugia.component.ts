@@ -365,8 +365,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
           this.handleOk(true);
         } catch (e) {
           console.log('error: ', e);
-          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }finally {
+          this.spinner.hide();
         }
       },
     });
