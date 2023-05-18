@@ -48,7 +48,7 @@ export class TienDoCongViecComponent implements OnInit {
       let res = await this.hopdongService.detailQdPdKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          let listGoiThau = res.data.listKtXdscQuyetDinhPdKhlcntCvKh;
+          let listGoiThau = res.data.listKtTdxdQuyetDinhPdKhlcntCvKh;
           if (listGoiThau && listGoiThau.length > 0) {
             listGoiThau.forEach(item => item.chuDauTu = res.data.chuDauTu);
           }
