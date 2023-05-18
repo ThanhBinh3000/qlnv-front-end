@@ -100,7 +100,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
-      listKtXdscQuyetDinhPdDtxdDtl: null,
+      listKtTdxdQuyetDinhPdDtxdDtl: null,
       loaiDuAn: [null],
       khoi: [null],
     });
@@ -228,7 +228,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
             }
           })
           this.listFile = data.fileDinhKems;
-          this.dataTable = data.listKtXdscQuyetDinhPdDtxdDtl;
+          this.dataTable = data.listKtTdxdQuyetDinhPdDtxdDtl;
           this.updateIdVirtual();
         }
       } else {
@@ -276,7 +276,7 @@ export class ThongTinQuyetDinhPheDuyetDuAnDtxdComponent extends Base2Component i
       this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
-    this.formData.value.listKtXdscQuyetDinhPdDtxdDtl = this.dataTable;
+    this.formData.value.listKtTdxdQuyetDinhPdDtxdDtl = this.dataTable;
     if (isBanHanh) {
       this.modal.confirm({
         nzClosable: false,
