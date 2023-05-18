@@ -10,10 +10,6 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {cloneDeep} from "lodash";
 import {chain} from "lodash";
 import {v4 as uuidv4} from "uuid";
-import {
-  QuyetdinhpheduyetduandtxdService
-} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
-import {KtQdXdHangNamService} from "../../../../services/kt-qd-xd-hang-nam.service";
 import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../services/donvi.service";
 import {MESSAGE} from "../../../../constants/message";
@@ -31,6 +27,9 @@ import {HopdongService} from "../../../../services/qlnv-kho/tiendoxaydungsuachua
 import {
   KtKhSuaChuaBtcService
 } from "../../../../services/qlnv-kho/quy-hoach-ke-hoach/kh-sc-lon-btc/kt-kh-sua-chua-btc.service";
+import {
+  QdPheDuyetBaoCaoKtktService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-lon-hang-nam',
@@ -69,7 +68,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     modal: NzModalService,
     private donViService: DonviService,
     private ktQdXdHangNamService: KtKhSuaChuaBtcService,
-    private quyetdinhpheduyetduandtxdService: QuyetdinhpheduyetduandtxdService,
+    private qdPheDuyetBaoCaoTktkService: QdPheDuyetBaoCaoKtktService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
@@ -80,12 +79,13 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     this.formData = this.fb.group({
       namKeHoach: [''],
       tenDuAn: [''],
-      maDvi: [this.userInfo.MA_DVI],
-      capDvi: [this.userInfo.CAP_DVI],
+      maDvi: [null],
+      capDvi: [null],
       soQuyetDinh: [''],
       trangThai: [''],
       ngayKyTu: [''],
       ngayKyDen: [''],
+      loai : [null]
     });
     this.filterTable = {};
   }
@@ -100,6 +100,11 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   async filter() {
     await this.spinner.show();
     try {
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI,
+        capDvi: this.userInfo.CAP_DVI,
+        loai : '00'
+      })
       let body = this.formData.value
       let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -172,13 +177,17 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     this.spinner.show();
     try {
       let body = {
-        "idDuAn": item.id,
+        "namKh": item.namKh,
+        "soQdPdKhScl": item.soQdPdTcdt,
+        "idQdPdKhScl": item.idQdTcdt,
+        "loai" : "00",
         "paggingReq": {
           "limit": 10,
           "page": 0
         }
       }
-      let res = await this.quyetdinhpheduyetduandtxdService.search(body);
+      let res = await this.qdPheDuyetBaoCaoTktkService.search(body);
+      console.log(res,111)
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
         //Check tiếp quyết định phê duyệt bản vẽ
@@ -194,7 +203,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-      console.log(e, 'aaaaaaaaaaaaaa')
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR + 11);
     } finally {
       this.spinner.hide();
