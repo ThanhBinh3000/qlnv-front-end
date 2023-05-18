@@ -94,6 +94,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
+      this.dataTableAllBn = [];
       let res = await this.quyetDinhTtcpService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -285,6 +286,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger;
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
