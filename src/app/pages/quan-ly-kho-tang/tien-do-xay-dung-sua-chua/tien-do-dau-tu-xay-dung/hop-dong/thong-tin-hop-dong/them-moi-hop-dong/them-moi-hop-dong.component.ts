@@ -141,7 +141,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtTdxdTdxdHopDongKlcv: [[]]
+      listKtTdxdHopDongKlcv: [[]]
     });
   }
 
@@ -231,7 +231,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     }
     this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
     if (this.dataKlcv && this.dataKlcv.length > 0) {
-      this.formData.value.listKtTdxdTdxdHopDongKlcv = this.dataKlcv;
+      this.formData.value.listKtTdxdHopDongKlcv = this.dataKlcv;
     } else {
       this.notification.success(MESSAGE.ERROR, "Danh sách khối lượng công việc không được để trống.");
       return;
@@ -379,7 +379,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.listPhuLuc = data.listPhuLuc;
-          this.dataKlcv = data.listKtTdxdTdxdHopDongKlcv;
+          this.dataKlcv = data.listKtTdxdHopDongKlcv && data.listKtTdxdHopDongKlcv.length > 0 ? data.listKtTdxdHopDongKlcv : [];
           this.updateEditKLCongViecCache()
         }
       } else {

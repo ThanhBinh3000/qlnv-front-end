@@ -11,6 +11,7 @@ import {
   QuyetdinhpheduyetKhlcntService
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {AMOUNT_NO_DECIMAL} from "../../../../../Utility/utils";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-tien-do-cong-viec',
@@ -23,6 +24,7 @@ export class TienDoCongViecComponent implements OnInit {
   listHopDong: any[] = []
   formData : FormGroup;
   AMOUNT = AMOUNT_NO_DECIMAL;
+  STATUS = STATUS
 
   constructor(
     private httpClient: HttpClient,
@@ -36,6 +38,8 @@ export class TienDoCongViecComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
+      tenTrangThai : ['Chưa thực hiện'],
+      soQd : [null]
     })
   }
 
