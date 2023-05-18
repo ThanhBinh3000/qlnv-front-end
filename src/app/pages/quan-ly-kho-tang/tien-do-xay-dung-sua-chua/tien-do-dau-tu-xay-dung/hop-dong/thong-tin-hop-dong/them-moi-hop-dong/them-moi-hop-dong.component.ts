@@ -185,11 +185,11 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,
         loaiHopDong: this.itemGoiThau.loaiHopDong,
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
-        cdtTen: this.itemGoiThau.ktXdscQuyetDinhPdKqlcnt.chuDauTu,
-        cdtDiaChi: this.itemGoiThau.ktXdscQuyetDinhPdKqlcnt.diaChi,
-        dvccTen: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.tenNhaThau,
-        dvccDiaChi: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.diaChi,
-        dvccMst: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.maSoThue,
+        cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.chuDauTu,
+        cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.diaChi,
+        dvccTen: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.tenNhaThau,
+        dvccDiaChi: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.diaChi,
+        dvccMst: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.maSoThue,
       });
     }
   }
