@@ -122,7 +122,8 @@ export class FileListComponent implements OnInit {
 
   updateFile(index) {
     let curRow = this.data[index];
-    if (!curRow || !curRow.noiDung || curRow.noiDung == '' || !curRow.fileName || curRow.fileName == '') {
+    if ((!this.isCanCuPL) && (!curRow || !curRow.noiDung || curRow.noiDung == '' || !curRow.fileName || curRow.fileName == '')) {
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file");
       return;
     }
     this.data.splice(index, 1, curRow);
