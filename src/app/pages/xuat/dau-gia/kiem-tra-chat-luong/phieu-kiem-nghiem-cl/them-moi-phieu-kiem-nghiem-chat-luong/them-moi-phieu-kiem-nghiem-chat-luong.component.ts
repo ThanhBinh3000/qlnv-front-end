@@ -19,7 +19,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import { DatePipe } from '@angular/common';
 @Component({
-  selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
+  selector: 'app-bdg-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss'],
 })

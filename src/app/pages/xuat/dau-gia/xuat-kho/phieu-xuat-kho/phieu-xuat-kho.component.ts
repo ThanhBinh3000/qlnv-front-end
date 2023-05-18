@@ -15,7 +15,7 @@ import {CHUC_NANG} from "../../../../../constants/status";
 import {DauGiaComponent} from "../../dau-gia.component";
 
 @Component({
-  selector: 'app-phieu-xuat-kho',
+  selector: 'app-bdg-phieu-xuat-kho',
   templateUrl: './phieu-xuat-kho.component.html',
   styleUrls: ['./phieu-xuat-kho.component.scss']
 })
