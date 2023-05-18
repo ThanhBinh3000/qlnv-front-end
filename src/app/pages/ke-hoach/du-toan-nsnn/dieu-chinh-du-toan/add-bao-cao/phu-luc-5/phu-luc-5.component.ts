@@ -96,6 +96,7 @@ export class PhuLuc5Component implements OnInit {
   scrollX: string;
 
   BOX_NUMBER_WIDTH = 400;
+  dataVp: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -126,6 +127,9 @@ export class PhuLuc5Component implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editAppraisalValue = this.dataInfo?.editRecommendedValue;
     this.viewAppraisalValue = this.dataInfo?.viewRecommendedValue;
+    this.dataVp = this.formDetail.dataVp;
+    console.log("this.dataVp pl5:", this.dataVp);
+
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -144,7 +148,7 @@ export class PhuLuc5Component implements OnInit {
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
         item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanDchinh
+        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi
       } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
         // item.noiDung = dinhMuc?.tenDinhMuc;
@@ -152,7 +156,7 @@ export class PhuLuc5Component implements OnInit {
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
         item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanDchinh
+        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
       }
     })
 
