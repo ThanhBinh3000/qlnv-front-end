@@ -147,7 +147,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)">
+              <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,data)"
+                [ngClass]="{'bg-selected': i == 0 && this.selected}">
                 <td class="text-center">{{i + 1}} </td>
                 <td>{{ data.tenDvi }}</td>
                 <td>{{ data.diaChi }}</td>
