@@ -95,9 +95,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
-      listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
-      listKtXdscQuyetDinhPdKhlcntCvKad: null,
-      listKtXdscQuyetDinhPdKhlcntCvKh: null,
+      listKtTdxdQuyetDinhPdKhlcntCvDaTh: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKad: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKh: null,
       khoi: [null],
       loaiCapCt: [null],
     });
@@ -211,9 +211,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
       this.formData.value.fileDinhKems = this.listFile;
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
-    this.formData.value.listKtXdscQuyetDinhPdKhlcntCvDaTh = this.dataCongViecDaTh;
-    this.formData.value.listKtXdscQuyetDinhPdKhlcntCvKad = this.dataCongViecKad;
-    this.formData.value.listKtXdscQuyetDinhPdKhlcntCvKh = this.dataCongViecKh;
+    this.formData.value.listKtTdxdQuyetDinhPdKhlcntCvDaTh = this.dataCongViecDaTh;
+    this.formData.value.listKtTdxdQuyetDinhPdKhlcntCvKad = this.dataCongViecKad;
+    this.formData.value.listKtTdxdQuyetDinhPdKhlcntCvKh = this.dataCongViecKh;
     if (isBanHanh) {
       this.modal.confirm({
         nzClosable: false,
@@ -287,9 +287,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
             diaDiem: this.itemQdPdTktcTdt.diaDiem,
           })
           this.fileDinhKem = data.fileDinhKems;
-          this.dataCongViecDaTh = data.listKtXdscQuyetDinhPdKhlcntCvDaTh ? data.listKtXdscQuyetDinhPdKhlcntCvDaTh : [];
-          this.dataCongViecKad = data.listKtXdscQuyetDinhPdKhlcntCvKad ? data.listKtXdscQuyetDinhPdKhlcntCvKad : [];
-          this.dataCongViecKh = data.listKtXdscQuyetDinhPdKhlcntCvKh ? data.listKtXdscQuyetDinhPdKhlcntCvKh : [];
+          this.dataCongViecDaTh = data.listKtTdxdQuyetDinhPdKhlcntCvDaTh ? data.listKtTdxdQuyetDinhPdKhlcntCvDaTh : [];
+          this.dataCongViecKad = data.listKtTdxdQuyetDinhPdKhlcntCvKad ? data.listKtTdxdQuyetDinhPdKhlcntCvKad : [];
+          this.dataCongViecKh = data.listKtTdxdQuyetDinhPdKhlcntCvKh ? data.listKtTdxdQuyetDinhPdKhlcntCvKh : [];
           this.updateEditCongViecDaThCache();
           this.updateEditCongViecKadCache();
           this.updateEditCongViecKhCache();
@@ -355,7 +355,7 @@ export class ThongTinQuyetDinhPheDuyetKhlcntComponent extends Base2Component imp
   //       if (!this.idInput) {
   //         let res = await this.quyetdinhpheduyetKhlcntService.getLastRecordBySoQdPdDaDtxd(body);
   //         if (res.msg == MESSAGE.SUCCESS && res.data) {
-  //           this.dataCongViecDaTh = res.data.listKtXdscQuyetDinhPdKhlcntCvDaTh;
+  //           this.dataCongViecDaTh = res.data.listKtTdxdQuyetDinhPdKhlcntCvDaTh;
   //           this.updateEditCongViecDaThCache();
   //         } else {
   //           this.dataCongViecDaTh = [];
