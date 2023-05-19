@@ -100,7 +100,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao nv xuất hàng</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input [readonly]="isView" formControlName="soQdGiaoNvXh" readonly/>
+                <input nz-input [readonly]="isView" formControlName="soQdGiaoNvXh"  (ngModelChange)="changeSoQd($event)"  readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -126,7 +126,7 @@
             <nz-form-label [nzNoColon]="true"> Điểm kho</nz-form-label>
             <nz-form-control nz-col>
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiem()">
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly/>
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" (ngModelChange)="changeDd($event)"  readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -184,7 +184,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Địa điểm kho</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input nz-input formControlName="diaDiemKho" [readonly]="isView"/>
+              <input nz-input formControlName="diaDiemKho" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -192,7 +192,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Lãnh đạo chi cục</nz-form-label>
             <nz-form-control nz-col>
-              <input nz-input formControlName="nguoiPduyet" [readonly]="isView"/>
+              <input nz-input formControlName="nguoiPduyet" [readonly]="true"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -200,7 +200,7 @@
         <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Thủ kho</nz-form-label>
-            <input nz-input formControlName="nguoiGduyet" [readonly]="isView"/>
+            <input nz-input formControlName="nguoiGduyet" [readonly]="true"/>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
@@ -347,7 +347,7 @@
         <nz-form-item>
           <nz-form-label class="label-color-kh"> Tổng trọng lượng bao bì (kg)
           </nz-form-label>
-          <nz-form-control nz-col style="margin-top: 5px;">
+            <nz-form-control nz-col [nzErrorTip]="error" style="margin-top: 5px;">
             <nz-input-number [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                              [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
                              [(ngModel)]="bangKeDtlCreate.soLuong"
