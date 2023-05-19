@@ -19,6 +19,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { ItemDaiDien } from 'src/app/pages/nhap/dau-thau/kiem-tra-chat-luong/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
 import { Validators } from '@angular/forms';
 import { ChiTietList } from 'src/app/models/QdPheDuyetKHBanDauGia';
+import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 
 @Component({
     selector: 'app-chi-tiet-danh-sach-bien-ban-lay-mau',
@@ -64,7 +65,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         spinner: NgxSpinnerService,
         modal: NzModalService,
         private danhMucService: DanhMucService,
-        private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+        private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
         private bienBanLayMauBanGiaoMauService: BienBanLayMauBanGiaoMauService,
         private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
     ) {
@@ -81,7 +82,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 soQdinhDcc: [, [Validators.required]],
                 ngayQdGiaoNvXh: [, [Validators.required]],
                 ktvBaoQuan: [],
-                soBienBan: [, [Validators.required]],
+                soBbLayMau: [, [Validators.required]],
                 ngayLayMau: [,],
                 dviKiemNghiem: [, [Validators.required]],
                 diaDiemLayMau: [, [Validators.required]],
@@ -173,7 +174,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 tenDvi: this.userInfo.TEN_DVI,
                 maQhNs: this.userInfo.DON_VI.maQhns,
                 ktvBaoQuan: this.userInfo.TEN_DAY_DU,
-                soBienBan: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
+                soBbLayMau: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
 
             });
         }
@@ -229,25 +230,32 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     };
 
     async bindingDataQd(id, isSetTc?) {
-        await this.spinner.show();
-        let dataRes = await this.quyetDinhGiaoNvCuuTroService.getDetail(id)
-        const data = dataRes.data;
-        this.formData.patchValue({
-            soQdGiaoNvXh: data.soQd,
-            idQdGiaoNvXh: data.id,
-            ngayQdGiaoNvXh: data.ngayKy,
-            loaiVthh: data.loaiVthh,
-            tenLoaiVthh: data.tenLoaiVthh,
+        try {
+            await this.spinner.show();
+            let dataRes = await this.quyetDinhDieuChuyenCucService.getDetail(id)
+            const data = dataRes.data;
+            this.formData.patchValue({
+                soQdGiaoNvXh: data.soQd,
+                idQdGiaoNvXh: data.id,
+                ngayQdGiaoNvXh: data.ngayKy,
+                loaiVthh: data.loaiVthh,
+                tenLoaiVthh: data.tenLoaiVthh,
 
-        });
-        let dataChiCuc = data.noiDungCuuTro.find(item =>
-            item.maDviChiCuc == this.userInfo.MA_DVI
-        );
-        if (dataChiCuc) {
-            this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
+            });
+            let dataChiCuc = data.noiDungCuuTro.find(item =>
+                item.maDviChiCuc == this.userInfo.MA_DVI
+            );
+            if (dataChiCuc) {
+                this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
+            }
+            this.listBienBan(data.soQd)
+        } catch (error) {
+            console.log("error", error);
+
+        } finally {
+            await this.spinner.hide();
+
         }
-        this.listBienBan(data.soQd)
-        await this.spinner.hide();
     }
 
     async listBienBan(item) {
