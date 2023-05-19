@@ -143,7 +143,7 @@
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">Số quyết định</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Số QĐ PD TMĐT khái toán, dự toán</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input [readonly]="isViewDetail" formControlName="soQd" class="search__input" nz-input />
@@ -171,30 +171,6 @@
             <div class="list-file">
               <file-list [data]="fileDinhKem"></file-list>
             </div>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="8">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt quyết toán</nz-form-label>
-              <input [readonly]="true" class="text-blue" nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="8">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Ngày QĐ phê duyệt quyết toán</nz-form-label>
-              <input [readonly]="true" formControlName="ngayQdPd" class="text-blue" nz-input />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzSpan="8">
-          <nz-form-item>
-            <nz-form-control>
-              <nz-form-label [nzNoColon]="true">Giá trị phê duyệt quyết toán (đ)</nz-form-label>
-              <input [readonly]="true" formControlName="giaTriPd" class="text-body" nz-input />
-            </nz-form-control>
           </nz-form-item>
         </div>
       </div>
