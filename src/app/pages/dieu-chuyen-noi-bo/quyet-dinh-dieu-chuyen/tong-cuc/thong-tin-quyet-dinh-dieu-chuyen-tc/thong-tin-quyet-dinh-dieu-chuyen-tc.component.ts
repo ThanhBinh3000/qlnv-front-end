@@ -301,11 +301,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       this.canCu = data.canCu;
       this.quyetDinh = data.quyetDinh;
       if (data.loaiDc === "CHI_CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
       }
 
       if (data.loaiDc === "CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
       }
 
     }
@@ -368,7 +368,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
             }
 
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
           }
 
           if (loaiDC === "CUC") {
@@ -395,7 +395,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
               }
 
             }
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
 
           }
 
@@ -814,11 +814,11 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         })
 
         if (loaiDC === "CHI_CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
         }
 
         if (loaiDC === "CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
+          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
         }
 
         console.log('onChangeIdTrHdr', listDeXuat, listHangHoa, this.dataTableView)
