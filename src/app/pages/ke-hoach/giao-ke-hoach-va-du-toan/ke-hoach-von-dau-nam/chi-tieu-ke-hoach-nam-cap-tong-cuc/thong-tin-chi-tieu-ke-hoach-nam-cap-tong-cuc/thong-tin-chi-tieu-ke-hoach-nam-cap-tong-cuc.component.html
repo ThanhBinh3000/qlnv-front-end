@@ -65,7 +65,7 @@
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
           </span>
-          <span>Thông tin chỉ tiêu kế hoạch năm {{userService.isTongCuc() ? 'Tổng cục' : 'Cục'}} giao 11</span>
+          <span>Thông tin chỉ tiêu kế hoạch năm {{userService.isTongCuc() ? 'Tổng cục' : 'Cục'}} giao</span>
         </div>
       </div>
     </div>
@@ -281,13 +281,13 @@
             <th class="text-right">{{calculatortkdnTongQuyThocCreate()}}</th>
             <th class="text-right">{{calculatortkdnTongThocCreate()}}
             </th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[0].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[1].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[2].soLuong}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[0].soLuong  | number: '1.0-1'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[1].soLuong  | number: '1.0-1'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[2].soLuong  | number: '1.0-1'}}</th>
             <th class="text-right">{{calculatortkdnTongGaoCreate()}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[0].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[0].soLuong  | number: '1.0-1'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong  | number: '1.0-1'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong  | number: '1.0-1'}}</th>
             <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>
             <th class="text-right">
               <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"

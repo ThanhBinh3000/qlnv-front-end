@@ -1,16 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import { FormArray, Validators } from "@angular/forms";
 import { MESSAGE } from "src/app/constants/message";
-import * as dayjs from "dayjs";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { ThongtinDaugiaComponent } from './thongtin-daugia/thongtin-daugia.component';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import { async } from 'rxjs';
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -18,7 +17,7 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
   styleUrls: ['./chi-tiet-thong-tin-dau-gia.component.scss']
 })
 export class ChiTietThongTinDauGiaComponent extends Base2Component implements OnInit {
-  //base init
+
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -26,6 +25,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   showListEvent = new EventEmitter<any>();
   fileDinhKem: any[] = [];
   dataDetail: any;
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -40,40 +40,33 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     this.formData = this.fb.group(
       {
         id: [],
-        nam: [dayjs().get("year"), [Validators.required]],
-        soQdPd: [],
-        maDvi: [],
-        loaiVthh: [],
-        tenLoaiVthh: [],
-        cloaiVthh: [],
-        tenCloaiVthh: [],
-
-        idQdDcKh: [],
-        soQdDcKh: [],
-        idQdPdKq: [],
-        soQdPdKq: [],
-        idKhDx: [],
-        soKhDx: [],
-        ngayQdPdKqBdg: [],
-        thoiHanGiaoNhan: [],
-        thoiHanThanhToan: [],
-        phuongThucThanhToan: [],
-        phuongThucGiaoNhan: [],
-        trangThai: [],
-        tenTrangThai: [],
-        maDviThucHien: [],
+        nam: [],
+        soQdPd: [''],
+        soQdPdKqBdg: [''],
+        maDvi: [''],
+        tenDvi: [''],
         tongTienGiaKhoiDiem: [],
         tongTienDatTruoc: [],
-        tongTienDatTruocDuocDuyet: [],
+        khoanTienDatTruoc: [],
+        tgianDauGiaTu: [''],
+        tgianDauGiaDen: [''],
+        tgianTtoan: [],
+        pthucTtoan: [''],
+        tgianGnhan: [],
+        pthucGnhan: [''],
+        loaiVthh: [''],
+        tenLoaiVthh: [''],
+        cloaiVthh: [''],
+        tenCloaiVthh: [''],
         tongSoLuong: [],
-        phanTramDatTruoc: [],
-        thoiGianToChucTu: [],
-        thoiGianToChucDen: [],
-        tenDvi: [],
-        tenDviThucHien: [],
-        soDviTsan: [],
+        slDviTsan: [],
         soDviTsanThanhCong: [],
         soDviTsanKhongThanh: [],
+        loaiHinhNx: [''],
+        kieuNx: [''],
+        trangThai: [],
+        tenTrangThai: [],
+
       }
     );
   }
@@ -92,24 +85,31 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     }
   }
 
-
   async loadDetail(id: number) {
     if (id > 0) {
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
           this.dataTable = dataDtl.listTtinDg
+          if (this.dataTable && this.dataTable.length > 0) {
+            await this.showFirstRow(event, this.dataTable[0]);
+          }
           if (dataDtl) {
             await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
               const dataHdr = hdr.data;
               this.formData.patchValue({
-                soQdPd: dataHdr.soQdPd,
                 nam: dataHdr.nam,
+                soQdPd: dataHdr.soQdPd,
+                soQdPdKqBdg: dataDtl.soQdPdKqBdg,
+                tenDvi: dataDtl.tenDvi,
+                tgianTtoan: dataDtl.tgianTtoan,
+                tgianGnhan: dataDtl.tgianGnhan,
+                pthucGnhan: dataDtl.pthucGnhan,
                 trangThai: dataDtl.trangThai,
                 tenTrangThai: dataDtl.tenTrangThai,
-                tenDvi: dataDtl.tenDvi,
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
+                slDviTsan: dataDtl.slDviTsan,
               })
             })
           }
@@ -172,10 +172,51 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
-  selectRow($event, i) {
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
-    this.dataDetail = this.dataTable[i];
+
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
+  }
+
+  async showDetail($event, data: any) {
+    await this.spinner.show();
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow');
+    } else {
+      this.selected = true;
+    }
+    this.dataDetail = data;
+    await this.loadDataThongTin(data);
+    await this.spinner.hide();
+  }
+
+  async loadDataThongTin(data) {
+    if (data.id) {
+      let dataTtin = await this.thongTinDauGiaService.getDetail(data.id)
+      if (dataTtin) {
+        const dataThongTin = dataTtin.data;
+        let tongTienGiaKhoiDiem: number = 0
+        let tongTienDatTruoc: number = 0
+        let tongSoLuong: number = 0
+        dataTtin.data.children.forEach((item) => {
+          item.children.forEach((child) => {
+            tongTienGiaKhoiDiem += child.soLuongDeXuat * child.donGiaDeXuat
+          })
+          tongTienDatTruoc += item.soTienDatTruocChiCuc
+          tongSoLuong += item.soLuongChiCuc
+        })
+        this.formData.patchValue({
+          tongTienGiaKhoiDiem: tongTienGiaKhoiDiem,
+          tongTienDatTruoc: tongTienDatTruoc,
+          khoanTienDatTruoc: dataThongTin.khoanTienDatTruoc,
+          tgianDauGiaTu: dataThongTin.tgianDauGiaTu,
+          tgianDauGiaDen: dataThongTin.tgianDauGiaDen,
+          pthucTtoan: dataThongTin.pthucTtoan,
+          tongSoLuong: tongSoLuong
+        })
+      }
+    }
   }
 
   themMoiPhienDauGia($event, data?: any) {
@@ -188,10 +229,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         this.notification.error(MESSAGE.ERROR, "Không thể thêm mới vì đang có gói thầu chưa hoàn thành cập nhật, xin vui lòng hoàn thành cập nhật");
         return;
       }
-    }
-
-    const modalQD = this.modal.create({
-      nzTitle: 'Cập nhật thông tin đấu giá',
+    } const modalQD = this.modal.create({
+      nzTitle: 'CẬP NHẬP THÔNG TIN ĐẤU GIÁ',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -209,4 +248,31 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     });
   }
 
+  async deleteThongTin(data) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.thongTinDauGiaService.delete(body).then(async () => {
+            this.loadDetail(this.idInput);
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 }

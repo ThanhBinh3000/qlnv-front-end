@@ -32,6 +32,23 @@ import { SlGtriHangDtqgNhapComponent } from './sl-gtri-hang-dtqg-nhap/sl-gtri-ha
 import { ThemMoiSlGtriHangDtqgNhapComponent } from './sl-gtri-hang-dtqg-nhap/them-moi-sl-gtri-hang-dtqg-nhap/them-moi-sl-gtri-hang-dtqg-nhap.component';
 import { SlGtriHangDtqgXuatComponent } from './sl-gtri-hang-dtqg-xuat/sl-gtri-hang-dtqg-xuat.component';
 import { ThemMoiSlGtriHangDtqgXuatComponent } from './sl-gtri-hang-dtqg-xuat/them-moi-sl-gtri-hang-dtqg-xuat/them-moi-sl-gtri-hang-dtqg-xuat.component';
+import {
+  ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent
+} from "./chi-tiet-nhap-xuat-ton-kho-hang-dtqg/them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg/them-moi-chi-tiet-nhap-xuat-ton-kho-hang-dtqg.component";
+import {
+  ChiTietNhapXuatTonKhoHangDtqgComponent
+} from "./chi-tiet-nhap-xuat-ton-kho-hang-dtqg/chi-tiet-nhap-xuat-ton-kho-hang-dtqg.component";
+import { SlGtriHangDtqgXcKThuTienComponent } from './sl-gtri-hang-dtqg-xc-k-thu-tien/sl-gtri-hang-dtqg-xc-k-thu-tien.component';
+import { ThemMoiSlGtriHangDtqgXcKThuTienComponent } from './sl-gtri-hang-dtqg-xc-k-thu-tien/them-moi-sl-gtri-hang-dtqg-xc-k-thu-tien/them-moi-sl-gtri-hang-dtqg-xc-k-thu-tien.component';
+import { SlGtriHangDtqgXcKhacComponent } from './sl-gtri-hang-dtqg-xc-khac/sl-gtri-hang-dtqg-xc-khac.component';
+import { ThemMoiSlGtriHangDtqgXcKhacComponent } from './sl-gtri-hang-dtqg-xc-khac/them-moi-sl-gtri-hang-dtqg-xc-khac/them-moi-sl-gtri-hang-dtqg-xc-khac.component';
+import { SlGtriHangDtqgXuatVtComponent } from './sl-gtri-hang-dtqg-xuat-vt/sl-gtri-hang-dtqg-xuat-vt.component';
+import { ThemMoiSlGtriHangDtqgXuatVtComponent } from './sl-gtri-hang-dtqg-xuat-vt/them-moi-sl-gtri-hang-dtqg-xuat-vt/them-moi-sl-gtri-hang-dtqg-xuat-vt.component';
+import { TiepNhanHangDtqgComponent } from './tiep-nhan-hang-dtqg/tiep-nhan-hang-dtqg.component';
+import { ThemMoiTiepNhanHangDtqgComponent } from './tiep-nhan-hang-dtqg/them-moi-tiep-nhan-hang-dtqg/them-moi-tiep-nhan-hang-dtqg.component';
+import { KhMuaHangDtqgComponent } from './kh-mua-hang-dtqg/kh-mua-hang-dtqg.component';
+import { ThemMoiKhMuaHangDtqgComponent } from './kh-mua-hang-dtqg/them-moi-kh-mua-hang-dtqg/them-moi-kh-mua-hang-dtqg.component';
+import { DialogThemMoiKhMuaHangDtqgComponent } from './kh-mua-hang-dtqg/dialog-them-moi-kh-mua-hang-dtqg/dialog-them-moi-kh-mua-hang-dtqg.component';
 
 
 @NgModule({
@@ -61,6 +78,19 @@ import { ThemMoiSlGtriHangDtqgXuatComponent } from './sl-gtri-hang-dtqg-xuat/the
     ThemMoiSlGtriHangDtqgNhapComponent,
     SlGtriHangDtqgXuatComponent,
     ThemMoiSlGtriHangDtqgXuatComponent,
+    SlGtriHangDtqgXcKThuTienComponent,
+    ThemMoiSlGtriHangDtqgXcKThuTienComponent,
+    SlGtriHangDtqgXcKhacComponent,
+    ThemMoiSlGtriHangDtqgXcKhacComponent,
+    SlGtriHangDtqgXuatVtComponent,
+    ThemMoiSlGtriHangDtqgXuatVtComponent,
+    TiepNhanHangDtqgComponent,
+    ThemMoiTiepNhanHangDtqgComponent,
+    KhMuaHangDtqgComponent,
+    ThemMoiKhMuaHangDtqgComponent,
+    DialogThemMoiKhMuaHangDtqgComponent,
+    ThemMoiChiTietNhapXuatTonKhoHangDtqgComponent,
+    ChiTietNhapXuatTonKhoHangDtqgComponent
   ],
   imports: [
     CommonModule,

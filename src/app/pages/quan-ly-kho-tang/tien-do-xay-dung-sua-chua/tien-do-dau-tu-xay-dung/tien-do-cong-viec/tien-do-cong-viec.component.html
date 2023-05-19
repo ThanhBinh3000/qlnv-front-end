@@ -1,0 +1,115 @@
+<div class="bg-trang">
+  <div class="cangiua group-button-search">
+    <button class="btn btn-sub xanh-nhat ml-2">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Hoàn thành</span>
+    </button>
+    <button class="btn btn-main btn-sm waves-effect waves-light ml-2">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <nz-table #basicTable [nzData]="listHopDong" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered class="mt-2">
+      <thead>
+      <tr>
+        <th width="40px" class="text-center">STT</th>
+        <th width="150px">Số hợp đồng</th>
+        <th width="200px">Tên hợp đồng</th>
+        <th>Gói thầu</th>
+        <th width="250px">Chủ đầu tư</th>
+        <th width="250px">Nhà thầu</th>
+        <th width="130px">Ngày ký hợp đồng</th>
+        <th width="130px">Giá trị hợp đồng</th>
+        <th width="130px">Trạng thái HĐ</th>
+        <th width="100px" class="text-center">Tiến độ thực hiện</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of listHopDong; let i = index"
+          style="cursor: pointer" [ngClass]="{'bg-selected': data.selected}"
+          (click)="selectRow(data)">
+        <td>{{ i + 1}}</td>
+        <td>{{ data.hopDong?.soHd }}</td>
+        <td>{{ data.hopDong?.tenHd }}</td>
+        <td>{{ data.noiDung }}</td>
+        <td>{{ data.chuDauTu }}</td>
+        <td>{{ data.nhaThauTrung }}</td>
+        <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+        <td>{{ data.hopDong?.thanhTien | number: '1.0-1' }}</td>
+        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
+        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+      <span
+        [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV   ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{ formData.value.tenTrangThai }}
+      </span>
+          <span>TIẾN ĐỘ CÔNG VIỆC</span>
+        </div>
+      </div>
+    </div>
+    <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ PD dự án ĐTXD</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ PD bản vẽ TKTC và tổng dự toán</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt KH LCNT</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <div class="group-button">
+    <h3> TIẾN ĐỘ VÀ KHỐI LƯỢNG CÔNG VIỆC THEO HỢP ĐỒNG</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
+  <nz-table [nzData]="listHopDong" [nzFrontPagination]="false"
+            [nzShowPagination]="false" nzBordered class="pd-10">
+    <thead>
+    <tr>
+      <th width="40px" class="text-center">STT</th>
+      <th width="150px">Số hợp đồng</th>
+      <th width="200px">Tên hợp đồng</th>
+      <th>Gói thầu</th>
+      <th width="250px">Chủ đầu tư</th>
+      <th width="250px">Nhà thầu</th>
+      <th width="130px">Ngày ký hợp đồng</th>
+      <th width="130px">Giá trị hợp đồng</th>
+      <th width="130px">Trạng thái HĐ</th>
+      <th width="100px" class="text-center">Tiến độ thực hiện</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </nz-table>
+</div>

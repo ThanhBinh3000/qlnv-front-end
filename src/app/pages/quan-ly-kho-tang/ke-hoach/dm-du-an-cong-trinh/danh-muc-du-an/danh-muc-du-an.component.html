@@ -7,7 +7,7 @@
         <input class="search__input" placeholder="Nhập text" nz-input formControlName="soQd"/>
       </div>
       <div nz-col [nzSpan]="userService.isCuc() ? 6 : 3">
-        <label class="search__label">Khối</label>
+        <label class="search__label">Khối dự án/Công trình</label>
         <nz-select  nzAllowClear  formControlName="khoi">
           <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
@@ -88,13 +88,6 @@
           </div>
         </div>
       </div>
-      <div nz-col nzSpan="6">
-        <label class="search__label">Trạng thái</label>
-        <nz-select  formControlName="trangThai" nzAllowClear>
-          <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </div>
     </div>
     </form>
     <div nz-col class="cangiua group-button-search">
@@ -134,7 +127,7 @@
         <th class="text-center" >Mã dự án</th>
         <th class="text-center" >Tên dự án</th>
         <th class="text-center" >Địa điểm xây dựng</th>
-        <th class="text-center" >Khối dự án, công trình</th>
+        <th class="text-center" >Khối dự án/công trình</th>
         <th class="text-center" >Thuộc Chi cục</th>
         <th class="text-center" >Điểm kho</th>
         <th class="text-center" >Thời gian <br> khởi công</th>
@@ -195,14 +188,18 @@
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgKhoiCong"
-                   (input)="filterInTable('tgSuaChua',filterTable.tgSuaChua)" size="small"/>
+            <nz-select nzAllowClear [(ngModel)]="filterTable.tgKhoiCong"
+                       (ngModelChange)="filterInTable('tgKhoiCong',filterTable.tgKhoiCong)">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>
           <nz-input-group>
-            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tgHoanThanh"
-                   (input)="filterInTable('tgThucHien',filterTable.tgThucHien)" size="small"/>
+            <nz-select nzAllowClear [(ngModel)]="filterTable.tgHoanThanh"
+                       (ngModelChange)="filterInTable('tgHoanThanh',filterTable.tgHoanThanh)">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </nz-input-group>
         </th>
         <th>

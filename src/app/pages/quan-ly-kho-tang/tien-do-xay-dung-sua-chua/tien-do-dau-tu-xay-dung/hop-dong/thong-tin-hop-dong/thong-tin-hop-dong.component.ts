@@ -8,14 +8,15 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {
   QuyetdinhpheduyetKhlcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKhlcnt.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {
   QuyetdinhpheduyetKqLcntService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/quyetdinhpheduyetKqLcnt.service";
-import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/hopdong.service";
+} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
+import {HopdongService} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
 import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-hop-dong',
@@ -87,9 +88,9 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
       trangThaiHd: [],
       tenTrangThaiHd: [],
       fileDinhKems: [null],
-      listKtXdscQuyetDinhPdKhlcntCvDaTh: null,
-      listKtXdscQuyetDinhPdKhlcntCvKad: null,
-      listKtXdscQuyetDinhPdKhlcntCvKh: null
+      listKtTdxdQuyetDinhPdKhlcntCvDaTh: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKad: null,
+      listKtTdxdQuyetDinhPdKhlcntCvKh: null
     });
     super.ngOnInit()
   }
@@ -108,8 +109,40 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
-  save(isHoanThanh?) {
+  hoanThanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành hợp đồng?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.itemQdPdKhLcnt.id,
+            trangThai: STATUS.DA_HOAN_THANH,
+          };
+          let res =
+            await this.hopdongService.hoanThanh(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
 
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   async detail(isBackFromHd?) {
@@ -117,7 +150,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
     try {
       if (this.itemQdPdKhLcnt && !isBackFromHd) {
         this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-        this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+        this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
+        console.log( this.itemQdPdKhLcnt,' this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt this.itemQdPdKhLcnt');
         if (this.listHopDong && this.listHopDong.length > 0) {
           this.selectRow(this.listHopDong[0]);
         }
@@ -134,7 +168,7 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
           if (res.data) {
             this.itemQdPdKhLcnt = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, this.itemQdPdKhLcnt);
-            this.listHopDong = this.itemQdPdKhLcnt.listKtXdscQuyetDinhPdKhlcntCvKh;
+            this.listHopDong = this.itemQdPdKhLcnt.listKtTdxdQuyetDinhPdKhlcntCvKh;
             if (this.listHopDong && this.listHopDong.length > 0) {
               this.selectRow(this.listHopDong[0]);
             }

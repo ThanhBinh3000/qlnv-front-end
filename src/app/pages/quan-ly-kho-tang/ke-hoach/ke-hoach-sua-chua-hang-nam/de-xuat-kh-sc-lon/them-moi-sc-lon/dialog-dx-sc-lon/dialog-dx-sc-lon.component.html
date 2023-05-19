@@ -122,7 +122,7 @@
       </div>
       <div nz-col nzSpan="12">
         <nz-form-item>
-          <nz-form-label nzNoColon="true">Kế hoạch vốn năm hiện tại (đ)</nz-form-label>
+          <nz-form-label nzRequired nzNoColon="true">Kế hoạch vốn năm hiện tại (đ)</nz-form-label>
           <nz-input-group>
             <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="item.vonDauTu" [nzMin]="0"
                              [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter" class="text-blue"

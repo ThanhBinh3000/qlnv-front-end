@@ -293,22 +293,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     this.listPhieuXuatKho.forEach(s => {
       s.id = null;
     })
-    let res ;
-    if (body.id && body.id > 0) {
-      res = await this.bienBanTinhKhoService.update(body);
-    } else {
-      res = await this.bienBanTinhKhoService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      }
-      this.formData.enable();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    await this.createUpdate(body);
     this.formData.enable();
   }
 

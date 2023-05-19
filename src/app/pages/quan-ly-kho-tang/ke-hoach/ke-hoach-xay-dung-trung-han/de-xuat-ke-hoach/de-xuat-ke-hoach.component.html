@@ -108,8 +108,10 @@
           <th></th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small"/>
+              <nz-select nzAllowClear [(ngModel)]="filterTable.namKeHoach"
+                         (ngModelChange)="filterInTable('namKeHoach',filterTable.namKeHoach)">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
             </nz-input-group>
           </th>
           <th>
@@ -173,7 +175,7 @@
           <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
           <td>{{ data.ngayDuyet | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.namBatDau && data.namKetThuc ? data.namBatDau + ' - ' + data.namKetThuc : '' }}</td>
-          <td>{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
+          <td class="text-right">{{ data.tmdt | number: '1.0-1' : 'vi-VN' }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">

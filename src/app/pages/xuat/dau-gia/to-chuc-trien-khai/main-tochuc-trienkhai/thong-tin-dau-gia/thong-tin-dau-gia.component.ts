@@ -1,13 +1,13 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import dayjs from "dayjs";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {MESSAGE} from "../../../../../../constants/message";
-import {Base2Component} from 'src/app/components/base2/base2.component';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {cloneDeep} from 'lodash';
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { MESSAGE } from "../../../../../../constants/message";
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { cloneDeep } from 'lodash';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
@@ -21,6 +21,12 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
 
   @Input()
   loaiVthh: string;
+
+  idQdPdKh: number = 0;
+  isViewQdPdKh: boolean = false;
+
+  idDxBdg: number = 0;
+  isViewDxBdg: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -76,14 +82,13 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
         loaiVthh: this.loaiVthh
       })
       await this.search();
-      let dt=  this.dataTable.flatMap(row => {
+      let dt = this.dataTable.flatMap(row => {
         return row.children.map(data => {
           return Object.assign(cloneDeep(row), data);
         })
       })
       console.log(arr)
-      this.dataTable=cloneDeep(dt);
-      console.log(dt)
+      this.dataTable = cloneDeep(dt);
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -102,5 +107,26 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       this.formData.patchValue(currentSearch)
     }
     this.timKiem();
+  }
+
+
+  openModalQdPdKh(id: number) {
+    this.idQdPdKh = id;
+    this.isViewQdPdKh = true;
+  }
+
+  closeModalQdPdKh() {
+    this.idQdPdKh = null;
+    this.isViewQdPdKh = false;
+  }
+
+  openModalDxBdg(id: number) {
+    this.idDxBdg = id;
+    this.isViewDxBdg = true;
+  }
+
+  closeModalDxBdg() {
+    this.idDxBdg = null;
+    this.isViewDxBdg = false;
   }
 }

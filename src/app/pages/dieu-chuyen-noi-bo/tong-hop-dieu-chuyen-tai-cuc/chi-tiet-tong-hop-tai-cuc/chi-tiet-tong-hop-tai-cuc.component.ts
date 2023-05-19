@@ -88,6 +88,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   groupData2Cuc: any[];
 
   listCCNhan: any[];
+
+  listMaCCNhan: any[];
   listTenTrangThai = {
     "00": "Dự thảo",
     "01": "Chờ duyệt - tp",
@@ -95,8 +97,10 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     "03": "Chờ duyệt - lđ cục",
     "04": "Từ chối - lđ cục",
     "05": "Đã duyệt - lđ cục",
-    "65": "Y/c chi cục xác định điểm nhập"
-  }
+    "59": "Y/c chi cục xác định điểm nhập"
+  };
+  deXuatPheDuyet: { [key: string]: boolean } = {};
+  dcnbKeHoachDcHdrId: number[] = [];
   constructor(httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
@@ -144,13 +148,14 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     try {
       // await this.loadDetail(this.idInput)
       if (this.formData.value.id) {
+        // await this.getDsChiCucBiTuChoi(this.formData.value.id);
         const data = await this.detail(this.formData.value.id);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.formData.patchValue({
           soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat.split('/')[0] : null
         })
         this.daXdinhDiemNhap = data?.daXdinhDiemNhap
-        this.convertTongHop(data, this.isAddNew)
+        this.convertTongHop(data, this.isAddNew);
       }
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
     } catch (e) {
@@ -166,6 +171,14 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   async initData() {
     this.formData.controls["id"].setValue(this.idInput)
   };
+  // async getDsChiCucBiTuChoi(id) {
+  //     try {
+  //         const res = await this.tongHopDieuChuyenService.getDsChiCucTuChoi({ id });
+  //         this.listMaCCNhan = Array.isArray(res.data) ? res.data.map(f => f.maChiCucNhan) : []
+  //     } catch (error) {
+  //         console.log("error", error)
+  //     }
+  // }
   async detail(id, roles?: any) {
     if (!this.checkPermission(roles)) {
       return
@@ -223,7 +236,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         const data = await this.tongHopDieuChuyenService.guiYeuCauXacDinhDiemNhap({ id: this.formData.value.id });
         if (data.msg == MESSAGE.SUCCESS) {
           this.notification.success(MESSAGE.SUCCESS, "Gửi yêu cầu xác định điểm nhập thành công!");
-          this.formData.controls['trangThai'].setValue(STATUS.DA_PHANBO_DC_CHODUYET_LDC)
+          this.formData.controls['trangThai'].setValue(STATUS.YC_CHICUC_PHANBO_DC);
         } else {
           this.notification.error(MESSAGE.ERROR, data.msg);
         }
@@ -302,6 +315,13 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
     this.errorInputComponent = [];
     this.disableInputComponent = new ModalInput();
   };
+  duyet(id: number, trangThai: string, msg: string, dcnbKeHoachDcHdrId?: number[], roles?: any, msgSuccess?: string) {
+    if (this.formData.value.loaiKeHoach == 'CUC' && (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) && (!dcnbKeHoachDcHdrId || !Array.isArray(dcnbKeHoachDcHdrId) || dcnbKeHoachDcHdrId.length <= 0)) {
+      this.notification.error(MESSAGE.NOTIFICATION, 'Chưa có kế hoạch điều chuyển nào được duyệt.');
+      return;
+    }
+    this.approve(id, trangThai, msg, dcnbKeHoachDcHdrId, roles, msgSuccess)
+  }
   async saveAndSend(): Promise<void> {
     try {
       await this.spinner.show();
@@ -366,7 +386,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
   async save(isGuiDuyet: boolean, isGuiYeuCau: boolean) {
     try {
 
-      let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat + '/DCNB' };
+      let body = { ...this.formData.value, soDeXuat: this.formData.value.soDeXuat ? this.formData.value.soDeXuat + '/DCNB' : undefined };
       let res;
       await this.spinner.show();
       this.setValidator(false)
@@ -487,7 +507,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
         if (Array.isArray(data.thKeHoachDieuChuyenNoiBoCucDtls) && data.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
           this.daXdinhDiemNhap = true;
           data.thKeHoachDieuChuyenNoiBoCucDtls?.forEach(element => {
-            if (!element.dcnbKeHoachDcHdr.daXdinhDiemNhap) {
+            if (!element?.dcnbKeHoachDcHdr?.daXdinhDiemNhap) {
               this.daXdinhDiemNhap = false;
             }
           });
@@ -518,7 +538,18 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
           this.groupData2Cuc.forEach((item, id) => {
             if (item.dcnbKeHoachDcHdr.some(cur => !cur.daXdinhDiemNhap)) {
               this.daXdinhDiemNhap = false
+            };
+            if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP) {
+              Array.isArray(item.dcnbKeHoachDcHdr) && item.dcnbKeHoachDcHdr.forEach(element => {
+                this.deXuatPheDuyet[element.id] = true;
+              });
+
+            } else if (this.formData.value.trangThai && this.formData.value.trangThai != STATUS.DU_THAO && typeof item.dcnbKeHoachDcHdrId == "string") {
+              item.dcnbKeHoachDcHdrId?.split(",")?.forEach(element => {
+                this.deXuatPheDuyet[element] = true
+              });
             }
+            this.renderListDcnbKeHoachDcHdrId(this.deXuatPheDuyet)
           })
           this.selectRow(this.groupData2Cuc[0], isNew)
         }
@@ -653,5 +684,60 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
       this.isViewKeHoachDC = true;
     }
 
+  }
+  checkDxuatDuyet(check: boolean, data: any): void {
+    this.deXuatPheDuyet[data.id] = check;
+    this.renderListDcnbKeHoachDcHdrId(this.deXuatPheDuyet)
+  };
+  renderListDcnbKeHoachDcHdrId(listObj = {}) {
+    const arr = []
+    for (const [key, value] of Object.entries(listObj)) {
+      if (value) {
+        arr.push(Number(key))
+      }
+    }
+    this.dcnbKeHoachDcHdrId = cloneDeep(arr)
+  }
+  async approve(id: number, trangThai: string, msg: string, dcnbKeHoachDcHdrId?: number[], roles?: any, msgSuccess?: string) {
+    if (!this.checkPermission(roles)) {
+      return
+    };
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: msg,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: id,
+            trangThai: trangThai,
+            dcnbKeHoachDcHdrId
+          }
+          let res = await this.tongHopDieuChuyenService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
+            this.spinner.hide();
+            this.goBack();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide();
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  };
+  roleCheckXuatDuyet(id: number, trangThai: string) {
+    return this.userService.isCuc() && ((this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_TP') && (trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.TU_CHOI_LDC)) || (this.userService.isAccessPermisson('DCNB_TONGHOPDC_DUYET_LDCUC') && trangThai == STATUS.CHO_DUYET_LDC))
   }
 }

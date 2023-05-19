@@ -619,7 +619,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên nhà kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNhakho" nz-input [readonly]="true" />
+                            <input formControlName="tenNhakho" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -885,7 +885,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNgankho" nz-input [readonly]="true" />
+                            <input formControlName="tenNgankho" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1249,7 +1249,7 @@
                         <nz-form-item>
                           <nz-form-label>Tên lô kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
-                            <input formControlName="tenNganlo" nz-input [readonly]="true" />
+                            <input formControlName="tenNganlo" nz-input [readonly]="isEditData" />
                           </nz-form-control>
                         </nz-form-item>
                       </div>
@@ -1767,10 +1767,10 @@
                                   <ng-container *ngIf="expandSet.has(item3.idVirtual)">
                                     <ng-container *ngFor="let item4 of item3.childData">
                                       <tr>
-                                        <td></td>
-                                        <td style="padding-left: 100px">{{item4.tenCloaiVthh}}</td>
-                                        <td class="text-right">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
-                                        <td>{{item4.tenDonViTinh}}</td>
+                                        <td  class="bg-selected"></td>
+                                        <td  class="font-weight-bold bg-selected" style="padding-left: 125px">{{item4.tenCloaiVthh}}</td>
+                                        <td class="font-weight-bold text-right bg-selected">{{item4.slHienThoi | number : '1.0-1' : 'vi-VN'}}</td>
+                                        <td class="font-weight-bold bg-selected">{{item4.tenDonViTinh}}</td>
                                       </tr>
                                     </ng-container>
                                   </ng-container>

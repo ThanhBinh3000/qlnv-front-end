@@ -6,7 +6,7 @@
   </div>
   <div nz-col nzSpan="24">
     <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="24" class="form-item" style="padding-right: 15px;">
-      <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
+      <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ/Ngành</nz-form-label>
       <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
         <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
         </nz-option>
@@ -40,7 +40,7 @@
     <nz-tab [nzTitle]="'Mua tăng'">
       <app-ke-hoach-xuat-giam [isView]="isView" tab='MT' [tabRadio]="radioValue" [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaTang"
                               [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.muaTangList"
-                              [(dataToanBn)]="dataToanBn">
+                              [dataToanBn]="dataToanBn">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
 

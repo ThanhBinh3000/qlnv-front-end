@@ -86,7 +86,7 @@
         <tr>
           <th class="text-center" nzWidth="5%">STT</th>
           <th class="text-center" nzWidth="10%">Năm</th>
-          <th class="text-center" nzWidth="40%">Bộ ngành</th>
+          <th class="text-center" nzWidth="40%">Bộ/Ngành</th>
           <th class="text-center" nzWidth="10%">Thời gian tạo</th>
           <th class="text-center" nzWidth="10%">Thời gian ban hành</th>
           <th class="text-center" nzWidth="10%">Trạng thái</th>
@@ -112,6 +112,12 @@
             <a *ngIf="data.trangThai == STATUS.DU_THAO"
                (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'pdf')">
+              <i class="icon htvbdh_file-pdf"></i>
+            </a>
+            <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="download(data.id, 'xlsx')">
+              <i class="icon htvbdh_file-excel"></i>
             </a>
           </td>
         </tr>

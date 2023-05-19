@@ -1,32 +1,35 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Base2Component } from "src/app/components/base2/base2.component";
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "src/app/services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DonviService } from "src/app/services/donvi.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {Base2Component} from "src/app/components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DonviService} from "src/app/services/donvi.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
 import dayjs from "dayjs";
-import { UserLogin } from "src/app/models/userlogin";
-import { MESSAGE } from "src/app/constants/message";
-import { chain, isEmpty } from 'lodash';
-import { v4 as uuidv4 } from 'uuid';
+import {UserLogin} from "src/app/models/userlogin";
+import {MESSAGE} from "src/app/constants/message";
+import {chain, isEmpty} from 'lodash';
+import {v4 as uuidv4} from 'uuid';
 import {
   BangKeCanCtvtService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BangKeCanCtvt.service";
-import { BangKeCanService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
+import {BangKeCanService} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BangKeCan.service';
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-bang-ke-can',
+  selector: 'app-bdg-bang-ke-can',
   templateUrl: './bang-ke-can.component.html',
   styleUrls: ['./bang-ke-can.component.scss']
 })
 export class BangKeCanComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
+  public vldTrangThai: DauGiaComponent;
+  public CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
@@ -35,7 +38,8 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   isView = false;
   expandSetString = new Set<string>();
   dataView: any = [];
-
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -45,15 +49,19 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     private donviService: DonviService,
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
     private bangKeCanService: BangKeCanService,
+    private dauGiaComponent: DauGiaComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bangKeCanService);
+    this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
       id: [],
-      nam: dayjs().get('year'),
+      nam: [],
       soQdGiaoNvXh: [],
       soBangKe: [],
       thoiGianGiaoNhan: [],
-      ngayQdGiaoNvXh: [],
+      ngayXuat: [],
+      ngayXuatTu: [],
+      ngayXuatDen: [],
       maDiemKho: [],
       maNhaKho: [],
       maNganKho: [],
@@ -66,6 +74,20 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
       type: []
     })
   }
+
+  disabledStartNgayXk = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayXuatDen) {
+      return startValue.getTime() >= this.formData.value.ngayXuatDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayXk = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayXuatTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayXuatTu.getTime();
+  };
 
   async ngOnInit() {
     try {
@@ -106,7 +128,9 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
 
   async search(roles?): Promise<void> {
     await this.spinner.show()
-    this.formData.value.loaiVthh = this.loaiVthh;
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    });
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
@@ -146,23 +170,38 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
+    console.log(JSON.stringify(this.dataTable), 'raw')
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
-        let quyetDinh = value.find(f => f.soQdGiaoNvXh === key)
-
-        let nam = quyetDinh.nam;
-        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
+        let rs = chain(value)
+          .groupBy("maDiemKho")
+          .map((v, k) => {
+              let rowLv2 = v.find(s => s.maDiemKho === k);
+              return {
+                id: rowLv2 ? rowLv2.id : null,
+                idVirtual: uuidv4(),
+                maDiemKho: k != "null" ? k : '',
+                tenDiemKho: rowLv2 ? rowLv2.tenDiemKho : null,
+                tenNhaKho: rowLv2 ? rowLv2.tenNhaKho : null,
+                tenNganKho: rowLv2 ? rowLv2.tenNganKho : null,
+                tenLoKho: rowLv2 ? rowLv2.tenLoKho : null,
+                childData: v
+              }
+            }
+          ).value();
+        let rowLv1 = value.find(s => s.soQdGiaoNvXh === key);
         return {
           idVirtual: uuidv4(),
-          soQdGiaoNvXh: key, nam: nam,
-          ngayQdGiaoNvXh: ngayQdGiaoNvXh,
-          childData: value
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: rowLv1 ? rowLv1.nam : null,
+          thoiGianGiaoNhan: rowLv1 ? rowLv1.thoiGianGiaoNhan : null,
+          childData: rs
         };
       }).value();
     this.dataView = dataView
+    console.log(dataView,"data")
     this.expandAll()
-
   }
 
   editRow(lv2: any, isView: boolean) {
@@ -171,7 +210,24 @@ export class BangKeCanComponent extends Base2Component implements OnInit {
     this.isView = isView;
   }
 
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isView = b;
+    // this.isViewDetail = isView ?? false;
+  }
+
   async deleteRow(lv2: any) {
     await this.delete(lv2);
+  }
+  openPhieuXkModal(id: number) {
+    console.log(id, 'id');
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
   }
 }

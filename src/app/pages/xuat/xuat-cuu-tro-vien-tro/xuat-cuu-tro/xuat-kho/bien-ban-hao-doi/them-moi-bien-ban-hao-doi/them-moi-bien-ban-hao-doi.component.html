@@ -41,6 +41,12 @@
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
+    <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+            (click)="save()">
+      <i class="icon  htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
   </div>
 </nz-affix>
 <div class="bg-trang">

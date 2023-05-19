@@ -101,10 +101,10 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         tenCloaiVthh: [],
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
-        tenNhaKho: [],
-        tenDiemKho: [],
+        tenNhaKho:['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
-        tenNganKho: [],
+        tenNganKho: ['', [Validators.required]],
         listPhieuXuatKho: [new Array()],
         fileDinhKems: [new Array<FileDinhKem>()],
       }
@@ -115,18 +115,17 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   async ngOnInit() {
     try {
-      this.spinner.show();
-
+      await this.spinner.show();
       await Promise.all([
         this.loadSoQuyetDinh()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -157,7 +156,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         ngayKetThucXuat: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        type: "XUAT_CTVT",
+        type: "XUAT_CAP",
         tongSlNhap: "100000",
         loaiVthh: this.loaiVthh
       });
@@ -280,8 +279,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     }
   }
 
-
-
   async save() {
     this.formData.disable()
     let body = this.formData.value;
@@ -290,22 +287,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     this.listPhieuXuatKho.forEach(s => {
       s.id = null;
     })
-    let res ;
-    if (body.id && body.id > 0) {
-      res = await this.bienBanTinhKhoService.update(body);
-    } else {
-      res = await this.bienBanTinhKhoService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      }
-      this.formData.enable();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    await this.createUpdate(body);
     this.formData.enable();
   }
 
@@ -412,7 +394,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
 
   openPhieuKnClModal(id: number) {
-    console.log(id, "id")
     this.idPhieuKnCl = id;
     this.openPhieuKnCl = true;
   }
@@ -423,7 +404,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openPhieuXkModal(id: number) {
-    console.log(id, "id")
     this.idPhieuXk = id;
     this.openPhieuXk = true;
   }
@@ -434,7 +414,6 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   }
 
   openBangKeModal(id: number) {
-    console.log(id, "id")
     this.idBangKe = id;
     this.openBangKe = true;
   }
