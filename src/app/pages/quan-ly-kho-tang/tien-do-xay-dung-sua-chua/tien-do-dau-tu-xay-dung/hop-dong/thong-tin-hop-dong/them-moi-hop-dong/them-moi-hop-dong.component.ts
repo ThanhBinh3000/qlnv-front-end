@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, Validators} from "@angular/forms";
 import {STATUS} from "../../../../../../../constants/status";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
@@ -16,19 +16,14 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
-import {FILETYPE} from "../../../../../../../constants/fileType";
 import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {
-  CongViec
-} from "../../../quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
-import {
-  DialogQdPdKhlcntComponent
-} from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
 import {
   DialogQdPdKqlcntComponent
 } from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {PhuLucHopDongComponent} from "../phu-luc-hop-dong/phu-luc-hop-dong.component";
+import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 @Component({
   selector: 'app-them-moi-hop-dong',
@@ -36,6 +31,7 @@ import {CurrencyMaskInputMode} from "ngx-currency";
   styleUrls: ['./them-moi-hop-dong.component.scss']
 })
 export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
+  @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
@@ -352,17 +348,26 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     })
   }
 
-  redirectToPhuLuc(isView: boolean, id: number) {
-    this.idPhuLuc = id;
-    this.isViewHd = true;
-    this.isViewPl = isView;
-  }
-
-  goBackPl(event) {
-    this.isViewHd = false;
-    if (event) {
-      this.detail(this.idInput)
-    }
+  openModalPhuLuc(isView: boolean, id: number) {
+    const modalQD = this.modal.create({
+      nzTitle: 'PHỤ LỤC HỢP ĐỒNG',
+      nzContent: PhuLucHopDongComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHdr: this.formData.value,
+        id: id,
+        isView: isView
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.detail(this.idInput)
+      }
+    });
+    this.collapseExpand.clickHeader();
   }
 
   async detail(id) {
