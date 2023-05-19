@@ -94,6 +94,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   convertListData() {
+    console.log(this.dataTable,'dataTabledataTabledataTabledataTabledataTable')
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
           tenVthh: key,

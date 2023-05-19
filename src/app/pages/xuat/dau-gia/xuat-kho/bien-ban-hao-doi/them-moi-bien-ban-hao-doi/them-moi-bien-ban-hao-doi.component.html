@@ -5,44 +5,48 @@
       <span>Quay lại</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_LDCC)&&
-    userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_THEM')"
-            (click)="save(true)">
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+            (click)="saveAndSend(this.formData.value,STATUS.CHO_DUYET_TP,'Bạn có muốn lưu và gửi duyệt ?','Bạn đã lưu và gửi duyệt thành công!')">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
 
     </button>
-    <button type="button"
-            class="btn btn-sub do"
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_KTVBQ') && isDisabled()"
-            (click)="reject(idInput,STATUS.TU_CHOI_KTVBQ)">
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button type="button"
-            class="btn btn-sub do"
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_LDCCUC') && isDisabled()"
-            (click)="reject(idInput,STATUS.TU_CHOI_LDCC)">
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_KT')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_KTVBQ') && isDisabled()"
-            (click)="approve(idInput,STATUS.DA_DUYET_KTVBQ,'Bạn có muốn duyệt bản ghi này ?')">
+    <button type="button" class="btn btn-sub do" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_LDCCUC')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_KTVBQ')
+        && (formData.value.trangThai===STATUS.CHO_DUYET_KTVBQ) " (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-            *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_LDCCUC') && isDisabled()"
-            (click)="approve(idInput,STATUS.DA_DUYET_LDCC,'Bạn có muốn duyệt bản ghi này ?')">
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc()  && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_KT')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_KT) " (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ || formData.value.trangThai == STATUS.TU_CHOI_LDCC)&&
-    userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBHD_DUYET_THEM')"
-            type="button" class="btn btn-main" (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
+    <button class="btn btn-sub xanh-nhat" *ngIf="  this.userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_XK_LT_BBTK_LDCCUC')
+            && (formData.value.trangThai===STATUS.CHO_DUYET_LDCC)" (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet "></i>
+      <span>Duyệt</span>
+    </button>
+    <button class="btn btn-sub xanh-nhat" type="button"
+            *ngIf=" this.userService.isChiCuc() && !isDisabled() && formData.value.trangThai != STATUS.DA_DUYET_LDCC"
+            (click)="save()">
+      <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
+
     </button>
   </div>
 </nz-affix>
@@ -230,14 +234,22 @@
           <ng-container *ngFor="let item of basicTable.data, let i = index;">
             <tr>
               <td>{{i + 1}}</td>
-              <td>{{item.soPhieuKnCl}} </td>
-              <td>{{item.soPhieuXuatKho}}</td>
-              <td>{{item.soBkCanHang}}</td>
-              <td>{{item.ngayXuatKho}}</td>
-              <td>{{item.slXuat}}</td>
+              <td><a *ngIf="item.soPhieuKnCl" nz-button  nzType="link" (click)="openPhieuKnClModal(item.idPhieuKnCl)" >{{item.soPhieuKnCl}}</a> </td>
+              <td><a *ngIf="item.soPhieuXuatKho" nz-button  nzType="link" (click)="openPhieuXkModal(item.idPhieuXuatKho)" >{{item.soPhieuXuatKho}}</a></td>
+              <td><a *ngIf="item.soBkCanHang"  nz-button  nzType="link" (click)="openBangKeModal(item.idBkCanHang)" >{{item.soBkCanHang}}</a></td>
+              <td>{{item.ngayXuatKho | date: 'dd/MM/YYYY' }}</td>
+              <td>{{item.slXuat |number:'1.0-1' : 'vi_VN'}}</td>
             </tr>
           </ng-container>
           </tbody>
+          <tfoot>
+          <ng-container>
+            <tr>
+              <td colspan="5" class="bold text-blue text-right">TỔNG</td>
+              <td class="bold text-blue">{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}} </td>
+            </tr>
+          </ng-container>
+          </tfoot>
         </nz-table>
       </nz-card>
     </form>
@@ -248,7 +260,7 @@
             <nz-form-label [nzNoColon]="true">
               Tổng số lượng nhập
             </nz-form-label>
-            <span>10.000</span>
+            <span class="bold text-blue">10.000</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -264,10 +276,7 @@
             <nz-form-label [nzNoColon]="true">
               Tổng số lượng xuất
             </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <input nz-input [ngModelOptions]="{standalone: true}"
-                     [ngModel]="calcTong() > 0 ? calcTong() : ''" readonly/>
-            </nz-form-control>
+            <span>{{tongSoLuongXk |number:'1.0-1' : 'vi_VN'}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -278,7 +287,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy">
-                  {{formData.value.ngayKtXuat}}
+                  {{formData.value.ngayKtXuat | date: 'dd/MM/YYYY'}}
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -295,7 +304,7 @@
                   Số lượng hao thực tế
                 </nz-form-label>
                 <span>
-                                    {{formData.value.slHaoThucTe}}
+                                    {{formData.value.slHaoThucTe |number:'1.0-1' : 'vi_VN'}}
                                 </span>
               </nz-form-item>
             </div>
@@ -323,7 +332,7 @@
                   Số lượng
                 </nz-form-label>
                 <span>
-                                    {{formData.value.slHaoVuotDm}}
+                                    {{formData.value.slHaoVuotDm |number:'1.0-1' : 'vi_VN'}}
                                 </span>
               </nz-form-item>
             </div>
@@ -351,7 +360,7 @@
                   Số lượng
                 </nz-form-label>
                 <span>
-                                    {{formData.value.slHaoThanhLy}}
+                                    {{formData.value.slHaoThanhLy |number:'1.0-1' : 'vi_VN'}}
                                 </span>
               </nz-form-item>
             </div>
@@ -377,7 +386,7 @@
                   Số lượng
                 </nz-form-label>
                 <span>
-                                    {{formData.value.slHaoDuoiDm}}
+                                    {{formData.value.slHaoDuoiDm |number:'1.0-1' : 'vi_VN'}}
                                 </span>
               </nz-form-item>
             </div>
@@ -413,10 +422,10 @@
               <ng-container>
                 <tr>
                   <td>1</td>
-                  <td>{{formData.value.ngayKetThucXuat}} </td>
-                  <td>{{formData.value.ngayKetThucXuat}}</td>
-                  <td>{{formData.value.dinhMucHaoHut}}</td>
-                  <td>{{formData.value.sLHaoHutTheoDm}}</td>
+                  <td>{{formData.value.ngayKetThucXuat | date: 'dd/MM/YYYY' }} </td>
+                  <td>{{formData.value.tongSoLuongXk }}</td>
+                  <td>{{formData.value.dinhMucHaoHut }}</td>
+                  <td>{{formData.value.sLHaoHutTheoDm |number:'1.0-1' : 'vi_VN'}}</td>
                 </tr>
               </ng-container>
               </tbody>
@@ -426,7 +435,7 @@
         <!--  -->
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Nguyên nhân
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -437,7 +446,7 @@
         </div>
         <div nz-col nzSpan="12">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Kiến nghị
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -448,7 +457,7 @@
         </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Ghi chú
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
@@ -507,7 +516,7 @@
         </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               File đính kèm biên bản tịnh kho đã ký
             </nz-form-label>
             <div class="list-file">
@@ -522,3 +531,40 @@
 <ng-template #error let-control>
   <app-template-error #error [control]="control"></app-template-error>
 </ng-template>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuKnCl" (nzOnCancel)="closePhieuKnClModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-them-moi-phieu-kiem-nghiem-chat-luong [id]="idPhieuKnCl" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-bdg-them-moi-phieu-kiem-nghiem-chat-luong>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closePhieuKnClModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-them-moi-phieu-xuat-kho [idInput]="idPhieuXk" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-bdg-them-moi-phieu-xuat-kho>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closePhieuXkModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openBangKe" (nzOnCancel)="closeBangKeModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-bdg-chi-tiet-bang-ke-can [idInput]="idBangKe" [loaiVthh]="loaiVthh" [isView]="true">
+    </app-bdg-chi-tiet-bang-ke-can>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeBangKeModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>

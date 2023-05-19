@@ -46,8 +46,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
-  dsDonViTinh = [];
-  dsKeHoachNam = [];
   listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
   amount = AMOUNT_ONE_DECIMAL;
 
@@ -176,6 +174,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   onChangeLoaiVthh(event, typeData?: any) {
+    debugger;
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
       typeData.cloaiVthh = null;

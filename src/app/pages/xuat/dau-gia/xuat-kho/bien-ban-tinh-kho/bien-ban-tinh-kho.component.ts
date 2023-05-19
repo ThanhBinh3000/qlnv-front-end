@@ -12,9 +12,11 @@ import { chain } from 'lodash';
 import * as uuid from "uuid";
 import { PhieuXuatKhoService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/PhieuXuatKho.service';
 import { BienBanTinhKhoService } from './../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/xuat-kho/BienBanTinhKho.service';
+import {DauGiaComponent} from "../../dau-gia.component";
+import {CHUC_NANG} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-bien-ban-tinh-kho',
+  selector: 'app-bdg-bien-ban-tinh-kho',
   templateUrl: './bien-ban-tinh-kho.component.html',
   styleUrls: ['./bien-ban-tinh-kho.component.scss']
 })
@@ -24,7 +26,8 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  public vldTrangThai: DauGiaComponent;
+  public CHUC_NANG = CHUC_NANG;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -33,8 +36,10 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     modal: NzModalService,
     private phieuXuatKhoService: PhieuXuatKhoService,
     private bienBanTinhKhoService: BienBanTinhKhoService,
+    private dauGiaComponent: DauGiaComponent
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanTinhKhoService);
+    this.vldTrangThai = dauGiaComponent;
     this.formData = this.fb.group({
       tenDvi: null,
       maDvi: null,
@@ -74,7 +79,38 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   isView = false;
   children: any = [];
   expandSetString = new Set<string>();
+  idPhieuXk: number = 0;
+  openPhieuXk = false;
+  idBangKe: number = 0;
+  openBangKe = false;
 
+  disabledStartNgayBd = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayBatDauXuatDen) {
+      return startValue.getTime() >= this.formData.value.ngayBatDauXuatDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayBd = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayBatDauXuatTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayBatDauXuatTu.getTime();
+  };
+
+  disabledStartNgayKt = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKetThucXuatDen) {
+      return startValue.getTime() >= this.formData.value.ngayKetThucXuatDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKt = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKetThucXuatTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKetThucXuatTu.getTime();
+  };
 
   ngOnInit(): void {
     try {
@@ -90,7 +126,9 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
 
 
   async search(roles?): Promise<void> {
-    this.formData.value.loaiVthh = this.loaiVthh;
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+    });
     await super.search(roles);
     this.buildTableView();
   }
@@ -128,6 +166,7 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
   }
 
   buildTableView() {
+    console.log(this.dataTable, " key ? key : null,")
     let dataView = chain(this.dataTable)
       .groupBy("soQdGiaoNvXh")
       .map((value, key) => {
@@ -135,29 +174,28 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
         let rs = chain(value)
           .groupBy("soBbTinhKho")
           .map((v, k) => {
-            let soBb = v.find(s => s.soBbTinhKho === k)
-            return {
-              idVirtual: uuid.v4(),
-              soBbTinhKho: k,
-              ngayBatDauXuat: soBb.ngayBatDauXuat,
-              ngayKetThucXuat: soBb.ngayKetThucXuat,
-              trangThai: soBb.trangThai,
-              tenTrangThai: soBb.tenTrangThai,
-              maDvi: soBb.maDvi,
-              tenDiemKho: soBb.tenDiemKho,
-              tenNhaKho: soBb.tenNhaKho,
-              tenNganKho: soBb.tenNganKho,
-              tenLoKho: soBb.tenLoKho,
-              id: soBb.id,
-              childData: v
+              let soBb = v.find(s => s.soBbTinhKho === k)
+              return {
+                idVirtual: uuid.v4(),
+                soBbTinhKho: k != "null" ? k : '',
+                tenDiemKho: soBb ? soBb.tenDiemKho : null,
+                tenLoKho: soBb ? soBb.tenLoKho : null,
+                ngayBatDauXuat: soBb ? soBb.ngayBatDauXuat : null,
+                ngayKetThucXuat: soBb ? soBb.ngayKetThucXuat : null,
+                trangThai: soBb ? soBb.trangThai : null,
+                tenTrangThai: soBb ? soBb.tenTrangThai : null,
+                maDvi: soBb ? soBb.maDvi : null,
+                id: soBb ? soBb.id : null,
+                childData: v ? v : null,
+              }
             }
-          }
           ).value();
-        let nam = quyetDinh.nam;
-        let ngayQdGiaoNvXh = quyetDinh.ngayQdGiaoNvXh;
+        let nam = quyetDinh ? quyetDinh.nam : null;
+        let ngayQdGiaoNvXh = quyetDinh ? quyetDinh.ngayQdGiaoNvXh : null;
         return {
           idVirtual: uuid.v4(),
-          soQdGiaoNvXh: key, nam: nam,
+          soQdGiaoNvXh: key != "null" ? key : '',
+          nam: nam,
           ngayQdGiaoNvXh: ngayQdGiaoNvXh,
           childData: rs
         };
@@ -187,5 +225,25 @@ export class BienBanTinhKhoComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     this.isView = b;
     // this.isViewDetail = isView ?? false;
+  }
+
+  openPhieuXkModal(id: number) {
+    this.idPhieuXk = id;
+    this.openPhieuXk = true;
+  }
+
+  closePhieuXkModal() {
+    this.idPhieuXk = null;
+    this.openPhieuXk = false;
+  }
+
+  openBangKeModal(id: number) {
+    this.idBangKe = id;
+    this.openBangKe = true;
+  }
+
+  closeBangKeModal() {
+    this.idBangKe = null;
+    this.openBangKe = false;
   }
 }

@@ -102,7 +102,6 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         this.loadDanhMucHang(),
       ])
     if (this.idInput == 0) {
-      console.log('vao day')
       await this.loadQdTtcpGiaoBoNganh(dayjs().get('year'))
     }
     await this.spinner.hide();
@@ -143,7 +142,8 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         ngayQd: data.ngayQd,
         soQd: data.soQd.split('/')[0],
         trangThai: data.trangThai,
-        trichYeu: data.trichYeu
+        trichYeu: data.trichYeu,
+        ghiChu: data.ghiChu
       })
       // this.taiLieuDinhKemList = data.fileDinhkems;
       data.fileDinhkems.forEach(item => {

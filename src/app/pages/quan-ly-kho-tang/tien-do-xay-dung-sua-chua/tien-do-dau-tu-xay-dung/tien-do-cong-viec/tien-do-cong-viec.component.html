@@ -1,14 +1,14 @@
 <div class="bg-trang">
   <div class="cangiua group-button-search">
-      <button class="btn btn-sub xanh-nhat ml-2">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Hoàn thành</span>
-      </button>
-      <button class="btn btn-main btn-sm waves-effect waves-light ml-2">
-        <i class="icon htvbdh_tcdt_save"></i>
-        <span>Lưu</span>
-      </button>
-    </div>
+    <button class="btn btn-sub xanh-nhat ml-2">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Hoàn thành</span>
+    </button>
+    <button class="btn btn-main btn-sm waves-effect waves-light ml-2">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <nz-table #basicTable [nzData]="listHopDong" [nzFrontPagination]="false"
               [nzShowPagination]="false" nzBordered class="mt-2">
@@ -44,115 +44,72 @@
       </tbody>
     </nz-table>
   </nz-card>
-    <nz-card class="mt16 flex-card p-lr16 mg-t-10">
-      <div class="header header-green-background mg-t-10">
-        <div class="header-text">
-          <div class="title-chi-tieu">
-            <span class="text-uppercase font-weight-bold">Thông tin chung</span>
-          </div>
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <div class="header header-green-background">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+      <span
+        [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV   ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{ formData.value.tenTrangThai }}
+      </span>
+          <span>TIẾN ĐỘ CÔNG VIỆC</span>
         </div>
       </div>
-      <form nz-form nzLayout="horizontal" [formGroup]="formData">
-        <div nz-row [nzGutter]="[24]">
-          <div nz-col nzSpan="12">
-            <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KH LCNT</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="soQd" readonly/>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="soQdPdKqlcnt" readonly/>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tên dự án</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="tenDuAn" readonly/>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Chủ đầu tư</nz-form-label>
-                  <nz-form-control>
-                    <input nz-input formControlName="chuDauTu" readonly/>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                </nz-form-item>
-              </div>
-            </div>
-          </div>
-          <div nz-col nzSpan="12">
-            <div nz-row [nzGutter]="[24]" class="label-50 mg-t-10 border-right">
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư</nz-form-label>
-                  <nz-form-control>
-                    <nz-input-group>
-                      <input nz-input currencyMask [options]="AMOUNT" formControlName="tongTien" readonly/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tổng số gói thầu</nz-form-label>
-                  <nz-form-control>
-                    <nz-input-group>
-                      <input nz-input formControlName="soGoiThau" readonly/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số gói thầu đã trúng</nz-form-label>
-                  <nz-form-control>
-                    <nz-input-group>
-                      <input nz-input formControlName="soGoiThauTc" readonly/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Số gói thầu trượt</nz-form-label>
-                  <nz-form-control>
-                    <nz-input-group>
-                      <input nz-input formControlName="soGoiThauTb" readonly/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-              <div nz-col nzSpan="24">
-                <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Tổng số hợp đồng đã ký</nz-form-label>
-                  <nz-form-control>
-                    <nz-input-group>
-                      <input nz-input formControlName="soHopDongDaKy" readonly/>
-                    </nz-input-group>
-                  </nz-form-control>
-                </nz-form-item>
-              </div>
-            </div>
-          </div>
+    </div>
+    <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ PD dự án ĐTXD</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
         </div>
-      </form>
-    </nz-card>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ PD bản vẽ TKTC và tổng dự toán</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt KH LCNT</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> Số QĐ phê duyệt KQ LCNT</nz-form-label>
+            <span class="text-blue">01/QĐ-TCDT</span>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <div class="group-button">
+    <h3> TIẾN ĐỘ VÀ KHỐI LƯỢNG CÔNG VIỆC THEO HỢP ĐỒNG</h3>
+    <div class="buttons">
+      <button type="button" class="btn btn-sub">
+        <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <span>Xuất file</span>
+      </button>
+    </div>
+  </div>
+  <nz-table [nzData]="listHopDong" [nzFrontPagination]="false"
+            [nzShowPagination]="false" nzBordered class="pd-10">
+    <thead>
+    <tr>
+      <th width="40px" class="text-center">STT</th>
+      <th width="150px">Số hợp đồng</th>
+      <th width="200px">Tên hợp đồng</th>
+      <th>Gói thầu</th>
+      <th width="250px">Chủ đầu tư</th>
+      <th width="250px">Nhà thầu</th>
+      <th width="130px">Ngày ký hợp đồng</th>
+      <th width="130px">Giá trị hợp đồng</th>
+      <th width="130px">Trạng thái HĐ</th>
+      <th width="100px" class="text-center">Tiến độ thực hiện</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+  </nz-table>
 </div>
