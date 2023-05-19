@@ -10,7 +10,7 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../constants/status";
 import { MESSAGE } from "../../../../../constants/message";
-import { slGtriHangDtqgXuatVt } from "../../../../../models/BaoCaoBoNganh";
+import { tiepNhanHangDtqg } from "../../../../../models/BaoCaoBoNganh";
 import {
   DialogThemMoiSlGtriHangDtqgComponent
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
@@ -106,8 +106,11 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
             this.itemRowMatHang[i] = [];
             this.itemRowMatHangEdit[i] = [];
             for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-              this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
+              this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
               this.itemRowMatHangEdit[i][y] = [];
+              if (this.listDataGroup[i].children[y].children.length > 0) {
+                this.listDataGroup[i].children[y].coNhieuMatHang = true;
+              }
             }
           }
         }})
@@ -147,6 +150,9 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
   }
 
   async save() {
+    for (let i = 0; i < this.listDataGroup.length; i++) {
+      this.listDataGroup[i].thuTuHienThi = (i+1)
+    }
     let body = {
       "hdr" : this.formData.value,
       "detail": this.listDataGroup
@@ -169,7 +175,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     }
   }
 
-  themMoiDanhMuc() {
+  themMoiDanhMuc(data?: string) {
     const modalGT = this.modal.create({
       nzTitle: '',
       nzContent: DialogThemMoiSlGtriHangDtqgComponent,
@@ -180,6 +186,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
       nzClassName: '',
       nzComponentParams: {
         listDataGroup: this.listDataGroup,
+        danhMuc: data
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -199,9 +206,11 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
       for (let i = 0; i < this.listDataGroup.length; i++) {
         this.itemRowMatHang[i] = [];
         this.itemRowMatHangEdit[i] = [];
+        this.itemRowNhomMhEdit[i] = [];
         for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-          this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
+          this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
           this.itemRowMatHangEdit[i][y] = [];
+          this.itemRowNhomMhEdit[i][y] = this.listDataGroup[i].children[y];
         }
       }
     });
@@ -246,7 +255,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
   }
 
   clearItemRowMatHang(i: number, y: number) {
-    this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
+    this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
   }
 
   editRowDvi(i: number) {
@@ -281,8 +290,7 @@ export class ThemMoiTiepNhanHangDtqgComponent extends Base2Component implements 
     this.listDataGroup[i].children.splice(y, 1)
   }
   saveEditRowNhomMh(i: number, y: number) {
-    this.listDataGroup[i].children[y].danhMuc = this.itemRowNhomMhEdit[i][y].danhMuc
-    this.listDataGroup[i].children[y].maSo = this.itemRowNhomMhEdit[i][y].maSo
+    this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y]
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
   }

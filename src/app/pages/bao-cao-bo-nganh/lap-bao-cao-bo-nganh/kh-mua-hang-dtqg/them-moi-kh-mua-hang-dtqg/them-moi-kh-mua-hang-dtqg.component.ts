@@ -11,11 +11,11 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../constants/status";
 import { MESSAGE } from "../../../../../constants/message";
-import { slGtriHangDtqg } from "../../../../../models/BaoCaoBoNganh";
-import {
-  DialogThemMoiSlGtriHangDtqgComponent
-} from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
+import { khMuaHangDtqg } from "../../../../../models/BaoCaoBoNganh";
 import { cloneDeep } from 'lodash';
+import {
+  DialogThemMoiKhMuaHangDtqgComponent
+} from "../dialog-them-moi-kh-mua-hang-dtqg/dialog-them-moi-kh-mua-hang-dtqg.component";
 
 @Component({
   selector: 'app-them-moi-kh-mua-hang-dtqg',
@@ -64,7 +64,7 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
         loaiBc: [null],
         thoiHanGuiBc: [null],
         thongTuSo: ["130/2018/TT-BTC"],
-        bieuSo: ["004.H/BCDTQG-BN"],
+        bieuSo: ["003.H/BCDTQG-BN"],
         tenDonViGui: [null],
         maDonViGui: [null],
         tenDonViNhan: [null],
@@ -90,8 +90,32 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
         tenDonViNhan: this.dsDonVi[0].tenDvi,
         maDonViNhan: this.dsDonVi[0].maDvi
       });
+      this.initData();
     }
     this.spinner.hide();
+  }
+
+  initData() {
+    let row1 = new khMuaHangDtqg();
+    row1.danhMuc = "I. Kế hoạch mua tăng";
+    row1.maSo = "01";
+    row1.children = []
+    this.listDataGroup.push(row1);
+    let row2 = new khMuaHangDtqg();
+    row2.danhMuc = "II. Kế hoạch mua bù";
+    row2.maSo = "02";
+    row2.children = []
+    this.listDataGroup.push(row2);
+    let row3 = new khMuaHangDtqg();
+    row3.danhMuc = "I. Kế hoạch mua bổ sung";
+    row3.maSo = "03";
+    row3.children = []
+    this.listDataGroup.push(row3);
+    let row4 = new khMuaHangDtqg();
+    row4.danhMuc = "I. Kế hoạch giao mua hàng trong trường hợp khác";
+    row4.maSo = "04";
+    row4.children = []
+    this.listDataGroup.push(row4);
   }
 
   async loadChiTiet(id:number) {
@@ -106,8 +130,11 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
             this.itemRowMatHang[i] = [];
             this.itemRowMatHangEdit[i] = [];
             for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-              this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+              this.itemRowMatHang[i][y] = new khMuaHangDtqg();
               this.itemRowMatHangEdit[i][y] = [];
+              if (this.listDataGroup[i].children[y].children.length > 0) {
+                this.listDataGroup[i].children[y].coNhieuMatHang = true;
+              }
             }
           }
         }})
@@ -147,6 +174,9 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
   }
 
   async save() {
+    for (let i = 0; i < this.listDataGroup.length; i++) {
+      this.listDataGroup[i].thuTuHienThi = (i+1)
+    }
     let body = {
       "hdr" : this.formData.value,
       "detail": this.listDataGroup
@@ -169,10 +199,10 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     }
   }
 
-  themMoiDanhMuc() {
+  themMoiDanhMuc(data?: string) {
     const modalGT = this.modal.create({
       nzTitle: '',
-      nzContent: DialogThemMoiSlGtriHangDtqgComponent,
+      nzContent: DialogThemMoiKhMuaHangDtqgComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '650px',
@@ -180,28 +210,26 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
       nzClassName: '',
       nzComponentParams: {
         listDataGroup: this.listDataGroup,
+        danhMuc: data
       },
     });
     modalGT.afterClose.subscribe((res) => {
       if (!res) {
         return;
       }
-      let isUpdate = false;
       this.listDataGroup.forEach(dvi => {
         if (dvi.danhMuc ==  res.danhMuc) {
           dvi.children = [...dvi.children, res.children[0]]
-          isUpdate = true;
         }
       })
-      if (!isUpdate) {
-        this.listDataGroup = [...this.listDataGroup, res];
-      }
       for (let i = 0; i < this.listDataGroup.length; i++) {
         this.itemRowMatHang[i] = [];
         this.itemRowMatHangEdit[i] = [];
+        this.itemRowNhomMhEdit[i] = [];
         for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-          this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+          this.itemRowMatHang[i][y] = new khMuaHangDtqg();
           this.itemRowMatHangEdit[i][y] = [];
+          this.itemRowNhomMhEdit[i][y] = this.listDataGroup[i].children[y];
         }
       }
     });
@@ -230,6 +258,8 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z]
     this.listDataGroup[i].children[y].children[z].edit = false;
     this.itemRowMatHangEdit[i][y][z] = {}
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   cancelEditRowMatHang(i: number, y: number, z: number) {
@@ -243,10 +273,12 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
       this.itemRowMatHang[i][y]
     ];
     this.clearItemRowMatHang(i, y);
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   clearItemRowMatHang(i: number, y: number) {
-    this.itemRowMatHang[i][y] = new slGtriHangDtqg();
+    this.itemRowMatHang[i][y] = new khMuaHangDtqg();
   }
 
   editRowDvi(i: number) {
@@ -281,15 +313,68 @@ export class ThemMoiKhMuaHangDtqgComponent extends Base2Component implements OnI
     this.listDataGroup[i].children.splice(y, 1)
   }
   saveEditRowNhomMh(i: number, y: number) {
-    this.listDataGroup[i].children[y].danhMuc = this.itemRowNhomMhEdit[i][y].danhMuc
-    this.listDataGroup[i].children[y].maSo = this.itemRowNhomMhEdit[i][y].maSo
+    this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y]
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
+    this.tinhTongGtriDvi()
   }
 
   cancelEditRowNhomMh(i: number, y: number) {
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
+  }
+
+  tinhTongGtriDvi (){
+    for (let dvi of this.listDataGroup) {
+      dvi.gtriKhNamTruoc = 0
+      dvi.gtriKhGiaoTrongNam = 0
+      dvi.gtriTongKhDuocGiao = 0
+      dvi.gtriThucHienNamTruoc = 0
+      dvi.gtriThucHienGiaoTrongNam = 0
+      dvi.gtriTongThucHienTrongNam = 0
+      dvi.gtriChuyenSangNamSau = 0
+      dvi.gtriHuyDuToan = 0
+      dvi.gtriTongDuToanConLai = 0
+      for (let nhomMh of dvi.children) {
+        dvi.gtriKhNamTruoc += this.nvl(nhomMh.gtriKhNamTruoc)
+        dvi.gtriKhGiaoTrongNam += this.nvl(nhomMh.gtriKhGiaoTrongNam)
+        dvi.gtriTongKhDuocGiao += this.nvl(nhomMh.gtriTongKhDuocGiao)
+        dvi.gtriThucHienNamTruoc += this.nvl(nhomMh.gtriThucHienNamTruoc)
+        dvi.gtriThucHienGiaoTrongNam += this.nvl(nhomMh.gtriThucHienGiaoTrongNam)
+        dvi.gtriTongThucHienTrongNam += this.nvl(nhomMh.gtriTongThucHienTrongNam)
+        dvi.gtriChuyenSangNamSau += this.nvl(nhomMh.gtriChuyenSangNamSau)
+        dvi.gtriHuyDuToan += this.nvl(nhomMh.gtriHuyDuToan)
+        dvi.gtriTongDuToanConLai += this.nvl(nhomMh.gtriTongDuToanConLai)
+      }
+    }
+  }
+  tinhTongGtriNhomMh (){
+    for (let dvi of this.listDataGroup) {
+      for (let nhomMh of dvi.children) {
+        if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.gtriKhNamTruoc = 0
+          nhomMh.gtriKhGiaoTrongNam = 0
+          nhomMh.gtriTongKhDuocGiao = 0
+          nhomMh.gtriThucHienNamTruoc = 0
+          nhomMh.gtriThucHienGiaoTrongNam = 0
+          nhomMh.gtriTongThucHienTrongNam = 0
+          nhomMh.gtriChuyenSangNamSau = 0
+          nhomMh.gtriHuyDuToan = 0
+          nhomMh.gtriTongDuToanConLai = 0
+          for (let matHang of nhomMh.children) {
+            nhomMh.gtriKhNamTruoc += this.nvl(matHang.gtriKhNamTruoc)
+            nhomMh.gtriKhGiaoTrongNam += this.nvl(matHang.gtriKhGiaoTrongNam)
+            nhomMh.gtriTongKhDuocGiao += this.nvl(matHang.gtriTongKhDuocGiao)
+            nhomMh.gtriThucHienNamTruoc += this.nvl(matHang.gtriThucHienNamTruoc)
+            nhomMh.gtriThucHienGiaoTrongNam += this.nvl(matHang.gtriThucHienGiaoTrongNam)
+            nhomMh.gtriTongThucHienTrongNam += this.nvl(matHang.gtriTongThucHienTrongNam)
+            nhomMh.gtriChuyenSangNamSau += this.nvl(matHang.gtriChuyenSangNamSau)
+            nhomMh.gtriHuyDuToan += this.nvl(matHang.gtriHuyDuToan)
+            nhomMh.gtriTongDuToanConLai += this.nvl(matHang.gtriTongDuToanConLai)
+          }
+        }
+      }
+    }
   }
 
 }

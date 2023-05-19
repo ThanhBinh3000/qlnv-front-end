@@ -7,9 +7,9 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { BcBnTt130Service } from "../../../../services/bao-cao/BcBnTt130.service";
 import { UserService } from "../../../../services/user.service";
 import * as dayjs from "dayjs";
-import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
 import { Base2Component } from "../../../../components/base2/base2.component";
+import { saveAs } from "file-saver";
 
 @Component({
   selector: 'app-sl-gtri-hang-dtqg',
@@ -25,6 +25,11 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
   ]
   selectedId: number = 0;
   isView: boolean = false;
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  showDlgPreview = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -36,7 +41,7 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, bcBnTt108Service);
     this.formData = this.fb.group(
       {
-        nam: [dayjs().get("year"), [Validators.required]],
+        nam: [],
         quy: [null],
         tuNgayTao: [null],
         tuNgayKyGui: [null],
@@ -55,27 +60,31 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
     if (!startValue || !this.denNgayTao) {
       return false;
     }
-    return startValue.getTime() > this.denNgayTao.getTime();
+    let endDate = new Date(this.denNgayTao.getFullYear(), this.denNgayTao.getMonth(), this.denNgayTao.getDate() +1 , 0, 0, 0)
+    return startValue.getTime() >= (endDate.getTime());
   };
 
   disabledDenNgayTao = (endValue: Date): boolean => {
     if (!endValue || !this.tuNgayTao) {
       return false;
     }
-    return endValue.getTime() <= this.tuNgayTao.getTime();
+    let startDate = new Date(this.tuNgayTao.getFullYear(), this.tuNgayTao.getMonth(), this.tuNgayTao.getDate() -1 , 23, 59, 59)
+    return endValue.getTime() <= (startDate.getTime());
   };
   disabledTuNgayKyGui = (startValue: Date): boolean => {
     if (!startValue || !this.denNgayKyGui) {
       return false;
     }
-    return startValue.getTime() > this.denNgayKyGui.getTime();
+    let endDate = new Date(this.denNgayKyGui.getFullYear(), this.denNgayKyGui.getMonth(), this.denNgayKyGui.getDate() +1 , 0, 0, 0)
+    return startValue.getTime() >= (endDate.getTime());
   };
 
   disabledDenNgayKyGui = (endValue: Date): boolean => {
     if (!endValue || !this.tuNgayKyGui) {
       return false;
     }
-    return endValue.getTime() <= this.tuNgayKyGui.getTime();
+    let startDate = new Date(this.tuNgayKyGui.getFullYear(), this.tuNgayKyGui.getMonth(), this.tuNgayKyGui.getDate() -1 , 23, 59, 59)
+    return endValue.getTime() < (startDate.getTime());
   };
 
   ngOnInit(): void {
@@ -109,7 +118,7 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
   }
 
   async clearFilter() {
-    this.formData.get('nam').setValue(dayjs().get("year"));
+    this.formData.get('nam').setValue(null);
     this.formData.get('quy').setValue(null);
     this.formData.get('tuNgayTao').setValue(null);
     this.formData.get('tuNgayKyGui').setValue(null);
@@ -127,5 +136,62 @@ export class SlGtriHangDtqgComponent extends Base2Component implements OnInit {
     if (isView != null) {
       this.isView = isView;
     }
+  }
+  async download(id: any, type: any) {
+    if (type == 'pdf') {
+      await this.preView(id)
+    } else {
+      await this.downloadExcel(id)
+    }
+  }
+
+  async downloadExcel(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.idHdr = id;
+      body.typeFile = "xlsx";
+      body.fileName = "bcbn_sl_gtri_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng DTQG";
+      body.trangThai = "01";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bcbn_sl_gtri_hang_dtqg.xlsx");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
+  async preView(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.id = id;
+      body.typeFile = "pdf";
+      body.fileName = "bcbn_sl_gtri_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo số lượng và giá trị hàng DTQG";
+      body.trangThai = "01";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  downloadPdf() {
+    saveAs(this.pdfBlob, "bcbn_sl_gtri_hang_dtqg.pdf");
   }
 }
