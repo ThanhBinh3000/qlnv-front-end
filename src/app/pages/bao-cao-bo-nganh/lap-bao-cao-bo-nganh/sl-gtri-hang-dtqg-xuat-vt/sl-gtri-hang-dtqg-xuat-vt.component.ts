@@ -10,7 +10,7 @@ import { UserService } from "../../../../services/user.service";
 import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { MESSAGE } from "../../../../constants/message";
-
+import { saveAs } from "file-saver";
 @Component({
   selector: 'app-sl-gtri-hang-dtqg-xuat-vt',
   templateUrl: './sl-gtri-hang-dtqg-xuat-vt.component.html',
@@ -25,6 +25,11 @@ export class SlGtriHangDtqgXuatVtComponent extends Base2Component implements OnI
   ]
   selectedId: number = 0;
   isView: boolean = false;
+  pdfSrc: any;
+  excelSrc: any;
+  pdfBlob: any;
+  excelBlob: any;
+  showDlgPreview = false;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -127,5 +132,58 @@ export class SlGtriHangDtqgXuatVtComponent extends Base2Component implements OnI
     if (isView != null) {
       this.isView = isView;
     }
+  }
+  async download(id: any, type: any) {
+    if (type == 'pdf') {
+      await this.preView(id)
+    } else {
+      await this.downloadExcel(id)
+    }
+  }
+
+  async downloadExcel(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.idHdr = id;
+      body.typeFile = "xlsx";
+      body.fileName = "bcbn_sl_gtri_hang_dtqg_xuat_vt.jrxml";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bcbn_sl_gtri_hang_dtqg_xuat_vt.xlsx");
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
+  async preView(id: any) {
+    try {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.id = id;
+      body.typeFile = "pdf";
+      body.fileName = "bcbn_sl_gtri_hang_dtqg_xuat_vt.jrxml";
+      await this.bcBnTt108Service.ketXuat(body).then(async s => {
+        this.pdfBlob = s;
+        this.pdfSrc = await new Response(s).arrayBuffer();
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  closeDlg() {
+    this.showDlgPreview = false;
+  }
+  downloadPdf() {
+    saveAs(this.pdfBlob, "bcbn_sl_gtri_hang_dtqg_xuat_vt.pdf");
   }
 }

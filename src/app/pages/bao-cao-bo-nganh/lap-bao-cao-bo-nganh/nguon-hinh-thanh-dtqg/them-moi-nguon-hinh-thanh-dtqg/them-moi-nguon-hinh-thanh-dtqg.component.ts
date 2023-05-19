@@ -237,13 +237,6 @@ export class ThemMoiNguonHinhThanhDtqgComponent extends Base2Component implement
     this.dataNguonNgoaiNsnn[index].edit = false;
   }
 
-  nvl(item: number) {
-    if (item == null) {
-      return 0;
-    }
-    return item;
-  }
-
   quayLai() {
     this.showListEvent.emit();
   }
