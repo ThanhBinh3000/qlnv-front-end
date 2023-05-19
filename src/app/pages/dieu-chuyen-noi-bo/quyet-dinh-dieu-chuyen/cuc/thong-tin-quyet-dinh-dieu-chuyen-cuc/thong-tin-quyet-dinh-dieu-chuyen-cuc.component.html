@@ -121,7 +121,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="8">
+          <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Trích yếu
@@ -132,7 +132,7 @@
             </nz-form-item>
           </div>
 
-          <div nz-col [nzSpan]="4">
+          <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true">
                 Tổng dự toán kinh phí(triệu đồng)
@@ -144,7 +144,27 @@
             </nz-form-item>
           </div>
 
+          <div nz-col [nzSpan]="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Loại hình nhập xuất
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="loaiHinhNX" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
+          <div nz-col [nzSpan]="3">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Kiểu nhập xuất
+              </nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="kieuNX" [readonly]="true" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
 
 
@@ -497,7 +517,7 @@
                   <td></td>
                   <td></td>
                   <td *ngIf="!isView">
-                    <a (click)="themDiemKho(bb)">
+                    <a (click)="themLoKho(bb)">
                       <i class="icon htvbdh_dau-cong"></i>
                     </a>
                     <a (click)="xoaDiemKho(bb)">
@@ -513,7 +533,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
                       <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                       <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                       <td class="bold">{{c.tenDonViTinh || ""}}</td>
@@ -531,7 +551,7 @@
                       <td></td>
                       <td></td>
                       <td *ngIf="!isView">
-                        <a (click)="themLoKho(c)">
+                        <a (click)="themDiemKhoNhan(c)">
                           <i class="icon htvbdh_dau-cong"></i>
                         </a>
                         <a (click)="xoaLoKho(c)">
@@ -584,8 +604,8 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td>{{e.tenLoKhoNhan}}</td>
-                          <td>không</td>
+                          <td>{{e.tenLoKhoNhan}} {{e.tenNganKhoNhan}}</td>
+                          <td>{{e.thayDoiThuKho}}</td>
                           <td class="text-right">
                             {{e.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                           <td class="text-right">

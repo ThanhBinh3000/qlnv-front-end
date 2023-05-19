@@ -305,7 +305,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       }
 
       if (data.loaiDc === "CUC") {
-        this.dataTableView = this.buildTableViewCUC(listHangHoa, "maDvi")
+        this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
       }
 
     }
@@ -395,7 +395,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
               }
 
             }
-            this.dataTableView = this.buildTableViewCUC(listHangHoa, "maDvi")
+            this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
 
           }
 
@@ -428,51 +428,74 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           ?.map((v, k) => {
             console.log('maDiemKho', k, v)
             let rss = chain(v)
-              .groupBy("maLoKho")
+              .groupBy("maNganKho")
               ?.map((vs, ks) => {
-                console.log('maLoKho', ks, vs)
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
-                const rsss = chain(vs).groupBy("id").map((x, ix) => {
-                  console.log('id', ix, x)
-                  const ids = x.find(f => f.id == ix);
+                console.log('maNganKho', ks, vs)
+                const maNganKho = vs.find(s => s?.maNganKho == ks);
+                // const rsss = chain(vs).groupBy("id").map((x, ix) => {
+                //   console.log('id', ix, x)
+                //   const ids = x.find(f => f.id == ix);
 
-                  const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
-                  if (!hasmaChiCucNhan) return {
-                    ...ids
+                //   const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
+                //   if (!hasmaChiCucNhan) return {
+                //     ...ids
+                //   }
+
+                //   const rsxx = chain(x).groupBy("maChiCucNhan")?.map((m, im) => {
+                //     console.log('maChiCucNhan', ix, x)
+                //     const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
+                //     const hasMaDiemKhoNhan = x.some(f => f.maDiemKhoNhan);
+                //     if (!hasMaDiemKhoNhan) return {
+                //       ...maChiCucNhan
+                //     }
+
+                //     const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                //       console.log('maDiemKhoNhan', inx, n)
+                //       const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                //       return {
+                //         ...maDiemKhoNhan,
+                //         children: n
+                //       }
+                //     }).value()
+                //     return {
+                //       ...maChiCucNhan,
+                //       children: rssx
+                //     }
+                //   }).value()
+
+                //   return {
+                //     ...ids,
+                //     children: rsxx
+                //   }
+                // }).value()
+
+                const rsxx = chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
+                  console.log('maChiCucNhan', im, m)
+                  const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
+                  const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
+                  if (!hasMaDiemKhoNhan) return {
+                    ...maChiCucNhan
                   }
-                  const rsxx = chain(x).groupBy("maChiCucNhan")?.map((m, im) => {
-                    console.log('maChiCucNhan', ix, x)
-                    const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                    const hasMaDiemKhoNhan = x.some(f => f.maDiemKhoNhan);
-                    if (!hasMaDiemKhoNhan) return {
-                      ...maChiCucNhan
-                    }
 
-                    const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-                      console.log('maDiemKhoNhan', inx, n)
-                      const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                      return {
-                        ...maDiemKhoNhan,
-                        children: n
-                      }
-                    }).value()
+                  const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+                    console.log('maDiemKhoNhan', inx, n)
+                    const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
                     return {
-                      ...maChiCucNhan,
-                      children: rssx
+                      ...maDiemKhoNhan,
+                      children: n
                     }
                   }).value()
-                  //
-
                   return {
-                    ...ids,
-                    children: rsxx
+                    ...maChiCucNhan,
+                    children: rssx
                   }
                 }).value()
+
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
                 return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: rsss,
+                  ...maNganKho,
+                  idVirtual: maNganKho ? maNganKho.idVirtual ? maNganKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+                  children: rsxx,
                   duToanKphi
                 }
               }
@@ -510,62 +533,62 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     return dataView
   }
 
-  buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
-    let dataView = chain(data)
-      .groupBy(groupBy)
-      ?.map((value, key) => {
-        console.log('maDvi', key, value)
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          ?.map((v, k) => {
-            console.log('maDiemKho', k, v)
-            let rss = chain(v)
-              .groupBy("maLoKho")
-              ?.map((vs, ks) => {
-                console.log('maLoKho', ks, vs)
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+  // buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
+  //   let dataView = chain(data)
+  //     .groupBy(groupBy)
+  //     ?.map((value, key) => {
+  //       console.log('maDvi', key, value)
+  //       let rs = chain(value)
+  //         .groupBy("maDiemKho")
+  //         ?.map((v, k) => {
+  //           console.log('maDiemKho', k, v)
+  //           let rss = chain(v)
+  //             .groupBy("maLoKho")
+  //             ?.map((vs, ks) => {
+  //               console.log('maLoKho', ks, vs)
+  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: vs,
-                  duToanKphi
-                }
-              }
-              ).value();
+  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //               return {
+  //                 ...maLoKho,
+  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //                 children: vs,
+  //                 duToanKphi
+  //               }
+  //             }
+  //             ).value();
 
-            let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-            let rowDiemKho = v?.find(s => s.maDiemKho === k);
+  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
-            return {
-              ...rowDiemKho,
-              idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-              duToanKphi: duToanKphi,
-              children: rss,
-              expand: true
-            }
-          }
-          ).value();
+  //           return {
+  //             ...rowDiemKho,
+  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //             duToanKphi: duToanKphi,
+  //             children: rss,
+  //             expand: true
+  //           }
+  //         }
+  //         ).value();
 
-        let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-        let rowChiCuc = value?.find(s => s.maDvi === key);
-        return {
-          ...rowChiCuc,
-          idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-          duToanKphi: duToanKphi,
-          children: rs,
-          expand: true
-        };
-      }).value();
-    // this.tableView = dataView;
-    // this.expandAll()
+  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //       let rowChiCuc = value?.find(s => s.maDvi === key);
+  //       return {
+  //         ...rowChiCuc,
+  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //         duToanKphi: duToanKphi,
+  //         children: rs,
+  //         expand: true
+  //       };
+  //     }).value();
+  //   // this.tableView = dataView;
+  //   // this.expandAll()
 
-    // if (data?.length !== 0) {
-    //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    // };
-    return dataView
-  }
+  //   // if (data?.length !== 0) {
+  //   //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //   // };
+  //   return dataView
+  // }
 
   async save(isGuiDuyet?) {
     await this.spinner.show();
@@ -795,7 +818,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
         }
 
         if (loaiDC === "CUC") {
-          this.dataTableView = this.buildTableViewCUC(listHangHoa, "maDvi")
+          this.dataTableView = this.buildTableViewChiCUC(listHangHoa, "maDvi")
         }
 
         console.log('onChangeIdTrHdr', listDeXuat, listHangHoa, this.dataTableView)

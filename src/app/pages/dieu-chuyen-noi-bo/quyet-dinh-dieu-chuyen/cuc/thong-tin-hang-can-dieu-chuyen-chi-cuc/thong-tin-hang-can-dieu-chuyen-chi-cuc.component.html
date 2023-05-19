@@ -281,14 +281,14 @@
       <div class="cantrai">
       </div>
       <div class="canphai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onCancel()">
-          <i nz-icon nzType="close" class="icon-close"></i>
-          Đóng
-        </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk(formData.value)">
-          <i nz-icon nzType="close" class="icon-close"></i>
+        <button nz-button (click)="onCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button (click)="handleOk(formData.value)" class="modal__button--save">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           Lưu
-        </a>
+        </button>
       </div>
     </div>
   </div>
