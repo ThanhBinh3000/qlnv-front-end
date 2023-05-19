@@ -733,6 +733,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       this.formData.patchValue({
         soQd: this.dataChiTieu.soQuyetDinh
       });
+    } else {
+      this.dataChiTieu = null;
+      this.formData.patchValue({
+        soQd: null
+      });
     }
   }
 
