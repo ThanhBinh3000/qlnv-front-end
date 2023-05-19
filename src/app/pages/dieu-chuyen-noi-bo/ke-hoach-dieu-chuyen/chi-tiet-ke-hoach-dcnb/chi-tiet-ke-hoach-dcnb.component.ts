@@ -594,6 +594,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     if (!this.isNhanDieuChuyen) {
       this.disableValidateFormChiTietHangHoaNDC();
+    }else {
+      if (!this.formDataChiTiet.value.coLoKho) {
+        this.removeValidateFormChiTiet("maLoKho");
+        this.removeValidateFormChiTiet("tenLoKho");
+      }
     }
     this.helperService.markFormGroupTouched(this.formDataChiTiet);
     if (this.formDataChiTiet.invalid) {

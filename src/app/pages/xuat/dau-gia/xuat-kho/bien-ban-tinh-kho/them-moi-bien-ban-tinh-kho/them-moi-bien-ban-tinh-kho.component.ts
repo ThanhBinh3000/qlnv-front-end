@@ -175,6 +175,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      this.listSoQuyetDinh = this.listSoQuyetDinh.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

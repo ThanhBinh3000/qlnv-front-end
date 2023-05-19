@@ -85,7 +85,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
   listThanhTien: any;
   listSoLuong: any;
   flagInit: Boolean = true;
-
+  listDiaDiemKho: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -138,9 +138,9 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         nlqDonVi: [''],
         nlqDiaChi: [''],
         thoiGianGiaoNhan: [''],
-        tongTrongLuong: [0],
-        tongTrongLuongBaoBi: [0],
-        tongTrongLuongHang: [0],
+        tongTrongLuong: [''],
+        tongTrongLuongBaoBi:['', [Validators.required]],
+        tongTrongLuongHang: [''],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
         ngayPduyet: [''],
@@ -232,13 +232,14 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dsQdGnv = data.content;
+      this.dsQdGnv = this.dsQdGnv.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
   async loadDetail(idInput: number) {
-    console.log(idInput, 'idInput')
     if (idInput > 0) {
       await this.bangKeCanService.getDetail(idInput)
         .then((res) => {
@@ -441,7 +442,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
       this.formData.value.bangKeDtl = [...this.formData.value.bangKeDtl, this.bangKeDtlCreate];
       this.clearRow();
       this.tinhTong();
-      console.log(this.formData.value, '91991919')
     }
   }
 
@@ -472,7 +472,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -497,7 +497,6 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           ngayKyHd: dataRes.data.ngayKyHd,
           bangKeDtl: this.formData.value.bangKeDtl
         });
-        console.log(dataRes.data.children, 444);
         let dataChiCuc = dataRes.data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc) {
           dataChiCuc.forEach(e => {
@@ -545,6 +544,20 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
         this.dsPhieuXuatKho = list.filter(item => (item.maDiemKho == data.maDiemKho));
+        let body1 = {
+          trangThai: "01",
+          maDviCha: this.userInfo.MA_DVI
+        };
+        const res1 = await this.donViService.getAll(body1)
+        const dataDk = res1.data;
+        if (dataDk) {
+          this.listDiaDiemKho = dataDk.filter(item => item.maDvi == data.maDiemKho);
+          this.listDiaDiemKho.forEach(s => {
+            this.formData.patchValue({
+              diaDiemKho: s.diaChi,
+            })
+          })
+        }
       }
     });
   }
@@ -584,6 +597,43 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
         });
       }
     });
+  }
+
+  changeSoQd(event) {
+    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+      this.formData.patchValue({
+        maDiemKho: null,
+        tenDiemKho: null,
+        maNhaKho: null,
+        tenNhaKho: null,
+        maNganKho: null,
+        tenNganKho: null,
+        maLoKho: null,
+        tenLoKho: null,
+        maKho:null,
+        tenKho: null,
+      });
+    }
+  }
+
+  changeDd(event) {
+    if (event && event !== this.formData.value.maDiemKho) {
+      this.formData.patchValue({
+        idPhieuXuatKho:  null,
+        soPhieuXuatKho:  null,
+        ngayXuat:  null,
+        nlqHoTen:  null,
+        nlqCmnd: null,
+        nlqDonVi:  null,
+        nlqDiaChi: null,
+        loaiVthh:  null,
+        cloaiVthh:  null,
+        tenLoaiVthh:  null,
+        tenCloaiVthh:  null,
+        moTaHangHoa:  null,
+        donViTinh:  null,
+      });
+    }
   }
 
   async changeNam() {

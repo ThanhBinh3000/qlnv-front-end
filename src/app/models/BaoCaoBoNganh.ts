@@ -240,3 +240,31 @@ export class tiepNhanHangDtqg {
   coNhieuMatHang: boolean
   edit: boolean
 }
+
+export class khMuaHangDtqg {
+  danhMuc: string
+  matHang: string
+  maSo: string
+  dvt: string
+  namKhNamTruoc: number
+  slKhNamTruoc: number
+  gtriKhNamTruoc: number
+  slKhGiaoTrongNam: number
+  gtriKhGiaoTrongNam: number
+  slTongKhDuocGiao: number
+  gtriTongKhDuocGiao: number
+  namThucHienNamTruoc: number
+  slThucHienNamTruoc: number
+  gtriThucHienNamTruoc: number
+  slThucHienGiaoTrongNam: number
+  gtriThucHienGiaoTrongNam: number
+  slTongThucHienTrongNam: number
+  gtriTongThucHienTrongNam: number
+  slChuyenSangNamSau: number
+  gtriChuyenSangNamSau: number
+  slHuyDuToan: number
+  gtriHuyDuToan: number
+  slTongDuToanConLai: number
+  gtriTongDuToanConLai: number
+  children: any[]
+}
