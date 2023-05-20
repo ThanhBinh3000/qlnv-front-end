@@ -136,23 +136,26 @@ export class PhuLuc6Component implements OnInit {
     this.dsDinhMuc = this.dsDinhMucX
 
     this.lstCtietBcao.forEach(item => {
+      // if (!item.noiDung) {
+      //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
+      //   item.noiDung = dinhMuc?.tenDinhMuc;
+      //   item.sluongThienDmuc = dinhMuc?.tongDmuc;
+      //   item.maDviTinh = dinhMuc?.donViTinh;
+      //   item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
+      //   item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+      //   item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
+      // } else {
+      const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
       if (!item.noiDung) {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
         item.noiDung = dinhMuc?.tenDinhMuc;
-        item.sluongThienDmuc = dinhMuc?.tongDmuc;
-        item.maDviTinh = dinhMuc?.donViTinh;
-        item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
-        item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
-      } else {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
-        // item.noiDung = dinhMuc?.tenDinhMuc;
-        item.sluongThienDmuc = dinhMuc?.tongDmuc;
-        item.maDviTinh = dinhMuc?.donViTinh;
-        item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
-        item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
       }
+      item.sluongThienDmuc = dinhMuc?.tongDmuc;
+      item.maDviTinh = dinhMuc?.donViTinh;
+      item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
+      item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
+      // item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
+      item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
+      // }
     })
 
     await this.danhMucService.dMVatTu().toPromise().then(res => {

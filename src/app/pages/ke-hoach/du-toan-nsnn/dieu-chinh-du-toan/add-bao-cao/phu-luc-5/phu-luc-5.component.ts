@@ -139,26 +139,30 @@ export class PhuLuc5Component implements OnInit {
     // await this.getDinhMucPL2X();
 
     this.dsDinhMuc = this.dsDinhMucN
-
-    this.lstCtietBcao.forEach(item => {
-      if (!item.noiDung) {
+    if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
+      this.lstCtietBcao.forEach(item => {
+        // if (!item.noiDung) {
+        //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
+        //   item.noiDung = dinhMuc?.tenDinhMuc;
+        //   item.dinhMuc = dinhMuc?.tongDmuc;
+        //   item.dviTinh = dinhMuc?.donViTinh;
+        //   item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
+        //   item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
+        //   item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi
+        // } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
-        item.noiDung = dinhMuc?.tenDinhMuc;
+        if (!item.noiDung) {
+          item.noiDung = dinhMuc?.tenDinhMuc;
+        }
         item.dinhMuc = dinhMuc?.tongDmuc;
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
         item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi
-      } else {
-        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
-        // item.noiDung = dinhMuc?.tenDinhMuc;
-        item.dinhMuc = dinhMuc?.tongDmuc;
-        item.dviTinh = dinhMuc?.donViTinh;
-        item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
-        item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
-      }
-    })
+        // item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
+        item.dtoanVuTvqtDnghi = item.thanhTien - item.dtoanDaGiaoLke;
+        // }
+      })
+    }
 
     await this.danhMucService.dMVatTu().toPromise().then(res => {
       if (res.statusCode == 0) {
