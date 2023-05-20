@@ -110,7 +110,7 @@ export class AddBaoCaoComponent implements OnInit {
   listFile: File[] = [];
   childUnit: any[] = [];
   selectedIndex = 0;
-
+  dataVp: any[] = [];
   // truoc khi upload file 
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
@@ -222,8 +222,9 @@ export class AddBaoCaoComponent implements OnInit {
     this.spinner.show();
     console.log(this.data);
     this.baoCao.id = this.data?.id;
-    this.userInfo = this.userService.getUserLogin();
+    this.userInfo = await this.userService.getUserLogin();
     await this.getListUser();
+    console.log("this.userInfo:", this.userInfo.DON_VI.tenVietTat)
 
     if (this.baoCao.id) {
       await this.getDetailReport();
@@ -256,6 +257,9 @@ export class AddBaoCaoComponent implements OnInit {
       );
 
       if (this.baoCao.lstDviTrucThuoc.length == 0) {
+        // if (this.userInfo.DON_VI.tenVietTat.includes('_VP')) {
+        //   await this.getDataVp();
+        // } else {
         this.listAppendix = PHU_LUC
         this.listAppendix.forEach(e => {
           this.baoCao.lstDchinh.push({
@@ -269,6 +273,7 @@ export class AddBaoCaoComponent implements OnInit {
             giaoCho: this.userInfo.sub
           });
         });
+        // }
       } else {
         const isPL = this.baoCao?.lstDchinh.find(item => item.maLoai == "pl01")
         if (this.userInfo.CAP_DVI == "2" || isPL) {
@@ -317,6 +322,63 @@ export class AddBaoCaoComponent implements OnInit {
       }
     )
   }
+
+  // call du lieu van phong 
+  // async getDataVp() {
+  //   const request = {
+  //     dotBcao: this.baoCao.dotBcao,
+  //     namBcao: this.baoCao.namBcao,
+  //   }
+  //   await this.dieuChinhDuToanService.getDataVp(request).toPromise().then(
+  //     data => {
+  //       if (data.statusCode == 0) {
+  //         this.baoCao.lstDchinh = data.data.lstDchinhs;
+  //         console.log("resData: ", this.dataVp);
+
+  //       } else {
+  //         this.notification.error(MESSAGE.ERROR, data?.msg);
+  //       }
+  //     },
+  //     (err) => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+  //     }
+  //   )
+
+  //   this.listAppendix = PHU_LUC
+
+  //   this.baoCao?.lstDchinh?.forEach(item => {
+  //     item.id = uuid.v4() + "FE";
+  //     item.maDviTien = '1';
+  //     item.checked = false;
+  //     item.trangThai = '3';
+  //     item.giaoCho = this.userInfo?.sub;
+  //     const index = this.listAppendix.findIndex(data => data.id == item.maLoai);
+  //     if (index != -1) {
+  //       item.tenDm = this.listAppendix[index].tenDm + ' ' + this.baoCao.namBcao;
+  //       item.tenPl = this.listAppendix[index].tenPl;
+  //     }
+  //     // if (item.maLoai == '4') {
+  //     //     item.lstCtietBcaos.forEach(e => {
+  //     //         e.khGiaMuaTd = divNumber(e.khTtien, e.khSoLuong);
+  //     //         e.thGiaMuaTd = divNumber(e.thTtien, e.thSoLuong);
+  //     //     })
+  //     // }
+  //     // if (item.maLoai == '5') {
+  //     //     item.lstCtietBcaos.forEach(e => {
+  //     //         e.ttClechGiaTteVaGiaHtoan = sumNumber([e.ttGiaBanTte, -e.ttGiaHtoan]);
+  //     //     })
+  //     // }
+  //   })
+  //   this.baoCao?.lstDviTrucThuoc?.forEach(item => {
+  //     item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
+  //     item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+  //     item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+  //     item.ngayTraKq = this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR);
+  //   })
+  //   this.listFile = [];
+  //   this.baoCao.trangThaiBaoCao = "1";
+  // }
+
   statusAppraisal = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
 
   getStatusButton() {
@@ -687,7 +749,8 @@ export class AddBaoCaoComponent implements OnInit {
       viewRecommendedValue: this.viewRecommendedValue,
       editRecommendedValue: this.acceptStatus,
       isSynthetic: isSynthetic,
-      trangThai: this.baoCao.trangThaiBaoCao
+      trangThai: this.baoCao.trangThaiBaoCao,
+      dataVp: this.dataVp
     };
 
     dataInfo.data.maDviTien = "1";
