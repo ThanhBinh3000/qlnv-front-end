@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {
@@ -19,6 +19,7 @@ import {DonviService} from "../../../../../../../services/donvi.service";
 import {CurrencyMaskInputMode} from 'ngx-currency'
 import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
 import {FILETYPE} from "../../../../../../../constants/fileType";
+import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 
 @Component({
@@ -27,6 +28,7 @@ import {FILETYPE} from "../../../../../../../constants/fileType";
   styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
+  @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
   @Input('isView') isView: boolean = false;
   @Input()
   idInput: number;
@@ -384,7 +386,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         })
       }
     });
-
+    this.collapseExpand.clickHeader();
   };
 
   xoaKeHoach(index: number) {
