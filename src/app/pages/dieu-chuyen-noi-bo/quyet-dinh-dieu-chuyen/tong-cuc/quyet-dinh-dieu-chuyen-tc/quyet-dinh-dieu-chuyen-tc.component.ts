@@ -25,6 +25,8 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;
   tabSelected: number = 0;
+  @Input()
+  idTHop: number;
 
   @Input()
   loaiVthh: string;
@@ -82,6 +84,8 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
       trichYeu: '',
       maDxuat: '',
       maThop: '',
+      soQdinhXuatCuc: '',
+      soQdinhNhapCuc: '',
       tenTrangThai: '',
     };
   }
@@ -128,6 +132,9 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
       this.visibleTab = value;
     });
 
+    if (this.idTHop)
+      this.redirectDetail(0, false)
+
     try {
       this.initData()
       await this.timKiem();
@@ -150,12 +157,12 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   }
 
   isTongCuc() {
-    return true//this.userService.isTongCuc()
+    return this.userService.isTongCuc()
   }
 
-  // isCuc() {
-  //   return false//this.userService.isCuc()
-  // }
+  isCuc() {
+    return false//this.userService.isCuc()
+  }
 
   // isChiCuc() {
   //   return false//this.userService.isChiCuc()
@@ -182,20 +189,20 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
   //   }
   // }
 
-  async changeHangHoa(event: any) {
-    if (event) {
-      this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
+  // async changeHangHoa(event: any) {
+  //   if (event) {
+  //     this.formData.patchValue({ donViTinh: this.listHangHoaAll.find(s => s.ma == event)?.maDviTinh })
 
-      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.listChungLoaiHangHoa = res.data;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
+  //     let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ str: event });
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       if (res.data) {
+  //         this.listChungLoaiHangHoa = res.data;
+  //       }
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //   }
+  // }
 
   async timKiem() {
     if (this.formData.value.ngayDuyetTc) {
@@ -251,6 +258,7 @@ export class QuyetDinhDieuChuyenTCComponent extends Base2Component implements On
     this.showListEvent.emit();
     this.isDetail = false;
     this.isView = false;
+    this.timKiem();
   }
 
 
