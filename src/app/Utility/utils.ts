@@ -489,7 +489,7 @@ export const AMOUNT_NO_DECIMAL = {
   align: "right",
   nullable: true,
   min: 0,
-  max: 100000000000,
+  max: 1000000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -503,7 +503,7 @@ export const AMOUNT_ONE_DECIMAL = {
   align: "right",
   nullable: true,
   min: 0,
-  max: 100000000000,
+  max: 1000000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -517,7 +517,7 @@ export const AMOUNT_TWO_DECIMAL = {
   align: "right",
   nullable: true,
   min: 0,
-  max: 100000000000,
+  max: 1000000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
@@ -531,7 +531,7 @@ export const AMOUNT_THREE_DECIMAL = {
   align: "right",
   nullable: true,
   min: 0,
-  max: 100000000000,
+  max: 1000000000000,
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
