@@ -55,7 +55,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   initData() {
     this.quanLyHangTrongKhoService.getTrangThaiHt({
       nam: this.namHienTai,
-      maDvi: this.maBoNganh,
+      // maDvi: this.maBoNganh,
       listLoaiVthh: ['0101', '0102']
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
