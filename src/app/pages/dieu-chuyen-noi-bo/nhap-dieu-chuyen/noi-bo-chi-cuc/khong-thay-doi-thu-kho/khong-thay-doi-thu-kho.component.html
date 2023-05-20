@@ -1,0 +1,21 @@
+<div>
+  <nz-affix>
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item (click)="selectTab(0)">
+        Xuất kho lương thực
+      </li>
+      <li nz-menu-item (click)="selectTab(1)">
+        Xuất kho vật tư
+      </li>
+    </ul>
+  </nz-affix>
+
+  <div>
+
+    <app-xuat-kho-luong-thuc *ngIf="tabSelected == 0"></app-xuat-kho-luong-thuc>
+    <app-xuat-kho-vat-tu *ngIf="tabSelected == 1"></app-xuat-kho-vat-tu>
+
+  </div>
+
+
+</div>

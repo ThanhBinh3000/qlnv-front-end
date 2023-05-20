@@ -13,6 +13,8 @@ import { MESSAGE } from "../../../../../constants/message";
 export class DialogThemMoiKhMuaHangDtqgComponent implements OnInit {
   formData: FormGroup;
   listDataGroup = [];
+  danhMuc: string;
+  isViewDanhMuc: boolean = false;
   constructor(private _modalRef: NzModalRef,
               private fb: FormBuilder,
               public globals: Globals,
@@ -22,15 +24,25 @@ export class DialogThemMoiKhMuaHangDtqgComponent implements OnInit {
       maSoDvi: [null],
       nhomMatHang: [null],
       maSoNhomMatHang: [null],
+      coNhieuMatHang: [false]
     });
   }
 
   ngOnInit(): void {
+    if (this.danhMuc != null) {
+      this.listDataGroup.forEach(item => {
+        if (this.danhMuc == item.danhMuc) {
+          this.formData.get('maSoDvi').setValue(item.maSo);
+          this.formData.get('tenDvi').setValue(item.danhMuc)
+        }
+      });
+      this.isViewDanhMuc = true;
+    }
   }
 
   changeDvi(event?: any) {
     this.listDataGroup.forEach(item => {
-      if (event.nzValue == item.danhMuc) {
+      if (event == item.danhMuc) {
         this.formData.get('maSoDvi').setValue(item.maSo)
       }
     });
@@ -40,23 +52,6 @@ export class DialogThemMoiKhMuaHangDtqgComponent implements OnInit {
     this._modalRef.destroy();
   }
   save() {
-    let isDuplicated = false;
-    this.listDataGroup.forEach(item => {
-      if (this.formData.get('tenDvi').value == item.danhMuc) {
-        item.children.forEach(nhomMh => {
-          if (this.formData.get('nhomMatHang').value == nhomMh.danhMuc) {
-            isDuplicated = true;
-          }
-        })
-      }
-    })
-    if (isDuplicated) {
-      this.notification.error(
-        MESSAGE.ERROR,
-        'Nhóm mặt hàng đã tồn tại',
-      );
-      return;
-    }
     let res = {
       danhMuc: this.formData.get('tenDvi').value,
       maSo: this.formData.get('maSoDvi').value,
@@ -64,6 +59,8 @@ export class DialogThemMoiKhMuaHangDtqgComponent implements OnInit {
     }
     res.children =[
       {
+        coNhieuMatHang: this.formData.get('coNhieuMatHang').value,
+        edit: !this.formData.get('coNhieuMatHang').value,
         danhMuc: this.formData.get('nhomMatHang').value,
         maSo: this.formData.get('maSoNhomMatHang').value,
         children: []

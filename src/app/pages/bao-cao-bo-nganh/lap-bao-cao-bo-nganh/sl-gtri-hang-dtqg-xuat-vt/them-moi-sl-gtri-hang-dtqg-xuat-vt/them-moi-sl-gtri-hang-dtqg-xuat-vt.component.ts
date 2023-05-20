@@ -11,7 +11,7 @@ import * as dayjs from "dayjs";
 import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../constants/status";
 import { MESSAGE } from "../../../../../constants/message";
-import { tiepNhanHangDtqg } from "../../../../../models/BaoCaoBoNganh";
+import { slGtriHangDtqgXuatVt } from "../../../../../models/BaoCaoBoNganh";
 import {
   DialogThemMoiSlGtriHangDtqgComponent
 } from "../../sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg/dialog-them-moi-sl-gtri-hang-dtqg.component";
@@ -106,7 +106,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
             this.itemRowMatHang[i] = [];
             this.itemRowMatHangEdit[i] = [];
             for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-              this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
+              this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
               this.itemRowMatHangEdit[i][y] = [];
               if (this.listDataGroup[i].children[y].children.length > 0) {
                 this.listDataGroup[i].children[y].coNhieuMatHang = true;
@@ -208,7 +208,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
         this.itemRowMatHangEdit[i] = [];
         this.itemRowNhomMhEdit[i] = [];
         for (let y = 0; y < this.listDataGroup[i].children.length; y++) {
-          this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
+          this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
           this.itemRowMatHangEdit[i][y] = [];
           this.itemRowNhomMhEdit[i][y] = this.listDataGroup[i].children[y];
         }
@@ -239,6 +239,8 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z]
     this.listDataGroup[i].children[y].children[z].edit = false;
     this.itemRowMatHangEdit[i][y][z] = {}
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   cancelEditRowMatHang(i: number, y: number, z: number) {
@@ -252,10 +254,12 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
       this.itemRowMatHang[i][y]
     ];
     this.clearItemRowMatHang(i, y);
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   clearItemRowMatHang(i: number, y: number) {
-    this.itemRowMatHang[i][y] = new tiepNhanHangDtqg();
+    this.itemRowMatHang[i][y] = new slGtriHangDtqgXuatVt();
   }
 
   editRowDvi(i: number) {
@@ -293,6 +297,7 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y]
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
+    this.tinhTongGtriDvi()
   }
 
   cancelEditRowNhomMh(i: number, y: number) {
@@ -300,4 +305,32 @@ export class ThemMoiSlGtriHangDtqgXuatVtComponent extends Base2Component impleme
     this.itemRowNhomMhEdit[i][y] = {};
   }
 
+  tinhTongGtriDvi (){
+    for (let dvi of this.listDataGroup) {
+      dvi.gtriTrongKy = 0
+      dvi.gtriLuyKe = 0
+      dvi.gtriTong = 0
+      for (let nhomMh of dvi.children) {
+        dvi.gtriTrongKy += this.nvl(nhomMh.gtriTrongKy)
+        dvi.gtriLuyKe += this.nvl(nhomMh.gtriLuyKe)
+        dvi.gtriTong += this.nvl(nhomMh.gtriTong)
+      }
+    }
+  }
+  tinhTongGtriNhomMh (){
+    for (let dvi of this.listDataGroup) {
+      for (let nhomMh of dvi.children) {
+        if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.gtriTrongKy = 0
+          nhomMh.gtriLuyKe = 0
+          nhomMh.gtriTong = 0
+          for (let matHang of nhomMh.children) {
+            nhomMh.gtriTrongKy += this.nvl(matHang.gtriTrongKy)
+            nhomMh.gtriLuyKe += this.nvl(matHang.gtriLuyKe)
+            nhomMh.gtriTong += this.nvl(matHang.gtriTong)
+          }
+        }
+      }
+    }
+  }
 }

@@ -81,7 +81,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tạo</nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Thời gian tạo</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
@@ -151,7 +151,7 @@
         <th colSpan="2" class="text-center multi-line" nzWidth="100px">Tồn kho đầu kỳ</th>
         <th colSpan="4" class="text-center multi-line" nzWidth="100px">Nhập</th>
         <th colSpan="4" class="text-center multi-line" nzWidth="100px">Xuất</th>
-        <th colSpan="2" class="text-center multi-line" nzWidth="100px">Tồn kho cuối quý</th>
+        <th colSpan="2" class="text-center multi-line" nzWidth="100px">Tồn kho cuối kỳ</th>
         <th colSpan="3" class="text-center multi-line" nzWidth="100px">Tỷ lệ (%) tổng dự mức DTQG tồn kho cuối kỳ so
           với
         </th>
@@ -221,27 +221,27 @@
       </thead>
       <tbody>
       <ng-container *ngFor="let data of listDataGroup; let i = index">
-        <tr>
+        <tr class="title-bg">
           <ng-container *ngIf="!data.edit; else editTemplateDvi">
-            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="dm-title">{{convertToRoman(i+1)}}.</td>
             <td nzLeft class="dm-title">{{ data.danhMuc }}</td>
             <td nzLeft></td>
             <td class="dm-title">{{ data.maSo }}</td>
             <td></td>
             <td></td>
+            <td>{{ data.gtriTonDauNam | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ data.gtriTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -258,25 +258,25 @@
             </td>
           </ng-container>
           <ng-template #editTemplateDvi>
-            <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td nzLeft class="dm-title">{{convertToRoman(i+1)}}.</td>
             <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].danhMuc" /></td>
             <td nzLeft></td>
             <td class="dm-title"><input nz-input [(ngModel)]="itemRowDonViEdit[i].maSo"/></td>
             <td></td>
             <td></td>
+            <td>{{ data.gtriTonDauNam | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
+            <td>{{ data.gtriXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ data.gtriTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -291,27 +291,27 @@
           </ng-template>
         </tr>
         <ng-container *ngFor="let nhomMatHang of data.children, let y = index">
-          <tr>
+          <tr class="title-bg">
             <ng-container *ngIf="!nhomMatHang.edit; else editTemplateNhomMh">
-            <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
-            <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
-            <td nzLeft></td>
-            <td class="dm-title">{{ nhomMatHang.maSo }}</td>
+              <td nzLeft class="dm-title">{{y + 1}}.</td>
+              <td nzLeft class="dm-title">{{ nhomMatHang.danhMuc }}</td>
+              <td nzLeft></td>
+              <td class="dm-title">{{ nhomMatHang.maSo }}</td>
               <td>{{ nhomMatHang.dvt }}</td>
-              <td>{{ nhomMatHang.slTonDauNam }}</td>
-              <td>{{ nhomMatHang.gtriTonDauNam }}</td>
-              <td>{{ nhomMatHang.slTonDauKy }}</td>
-              <td>{{ nhomMatHang.gtriTonDauKy }}</td>
-              <td>{{ nhomMatHang.slNhapTrongKy }}</td>
-              <td>{{ nhomMatHang.gtriNhapTrongKy }}</td>
-              <td>{{ nhomMatHang.slNhapLuyKe }}</td>
-              <td>{{ nhomMatHang.gtriNhapLuyKe }}</td>
-              <td>{{ nhomMatHang.slXuatTrongKy }}</td>
-              <td>{{ nhomMatHang.gtriXuatTrongKy }}</td>
-              <td>{{ nhomMatHang.slXuatLuyKe }}</td>
-              <td>{{ nhomMatHang.gtriXuatLuyKe }}</td>
-              <td>{{ nhomMatHang.slTonCuoiQuy }}</td>
-              <td>{{ nhomMatHang.gtriTonCuoiQuy }}</td>
+              <td>{{ nhomMatHang.slTonDauNam | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{ nhomMatHang.gtriTonDauNam | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.slTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ nhomMatHang.gtriTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{ nhomMatHang.tiLeChienLuoc }}</td>
               <td>{{ nhomMatHang.tiLeKeHoach }}</td>
               <td>{{ nhomMatHang.tiLeGdp }}</td>
@@ -325,7 +325,7 @@
               </td>
             </ng-container>
             <ng-template #editTemplateNhomMh>
-              <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <td nzLeft class="dm-title">{{y + 1}}.</td>
               <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].danhMuc" /></td>
               <td nzLeft></td>
               <td class="dm-title"><input nz-input [(ngModel)]="itemRowNhomMhEdit[i][y].maSo"/></td>
@@ -379,14 +379,8 @@
                 <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
                                  [(ngModel)]="itemRowNhomMhEdit[i][y].gtriXuatLuyKe"></nz-input-number>
               </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].slTonCuoiQuy"></nz-input-number>
-              </td>
-              <td>
-                <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
-                                 [(ngModel)]="itemRowNhomMhEdit[i][y].gtriTonCuoiQuy"></nz-input-number>
-              </td>
+              <td></td>
+              <td></td>
               <td>
                 <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" *ngIf="!nhomMatHang.coNhieuMatHang"
                                  [(ngModel)]="itemRowNhomMhEdit[i][y].tiLeChienLuoc"></nz-input-number>
@@ -412,25 +406,25 @@
           <ng-container *ngFor="let matHang of nhomMatHang.children, let z = index">
             <tr>
               <ng-container *ngIf="!matHang.edit; else editTemplate">
-                <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
+                <td nzLeft class="text-left">{{y+1}}.{{z+1}}.</td>
                 <td nzLeft></td>
                 <td nzLeft>{{ matHang.matHang }}</td>
                 <td>{{ matHang.maSo }}</td>
                 <td>{{ matHang.dvt }}</td>
-                <td>{{ matHang.slTonDauNam }}</td>
-                <td>{{ matHang.gtriTonDauNam }}</td>
-                <td>{{ matHang.slTonDauKy }}</td>
-                <td>{{ matHang.gtriTonDauKy }}</td>
-                <td>{{ matHang.slNhapTrongKy }}</td>
-                <td>{{ matHang.gtriNhapTrongKy }}</td>
-                <td>{{ matHang.slNhapLuyKe }}</td>
-                <td>{{ matHang.gtriNhapLuyKe }}</td>
-                <td>{{ matHang.slXuatTrongKy }}</td>
-                <td>{{ matHang.gtriXuatTrongKy }}</td>
-                <td>{{ matHang.slXuatLuyKe }}</td>
-                <td>{{ matHang.gtriXuatLuyKe }}</td>
-                <td>{{ matHang.slTonCuoiQuy }}</td>
-                <td>{{ matHang.gtriTonCuoiQuy }}</td>
+                <td>{{ matHang.slTonDauNam | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriTonDauNam | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriTonDauKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriNhapTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriNhapLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriXuatTrongKy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriXuatLuyKe | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.slTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ matHang.gtriTonCuoiQuy | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ matHang.tiLeChienLuoc }}</td>
                 <td>{{ matHang.tiLeKeHoach }}</td>
                 <td>{{ matHang.tiLeGdp }}</td>
@@ -498,14 +492,8 @@
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriXuatLuyKe"></nz-input-number>
                 </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].slTonCuoiQuy"></nz-input-number>
-                </td>
-                <td>
-                  <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                   [(ngModel)]="itemRowMatHangEdit[i][y][z].gtriTonCuoiQuy"></nz-input-number>
-                </td>
+                <td></td>
+                <td></td>
                 <td>
                   <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                    [(ngModel)]="itemRowMatHangEdit[i][y][z].tiLeChienLuoc"></nz-input-number>
@@ -584,14 +572,8 @@
               <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                [(ngModel)]="itemRowMatHang[i][y].gtriXuatLuyKe"></nz-input-number>
             </td>
-            <td>
-              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].slTonCuoiQuy"></nz-input-number>
-            </td>
-            <td>
-              <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                               [(ngModel)]="itemRowMatHang[i][y].gtriTonCuoiQuy"></nz-input-number>
-            </td>
+            <td></td>
+            <td></td>
             <td>
               <nz-input-number [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                                [(ngModel)]="itemRowMatHang[i][y].tiLeChienLuoc"></nz-input-number>
@@ -622,19 +604,19 @@
         <td class="text-center">X</td>
         <td class="text-center">X</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriTonDauNam() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriTonDauKy() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriNhapTrongKy() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriNhapLuyKe() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriXuatTrongKy() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriXuatLuyKe() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">X</td>
-        <td class="text-center"></td>
+        <td class="text-center">{{calTongGtriTonCuoiQuy() | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center"></td>
         <td class="text-center"></td>
         <td class="text-center"></td>
@@ -642,8 +624,8 @@
       </tr>
       </tbody>
     </nz-table>
-    <label><span style="color: red">* </span> Ghi chú</label>
-    <textarea rows="3" readonly nz-input [(ngModel)]="ghiChu"></textarea>
+    <label>Ghi chú</label>
+    <textarea rows="3" nz-input [(ngModel)]="ghiChu"></textarea>
   </nz-card>
 </div>
 <ng-template #error let-control>

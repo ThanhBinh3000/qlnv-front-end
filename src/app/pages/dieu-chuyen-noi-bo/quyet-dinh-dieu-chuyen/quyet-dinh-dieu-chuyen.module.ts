@@ -10,28 +10,24 @@ import { NzCardModule } from "ng-zorro-antd/card";
 
 import { QuyetDinhDieuChuyenRoutingModule } from './quyet-dinh-dieu-chuyen-routing.module';
 import { QuyetDinhDieuChuyenComponent } from './quyet-dinh-dieu-chuyen.component';
-import { ThongTinQuyetDinhDieuChuyenComponent } from "./thong-tin-quyet-dinh-dieu-chuyen/thong-tin-quyet-dinh-dieu-chuyen.component";
-import { ThongTinHangCanDieuChuyenComponent } from "./thong-tin-hang-can-dieu-chuyen/thong-tin-hang-can-dieu-chuyen.component";
 
 import { QuyetDinhDieuChuyenTCComponent } from './tong-cuc/quyet-dinh-dieu-chuyen-tc/quyet-dinh-dieu-chuyen-tc.component';
 import { ThongTinQuyetDinhDieuChuyenTCComponent } from "./tong-cuc/thong-tin-quyet-dinh-dieu-chuyen-tc/thong-tin-quyet-dinh-dieu-chuyen-tc.component";
-import { ThongTinHangCanDieuChuyenTCComponent } from "./tong-cuc/thong-tin-hang-can-dieu-chuyen-tc/thong-tin-hang-can-dieu-chuyen-tc.component";
 
 import { QuyetDinhDieuChuyenCucComponent } from './cuc/quyet-dinh-dieu-chuyen-cuc/quyet-dinh-dieu-chuyen-cuc.component';
 import { ThongTinQuyetDinhDieuChuyenCucComponent } from "./cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc/thong-tin-quyet-dinh-dieu-chuyen-cuc.component";
 import { ThongTinHangCanDieuChuyenCucComponent } from "./cuc/thong-tin-hang-can-dieu-chuyen-cuc/thong-tin-hang-can-dieu-chuyen-cuc.component";
+import { ThongTinHangCanDieuChuyenChiCucComponent } from "./cuc/thong-tin-hang-can-dieu-chuyen-chi-cuc/thong-tin-hang-can-dieu-chuyen-chi-cuc.component";
 
 @NgModule({
   declarations: [
     QuyetDinhDieuChuyenComponent,
-    ThongTinQuyetDinhDieuChuyenComponent,
-    ThongTinHangCanDieuChuyenComponent,
     QuyetDinhDieuChuyenTCComponent,
     ThongTinQuyetDinhDieuChuyenTCComponent,
-    ThongTinHangCanDieuChuyenTCComponent,
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
-    ThongTinHangCanDieuChuyenCucComponent
+    ThongTinHangCanDieuChuyenCucComponent,
+    ThongTinHangCanDieuChuyenChiCucComponent
   ],
   imports: [
     CommonModule,
@@ -45,14 +41,12 @@ import { ThongTinHangCanDieuChuyenCucComponent } from "./cuc/thong-tin-hang-can-
   ],
   exports: [
     QuyetDinhDieuChuyenComponent,
-    ThongTinQuyetDinhDieuChuyenComponent,
-    ThongTinHangCanDieuChuyenComponent,
     QuyetDinhDieuChuyenTCComponent,
     ThongTinQuyetDinhDieuChuyenTCComponent,
-    ThongTinHangCanDieuChuyenTCComponent,
     QuyetDinhDieuChuyenCucComponent,
     ThongTinQuyetDinhDieuChuyenCucComponent,
-    ThongTinHangCanDieuChuyenCucComponent
+    ThongTinHangCanDieuChuyenCucComponent,
+    ThongTinHangCanDieuChuyenChiCucComponent
   ]
 })
 export class QuyetDinhDieuChuyenModule {
