@@ -175,7 +175,7 @@ export class BaoCao05Component implements OnInit {
                 this.lstCtietBcao[index].luyKeTcong = sumNumber([this.lstCtietBcao[index].luyKeTcong, this.soLuongTheoQuyetDinh.trongDotTcong]);
                 this.lstCtietBcao[index].listCtiet.forEach(item => {
                     const sl = this.soLuongTheoQuyetDinh.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
-                    if (item.loaiMatHang == 0 || item.loaiMatHang == 1) {
+                    if (item.loaiMatHang == 0) {
                         item.sl = sl;
                     } else {
                         item.sl = sumNumber([item.sl, sl]);
@@ -185,7 +185,7 @@ export class BaoCao05Component implements OnInit {
                 this.lstCtietBcao[index1].luyKeTcong = sumNumber([this.lstCtietBcao[index1].luyKeTcong, this.soLuongThucHienNhap.trongDotTcong]);
                 this.lstCtietBcao[index1].listCtiet.forEach(item => {
                     const sl = this.soLuongThucHienNhap.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
-                    if (item.loaiMatHang == 0 || item.loaiMatHang == 1) {
+                    if (item.loaiMatHang == 0) {
                         item.sl = sl;
                     } else {
                         item.sl = sumNumber([item.sl, sl]);
@@ -195,7 +195,7 @@ export class BaoCao05Component implements OnInit {
                 this.lstCtietBcao[index2].luyKeTcong = sumNumber([this.lstCtietBcao[index2].luyKeTcong, this.soLuongThucHienNamTruoc.trongDotTcong]);
                 this.lstCtietBcao[index2].listCtiet.forEach(item => {
                     const sl = this.soLuongThucHienNamTruoc.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
-                    if (item.loaiMatHang == 0 || item.loaiMatHang == 1) {
+                    if (item.loaiMatHang == 0) {
                         item.sl = sl;
                     } else {
                         item.sl = sumNumber([item.sl, sl]);
@@ -205,7 +205,7 @@ export class BaoCao05Component implements OnInit {
                 this.lstCtietBcao[index3].luyKeTcong = sumNumber([this.lstCtietBcao[index3].luyKeTcong, this.soLuongThucHienNamNay.trongDotTcong]);
                 this.lstCtietBcao[index3].listCtiet.forEach(item => {
                     const sl = this.soLuongThucHienNamNay.listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
-                    if (item.loaiMatHang == 0 || item.loaiMatHang == 1) {
+                    if (item.loaiMatHang == 0) {
                         item.sl = sl;
                     } else {
                         item.sl = sumNumber([item.sl, sl]);
