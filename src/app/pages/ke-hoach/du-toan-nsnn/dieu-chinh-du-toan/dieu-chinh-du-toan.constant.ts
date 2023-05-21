@@ -9,13 +9,6 @@ export const TAB_LIST = [
         role: [DCDT.VIEW_REPORT, DCDT.VIEW_SYNTHETIC_REPORT],
         isSelected: false,
     },
-    // {
-    //     name: 'Báo cáo ',
-    //     code: 'baocao',
-    //     status: true,
-    //     role: [DCDT.EDIT_REPORT],
-    //     isSelected: false,
-    // },
     {
         name: 'Báo cáo từ đơn vị cấp dưới ',
         code: 'capduoi',

@@ -15,7 +15,6 @@ import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import * as uuid from 'uuid';
@@ -159,7 +158,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     public giaoDuToanChiService: GiaoDuToanChiService,
     public quanLyVonPhiService: QuanLyVonPhiService,
     private userService: UserService,
-    private danhMuc: DanhMucHDVService,
   ) { }
 
   ngOnInit() {
@@ -305,8 +303,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.statusBtnEdit = false;
       }
     }
-    // this.statusBtnCopy = utils.getRoleCopy(this.isStatus, checkChirld, this.userInfo?.roles[0]?.code);
-
     this.statusBtnCopy = !(Utils.statusCopy.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
     this.statusBtnPrint = !(Utils.statusPrint.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
@@ -341,7 +337,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
-          // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
@@ -479,9 +474,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return
     }
-    // if (file) {
-    //   request.soQd = await this.uploadFile(file);
-    // }
     if (!request.soQd) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return;
@@ -509,7 +501,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.id = data.data.id;
-            // this.getDetailReport();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }

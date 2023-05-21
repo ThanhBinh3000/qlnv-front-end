@@ -87,7 +87,6 @@ export class PhuLuc4Component implements OnInit {
     private dieuChinhDuToanService: DieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
     public userService: UserService,
     private danhMucService: DanhMucDungChungService,
   ) { }
@@ -111,8 +110,6 @@ export class PhuLuc4Component implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
-    console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
-
     const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
     if (category) {
       category.data.forEach(

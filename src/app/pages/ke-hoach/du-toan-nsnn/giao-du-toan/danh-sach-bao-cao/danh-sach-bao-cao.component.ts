@@ -9,7 +9,7 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCVP, GDT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { GDT, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
@@ -64,7 +64,6 @@ export class DanhSachBaoCaoComponent implements OnInit {
   };
   constructor(
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,

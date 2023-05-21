@@ -9,8 +9,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import { DialogTongHopGiaoComponent } from 'src/app/components/dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -149,16 +147,13 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 	constructor(
 		private location: Location,
 		private spinner: NgxSpinnerService,
-		private routerActive: ActivatedRoute,
 		private userService: UserService,
 		private notification: NzNotificationService,
 		private danhMuc: DanhMucHDVService,
 		private quanLyVonPhiService: QuanLyVonPhiService,
 		private giaoDuToanChiService: GiaoDuToanChiService,
 		private datePipe: DatePipe,
-		private dataSource: DataService,
 		private modal: NzModalService,
-		private router: Router,
 		public globals: Globals,
 	) { }
 
@@ -341,7 +336,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
 
 	statusDvi() {
-		console.log(this.userInfo)
 		if (this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP")) {
 			return true
 		} else {

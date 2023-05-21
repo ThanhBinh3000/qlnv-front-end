@@ -73,7 +73,7 @@ export class PhanBoDuToanComponent implements OnInit {
     loai: null,
     trangThais: [],
     maPa: "",
-    maLoaiDan: [1,2],
+    maLoaiDan: [1, 2],
     soQd: "",
     trangThaiGiaos: [],
     paggingReq: {
@@ -213,7 +213,7 @@ export class PhanBoDuToanComponent implements OnInit {
     this.searchFilter.maPa = null;
     this.trangThai = null;
     this.trangThaiGiao = null;
-    this.searchFilter.maLoaiDan = [1,2];
+    this.searchFilter.maLoaiDan = [1, 2];
     this.search();
   };
 
@@ -414,15 +414,6 @@ export class PhanBoDuToanComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   };
-
-  // viewDetail(data: any) {
-  //   debugger
-  //   const obj = {
-  //     id: data.id,
-  //     tabSelected: 'quyetDinhBTC',
-  //   }
-  //   this.dataChange.emit(obj);
-  // };
 
   //doi so trang
   onPageIndexChange(page) {

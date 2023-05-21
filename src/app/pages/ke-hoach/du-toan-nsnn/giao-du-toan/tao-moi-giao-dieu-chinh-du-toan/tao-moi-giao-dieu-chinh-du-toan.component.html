@@ -135,18 +135,12 @@
                     <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px">STT</th>
-                                <th rowspan="2" nzWidth="350px">Nhóm</th>
+                                <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
+                                <th rowspan="2" nzWidth="350px" nzLeft>Nhóm</th>
                                 <th rowspan="2">Tổng số</th>
                                 <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
                                 <th rowspan="2" style="width: 60px" *ngIf="!status" nzRight></th>
                             </tr>
-                            <!-- <tr>
-                  <th *ngFor="let item of lstDvi" nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-                    (nzOnConfirm)="deleteCol(item.maDvi)">
-                    {{item.tenDvi}}
-                  </th>
-                </tr> -->
                             <tr>
                                 <ng-container *ngIf="trangThaiBanGhi == '1'; else nonDeleteCol">
                                     <th *ngFor="let item of lstDvi" nz-popconfirm

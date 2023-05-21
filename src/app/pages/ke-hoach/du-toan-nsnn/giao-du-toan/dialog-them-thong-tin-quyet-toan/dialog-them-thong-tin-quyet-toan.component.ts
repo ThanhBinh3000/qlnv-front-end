@@ -1,18 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
-import * as fileSaver from 'file-saver';
-import * as uuid from "uuid";
-import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 
 export class ItemCongVan {
   fileName: string;
@@ -127,8 +125,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.phuongAns = data.data;
-          console.log(this.phuongAns);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -243,16 +239,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     ))
 
     //get file cong van url
-    const file: any = this.fileDetail;
-    // if (file) {
-    //   if (file.size > Utils.FILE_SIZE) {
-    //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-    //     return;
-    //   } else {
-    //     request.soQd = await this.uploadFile(file);
-    //   }
-    // }
-
     if (!request.soQd) {
       this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");
       return;
@@ -273,7 +259,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
   async handleOk() {
     let phuongAn!: string;
-    let loaiPa!: string;
     const requestReport = {
       loaiTimKiem: "0",
       maPhanGiao: '2',
@@ -302,46 +287,12 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
         limit: 10,
         page: 1
       },
-
-      // loaiTimKiem: "0",
-      // maPhanGiao: "2",
-      // maLoai: "2",
-      // namPa: null,
-      // ngayTaoTu: null,
-      // ngayTaoDen: null,
-      // donViTao: "0101",
-      // loai: null,
-      // trangThais: [
-      //   "1",
-      //   "2",
-      //   "3",
-      //   "4",
-      //   "5",
-      //   "6",
-      //   "7",
-      //   "8",
-      //   "9"
-      // ],
-      // maPa: null,
-      // maLoaiDan: null,
-      // soQd: "",
-      // trangThaiGiaos: [
-      //   "0",
-      //   "1",
-      //   "2"
-      // ],
-      // paggingReq: {
-      //   limit: 10,
-      //   page: 1
-      // }
-
     };
     this.spinner.show();
     await this.GiaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           phuongAn = data.data.content[0]?.id;
-          // loaiPa = data.data.content[0]?.maLoaiDan;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -352,7 +303,6 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     );
     let data = {
       id: phuongAn,
-      // loaiPa: loaiPa
     }
     this._modalRef.close(data);
   }

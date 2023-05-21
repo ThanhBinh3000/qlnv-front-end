@@ -1,19 +1,18 @@
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, getHead, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { CurrencyMaskInputMode } from 'ngx-currency';
 export class ItemData {
   level: any;
   checked: boolean;
@@ -96,7 +95,6 @@ export class PhuLuc5Component implements OnInit {
   scrollX: string;
 
   BOX_NUMBER_WIDTH = 400;
-  dataVp: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -127,9 +125,6 @@ export class PhuLuc5Component implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editAppraisalValue = this.dataInfo?.editRecommendedValue;
     this.viewAppraisalValue = this.dataInfo?.viewRecommendedValue;
-    this.dataVp = this.formDetail.dataVp;
-    console.log("this.dataVp pl5:", this.dataVp);
-
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -141,15 +136,6 @@ export class PhuLuc5Component implements OnInit {
     this.dsDinhMuc = this.dsDinhMucN
     if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
       this.lstCtietBcao.forEach(item => {
-        // if (!item.noiDung) {
-        //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
-        //   item.noiDung = dinhMuc?.tenDinhMuc;
-        //   item.dinhMuc = dinhMuc?.tongDmuc;
-        //   item.dviTinh = dinhMuc?.donViTinh;
-        //   item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
-        //   item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        //   item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi
-        // } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNoiDung && e.loaiDinhMuc == item.maDmuc);
         if (!item.noiDung) {
           item.noiDung = dinhMuc?.tenDinhMuc;
@@ -158,9 +144,7 @@ export class PhuLuc5Component implements OnInit {
         item.dviTinh = dinhMuc?.donViTinh;
         item.thanhTien = mulNumber(item.dinhMuc, item.tongCong);
         item.dtoanDchinh = item.thanhTien - item.dtoanDaGiaoLke;
-        // item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
         item.dtoanVuTvqtDnghi = item.thanhTien - item.dtoanDaGiaoLke;
-        // }
       })
     }
 

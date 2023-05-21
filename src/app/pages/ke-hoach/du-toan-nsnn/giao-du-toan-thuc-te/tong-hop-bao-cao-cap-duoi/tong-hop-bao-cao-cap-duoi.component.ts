@@ -53,7 +53,7 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     loaiTimKiem: "1",
     maPhanGiao: '2',
     maLoai: '2',
-    maLoaiDan: [1,2],
+    maLoaiDan: [1, 2],
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
@@ -249,14 +249,12 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.maPa = null
-    this.searchFilter.maLoaiDan = [1,2]
+    this.searchFilter.maLoaiDan = [1, 2]
     this.trangThai = null;
     this.onSubmit();
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    console.log({ "id": id, "maLoaiDan": maLoaiDan });
-
     if (maLoaiDan == "1") {
       const obj = {
         id: id,
@@ -320,7 +318,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res) {
-        console.log("res: ", res);
         const obj = {
           ...res,
           // id: null,

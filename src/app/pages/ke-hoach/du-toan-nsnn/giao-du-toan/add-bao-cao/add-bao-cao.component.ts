@@ -240,8 +240,6 @@ export class AddBaoCaoComponent implements OnInit {
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
-      console.log("this.data", this.data);
-
       this.baoCao.nam = this.data.namDtoan;
       this.baoCao.maPa = this.data?.maPa;
       this.baoCao.maPaCha = this.data?.maPaCha;
@@ -660,8 +658,6 @@ export class AddBaoCaoComponent implements OnInit {
     });
     modalAppendix.afterClose.toPromise().then(async (res) => {
       if (res) {
-        console.log("res: ", res);
-
         //gan lai thong tin sau khi bieu mau duoc luu
         const index = this.baoCao.lstCtiets.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
         this.baoCao.lstCtiets[index] = res.formDetail;
@@ -917,7 +913,6 @@ export class AddBaoCaoComponent implements OnInit {
   };
 
   back() {
-    console.log(this.data)
     if (this.data?.preData) {
       this.dataChange.emit(this.data?.preData)
     } else {
@@ -994,18 +989,6 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
-    // let isParent
-    // if (this.userInfo.CAP_DVI == "1") {
-    //   this.childUnit.forEach(s => {
-    //     if (s.maDvi == this.baoCao.maDvi) {
-    //       isParent = true
-    //     }
-    //   })
-    // } else if (this.userInfo.CAP_DVI == "2" ) {
-    //   const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
-    //   isParent = this.userInfo.MA_DVI == maDviCha;
-    // }
-
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
     const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
@@ -1051,8 +1034,6 @@ export class AddBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
-          console.log(this.childUnit);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

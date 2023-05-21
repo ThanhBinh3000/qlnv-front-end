@@ -220,12 +220,9 @@ export class AddBaoCaoComponent implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    console.log(this.data);
     this.baoCao.id = this.data?.id;
     this.userInfo = await this.userService.getUserLogin();
     await this.getListUser();
-    console.log("this.userInfo:", this.userInfo.DON_VI.tenVietTat)
-
     if (this.baoCao.id) {
       await this.getDetailReport();
     } else {
@@ -312,8 +309,6 @@ export class AddBaoCaoComponent implements OnInit {
       data => {
         if (data.statusCode == 0) {
           this.childUnit = data.data;
-          console.log("this.childUnit: ", this.childUnit);
-
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -334,8 +329,6 @@ export class AddBaoCaoComponent implements OnInit {
   //     data => {
   //       if (data.statusCode == 0) {
   //         this.baoCao.lstDchinh = data.data.lstDchinhs;
-  //         console.log("resData: ", this.dataVp);
-
   //       } else {
   //         this.notification.error(MESSAGE.ERROR, data?.msg);
   //       }

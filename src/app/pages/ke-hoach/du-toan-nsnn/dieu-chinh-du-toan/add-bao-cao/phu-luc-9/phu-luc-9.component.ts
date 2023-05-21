@@ -1,18 +1,18 @@
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { MESSAGE } from 'src/app/constants/message';
-import { exchangeMoney, displayNumber, sumNumber, sortByIndex, sortWithoutIndex } from 'src/app/Utility/func';
-import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
-import { UserService } from 'src/app/services/user.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { DON_VI_TIEN, LA_MA, AMOUNT, MONEY_LIMIT } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { CurrencyMaskInputMode } from 'ngx-currency';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import * as uuid from "uuid";
 
 export class ItemData {
   level: any;
@@ -116,9 +116,7 @@ export class PhuLuc9Component implements OnInit {
     private dieuChinhDuToanService: DieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
     public userService: UserService,
-    private danhMucService: DanhMucDungChungService,
   ) { }
 
   async ngOnInit() {
@@ -129,7 +127,6 @@ export class PhuLuc9Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    console.log(this.dataInfo)
     this.userInfo = this.userService.getUserLogin();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;

@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { GDT, Utils } from 'src/app/Utility/utils';
 import { cloneDeep } from 'lodash';
-import { UserService } from 'src/app/services/user.service';
-import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { UserService } from 'src/app/services/user.service';
+import { GDT, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
     ngayTaoDen: null,
     maPa: "",
     trangThai: Utils.TT_BC_1,
-    maLoaiDan:[3]
+    maLoaiDan: [3]
   };
 
   filterTable: any = {
@@ -66,14 +66,8 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.searchFilter.ngayTaoTu = new Date();
-    // const newDate = new Date();
-    // newDate.setMonth(newDate.getMonth() - 1);
-    // this.searchFilter.ngayTaoDen = newDate;
-
     this.userInfo = this.userService.getUserLogin();
     this.search();
-    // this.searchFilter.donViTao = this.userInfo?.MA_DVI;
   };
 
   clearFilter() {
@@ -113,7 +107,6 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
       trangThaiGiaos: ["0", "1", "2"],
     };
     this.spinner.show();
-    //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
     await this.giaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {

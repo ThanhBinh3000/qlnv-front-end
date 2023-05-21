@@ -7,7 +7,6 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from 'src/app/components/dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -566,7 +565,6 @@ export class AddQuyetToanComponent implements OnInit {
 	}
 
 	async viewDetail(id) {
-		console.log(id);
 		this.spinner.show();
 		localStorage.setItem('idInput', this.idInput);
 		this.idInput = id
@@ -1089,28 +1087,6 @@ export class AddQuyetToanComponent implements OnInit {
 		return displayNumber(num);
 	};
 
-	// deleteLine(id: any) {
-	//   const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
-	//   const nho: string = this.lstCtietBcao[index].stt;
-	//   const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-	//   const stt: string = this.lstCtietBcao[index].stt;
-	//   //xóa phần tử và con của nó
-	//   this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
-	//   //update lại số thức tự cho các phần tử cần thiết
-	//   const lstIndex: number[] = [];
-	//   for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-	//     if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-	//       lstIndex.push(i);
-	//     }
-	//   }
-
-	//   this.replaceIndex(lstIndex, -1);
-	//   this.sum(stt);
-	//   this.updateEditCache();
-	//   console.log(this.lstCtietBcao);
-
-	// };
-
 	deleteLine(id: string) {
 		const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
 		const nho: string = this.lstCtietBcao[index].stt;
@@ -1129,8 +1105,6 @@ export class AddQuyetToanComponent implements OnInit {
 		this.sum(stt);
 		this.getTotal();
 		this.updateEditCache();
-		console.log(this.lstCtietBcao);
-
 	}
 
 

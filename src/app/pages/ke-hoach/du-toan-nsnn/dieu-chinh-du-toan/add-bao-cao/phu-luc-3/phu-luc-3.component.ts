@@ -16,25 +16,6 @@ import * as uuid from "uuid";
 export class ItemData {
   level: any;
   checked: boolean;
-  // id: string;
-  // qlnvKhvonphiDchinhCtietId: string;
-  // stt: string;
-  // noiDung: string;
-  // dviTinh: string;
-  // sluongDuocGiao: number;
-  // sluongThucTe: number;
-  // sluongUocThien: number;
-  // tongCong: number;
-  // dinhMuc: number;
-  // thanhTien: number;
-  // dtoanDaGiaoLke: number;
-  // dtoanDchinh: number;
-  // dtoanVuTvqtDnghi: number;
-  // kphiThieu: number;
-  // maNoiDung: string;
-
-  // phu luc 3
-
   id: string;
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
@@ -102,7 +83,6 @@ export class PhuLuc3Component implements OnInit {
     private dieuChinhDuToanService: DieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private quanLyVonPhiService: QuanLyVonPhiService,
     public userService: UserService,
     private danhMucService: DanhMucDungChungService,
   ) { }
@@ -133,7 +113,6 @@ export class PhuLuc3Component implements OnInit {
     await this.getListTaiSan();
 
     if (this.lstCtietBcao.length == 0) {
-      // this.linhVucChis.forEach(e => {
       this.lstCtietBcao.push({
         ...new ItemData(),
         id: uuid.v4() + 'FE',
@@ -142,11 +121,6 @@ export class PhuLuc3Component implements OnInit {
         noiDung: this.userInfo.TEN_DVI,
         loaiKhoan: "340-341"
       })
-      // })
-      // this.setLevel();
-      // this.lstCtietBcao.forEach(item => {
-      //   item.tenDanhMuc += this.getName(item.level, item.maDanhMuc);
-      // })
     } else if (!this.lstCtietBcao[0]?.stt) {
       this.lstCtietBcao.forEach(item => {
         item.stt = item.maNoiDung;
@@ -158,8 +132,6 @@ export class PhuLuc3Component implements OnInit {
     } else {
       this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 8).toString() + 'px';
     }
-
-    // this.sortByIndex();
     this.getTotal();
     this.tinhTong();
     this.updateEditCache();
@@ -174,7 +146,6 @@ export class PhuLuc3Component implements OnInit {
         item => {
           this.lstTaiSans.push({
             ...item,
-            // level: item.ma?.split('.').length - 2,
             donViTinh: "cái"
           })
         }
@@ -204,7 +175,6 @@ export class PhuLuc3Component implements OnInit {
   getTotal() {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
-      // this.total.dinhMuc = sumNumber([this.total.dinhMuc, item.dinhMuc]);
       this.total.ncauKphi = sumNumber([this.total.ncauKphi, item.ncauKphi]);
       this.total.dtoanKphiNtruoc = sumNumber([this.total.dtoanKphiNtruoc, item.dtoanKphiNtruoc]);
       this.total.dtoanDchinh = sumNumber([this.total.dtoanDchinh, item.dtoanDchinh]);
@@ -353,7 +323,6 @@ export class PhuLuc3Component implements OnInit {
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.updateEditCache();
-    this.sum(this.lstCtietBcao[index].stt);
     this.tinhTong();
     this.getTotal();
   };
@@ -367,41 +336,6 @@ export class PhuLuc3Component implements OnInit {
     });
   };
 
-  sum(stt: string) {
-    // stt = this.getHead(stt);
-    // while (stt != '0') {
-    //   const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    //   const data = this.lstCtietBcao[index];
-    //   this.lstCtietBcao[index] = {
-    //     ...new ItemData(),
-    //     id: data.id,
-    //     stt: data.stt,
-    //     tenDanhMuc: data.tenDanhMuc,
-    //     level: data.level,
-    //     // ttienTd: data.ttienTd,
-    //     danhMuc: data.danhMuc,
-    //     // sluongNamDtoan:data.sluongNamDtoan,
-    //     // ttienNamDtoan: data.ttienNamDtoan,
-    //     // thienNamTruoc: data.thienNamTruoc,
-    //     // dtoanNamHtai: data.dtoanNamHtai,
-    //     // uocNamHtai: data.uocNamHtai,
-    //     // dmucNamDtoan: data.dmucNamDtoan,
-    //   }
-    //   this.lstCtietBcao.forEach(item => {
-    //     if (this.getHead(item.stt) == stt) {
-    //       this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
-    //       this.lstCtietBcao[index].thienNamTruoc = sumNumber([this.lstCtietBcao[index].thienNamTruoc, item.thienNamTruoc]);
-    //       this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
-    //       this.lstCtietBcao[index].uocNamHtai = sumNumber([this.lstCtietBcao[index].uocNamHtai, item.uocNamHtai]);
-    //       // this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
-    //       this.lstCtietBcao[index].ttienTd = sumNumber([this.lstCtietBcao[index].ttienTd, item.ttienTd]);
-    //     }
-    //   })
-    //   stt = this.getHead(stt);
-    // }
-    // // this.getTotal();
-    // this.tinhTong();
-  };
 
   cancelEdit(id: string): void {
     const index = this.lstCtietBcao.findIndex(item => item.id === id);

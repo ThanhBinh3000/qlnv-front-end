@@ -1,16 +1,13 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import * as dayjs from 'dayjs';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { UserService } from 'src/app/services/user.service';
+import * as uuid from "uuid";
 
 @Component({
   selector: 'app-dialog-tong-hop',
@@ -55,7 +52,6 @@ export class DialogTongHopComponent implements OnInit {
     private userService: UserService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
-    private datePipe: DatePipe,
     private notification: NzNotificationService,
   ) { }
 
@@ -79,7 +75,6 @@ export class DialogTongHopComponent implements OnInit {
     await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          console.log(data);
           this.response.lstCtietBcao = data.data.lstPa;
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
           this.response.maPaCha = data.data.maPaCha;
@@ -93,10 +88,6 @@ export class DialogTongHopComponent implements OnInit {
               }
             });
           })
-          // this.response.lstDviTrucThuoc.forEach(item => {
-          //   item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-          //   item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-          // })
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -145,7 +136,6 @@ export class DialogTongHopComponent implements OnInit {
             )
           })
         }
-        console.log(res.data);
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
       }

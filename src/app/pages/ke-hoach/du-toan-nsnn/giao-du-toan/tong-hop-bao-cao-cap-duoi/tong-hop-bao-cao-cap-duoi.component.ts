@@ -98,16 +98,13 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   isDataAvailable = false;
   statusNewReport = true;
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
-    private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     private userService: UserService,
-    private dataSource: DataService,
     private modal: NzModalService,
   ) {
   }
@@ -201,7 +198,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
-    // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -254,8 +250,6 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   }
 
   xemChiTiet(id: string, maLoaiDan: string) {
-    console.log({ "id": id, "maLoaiDan": maLoaiDan });
-
     if (maLoaiDan == "3") {
       const obj = {
         id: id,
@@ -319,10 +313,8 @@ export class TongHopBaoCaoCapDuoiComponent implements OnInit {
     });
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res) {
-        console.log("res: ", res);
         const obj = {
           ...res,
-          // id: null,
           tabSelected: 'addBaoCao',
           isSynthetic: true,
         }
