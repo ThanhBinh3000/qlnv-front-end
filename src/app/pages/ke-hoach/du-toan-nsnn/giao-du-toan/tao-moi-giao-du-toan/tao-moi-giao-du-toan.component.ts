@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -11,8 +10,6 @@ import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialo
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -285,8 +282,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
 
     this.updateEditCache();
     this.getStatusButton();
-    console.log(this.data);
-    console.log(this.lstDvi);
     this.spinner.hide();
   };
 
@@ -431,8 +426,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       (res) => {
         if (res.statusCode == 0) {
           maBcaoNew = res.data;
-          //   let sub = "BTC";
-          //  maBcaoNew =maBcaoNew.slice(0, 2) + sub +maBcaoNew.slice(2);
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -682,7 +675,6 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
       this.giaoDuToanChiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
-            // const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
             if (this.trangThaiBanGhi == '1') {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             } else {

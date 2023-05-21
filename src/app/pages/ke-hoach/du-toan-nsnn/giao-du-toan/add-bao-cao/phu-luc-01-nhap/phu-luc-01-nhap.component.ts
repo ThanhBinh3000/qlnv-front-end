@@ -67,7 +67,6 @@ export class PhuLuc01NhapComponent implements OnInit {
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -85,8 +84,6 @@ export class PhuLuc01NhapComponent implements OnInit {
 
 
   async initialization() {
-    console.log(this.dataInfo);
-
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;
@@ -529,12 +526,6 @@ export class PhuLuc01NhapComponent implements OnInit {
         maDviTinh: data.maDviTinh,
         namDtDmuc: data.namDtDmuc,
         namDtSluong: data.namDtSluong,
-        // sluongNamDtoan:data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // dmucNamDtoan: data.dmucNamDtoan,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -561,16 +552,9 @@ export class PhuLuc01NhapComponent implements OnInit {
           level: data.level,
           danhMuc: data.danhMuc,
           namDtSluong: data.namDtSluong,
-          namDtDmuc:data.namDtDmuc,
+          namDtDmuc: data.namDtDmuc,
           maDmuc: data.maDmuc,
           maDviTinh: data.maDviTinh,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {

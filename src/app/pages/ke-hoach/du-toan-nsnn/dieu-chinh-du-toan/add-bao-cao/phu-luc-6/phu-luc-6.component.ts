@@ -1,19 +1,18 @@
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, exchangeMoney, getHead, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { CurrencyMaskInputMode } from 'ngx-currency';
 export class ItemData {
   level: any;
   checked: boolean;
@@ -136,15 +135,6 @@ export class PhuLuc6Component implements OnInit {
     this.dsDinhMuc = this.dsDinhMucX
     if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
       this.lstCtietBcao.forEach(item => {
-        // if (!item.noiDung) {
-        //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
-        //   item.noiDung = dinhMuc?.tenDinhMuc;
-        //   item.sluongThienDmuc = dinhMuc?.tongDmuc;
-        //   item.maDviTinh = dinhMuc?.donViTinh;
-        //   item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
-        //   item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-        //   item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
-        // } else {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maNdung && e.loaiDinhMuc == item.maDmuc);
         if (!item.noiDung) {
           item.noiDung = dinhMuc?.tenDinhMuc;
@@ -153,7 +143,6 @@ export class PhuLuc6Component implements OnInit {
         item.maDviTinh = dinhMuc?.donViTinh;
         item.sluongThienTtien = mulNumber(item.sluongThienDmuc, item.sluongThienCong);
         item.dtoanDchinh = item.sluongThienTtien - item.dtoanGiaoLke;
-        // item.dtoanVuTvqtDnghi = item.dtoanVuTvqtDnghi == 0 || !item.dtoanVuTvqtDnghi ? item.dtoanDchinh : item.dtoanVuTvqtDnghi;
         item.dtoanVuTvqtDnghi = item.sluongThienTtien - item.dtoanGiaoLke;
         // }
       })
@@ -593,14 +582,7 @@ export class PhuLuc6Component implements OnInit {
         stt: data.stt,
         noiDung: data.noiDung,
         level: data.level,
-        // ttienTd: data.ttienTd,
         maNdung: data.maNdung,
-        // sluongNamDtoan:data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // thienNamTruoc: data.thienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocNamHtai: data.uocNamHtai,
-        // dmucNamDtoan: data.dmucNamDtoan,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
@@ -613,7 +595,6 @@ export class PhuLuc6Component implements OnInit {
       })
       stt = this.getHead(stt);
     }
-    // this.getTotal();
     this.tinhTong();
   }
   // tinh tong tu cap duoi khong chuyen nstt
@@ -630,13 +611,6 @@ export class PhuLuc6Component implements OnInit {
           noiDung: data.noiDung,
           level: data.level,
           maNdung: data.maNdung,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {
@@ -649,7 +623,6 @@ export class PhuLuc6Component implements OnInit {
         })
         stt = this.getHead(stt);
       }
-      // this.getTotal();
       this.tinhTong();
     })
 

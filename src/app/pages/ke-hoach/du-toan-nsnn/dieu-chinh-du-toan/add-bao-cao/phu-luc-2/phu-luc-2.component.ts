@@ -14,26 +14,6 @@ import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 export class ItemData {
-  // level: any;
-  // checked: boolean;
-  // id: string;
-  // qlnvKhvonphiDchinhCtietId: string;
-  // stt: string;
-  // noiDung: string;
-  // dviTinh: string;
-  // sluongDuocGiao: number;
-  // sluongThien: number;
-  // soLuongUocThien: number;
-  // tongCong: number;
-  // dinhMuc: number;
-  // thanhTien: number;
-  // dtoanDaGiaoLke: number;
-  // dtoanDchinh: number;
-  // dtoanVuTvqtDnghi: number;
-  // kphiConThieu: number;
-  // maNoiDung: string;
-
-
   id: string;
   qlnvKhvonphiDchinhCtietId: string;
   stt: string;
@@ -151,7 +131,6 @@ export class PhuLuc2Component implements OnInit {
 
   onChangeTaiSan(event, id) {
     const taiSan = this.lstTaiSans.filter(item => item.ma == event)
-    console.log(taiSan);
     this.editCache[id].data.dvTinh = taiSan[0].donViTinh;
     this.editCache[id].data.tenTaiSan = taiSan[0].giaTri;
 
@@ -343,7 +322,6 @@ export class PhuLuc2Component implements OnInit {
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.updateEditCache();
-    this.sum(this.lstCtietBcao[index].stt);
     this.tinhTong();
     this.getTotal();
   };
@@ -356,43 +334,6 @@ export class PhuLuc2Component implements OnInit {
       };
     });
   };
-
-  sum(stt: string) {
-    // stt = this.getHead(stt);
-    // while (stt != '0') {
-    //   const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    //   const data = this.lstCtietBcao[index];
-    //   this.lstCtietBcao[index] = {
-    //     ...new ItemData(),
-    //     id: data.id,
-    //     stt: data.stt,
-    //     tenDanhMuc: data.tenDanhMuc,
-    //     level: data.level,
-    //     // ttienTd: data.ttienTd,
-    //     danhMuc: data.danhMuc,
-    //     // sluongNamDtoan:data.sluongNamDtoan,
-    //     // ttienNamDtoan: data.ttienNamDtoan,
-    //     // thienNamTruoc: data.thienNamTruoc,
-    //     // dtoanNamHtai: data.dtoanNamHtai,
-    //     // uocNamHtai: data.uocNamHtai,
-    //     // dmucNamDtoan: data.dmucNamDtoan,
-    //   }
-    //   this.lstCtietBcao.forEach(item => {
-    //     if (this.getHead(item.stt) == stt) {
-    //       this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
-    //       this.lstCtietBcao[index].thienNamTruoc = sumNumber([this.lstCtietBcao[index].thienNamTruoc, item.thienNamTruoc]);
-    //       this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
-    //       this.lstCtietBcao[index].uocNamHtai = sumNumber([this.lstCtietBcao[index].uocNamHtai, item.uocNamHtai]);
-    //       // this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
-    //       this.lstCtietBcao[index].ttienTd = sumNumber([this.lstCtietBcao[index].ttienTd, item.ttienTd]);
-    //     }
-    //   })
-    //   stt = this.getHead(stt);
-    // }
-    // // this.getTotal();
-    // this.tinhTong();
-  };
-
   cancelEdit(id: string): void {
     const index = this.lstCtietBcao.findIndex(item => item.id === id);
     // lay vi tri hang minh sua

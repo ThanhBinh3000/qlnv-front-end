@@ -1,17 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
-import { NOI_DUNG } from './phu-luc-phan-bo.constant';
-import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, exchangeMoney, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA } from 'src/app/Utility/utils';
+import { NOI_DUNG } from './phu-luc-phan-bo.constant';
 
 export class ItemData {
   id: string;
@@ -65,7 +64,6 @@ export class PhuLucPhanBoComponent implements OnInit {
     private modal: NzModalService,
     private _modalRef: NzModalRef,
     private danhMuc: DanhMucHDVService,
-    private userService: UserService,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private giaoDuToanService: GiaoDuToanChiService,
@@ -114,80 +112,15 @@ export class PhuLucPhanBoComponent implements OnInit {
     } else {
       this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
     }
-    console.log(this.dataInfo);
 
     if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
       this.dataInfo.extraData.forEach(item => {
         if (item.maNdung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-          // if (index != -1) {
           this.lstCtietBcao[index].lstCtietDvis = item?.lstCtietDvis;
-          // }
-          // this.sum(this.lstCtietBcao[index].stt)
         }
       })
     }
-
-
-    // if (this.dataInfo.data.trangThai == "3") {
-    //   if (this.isSynthetic || this.isSynthetic == false) {
-    //     this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
-    //     lstCtietTemp.forEach(s => {
-    //       s.lstCtietDvis = []
-    //       s.lstCtietDvis.push({
-    //         id: uuid.v4() + 'FE',
-    //         maDviNhan: this.maDvi,
-    //         soTranChi: 0,
-    //       })
-    //     })
-    //     this.lstCtietBcao = lstCtietTemp
-    //     if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-    //       this.dataInfo.extraData.forEach(item => {
-    //         if (item.maNdung) {
-    //           const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-    //           this.lstCtietBcao[index].lstCtietDvis = item.lstCtietDvis;
-    //           this.sum(this.lstCtietBcao[index].stt)
-    //         }
-    //       })
-    //     }
-    //   } else {
-    //     // lstCtietTemp.forEach(s => {
-    //     //   s.lstCtietDvis = []
-    //     //   s.lstCtietDvis.push({
-    //     //     id: uuid.v4() + 'FE',
-    //     //     maDviNhan: this.maDvi,
-    //     //     soTranChi: 0,
-    //     //   })
-    //     // })
-    //     let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.maDvi);
-
-    //     this.dataInfo.data?.lstCtietBcaos[0].lstCtietDvis.forEach(s => {
-    //       lstDvi1 = lstDvi1.filter(v => v.maDvi === s.maDviNhan)
-    //     })
-    //     this.lstDvi = lstDvi1
-    //     this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos
-    //     // if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-    //     //   this.dataInfo.extraData.forEach(item => {
-    //     //     if (item.maNdung) {
-    //     //       const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
-    //     //       this.lstCtietBcao[index].lstCtietDvis = item.lstCtietDvis;
-    //     //       this.sum(this.lstCtietBcao[index].stt)
-    //     //     }
-    //     //   })
-    //     // }
-    //   }
-    // } else if ((this.dataInfo.data.trangThai == "5" || this.dataInfo.data.trangThai == "4") && this.isSynthetic == false) {
-    //   this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
-    //   this.dataInfo.data.lstCtietBcaos.forEach(s => {
-    //     if (s.listCtiet && s.listCtiet.length > 0) {
-    //       s.lstCtietDvis = s.listCtiet
-    //     }
-    //     if (s.lstCtietDvis && s.lstCtietDvis.length > 0) {
-    //       s.lstCtietDvis = s.lstCtietDvis
-    //     }
-    //   })
-    //   this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
-    // }
 
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
 
@@ -202,11 +135,6 @@ export class PhuLucPhanBoComponent implements OnInit {
         this.sum(this.lstCtietBcao[index].stt)
       }
     })
-
-
-    // this.tinhTong();
-    console.log(this.lstCtietBcao);
-
     this.getTotal();
     this.getStatusButton();
     this.updateEditCache();
@@ -504,12 +432,6 @@ export class PhuLucPhanBoComponent implements OnInit {
       if (level == 0) {
         this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
         this.total.dtoanGiao = sumNumber([this.total.dtoanGiao, item.dtoanGiao]);
-        // this.total.tong = sumNumber([this.total.tong, item.tong]);
-        // this.total.dtoanDaThien = sumNumber([this.total.dtoanDaThien, item.dtoanDaThien]);
-        // this.total.dtoanUocThien = sumNumber([this.total.dtoanUocThien, item.dtoanUocThien]);
-        // this.total.tongDtoanTrongNam = sumNumber([this.total.tongDtoanTrongNam, item.tongDtoanTrongNam]);
-        // this.total.dtoanDnghiDchinh = sumNumber([this.total.dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
-        // this.total.dtoanVuTvqtDnghi = sumNumber([this.total.dtoanVuTvqtDnghi, item.dtoanVuTvqtDnghi]);
       }
     })
   }
@@ -534,16 +456,4 @@ export class PhuLucPhanBoComponent implements OnInit {
   handleCancel() {
     this._modalRef.close();
   };
-
-  // tính tổng
-  // tinhTong() {
-  //   this.lstCtietBcao.forEach(item => {
-  //     const sttItem = item.stt
-  //     const index = this.lstCtietBcao.findIndex(e => e.stt == sttItem);
-  //     this.lstCtietBcao[index].dtoanGiao = 0
-  //     this.lstCtietBcao[index].lstCtietDvis.forEach(item => {
-  //       this.lstCtietBcao[index].dtoanGiao += Number(item.soTranChi);
-  //     })
-  //   })
-  // };
 }

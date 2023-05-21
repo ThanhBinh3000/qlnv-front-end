@@ -1,19 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
-import { AMOUNT, DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, DON_VI_TIEN, LA_MA } from 'src/app/Utility/utils';
 // import { NOI_DUNG } from './phu-luc-phan-bo.constant';
-import * as uuid from 'uuid';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { displayNumber, exchangeMoney, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
 export class ItemData {
   id: string;
@@ -69,7 +67,6 @@ export class PhuLucTongHopComponent implements OnInit {
     private modal: NzModalService,
     private _modalRef: NzModalRef,
     private danhMuc: DanhMucHDVService,
-    private userService: UserService,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private dieuChinhDuToanService: DieuChinhService,
@@ -84,8 +81,6 @@ export class PhuLucTongHopComponent implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    console.log(this.dataInfo);
-
     this.maDvi = this.dataInfo.maDvi;
 
     // lấy danh sách đơn vị
@@ -127,7 +122,6 @@ export class PhuLucTongHopComponent implements OnInit {
         if (item.maNoiDung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNoiDung == item.maNoiDung);
           this.lstCtietBcao[index].child = item.child;
-          // this.sum(this.lstCtietBcao[index].stt)
         }
       })
     }
@@ -190,10 +184,6 @@ export class PhuLucTongHopComponent implements OnInit {
     //   })
     //   this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
     // }
-
-
-
-    // console.log(lstCtietTemp);
 
     if (this.status) {
       this.scrollX = (350 + 250 * (this.lstDvi.length + 1)).toString() + 'px';

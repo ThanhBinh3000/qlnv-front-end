@@ -1,16 +1,16 @@
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, MONEY_LIMIT, LA_MA, Utils } from 'src/app/Utility/utils';
-import { DANH_MUC_PL10 } from './phu-luc-1.constant';
-import * as uuid from "uuid";
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CurrencyMaskInputMode } from 'ngx-currency';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import * as uuid from "uuid";
+import { DANH_MUC_PL10 } from './phu-luc-1.constant';
 
 export class ItemData {
   level: any;
@@ -102,8 +102,6 @@ export class PhuLuc1Component implements OnInit {
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.viewRecommendedValue = this.dataInfo?.viewRecommendedValue;
-    console.log("this.viewRecommendedValue: ", this.viewRecommendedValue);
-
     this.editRecommendedValue = this.dataInfo?.editRecommendedValue;
     this.formDetail?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
@@ -128,9 +126,7 @@ export class PhuLuc1Component implements OnInit {
         })
       })
     }
-    console.log(this.isSynthetic);
     if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-      console.log(this.dataInfo?.extraData);
       this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNoiDung);
       this.dataInfo.extraData.forEach(item => {
         if (this.isSynthetic == true) {

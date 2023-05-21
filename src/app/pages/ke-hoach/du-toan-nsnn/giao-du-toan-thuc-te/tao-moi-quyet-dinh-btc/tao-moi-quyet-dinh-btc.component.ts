@@ -1,25 +1,24 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
-import { Globals } from 'src/app/shared/globals';
+import { MESSAGE } from 'src/app/constants/message';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import * as fileSaver from 'file-saver';
-// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import * as uuid from 'uuid';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { Globals } from 'src/app/shared/globals';
+import { AMOUNT, DON_VI_TIEN, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import * as uuid from 'uuid';
+import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 
 export class ItemData {
   id!: any;
@@ -194,7 +193,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
 
   async initialization() {
-    this.spinner.show(); 
+    this.spinner.show();
     this.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
     this.maDonViTao = this.userInfo?.MA_DVI;
@@ -355,12 +354,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.id = data.data.id;
           this.lstCtietBcao = data.data.lstCtiets[0];
           this.maDviTien = data.data.maDviTien;
-          // this.sortByIndex();
-          // this.lstCtietBcao.forEach(item => {
-          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
-          //   item.nguonNsnn = divMoney(item.nguonNsnn, this.maDviTien);
-          //   item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
-          // })
           this.namPa = data.data.namPa;
           this.isStatus = data.data.trangThai;
           this.maPa = data.data.maPa;
@@ -369,8 +362,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.maPaCha = data.data.maPa;
-          // this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao && (e.type === "DV"));
-          console.log("this.lstDvi: ", this.lstDvi);
           this.lstFiles = data.data.lstFiles;
           this.listFile = [];
           if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
@@ -518,7 +509,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       maDvi: this.maDonViTao,
       maDviTien: this.maDviTien,
       maLoaiDan: "1",
-      // maPa: this.maPa,
       maPa: this.maPa,
       namPa: this.namPa,
       maPhanGiao: '1',
@@ -544,9 +534,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return
     }
-    // if (file) {
-    //   request.soQd = await this.uploadFile(file);
-    // }
+
     if (!request.soQd) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
       return;
@@ -574,7 +562,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.id = data.data.id;
-            // this.getDetailReport();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -863,9 +850,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     return displayNumber(num);
   };
 
-  // getHead(str: string): string {
-  //   return str.substring(0, str.lastIndexOf('.'));
-  // }
   // lấy phần đuôi của stt
   getTail(str: string): number {
     return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);

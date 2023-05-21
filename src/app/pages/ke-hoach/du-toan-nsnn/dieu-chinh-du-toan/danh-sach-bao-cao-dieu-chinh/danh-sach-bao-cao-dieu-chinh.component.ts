@@ -106,14 +106,10 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
-    //   this.statusNewReport = false;
-    // }
     this.searchFilter.denNgay = new Date();
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
-    // this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
     this.search();
     if (this.userInfo.CAP_DVI == '1') {

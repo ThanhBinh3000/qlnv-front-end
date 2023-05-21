@@ -1,7 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
@@ -100,12 +98,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
-    private routerActive: ActivatedRoute,
     private datepipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private router: Router,
     private notification: NzNotificationService,
-    private location: Location,
     private danhMucService: DanhMucHDVService,
     private dataSource: DataService,
     public globals: Globals,
@@ -154,14 +148,12 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     localStorage.setItem("preTab", "dsGiaoTuCapTren")
     this.id = this.data.id;
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.userInfo)
     this.maDviTao = this.userInfo?.MA_DVI;
     //lay danh sach danh muc
     await this.danhMucService.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
-          // this.lstDvi = this.donVis.filter(e => e.parent?.maDvi === this.maDviTao);
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -228,8 +220,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
-          console.log(data.data);
-
           this.lstCtietBcao = data.data.lstCtiets;
           this.sortByIndex();
           this.soQd = data.data.soQd;
@@ -254,17 +244,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
               this.statusBtnCreateReport = false;
             }
           }
-          //  else {
-          //   if ((this.userInfo.DON_VI.tenVietTat.includes("CCDT") || this.userInfo.DON_VI.tenVietTat.includes("CNTT") || this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
-          //     this.statusBtnNew = true;
-          //     this.statusBtnCreateReport = false;
-          //   } else {
-          //     this.statusBtnNew = false;
-          //   }
-          // }
-          // if ((this.userInfo.CAP_DVI != '3' && this.userInfo.DON_VI.tenVietTat.includes("CNTT")) || (this.userInfo.CAP_DVI != '3' && this.userInfo.DON_VI.tenVietTat.includes("_VP"))) {
-          //   this.statusBtnCreateReport = false;
-          // }
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -281,10 +260,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       tabSelected: 'giaodutoan',
     }
     this.dataSource.changeData(obj);
-    // this.router.navigate([
-    //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN,
-    // ]);
-    // this.location.back()
   }
 
 
@@ -469,34 +444,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       idPaBTC: this.id,
       tabSelected: 'phuongAnGiaoDuToan',
     };
-
-    // const request2 = {
-    //   id: null,
-    //   fileDinhKems: [],
-    //   listIdDeleteFiles: [],
-    //   lstCtiets: lstCtietBcaoTemp,
-    //   maDvi: this.maDviTao,
-    //   maDviTien: this.maDviTien,
-    //   maPa: maPa,
-    //   maPaCha: this.maPaCha,
-    //   namPa: this.namDtoan,
-    //   maPhanGiao: "2",
-    //   maLoaiDan: '2',
-    //   trangThai: "1",
-    //   thuyetMinh: "",
-    //   idPaBTC: this.id,
-    //   tabSelected: 'phuongAnGiaoDieuChinh',
-    // };
-
-    // if (loaiPa) {
-    //   if (loaiPa === 1) {
     this.dataChange.emit(request1);
-    //   }
-
-    //   if (loaiPa === 2) {
-    //     this.dataChange.emit(request2);
-    //   }
-    // }
   };
 
   async taoMoiBaoCao() {
@@ -518,8 +466,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     );
 
 
-    // this.lstDvi.forEach(item => {
-    // })
     listCtietDvi.push({
       id: uuid.v4() + 'FE',
       maDviNhan: this.userInfo.MA_DVI,
@@ -559,39 +505,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       idPaBTC: this.id,
       tabSelected: 'addBaoCao',
     };
-
-    // const request2 = {
-    //   id: null,
-    //   fileDinhKems: [],
-    //   listIdDeleteFiles: [],
-    //   lstCtiets: lstCtietBcaoTemp,
-    //   lstCtiets1: lstCtietBcaoTemp,
-    //   maDvi: this.maDviTao,
-    //   maDviTien: this.maDviTien,
-    //   maBcao: maBcao,
-    //   maPa: this.maPa,
-    //   maPaCha: this.maPaCha,
-    //   namPa: this.namDtoan,
-    //   soQd: this.soQd,
-    //   maPhanGiao: "2",
-    //   maLoaiDan: '2',
-    //   trangThai: "1",
-    //   thuyetMinh: "",
-    //   idPaBTC: this.id,
-    //   tabSelected: 'addBaoCao',
-    // };
-
-    // if (loaiPa) {
-    //   if (loaiPa === 1) {
     localStorage.setItem("idChiTiet", this.id);
     this.dataChange.emit(request1);
-    // }
-
-    // if (loaiPa === 2) {
-    //   localStorage.setItem("idChiTiet", this.id);
-    //   this.dataChange.emit(request2);
-    //   }
-    // }
   };
 
 

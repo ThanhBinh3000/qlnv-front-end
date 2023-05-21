@@ -7,7 +7,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 @Component({
   selector: 'app-dialog-tao-moi',
@@ -30,7 +29,6 @@ export class DialogTaoMoiComponent implements OnInit {
     private notification: NzNotificationService,
     private dieuChinhService: DieuChinhService,
     private userService: UserService,
-    private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
   ) { }
 

@@ -6,12 +6,11 @@ import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/d
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, exchangeMoney, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
 import { DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
@@ -68,7 +67,6 @@ export class PhuLuc02Component implements OnInit {
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
-    private lapThamDinhService: LapThamDinhService,
     private giaoDuToanService: GiaoDuToanChiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -103,17 +101,6 @@ export class PhuLuc02Component implements OnInit {
       })
     })
     await this.getDinhMuc();
-    // this.lstCtietBcao.forEach(item => {
-    //   // if (!item.tenDanhMuc) {
-    //   const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
-    //   item.tenDanhMuc = dinhMuc?.tenDinhMuc ? dinhMuc?.tenDinhMuc : item.tenDanhMuc;
-    //   item.namDtDmuc = dinhMuc?.tongDmuc;
-    //   item.maDviTinh = dinhMuc?.donViTinh;
-    //   item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
-    //   item.namDtSluong = item.namDtSluong
-    //   // }
-    // })
-
     this.lstCtietBcao.forEach(item => {
       const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiBaoQuan == item.maDmuc);
       if (!item.tenDanhMuc) {
@@ -123,10 +110,6 @@ export class PhuLuc02Component implements OnInit {
       item.maDviTinh = dinhMuc?.donViTinh;
       item.namDtTtien = mulNumber(item.namDtDmuc, item.namDtSluong);
     })
-
-    console.log(this.lstCtietBcao);
-    // this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
-
     if (this.status) {
       this.scrollX = (400 + this.BOX_NUMBER_WIDTH * 3).toString() + 'px';
     } else {
@@ -532,13 +515,6 @@ export class PhuLuc02Component implements OnInit {
           namDtSluong: data.namDtSluong,
           maDviTinh: data.maDviTinh,
           namDtDmuc: data.namDtDmuc,
-          // sluongNamDtoan: data.sluongNamDtoan,
-          // ttienNamDtoan: data.ttienNamDtoan,
-          // thienNamTruoc: data.thienNamTruoc,
-          // dtoanNamHtai: data.dtoanNamHtai,
-          // uocNamHtai: data.uocNamHtai,
-          // dmucNamDtoan: data.dmucNamDtoan,
-          // ttienTd: data.ttienTd,
         }
         this.lstCtietBcao.forEach(item => {
           if (this.getHead(item.stt) == stt) {

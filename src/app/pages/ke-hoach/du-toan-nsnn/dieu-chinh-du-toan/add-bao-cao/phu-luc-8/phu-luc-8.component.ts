@@ -1,19 +1,19 @@
-import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { exchangeMoney, displayNumber, getTail, sumNumber, mulNumber, getHead } from 'src/app/Utility/func';
-import { DON_VI_TIEN, AMOUNT, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { CurrencyMaskInputMode } from 'ngx-currency';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { displayNumber, exchangeMoney, getHead, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-8.constant';
-import { CurrencyMaskInputMode } from 'ngx-currency';
 
 export class ItemData {
   level: any;
