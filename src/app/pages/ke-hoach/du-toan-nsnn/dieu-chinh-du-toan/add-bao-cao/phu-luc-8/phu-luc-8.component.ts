@@ -126,56 +126,19 @@ export class PhuLuc8Component implements OnInit {
       })
     })
 
-    // if (this.lstCtietBcao.length == 0) {
-    //   this.linhVucChis.forEach(e => {
-    //     this.lstCtietBcao.push({
-    //       ...new ItemData(),
-    //       id: uuid.v4() + 'FE',
-    //       stt: e.ma,
-    //       matHang: e.giaTri,
-    //       maMatHang: e.ma,
-    //       dtoanDchinhDnghi: 0,
-    //     })
-    //   })
-    //   this.setLevel();
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.maMatHang += this.getName(item.level, item.maMatHang);
-    //   })
-    // } else if (!this.lstCtietBcao[0]?.stt) {
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.stt = item.maMatHang;
-    //   })
-    // }
-
-    // await this.getDinhMucPL2N();
-    // await this.getDinhMucPL2X();
     await this.getDinhMuc();
-    // this.dsDinhMuc = this.dsDinhMucX
-
-    this.lstCtietBcao.forEach(item => {
-      if (!item.matHang) {
-        // const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maMatHang);
+    if (this.dataInfo?.isSynthetic && this.formDetail.trangThai == "3") {
+      this.lstCtietBcao.forEach(item => {
         const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maMatHang && e.loaiBaoQuan == item.maDmuc);
-        item.matHang = dinhMuc?.tenDinhMuc;
+        if (!item.matHang) {
+          item.matHang = dinhMuc?.tenDinhMuc;
+        }
         item.dinhMuc = dinhMuc?.tongDmuc;
         item.maDviTinh = dinhMuc?.donViTinh;
         item.luongSlBquanTcong = sumNumber([item.luongSlBquanTte, item.luongSlBquanUocThien])
         item.tongNcauDtoan = mulNumber(item.dinhMuc, item.luongSlBquanTcong);
-      }
-    })
-    // if (this.isSynthetic) {
-    //   this.lstCtietBcao.forEach(item => {
-    //     // if (!item.tenDanhMuc) {
-    //     const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maMatHang);
-    //     // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
-    //     item.dinhMuc = dinhMuc?.tongDmuc;
-    //     // item.dviTinh = dinhMuc?.donViTinh;
-    //     item.luongSlBquanTcong = sumNumber([item.luongSlBquanTte, item.luongSlBquanUocThien])
-    //     item.tongNcauDtoan = mulNumber(item.dinhMuc, item.luongSlBquanTcong);
-    //     // }
-    //   })
-    //   this.sum1()
-    // }
+      })
+    }
 
     await this.danhMucService.dMVatTu().toPromise().then(res => {
       if (res.statusCode == 0) {
