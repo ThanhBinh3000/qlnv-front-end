@@ -11,7 +11,7 @@ import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
-import { displayNumber, exchangeMoney, sumNumber } from 'src/app/Utility/func';
+import { displayNumber, exchangeMoney, sortByIndex, sumNumber } from 'src/app/Utility/func';
 import { DANH_MUC_PL_TH } from './phu-luc-tong-hop.constant';
 import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
@@ -200,7 +200,7 @@ export class PhuLucTongHopComponent implements OnInit {
     } else {
       this.scrollX = (350 + 250 * (this.lstDvi.length + 1)).toString() + 'px';
     }
-
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao)
     this.tinhTong();
     this.getTotal();
     this.getStatusButton();
