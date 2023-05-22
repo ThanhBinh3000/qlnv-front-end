@@ -13,8 +13,6 @@ import { NhapDieuChuyenRoutingModule } from './nhap-dieu-chuyen-routing.module';
 import { NoiBoChiCucComponent } from './noi-bo-chi-cuc/noi-bo-chi-cuc.component';
 import { GiuaHaiChiCucComponent } from './giua-hai-chi-cuc/giua-hai-chi-cuc.component';
 import { GiuaHaiCucComponent } from './giua-hai-cuc/giua-hai-cuc.component';
-import { ThayDoiThuKhoComponent } from './noi-bo-chi-cuc/thay-doi-thu-kho/thay-doi-thu-kho.component';
-import { KhongThayDoiThuKhoComponent } from './noi-bo-chi-cuc/khong-thay-doi-thu-kho/khong-thay-doi-thu-kho.component';
 import { ChatLuongLuongThucComponent } from './chat-luong-luong-thuc/chat-luong-luong-thuc.component';
 import { ChatLuongVatTuComponent } from './chat-luong-vat-tu/chat-luong-vat-tu.component';
 import { XuatKhoVatTuComponent } from './xuat-kho-vat-tu/xuat-kho-vat-tu.component';
@@ -27,6 +25,8 @@ import { BangKeCanHangComponent } from './bang-ke-can-hang/bang-ke-can-hang.comp
 import { BienBanTinhKhoComponent } from './bien-ban-tinh-kho/bien-ban-tinh-kho.component';
 import { BienBanHaoDoiComponent } from './bien-ban-hao-doi/bien-ban-hao-doi.component';
 import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat-tu.component';
+import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import { BienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/bien-ban-nghiem-thu-bao-quan-lan-dau.component';
 
 
 
@@ -36,8 +36,6 @@ import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat
     NoiBoChiCucComponent,
     GiuaHaiChiCucComponent,
     GiuaHaiCucComponent,
-    ThayDoiThuKhoComponent,
-    KhongThayDoiThuKhoComponent,
     ChatLuongLuongThucComponent,
     ChatLuongVatTuComponent,
     XuatKhoVatTuComponent,
@@ -50,6 +48,8 @@ import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat
     BienBanTinhKhoComponent,
     BienBanHaoDoiComponent,
     BangKeNhapVatTuComponent,
+    KiemTraChatLuongComponent,
+    BienBanNghiemThuBaoQuanLanDauComponent
   ],
   imports: [
     CommonModule,

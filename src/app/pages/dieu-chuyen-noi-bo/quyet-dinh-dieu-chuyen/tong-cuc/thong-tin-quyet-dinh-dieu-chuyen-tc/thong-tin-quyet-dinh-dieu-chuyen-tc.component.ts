@@ -527,9 +527,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     // this.tableView = dataView;
     // this.expandAll()
 
-    // if (data?.length !== 0) {
-    //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-    // };
+    if (data?.length !== 0) {
+      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+      this.formData.patchValue({
+        tongtien: tongDuToanChiPhi,
+      })
+    };
     return dataView
   }
 
