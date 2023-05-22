@@ -96,22 +96,29 @@
           <span>Danh sách nhập, xuất, cứu trợ, viện trợ, bảo quản hàng dữ trữ quốc gia</span>
         </div>
       </div>
+      <div class="buttons" *ngIf="!isView">
+        <button type="button" class="btn btn-main" (click)="themMoiDanhMuc()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
     </div>
     <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-      <nz-table nzBordered class="nowrap" [nzData]="listDataDetail" [nzFrontPagination]="false"
-        [nzShowPagination]="false">
+      <nz-table nzBordered class="nowrap" [nzData]="listDataGroup" [nzFrontPagination]="false"
+        [nzShowPagination]="false" [nzScroll]="{ x: '5000px' }">
         <thead>
           <tr>
-            <th rowspan="3" style="width: 2%;">STT</th>
-            <th rowspan="3" style=" padding: 50px 50px 50px 50px; ">Tên hàng, quy cách, địa điểm đề hàng</th>
-            <th rowspan="3">ĐVT</th>
-            <th rowspan="3">Nước sản xuất</th>
-            <th rowspan="3" style=" text-align: center; ">Đơn vị <br> bảo quản</th>
-            <th rowspan="3" style=" text-align: center; ">Tồn kho đầu năm <br> (01/01/2022) </th>
-            <th colspan="12">Nhập</th>
-            <th colspan="12">Xuất</th>
-            <th rowspan="3" style=" text-align: center; ">Tồn kho cuối kỳ <br> (31/12/2022)</th>
-            <th rowspan="3">Hành động</th>
+            <th rowspan="3" class="text-center multi-line" nzLeft>STT</th>
+            <th rowspan="3" class="text-center multi-line" style="width: 200px" nzLeft>Tên hàng, quy cách</th>
+            <th rowspan="3" class="text-center multi-line" style="width: 300px" nzLeft>Địa điểm để hàng</th>
+            <th rowspan="3" class="text-center multi-line">ĐVT</th>
+            <th rowspan="3" class="text-center multi-line">Nước sản xuất</th>
+            <th rowspan="3" class="text-center multi-line">Đơn vị <br> bảo quản</th>
+            <th rowspan="3" class="text-center multi-line">Tồn kho đầu năm <br> (01/01/2022) </th>
+            <th colspan="12" class="text-center multi-line">Nhập</th>
+            <th colspan="12" class="text-center multi-line">Xuất</th>
+            <th rowspan="3" class="text-center multi-line">Tồn kho cuối kỳ <br> (31/12/2022)</th>
+            <th rowspan="3" class="text-center multi-line" nzRight *ngIf="!isView">Hành động</th>
           </tr>
           <tr>
             <th colspan="6">Kỳ này</th>
@@ -120,37 +127,38 @@
             <th colspan="6">Lũy kế</th>
           </tr>
           <tr>
-            <th style=" text-align: center; ">Tổng số</th>
-            <th style=" text-align: center; ">Mua tăng</th>
-            <th style=" text-align: center; ">Đổi hàng</th>
-            <th style=" text-align: center; ">Điều chuyển</th>
-            <th style=" text-align: center; ">Dôi thừa</th>
-            <th style=" text-align: center; ">Khác</th>
-            <th style=" text-align: center; ">Tổng số</th>
-            <th style=" text-align: center; ">Mua tăng</th>
-            <th style=" text-align: center; ">Đổi hàng</th>
-            <th style=" text-align: center; ">Điều chuyển</th>
-            <th style=" text-align: center; ">Dôi thừa</th>
-            <th style=" text-align: center; ">Khác</th>
-            <th style=" text-align: center; ">Tổng số</th>
-            <th style=" text-align: center; ">Mua tăng</th>
-            <th style=" text-align: center; ">Đổi hàng</th>
-            <th style=" text-align: center; ">Điều chuyển</th>
-            <th style=" text-align: center; ">Dôi thừa</th>
-            <th style=" text-align: center; ">Khác</th>
-            <th style=" text-align: center; ">Tổng số</th>
-            <th style=" text-align: center; ">Mua tăng</th>
-            <th style=" text-align: center; ">Đổi hàng</th>
-            <th style=" text-align: center; ">Điều chuyển</th>
-            <th style=" text-align: center; ">Dôi thừa</th>
-            <th style=" text-align: center; ">Khác</th>
+            <th class="text-center multi-line">Tổng số</th>
+            <th class="text-center multi-line">Mua tăng</th>
+            <th class="text-center multi-line">Đổi hàng</th>
+            <th class="text-center multi-line">Điều chuyển</th>
+            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Khác</th>
+            <th class="text-center multi-line">Tổng số</th>
+            <th class="text-center multi-line">Mua tăng</th>
+            <th class="text-center multi-line">Đổi hàng</th>
+            <th class="text-center multi-line">Điều chuyển</th>
+            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Khác</th>
+            <th class="text-center multi-line">Tổng số</th>
+            <th class="text-center multi-line">Mua tăng</th>
+            <th class="text-center multi-line">Đổi hàng</th>
+            <th class="text-center multi-line">Điều chuyển</th>
+            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Khác</th>
+            <th class="text-center multi-line">Tổng số</th>
+            <th class="text-center multi-line">Mua tăng</th>
+            <th class="text-center multi-line">Đổi hàng</th>
+            <th class="text-center multi-line">Điều chuyển</th>
+            <th class="text-center multi-line">Dôi thừa</th>
+            <th class="text-center multi-line">Khác</th>
           </tr>
           <tr>
-            <th class="colNumber">A</th>
-            <th class="colNumber">B</th>
-            <th class="colNumber">C</th>
+            <th class="colNumber" nzLeft>A</th>
+            <th class="colNumber" nzLeft>B</th>
+            <th class="colNumber" nzLeft>C</th>
             <th class="colNumber">D</th>
             <th class="colNumber">E</th>
+            <th class="colNumber">F</th>
             <th class="colNumber">1</th>
             <th class="colNumber">2</th>
             <th class="colNumber">3</th>
@@ -177,146 +185,451 @@
             <th class="colNumber">24</th>
             <th class="colNumber">25</th>
             <th class="colNumber">26</th>
-            <th class="colNumber"></th>
-          </tr>
-          <tr>
-            <th></th>
-            <th>
-              <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow.cloaiVthh"
-                (ngModelChange)="changeCloaiVthh($event)">
-                <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                </nz-option>
-              </nz-select>
-            </th>
-            <th>{{itemRow.dvt}}</th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nuocSanXuat" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.donViBaoQuan" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoDauNam" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnTs" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnMt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnDh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnDc" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnDt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapKnK" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkTs" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkMt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkDh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkDc" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkDt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.nhapLkK" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnTs" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnKtt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnBdh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnLpdh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnHh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatKnK" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkTs" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkKtt" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkBdh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkLpdh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkHh" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.xuatLkK" /></th>
-            <th><input nz-input [readonly]="isView" [(ngModel)]="itemRow.tonKhoCuoiKy" /></th>
-            <th>
-              <a *ngIf="!isView" (click)="addRow()" [class.disabled]="!itemRow">
-                <i class="fa fa-plus"></i>
-              </a>
-              <a *ngIf="!isView" (click)="clearItemRow()">
-                <i class="icon  htvbdh_nhap-lai1"></i>
-              </a>
-            </th>
+            <th class="colNumber" nzRight *ngIf="!isView"></th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of listDataDetail, let i = index">
-            <ng-container *ngIf="!data.edit; else editTemplate">
-              <td class="text-center">{{i+1}}</td>
-              <td>{{ data.tenHang }}</td>
-              <td>{{ data.dvt }}</td>
-              <td class="text-right">{{ data.nuocSanXuat }}</td>
-              <td class="text-right">{{ data.donViBaoQuan }}</td>
-              <td class="text-right">{{ data.tonKhoDauNam | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnTs | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnMt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnDh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnDc | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnDt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapKnK | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkTs | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkMt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkDh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkDc | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkDt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.nhapLkK | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnTs | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnKtt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnBdh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnLpdh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnHh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatKnK | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkTs | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkKtt | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkBdh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkLpdh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkHh | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.xuatLkK | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-right">{{ data.tonKhoCuoiKy | number : '1.0-1' : 'vi_VN' }}</td>
-              <td class="text-center">
-                <a *ngIf="!isView" (click)="startEdit(i)">
-                  <i class=" fa fa-pencil"></i>
-                </a>
-                <a *ngIf="!isView" (click)="deleteRow(i)">
-                  <i class="fa fa-trash-o do"></i>
-                </a>
-              </td>
+          <ng-container *ngFor="let data of listDataGroup; let i = index">
+            <tr>
+              <ng-container *ngIf="!data.edit; else editTemplateMHang">
+                <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                <td nzLeft class="dm-title">{{ data.matHang }}</td>
+                <td nzLeft></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td nzRight *ngIf="!isView">
+                  <a (click)="editRowMatHang(i)">
+                    <i class=" fa fa-pencil"></i>
+                  </a>
+                  <a (click)="deleteRowMatHang(i)">
+                    <i class=" fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplateMHang>
+                <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                <td nzLeft class="dm-title"><input nz-input [(ngModel)]="itemRowMatHangEdit[i].matHang" /></td>
+                <td nzLeft></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td nzRight>
+                  <a (click)="saveEditRowMatHang(i)">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                  </a>
+                  <a (click)="cancelEditRowMatHang(i)">
+                    <i class="fa fa-ban do"></i>
+                  </a>
+                </td>
+              </ng-template>
+            </tr>
+            <ng-container *ngFor="let loaiHangHoa of data.children, let y = index">
+              <tr>
+                <ng-container *ngIf="!loaiHangHoa.edit; else editTemplateLoaiVthh">
+                  <td nzLeft class="text-center">{{(page - 1) * pageSize + y + 1}}</td>
+                  <td nzLeft class="dm-title" style="padding-left: 20px">{{ loaiHangHoa.tenLoaiVthh }}</td>
+                  <td nzLeft></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td nzRight *ngIf="!isView">
+                    <a *ngIf="!isView" (click)="editRowLoaiVthh(i, y)">
+                      <i class=" fa fa-pencil"></i>
+                    </a>
+                    <a *ngIf="!isView" (click)="deleteRowLoaiVthh(i, y)">
+                      <i class=" fa fa-trash-o do"></i>
+                    </a>
+                  </td>
+                </ng-container>
+                <ng-template #editTemplateLoaiVthh>
+                  <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                  <td nzLeft class="dm-title" style="padding-left: 20px"><input nz-input [(ngModel)]="itemRowLoaiVthhEdit[i][y].tenLoaiVthh" /></td>
+                  <td nzLeft></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td nzRight>
+                    <a (click)="saveEditRowLoaiVthh(i, y)">
+                      <i class="icon htvbdh_tcdt_save"></i>
+                    </a>
+                    <a (click)="cancelEditRowLoaiVthh(i, y)">
+                      <i class="fa fa-ban do"></i>
+                    </a>
+                  </td>
+                </ng-template>
+              </tr>
+              <ng-container *ngFor="let cloaiVthh of loaiHangHoa.children, let z = index">
+                <tr>
+                  <ng-container *ngIf="!cloaiVthh.edit; else editTemplateCLoaiVthh">
+                    <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
+                    <td nzLeft class="dm-title" style="padding-left: 40px">{{ cloaiVthh.tenCloaiVthh }}</td>
+                    <td nzLeft></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td nzRight *ngIf="!isView">
+                      <a *ngIf="!isView" (click)="editRowCLoaiVthh(i, y, z)">
+                        <i class=" fa fa-pencil"></i>
+                      </a>
+                      <a *ngIf="!isView" (click)="deleteRowCLoaiVthh(i, y, z)">
+                        <i class=" fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                  <ng-template #editTemplateCLoaiVthh>
+                    <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                    <td nzLeft class="dm-title" style="padding-left: 40px"><input nz-input [(ngModel)]="itemRowCLoaiVthhEdit[i][y][z].tenCloaiVthh" />
+                    </td>
+                    <td nzLeft></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td nzRight>
+                      <a (click)="saveEditRowCLoaiVthh(i, y, z)">
+                        <i class="icon htvbdh_tcdt_save"></i>
+                      </a>
+                      <a (click)="cancelEditRowCLoaiVthh(i, y, z)">
+                        <i class="fa fa-ban do"></i>
+                      </a>
+                    </td>
+                  </ng-template>
+                </tr>
+                <ng-container *ngFor="let chiCuc of cloaiVthh.children, let k = index">
+                  <tr>
+                    <ng-container *ngIf="!chiCuc.edit; else editTemplate">
+                      <td nzLeft class="text-center">{{(page - 1) * pageSize + z + 1}}</td>
+                      <td nzLeft></td>
+                      <td nzLeft class="dm-title">{{ chiCuc.tenDiaDiem }}</td>
+                      <td>{{ chiCuc.dvt }}</td>
+                      <td>{{ chiCuc.nuocSanXuat }}</td>
+                      <td>{{ chiCuc.donViBaoQuan }}</td>
+                      <td>{{ chiCuc.tonKhoDauNam }}</td>
+                      <td>{{ chiCuc.nhapKnTs }}</td>
+                      <td>{{ chiCuc.nhapKnMt }}</td>
+                      <td>{{ chiCuc.nhapKnDh }}</td>
+                      <td>{{ chiCuc.nhapKnDc }}</td>
+                      <td>{{ chiCuc.nhapKnDt }}</td>
+                      <td>{{ chiCuc.nhapKnK }}</td>
+                      <td>{{ chiCuc.nhapLkTs }}</td>
+                      <td>{{ chiCuc.nhapLkMt }}</td>
+                      <td>{{ chiCuc.nhapLkDh }}</td>
+                      <td>{{ chiCuc.nhapLkDc }}</td>
+                      <td>{{ chiCuc.nhapLkDt }}</td>
+                      <td>{{ chiCuc.nhapLkK }}</td>
+                      <td>{{ chiCuc.xuatKnTs }}</td>
+                      <td>{{ chiCuc.xuatKnKtt }}</td>
+                      <td>{{ chiCuc.xuatKnBdh }}</td>
+                      <td>{{ chiCuc.xuatKnLpdh }}</td>
+                      <td>{{ chiCuc.xuatKnHh }}</td>
+                      <td>{{ chiCuc.xuatKnK }}</td>
+                      <td>{{ chiCuc.xuatLkTs }}</td>
+                      <td>{{ chiCuc.xuatLkKtt }}</td>
+                      <td>{{ chiCuc.xuatLkBdh }}</td>
+                      <td>{{ chiCuc.xuatLkLpdh }}</td>
+                      <td>{{ chiCuc.xuatLkHh }}</td>
+                      <td>{{ chiCuc.xuatLkK }}</td>
+                      <td>{{ chiCuc.tonKhoCuoiKy }}</td>
+                      <td nzRight *ngIf="!isView">
+                        <a *ngIf="!isView" (click)="startEdit(i, y, z, k)">
+                          <i class=" fa fa-pencil"></i>
+                        </a>
+                        <a *ngIf="!isView" (click)="deleteRow(i, y, z, k)">
+                          <i class=" fa fa-trash-o do"></i>
+                        </a>
+                      </td>
+                    </ng-container>
+                    <ng-template #editTemplate>
+                      <td nzLeft class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+                      <td nzLeft></td>
+                      <td nzLeft class="dm-title">
+                        <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].diaDiemDeNhapHang"
+                                   (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z, k)">
+                          <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
+                          </nz-option>
+                        </nz-select>
+                      </td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].dvt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nuocSanXuat" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].donViBaoQuan" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoDauNam" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnTs" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnMt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDc" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnDt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapKnK" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkTs" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkMt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDc" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkDt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].nhapLkK" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnTs" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnKtt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnBdh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnLpdh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnHh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatKnK" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkTs" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkKtt" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkBdh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkLpdh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkHh" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].xuatLkK" /></td>
+                      <td><input nz-input [readonly]="isView" [(ngModel)]="itemRowEdit[i][y][z][k].tonKhoCuoiKy" /></td>
+                      <td nzRight>
+                        <a (click)="saveEdit(i, y, z, k)">
+                          <i class="icon htvbdh_tcdt_save"></i>
+                        </a>
+                        <a (click)="cancelEdit(i, y, z, k)">
+                          <i class="fa fa-ban do"></i>
+                        </a>
+                      </td>
+                    </ng-template>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="!isView && cloaiVthh.coNhieuMatHang">
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft>
+                    <nz-select [nzDisabled]="isView" [(ngModel)]="itemRow[i][y][z].diaDiemDeNhapHang"
+                               (ngModelChange)="changeDiaDiemDeNhapHang($event, i, y, z)">
+                      <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.tenDvi">
+                      </nz-option>
+                    </nz-select>
+                  </td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].dvt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nuocSanXuat" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].donViBaoQuan" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].tonKhoDauNam" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnTs" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnMt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDc" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnDt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapKnK" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkTs" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkMt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDc" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkDt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].nhapLkK" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnTs" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnKtt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnBdh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnLpdh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnHh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatKnK" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkTs" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkKtt" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkBdh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkLpdh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkHh" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].xuatLkK" /></td>
+                  <td><input nz-input [readonly]="isView" [(ngModel)]="itemRow[i][y][z].tonKhoCuoiKy" /></td>
+                  <td nzRight>
+                    <a (click)="addRow(i, y, z)">
+                      <i class="fa fa-plus"></i>
+                    </a>
+                    <a (click)="clearItemRow(i, y, z)">
+                      <i class="icon  htvbdh_nhap-lai1"></i>
+                    </a>
+                  </td>
+                </tr>
+              </ng-container>
             </ng-container>
-            <ng-template #editTemplate>
-              <td class="text-center">{{i+1}}</td>
-              <th>
-                <nz-select [nzDisabled]="isView" [(ngModel)]="itemRowUpdate.cloaiVthh"
-                  (ngModelChange)="changeCloaiVthh($event)">
-                  <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                  </nz-option>
-                </nz-select>
-              </th>
-              <th>{{itemRowUpdate.dvt}}</th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nuocSanXuat" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.donViBaoQuan" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoDauNam" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnTs" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnMt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnDh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnDc" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnDt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapKnK" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkTs" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkMt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkDh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkDc" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkDt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.nhapLkK" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnTs" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnKtt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnBdh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnLpdh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnHh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatKnK" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkTs" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkKtt" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkBdh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkLpdh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkHh" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.xuatLkK" /></th>
-              <th><input nz-input [readonly]="isView" [(ngModel)]="itemRowUpdate.tonKhoCuoiKy" /></th>
-              <td class="text-center">
-                <a (click)="saveEdit(itemRowUpdate,i)" class="save">
-                  <i class="icon htvbdh_tcdt_save"></i>
-                </a>
-                <a (click)="cancelEdit(i)">
-                  <i class="fa fa-ban do"></i>
-                </a>
-              </td>
-            </ng-template>
+          </ng-container>
+          <tr>
+            <td nzLeft></td>
+            <td nzLeft></td>
+            <td nzLeft></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td class="text-center"></td>
+            <td nzRight class="text-center" *ngIf="!isView"></td>
           </tr>
         </tbody>
       </nz-table>
