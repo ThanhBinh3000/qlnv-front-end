@@ -292,14 +292,16 @@
             <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
             <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>
             <th class="text-right">
-              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.ntnThoc">
-              </nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="keHoachLuongThucCreate.ntnThoc"/>
+<!--              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"-->
+<!--                               [(ngModel)]="keHoachLuongThucCreate.ntnThoc">-->
+<!--              </nz-input-number>-->
             </th>
             <th class="text-right">
-              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.ntnGao">
-              </nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="keHoachLuongThucCreate.ntnGao"/>
+<!--              <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"-->
+<!--                               [(ngModel)]="keHoachLuongThucCreate.ntnGao">-->
+<!--              </nz-input-number>-->
             </th>
             <th class="text-right">{{calculatorxtnTongSoQuyThocCreate()}}</th>
             <th class="text-right">{{calculatorxtnTongThocCreate()}}</th>
@@ -308,36 +310,47 @@
           [max]="keHoachLuongThucCreate.tkdnThoc[0].soLuong"
           [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong" class="w-120" [min]="0"
           [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly /> -->
+              <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"/>
 
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[0].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"></nz-input-number>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[0].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[1].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"></nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT"
+                     [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"/>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[1].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[2].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"></nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT"
+                     [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"/>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[2].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">{{calculatorxtnTongGaoCreate()}}</th>
             <th class="text-right">
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnGao[0].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"></nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT"
+                     [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"/>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[0].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnGao[1].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"></nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT"
+                     [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"/>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[1].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
-                               [nzMax]="keHoachLuongThucCreate.tkdnGao[2].soLuong" [nzSize]="'small'"
-                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"></nz-input-number>
+              <input class="money-input" currencyMask [options]="AMOUNT"
+                     [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"/>
+              <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
+              <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[2].soLuong" [nzSize]="'small'"-->
+              <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">{{calculatortkcnTongSoQuyThocCreate()}}</th>
             <th class="text-right">{{calculatortkcnTongThocCreate()}}</th>
@@ -373,7 +386,8 @@
               </ng-container>
               <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
-                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
+                <td *ngFor="let item of data.tkdnGao"
+                    class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
@@ -443,7 +457,8 @@
               </ng-container>
               <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
-                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
+                <td *ngFor="let item of data.tkdnGao"
+                    class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
@@ -454,12 +469,15 @@
                 {{calculatorntnTongSoQuyThoc(i)}}
               </td>
               <td class="text-right">
-                <input class="w-200" nz-input nzSize="small" appNumberOnly
-                       [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc"/>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc"/>
+
+<!--                <input class="w-200" nz-input nzSize="small" appNumberOnly-->
+<!--                       [(ngModel)]="dsKeHoachLuongThucClone[i].ntnThoc"/>-->
               </td>
               <td class="text-right">
-                <input class="w-200" nz-input nzSize="small" appNumberOnly
-                       [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao"/>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao"/>
+<!--                <input class="w-200" nz-input nzSize="small" appNumberOnly-->
+<!--                       [(ngModel)]="dsKeHoachLuongThucClone[i].ntnGao"/>-->
               </td>
               <td class="text-right">
                 {{calculatorxtnTongSoQuyThoc(i)}}
@@ -468,43 +486,51 @@
                 {{calculatorxtnTongThoc(i)}}
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong"
-                                 name="goiThau" class="w-200" [nzMin]="0"
-                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[0].soLuong"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong"/>
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong"-->
+<!--                                 name="goiThau" class="w-200" [nzMin]="0"-->
+<!--                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[0].soLuong"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong"
-                                 name="goiThau" class="w-200" [nzMin]="0"
-                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[1].soLuong"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong"/>
+
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong"-->
+<!--                                 name="goiThau" class="w-200" [nzMin]="0"-->
+<!--                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[1].soLuong"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong"
-                                 name="goiThau" class="w-200" [nzMin]="0"
-                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[2].soLuong"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong"/>
+
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong"-->
+<!--                                 name="goiThau" class="w-200" [nzMin]="0"-->
+<!--                                 [nzMax]="dsKeHoachLuongThucClone[i].tkdnThoc[2].soLuong"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
                 {{calculatorxtnTongGao(i)}}
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong"
-                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[0].soLuong"
-                                 class="w-200"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong"/>
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong"-->
+<!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[0].soLuong"-->
+<!--                                 class="w-200"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"
-                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong"
-                                 class="w-200"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"/>
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"-->
+<!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong"-->
+<!--                                 class="w-200"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"
-                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong"
-                                 class="w-200"
-                                 [nzSize]="'small'"></nz-input-number>
+                <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"/>
+<!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"-->
+<!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong"-->
+<!--                                 class="w-200"-->
+<!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
                 {{ calculatortkcnTongSoQuyThoc(i)}}
