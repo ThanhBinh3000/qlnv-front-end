@@ -4,13 +4,13 @@
       <nz-card class="mt16 flex-card p-lr16">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="20">
-            <div nz-col nzSpan="2">
+            <div nz-col nzSpan="3">
               <label class="search__label"> Năm kế hoạch </label>
               <nz-select formControlName="nam">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col nzSpan="2">
+            <div nz-col nzSpan="3">
               <label class="search__label">Số quyết định</label>
               <nz-input-group nzAddOnAfter="/DCNB">
                 <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
@@ -27,10 +27,9 @@
               <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
-            <div nz-col nzSpan="12">
+            <div nz-col nzSpan="10">
               <label class="search__label">Loại điều chuyển</label>
-              <nz-select nzAllowClear formControlName="loaiDc" (ngModelChange)="changeHangHoa($event)"
-                nzPlaceHolder="Chọn loại điều chuyển" nzShowSearch>
+              <nz-select nzAllowClear formControlName="loaiDc" nzPlaceHolder="Chọn loại điều chuyển" nzShowSearch>
                 <nz-option *ngFor="let p of listLoaiDieuChuyen" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </div>
@@ -119,7 +118,7 @@
               </th>
               <th>
                 <nz-input-group>
-                  <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="filterTable.ngayKyQdinh"
+                  <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayKyQdinh"
                     (ngModelChange)="filterInTable('ngayKyQdinh', convertDateToString(filterTable.ngayKyQdinh))">
                   </nz-date-picker>
                 </nz-input-group>
@@ -152,14 +151,14 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiDc"
-                    (input)="filterInTable('loaiDc',filterTable.loaiDc)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinhXuatCuc"
+                    (input)="filterInTable('soQdinhXuatCuc',filterTable.soQdinhXuatCuc)" size="small" />
                 </nz-input-group>
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiDc"
-                    (input)="filterInTable('loaiDc',filterTable.loaiDc)" size="small" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdinhNhapCuc"
+                    (input)="filterInTable('soQdinhNhapCuc',filterTable.soQdinhNhapCuc)" size="small" />
                 </nz-input-group>
               </th>
               <th>
@@ -181,7 +180,7 @@
               <td>{{ data.nam }}</td>
               <td>{{ data.soQdinh }}</td>
               <td>{{ data.ngayKyQdinh | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.loaiDc }}</td>
+              <td>{{ data.tenLoaiDc }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.maDxuat }}</td>
               <td>{{ data.maThop }}</td>
@@ -189,7 +188,7 @@
               <td>{{ data.maThop }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
-                <a (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isTongCuc()"
@@ -229,7 +228,7 @@
   </div>
 
   <div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-quyet-dinh-dieu-chuyen-tc [isDetail]="isDetail" [dataInit]="dataInit"
+    <app-thong-tin-quyet-dinh-dieu-chuyen-tc [isView]="isView" [idInput]="selectedId" [idTHop]="idTHop"
       (showListEvent)="quayLai()"></app-thong-tin-quyet-dinh-dieu-chuyen-tc>
   </div>
 </div>

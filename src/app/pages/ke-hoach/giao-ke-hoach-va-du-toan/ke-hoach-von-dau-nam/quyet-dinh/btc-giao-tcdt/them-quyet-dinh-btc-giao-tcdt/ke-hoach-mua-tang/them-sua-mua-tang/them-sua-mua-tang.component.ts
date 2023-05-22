@@ -15,7 +15,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import * as uuid from "uuid";
 import {HelperService} from "../../../../../../../../../services/helper.service";
 import {HttpClient} from "@angular/common/http";
-import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL} from "../../../../../../../../../Utility/utils";
+import {AMOUNT_NO_DECIMAL, AMOUNT_ONE_DECIMAL, AMOUNT_TWO_DECIMAL} from "../../../../../../../../../Utility/utils";
 
 @Component({
   selector: 'app-them-sua-mua-tang',
@@ -39,7 +39,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
   fb: FormBuilder = new FormBuilder();
   helperService: HelperService
   modal: NzModalService
-  amount = AMOUNT_ONE_DECIMAL;
+  amount = AMOUNT_TWO_DECIMAL;
   amount_no_decimal = AMOUNT_NO_DECIMAL;
 
   constructor(httpClient: HttpClient,
@@ -67,7 +67,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
       }
       this.formItem.patchValue({
         tenVthh: this.itemInput.tenVthh,
-        soLuong: this.soLuong - slDaThem
+        soLuong: this.soLuong - slDaThem,
       })
       this.onChangeLoaiVthh(this.formItem.value.tenVthh, 'them');
     } else {
@@ -99,6 +99,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
         dviTinh: loaiVthh.maDviTinh,
         tenVthh: loaiVthh.ten,
         loaiVthh: loaiVthh.key,
+        soLuongDuToan : this.soLuong
       })
       let dsCloaiHangHoa = loaiVthh.child;
       this.dsChungLoaiHangHoa = dsCloaiHangHoa;
@@ -142,6 +143,7 @@ export class ThemSuaMuaTangComponent implements OnInit {
   }
 
   handleOk() {
+    debugger;
     if (this.actionType == 'them') {
       this.formItem.controls['cloaiVthh'].setValidators([Validators.required]);
       this.formItem.controls['tenCloaiVthh'].setValidators([Validators.required])
@@ -158,9 +160,12 @@ export class ThemSuaMuaTangComponent implements OnInit {
     if (this.formItem.invalid) {
       return;
     }
+    console.log(this.formItem.value.soLuongDuToan,'this.formItem.value.soLuongDuToan')
     let toatlSlDuToan = (this.dataTable.reduce((accumulator, object) => {
       return accumulator + object.soLuongDuToan ? object.soLuongDuToan : 0;
-    }, 0)) + this.formItem.value.soLuongDuToan;
+    }, 0));
+    console.log(toatlSlDuToan,'toatlSlDuToantoatlSlDuToantoatlSlDuToantoatlSlDuToan');
+    console.log(this.soLuong,'this.soLuongthis.soLuongthis.soLuong')
     if (toatlSlDuToan > this.soLuong) {
       this.notification.error(MESSAGE.ERROR, "Tổng số lượng dự toán cho loại hàng hóa này vượt quá số lượng TTCP giao");
       return;
