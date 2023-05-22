@@ -249,7 +249,7 @@ export class ThemMoiTtcpComponent implements OnInit {
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
+      nzTitle: 'Thêm chi tiết kế hoạch giao Bộ/Ngành',
       nzContent: DialogQdMuabubosungTtcpComponent,
       nzMaskClosable: false,
       nzClosable: false,

@@ -295,12 +295,12 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     };
     let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (value && value.type == 'DC') {
+      if (value && value.type == 'NDC') {
+        this.listChiCucNhan = Array.isArray(res.data) ? res.data : [];
+      } else {
         this.listChiCucNhan = Array.isArray(res.data) ? res.data.filter(f => {
           return f.maDvi !== this.userInfo.MA_DVI
         }) : [];
-      } else {
-        this.listChiCucNhan = Array.isArray(res.data) ? res.data : [];
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -389,9 +389,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           if (res.data && res.data.length > 0) {
             res.data.forEach(element => {
               if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKhoNhanBq = [];
                 this.listDiemKhoNhanBq = [
                   ...this.listDiemKhoNhanBq,
-                  ...element.children
+                  ...element.children.filter(item => item.type == 'MLK')
                 ]
               }
             });
@@ -594,6 +595,11 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
     }
     if (!this.isNhanDieuChuyen) {
       this.disableValidateFormChiTietHangHoaNDC();
+    }else {
+      if (!this.formDataChiTiet.value.coLoKho) {
+        this.removeValidateFormChiTiet("maLoKho");
+        this.removeValidateFormChiTiet("tenLoKho");
+      }
     }
     this.helperService.markFormGroupTouched(this.formDataChiTiet);
     if (this.formDataChiTiet.invalid) {

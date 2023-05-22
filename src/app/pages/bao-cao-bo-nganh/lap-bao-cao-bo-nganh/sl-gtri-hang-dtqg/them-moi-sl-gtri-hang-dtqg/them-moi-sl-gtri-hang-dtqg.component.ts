@@ -40,7 +40,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     },
     { text: "Báo cáo quý", value: 2, thoiHanGuiBc: "Ngày 20 của tháng đầu quý sau" }
   ];
-  ghiChu: string = "Dấu “x” tại các hàng trong biểu là nội dung không phải tổng hợp, báo cáo.";
+  ghiChu: string;
   dsDonVi: any[] = [];
   listDataGroup: any[] = [];
   itemRowMatHangEdit: any[] = [];
@@ -72,6 +72,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
         ngayTao: [dayjs().format("YYYY-MM-DD")],
         trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự thảo'],
+        ghiChu: [null],
       }
     );
   }
@@ -101,6 +102,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
         if (res.msg == MESSAGE.SUCCESS) {
           const dataDetail = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+          this.ghiChu = dataDetail.hdr.ghiChu;
           this.listDataGroup = dataDetail.detail;
           for (let i = 0; i < this.listDataGroup.length; i++) {
             this.itemRowMatHang[i] = [];
@@ -153,6 +155,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     for (let i = 0; i < this.listDataGroup.length; i++) {
       this.listDataGroup[i].thuTuHienThi = (i+1)
     }
+    this.formData.get('ghiChu').setValue(this.ghiChu);
     let body = {
       "hdr" : this.formData.value,
       "detail": this.listDataGroup
@@ -169,6 +172,7 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
       } else {
         this.formData.get("id").setValue(res.data.id);
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.idInput = res.data.id;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -236,9 +240,12 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
   }
 
   saveEditRowMatHang(i: number, y: number, z: number) {
-    this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z]
+    this.tinhTonCuoiKy(this.itemRowMatHangEdit[i][y][z]);
+    this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z];
     this.listDataGroup[i].children[y].children[z].edit = false;
-    this.itemRowMatHangEdit[i][y][z] = {}
+    this.itemRowMatHangEdit[i][y][z] = {};
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   cancelEditRowMatHang(i: number, y: number, z: number) {
@@ -247,11 +254,14 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
   }
 
   addRowMatHang(i: number, y: number) {
+    this.tinhTonCuoiKy(this.itemRowMatHang[i][y]);
     this.listDataGroup[i].children[y].children = [
       ...this.listDataGroup[i].children[y].children,
       this.itemRowMatHang[i][y]
     ];
     this.clearItemRowMatHang(i, y);
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   clearItemRowMatHang(i: number, y: number) {
@@ -290,9 +300,11 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     this.listDataGroup[i].children.splice(y, 1)
   }
   saveEditRowNhomMh(i: number, y: number) {
-    this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y]
+    this.tinhTonCuoiKy(this.itemRowNhomMhEdit[i][y]);
+    this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y];
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
+    this.tinhTongGtriDvi();
   }
 
   cancelEditRowNhomMh(i: number, y: number) {
@@ -300,4 +312,116 @@ export class ThemMoiSlGtriHangDtqgComponent extends Base2Component implements On
     this.itemRowNhomMhEdit[i][y] = {};
   }
 
+  tinhTongGtriDvi (){
+    for (let dvi of this.listDataGroup) {
+      dvi.gtriTonDauNam = 0
+      dvi.gtriTonDauKy = 0
+      dvi.gtriNhapTrongKy = 0
+      dvi.gtriNhapLuyKe = 0
+      dvi.gtriXuatTrongKy = 0
+      dvi.gtriXuatLuyKe = 0
+      dvi.gtriTonCuoiQuy = 0
+      for (let nhomMh of dvi.children) {
+        dvi.gtriTonDauNam += this.nvl(nhomMh.gtriTonDauNam)
+        dvi.gtriTonDauKy += this.nvl(nhomMh.gtriTonDauKy)
+        dvi.gtriNhapTrongKy += this.nvl(nhomMh.gtriNhapTrongKy)
+        dvi.gtriNhapLuyKe += this.nvl(nhomMh.gtriNhapLuyKe)
+        dvi.gtriXuatTrongKy += this.nvl(nhomMh.gtriXuatTrongKy)
+        dvi.gtriXuatLuyKe += this.nvl(nhomMh.gtriXuatLuyKe)
+        dvi.gtriTonCuoiQuy += this.nvl(nhomMh.gtriTonCuoiQuy)
+      }
+    }
+  }
+  tinhTongGtriNhomMh (){
+    for (let dvi of this.listDataGroup) {
+      for (let nhomMh of dvi.children) {
+        if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.gtriTonDauNam = 0
+          nhomMh.gtriTonDauKy = 0
+          nhomMh.gtriNhapTrongKy = 0
+          nhomMh.gtriNhapLuyKe = 0
+          nhomMh.gtriXuatTrongKy = 0
+          nhomMh.gtriXuatLuyKe = 0
+          nhomMh.gtriTonCuoiQuy = 0
+          for (let matHang of nhomMh.children) {
+            nhomMh.gtriTonDauNam += this.nvl(matHang.gtriTonDauNam)
+            nhomMh.gtriTonDauKy += this.nvl(matHang.gtriTonDauKy)
+            nhomMh.gtriNhapTrongKy += this.nvl(matHang.gtriNhapTrongKy)
+            nhomMh.gtriNhapLuyKe += this.nvl(matHang.gtriNhapLuyKe)
+            nhomMh.gtriXuatTrongKy += this.nvl(matHang.gtriXuatTrongKy)
+            nhomMh.gtriXuatLuyKe += this.nvl(matHang.gtriXuatLuyKe)
+            nhomMh.gtriTonCuoiQuy += this.nvl(matHang.gtriTonCuoiQuy)
+          }
+        }
+      }
+    }
+  }
+  tinhTonCuoiKy (data: slGtriHangDtqg){
+    data.slTonCuoiQuy = data.slTonDauKy+ data.slNhapTrongKy - data.slXuatTrongKy;
+    data.gtriTonCuoiQuy = data.gtriTonDauKy+ data.gtriNhapTrongKy - data.gtriXuatTrongKy;
+  }
+
+  calTongGtriTonDauNam() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriTonDauNam);
+      })
+      return sum;
+    }
+  }
+  calTongGtriTonDauKy() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriTonDauKy);
+      })
+      return sum;
+    }
+  }
+  calTongGtriNhapTrongKy() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriNhapTrongKy);
+      })
+      return sum;
+    }
+  }
+  calTongGtriNhapLuyKe() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriNhapLuyKe);
+      })
+      return sum;
+    }
+  }
+  calTongGtriXuatTrongKy() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriXuatTrongKy);
+      })
+      return sum;
+    }
+  }
+  calTongGtriXuatLuyKe() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriXuatLuyKe);
+      })
+      return sum;
+    }
+  }
+  calTongGtriTonCuoiQuy() {
+    if (this.listDataGroup) {
+      let sum = 0
+      this.listDataGroup.forEach(item => {
+        sum += this.nvl(item.gtriTonCuoiQuy);
+      })
+      return sum;
+    }
+  }
 }

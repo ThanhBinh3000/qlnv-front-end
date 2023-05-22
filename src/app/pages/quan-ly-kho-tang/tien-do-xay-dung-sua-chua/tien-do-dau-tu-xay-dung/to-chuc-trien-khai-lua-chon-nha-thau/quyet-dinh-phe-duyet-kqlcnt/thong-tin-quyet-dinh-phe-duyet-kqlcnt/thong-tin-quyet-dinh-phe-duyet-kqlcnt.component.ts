@@ -93,7 +93,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       ccPhapLy: [],
-      listKtXdscQuyetDinhPdKqlcntDsgt: [[]]
+      listKtTdxdQuyetDinhPdKqlcntDsgt: [[]]
     });
   }
 
@@ -126,7 +126,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
       });
       let res = await this.quyetdinhpheduyetKhlcntService.getDetail(this.itemQdPdKhLcnt.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.listGoiThau = res.data.listKtXdscQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt && !item.idQdPdKqlcnt);
+        this.listGoiThau = res.data.listKtTdxdQuyetDinhPdKhlcntCvKh.filter(item => !item.soQdPdKqlcnt && !item.idQdPdKqlcnt);
       }
     }
   }
@@ -149,7 +149,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
               this.listCcPhapLy.push(item)
             }
           })
-          this.listGoiThau = data.listKtXdscQuyetDinhPdKqlcntDsgt;
+          this.listGoiThau = data.listKtTdxdQuyetDinhPdKqlcntDsgt;
           this.listFile = data.fileDinhKems;
         }
       } else {
@@ -190,8 +190,8 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.listGoiThau && this.listGoiThau.length > 0) {
-      this.formData.value.listKtXdscQuyetDinhPdKqlcntDsgt = this.listGoiThau;
-      this.formData.value.listKtXdscQuyetDinhPdKqlcntDsgt.forEach(item => {
+      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt = this.listGoiThau;
+      this.formData.value.listKtTdxdQuyetDinhPdKqlcntDsgt.forEach(item => {
         item.idGoiThau = item.id;
         item.id = null
       })
@@ -282,7 +282,7 @@ export class ThongTinQuyetDinhPheDuyetKqlcntComponent extends Base2Component imp
   //       // if (!this.idInput) {
   //       //   let res = await this.quyetdinhpheduyetKqLcntService.getLastRecordBySoQdPdDaDtxd(body);
   //       //   if (res.msg == MESSAGE.SUCCESS && res.data) {
-  //       //     // this.dataCongViecDaTh = res.data.listKtXdscQuyetDinhPdKhlcntCvDaTh;
+  //       //     // this.dataCongViecDaTh = res.data.listKtTdxdQuyetDinhPdKhlcntCvDaTh;
   //       //     // this.updateEditCongViecDaThCache();
   //       //   } else {
   //       //     // this.dataCongViecDaTh = [];

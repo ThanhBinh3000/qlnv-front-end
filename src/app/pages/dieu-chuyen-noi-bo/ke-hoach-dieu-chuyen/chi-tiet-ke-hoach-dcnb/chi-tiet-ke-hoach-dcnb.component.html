@@ -598,8 +598,7 @@
       <form nzLayout="vertical" nz-form [formGroup]="formDataChiTiet">
         <nz-card nzTitle="Thông tin chi cục nhận điều chuyển">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="7" class="dcnb-label">Chi cục nhận điều
-              chuyển
+            <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="7" class="dcnb-label">Chi cục nhận điều chuyển
             </nz-form-label>
             <nz-form-control [nzErrorTip]="'Vui lòng chọn chi cục nhận điều chuyển'"
                              [nzValidateStatus]="checkVld('maChiCucNhan')">
@@ -769,7 +768,7 @@
                 </nz-form-control>
               </nz-form-item>
 
-              <nz-form-item *ngIf="formDataChiTiet.value.coLoKho">
+              <nz-form-item>
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Ngăn kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn ngăn kho'" [nzValidateStatus]="checkVld('maNganKho')">
@@ -781,7 +780,7 @@
                 </nz-form-control>
               </nz-form-item>
 
-              <nz-form-item>
+              <nz-form-item *ngIf="formDataChiTiet.value.coLoKho">
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Lô kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn lô kho'" [nzValidateStatus]="checkVld('maLoKho')">
@@ -870,7 +869,7 @@
                 </nz-form-control>
               </nz-form-item>
 
-              <nz-form-item>
+              <nz-form-item *ngIf="formDataChiTiet.value.coLoKhoNhan">
                 <nz-form-label [nzNoColon]="true" nzRequired nz-col [nzSpan]="8" class="dcnb-label">Lô kho
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="'Vui lòng chọn lô kho'" [nzValidateStatus]="checkVld('maLoKhoNhan')">

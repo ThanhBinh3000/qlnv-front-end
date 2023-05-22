@@ -111,8 +111,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         item.soLuongDuToan = item.dataChild[0].soLuong;
         item.cloaiVthh = null;
         item.tenCloaiVthh = null;
-        item.tongTien = null;
-        item.donGia = null;
+        item.tongTien = item.dataChild[0].tongTien ? item.dataChild[0].tongTien : null;
+        item.donGia = item.dataChild[0].donGia ? item.dataChild[0].donGia : null;
         item.dataChild.shift();
       }
     })

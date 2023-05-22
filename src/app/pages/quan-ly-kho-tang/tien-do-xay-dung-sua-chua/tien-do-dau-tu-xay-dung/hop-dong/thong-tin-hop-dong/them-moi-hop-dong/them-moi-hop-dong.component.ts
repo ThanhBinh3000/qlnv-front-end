@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, Validators} from "@angular/forms";
 import {STATUS} from "../../../../../../../constants/status";
 import {Base2Component} from "../../../../../../../components/base2/base2.component";
@@ -16,19 +16,14 @@ import {
   QuyetdinhpheduyetKqLcntService
 } from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKqLcnt.service";
 import {MESSAGE} from "../../../../../../../constants/message";
-import {FILETYPE} from "../../../../../../../constants/fileType";
 import {HopdongService} from "../../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/hopdong.service";
-import {
-  CongViec
-} from "../../../quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt/thong-tin-quyet-dinh-phe-duyet-khlcnt.component";
 import {convertTienTobangChu} from "../../../../../../../shared/commonFunction";
-import {
-  DialogQdPdKhlcntComponent
-} from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
 import {
   DialogQdPdKqlcntComponent
 } from "../../../../../../../components/dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
 import {CurrencyMaskInputMode} from "ngx-currency";
+import {PhuLucHopDongComponent} from "../phu-luc-hop-dong/phu-luc-hop-dong.component";
+import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 @Component({
   selector: 'app-them-moi-hop-dong',
@@ -36,6 +31,7 @@ import {CurrencyMaskInputMode} from "ngx-currency";
   styleUrls: ['./them-moi-hop-dong.component.scss']
 })
 export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
+  @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
@@ -141,7 +137,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       idDuAn: [null],
       thanhTienBangChu: [],
       fileDinhKems: [null],
-      listKtXdscTdxdHopDongKlcv: [[]]
+      listKtTdxdHopDongKlcv: [[]]
     });
   }
 
@@ -170,8 +166,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
       if (rs.msg == MESSAGE.SUCCESS) {
         dataQdPdKqlcnt = rs.data;
       }
-      if (dataQdPdKqlcnt.listKtXdscQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtXdscQuyetDinhPdKqlcntDsgt.length) {
-        goiThau = dataQdPdKqlcnt.listKtXdscQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
+      if (dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt && dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.length) {
+        goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
       }
       this.formData.patchValue({
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
@@ -185,11 +181,11 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         ngayKyKqlcnt: dataQdPdKqlcnt ? dataQdPdKqlcnt.ngayKy : null,
         loaiHopDong: this.itemGoiThau.loaiHopDong,
         tenLoaiHopDong: this.itemGoiThau.tenLoaiHopDong,
-        cdtTen: this.itemGoiThau.ktXdscQuyetDinhPdKqlcnt.chuDauTu,
-        cdtDiaChi: this.itemGoiThau.ktXdscQuyetDinhPdKqlcnt.diaChi,
-        dvccTen: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.tenNhaThau,
-        dvccDiaChi: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.diaChi,
-        dvccMst: goiThau?.ktXdscQuyetDinhPdKhlcntDsnt?.maSoThue,
+        cdtTen: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.chuDauTu,
+        cdtDiaChi: this.itemGoiThau.ktTdxdQuyetDinhPdKqlcnt.diaChi,
+        dvccTen: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.tenNhaThau,
+        dvccDiaChi: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.diaChi,
+        dvccMst: goiThau?.ktTdxdQuyetDinhPdKhlcntDsnt?.maSoThue,
       });
     }
   }
@@ -231,7 +227,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     }
     this.formData.value.soHd = this.formData.value.soHd + this.hauToSoHd;
     if (this.dataKlcv && this.dataKlcv.length > 0) {
-      this.formData.value.listKtXdscTdxdHopDongKlcv = this.dataKlcv;
+      this.formData.value.listKtTdxdHopDongKlcv = this.dataKlcv;
     } else {
       this.notification.success(MESSAGE.ERROR, "Danh sách khối lượng công việc không được để trống.");
       return;
@@ -341,28 +337,37 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         //get danh sách gói thầu thành công (đã có đơn vị trúng thầu).
         let res = await this.quyetdinhpheduyetKqLcntService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.listGoiThau = res.data.listKtXdscQuyetDinhPdKqlcntDsgt.filter(item => item.trangThai == STATUS.THANH_CONG);
+          this.listGoiThau = res.data.listKtTdxdQuyetDinhPdKqlcntDsgt.filter(item => item.trangThai == STATUS.THANH_CONG);
         }
         //Lấy danh sách nhà thầu tham gia đấu thầu cho qd pd khlcnt
         let resp = await this.quyetdinhpheduyetKhlcntService.getDetail(data.idQdPdKhlcnt);
         if (resp.msg == MESSAGE.SUCCESS) {
-          this.listNhaThau = resp.data.listKtXdscQuyetDinhPdKhlcntDsnt ? resp.data.listKtXdscQuyetDinhPdKhlcntDsnt.filter(item => item.trangThai == STATUS.TRUNG_THAU) : [];
+          this.listNhaThau = resp.data.listKtTdxdQuyetDinhPdKhlcntDsnt ? resp.data.listKtTdxdQuyetDinhPdKhlcntDsnt.filter(item => item.trangThai == STATUS.TRUNG_THAU) : [];
         }
       }
     })
   }
 
-  redirectToPhuLuc(isView: boolean, id: number) {
-    this.idPhuLuc = id;
-    this.isViewHd = true;
-    this.isViewPl = isView;
-  }
-
-  goBackPl(event) {
-    this.isViewHd = false;
-    if (event) {
-      this.detail(this.idInput)
-    }
+  openModalPhuLuc(isView: boolean, id: number) {
+    const modalQD = this.modal.create({
+      nzTitle: 'PHỤ LỤC HỢP ĐỒNG',
+      nzContent: PhuLucHopDongComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1500px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataHdr: this.formData.value,
+        id: id,
+        isView: isView
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+        this.detail(this.idInput)
+      }
+    });
+    this.collapseExpand.clickHeader();
   }
 
   async detail(id) {
@@ -379,7 +384,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
           })
           this.fileDinhKem = data.listFileDinhKems;
           this.listPhuLuc = data.listPhuLuc;
-          this.dataKlcv = data.listKtXdscTdxdHopDongKlcv;
+          this.dataKlcv = data.listKtTdxdHopDongKlcv && data.listKtTdxdHopDongKlcv.length > 0 ? data.listKtTdxdHopDongKlcv : [];
           this.updateEditKLCongViecCache()
         }
       } else {

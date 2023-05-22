@@ -184,7 +184,7 @@
       <th class="text-center" width="8%">SL dự toán</th>
       <th class="text-center" width="8%">Đơn giá</th>
       <th class="text-center" width="8%">Dự toán (Triệu đồng)</th>
-      <th class="text-center" width="8%">Hành động</th>
+      <th class="text-center" width="8%" *ngIf="isView">Hành động</th>
     </tr>
     <!--    <tr>-->
     <!--      <th></th>-->
@@ -234,7 +234,7 @@
           <td class="font-weight-bold">{{sumSoLuong(data, 'donGia') | number : '1.0-1' : 'vi_VN'}}</td>
           <td class="font-weight-bold">{{sumSoLuong(data, 'tongTien') | number : '1.0-1' : 'vi_VN'}}</td>
         </ng-container>
-        <td class="font-weight-bold text-left" nzRight>
+        <td class="font-weight-bold text-left" nzRight *ngIf="isView">
           <a *ngIf="!data.dataChild || data.dataChild.length == 0" (click)="themMoiMuaTang(data, 'sua', idx)">
             <i class="fa fa-pencil"></i>
           </a>
@@ -261,7 +261,7 @@
           <td>
             {{item.tongTien | number : '1.0-1' : 'vi_VN'}}
           </td>
-          <td class="text-left" nzRight>
+          <td class="text-left" nzRight *ngIf="isView">
             <a (click)="themMoiMuaTang(item, 'sua', y, dataTable[idx])">
               <i class="fa fa-pencil"></i>
             </a>

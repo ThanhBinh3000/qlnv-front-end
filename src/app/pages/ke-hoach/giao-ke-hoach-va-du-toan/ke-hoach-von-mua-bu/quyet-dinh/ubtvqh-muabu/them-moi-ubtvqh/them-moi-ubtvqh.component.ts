@@ -214,7 +214,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
+      nzTitle: 'Thêm chi tiết kế hoạch giao Bộ/Ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhUbtvqhMuaBuBoSungComponent,
       nzMaskClosable: false,
       nzClosable: false,

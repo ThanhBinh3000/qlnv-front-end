@@ -271,7 +271,9 @@
                 <nz-autocomplete #auto (selectionChange)="selectDonViKeyDown($event,'khlt')" [nzBackfill]="false">
                   <ng-container>
                     <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
-                                    (click)="selectDonvi(option)">
+                    >
+                      <!--                      <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"-->
+                      <!--                                      (click)="selectDonvi(option)">-->
                       {{ option.labelDonVi }}
                     </nz-auto-option>
                   </ng-container>
@@ -281,13 +283,13 @@
             <th class="text-right">{{calculatortkdnTongQuyThocCreate()}}</th>
             <th class="text-right">{{calculatortkdnTongThocCreate()}}
             </th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[0].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[1].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[2].soLuong}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[0].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[1].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnThoc[2].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
             <th class="text-right">{{calculatortkdnTongGaoCreate()}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[0].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong}}</th>
-            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[0].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong  | number: '1.0-1': 'vi_VN'}}</th>
             <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>
             <th class="text-right">
               <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
@@ -357,48 +359,48 @@
               <td nzLeft class="text-right">{{data.stt}}</td>
               <td nzLeft class="text-left">{{data.tenDonvi}}</td>
               <td class="text-right">{{data.tkdnTongSoQuyThoc | number:
-                '1.0-1'}}</td>
-              <td class="text-right">{{data.tkdnTongThoc | number: '1.0-1'}}
+                '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{data.tkdnTongThoc | number: '1.0-1': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                 <td *ngFor="let item of data.tkdnThoc" class="text-right">
-                  {{item.soLuong | number: '1.0-1'}}</td>
+                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1'}} </td>
+              <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
-                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1'}} </td>
+                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
               </ng-container>
-              <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.ntnThoc | number: '1.0-1'}}</td>
-              <td class="text-right">{{data.ntnGao | number: '1.0-1'}}</td>
+              <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{data.ntnThoc | number: '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{data.ntnGao | number: '1.0-1': 'vi_VN'}}</td>
               <td class="text-right">{{data.xtnTongSoQuyThoc | number:
                 '1.0-1'}}</td>
-              <td class="text-right">{{data.xtnTongThoc | number: '1.0-1'}}
+              <td class="text-right">{{data.xtnTongThoc | number: '1.0-1': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.xtnThoc?.length > 0">
                 <td *ngFor="let item of data.xtnThoc" class="text-right">
-                  {{item.soLuong | number: '1.0-1'}}</td>
+                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.xtnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right">{{data.xtnTongGao | number: '1.0-1'}}
+              <td class="text-right">{{data.xtnTongGao | number: '1.0-1': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.xtnGao?.length > 0">
                 <td *ngFor="let item of data.xtnGao" class="text-right">
-                  {{item.soLuong | number: '1.0-1'}}</td>
+                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.xtnGao?.length == 0">
                 <td class="text-right">0</td>
@@ -406,10 +408,10 @@
                 <td class="text-right">0</td>
               </ng-container>
               <td class="text-right">{{data.tkcnTongSoQuyThoc | number:
-                '1.0-1'}}</td>
-              <td class="text-right">{{data.tkcnTongThoc | number: '1.0-1'}}
+                '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{data.tkcnTongThoc | number: '1.0-1': 'vi_VN'}}
               </td>
-              <td class="text-right">{{data.tkcnTongGao | number: '1.0-1'}}
+              <td class="text-right">{{data.tkcnTongGao | number: '1.0-1': 'vi_VN'}}
               </td>
               <!-- <td>{{ convertTrangThai(tdongTinChiTieuKeHoachNam.trangThai) }}</td> -->
               <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
@@ -428,20 +430,20 @@
               <td nzLeft class="text-left">{{data.tenDonvi}}</td>
               <td class="text-right">{{data.tkdnTongSoQuyThoc | number:
                 '1.0-1'}}</td>
-              <td class="text-right">{{data.tkdnTongThoc | number: '1.0-1'}}
+              <td class="text-right">{{data.tkdnTongThoc | number: '1.0-1': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                 <td *ngFor="let item of data.tkdnThoc" class="text-right">
-                  {{item.soLuong | number: '1.0-1'}}</td>
+                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1'}} </td>
+              <td class="text-right"> {{data.tkdnTongGao | number: '1.0-1': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
-                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1'}} </td>
+                <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
@@ -531,99 +533,99 @@
             <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongThoc ? sumTotalKhDuTruLuongThuc.tkdnTongThoc : 0)  |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 ? sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongGao ? sumTotalKhDuTruLuongThuc.tkdnTongGao : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam1 : 0)  |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam2 : 0)|
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 ? sumTotalKhDuTruLuongThuc.tkdnGao_nam3 : 0)|
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnThoc ? sumTotalKhDuTruLuongThuc.ntnThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnGao ? sumTotalKhDuTruLuongThuc.ntnGao : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongThoc ? sumTotalKhDuTruLuongThuc.xtnTongThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{  (sumTotalKhDuTruLuongThuc.xtnThoc_nam1 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam1 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam2 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam2 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam3 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam3 : 0)|
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongGao ? sumTotalKhDuTruLuongThuc.xtnTongGao : 0)|
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam1 ? sumTotalKhDuTruLuongThuc.xtnGao_nam1 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam2 ? sumTotalKhDuTruLuongThuc.xtnGao_nam2 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam3 ? sumTotalKhDuTruLuongThuc.xtnGao_nam3 : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ? sumTotalKhDuTruLuongThuc.tkcnTongThoc : 0) |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao : 0)  |
-              number: '1.0-1'}}
+              number: '1.0-1': 'vi_VN'}}
             </th>
             <!-- <td class="background-last-row"></td> -->
             <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
@@ -643,17 +645,17 @@
             <th></th>
             <th class="first-last-row-table background-last-row"> Chỉ tiêu của BTC</th>
             <th
-              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocMua : 0)|  number: '1.0-1'}}</th>
+              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
             <th
-              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoMua : 0) |  number: '1.0-1'}}</th>
-            <th></th>
-            <th
-              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocXuat : 0)|  number: '1.0-1' }}</th>
-            <th></th>
-            <th></th>
+              class="text-right text-btc "> {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
             <th></th>
             <th
-              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
+              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltThocXuat : 0)|  number: '1.0-1': 'vi_VN' }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTtcpGiaoBTC ? dataQdTtcpGiaoBTC.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
             <th></th>
             <th></th>
             <th></th>
@@ -676,17 +678,17 @@
             <th></th>
             <th class="first-last-row-table background-last-row"> Chỉ tiêu của TCDT</th>
             <th
-              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1'}}</th>
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocMua : 0)|  number: '1.0-1': 'vi_VN'}}</th>
             <th
-              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1'}}</th>
-            <th></th>
-            <th
-              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' }}</th>
-            <th></th>
-            <th></th>
+              class="text-right text-btc "> {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoMua : 0) |  number: '1.0-1': 'vi_VN'}}</th>
             <th></th>
             <th
-              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1'}}</th>
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltThocXuat : 0)|  number: '1.0-1' : 'vi_VN'}}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th
+              class="text-right text-btc ">  {{(dataQdTCDTGiaoCuc ? dataQdTCDTGiaoCuc.ltGaoXuat : 0) |  number: '1.0-1': 'vi_VN'}}</th>
             <th></th>
             <th></th>
             <th></th>
@@ -794,9 +796,9 @@
             <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
               <td class="text-right">{{dataMuoi.stt}}</td>
               <td class="text-left">{{dataMuoi.tenDonVi}}</td>
-              <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
-              <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1'}}</td>
-              <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+              <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
+              <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
               <td
                 class="text-right">{{dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
               <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
@@ -811,7 +813,7 @@
             <ng-template #editTemplateMuoi>
               <td class="text-right">{{dataMuoi.stt}}</td>
               <td class="text-left">{{dataMuoi.tenDonVi}}</td>
-              <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
+              <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
               <td class="text-right">
                 <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0" [nzSize]="'small'"
                                  [(ngModel)]="dsMuoiClone[i].nhapTrongNam">
@@ -840,28 +842,28 @@
           <tr>
             <td></td>
             <td style="text-align: center; font-weight: 700">Cộng</td>
-            <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
-            <td class="text-right"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
-            <td class="text-right"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
-            <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</td>
             <td></td>
           </tr>
           <tr *ngIf="userService.isTongCuc()">
             <td></td>
             <td style="text-align: right; font-weight: 700">Chỉ tiêu của BTC</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</td>
             <td></td>
           </tr>
           <tr *ngIf="userService.isCuc()">
             <td></td>
             <td style="text-align: right; font-weight: 700">Chỉ tiêu của TCDT</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
-            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoDauNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.nhapTrongNam | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.xuatTrongNamMuoi | number: '1.0-1': 'vi_VN'}}</td>
+            <td class="text-right text-btc"> {{sumTotalKhDuTruMuoi.tonKhoCuoiNam | number: '1.0-1': 'vi_VN'}}</td>
             <td></td>
           </tr>
           </tfoot>
@@ -1016,9 +1018,9 @@
                       <td>{{r.tenVatTuCha}}</td>
                       <td>{{r.tenVatTu}}</td>
                       <td>{{r.donViTinh}}</td>
-                      <td>{{+r.soLuongChuyenSang + +r.soLuongNhap|number: '1.0-1'}}</td>
-                      <td>{{r.soLuongChuyenSang|number: '1.0-1'}}</td>
-                      <td>{{r.soLuongNhap|number: '1.0-1'}}</td>
+                      <td>{{+r.soLuongChuyenSang + +r.soLuongNhap|number: '1.0-1': 'vi_VN'}}</td>
+                      <td>{{r.soLuongChuyenSang|number: '1.0-1': 'vi_VN'}}</td>
+                      <td>{{r.soLuongNhap|number: '1.0-1': 'vi_VN'}}</td>
                       <td>
                         <a (click)="suaVatTu(i,i1,'nhap')">
                           <i class="fa fa-pencil"></i>

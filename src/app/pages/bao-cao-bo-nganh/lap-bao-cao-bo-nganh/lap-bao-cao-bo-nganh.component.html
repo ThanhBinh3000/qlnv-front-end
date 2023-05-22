@@ -4,7 +4,7 @@
       <ul nz-menu nzMode="inline" style="max-width: 300px">
         <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 145/2013/TT-BTC">
           <ul>
-            <li nz-menu-item nzSelected (click)="selectTab(0)">
+            <li nz-menu-item (click)="selectTab(0)">
               <span nz-icon nzType="fund"></span>
               <span>KH tổng hợp nhập, xuất hàng DTQG</span>
             </li>
@@ -28,11 +28,11 @@
               <span nz-icon nzType="fund"></span>
               <span>Nhập, xuất, tồn kho hàng DTQG</span>
             </li>
+            <!--            <li nz-menu-item (click)="selectTab(6)">-->
+            <!--              <span nz-icon nzType="fund"></span>-->
+            <!--              <span>Nhập dữ liệu chi tiết nhập, xuất, tồn kho hàng DTQG</span>-->
+            <!--            </li>-->
             <li nz-menu-item (click)="selectTab(6)">
-              <span nz-icon nzType="fund"></span>
-              <span>Nhập dữ liệu chi tiết nhập, xuất, tồn kho hàng DTQG</span>
-            </li>
-            <li nz-menu-item (click)="selectTab(7)">
               <span nz-icon nzType="fund"></span>
               <span>Chi tiết nhập, xuất, tồn kho hàng DTQG</span>
             </li>
@@ -40,7 +40,7 @@
         </li>
       </ul>
       <ul nz-menu nzMode="inline" style="max-width: 300px">
-        <li nz-submenu nzOpen="false" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC">
+        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo theo thông tư 130/2018/TT-BTC">
           <ul>
             <li nz-menu-item (click)="selectTab(8)">
               <span nz-icon nzType="fund"></span>
@@ -115,6 +115,11 @@
       <div class="contentDetail">
         <ng-container *ngIf="tabSelected == 5">
           <app-nhap-xuat-ton-kho-hang-dtqg></app-nhap-xuat-ton-kho-hang-dtqg>
+        </ng-container>
+      </div>
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 6">
+          <app-chi-tiet-nhap-xuat-ton-kho-hang-dtqg></app-chi-tiet-nhap-xuat-ton-kho-hang-dtqg>
         </ng-container>
       </div>
       <div class="contentDetail">

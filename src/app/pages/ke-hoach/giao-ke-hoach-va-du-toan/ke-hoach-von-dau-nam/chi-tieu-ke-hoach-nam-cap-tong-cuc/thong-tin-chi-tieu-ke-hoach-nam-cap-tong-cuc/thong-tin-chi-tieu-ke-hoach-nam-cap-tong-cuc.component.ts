@@ -175,7 +175,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.listNam.push({
         value: this.yearNow + i,
         text: this.yearNow + i,
@@ -929,7 +929,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-    return sumVal ? Intl.NumberFormat('en-US').format(sumVal) : '0';
+    return sumVal ? Intl.NumberFormat('vi-VN').format(sumVal) : '0';
   }
 
   reduceRowDataVatTu(
@@ -1792,7 +1792,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc -
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
       )
       : '0';
@@ -1805,7 +1805,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].xtnTongGao;
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].tkcnTongGao,
       )
       : '0';
@@ -1816,7 +1816,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc +
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
       )
       : '0';
@@ -1827,7 +1827,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongThoc +
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
       )
       : '0';
@@ -1838,7 +1838,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc +
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
       )
       : '0';
@@ -1916,15 +1916,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.loaiVthh == '0101') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong +=
                     tonKho.duDau;
                   break;
                 default:
@@ -1933,15 +1933,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             } else if (tonKho.loaiVthh == '0102') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong +=
                     tonKho.duDau;
                   break;
                 default:
@@ -2064,7 +2064,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnThoc +
       +this.keHoachLuongThucCreate.ntnGao * 2;
     return this.keHoachLuongThucCreate.ntnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
       )
       : '0';
@@ -2078,7 +2078,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           0,
         );
       return this.keHoachLuongThucCreate.xtnTongThoc
-        ? Intl.NumberFormat('en-US').format(
+        ? Intl.NumberFormat('vi-VN').format(
           this.keHoachLuongThucCreate.xtnTongThoc,
         )
         : '0';
@@ -2090,7 +2090,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate.xtnTongGao =
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
-        ? Intl.NumberFormat('en-US').format(
+        ? Intl.NumberFormat('vi-VN').format(
           this.keHoachLuongThucCreate.xtnTongGao,
         )
         : '0';
@@ -2102,7 +2102,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc +
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
       )
       : '0';
@@ -2113,8 +2113,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongThoc +
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN').format(
+        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000,
       )
       : '0';
   }
@@ -2123,7 +2123,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongThoc =
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.tkdnTongThoc,
       )
       : '0';
@@ -2133,7 +2133,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongGao =
       this.keHoachLuongThucCreate?.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.tkdnTongGao,
       )
       : '0';
@@ -2145,7 +2145,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnThoc -
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.tkcnTongThoc,
       )
       : '0';
@@ -2157,7 +2157,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnGao -
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.tkcnTongGao,
       )
       : '0';
@@ -2168,7 +2168,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongThoc +
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
       )
       : '0';
@@ -2595,7 +2595,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   //   this.keHoachMuoiCreate.tkdnTongSoMuoi =
   //     this.keHoachMuoiCreate?.tkdnMuoi.reduce((a, b) => a + +b.soLuong, 0);
   //   return this.keHoachMuoiCreate.tkdnTongSoMuoi
-  //     ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.tkdnTongSoMuoi)
+  //     ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.tkdnTongSoMuoi)
   //     : '0';
   // }
 
@@ -2603,7 +2603,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     // this.keHoachMuoiCreate.xtnTongSoMuoi =
     //   this.keHoachMuoiCreate?.xtnMuoi.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachMuoiCreate.xtnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.xtnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.xtnTongSoMuoi)
       : '0';
   }
 
@@ -2613,7 +2613,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachMuoiCreate.ntnTongSoMuoi -
       this.keHoachMuoiCreate.xtnTongSoMuoi;
     return this.keHoachMuoiCreate.tkcnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.tkcnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.tkcnTongSoMuoi)
       : '0';
   }
 
@@ -2696,7 +2696,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   //     0,
   //   );
   //   return this.dsMuoiClone[i].xtnTongSoMuoi
-  //     ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].xtnTongSoMuoi)
+  //     ? Intl.NumberFormat('vi-VN').format(this.dsMuoiClone[i].xtnTongSoMuoi)
   //     : '0';
   // }
 
@@ -2706,7 +2706,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsMuoiClone[i].ntnTongSoMuoi -
       this.dsMuoiClone[i].xtnTongSoMuoi;
     return this.dsMuoiClone[i].tkcnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
       : '0';
   }
 
@@ -2857,7 +2857,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].tongCacNamTruoc +
       this.dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam;
     return this.dsVatTuClone[i].vatTuThietBi[0].tongNhap
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
       )
       : '0';
@@ -2869,7 +2869,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[1].soLuong +
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[2].soLuong;
     return this.dsVatTuClone[i].tongChiTieuCacnamTruoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
       )
       : '0';

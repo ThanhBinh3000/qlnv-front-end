@@ -3,7 +3,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from 'src/app/shared/globals';
 @Component({
-  selector: 'app-kiem-tra-chat-luong',
+  selector: 'app-bdg-kiem-tra-chat-luong',
   templateUrl: './kiem-tra-chat-luong.component.html',
   styleUrls: ['./kiem-tra-chat-luong.component.scss'],
 })

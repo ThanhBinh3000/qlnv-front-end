@@ -91,7 +91,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
       tenTrangThai: ['Dự thảo'],
       fileDinhKems: [null],
       child: [null],
-      listKtXdscQuyetDinhPdTktcTdtDtl: null
+      listKtTdxdQuyetDinhPdTktcTdtDtl: null
     });
   }
 
@@ -192,7 +192,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
             }
           })
           this.listFile = data.fileDinhKems;
-          this.dataTable = data.listKtXdscQuyetDinhPdTktcTdtDtl;
+          this.dataTable = data.listKtTdxdQuyetDinhPdTktcTdtDtl;
           this.updateIdVirtual();
         }
       } else {
@@ -250,7 +250,7 @@ export class ThongTinQuyetDinhPheDuyetTktcTdtComponent extends Base2Component im
     }
     this.formData.value.soQd = this.formData.value.soQd + this.maQd;
     if (this.dataTable && this.dataTable.length > 0) {
-      this.formData.value.listKtXdscQuyetDinhPdTktcTdtDtl = this.dataTable;
+      this.formData.value.listKtTdxdQuyetDinhPdTktcTdtDtl = this.dataTable;
     } else {
       this.notification.warning(MESSAGE.WARNING, "Chưa nhập chi tiết dự án xây dựng!");
       return;
