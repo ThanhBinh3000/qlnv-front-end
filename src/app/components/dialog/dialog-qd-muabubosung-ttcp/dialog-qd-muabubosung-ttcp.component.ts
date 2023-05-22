@@ -5,6 +5,7 @@ import { DanhMucService } from "../../../services/danhmuc.service";
 import { Globals } from "../../../shared/globals";
 import { MESSAGE } from "../../../constants/message";
 import { MuabuBosungComponent } from "./muabu-bosung/muabu-bosung.component";
+import {DonviService} from "../../../services/donvi.service";
 
 @Component({
   selector: 'app-dialog-qd-muabubosung-ttcp',
@@ -33,6 +34,7 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     public globals: Globals
   ) { }
 
@@ -52,16 +54,36 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
-    const boNganh = this.dsBoNganh.filter(item => item.ma == event)
-    if (boNganh.length > 0) {
-      this.keHoach.tenBoNganh = boNganh[0].giaTri;
+    const boNganh = this.dsBoNganh.find(item => item.maDvi == event)
+    if (boNganh) {
+      this.keHoach.tenBoNganh = boNganh.tenDvi;
     }
+    //fix btc = tcdt
+    if (event == '01') {
+      event = '0101'
+    }
+    this.danhMucService.getDanhMucHangDvql({
+      "dviQly": event
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        if (event == '0101') {
+          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          dataVatTu.forEach(item => {
+            this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+          });
+        } else {
+          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+        }
+      }
+    })
   }
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    //let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
+      //fix theo giao dien moi
       this.dsBoNganh = res.data;
     }
   }

@@ -5,6 +5,7 @@ import { DanhMucService } from "../../../services/danhmuc.service";
 import { Globals } from "../../../shared/globals";
 import { MESSAGE } from "../../../constants/message";
 import { MuaBuBoSungComponent } from "./mua-bu-bo-sung/mua-bu-bo-sung.component";
+import {DonviService} from "../../../services/donvi.service";
 
 @Component({
   selector: 'app-dialog-muabu-bosung-btc',
@@ -35,6 +36,7 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     public globals: Globals
   ) { }
 
@@ -62,8 +64,10 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    //let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
+      //fix theo giao dien moi
       this.dsBoNganh = res.data;
     }
   }

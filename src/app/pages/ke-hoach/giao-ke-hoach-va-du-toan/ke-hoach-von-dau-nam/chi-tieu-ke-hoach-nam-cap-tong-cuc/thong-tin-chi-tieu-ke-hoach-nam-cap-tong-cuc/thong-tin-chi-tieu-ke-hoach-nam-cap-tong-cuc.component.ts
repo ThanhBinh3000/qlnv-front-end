@@ -51,6 +51,8 @@ import {STATUS} from "../../../../../../constants/status";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
 import {QuyetDinhTtcpService} from "../../../../../../services/quyetDinhTtcp.service";
+import {AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -148,7 +150,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuConEditXuatShow: any[] = [];
   dataQdTtcpGiaoBTC: any;
   dataQdTCDTGiaoCuc: any;
-
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
   //
 
   constructor(
