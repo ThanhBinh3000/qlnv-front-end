@@ -74,18 +74,17 @@
                   <nz-form-label nzRequired [nzNoColon]="true"> Số hợp đồng </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                      <input nz-input formControlName="soHd" [readonly]="true" />
+                      <input nz-input formControlName="soHd" [readonly]="isDisabled()" />
                     </nz-input-group>
                   </nz-form-control>
                 </nz-form-item>
               </div>
               <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng </nz-form-label>
+                  <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký hợp đồng </nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input nz-input formControlName="ngayKyHd" [readonly]="true" />
-                    </nz-input-group>
+                    <nz-date-picker formControlName="ngayKyHd" nzFormat="dd/MM/yyyy" [nzDisabled]="isDisabled()">
+                    </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -712,7 +711,7 @@
                   </nz-collapse-panel>
                 </nz-collapse>
                 <form nz-form nzLayout="vertical" [formGroup]="formData">
-                  <div nz-col [nzSpan]="24">
+                  <div nz-col [nzSpan]="24" *ngIf="formData.value.ketQua == 1">
                     <nz-form-item>
                       <nz-form-label [nzNoColon]="true">
                         File đính kèm biên bản đã ký
@@ -720,6 +719,18 @@
                       <div class="list-file">
                         <file-list [disabled]="isDisabled()" [data]="fileDinhKems"></file-list>
                       </div>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="24" *ngIf="formData.value.ketQua == 0">
+                    <nz-form-item>
+                      <nz-form-label nzRequired [nzNoColon]="true"> Nội dung thông báo đấu giá không thành
+                      </nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group>
+                          <textarea rows="3" nz-input formControlName="thongBaoKhongThanh"
+                            [readonly]="isDisabled()"></textarea>
+                        </nz-input-group>
+                      </nz-form-control>
                     </nz-form-item>
                   </div>
                 </form>

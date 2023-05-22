@@ -28,8 +28,8 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
   ];
 
   listPtBanTt: any[] = [
-    { ma: 'Ủy Quyền', giaTri: 'Ủy Quyền' },
-    { ma: 'Bán lẻ', giaTri: 'Bán lẻ' },
+    { ma: '02', giaTri: 'Ủy Quyền' },
+    { ma: '03', giaTri: 'Bán lẻ' },
   ]
 
   constructor(
@@ -91,7 +91,7 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
       maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-      pthucBanTrucTiep: ['Ủy quyền', 'Bán lẻ'],
+      pthucBanTrucTiep: ['02', '03'],
       lastest: 1
     })
   }
@@ -102,10 +102,9 @@ export class QuyetDinhUyQuenBanLeComponent extends Base2Component implements OnI
     this.search();
   }
 
-  redirectToChiTiet(id: number, pthucBanTrucTiep: string) {
+  redirectToChiTiet(id: number) {
     this.selectedId = id;
     this.isDetail = true;
-    this.pthucBanTrucTiep = pthucBanTrucTiep;
   }
 
   disabledNgayTaoTu = (startValue: Date): boolean => {

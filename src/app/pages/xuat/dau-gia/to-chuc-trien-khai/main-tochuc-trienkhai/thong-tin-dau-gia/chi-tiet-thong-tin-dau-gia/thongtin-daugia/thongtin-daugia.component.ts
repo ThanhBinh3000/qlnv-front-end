@@ -108,6 +108,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       cloaiVthh: [''],
       moTaHangHoa: [''],
       khoanTienDatTruoc: [],
+      thongBaoKhongThanh: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
     })
@@ -284,9 +285,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     });
     body.ketQuaSl = soLuongTrung + "/" + soLuongDviTsan;
     let data = await this.createUpdate(body);
-    if (data) {
-      this.modal.closeAll();
-    }
+    // if (data) {
+    //   this.modal.closeAll();
+    // }
   }
 
   addRow(item, name) {

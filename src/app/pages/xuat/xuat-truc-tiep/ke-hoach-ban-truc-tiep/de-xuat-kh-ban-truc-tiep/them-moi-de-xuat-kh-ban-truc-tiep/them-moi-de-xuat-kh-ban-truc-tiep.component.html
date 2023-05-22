@@ -352,11 +352,16 @@
                     </div>
                 </form>
                 <ng-template #extraTpl>
-                    <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
+                    <button style="background: #353a64;" type="button" class="btn btn-main" *ngIf="!isDisable()"
                         (click)="themMoiBangPhanLoTaiSan($event)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
+                    <!-- <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
+                        (click)="themMoiBangPhanLoTaiSan($event)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button> -->
                 </ng-template>
                 <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                     <thead>

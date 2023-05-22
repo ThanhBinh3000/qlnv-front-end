@@ -74,6 +74,7 @@
                         </th>
                         <th class="text-center">STT</th>
                         <th class="text-center">Số QĐ phê duyệt KH bán trực tiếp</th>
+                        <th class="text-center">Số đề xuất KH bán trực tiếp</th>
                         <th class="text-center" *ngIf="userService.isTongCuc()">Đơn vị</th>
                         <th class="text-center">Phương thức bán trực tiếp</th>
                         <th class="text-center">Ngày nhận chào giá/Ngày ủy quyền</th>
@@ -90,6 +91,12 @@
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
                                     (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
+                            </nz-input-group>
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDxuat"
+                                    (input)="filterInTable('soDxuat',filterTable.soDxuat)" size="small" />
                             </nz-input-group>
                         </th>
                         <th *ngIf="userService.isTongCuc()">
@@ -158,8 +165,10 @@
                                 (click)="openModalQdPdKh(data.idQdHdr)">{{
                                 data.xhQdPdKhBttHdr.soQdPd}}</a>
                         </td>
+                        <td>{{data.soDxuat}}</td>
                         <td *ngIf="userService.isTongCuc()">{{ data.tenDvi }}</td>
-                        <td>{{data.pthucBanTrucTiep }}</td>
+                        <td>{{data.pthucBanTrucTiep == '01' ? 'Chào giá' : data.pthucBanTrucTiep == '02' ? 'Ủy quyền' :
+                            data.pthucBanTrucTiep == '03' ? 'Bán lẻ' : null }}</td>
                         <td>{{data.ngayNhanCgia | date: 'dd/MM/YYYY'}}</td>
                         <td>
                             <a *ngIf="data.soQdKq && data.idSoQdKq" nz-button nzType="link"
@@ -171,11 +180,11 @@
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
                             <a *ngIf="data.trangThai == STATUS.HOAN_THANH_CAP_NHAT "
-                                (click)="redirectToChiTiet(true,data.id, data.pthucBanTrucTiep)">
+                                (click)="redirectToChiTiet(true,data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="data.trangThai != STATUS.HOAN_THANH_CAP_NHAT &&  userService.isCuc()"
-                                (click)="redirectToChiTiet(false,data.id, data.pthucBanTrucTiep)">
+                                (click)="redirectToChiTiet(false,data.id)">
                                 <i class="icon htvbdh_soanthao"></i>
                             </a>
                             <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
@@ -206,8 +215,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-them-moi-thong-tin-ban-truc-tiep [loaiVthh]="loaiVthh" [idInput]="selectedId" (showListEvent)="showList()"
-        [pthucBanTrucTiep]="pthucBanTrucTiep">
+    <app-them-moi-thong-tin-ban-truc-tiep [loaiVthh]="loaiVthh" [idInput]="selectedId" (showListEvent)="showList()">
     </app-them-moi-thong-tin-ban-truc-tiep>
 </div>
 <!--xem -->

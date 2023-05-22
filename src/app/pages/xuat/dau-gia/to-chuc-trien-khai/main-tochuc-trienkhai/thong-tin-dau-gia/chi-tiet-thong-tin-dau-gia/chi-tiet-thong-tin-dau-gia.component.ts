@@ -9,7 +9,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { ThongtinDaugiaComponent } from './thongtin-daugia/thongtin-daugia.component';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
-import { async } from 'rxjs';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -48,6 +48,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         tongTienGiaKhoiDiem: [],
         tongTienDatTruoc: [],
         khoanTienDatTruoc: [],
+        tgianDauGia: [''],
         tgianDauGiaTu: [''],
         tgianDauGiaDen: [''],
         tgianTtoan: [],
@@ -102,7 +103,9 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 soQdPd: dataHdr.soQdPd,
                 soQdPdKqBdg: dataDtl.soQdPdKqBdg,
                 tenDvi: dataDtl.tenDvi,
+                tgianDauGia: ['Từ' + ' ' + dayjs(dataDtl.tgianDkienTu).format('DD/MM/YYYY') + ' ' + 'Đến' + ' ' + dayjs(dataDtl.tgianDkienDen).format('DD/MM/YYYY')],
                 tgianTtoan: dataDtl.tgianTtoan,
+                pthucTtoan: dataDtl.pthucTtoan,
                 tgianGnhan: dataDtl.tgianGnhan,
                 pthucGnhan: dataDtl.pthucGnhan,
                 trangThai: dataDtl.trangThai,
@@ -110,6 +113,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
                 tenCloaiVthh: dataHdr.tenCloaiVthh,
                 tenLoaiVthh: dataHdr.tenLoaiVthh,
                 slDviTsan: dataDtl.slDviTsan,
+                loaiHinhNx: dataHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+                kieuNx: dataHdr.kieuNx != null ? 'Xuất bán' : null,
               })
             })
           }
@@ -210,9 +215,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           tongTienGiaKhoiDiem: tongTienGiaKhoiDiem,
           tongTienDatTruoc: tongTienDatTruoc,
           khoanTienDatTruoc: dataThongTin.khoanTienDatTruoc,
-          tgianDauGiaTu: dataThongTin.tgianDauGiaTu,
-          tgianDauGiaDen: dataThongTin.tgianDauGiaDen,
-          pthucTtoan: dataThongTin.pthucTtoan,
           tongSoLuong: tongSoLuong
         })
       }
