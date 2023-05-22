@@ -15,11 +15,11 @@
       <thead>
       <tr>
         <th width="40px" class="text-center">STT</th>
-        <th width="150px">Số hợp đồng</th>
+        <th>Số hợp đồng</th>
         <th width="200px">Tên hợp đồng</th>
         <th>Gói thầu</th>
-        <th width="250px">Chủ đầu tư</th>
-        <th width="250px">Nhà thầu</th>
+        <th>Chủ đầu tư</th>
+        <th>Nhà thầu</th>
         <th width="130px">Ngày ký hợp đồng</th>
         <th width="130px">Giá trị hợp đồng</th>
         <th width="130px">Trạng thái HĐ</th>
@@ -94,22 +94,72 @@
       </button>
     </div>
   </div>
-  <nz-table [nzData]="listHopDong" [nzFrontPagination]="false"
-            [nzShowPagination]="false" nzBordered class="pd-10">
+  <nz-table nzBordered class="pd-10"
+            [nzFrontPagination]="false" [nzShowPagination]="false"
+            [nzScroll]="dataTable && dataTable.length > 0 ? { x: '3000px' } : null">
     <thead>
     <tr>
-      <th width="40px" class="text-center">STT</th>
-      <th width="150px">Số hợp đồng</th>
-      <th width="200px">Tên hợp đồng</th>
-      <th>Gói thầu</th>
-      <th width="250px">Chủ đầu tư</th>
-      <th width="250px">Nhà thầu</th>
-      <th width="130px">Ngày ký hợp đồng</th>
-      <th width="130px">Giá trị hợp đồng</th>
-      <th width="130px">Trạng thái HĐ</th>
-      <th width="100px" class="text-center">Tiến độ thực hiện</th>
+      <th nzWidth="40px" rowSpan="3" class="text-center">STT</th>
+      <th class="text-center" rowSpan="3">Quý</th>
+      <th class="text-center" rowSpan="3" nzWidth="250px">Tên công tác/hạng mục công việc</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px">ĐVT</th>
+      <th class="text-center" colSpan="5">Khối lượng</th>
+      <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
+      <th class="text-center" colSpan="5">Thành tiền</th>
+      <th class="text-center" rowSpan="3">Ghi chú</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight>Hành động</th>
+    </tr>
+    <tr>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+      <th class="text-center" rowSpan="2">Theo hợp đồng</th>
+      <th class="text-center" rowSpan="2">Đơn giá bổ sung</th>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+    </tr>
+    <tr>
+      <th class="text-center">KL theo HĐ <br> ban đầu</th>
+      <th class="text-center">KL phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến hết kì trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
+      <th class="text-center">Theo HĐ ban đầu</th>
+      <th class="text-center">Phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
     </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+    <td></td>
+    <td>
+      <nz-select formControlName="nam">
+        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+      </nz-select>
+    </td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td class="text-center" nzRight>
+      <a>
+        <i class="table-icon icon htvbdh_dau-cong"></i>
+      </a>
+      <a>
+        <i class="table-icon fa fa-trash-o do"></i>
+      </a>
+    </td>
+    <tr></tr>
+    </tbody>
   </nz-table>
 </div>

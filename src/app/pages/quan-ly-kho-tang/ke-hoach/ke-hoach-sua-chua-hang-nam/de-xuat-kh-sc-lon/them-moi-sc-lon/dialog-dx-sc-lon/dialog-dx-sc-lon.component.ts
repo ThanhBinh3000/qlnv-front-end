@@ -90,7 +90,7 @@ export class DialogDxScLonComponent implements OnInit {
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDuAn == item.maDuAn) {
+        if (it.maCongTrinh == item.maCongTrinh) {
           rs = true;
           return;
         }
@@ -113,7 +113,6 @@ export class DialogDxScLonComponent implements OnInit {
     let res = await this.dmSuaChuaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDmScLon = res.data.content;
-      console.log(this.dataInput,22222)
       if (this.type == 'them' && this.listDmScLon && this.listDmScLon.length > 0) {
         this.listDmScLon = this.listDmScLon.filter(item => (item.trangThai == STATUS.CHUA_THUC_HIEN) && item.khoi == this.dataInput.khoi && (this.page == 'tren' ? item.tmdt > 5000000000 : item.tmdt <= 5000000000));
       }
