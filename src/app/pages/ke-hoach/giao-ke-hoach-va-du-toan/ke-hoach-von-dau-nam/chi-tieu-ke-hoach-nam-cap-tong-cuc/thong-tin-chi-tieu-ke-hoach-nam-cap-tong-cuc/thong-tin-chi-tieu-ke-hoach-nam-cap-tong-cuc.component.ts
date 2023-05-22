@@ -120,7 +120,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   canCuList: any[] = [];
   taiLieuDinhKemList: any[] = [];
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 100;
   totalRecord: number = 0;
   keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
   keHoachMuoiShow: Array<KeHoachMuoi> = [];
@@ -163,6 +163,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     max: 1000000000000,
     inputMode: CurrencyMaskInputMode.NATURAL,
   }
+
   //
 
   constructor(
@@ -1807,7 +1808,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
+        ( this.dsKeHoachLuongThucClone[i].tkcnTongThoc/ 1000),
       )
       : '0';
   }
@@ -1820,7 +1821,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
       ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
+        (this.dsKeHoachLuongThucClone[i].tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -1842,7 +1843,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
+        (this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc/ 1000),
       )
       : '0';
   }
@@ -2105,7 +2106,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
         ? Intl.NumberFormat('vi-VN').format(
-          this.keHoachLuongThucCreate.xtnTongGao,
+          this.keHoachLuongThucCreate.xtnTongGao ,
         )
         : '0';
     }
@@ -2117,7 +2118,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
+         this.keHoachLuongThucCreate.xtnTongSoQuyThoc ,
       )
       : '0';
   }
@@ -2128,7 +2129,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000,
+        (this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -2138,7 +2139,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongThoc,
+        (this.keHoachLuongThucCreate.tkdnTongThoc / 1000),
       )
       : '0';
   }
@@ -2148,7 +2149,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate?.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongGao,
+        (this.keHoachLuongThucCreate.tkdnTongGao / 1000),
       )
       : '0';
   }
@@ -2160,7 +2161,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongThoc,
+        (this.keHoachLuongThucCreate.tkcnTongThoc/ 1000),
       )
       : '0';
   }
@@ -2172,7 +2173,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongGao,
+        ( this.keHoachLuongThucCreate.tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -2183,7 +2184,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
       ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
+        (this.keHoachLuongThucCreate.tkcnTongSoQuyThoc/ 1000),
       )
       : '0';
   }
