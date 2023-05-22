@@ -120,7 +120,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   canCuList: any[] = [];
   taiLieuDinhKemList: any[] = [];
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 100;
   totalRecord: number = 0;
   keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
   keHoachMuoiShow: Array<KeHoachMuoi> = [];
