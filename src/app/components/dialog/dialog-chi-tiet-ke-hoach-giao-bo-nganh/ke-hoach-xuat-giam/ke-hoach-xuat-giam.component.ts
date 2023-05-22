@@ -174,7 +174,6 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   onChangeLoaiVthh(event, typeData?: any) {
-    debugger;
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
       typeData.cloaiVthh = null;
