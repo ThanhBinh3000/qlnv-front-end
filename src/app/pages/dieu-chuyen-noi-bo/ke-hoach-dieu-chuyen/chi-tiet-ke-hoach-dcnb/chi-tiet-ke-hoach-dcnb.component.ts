@@ -389,9 +389,10 @@ export class ChiTietKeHoachDcnbComponent extends Base2Component implements OnIni
           if (res.data && res.data.length > 0) {
             res.data.forEach(element => {
               if (element && element.capDvi == '3' && element.children) {
+                this.listDiemKhoNhanBq = [];
                 this.listDiemKhoNhanBq = [
                   ...this.listDiemKhoNhanBq,
-                  ...element.children
+                  ...element.children.filter(item => item.type == 'MLK')
                 ]
               }
             });
