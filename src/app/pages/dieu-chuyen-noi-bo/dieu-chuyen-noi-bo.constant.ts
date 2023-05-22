@@ -47,7 +47,7 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'xuat-dieu-chuyen',
     idHover: 'xuat-dieu-chuyen',
     hasTab: false,
-    caps: [1,2,3],
+    caps: [1, 2, 3],
     accessPermisson: 'DCNB_KHDC'
   },
   {
@@ -57,7 +57,6 @@ export const ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'nhap-dieu-chuyen',
     idHover: 'nhap-dieu-chuyen',
     hasTab: false,
-    caps: [1,2,3],
-    accessPermisson: 'DCNB_KHDC'
+    // accessPermisson: 'DCNB_KHDC'
   },
 ];

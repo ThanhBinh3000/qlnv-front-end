@@ -44,6 +44,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   listDiemKho: any[] = [];
   listBbLayMau: any[] = [];
   maPhieu: string;
+  soQdChange: string;
   checked: boolean = false;
   listFileDinhKem: any = [];
   listLoaiHinhNx: any = [];
@@ -190,7 +191,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
-      console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
       this.listSoQuyetDinh = this.listSoQuyetDinh.filter(item => item.children.some(child => child.maDvi === this.userInfo.MA_DVI));
 
     } else {
@@ -214,16 +214,54 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     })
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.bindingDataQd(data.id, true);
+        await this.bindingDataQd(data.id);
       }
     });
   };
 
-  async bindingDataQd(id, isSetTc?) {
+  changeSoQd(event) {
+    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+      this.formData.patchValue({
+        maDiemKho: null,
+        tenDiemKho: null,
+        maNhaKho: null,
+        tenNhaKho: null,
+        maNganKho: null,
+        tenNganKho: null,
+        maLoKho: null,
+        tenLoKho: null,
+        donGia: null,
+        soPhieuKnCl: null,
+        ktvBaoQuan: null,
+        ngayKn: null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenLoaiVthh: null,
+        tenCloaiVthh: null,
+        moTaHangHoa: null,
+      });
+    }
+  }
+
+  changeDd(event) {
+    if (event && event !== this.formData.value.maDiemKho) {
+      this.formData.patchValue({
+        soPhieuKnCl: null,
+        ktvBaoQuan: null,
+        ngayKn: null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenLoaiVthh: null,
+        tenCloaiVthh: null,
+        moTaHangHoa: null,
+      });
+    }
+  }
+
+  async bindingDataQd(id) {
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvXuatHangService.getDetail(id)
     const data = dataRes.data;
-    console.log(data, "donViTinh")
     await this.loadDataComboBox(data);
     this.formData.patchValue({
       soQdGiaoNvXh: data.soQd,
@@ -235,32 +273,32 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       donViTinh: data.donViTinh,
       loaiHinhNx: data.loaiHinhNx,
       kieuNhapXuat: data.kieuNx,
-
     });
-    await this.loadDsHd(data.soQd);
+    this.soQdChange = data.soQd;
+    await this.loadDsPhieuXk(data.soQd);
     let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc) {
+      this.listDiaDiemNhap = [];
       dataChiCuc.forEach(e => {
         this.listDiaDiemNhap = [...this.listDiaDiemNhap, e.children];
       });
       this.listDiaDiemNhap = this.listDiaDiemNhap.flat();
-      console.log( this.listDiaDiemNhap ," this.listDiaDiemNhap ");
-      console.log( this.listPhieuXk ," this.listPhieuXk ");
-      this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
-        return this.listPhieuXk.some(phieuXk => {
-          return (
-            item.maLoKho !== phieuXk.maLoKho ||
-            item.maNganKho !== phieuXk.maNganKho
-          );
-        });
-      });
 
-      console.log( this.listDiaDiemNhap ," this. ");
+      if (this.listPhieuXk.length > 0) {
+        this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => {
+          return this.listPhieuXk.some(phieuXk => {
+            return (
+              item.maLoKho !== phieuXk.maLoKho ||
+              item.maNganKho !== phieuXk.maNganKho
+            );
+          });
+        });
+      }
     }
     await this.spinner.hide();
   }
 
-  async loadDsHd(event) {
+  async loadDsPhieuXk(event) {
     let body = {
       soQdGiaoNvXh: event,
 
@@ -273,6 +311,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm xuất hàng',
@@ -293,7 +332,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   }
 
   async bindingDataDdNhap(data) {
-    console.log(data, "donGiaVat")
+
     if (data) {
       this.formData.patchValue({
         maDiemKho: data.maDiemKho,
@@ -306,16 +345,19 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         tenLoKho: data.tenLoKho,
         donGia: data.donGiaVat,
       })
+
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
         loaiVthh: this.loaiVthh,
-        soQdGiaoNvXh:this.formData.value.soQdGiaoNvXh,
+        soQdGiaoNvXh: this.formData.value.soQdGiaoNvXh,
       }
       let res = await this.xhPhieuKnghiemCluongService.search(body)
       const list = res.data.content;
+      console.log(list, "list")
       this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
     }
   }
+
   openDialogPhieuKnCl() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
@@ -416,7 +458,6 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadDataComboBox(data) {
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
-    console.log(resNx, 999)
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.ma == data.loaiHinhNx);
     }

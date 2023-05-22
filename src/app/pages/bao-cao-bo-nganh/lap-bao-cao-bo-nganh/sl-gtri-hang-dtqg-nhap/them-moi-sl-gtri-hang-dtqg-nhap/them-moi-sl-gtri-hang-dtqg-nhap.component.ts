@@ -239,6 +239,8 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     this.listDataGroup[i].children[y].children[z] = this.itemRowMatHangEdit[i][y][z]
     this.listDataGroup[i].children[y].children[z].edit = false;
     this.itemRowMatHangEdit[i][y][z] = {}
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   cancelEditRowMatHang(i: number, y: number, z: number) {
@@ -252,6 +254,8 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
       this.itemRowMatHang[i][y]
     ];
     this.clearItemRowMatHang(i, y);
+    this.tinhTongGtriNhomMh();
+    this.tinhTongGtriDvi();
   }
 
   clearItemRowMatHang(i: number, y: number) {
@@ -293,6 +297,7 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     this.listDataGroup[i].children[y] = this.itemRowNhomMhEdit[i][y]
     this.listDataGroup[i].children[y].edit = false;
     this.itemRowNhomMhEdit[i][y] = {};
+    this.tinhTongGtriDvi()
   }
 
   cancelEditRowNhomMh(i: number, y: number) {
@@ -300,4 +305,60 @@ export class ThemMoiSlGtriHangDtqgNhapComponent extends Base2Component implement
     this.itemRowNhomMhEdit[i][y] = {};
   }
 
+  tinhTongGtriDvi (){
+    for (let dvi of this.listDataGroup) {
+      dvi.gtriNhapTang = 0
+      dvi.gtriNhapBu = 0
+      dvi.gtriNhapBsung = 0
+      dvi.gtriNhapKhac = 0
+      dvi.gtriNhapTong = 0
+      dvi.gtriLuyKeTang = 0
+      dvi.gtriLuyKeBu = 0
+      dvi.gtriLuyKeBsung = 0
+      dvi.gtriLuyKeKhac = 0
+      dvi.gtriLuyKeTong = 0
+      for (let nhomMh of dvi.children) {
+        dvi.gtriNhapTang += this.nvl(nhomMh.gtriNhapTang)
+        dvi.gtriNhapBu += this.nvl(nhomMh.gtriNhapBu)
+        dvi.gtriNhapBsung += this.nvl(nhomMh.gtriNhapBsung)
+        dvi.gtriNhapKhac += this.nvl(nhomMh.gtriNhapKhac)
+        dvi.gtriNhapTong += this.nvl(nhomMh.gtriNhapTong)
+        dvi.gtriLuyKeTang += this.nvl(nhomMh.gtriLuyKeTang)
+        dvi.gtriLuyKeBu += this.nvl(nhomMh.gtriLuyKeBu)
+        dvi.gtriLuyKeBsung += this.nvl(nhomMh.gtriLuyKeBsung)
+        dvi.gtriLuyKeKhac += this.nvl(nhomMh.gtriLuyKeKhac)
+        dvi.gtriLuyKeTong += this.nvl(nhomMh.gtriLuyKeTong)
+      }
+    }
+  }
+  tinhTongGtriNhomMh (){
+    for (let dvi of this.listDataGroup) {
+      for (let nhomMh of dvi.children) {
+        if (nhomMh.coNhieuMatHang == true) {
+          nhomMh.gtriNhapTang = 0
+          nhomMh.gtriNhapBu = 0
+          nhomMh.gtriNhapBsung = 0
+          nhomMh.gtriNhapKhac = 0
+          nhomMh.gtriNhapTong = 0
+          nhomMh.gtriLuyKeTang = 0
+          nhomMh.gtriLuyKeBu = 0
+          nhomMh.gtriLuyKeBsung = 0
+          nhomMh.gtriLuyKeKhac = 0
+          nhomMh.gtriLuyKeTong = 0
+          for (let matHang of nhomMh.children) {
+            nhomMh.gtriNhapTang += this.nvl(matHang.gtriNhapTang)
+            nhomMh.gtriNhapBu += this.nvl(matHang.gtriNhapBu)
+            nhomMh.gtriNhapBsung += this.nvl(matHang.gtriNhapBsung)
+            nhomMh.gtriNhapKhac += this.nvl(matHang.gtriNhapKhac)
+            nhomMh.gtriNhapTong += this.nvl(matHang.gtriNhapTong)
+            nhomMh.gtriLuyKeTang += this.nvl(matHang.gtriLuyKeTang)
+            nhomMh.gtriLuyKeBu += this.nvl(matHang.gtriLuyKeBu)
+            nhomMh.gtriLuyKeBsung += this.nvl(matHang.gtriLuyKeBsung)
+            nhomMh.gtriLuyKeKhac += this.nvl(matHang.gtriLuyKeKhac)
+            nhomMh.gtriLuyKeTong += this.nvl(matHang.gtriLuyKeTong)
+          }
+        }
+      }
+    }
+  }
 }

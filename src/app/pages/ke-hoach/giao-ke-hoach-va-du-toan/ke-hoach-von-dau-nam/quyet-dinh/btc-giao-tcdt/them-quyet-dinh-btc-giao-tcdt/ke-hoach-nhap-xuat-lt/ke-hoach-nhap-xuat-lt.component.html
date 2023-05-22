@@ -19,13 +19,13 @@
                 <td rowspan="5">1</td>
                 <td style="font-weight: 500;">Vốn chi mua lương thực</td>
                 <td style="font-weight: 500;">
-                    {{ (keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht ) * 2 +
-                    keHoachNhapXuat.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
+                    {{ (keHoachNhapXuat?.soLuongMuaGaoLpdh + keHoachNhapXuat?.soLuongMuaGaoXcht ) * 2 +
+                    keHoachNhapXuat?.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
                 </td>
                 <td></td>
-                <td style="font-weight: 500;">{{ (( keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
-                    (keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
-                    (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
+                <td style="font-weight: 500;">{{ (( keHoachNhapXuat?.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
+                    (keHoachNhapXuat?.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
+                    (keHoachNhapXuat?.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
                     'vi_VN'}}
                 </td>
             </tr>

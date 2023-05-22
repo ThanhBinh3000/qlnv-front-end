@@ -11,22 +11,52 @@
     </div>
 
     <div class="btn-group">
+
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
+
       <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
         class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button *ngIf="!isView" type="button" class="btn btn-main ml-2" (click)="save()">
+
+      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-main ml-2"
+        (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
+
+      <button *ngIf="isView && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub"
+        (click)="guiDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Gửi duyệt</span>
+      </button>
+
+      <button
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.CHO_DUYET_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDTC"
+        type="button" class="btn btn-sub" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi do"></i>
+        <span>Từ chối</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub"
+        (click)="pheDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
+
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC" type="button" class="btn btn-info ml-2"
+        (click)="banHanh()">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
+      </button>
+
     </div>
   </div>
-  <!-- <nz-card class="mg-t-16 flex-card p-lr16"> -->
+
   <nz-collapse nzAccordion>
     <div class="mt16 flex-card p-lr16">
       <div class="header header-green-background mg-t-16">
@@ -46,10 +76,11 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Loại điều chuyển
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-radio-group formControlName="loaiDc">
-                  <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
+                <nz-radio-group formControlName="loaiDc" [nzDisabled]="isView" (ngModelChange)="onChangeLoaiDc($event)">
+                  <label nz-radio *ngFor="let p of listLoaiDC" [nzValue]="p.value">{{p.text}}</label>
+                  <!-- <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
                   <label nz-radio nzValue="CHI_CUC">Giữa 2 chi cục trong cùng 1 cục</label>
-                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label>
+                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label> -->
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
@@ -63,7 +94,7 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [disabled]="isDisabled()" formControlName="nam" nzAllowClear>
+                <nz-select [nzDisabled]="isView" formControlName="nam" nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -74,8 +105,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="/{{maQd}}">
-                  <nz-input-number formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999" [nzStep]="1"
-                    [nzSize]="'small'">
+                  <nz-input-number [nzDisabled]="isView" formControlName="soQdinh" [nzMin]="1" [nzMax]="999999999999"
+                    [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -85,7 +116,7 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày ký quyết định</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayKyQdinh" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -94,14 +125,14 @@
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Ngày hiệu lực</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [disabled]="isDisabled()" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                <nz-date-picker [nzDisabled]="isView" formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [disabled]="isDisabled()" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [nzDisabled]="isView" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
@@ -139,7 +170,7 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control>
-                <input nz-input formControlName="trichYeu" [readonly]="isDisabled()" />
+                <input nz-input formControlName="trichYeu" [readonly]="isView" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -150,7 +181,7 @@
                 Căn cứ pháp lý
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="canCu" [disabled]="isDisabled()"></file-list>
+                <file-list [data]="canCu" [disabled]="isView" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -161,7 +192,7 @@
                 File đính kèm QĐ phê duyệt KH điều chuyển nội bộ của Tổng cục đã ban hành
               </nz-form-label>
               <div class="list-file">
-                <file-list [data]="quyetDinh" [disabled]="isDisabled()"></file-list>
+                <file-list [data]="quyetDinh" [disabled]="isView" [isViewDetail]="isView"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -169,28 +200,10 @@
       </nz-card>
 
 
-      <!-- <div nz-col [nzSpan]="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
-                  </div>
-                </ng-template>
-              </div>
-            </nz-form-control>
-          </nz-form-item>
-        </div> -->
     </form>
 
   </nz-collapse>
-  <!-- </nz-card> -->
+
   <div class="mt16 flex-card p-lr16">
     <div *ngIf="isTongCuc()" class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -215,14 +228,14 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-            <tr [ngClass]="{'bg-selected': item.selected}" (click)="selectRow(item)">
+            <tr>
               <td>{{i + 1}}</td>
-              <td>{{item.tenDviCuc}}</td>
-              <td>{{item.tenCucNhan}}</td>
-              <td>{{item.soDxuat}}</td>
-              <td>{{item.ngayGduyet}}</td>
-              <td>{{item.tongDuToanKp|number: '1.0-1'}}</td>
-              <td>{{item.trichYeu}}</td>
+              <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
+              <td>{{item.tenCucNhan || ""}}</td>
+              <td>{{item.soDxuat || ""}}</td>
+              <td>{{item.ngayGduyet || ""}}</td>
+              <td>{{item.tongDuToanKp|number: '1.0-1' || ""}}</td>
+              <td>{{item.trichYeu || ""}}</td>
             </tr>
           </ng-container>
         </tbody>
@@ -236,154 +249,345 @@
         <div class="title-card">
           <div class="title-chi-tieu">
             <span></span>
-            <span *ngIf="isTongCuc()">Quyết định của TCDTNN</span>
-            <span *ngIf="isCuc()"> QUYẾT ĐỊNH ĐIỀU CHUYỂN NỘI BỘ HÀNG DTQG TRONG CÙNG 1 CHI CỤC DTNN</span>
+            <span>Quyết định của TCDTNN</span>
           </div>
         </div>
-        <div class="btn-group">
-          <button *ngIf="!isView && isCuc()" type="button" class="btn btn-main ml-2" (click)="add()">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-        </div>
+
       </div>
 
-      <nz-table *ngIf="isTongCuc()" #expandTable [nzData]="formData.value.listOfMapData" class="nowrap table-chi-tiet"
-        nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table *ngIf="formData.value.loaiDc === 'CHI_CUC'" #basicTable class="nowrap table-chi-tiet"
+        [nzData]="dataTableView" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
-            <th [rowspan]="2">STT</th>
-            <th [rowspan]="2"></th>
-            <th [rowspan]="2"></th>
-            <th [colspan]="9">Chi cục đề xuất điều chuyển</th>
-            <th [rowspan]="2">Thời gian dự kiến điều chuyển</th>
-            <th [colspan]="7">Chi cục nhận chuyển đến</th>
+            <th rowspan="2" width="60px" class="text-center">STT</th>
+            <th rowspan="2"></th>
+            <th rowspan="2"></th>
+            <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+            <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
+              Thời gian dự
+              kiến điều chuyển</th>
+            <th colspan="5" class="text-center">Chi cục nhận điều chuyển đến</th>
+            <th rowspan="2" class="text-center break max-w-90 min-w-90">Trạng thái xác định điểm
+              nhập
+            </th>
           </tr>
           <tr>
             <th>Chi cục</th>
             <th>Điểm kho</th>
             <th>Lô kho</th>
-            <th>Loại HH</th>
-            <th>Chủng loại hàng hóa</th>
-            <th>ĐVT</th>
-            <th>Tồn kho</th>
-            <th>Số lượng điều chuyển</th>
-            <th>Dự toán kinh phí(triệu đồng)</th>
+            <th class="text-center">Loại HH</th>
+            <th class="text-center">Chủng loại hàng hóa</th>
+            <th class="text-center">ĐVT</th>
+            <th class="text-center">Tồn kho</th>
+            <th class="text-center">Sl điều chuyển</th>
+            <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
             <th>Chi cục</th>
-            <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
-            <th>Tích lượng khả dụng</th>
-            <th>SL phân bổ nhập ĐC</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Lô kho</th>
+            <th class="text-center">Tích lượng khả dụng</th>
+            <th class="text-center">Sl nhập ĐC</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let data of expandTable.data, let i = index">
-            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
-              <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                <td>{{i + 1}}</td>
-                <td [nzShowExpand]="item.isEx" [(nzExpand)]="item.expand"
-                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                </td>
-                <td [nzShowExpand]="item.isCol" [(nzExpand)]="item.expand"
-                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                </td>
-                <td>{{ item.tenDvi }}</td>
-                <td>{{ item.tenDiemKho }}</td>
-                <td>{{ item.tenLoKho }}</td>
-                <td>{{ item.tenLoaiVthh }}</td>
-                <td>{{ item.tenCloaiVthh }}</td>
-                <td>{{ item.donViTinh }}</td>
-                <td>{{ item.tonKho }}</td>
-                <td>{{ item.soLuongDc }}</td>
-                <td>{{ item.duToanKphi }}</td>
-                <td>{{ item.thoiGianDkDc }}</td>
-                <td>{{ item.tenChiCucNhan }}</td>
-                <td>{{ item.tenDiemKhoNhan }}</td>
-                <td>{{ item.tenNhaKhoNhan }}</td>
-                <td>{{ item.tenNganKhoNhan }}</td>
-                <td>{{ item.tenLoKhoNhan }}</td>
-                <td>{{ item.tichLuongKd }}</td>
-                <td>{{ item.soLuongPhanBo }}</td>
-              </tr>
+          <ng-container *ngFor="let item of basicTable.data , let i = index">
+            <tr>
+              <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="item.expand"
+                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+              </td>
+              <td></td>
+              <td class="bold">{{ item.tenDvi || "" }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
+                'vi_VN'}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="item.expand">
+              <ng-container *ngFor="let bb of item.children, let y = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td [nzExpand]="bb.expand" (nzExpandChange)="bb.expand=!bb.expand">
+                  </td>
+                  <td></td>
+                  <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="bb.expand">
+                  <ng-container *ngFor="let c of bb.children, let y = index">
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoaiVthh || ""}}</td>
+                      <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                      <td class="bold">{{c.tenDonViTinh || ""}}</td>
+                      <td class="text-right bold">{{c.tonKho|number: '1.0-1':
+                        'vi_VN'}}
+                      </td>
+                      <td class="text-right bold">{{c.soLuongDc|number: '1.0-1':
+                        'vi_VN'}}</td>
+                      <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
+                        'vi_VN'}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <ng-container *ngFor="let d of c.children, let y = index">
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
+                        <td class="bold">{{d.tenChiCucNhan || ""}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-center">
+                          <label nz-checkbox [(ngModel)]="d.daXdinhDiemNhap" nzDisabled="true"></label>
+                        </td>
+                      </tr>
+                      <ng-container *ngFor="let e of d.children, let y = index">
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>{{(e.tenDiemKhoNhan || "")}}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                        <ng-container *ngFor="let e of d.children, let y = index">
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{e.tenLoKhoNhan}}</td>
+                            <td class="text-right">
+                              {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
+                            <td class="text-right">
+                              {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+                            <td></td>
+                          </tr>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </tbody>
       </nz-table>
 
-      <nz-table *ngIf="isCuc()" #expandTable [nzData]="listOfMapData" class="nowrap table-chi-tiet" nzBordered
-        [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table *ngIf="formData.value.loaiDc === 'CUC'" #basicTable class="nowrap table-chi-tiet"
+        [nzData]="dataTableView" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
-            <th [rowspan]="2">STT</th>
-            <th [rowspan]="2"></th>
-            <th [rowspan]="2"></th>
-            <th [colspan]="10">Ngăn/lô/kho đang bảo quản hàng hoá</th>
-            <!-- <th [rowspan]="2">Thời gian dự kiến điều chuyển</th> -->
-            <th [colspan]="7">Ngăn/lô/kho điều chuyển đến</th>
-            <th [rowspan]="2">Hành động</th>
+            <th rowspan="2" width="60px" class="text-center">STT</th>
+            <th rowspan="2"></th>
+            <th rowspan="2"></th>
+            <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+            <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
+              Thời gian dự
+              kiến điều chuyển</th>
+            <th colspan="7" class="text-center">Chi cục nhận điều chuyển đến</th>
           </tr>
           <tr>
             <th>Chi cục</th>
             <th>Điểm kho</th>
             <th>Lô kho</th>
-            <th>Loại HH</th>
-            <th>Chủng loại hàng hóa</th>
-            <th>ĐVT</th>
-            <th>Tồn kho</th>
-            <th>Số lượng điều chuyển</th>
-            <th>Dự toán kinh phí(triệu đồng)</th>
-            <th>Thời gian dự kiến điều chuyển</th>
-            <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
-            <th>Thay đổi thủ kho</th>
-            <th>Tích lượng khả dụng</th>
-            <th>SL phân bổ nhập ĐC</th>
+            <th class="text-center">Loại HH</th>
+            <th class="text-center">Chủng loại hàng hóa</th>
+            <th class="text-center">ĐVT</th>
+            <th class="text-center">Tồn kho</th>
+            <th class="text-center">Sl điều chuyển</th>
+            <th class="text-center break min-w-120 max-w-120">Dự toán kinh phí (triệu đồng)</th>
+            <th>Chi cục</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Nhà kho</th>
+            <th class="text-center">Ngăn kho</th>
+            <th class="text-center">Lô kho</th>
+            <th class="text-center">Tích lượng khả dụng</th>
+            <th class="text-center">Sl nhập ĐC</th>
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let data of expandTable.data">
-            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
-              <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                <td>1</td>
-                <td [nzShowExpand]="item.isEx" [(nzExpand)]="item.expand"
-                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                </td>
-                <td [nzShowExpand]="item.isCol" [(nzExpand)]="item.expand"
-                  (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                </td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.name }}</td>
-                <td>7{{ item.age }}</td>
-                <td>8{{ item.address }}</td>
-                <td>9{{ item.address }}</td>
-                <td>10{{ item.age }}</td>
-                <td>11{{ item.address }}</td>
-                <td>12{{ item.age }}</td>
-                <td>13{{ item.address }}</td>
-                <td>14{{ item.age }}</td>
-                <td>15{{ item.address }}</td>
-                <td>16{{ item.age }}</td>
-                <td>17{{ item.address }}</td>
-                <td class="text-center">
-                  <a *ngIf="data.trangThai !== STATUS.DU_THAO">
-                    <i class="fa fa-eye"></i>
-                  </a>
-                  <a *ngIf="data.trangThai == STATUS.DU_THAO">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <!-- <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a> -->
-                </td>
-              </tr>
+          <ng-container *ngFor="let item of basicTable.data , let i = index">
+            <tr>
+              <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="item.expand"
+                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+              </td>
+              <td></td>
+              <td class="bold">{{ item.tenDvi || "" }}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
+                'vi_VN'}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <ng-container *ngIf="item.expand">
+              <ng-container *ngFor="let bb of item.children, let y = index">
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td [nzExpand]="bb.expand" (nzExpandChange)="bb.expand=!bb.expand">
+                  </td>
+                  <td></td>
+                  <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <ng-container *ngIf="bb.expand">
+                  <ng-container *ngFor="let c of bb.children, let y = index">
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoaiVthh || ""}}</td>
+                      <td class="bold">{{c.tenCloaiVthh || ""}}</td>
+                      <td class="bold">{{c.tenDonViTinh || ""}}</td>
+                      <td class="text-right bold">{{c.tonKho|number: '1.0-1':
+                        'vi_VN'}}
+                      </td>
+                      <td class="text-right bold">{{c.soLuongDc|number: '1.0-1':
+                        'vi_VN'}}</td>
+                      <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
+                        'vi_VN'}}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <ng-container *ngFor="let d of c.children, let y = index">
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="bold">{{c.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
+                        <td class="bold">{{d.tenChiCucNhan || ""}}</td>
+                        <td>{{(d.tenDiemKhoNhan || "")}}</td>
+                        <td>{{(d.tenNhaKhoNhan || "")}}</td>
+                        <td>{{(d.tenNganKhoNhan || "")}}</td>
+                        <td>{{d.tenLoKhoNhan}}</td>
+                        <td class="text-right">
+                          {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
+                        <td class="text-right">
+                          {{c.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+                      </tr>
+
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </tbody>

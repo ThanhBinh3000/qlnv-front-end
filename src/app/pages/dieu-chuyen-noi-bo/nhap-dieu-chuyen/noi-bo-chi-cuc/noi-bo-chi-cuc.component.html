@@ -1,0 +1,21 @@
+<div>
+  <nz-affix>
+    <ul nz-menu nzMode="horizontal">
+      <li nz-menu-item nzSelected (click)="selectTab(0)">
+        Thay đổi thủ kho
+      </li>
+      <li nz-menu-item (click)="selectTab(1)">
+        Không thay đổi thủ kho
+      </li>
+    </ul>
+  </nz-affix>
+
+  <div>
+
+    <app-thay-doi-thu-kho *ngIf="tabSelected == 0"></app-thay-doi-thu-kho>
+    <app-khong-thay-doi-thu-kho *ngIf="tabSelected == 1"></app-khong-thay-doi-thu-kho>
+
+  </div>
+
+
+</div>
