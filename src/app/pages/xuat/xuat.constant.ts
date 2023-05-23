@@ -37,9 +37,9 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Xuất khác',
-    url: `/cuu-tro-ho-tro`,
-    dropdown: 'dau-thau',
-    idHover: 'dauthau',
+    url: `/xuat-khac`,
+    dropdown: 'xuat-khac',
+    idHover: 'xuat-khac',
     hasTab: false,
   },
   /*{
