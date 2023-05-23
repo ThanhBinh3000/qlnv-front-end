@@ -22,8 +22,20 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
           </button>
+          <button (click)="reject(idInput,STATUS.TU_CHOI_LDTC)"
+                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
+                  class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_tuchoi do"></i>
+            <span>Từ chối</span>
+          </button>
           <button (click)="approve(idInput,STATUS.CHO_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
                   *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDV') && (formData.value.trangThai===STATUS.CHO_DUYET_LDV)"
+                  class="btn btn-sub" type="button">
+            <i class="icon htvbdh_tcdt_pheduyet"></i>
+            <span>Duyệt</span>
+          </button>
+          <button (click)="approve(idInput,STATUS.DA_DUYET_LDTC,'Bạn có muốn duyệt quyết định này')"
+                  *ngIf="userService.isAccessPermisson('XHDTQG_XTL_HSTL_DUYETLDTC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDTC)"
                   class="btn btn-sub" type="button">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
@@ -363,7 +375,18 @@
       </div>
     </div>
   </div>
-
+  <form nz-form nzLayout="vertical" [formGroup]="formData" *ngIf="userService.isTongCuc()">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Kết quả đánh giá của Cán bộ Vụ QLHDT</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <textarea rows="3" class="search__input" nz-input formControlName="ketQua" [readOnly]="isView"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
   <ng-template #error let-control>
     <app-template-error #error [control]="control"></app-template-error>
   </ng-template>

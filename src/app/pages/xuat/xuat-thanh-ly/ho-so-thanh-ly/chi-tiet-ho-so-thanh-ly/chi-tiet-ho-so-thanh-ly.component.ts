@@ -104,6 +104,7 @@ export class ChiTietHoSoThanhLyComponent extends Base2Component implements OnIni
       trichYeu: [, [Validators.required]],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
+      ketQua: [],
       ngayKyQd: [],
       ngayGduyet: [],
       nguoiGduyetId: [],
@@ -157,7 +158,7 @@ export class ChiTietHoSoThanhLyComponent extends Base2Component implements OnIni
           if (res.msg == MESSAGE.SUCCESS) {
             this.maHauTo = '/' + res.data.soHoSo.split("/")[1];
             res.data.soHoSo = res.data.soHoSo.split("/")[0];
-            res.data.thoiGianTl= [res.data.thoiGianTlTu, res.data.thoiGianTlDen],
+            res.data.thoiGianTl = [res.data.thoiGianTlTu, res.data.thoiGianTlDen],
               this.formData.patchValue(res.data);
             this.formData.value.hoSoDtl.forEach(s => {
               s.idVirtual = uuidv4();
