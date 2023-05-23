@@ -19,12 +19,11 @@ import { DialogThemMoiBangKeBanLeComponent } from 'src/app/components/dialog/dia
 export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: String;
   @Input() idInput: number;
-  @Input() pthucBanTrucTiep: string;
   maQd: string = null;
   listOfData: any[] = [];
-  radioValue: string;
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
+  listPthucBanTt: any[] = [];
 
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -68,7 +67,10 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
     try {
       this.maQd = this.userInfo.MA_QD;
       if (this.idInput) {
-        await this.loadDetail(this.idInput)
+        await Promise.all([
+          this.loadDetail(this.idInput),
+          this.loadDataComboBox(),
+        ]);
       }
     } catch (e) {
       console.log('error: ', e);
@@ -76,6 +78,19 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
     await this.spinner.hide();
+  }
+
+  async loadDataComboBox() {
+    this.listPthucBanTt = [
+      {
+        ma: '02',
+        giaTri: 'Ủy quyền',
+      },
+      {
+        ma: '03',
+        giaTri: 'Bán lẻ',
+      },
+    ];
   }
 
 
@@ -100,13 +115,10 @@ export class ThongTinQuyetDinhUyQuyenBanLeComponent extends Base2Component imple
             loaiVthh: dataDtl.xhQdPdKhBttHdr.loaiVthh,
             tenLoaiVthh: dataDtl.xhQdPdKhBttHdr.tenLoaiVthh,
             pthucBanTrucTiep: dataDtl.pthucBanTrucTiep,
-            trichYeu: dataDtl.xhQdPdKhBttHdr.trichYeu,
+            trichYeu: dataDtl.trichYeu,
             thoiGianDeXuatBtt: (dataDtl.tgianDkienTu && dataDtl.tgianDkienDen) ? [dataDtl.tgianDkienTu, dataDtl.tgianDkienDen] : null,
             thoiGianPdBtt: (dataDtl.ngayMkho && dataDtl.ngayKthuc) ? [dataDtl.ngayMkho, dataDtl.ngayKthuc] : null
           })
-          if (this.pthucBanTrucTiep) {
-            this.radioValue = this.pthucBanTrucTiep
-          }
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
         })

@@ -121,7 +121,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         tenLoaiVthh: [],
         tenTrangThai: ['Dự Thảo'],
         tenNhaKho: ['', [Validators.required]],
-        tenDiemKho:  ['', [Validators.required]],
+        tenDiemKho: ['', [Validators.required]],
         tenLoKho: [],
         tenNganKho: ['', [Validators.required]],
         listPhieuXuatKho: [new Array()],
@@ -176,7 +176,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
         soBbHaoDoi: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
         ngayTaoBb: dayjs().format('YYYY-MM-DD'),
         thuKho: this.userInfo.TEN_DAY_DU,
-        loaiVThh:this.loaiVthh
+        loaiVThh: this.loaiVthh
 
       });
     }
@@ -220,7 +220,7 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
 
   async openDialogSoQd() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ xuất hàng',
+      nzTitle: 'Danh sách số quyết định giao nhiệm vụ xuất hàng',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -314,6 +314,38 @@ export class ThemMoiBienBanHaoDoiComponent extends Base2Component implements OnI
     })
   }
 
+  changeSoQd(event) {
+    if (event && event !== this.formData.value.soQdGiaoNvXh) {
+      this.formData.patchValue({
+        maDiemKho: null,
+        tenDiemKho: null,
+        maNhaKho: null,
+        tenNhaKho: null,
+        maNganKho: null,
+        tenNganKho: null,
+        maLoKho: null,
+        tenLoKho: null,
+        soPhieuKnCl: null,
+        loaiVthh: null,
+        cloaiVthh: null,
+        tenLoaiVthh: null,
+        tenCloaiVthh: null,
+        moTaHangHoa: null,
+      });
+    }
+  }
+
+  changeDd(event) {
+    if (event && event !== this.formData.value.maDiemKho) {
+      this.dataTable.forEach(s => {
+          s.slXuat = null;
+          s.soBkCanHang = null;
+          s.idBkCanHang = null;
+          s.idPhieuXuatKho = null;
+        }
+      )
+    }
+  }
 
   async save() {
     this.formData.disable()

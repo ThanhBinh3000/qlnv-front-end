@@ -127,113 +127,113 @@
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
-        <tr class="search-table">
-          <th></th>
-          <th></th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.soQdGiaoNvXh"
-                     (input)="filterInTable('soQdGiaoNvXh',filterTable.soQdGiaoNvXh)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                     (input)="filterInTable('nam',filterTable.nam)" size="small"/>
-            </nz-input-group>
+<!--        <tr class="search-table">-->
+<!--          <th></th>-->
+<!--          <th></th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.soQdGiaoNvXh"-->
+<!--                     (input)="filterInTable('soQdGiaoNvXh',filterTable.soQdGiaoNvXh)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                     (input)="filterInTable('nam',filterTable.nam)" size="small"/>-->
+<!--            </nz-input-group>-->
 
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.ngayQdGiaoNvXh"
-                     (input)="filterInTable('ngayQdGiaoNvXh',filterTable.ngayQdGiaoNvXh)" size="small"/>
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbHaoDoi"
-                     (input)="filterInTable('soBbHaoDoi',filterTable.soBbHaoDoi)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"
-                     (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.ngayBatDauXuatTu"
-                     (input)="filterInTable('ngayBatDauXuatTu',filterTable.ngayBatDauXuatTu)"
-                     size="small"/>
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.ngayKetThucXuat"
-                     (input)="filterInTable('ngayKetThucXuat',filterTable.ngayKetThucXuat)"
-                     size="small"/>
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                     (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small"/>
-            </nz-input-group>
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.ngayQdGiaoNvXh"-->
+<!--                     (input)="filterInTable('ngayQdGiaoNvXh',filterTable.ngayQdGiaoNvXh)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--            <ng-template #suffixTemplateInfo>-->
+<!--              <i nz-icon nzType="calendar"></i>-->
+<!--            </ng-template>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbHaoDoi"-->
+<!--                     (input)="filterInTable('soBbHaoDoi',filterTable.soBbHaoDoi)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBbTinhKho"-->
+<!--                     (input)="filterInTable('soBbTinhKho',filterTable.soBbTinhKho)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.ngayBatDauXuatTu"-->
+<!--                     (input)="filterInTable('ngayBatDauXuatTu',filterTable.ngayBatDauXuatTu)"-->
+<!--                     size="small"/>-->
+<!--            </nz-input-group>-->
+<!--            <ng-template #suffixTemplateInfo>-->
+<!--              <i nz-icon nzType="calendar"></i>-->
+<!--            </ng-template>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.ngayKetThucXuat"-->
+<!--                     (input)="filterInTable('ngayKetThucXuat',filterTable.ngayKetThucXuat)"-->
+<!--                     size="small"/>-->
+<!--            </nz-input-group>-->
+<!--            <ng-template #suffixTemplateInfo>-->
+<!--              <i nz-icon nzType="calendar"></i>-->
+<!--            </ng-template>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"-->
+<!--                     (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small"/>-->
+<!--            </nz-input-group>-->
 
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"
-                     (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small"/>
-            </nz-input-group>
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoKho"-->
+<!--                     (input)="filterInTable('tenLoKho',filterTable.tenLoKho)" size="small"/>-->
+<!--            </nz-input-group>-->
 
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBkCanHang"
-                     (input)="filterInTable('soBkCanHang',filterTable.soBkCanHang)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.soPhieuXuatKho"
-                     (input)="filterInTable('soPhieuXuatKho',filterTable.soPhieuXuatKho)" size="small"/>
-            </nz-input-group>
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBkCanHang"-->
+<!--                     (input)="filterInTable('soBkCanHang',filterTable.soBkCanHang)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.soPhieuXuatKho"-->
+<!--                     (input)="filterInTable('soPhieuXuatKho',filterTable.soPhieuXuatKho)" size="small"/>-->
+<!--            </nz-input-group>-->
 
-          </th>
-          <th>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayXuatKho"
-                     (input)="filterInTable('ngayXuatKho',filterTable.ngayXuatKho)" size="small"/>
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm"
-                     [(ngModel)]="filterTable.tenTrangThai"
-                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>
-            </nz-input-group>
-          </th>
-          <th></th>
-        </tr>
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group [nzSuffix]="suffixTemplateInfo">-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayXuatKho"-->
+<!--                     (input)="filterInTable('ngayXuatKho',filterTable.ngayXuatKho)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--            <ng-template #suffixTemplateInfo>-->
+<!--              <i nz-icon nzType="calendar"></i>-->
+<!--            </ng-template>-->
+<!--          </th>-->
+<!--          <th>-->
+<!--            <nz-input-group>-->
+<!--              <input type="text" nz-input placeholder="Tìm kiếm"-->
+<!--                     [(ngModel)]="filterTable.tenTrangThai"-->
+<!--                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small"/>-->
+<!--            </nz-input-group>-->
+<!--          </th>-->
+<!--          <th></th>-->
+<!--        </tr>-->
         </thead>
         <tbody>
 

@@ -149,7 +149,8 @@
                                     Căn cứ pháp lý
                                 </nz-form-label>
                                 <div class="list-file">
-                                    <file-list [disabled]="isDisabled()" [data]="fileCanCu"></file-list>
+                                    <file-list [disabled]="isDisabled()" [isCanCuPL]="true"
+                                        [data]="fileCanCu"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -302,7 +303,7 @@
                             <th class="text-center wrap">Ngày chào giá</th>
                             <th class="text-center wrap">Số lượng (Kg)</th>
                             <th class="text-center wrap">Đơn giá chưa bao gồm thuế (VNĐ)</th>
-                            <th class="text-center wrap">Thuế GTGT</th>
+                            <!-- <th class="text-center wrap">Thuế GTGT</th> -->
                             <th class="text-center wrap">Thành tiền</th>
                             <th class="text-center wrap">File đính kèm</th>
                             <th class="text-center wrap">Lựa chọn</th>
@@ -320,7 +321,7 @@
                                 <td nzLeft>{{data.ngayChaoGia | date: 'dd/MM/YYYY'}}</td>
                                 <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td nzLeft>{{data.thueGtgt}}</td>
+                                <!-- <td nzLeft>{{data.thueGtgt}}</td> -->
                                 <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
                                 <td> <label nz-checkbox [(ngModel)]="data.luaChon"
@@ -345,7 +346,7 @@
                                 <td nzLeft>{{data.ngayChaoGia}}</td>
                                 <td nzLeft>{{data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td nzLeft>{{data.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td nzLeft>{{data.thueGtgt}}</td>
+                                <!-- <td nzLeft>{{data.thueGtgt}}</td> -->
                                 <td nzLeft>{{data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td nzLeft class="text-blue">{{data.fileDinhKems?.fileName }}</td>
                                 <td nzLeft>

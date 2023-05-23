@@ -408,28 +408,30 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       );
       return;
     }
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_LDC:
-      case STATUS.TU_CHOI_TP:
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
-        msg = MESSAGE.GUI_DUYET_CONFIRM
-        break;
+    if (this.validatemaDviTsan()) {
+      let trangThai = '';
+      let msg = '';
+      switch (this.formData.get('trangThai').value) {
+        case STATUS.TU_CHOI_LDC:
+        case STATUS.TU_CHOI_TP:
+        case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_TP;
+          msg = MESSAGE.GUI_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_TP: {
+          trangThai = STATUS.CHO_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
+        case STATUS.CHO_DUYET_LDC: {
+          trangThai = STATUS.DA_DUYET_LDC;
+          msg = MESSAGE.PHE_DUYET_CONFIRM
+          break;
+        }
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
+      this.approve(this.idInput, trangThai, msg);
     }
-    this.approve(this.idInput, trangThai, msg);
   }
 
   tuChoi() {
@@ -445,6 +447,33 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       }
     };
     this.reject(this.idInput, trangThai);
+  }
+
+  validatemaDviTsan(): boolean {
+    if (this.dataTable && this.dataTable.length > 0) {
+      let data = this.dataTable.flatMap(s => s.children)
+      const checkMaDviTsan = {};
+      data.forEach((item) => {
+        const maDviTsan = item.maDviTsan;
+        if (checkMaDviTsan[maDviTsan]) {
+          checkMaDviTsan[maDviTsan]++;
+        } else {
+          checkMaDviTsan[maDviTsan] = 1;
+        }
+      });
+      let result = '';
+      for (let prop in checkMaDviTsan) {
+        if (checkMaDviTsan[prop] > 1) {
+          result += `${prop} ( hiện đang bị lặp lại ${checkMaDviTsan[prop]} lần), `;
+        }
+      }
+      let rs = Object.values(checkMaDviTsan).some(value => +value > 1);
+      if (rs == true) {
+        this.notification.error(MESSAGE.ERROR, "Mã đơn vị tài sản " + result.slice(0, -2) + " vui lòng nhập lại");
+        return false;
+      }
+    }
+    return true;
   }
 
   async ngOnChanges(changes: SimpleChanges) {
