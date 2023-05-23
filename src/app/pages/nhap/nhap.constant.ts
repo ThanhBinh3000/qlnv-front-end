@@ -3,6 +3,7 @@ import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 export const NHAP_MAIN_ROUTE = 'nhap';
 export const NHAP_THEO_KE_HOACH = 'nhap-theo-ke-hoach';
 export const MUA_TRUC_TIEP = 'mua-truc-tiep';
+export const NHAP_KHAC = 'khac';
 export const NHAP_THEO_PHUONG_THUC_DAU_THAU = 'nhap-theo-phuong-thuc-dau-thau';
 export const THOC = 'thoc';
 export const GAO = 'gao';
