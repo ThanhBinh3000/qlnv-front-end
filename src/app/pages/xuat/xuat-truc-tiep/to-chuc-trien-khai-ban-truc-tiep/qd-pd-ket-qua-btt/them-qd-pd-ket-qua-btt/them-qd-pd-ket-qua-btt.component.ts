@@ -38,6 +38,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
   fileQd: any[] = [];
   selected: boolean = false;
   luaChon: boolean = false;
+  loadQdKqBtt: any[] = []
 
   constructor(
     private httpClient: HttpClient,
@@ -76,6 +77,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       pthucBanTrucTiep: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
+      soDxuat: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
@@ -209,17 +211,26 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       maDvi: this.userInfo.MA_DVI,
-      pthucBanTrucTiep: ['Chào giá'],
-      typeSoQdKq: 0,
+      pthucBanTrucTiep: ['01'],
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       }
     }
+    await this.loadQdNvXuatHang();
     let listTb = [];
     let res = await this.chaoGiaMuaLeUyQuyenService.search(body);
-    if (res.data) {
-      listTb = res.data.content;
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = [
+        ...res.data.content.filter((item) => {
+          return !this.loadQdKqBtt.some((child) => {
+            if (child.soDxuat.length > 0 && item.soDxuat.length > 0) {
+              return item.soDxuat === child.soDxuat;
+            }
+          })
+        })
+      ]
+      listTb = data;
     }
     const modalQD = this.modal.create({
       nzTitle: 'DANH SÁCH THÔNG TIN CHÀO GIÁ',
@@ -230,8 +241,8 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       nzFooter: null,
       nzComponentParams: {
         dataTable: listTb,
-        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Phương thức bán trực tiếp', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQdPd', 'pthucBanTrucTiep', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số quyết định phê duyệt KH BTT', 'Số Đề xuất kế hoạch bán trực tiếp', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soQdPd', 'soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -239,6 +250,18 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         await this.onChangeTtin(data.id);
       }
     });
+  }
+
+  async loadQdNvXuatHang() {
+    let body = {
+      maDvi: this.userInfo.MA_DVI,
+      namKh: this.formData.value.namKh,
+      loaiVthh: this.loaiVthh,
+    }
+    let res = await this.qdPdKetQuaBttService.search(body);
+    if (res.data) {
+      this.loadQdKqBtt = res.data.content;
+    }
   }
 
   async onChangeTtin(idPdKhDtl) {
@@ -258,6 +281,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
         pthucBanTrucTiep: data.pthucBanTrucTiep,
         loaiHinhNx: data.xhQdPdKhBttHdr.loaiHinhNx,
         kieuNx: data.xhQdPdKhBttHdr.kieuNx,
+        soDxuat: data.soDxuat,
         idPdKhDtl: data.id,
         idPdKhHdr: data.xhQdPdKhBttHdr.id
       })

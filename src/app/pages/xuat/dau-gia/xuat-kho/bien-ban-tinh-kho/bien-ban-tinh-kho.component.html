@@ -91,11 +91,11 @@
           <th>Số BB tịnh kho</th>
           <th>Ngày bắt đầu xuất</th>
           <th>Ngày kết thúc xuất</th>
-          <th>Điểm Kho</th>
-          <th>Lô kho</th>
           <th>Số phiếu XK</th>
           <th>Ngày xuất kho</th>
           <th>Số bảng kê</th>
+          <th>Điểm Kho</th>
+          <th>Lô kho</th>
           <th>Trạng thái</th>
           <th>Hành động</th>
         </tr>
@@ -237,8 +237,8 @@
                 <td class="bold">{{lv1.soBbTinhKho}}</td>
                 <td class="bold">{{lv1.ngayBatDauXuat | date: 'dd/MM/YYYY' }}</td>
                 <td class="bold">{{lv1.ngayKetThucXuat | date: 'dd/MM/YYYY' }}</td>
-                <td class="bold">{{lv1.tenDiemKho}}</td>
-                <td class="bold">{{lv1.tenLoKho}}</td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -279,13 +279,13 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td></td>
-                      <td></td>
                       <td><a *ngIf="lv2.soPhieuXuatKho" nz-button nzType="link"
                              (click)="openPhieuXkModal(lv2.idPhieuXuatKho)">{{lv2.soPhieuXuatKho}}</a></td>
                       <td>{{lv2.ngayXuatKho}}</td>
                       <td><a *ngIf="lv2.soPhieuXuatKho" nz-button nzType="link"
                              (click)="openBangKeModal(lv2.idBkCanHang)">{{lv2.soBkCanHang}}</a></td>
+                      <td>{{lv3.tenDiemKho}}</td>
+                      <td>{{ (lv3.tenLoKho ? lv3.tenLoKho + '-' : '') + lv3.tenNganKho }}</td>
                       <td></td>
                       <td class="text-left">
                       </td>
@@ -321,7 +321,7 @@
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
   <app-bdg-them-moi-bien-ban-tinh-kho [idInput]="selectedId" [isView]="isView" [loaiVthh]="loaiVthh"
-                                     (showListEvent)="showList()">
+                                      (showListEvent)="showList()">
   </app-bdg-them-moi-bien-ban-tinh-kho>
 </div>
 <nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openPhieuXk" (nzOnCancel)="closePhieuXkModal()">

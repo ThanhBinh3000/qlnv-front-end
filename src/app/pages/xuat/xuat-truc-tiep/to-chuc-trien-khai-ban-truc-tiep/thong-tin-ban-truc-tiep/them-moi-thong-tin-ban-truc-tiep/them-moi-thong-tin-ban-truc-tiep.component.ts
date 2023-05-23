@@ -24,13 +24,11 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() loaiVthh: String;
   @Input() idInput: number;
   @Input() isView: boolean;
-  @Input() pthucBanTrucTiep: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Output()
   dataTableChange = new EventEmitter<any>();
 
-  radioValue: string = 'Chào giá';
   fileDinhKemUyQuyen: any[] = [];
   fileDinhKemMuaLe: any[] = [];
   listOfData: any[] = [];
@@ -41,7 +39,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   soLuongDeXuat: number;
   donGiaDuocDuyet: number;
   idDviDtl: number;
-
 
 
   constructor(
@@ -64,7 +61,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         soQdPd: [''],
         maDvi: [''],
         tenDvi: [''],
-        pthucBanTrucTiep: [''],
+        pthucBanTrucTiep: ['01'],
         diaDiemChaoGia: [''],
         ngayMkho: [''],
         ngayKthuc: [''],
@@ -159,8 +156,10 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
           })
           this.fileDinhKemUyQuyen = dataDtl.fileDinhKemUyQuyen;
           this.fileDinhKemMuaLe = dataDtl.fileDinhKemMuaLe;
-          if (this.pthucBanTrucTiep) {
-            this.radioValue = this.pthucBanTrucTiep
+          if (dataDtl.pthucBanTrucTiep) {
+            this.formData.patchValue({
+              pthucBanTrucTiep: dataDtl.pthucBanTrucTiep.toString()
+            })
           }
         })
         .catch((e) => {
@@ -187,7 +186,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.setValidator(isGuiDuyet)
     let body = this.formData.value;
     body.children = this.dataTable
-    body.pthucBanTrucTiep = this.radioValue;
     body.fileDinhKemUyQuyen = this.fileDinhKemUyQuyen;
     body.fileDinhKemMuaLe = this.fileDinhKemMuaLe;
     let data = await this.createUpdate(body);
@@ -203,7 +201,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   }
 
   hoanThanhCapNhat() {
-    if (this.radioValue == 'Chào giá') {
+    if (this.formData.value.pthucBanTrucTiep == '01') {
       if (this.listOfData.length == 0) {
         this.notification.error(
           MESSAGE.ERROR,
@@ -220,7 +218,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   addRow(): void {
     if (this.idDviDtl) {
       this.rowItem.idDviDtl = this.idDviDtl
-      if (this.validateSoLuong(true)) {
+      if (this.validate()) {
         if (!this.listOfData) {
           this.listOfData = [];
         }
@@ -237,27 +235,19 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     }
   }
 
-  validateSoLuong(isAdd?) {
-    let tongSoLuong = 0
-    if (isAdd) {
-      tongSoLuong += this.rowItem.soLuong;
+  isDisabledLuaChon(item) {
+    if (this.rowItem.luaChon == item) {
+      return false
+    } else {
+      return true;
     }
-    this.listOfData.forEach(item => {
-      tongSoLuong += item.soLuong
-    })
-    if (this.rowItem.tochucCanhan && this.rowItem.mst && this.rowItem.diaDiemChaoGia && this.rowItem.sdt && this.rowItem.ngayChaoGia && this.rowItem.soLuong && this.rowItem.donGia && this.rowItem.thueGtgt) {
-      if (this.rowItem.soLuong > this.soLuongDeXuat) {
-        this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
-        return;
-      } else if (tongSoLuong > this.soLuongDeXuat) {
-        this.notification.error(MESSAGE.ERROR, " Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
-        return;
-      } else if (this.rowItem.donGia < this.donGiaDuocDuyet) {
-        this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải lớn hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDuocDuyet + "đ) vui lòng nhập lại")
-        return;
-      } else {
-        return true;
-      }
+  }
+
+
+
+  validate() {
+    if (this.rowItem.tochucCanhan && this.rowItem.mst && this.rowItem.diaDiemChaoGia && this.rowItem.sdt && this.rowItem.ngayChaoGia && this.rowItem.soLuong && this.rowItem.donGia) {
+      return true
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return false
@@ -330,7 +320,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     this.listOfData.forEach(item => {
       tongSoLuong += item.soLuong
     })
-    if (this.dataEdit[index].data.tochucCanhan && this.dataEdit[index].data.mst && this.dataEdit[index].data.diaDiemChaoGia && this.dataEdit[index].data.sdt && this.dataEdit[index].data.ngayChaoGia && this.dataEdit[index].data.soLuong && this.dataEdit[index].data.donGia && this.dataEdit[index].data.thueGtgt) {
+    if (this.dataEdit[index].data.tochucCanhan && this.dataEdit[index].data.mst && this.dataEdit[index].data.diaDiemChaoGia && this.dataEdit[index].data.sdt && this.dataEdit[index].data.ngayChaoGia && this.dataEdit[index].data.soLuong && this.dataEdit[index].data.donGia) {
       if (this.dataEdit[index].data.soLuong > this.soLuongDeXuat) {
         this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
         return;
@@ -346,6 +336,31 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return false
+    }
+  }
+
+  changeLuaChon(isAdd?) {
+    let tongSoLuong = 0
+    if (isAdd) {
+      tongSoLuong += this.rowItem.soLuong;
+    }
+    this.listOfData.forEach(item => {
+      tongSoLuong += item.soLuong
+    })
+    if (this.rowItem.soLuong > this.soLuongDeXuat) {
+      this.notification.error(MESSAGE.ERROR, " Số lượng chào giá phải nhỏ hơn hoặc bằng số lượng bán trực tiếp đề xuất (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+      this.rowItem.luaChon = false;
+      return;
+    } else if (tongSoLuong > this.soLuongDeXuat) {
+      this.notification.error(MESSAGE.ERROR, " Tổng số lượng đơn giá chào giá phải nhỏ hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.soLuongDeXuat + "đ) vui lòng nhập lại")
+      this.rowItem.luaChon = false;
+      return;
+    } else if (this.rowItem.donGia < this.donGiaDuocDuyet) {
+      this.notification.error(MESSAGE.ERROR, " Đơn giá chào giá phải lớn hơn hoặc bằng đơn giá được duyệt bán trực tiếp (" + this.donGiaDuocDuyet + "đ) vui lòng nhập lại")
+      this.rowItem.luaChon = false;
+      return;
+    } else {
+      return true;
     }
   }
 
@@ -474,7 +489,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["ngayMkho"].clearValidators();
       this.formData.controls["ngayKthuc"].clearValidators();
     }
-    if (this.radioValue == 'Chào giá' && isGuiDuyet) {
+    if (this.formData.value.pthucBanTrucTiep == '01' && isGuiDuyet) {
       this.formData.controls["diaDiemChaoGia"].setValidators([Validators.required]);
       this.formData.controls["ghiChu"].setValidators([Validators.required]);
     } else {
@@ -482,7 +497,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
       this.formData.controls["ghiChu"].clearValidators();
 
     }
-    if (this.radioValue != 'Chào giá' && isGuiDuyet) {
+    if (this.formData.value.pthucBanTrucTiep != '01' && isGuiDuyet) {
       this.formData.controls["thoiHanBan"].setValidators([Validators.required]);
     } else {
       this.formData.controls["thoiHanBan"].clearValidators();
