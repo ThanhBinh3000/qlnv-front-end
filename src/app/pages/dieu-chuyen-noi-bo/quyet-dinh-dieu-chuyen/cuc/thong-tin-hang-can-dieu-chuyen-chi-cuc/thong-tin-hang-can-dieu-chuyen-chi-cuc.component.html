@@ -10,7 +10,7 @@
           <div nz-col nzSpan="10">
             <nz-form-item>
               <nz-form-control>
-                <nz-select [nzDisabled]="!!maDvi" formControlName="maDvi" nzAllowClear
+                <nz-select [nzDisabled]="this.data && !!this.data.maDvi" formControlName="maDvi" nzAllowClear
                   (ngModelChange)="onChangeChiCucDC($event)">
                   <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                 </nz-select>
@@ -45,7 +45,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maDiemKho" formControlName="maDiemKho" nzAllowClear
+                    <nz-select [nzDisabled]="true" formControlName="maDiemKho" nzAllowClear
                       (ngModelChange)="getListNhaKho($event)">
                       <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -60,7 +60,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNhaKho" formControlName="maNhaKho" nzAllowClear
+                    <nz-select [nzDisabled]="true" formControlName="maNhaKho" nzAllowClear
                       (ngModelChange)="getListNganKho($event)">
                       <nz-option *ngFor="let p of dsNhaKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -75,7 +75,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNganKho" formControlName="maNganKho" nzAllowClear
+                    <nz-select [nzDisabled]="true" formControlName="maNganKho" nzAllowClear
                       (ngModelChange)="getListLoKho($event)">
                       <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -83,14 +83,14 @@
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
+            <div *ngIf="dsLoKho.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span>Lô kho</span>
               </div>
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maLoKho" formControlName="maLoKho" nzAllowClear
+                    <nz-select [nzDisabled]="true" formControlName="maLoKho" nzAllowClear
                       (ngModelChange)="onChangeLoKho($event)">
                       <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -119,7 +119,7 @@
                 <span>Tồn kho</span>
               </div>
               <div nz-col nzSpan="14">
-                <span class="text-blue">{{formData.value.tonKho}}</span>
+                <span class="text-blue">{{formData.value.tonKho | number:'1.0-1':'vi_VN'}}</span>
                 <span>({{formData.value.tenDonViTinh}})</span>
               </div>
             </div>
@@ -130,7 +130,10 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <input nz-input formControlName="soLuongDc" [readOnly]="true" />
+                    <nz-input-number formControlName="soLuongDc" [nzDisabled]="true" [nzMin]="1"
+                      [nzMax]="formData.value.tonKho || 99" [nzStep]="1" [nzSize]="'small'"
+                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -142,8 +145,6 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <!-- <input nz-input class="money-input" currencyMask formControlName="duToanKphi" /> -->
-                    <!-- <input nz-input formControlName="duToanKphi" /> -->
                     <input nz-input currencyMask formControlName="duToanKphi" [options]="AMOUNT" [readOnly]="true" />
                   </nz-form-control>
                 </nz-form-item>
@@ -161,7 +162,7 @@
                 <span>SL điều chuyển còn lại</span>
               </div>
               <div nz-col nzSpan="14">
-                <span>{{formData.value.slDcConLai}}</span>
+                <span>{{formData.value.slDcConLai | number:'1.0-1':'vi_VN'}}</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-16">
@@ -171,8 +172,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNhaKhoNhan" formControlName="maDiemKhoNhan" nzAllowClear
-                      (ngModelChange)="getListNhaKhoNhan($event)">
+                    <nz-select [nzDisabled]="this.data && !!this.data.maDiemKhoNhan" formControlName="maDiemKhoNhan"
+                      nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
                       <nz-option *ngFor="let p of dsDiemKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -207,7 +208,7 @@
                 </nz-form-item>
               </div>
             </div>
-            <div nz-row [nzGutter]="24" class="mg-t-10">
+            <div *ngIf="dsLoKhoNhan.length > 0" nz-row [nzGutter]="24" class="mg-t-10">
               <div nz-col nzSpan="10">
                 <span>Lô kho</span>
               </div>
@@ -227,7 +228,7 @@
                 <span>Tồn kho</span>
               </div>
               <div nz-col nzSpan="14">
-                <span class="text-blue">{{formData.value.tonKhoNhan}}</span>
+                <span class="text-blue">{{formData.value.tonKhoNhan | number:'1.0-1':'vi_VN'}}</span>
                 <span>({{formData.value.tenDonViTinhNhan}})</span>
               </div>
             </div>
@@ -237,7 +238,8 @@
                 <span>Tích lượng khả dụng</span>
               </div>
               <div nz-col nzSpan="14">
-                <span>{{formData.value.tichLuongKd}}</span>
+                <span>{{formData.value.tichLuongKd | number:'1.0-1':'vi_VN'}}</span>
+                <span>({{formData.value.tenDonViTinhNhan}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -247,10 +249,10 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <!-- <nz-input-number formControlName="slNhapDc" [nzMin]="1" [nzMax]="formData.value.soLuongDc"
-                      (ngModelChange)="onChangeSLNhapDc($event)" /> -->
-                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1" [nzMax]="formData.value.soLuongDc"
-                      [nzStep]="1" [nzSize]="'small'" (ngModelChange)="onChangeSLNhapDc($event)">
+                    <nz-input-number formControlName="soLuongPhanBo" [nzMin]="1"
+                      [nzMax]="(formData.value.soLuongDc > formData.value.tichLuongKd ? formData.value.tichLuongKd : formData.value.soLuongDc) || 99"
+                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                      (ngModelChange)="onChangeSLNhapDc($event)">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>

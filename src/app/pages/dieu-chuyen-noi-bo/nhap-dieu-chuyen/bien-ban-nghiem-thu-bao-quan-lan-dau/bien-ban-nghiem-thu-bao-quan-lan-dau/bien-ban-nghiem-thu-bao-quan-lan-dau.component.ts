@@ -15,12 +15,13 @@ import { CHUC_NANG, STATUS } from 'src/app/constants/status';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Subject } from 'rxjs';
 import { QuyetDinhDieuChuyenTCService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service';
+
 @Component({
-  selector: 'app-bien-ban-mau',
-  templateUrl: './bien-ban-mau.component.html',
-  styleUrls: ['./bien-ban-mau.component.scss']
+  selector: 'app-bien-ban-nghiem-thu-bao-quan-lan-dau',
+  templateUrl: './bien-ban-nghiem-thu-bao-quan-lan-dau.component.html',
+  styleUrls: ['./bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
 })
-export class BienBanMauComponent extends Base2Component implements OnInit {
+export class BienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
 
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = true;

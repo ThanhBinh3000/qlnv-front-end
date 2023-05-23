@@ -115,7 +115,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
-
+    console.log('ThongTinHangCanDieuChuyenCucComponent=>data', this.data)
     this.formData.patchValue(this.data)
 
     await this.spinner.hide();
@@ -138,6 +138,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         let body = {
           maDviCha: maDvi,
           trangThai: '01',
+          type: "MLK"
         }
         const res = await this.donViService.getTreeAll(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -203,6 +204,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       if (nhaKho) {
         this.formData.patchValue({
           maNganKho: "",
+          maLoKho: "",
           tenNhaKho: nhaKho.tenDvi
         })
         this.dsNganKho = this.dsNhaKho.find(f => f.maDvi === value)?.children;
@@ -217,6 +219,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       if (nhaKhoNhan) {
         this.formData.patchValue({
           maNganKhoNhan: "",
+          maLoKhoNhan: "",
+          thayDoiThuKho: "",
+          slDcConLai: "",
+          tichLuongKd: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })
         this.dsNganKhoNhan = this.dsNhaKhoNhan.find(f => f.maDvi === value)?.children;
@@ -250,6 +256,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
           else {
+            this.dsLoKho = []
             const body = {
               maDvi: value,
               tenLoKho: nganKho.tenDvi
@@ -287,17 +294,24 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           tenLoKho: loKho.tenDvi
         }
         const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-        if (res.statusCode == 0) {
-          if (res.data.length > 0) {
-            this.formData.patchValue({
-              loaiVthh: res.data[0].loaiVthh,
-              tenLoaiVthh: res.data[0].tenLoaiVthh,
-              cloaiVthh: res.data[0].cloaiVthh,
-              tenCloaiVthh: res.data[0].tenCloaiVthh,
-              tonKho: res.data[0].slHienThoi,
-              tenDonViTinh: res.data[0].tenDonViTinh,
-            })
-          }
+        if (res.statusCode == 0 && res.data.length > 0) {
+          this.formData.patchValue({
+            loaiVthh: res.data[0].loaiVthh,
+            tenLoaiVthh: res.data[0].tenLoaiVthh,
+            cloaiVthh: res.data[0].cloaiVthh,
+            tenCloaiVthh: res.data[0].tenCloaiVthh,
+            tonKho: res.data[0].slHienThoi,
+            tenDonViTinh: res.data[0].tenDonViTinh,
+          })
+        } else {
+          this.formData.patchValue({
+            loaiVthh: "",
+            tenLoaiVthh: "",
+            cloaiVthh: "",
+            tenCloaiVthh: "",
+            tonKho: "",
+            tenDonViTinh: "",
+          })
         }
 
       }
@@ -336,6 +350,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
           if (coLoKho) {
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
+            this.dsLoKhoNhan = []
             if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
               this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
               this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) {
