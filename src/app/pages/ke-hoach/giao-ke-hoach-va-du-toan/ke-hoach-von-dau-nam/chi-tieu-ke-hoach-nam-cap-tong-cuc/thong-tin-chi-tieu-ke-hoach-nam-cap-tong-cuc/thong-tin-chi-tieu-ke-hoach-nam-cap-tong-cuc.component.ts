@@ -1501,7 +1501,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return;
     }
     //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
-    let checkFlag = this.soSanhCtCapTrenGiao('save');
+    let checkFlag = this.soSanhCtCapTrenGiao('save', isGuiDuyet);
     if (!checkFlag) {
       this.spinner.hide();
       return;
@@ -2189,7 +2189,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       : '0';
   }
 
-  soSanhCtCapTrenGiao(action) {
+  soSanhCtCapTrenGiao(action, isGuiDuyet?) {
     let totalNtnThoc, totalNtnGao = 0;
     let checkFlag = true;
     if (this.userService.isTongCuc()) {
@@ -2210,11 +2210,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0)) {
+          if (totalNtnThoc < (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0) && isGuiDuyet) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
             return false;
           }
-          if (totalNtnGao < (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0)) {
+          if (totalNtnGao < (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0) && isGuiDuyet) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
             return false;
           }
@@ -2238,11 +2238,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
+          if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0) && isGuiDuyet) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
             return false;
           }
-          if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
+          if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0) && isGuiDuyet) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
             return false;
             ;
