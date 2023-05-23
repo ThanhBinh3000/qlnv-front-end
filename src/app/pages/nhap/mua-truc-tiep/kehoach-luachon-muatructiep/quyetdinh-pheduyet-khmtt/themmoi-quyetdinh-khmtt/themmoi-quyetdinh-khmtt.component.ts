@@ -170,7 +170,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
         this.idInput = data.id;
         this.guiDuyet();
       } else {
-        this.quayLai();
+        // this.quayLai();
       }
     }
     await this.spinner.hide();
