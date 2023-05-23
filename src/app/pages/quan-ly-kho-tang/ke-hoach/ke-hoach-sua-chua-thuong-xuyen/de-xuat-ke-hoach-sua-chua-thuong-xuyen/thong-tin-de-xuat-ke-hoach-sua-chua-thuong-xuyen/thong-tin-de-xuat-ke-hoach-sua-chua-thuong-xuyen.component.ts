@@ -222,7 +222,7 @@ export class ThongTinDeXuatKeHoachSuaChuaThuongXuyenComponent extends Base2Compo
     let body = this.formData.value;
     body.soCv = body.soCv ? body.soCv + this.suffixCv : this.suffixCv;
     body.listKtKhDxkhScThuongXuyenDtl = this.dataTableRes;
-    body.maDvi = this.userInfo.MA_DVI;
+    body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     this.listFile = [];
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {

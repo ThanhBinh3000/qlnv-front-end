@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {XuatComponent} from './xuat.component';
+import {XuatKhacModule} from "./xuat-khac/xuat-khac.module";
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
         path: 'xuat-thanh-ly',
         loadChildren: () =>
           import('./xuat-thanh-ly/xuat-thanh-ly.module').then((m) => m.XuatThanhLyModule),
+      },
+      {
+        path: 'xuat-khac',
+        loadChildren: () =>
+          import('./xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
       },
     ],
   },

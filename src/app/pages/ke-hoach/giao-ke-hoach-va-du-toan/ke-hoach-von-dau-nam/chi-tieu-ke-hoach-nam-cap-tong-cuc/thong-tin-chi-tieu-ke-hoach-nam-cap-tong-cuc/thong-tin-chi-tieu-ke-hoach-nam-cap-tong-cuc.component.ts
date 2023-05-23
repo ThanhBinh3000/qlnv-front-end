@@ -51,6 +51,8 @@ import {STATUS} from "../../../../../../constants/status";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
 import {QuyetDinhTtcpService} from "../../../../../../services/quyetDinhTtcp.service";
+import {AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -118,7 +120,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   canCuList: any[] = [];
   taiLieuDinhKemList: any[] = [];
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 100;
   totalRecord: number = 0;
   keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
   keHoachMuoiShow: Array<KeHoachMuoi> = [];
@@ -148,6 +150,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuConEditXuatShow: any[] = [];
   dataQdTtcpGiaoBTC: any;
   dataQdTCDTGiaoCuc: any;
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   //
 
@@ -1792,8 +1807,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc -
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongThoc / 1000),
       )
       : '0';
   }
@@ -1805,8 +1820,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].xtnTongGao;
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
-      ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -1816,7 +1831,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc +
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
       )
       : '0';
@@ -1827,8 +1842,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongThoc +
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -1838,7 +1853,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc +
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
       )
       : '0';
@@ -2064,7 +2079,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnThoc +
       +this.keHoachLuongThucCreate.ntnGao * 2;
     return this.keHoachLuongThucCreate.ntnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
       )
       : '0';
@@ -2078,7 +2093,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           0,
         );
       return this.keHoachLuongThucCreate.xtnTongThoc
-        ? Intl.NumberFormat('vi-VN').format(
+        ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
           this.keHoachLuongThucCreate.xtnTongThoc,
         )
         : '0';
@@ -2090,7 +2105,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate.xtnTongGao =
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
-        ? Intl.NumberFormat('vi-VN').format(
+        ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
           this.keHoachLuongThucCreate.xtnTongGao,
         )
         : '0';
@@ -2102,7 +2117,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc +
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
       )
       : '0';
@@ -2113,8 +2128,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongThoc +
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -2123,8 +2138,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongThoc =
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongThoc / 1000),
       )
       : '0';
   }
@@ -2133,8 +2148,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongGao =
       this.keHoachLuongThucCreate?.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkdnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongGao / 1000),
       )
       : '0';
   }
@@ -2145,8 +2160,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnThoc -
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongThoc / 1000),
       )
       : '0';
   }
@@ -2157,8 +2172,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnGao -
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -2168,8 +2183,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongThoc +
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('vi-VN').format(
-        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -2182,30 +2197,26 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc > this.dataQdTtcpGiaoBTC.ltThocMua) {
+          if (totalNtnThoc > (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
-            checkFlag = false;
-            return;
+            return false
           }
-          if (totalNtnGao > this.dataQdTtcpGiaoBTC.ltGaoMua) {
+          if (totalNtnGao > (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
-            checkFlag = false;
-            return;
+            return false;
           }
         }
       } else {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < this.dataQdTtcpGiaoBTC.ltThocMua) {
+          if (totalNtnThoc < (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
-            checkFlag = false;
-            return;
+            return false;
           }
-          if (totalNtnGao < this.dataQdTtcpGiaoBTC.ltGaoMua) {
+          if (totalNtnGao < (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
-            checkFlag = false;
-            return;
+            return false;
           }
         }
       }
@@ -2214,30 +2225,27 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc > this.dataQdTCDTGiaoCuc.ltThocMua) {
+          if (totalNtnThoc > (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc TCDT giao");
-            checkFlag = false;
-            return;
+            return false;
           }
-          if (totalNtnGao > this.dataQdTCDTGiaoCuc.ltGaoMua) {
+          if (totalNtnGao > (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo TCDT giao");
-            checkFlag = false;
-            return;
+            return false;
           }
         }
       } else {
         totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
         totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
         if (totalNtnThoc || totalNtnGao) {
-          if (totalNtnThoc < this.dataQdTCDTGiaoCuc.ltThocMua) {
+          if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
-            checkFlag = false;
-            return;
+            return false;
           }
-          if (totalNtnGao < this.dataQdTCDTGiaoCuc.ltGaoMua) {
+          if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
             this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
-            checkFlag = false;
-            return;
+            return false;
+            ;
           }
         }
       }
@@ -2336,7 +2344,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
     this.keHoachLuongThucDialog.xtnTongGao =
       +this.keHoachLuongThucCreate.xtnGao[0].soLuong +
-      +this.keHoachLuongThucCreate.xtnGao[1].soLuong;
+      +this.keHoachLuongThucCreate.xtnGao[1].soLuong + this.keHoachLuongThucCreate.xtnGao[2].soLuong;
     const xtnGao1 = {
       id: null,
       nam: this.yearNow - 1,

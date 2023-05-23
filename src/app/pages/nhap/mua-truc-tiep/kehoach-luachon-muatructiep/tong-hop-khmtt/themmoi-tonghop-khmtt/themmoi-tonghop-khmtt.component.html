@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!isDetail && formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
+    <button *ngIf="!isView && formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button"
       class="btn btn-sub xanh-nhat" (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
@@ -36,7 +36,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isDetail" formControlName="namKh">
+              <nz-select [nzDisabled]="isView" formControlName="namKh">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
