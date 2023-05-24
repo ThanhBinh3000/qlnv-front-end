@@ -161,7 +161,7 @@
                             Căn cứ pháp lý
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list [disabled]="isDisable()" [data]="fileDinhKem"></file-list>
+                            <file-list [disabled]="isDisable()" [isCanCuPL]="true" [data]="fileDinhKem"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
@@ -352,11 +352,16 @@
                     </div>
                 </form>
                 <ng-template #extraTpl>
-                    <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
+                    <button style="background: #353a64;" type="button" class="btn btn-main" *ngIf="!isDisable()"
                         (click)="themMoiBangPhanLoTaiSan($event)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
+                    <!-- <button type="button" class="btn btn-sub xanh" *ngIf="!isDisable()"
+                        (click)="themMoiBangPhanLoTaiSan($event)">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button> -->
                 </ng-template>
                 <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
                     <thead>

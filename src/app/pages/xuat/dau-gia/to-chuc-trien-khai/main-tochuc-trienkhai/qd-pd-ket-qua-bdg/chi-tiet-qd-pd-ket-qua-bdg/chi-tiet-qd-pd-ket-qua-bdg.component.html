@@ -103,10 +103,10 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất
+                </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="loaiHinhNx" (ngModelChange)="onChangeLhNx($event)"
-                    [nzDisabled]="isDisabled()">
+                  <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
                     <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
@@ -115,8 +115,9 @@
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
-                <nz-form-control>
+                <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="kieuNx" [nzDisabled]="true">
                     <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                     </nz-option>
@@ -232,36 +233,31 @@
         <nz-table class="pd-10 " [nzScroll]="{ x: '1400px' }" nzBordered [nzData]="dataTable">
           <thead>
             <tr>
-              <th nzLeft nzWidth="50px"></th>
-              <th nzLeft nzWidth="200px" class="text-center wrap">Chi cục</th>
-              <th nzWidth="100px" class="text-center wrap">Điểm kho</th>
-              <th nzWidth="200px" class="text-center wrap">Nhà kho, ngăn kho, lô kho</th>
-              <th nzLeft nzWidth="70px" class="text-center wrap">Mã DVTS</th>
-              <th nzWidth="50px" class="text-center wrap">Số lượng</th>
-              <th nzWidth="50px" class="text-center wrap">ĐVT</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
-              <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
+              <th nzWidth="30px"></th>
+              <th nzWidth="150px" class="text-center wrap"> Chi cục </th>
+              <th nzWidth="150px" class="text-center wrap"> Điểm kho </th>
+              <th nzWidth="150px" class="text-center wrap"> Lô kho </th>
+              <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS </th>
+              <th nzWidth="120px" class="text-center wrap"> SL bán đấu giá </th>
+              <th nzWidth="50px" class="text-center wrap"> ĐVT </th>
+              <th nzWidth="120px" class="text-center wrap"> Đơn giá chưa VAT(đ) </th>
+              <th nzWidth="120px" class="text-center wrap"> Giá khởi điểm (đ) </th>
+              <th nzWidth="120px" class="text-center wrap"> Số tiền đặt trước (đ) </th>
               <th nzWidth="100px" class="text-center wrap">Đơn giá trúng DG (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Thành tiền đồng (đ)</th>
-              <th nzWidth="100px" class="text-center wrap">Tổ chức/ cá nhân trúng đấu giát</th>
+              <th nzWidth="120px" class="text-center wrap">Thành tiền (đ)</th>
+              <th nzWidth="200px" class="text-center wrap">Tổ chức/cá nhân trúng đấu giá </th>
             </tr>
           </thead>
           <tbody>
             <ng-container *ngFor="let item of dataTable , let i = index">
               <tr>
-                <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                <td nzLeft>{{item.tenDvi}}</td>
-                <td nzLeft></td>
+                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                <td>{{item.tenDvi}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc | number : '1.0-1' :
+                  'vi_VN'}} </td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -272,31 +268,24 @@
               </tr>
               <ng-container *ngIf="expandSet.has(i)">
                 <tr *ngFor="let children of item.children, let x = index">
-                  <td nzLeft></td>
-                  <td nzLeft></td>
-                  <td>{{children.tenDiemKho}}
-                  </td>
-                  <td>{{children.tenNhaKho}},{{children.tenNganKho}},{{children.tenLoKho}}
-                  </td>
+                  <td></td>
+                  <td></td>
+                  <td>{{children.tenDiemKho}}</td>
+                  <td> {{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
+                    {{children.tenNhaKho}} </td>
                   <td>{{children.maDviTsan}}</td>
-                  <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.dviTinh}}</td>
-                  <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                  <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}
-                  </td>
-                  <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{ (children.soLuong * children.donGiaDeXuat) + (children.soLuong *
-                    children.donGiaDeXuat *
-                    formData.value.khoanTienDatTruoc /
-                    100 ) | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{ (children.soLuong * children.donGiaVat) + (children.soLuong *
-                    children.donGiaVat
-                    *
-                    formData.value.khoanTienDatTruoc / 100 ) |
-                    number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{children.donGiaTraGia}}</td>
-                  <td>{{children.soLuong * children.donGiaTraGia | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}} </td>
+                  <td>{{children.donViTinh}} </td>
+                  <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }} </td>
+                  <td> {{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }} </td>
+                  <td> {{(children.soLuongDeXuat * children.donGiaDuocDuyet *
+                    formData.value.khoanTienDatTruoc
+                    / 100 ) |
+                    number
+                    :
+                    '1.0-1' : 'vi_VN' }} </td>
+                  <td>{{children.donGiaTraGia | number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{children.soLuongDeXuat * children.donGiaTraGia | number : '1.0-1' : 'vi_VN'}}</td>
                   <td>{{children.toChucCaNhan}}</td>
                 </tr>
               </ng-container>

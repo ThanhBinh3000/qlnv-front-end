@@ -1,14 +1,14 @@
 <div>
-  <nz-affix>
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level1">
     <ul nz-menu nzMode="horizontal">
       <li nz-menu-item nzSelected (click)="selectTab(0)">
-        Trong nội bộ chi cục
+        TRONG NỘI BỘ KHU VỰC
       </li>
       <li nz-menu-item (click)="selectTab(1)">
-        Giữa 2 chi cục trong cùng 1 cục
+        GIỮA 2 CHI CỤC TRONG CÙNG MỘT CỤC
       </li>
       <li nz-menu-item (click)="selectTab(2)">
-        Giữa 2 cục DTNN KV
+        GIỮA 2 CUC DTNN KV
       </li>
     </ul>
   </nz-affix>

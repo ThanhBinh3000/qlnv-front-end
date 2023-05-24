@@ -43,6 +43,13 @@ const routes: Routes = [
             '../dieu-chuyen-noi-bo/xuat-dieu-chuyen/xuat-dieu-chuyen.module'
           ).then((m) => m.XuatDieuChuyenModule),
       },
+      {
+        path: 'nhap-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/nhap-dieu-chuyen/nhap-dieu-chuyen.module'
+          ).then((m) => m.NhapDieuChuyenModule),
+      },
     ]
   }]
 

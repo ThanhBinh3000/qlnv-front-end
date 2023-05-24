@@ -1,10 +1,10 @@
 <div class="bg-trang">
   <div class="cangiua group-button-search">
-    <button class="btn btn-sub xanh-nhat ml-2">
+    <button class="btn btn-sub xanh-nhat ml-2" (click)="hoanThanh()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Hoàn thành</span>
     </button>
-    <button class="btn btn-main btn-sm waves-effect waves-light ml-2">
+    <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -15,11 +15,11 @@
       <thead>
       <tr>
         <th width="40px" class="text-center">STT</th>
-        <th width="150px">Số hợp đồng</th>
+        <th>Số hợp đồng</th>
         <th width="200px">Tên hợp đồng</th>
         <th>Gói thầu</th>
-        <th width="250px">Chủ đầu tư</th>
-        <th width="250px">Nhà thầu</th>
+        <th>Chủ đầu tư</th>
+        <th>Nhà thầu</th>
         <th width="130px">Ngày ký hợp đồng</th>
         <th width="130px">Giá trị hợp đồng</th>
         <th width="130px">Trạng thái HĐ</th>
@@ -39,7 +39,7 @@
         <td>{{ data.hopDong?.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.hopDong?.thanhTien | number: '1.0-1' }}</td>
         <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
-        <td class="text-left">{{  data.hopDong?.tenTrangThai  }}</td>
+        <td class="text-left">{{  data.tenTrangThaiTd  }}</td>
       </tr>
       </tbody>
     </nz-table>
@@ -61,19 +61,19 @@
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ PD dự án ĐTXD</nz-form-label>
-            <span class="text-blue">01/QĐ-TCDT</span>
+            <span class="text-blue">{{itemQdPdDaDtxd.soQd}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số QĐ PD bản vẽ TKTC và tổng dự toán</nz-form-label>
-            <span class="text-blue">01/QĐ-TCDT</span>
+            <span class="text-blue">{{itemQdPdTktcTdt.soQd}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">Số QĐ phê duyệt KH LCNT</nz-form-label>
-            <span class="text-blue">01/QĐ-TCDT</span>
+            <span class="text-blue">{{itemQdPdKhLcnt.soQd}}</span>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="6">
@@ -94,22 +94,131 @@
       </button>
     </div>
   </div>
-  <nz-table [nzData]="listHopDong" [nzFrontPagination]="false"
-            [nzShowPagination]="false" nzBordered class="pd-10">
+    <nz-table class="nowrap mg-t-10"  [nzData]="dataTable" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered [nzScroll]="dataTable && dataTable.length ? { x: '2500px' } : null">
     <thead>
     <tr>
-      <th width="40px" class="text-center">STT</th>
-      <th width="150px">Số hợp đồng</th>
-      <th width="200px">Tên hợp đồng</th>
-      <th>Gói thầu</th>
-      <th width="250px">Chủ đầu tư</th>
-      <th width="250px">Nhà thầu</th>
-      <th width="130px">Ngày ký hợp đồng</th>
-      <th width="130px">Giá trị hợp đồng</th>
-      <th width="130px">Trạng thái HĐ</th>
-      <th width="100px" class="text-center">Tiến độ thực hiện</th>
+      <th nzWidth="40px" rowSpan="3" class="text-center">STT</th>
+      <th class="text-center" rowSpan="3">Quý</th>
+      <th class="text-center" rowSpan="3" nzWidth="250px">Tên công tác/hạng mục công việc</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px">ĐVT</th>
+      <th class="text-center" colSpan="5">Khối lượng</th>
+      <th class="text-center" colSpan="2">Đơn giá thanh toán</th>
+      <th class="text-center" colSpan="5">Thành tiền</th>
+      <th class="text-center" rowSpan="3">Ghi chú</th>
+      <th class="text-center" rowSpan="3" nzWidth="100px" nzRight>Hành động</th>
+    </tr>
+    <tr>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+      <th class="text-center" rowSpan="2">Theo hợp đồng</th>
+      <th class="text-center" rowSpan="2">Đơn giá bổ sung</th>
+      <th class="text-center" colSpan="2">Tổng số</th>
+      <th class="text-center" colSpan="3">Thực hiện</th>
+    </tr>
+    <tr>
+      <th class="text-center">KL theo HĐ <br> ban đầu</th>
+      <th class="text-center">KL phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến <br> hết kì trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
+      <th class="text-center">Theo HĐ <br> ban đầu</th>
+      <th class="text-center">Phát sinh so <br> với HĐ ban đầu</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ trước</th>
+      <th class="text-center">Thực hiện <br> kỳ này</th>
+      <th class="text-center">Lũy kế đến <br> hết kỳ này</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>
+        <nz-select [(ngModel)]="rowItemCha.quy">
+          <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+        </nz-select>
+      </th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th class="text-center" nzRight>
+        <a (click)="themItemcha()">
+          <i class="table-icon icon htvbdh_dau-cong"></i>
+        </a>
+        <a>
+          <i class="table-icon fa fa-trash-o do"></i>
+        </a>
+      </th>
     </tr>
     </thead>
-    <tbody></tbody>
+      <tbody>
+      <ng-container *ngFor="let data of dataTable , let idx = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(data.idVirtual)" (nzExpandChange)="onExpandChange(data.idVirtual, $event)"></td>
+          <td class="font-weight-bold">{{data.quy}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="text-center" nzRight>
+            <a (click)="themMoiItem(data, idx, dataTable[idx])">
+              <i class="table-icon icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="deleteItemCha(idx)">
+              <i class="table-icon fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+        <ng-container *ngIf="expandSet.has(data.idVirtual)">
+          <tr *ngFor="let item of data.dataChild, let y = index">
+            <td></td>
+            <td class="text-right font-weight-bold">{{y + 1}}</td>
+            <td>{{item.tenCongViec}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-center" nzRight >
+              <a (click)="themMoiItem(item, y, dataTable[idx])">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteItem(idx, y)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      </tbody>
   </nz-table>
 </div>

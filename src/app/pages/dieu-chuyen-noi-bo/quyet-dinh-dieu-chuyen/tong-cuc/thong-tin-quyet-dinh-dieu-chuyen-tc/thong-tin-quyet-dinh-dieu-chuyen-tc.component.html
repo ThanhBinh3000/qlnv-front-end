@@ -78,9 +78,6 @@
               <nz-form-control nz-col [nzErrorTip]="error">
                 <nz-radio-group formControlName="loaiDc" [nzDisabled]="isView" (ngModelChange)="onChangeLoaiDc($event)">
                   <label nz-radio *ngFor="let p of listLoaiDC" [nzValue]="p.value">{{p.text}}</label>
-                  <!-- <label *ngIf="isCuc()" nz-radio nzValue="NOi_BO">Trong nội bộ Chi cục</label>
-                  <label nz-radio nzValue="CHI_CUC">Giữa 2 chi cục trong cùng 1 cục</label>
-                  <label nz-radio nzValue="CUC">Giữa 2 cục DTNN KV</label> -->
                 </nz-radio-group>
               </nz-form-control>
             </nz-form-item>
@@ -538,7 +535,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
                       <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                       <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                       <td class="bold">{{c.tenDonViTinh || ""}}</td>
