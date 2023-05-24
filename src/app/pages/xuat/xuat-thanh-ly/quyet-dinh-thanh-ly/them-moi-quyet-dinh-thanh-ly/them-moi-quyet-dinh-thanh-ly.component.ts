@@ -22,7 +22,7 @@ import {
   QuyetDinhThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
 
-export class BaoCaoKqDtl {
+export class QuyetDinhDtl {
   idVirtual: string;
   maDiaDiem: string;
   loaiVthh: string;
@@ -78,23 +78,23 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       });
     }
     this.formData = this.fb.group({
-
-      id:[],
-      maDvi:[],
-      nam:[dayjs().get("year"), [Validators.required]],
-      soBaoCao:['', [Validators.required]],
-      ngayBaoCao:[],
-      idQd:['', [Validators.required]],
+      id: [],
+      maDvi: [],
+      nam: [dayjs().get("year")],
       soQd:['', [Validators.required]],
-      noiDung:['', [Validators.required]],
+      ngayKy:['', [Validators.required]],
+      idHoSo: [],
+      soHoSo :['', [Validators.required]],
+      idKq: [],
+      soKq: [],
+      thoiGianTl: [],
+      thoiGianTlTu: [],
+      thoiGianTlDen: [],
+      trichYeu:['', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
-      tongSoLuongTl:[],
-      tongSoLuongCon:[],
-      tongThanhTien:[],
-      ngayTao: [],
-      nguoiTaoId: [],
-      ngaySua: [],
-      nguoiSuaId: [],
+      tongSoLuongTl: [],
+      tongSoLuongCon: [],
+      tongThanhTien: [],
       ngayPduyet: [],
       nguoiPduyetId: [],
       ngayGduyet: [],
@@ -104,8 +104,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       tenTrangThai: ['Dự thảo'],
       fileDinhKem: [new Array<FileDinhKem>()],
       canCu: [new Array<FileDinhKem>()],
-      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
-
+      quyetDinhDtl: [new Array<QuyetDinhDtl>()],
     });
 
   }
