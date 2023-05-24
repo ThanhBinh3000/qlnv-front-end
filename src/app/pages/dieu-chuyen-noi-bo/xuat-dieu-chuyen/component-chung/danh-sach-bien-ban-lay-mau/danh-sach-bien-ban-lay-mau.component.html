@@ -27,12 +27,12 @@
                         <div nz-row>
                             <div nz-col nzSpan="12" class="cus-start-date">
                                 <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy"
-                                    formControlName="ngayLayMauTu" nzPlaceHolder="Ngày bắt đầu">
+                                    formControlName="tuNgay" nzPlaceHolder="Ngày bắt đầu">
                                 </nz-date-picker>
                             </div>
                             <div nz-col nzSpan="12" class="cus-end-date">
                                 <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
-                                    formControlName="ngayLayMauDen" nzPlaceHolder="Ngày kết thúc">
+                                    formControlName="denNgay" nzPlaceHolder="Ngày kết thúc">
                                 </nz-date-picker>
                             </div>
                         </div>
@@ -60,7 +60,8 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(null, false, null, null)">
+                <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-main"
+                    (click)="redirectToChiTiet(null, false, null, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>

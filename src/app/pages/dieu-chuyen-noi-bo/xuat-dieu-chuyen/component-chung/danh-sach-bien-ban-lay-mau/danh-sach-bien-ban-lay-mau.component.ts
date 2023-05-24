@@ -26,7 +26,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     @Input() title: string = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
     @Input() fileNameExport: string = "file.xlsx";
     @Input() loaiDc: string;
-    @Input() loaiVthh: string[];
+    @Input() typeVthh: string[];
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -70,8 +70,8 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             soQdinhDcc: [null],
             dviKiemNghiem: [null],
             ngayLayMau: [null],
-            ngayLayMauTu: [null],
-            ngayLayMauDen: [null],
+            tuNgay: [null],
+            denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
             maDvi: [this.userInfo.MA_DVI],
             loaiDc: [],
@@ -93,14 +93,10 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     }
 
     ngOnInit(): void {
-        this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.loaiVthh });
+        this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.typeVthh });
         this.timKiem()
     }
     async timKiem() {
-        if (this.formData.value.ngayLayMau) {
-            this.formData.value.ngayLayMauTu = dayjs(this.formData.value.ngayLayMau[0]).format('YYYY-MM-DD')
-            this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
-        }
         try {
             await this.search();
             this.buildTableView();
@@ -174,17 +170,17 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         }
     }
     disabledTuNgay = (startValue: Date): boolean => {
-        if (startValue && this.formData.value.ngayLayMauDen) {
-            return startValue.getTime() > this.formData.value.ngayLayMauDen.getTime();
+        if (startValue && this.formData.value.denNgay) {
+            return startValue.getTime() > this.formData.value.denNgay.getTime();
         }
         return false;
     };
 
     disabledDenNgay = (endValue: Date): boolean => {
-        if (!endValue || !this.formData.value.ngayLayMauTu) {
+        if (!endValue || !this.formData.value.tuNgay) {
             return false;
         }
-        return endValue.getTime() <= this.formData.value.ngayLayMauTu.getTime();
+        return endValue.getTime() <= this.formData.value.tuNgay.getTime();
     };
     checkPermissonAdd(): boolean {
         return true
@@ -202,7 +198,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return false
     }
     checkRoleView(trangThai: string): boolean {
-        if (this.userService.isChiCuc() && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai)) {
+        if (!this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai)) {
             return true
         }
         return false
