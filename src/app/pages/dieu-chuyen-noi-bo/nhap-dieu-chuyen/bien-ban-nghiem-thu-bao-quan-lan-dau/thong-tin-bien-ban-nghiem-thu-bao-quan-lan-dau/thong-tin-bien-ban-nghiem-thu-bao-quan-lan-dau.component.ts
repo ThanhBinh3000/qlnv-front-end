@@ -1,22 +1,37 @@
-import { HttpClient } from "@angular/common/http";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { Validators } from "@angular/forms";
-import * as dayjs from "dayjs";
-import { chain } from 'lodash';
-import { NzModalService } from "ng-zorro-antd/modal";
+import { FormGroup, Validators } from "@angular/forms";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
-import { Base2Component } from "src/app/components/base2/base2.component";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzCardModule, NzCardComponent } from "ng-zorro-antd/card";
+import {
+  DeXuatPhuongAnCuuTroService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
+import * as dayjs from "dayjs";
+import { FileDinhKem } from "src/app/models/DeXuatKeHoachuaChonNhaThau";
+import { MESSAGE } from "src/app/constants/message";
+import { DanhMucService } from "src/app/services/danhmuc.service";
+import {
+  QuyetDinhPheDuyetPhuongAnCuuTroService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
+import { DonviService } from "src/app/services/donvi.service";
+import {
+  TongHopPhuongAnCuuTroService
+} from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
 import {
   DialogTableSelectionComponent
 } from "src/app/components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { MESSAGE } from "src/app/constants/message";
-import { STATUS } from "src/app/constants/status";
-import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/ma-tong-hop-quyet-dinh-dieu-chinh.service";
-import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
-import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
-import { StorageService } from "src/app/services/storage.service";
 import { v4 as uuidv4 } from 'uuid';
+import { chain, cloneDeep } from 'lodash';
+import { STATUS } from "src/app/constants/status";
+import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
+import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/ma-tong-hop-quyet-dinh-dieu-chinh.service";
+import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
+import { KeHoachDieuChuyenService } from "../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service";
+import * as uuid from "uuid";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -36,11 +51,12 @@ export class QuyetDinhPdDtl {
 }
 
 @Component({
-  selector: 'app-thong-tin-quyet-dinh-dieu-chuyen-tc',
-  templateUrl: './thong-tin-quyet-dinh-dieu-chuyen-tc.component.html',
-  styleUrls: ['./thong-tin-quyet-dinh-dieu-chuyen-tc.component.scss']
+  selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau',
+  templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component.html',
+  styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component.scss']
 })
-export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component implements OnInit {
+export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
+
   @Input()
   idTHop: number;
   @Input() idInput: number;
@@ -52,11 +68,113 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
   quyetDinh: any[] = [];
 
   maQd: string = null;
+  dataInput: any;
+  dataInputCache: any;
+  isTongHop: boolean;
+  load: boolean = false;
   listDanhSachTongHop: any[] = [];
   listDanhSachDeXuat: any[] = [];
+  danhSachTongHop: any[] = [];
   danhsachDx: any[] = [];
-  dataTableView: any[] = []
 
+  deXuatPhuongAn: any[] = [];
+  deXuatPhuongAnCache: any[] = [];
+  phuongAnView: any[] = [];
+  phuongAnViewCache: any[] = [];
+  listThanhTien: number[];
+  listSoLuong: number[];
+  listThanhTienCache: number[];
+  listSoLuongCache: number[];
+  expandSetString = new Set<string>();
+  expandSetStringCache = new Set<string>();
+  tongSoLuongDxuat = 0;
+  tongThanhTienDxuat = 0;
+  phuongAnRow: any = {};
+  dsDonVi: any;
+  listChiCuc: any[] = [];
+  isVisible = false;
+  listNoiDung = []
+  listChungLoaiHangHoa: any[] = [];
+  quyetDinhPdDtlCache: any[] = [];
+  deXuatSelected: any = []
+  dataTableView: any[] = []
+  listOfMapData: any[] = [
+    // {
+    //   key: `1`,
+    //   name: '1 John Brown sr.',
+    //   age: 60,
+    //   address: 'New York No. 1 Lake Park',
+    //   isEx: true,
+    //   children: [
+    //     {
+    //       key: `1-1`,
+    //       name: '1-1 John Brown',
+    //       age: 42,
+    //       address: 'New York No. 2 Lake Park',
+    //       isCol: false,
+    //     },
+    //     {
+    //       key: `1-2`,
+    //       name: '1-2 John Brown jr.',
+    //       age: 30,
+    //       address: 'New York No. 3 Lake Park',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-2-1`,
+    //           name: '1-2-1 Jimmy Brown',
+    //           age: 16,
+    //           address: 'New York No. 3 Lake Park'
+    //         }
+    //       ]
+    //     },
+    //     {
+    //       key: `1-3`,
+    //       name: '1-3 Jim Green sr.',
+    //       age: 72,
+    //       address: 'London No. 1 Lake Park',
+    //       isCol: true,
+    //       children: [
+    //         {
+    //           key: `1-3-1`,
+    //           name: '1-3-1 Jim Green',
+    //           age: 42,
+    //           address: 'London No. 2 Lake Park',
+    //           // children: [
+    //           //   {
+    //           //     key: `1-3-1-1`,
+    //           //     name: '1-3-1-1 Jim Green jr.',
+    //           //     age: 25,
+    //           //     address: 'London No. 3 Lake Park'
+    //           //   },
+    //           //   {
+    //           //     key: `1-3-1-2`,
+    //           //     name: '1-3-1-2 Jimmy Green sr.',
+    //           //     age: 18,
+    //           //     address: 'London No. 4 Lake Park'
+    //           //   }
+    //           // ]
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // },
+    // {
+    //   key: `2`,
+    //   name: '2 Joe Black',
+    //   age: 32,
+    //   address: 'Sidney No. 1 Lake Park',
+    //   isEx: false
+    // },
+    // {
+    //   key: `3`,
+    //   name: '2 Joe Black',
+    //   age: 32,
+    //   address: 'Sidney No. 1 Lake Park',
+    //   isEx: false
+    // }
+  ];
+  mapOfExpandedData: { [key: string]: any[] } = {};
   listLoaiDC: any[] = [
     {
       value: "CHI_CUC",
@@ -89,7 +207,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       idThop: [, [Validators.required]],
       idDxuat: [, [Validators.required]],
       trichYeu: [],
-      tongtien: [],
       type: ['TH', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -206,11 +323,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           tenLoaiDc: loaiDC.text,
         })
       }
-      this.formData.patchValue({
-        idThop: "",
-        idDxuat: "",
-        quyetDinhPdDtl: []
-      })
       this.dataTableView = []
     }
   }
@@ -309,7 +421,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
   buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
-      .groupBy("maDvi")
+      .groupBy(groupBy)
       ?.map((value, key) => {
         console.log('maDvi', key, value)
         let rs = chain(value)
@@ -413,6 +525,8 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
           expand: true
         };
       }).value();
+    // this.tableView = dataView;
+    // this.expandAll()
 
     if (data?.length !== 0) {
       const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
@@ -533,16 +647,26 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     this.showListEvent.emit();
   }
 
-
+  // flattenTree(tree) {
+  //   return tree.flatMap((item) => {
+  //     return item.childData ? this.flattenTree(item.childData) : item;
+  //   });
+  // }
 
   setValidator(isGuiDuyet?) {
     if (this.formData.get('type').value == 'TH') {
       this.formData.controls["idThop"].setValidators([Validators.required]);
+      // this.formData.controls["maThop"].setValidators([Validators.required]);
       this.formData.controls["idDxuat"].clearValidators();
+      // this.formData.controls["maDxuat"].clearValidators();
+      // this.formData.controls["ngayDx"].clearValidators();
     }
     if (this.formData.get('type').value == 'TTr') {
       this.formData.controls["idThop"].clearValidators();
+      // this.formData.controls["maThop"].clearValidators();
+      // this.formData.controls["ngayThop"].clearValidators();
       this.formData.controls["idDxuat"].setValidators([Validators.required]);
+      // this.formData.controls["maDxuat"].setValidators([Validators.required]);
     }
   }
 
@@ -550,10 +674,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     if (this.formData.get('type').value != 'TH') {
       return;
     }
-    this.setValidator()
-    this.formData.patchValue({
-      idDxuat: undefined
-    });
+
     await this.spinner.show();
     let bodyTh = {
       loaiDieuChuyen: this.formData.get('loaiDc').value,
@@ -600,10 +721,6 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     if (this.formData.get('type').value != 'TTr') {
       return
     }
-    this.setValidator()
-    this.formData.patchValue({
-      idThop: undefined
-    });
     await this.spinner.show();
     // Get data tờ trình
     let bodyDx = {
@@ -721,7 +838,5 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     }
     await this.spinner.hide();
   }
-
-
 
 }
