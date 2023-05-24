@@ -309,14 +309,14 @@
                                            [itemDuAn]="itemSelected"></app-quyet-dinh-phe-duyet-kqlcnt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '06'">
-          <app-hop-dong [itemQdPdDaDtxd]="itemQdPdDaDtxd" [itemTtdt]="itemTtdt"
+          <app-hop-dong [itemQdPdDaDtxd]="itemQdPdDaDtxd" [itemTtdt]="itemTtdt" [itemDuAn]="itemSelected"
                         [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-hop-dong>
         </ng-container>
         <ng-container *ngIf="tabSelected == '07'">
           <app-tien-do-cong-viec [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemQdPdTktcTdt]="itemQdPdTktcTdt"   [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-tien-do-cong-viec>
         </ng-container>
         <ng-container *ngIf="tabSelected == '08'">
-          <app-bien-ban-nghiem-thu [itemDuAn]="itemSelected"></app-bien-ban-nghiem-thu>
+          <app-bien-ban-nghiem-thu  [itemQdPdKhLcnt]="itemQdPdKhLcnt" [itemDuAn]="itemSelected"></app-bien-ban-nghiem-thu>
         </ng-container>
       </nz-card>
     </div>
