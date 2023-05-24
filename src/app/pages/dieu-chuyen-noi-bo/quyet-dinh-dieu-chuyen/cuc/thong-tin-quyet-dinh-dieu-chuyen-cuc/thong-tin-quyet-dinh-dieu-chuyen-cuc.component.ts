@@ -62,37 +62,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   listQuyetDinh: any[] = [];
 
   maQd: string = null;
-  dataInput: any;
-  dataInputCache: any;
-  isTongHop: boolean;
-  load: boolean = false;
-  listDanhSachTongHop: any[] = [];
-  listDanhSachDeXuat: any[] = [];
-  danhSachTongHop: any[] = [];
-
-  deXuatPhuongAn: any[] = [];
-  deXuatPhuongAnCache: any[] = [];
-  phuongAnView: any[] = [];
-  phuongAnViewCache: any[] = [];
-  listThanhTien: number[];
-  listSoLuong: number[];
-  listThanhTienCache: number[];
-  listSoLuongCache: number[];
-  expandSetString = new Set<string>();
-  expandSetStringCache = new Set<string>();
-  tongSoLuongDxuat = 0;
-  tongThanhTienDxuat = 0;
-  phuongAnRow: any = {};
-  dsDonVi: any;
-  listChiCuc: any[] = [];
   listChiCucNhan: any[] = [];
-  isVisible = false;
-  listNoiDung = []
-  listChungLoaiHangHoa: any[] = [];
-  deXuatSelected: any = []
-
-  listDiemKho: any[] = [];
-  listDiemKhoNhan: any[] = [];
 
   listLoaiQD: any[] = [
     {
@@ -120,143 +90,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   ];
 
-  listOfMapData: any[] = [
-    // {
-    //   key: `1`,
-    //   chicuc: 'chicuc',
-    //   dtkp: 'dtkp',
-    //   isEx: true,
-    //   children: [
-    //     {
-    //       key: `1-1`,
-    //       diemkho: 'diemkho',
-    //       lokho: 'lokho',
-    //       loaihh: 'loaihh',
-    //       clhh: 'clhh',
-    //       dvt: 'dvt',
-    //       tonkho: 'tonkho',
-    //       sldc: 'sldc',
-    //       dtkp: 'dtkp',
-    //       thoigian: 'thoigian',
-    //       diemkhoden: 'diemkhoden',
-    //       nhakhoden: 'nhakhoden',
-    //       ngankhoden: 'ngankhoden',
-    //       lokhoden: 'lokhoden',
-    //       tdthukho: 'tdthukho',
-    //       tlkd: 'tlkd',
-    //       slpb: 'slpb',
-    //       isCol: false,
-    //     },
-    //     {
-    //       key: `1-2`,
-    //       diemkho: 'diemkho',
-    //       isCol: true,
-    //       children: [
-    //         {
-    //           key: `1-2-1`,
-    //           lokho: 'lokho',
-    //           loaihh: 'loaihh',
-    //           clhh: 'clhh',
-    //           dvt: 'dvt',
-    //           tonkho: 'tonkho',
-    //           sldc: 'sldc',
-    //           dtkp: 'dtkp',
-    //           thoigian: 'thoigian',
-    //           diemkhoden: 'diemkhoden',
-    //           nhakhoden: 'nhakhoden',
-    //           ngankhoden: 'ngankhoden',
-    //           lokhoden: 'lokhoden',
-    //           tdthukho: 'tdthukho',
-    //           tlkd: 'tlkd',
-    //           slpb: 'slpb',
-    //         },
-    //         {
-    //           key: `1-2-2`,
-    //           lokho: 'lokho',
-    //           loaihh: 'loaihh',
-    //           clhh: 'clhh',
-    //           dvt: 'dvt',
-    //           tonkho: 'tonkho',
-    //           sldc: 'sldc',
-    //           dtkp: 'dtkp',
-    //           thoigian: 'thoigian',
-    //           diemkhoden: 'diemkhoden',
-    //           nhakhoden: 'nhakhoden',
-    //           ngankhoden: 'ngankhoden',
-    //           lokhoden: 'lokhoden',
-    //           tdthukho: 'tdthukho',
-    //           tlkd: 'tlkd',
-    //           slpb: 'slpb',
-    //         },
-    //         {
-    //           key: `1-2-3`,
-    //           lokho: 'lokho',
-    //           loaihh: 'loaihh',
-    //           clhh: 'clhh',
-    //           dvt: 'dvt',
-    //           tonkho: 'tonkho',
-    //           sldc: 'sldc',
-    //           dtkp: 'dtkp',
-    //           thoigian: 'thoigian',
-    //           diemkhoden: 'diemkhoden',
-    //           nhakhoden: 'nhakhoden',
-    //           ngankhoden: 'ngankhoden',
-    //           lokhoden: 'lokhoden',
-    //           tdthukho: 'tdthukho',
-    //           tlkd: 'tlkd',
-    //           slpb: 'slpb',
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       key: `1-3`,
-    //       diemkho: 'diemkho',
-    //       isCol: true,
-    //       children: [
-    //         {
-    //           key: `1-3-1`,
-    //           lokho: 'lokho',
-    //           loaihh: 'loaihh',
-    //           clhh: 'clhh',
-    //           dvt: 'dvt',
-    //           tonkho: 'tonkho',
-    //           sldc: 'sldc',
-    //           dtkp: 'dtkp',
-    //           thoigian: 'thoigian',
-    //           diemkhoden: 'diemkhoden',
-    //           nhakhoden: 'nhakhoden',
-    //           ngankhoden: 'ngankhoden',
-    //           lokhoden: 'lokhoden',
-    //           tdthukho: 'tdthukho',
-    //           tlkd: 'tlkd',
-    //           slpb: 'slpb',
-    //           // children: [
-    //           //   {
-    //           //     key: `1-3-1-1`,
-    //           //     name: '1-3-1-1 Jim Green jr.',
-    //           //     age: 25,
-    //           //     address: 'London No. 3 Lake Park'
-    //           //   },
-    //           //   {
-    //           //     key: `1-3-1-2`,
-    //           //     name: '1-3-1-2 Jimmy Green sr.',
-    //           //     age: 18,
-    //           //     address: 'London No. 4 Lake Park'
-    //           //   }
-    //           // ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
-    // {
-    //   key: `2`,
-    //   chicuc: 'chicuc',
-    //   dtkp: 'dtkp',
-    //   isEx: false
-    // }
-  ];
-  mapOfExpandedData: { [key: string]: any[] } = {};
   danhSachKeHoach: any[] = []
   typeKeHoach: string = "ADD"
   danhSachQuyetDinh: any[] = []
@@ -272,9 +105,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
-    private tongHopPhuongAnCuuTroService: TongHopPhuongAnCuuTroService,
     private quyetDinhDieuChuyenTCService: QuyetDinhDieuChuyenTCService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
   ) {
@@ -295,6 +125,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       soCanCuQdTc: [],
       ngayTrinhDuyetTc: [],
       tongDuToanKp: [],
+      loaiHinhNX: ["Nhập ĐC nội bộ Chi cục"],
+      kieuNX: ["Nhập không chi tiền"],
       danhSachQuyetDinh: [new Array<any>(),],
     }
     );
@@ -357,26 +189,27 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         }
       })
 
-      console.log('loadChiTiet', this.danhSachKeHoach)
       this.canCu = data.canCu;
       this.quyetDinh = data.quyetDinh;
 
       if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc)
 
       if (data.loaiDc === "DCNB") {
-        this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
       }
       if (data.loaiDc === "CHI_CUC") {
         this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
       }
       if (data.loaiDc === "CUC" && !(this.isChiCuc() && data.loaiQdinh == '01')) {
-        this.dataTableView = this.buildTableViewCUC(this.danhSachKeHoach, "maDvi")
+        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
       }
       if (data.loaiDc === "CUC" && this.isChiCuc() && data.loaiQdinh == '01') {
         this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-        console.log('loadChiTietCUC2', this.dataTableView)
+
       }
     }
+    console.log('loadChiTietdanhSachKeHoach', this.danhSachKeHoach)
+    console.log('loadChiTietdataTableView', JSON.stringify(this.dataTableView))
     await this.spinner.hide();
   }
 
@@ -434,7 +267,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log('loadDsQuyetDinh', res, this.listQuyetDinh)
+
   }
 
   async loadDsChiCuc(value?) {
@@ -458,6 +291,12 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeLoaiDc(value) {
     if (value) {
       const loaiDC = this.listLoaiDC.find(item => item.value == value)
+      this.formData.patchValue({
+        canCuQdTc: "",
+        soCanCuQdTc: "",
+        ngayTrinhDuyetTc: "",
+        tongDuToanKp: ""
+      })
 
       if (loaiDC) {
         this.formData.patchValue({
@@ -466,7 +305,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       }
       if (value !== "DCNB") this.loadDsQuyetDinh(value)
 
-      console.log('onChangeLoaiDc', value, loaiDC)
 
       this.dataTableView = []
     }
@@ -482,7 +320,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         })
       }
 
-      console.log('onChangeLoaiQdinh', value, loaiQD)
     }
   }
 
@@ -521,7 +358,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       })
 
-      this.dataTableView = this.formData.value.loaiDc === "CHI_CUC" ? this.buildTableViewChiCUC(dsHH, "maDvi") : this.buildTableViewCUC(dsHH, "maDvi")
+      this.dataTableView = this.formData.value.loaiDc === "CHI_CUC" ? this.buildTableViewChiCUC(dsHH, "maDvi") : this.buildTableViewChiCUC(dsHH, "maDvi")
 
       this.formData.patchValue({
         tongDuToanKp: tong,
@@ -532,87 +369,87 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
-  buildTableViewNB(data: any[] = [], groupBy: string = "maDvi") {
-    let dataView = chain(data)
-      .groupBy(groupBy)
-      ?.map((value, key) => {
-        console.log('maDvi', key, value)
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          ?.map((v, k) => {
-            console.log('maDiemKho', k, v)
-            let rss = chain(v)
-              .groupBy("maLoKho")
-              ?.map((vs, ks) => {
-                console.log('maLoKho', ks, vs)
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+  // buildTableViewNB(data: any[] = [], groupBy: string = "maDvi") {
+  //   let dataView = chain(data)
+  //     .groupBy(groupBy)
+  //     ?.map((value, key) => {
+  //       console.log('maDvi', key, value)
+  //       let rs = chain(value)
+  //         .groupBy("maDiemKho")
+  //         ?.map((v, k) => {
+  //           console.log('maDiemKho', k, v)
+  //           let rss = chain(v)
+  //             .groupBy("maLoKho")
+  //             ?.map((vs, ks) => {
+  //               console.log('maLoKho', ks, vs)
+  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-                const rssx = chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-                  console.log('maDiemKhoNhan', inx, n)
-                  const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                  return {
-                    ...maDiemKhoNhan,
-                    children: n
-                  }
-                }).value()
-                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: rssx,
-                  duToanKphi
-                }
-              }
-              ).value();
+  //               const rssx = chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+  //                 console.log('maDiemKhoNhan', inx, n)
+  //                 const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+  //                 return {
+  //                   ...maDiemKhoNhan,
+  //                   children: n
+  //                 }
+  //               }).value()
+  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //               return {
+  //                 ...maLoKho,
+  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //                 children: rssx,
+  //                 duToanKphi
+  //               }
+  //             }
+  //             ).value();
 
-            let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-            let rowDiemKho = v?.find(s => s.maDiemKho === k);
+  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
-            return {
-              ...rowDiemKho,
-              idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-              duToanKphi: duToanKphi,
-              children: rss,
-              expand: true
-            }
-          }
-          ).value();
+  //           return {
+  //             ...rowDiemKho,
+  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //             duToanKphi: duToanKphi,
+  //             children: rss,
+  //             expand: true
+  //           }
+  //         }
+  //         ).value();
 
-        let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-        let rowChiCuc = value?.find(s => s[`${groupBy}`] === key);
-        return {
-          ...rowChiCuc,
-          idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-          duToanKphi: duToanKphi,
-          children: rs,
-          expand: true
-        };
-      }).value();
+  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //       let rowChiCuc = value?.find(s => s[`${groupBy}`] === key);
+  //       return {
+  //         ...rowChiCuc,
+  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //         duToanKphi: duToanKphi,
+  //         children: rs,
+  //         expand: true
+  //       };
+  //     }).value();
 
 
-    if (data?.length !== 0) {
-      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-      this.formData.patchValue({
-        tongDuToanKp: tongDuToanChiPhi,
-      })
-    };
-    return dataView
-  }
+  //   if (data?.length !== 0) {
+  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //     this.formData.patchValue({
+  //       tongDuToanKp: tongDuToanChiPhi,
+  //     })
+  //   };
+  //   return dataView
+  // }
 
   buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
       .groupBy(groupBy)
       ?.map((value, key) => {
-        console.log('maDvi', key, value)
+
         let rs = chain(value)
           .groupBy("maDiemKho")
           ?.map((v, k) => {
-            console.log('maDiemKho', k, v)
+
             let rss = chain(v)
-              .groupBy("maLoKho")
+              .groupBy("maNganKho")
               ?.map((vs, ks) => {
-                console.log('maLoKho', ks, vs)
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+
+                const maLoKho = vs.find(s => s?.maNganKho == ks);
                 // const rsss = chain(vs).groupBy("id").map((x, ix) => {
                 //   console.log('id', ix, x)
                 //   const ids = x.find(f => f.id == ix);
@@ -623,7 +460,16 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                 //   }
 
                 // }).value()
-                const rsxx = chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
+
+
+                const rsxx = (groupBy === "maChiCucNhan") ? chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
+
+                  const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
+                  return {
+                    ...maDiemKhoNhan,
+                    children: n
+                  }
+                }).value() : chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
 
                   const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
                   const hasMaDiemKhoNhan = m.some(f => f.maDiemKhoNhan);
@@ -632,7 +478,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                   }
 
                   const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-                    console.log('maDiemKhoNhan', inx, n)
+
                     const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
                     return {
                       ...maDiemKhoNhan,
@@ -644,6 +490,8 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
                     children: rssx
                   }
                 }).value()
+
+
 
 
                 // return {
@@ -674,7 +522,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           ).value();
 
         let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-        let rowChiCuc = value?.find(s => s.maDvi === key);
+        let rowChiCuc = value?.find(s => s[groupBy] === key);
         return {
           ...rowChiCuc,
           idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
@@ -694,64 +542,64 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     return dataView
   }
 
-  buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
-    let dataView = chain(data)
-      .groupBy(groupBy)
-      ?.map((value, key) => {
-        console.log('maDvi', key, value)
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          ?.map((v, k) => {
-            console.log('maDiemKho', k, v)
-            let rss = chain(v)
-              .groupBy("maLoKho")
-              ?.map((vs, ks) => {
-                console.log('maLoKho', ks, vs)
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+  // buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
+  //   let dataView = chain(data)
+  //     .groupBy(groupBy)
+  //     ?.map((value, key) => {
+  //       console.log('maDvi', key, value)
+  //       let rs = chain(value)
+  //         .groupBy("maDiemKho")
+  //         ?.map((v, k) => {
+  //           console.log('maDiemKho', k, v)
+  //           let rss = chain(v)
+  //             .groupBy("maLoKho")
+  //             ?.map((vs, ks) => {
+  //               console.log('maLoKho', ks, vs)
+  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: vs,
-                  duToanKphi
-                }
-              }
-              ).value();
+  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //               return {
+  //                 ...maLoKho,
+  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //                 children: vs,
+  //                 duToanKphi
+  //               }
+  //             }
+  //             ).value();
 
-            let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-            let rowDiemKho = v?.find(s => s.maDiemKho === k);
+  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
 
-            return {
-              ...rowDiemKho,
-              idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-              duToanKphi: duToanKphi,
-              children: rss,
-              expand: true
-            }
-          }
-          ).value();
+  //           return {
+  //             ...rowDiemKho,
+  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //             duToanKphi: duToanKphi,
+  //             children: rss,
+  //             expand: true
+  //           }
+  //         }
+  //         ).value();
 
-        let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-        let rowChiCuc = value?.find(s => s.maDvi === key);
-        return {
-          ...rowChiCuc,
-          idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-          duToanKphi: duToanKphi,
-          children: rs,
-          expand: true
-        };
-      }).value();
+  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //       let rowChiCuc = value?.find(s => s.maDvi === key);
+  //       return {
+  //         ...rowChiCuc,
+  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
+  //         duToanKphi: duToanKphi,
+  //         children: rs,
+  //         expand: true
+  //       };
+  //     }).value();
 
 
-    if (data?.length !== 0) {
-      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-      this.formData.patchValue({
-        tongDuToanKp: tongDuToanChiPhi,
-      })
-    };
-    return dataView
-  }
+  //   if (data?.length !== 0) {
+  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
+  //     this.formData.patchValue({
+  //       tongDuToanKp: tongDuToanChiPhi,
+  //     })
+  //   };
+  //   return dataView
+  // }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
@@ -773,6 +621,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.show();
 
     await this.spinner.hide();
+    if (!row) this.typeKeHoach = "ADD"
+
+    const keHoachDcHdrId = row ? row.hdrId : undefined
+
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
       nzContent: ThongTinHangCanDieuChuyenCucComponent,
@@ -782,15 +634,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzFooter: null,
       nzComponentParams: {
         dsChiCuc: this.listChiCucNhan,
-        maChiCucNhan: row ? row.maChiCucNhan : '',
-        maDiemKho: row ? row.maDiemKho : '',
-        maNhaKho: row ? row.maNhaKho : '',
-        maNganKho: row ? row.maNganKho : '',
-        maLoKho: row ? row.maLoKho : '',
-        maDiemKhoNhan: row ? row.maDiemKhoNhan : '',
-        maNhaKhoNhan: row ? row.maNhaKhoNhan : '',
-        maNganKhoNhan: row ? row.maNganKhoNhan : '',
-        maLoKhoNhan: row ? row.maLoKhoNhan : '',
+        data: row ? row : undefined
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -798,27 +642,114 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
             this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== data.maLoKhoNhan)
-          if (this.typeKeHoach === "DIEM_KHO_NHAN")
-            this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
-          this.danhSachKeHoach.push(data)
+          // if (this.typeKeHoach === "DIEM_KHO_NHAN")
+          //   this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
+          this.danhSachKeHoach.push({
+            ...data,
+            hdrId: row.hdrId,
+            id: this.typeKeHoach === "LO_KHO_NHAN" ? row.id : undefined
+          })
 
         } else this.danhSachKeHoach.push(data)
 
-        this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
-        console.log('modalQD', data, JSON.stringify(this.dataTableView))
-        const groupChiCuc = this.groupBy(this.danhSachKeHoach, "maChiCucNhan")
-        Object.keys(groupChiCuc).forEach(element => {
-          this.danhSachQuyetDinh.push({
-            danhSachKeHoach: groupChiCuc[`${element}`]
+        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+
+        if (this.idInput) {
+          if (keHoachDcHdrId) {
+            const qdinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId == keHoachDcHdrId)
+
+            if (qdinh) {
+              const dsHH = this.typeKeHoach === "LO_KHO_NHAN" ? qdinh.danhSachKeHoach.filter(item => item.id !== row.id) : qdinh.danhSachKeHoach
+              dsHH.push({
+                ...data,
+                id: this.typeKeHoach === "LO_KHO_NHAN" ? row.id : undefined,
+                hdrId: qdinh.keHoachDcHdrId
+              })
+
+              qdinh.danhSachKeHoach = dsHH
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== keHoachDcHdrId)
+              dsQuyetDinh.push(qdinh)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+          } else {
+            if (this.typeKeHoach === "ADD") {
+              const qd = {
+                maChiCucNhan: data.maChiCucNhan,
+                danhSachKeHoach: [data]
+              }
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh
+              dsQuyetDinh.push(qd)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+            if (this.typeKeHoach === "THEM_LO_KHO") {
+              const dsHH = this.danhSachKeHoach.filter(kh => kh.maDiemKho === data.maDiemKho)
+              const qd = {
+                maChiCucNhan: data.maChiCucNhan,
+                danhSachKeHoach: dsHH
+              }
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
+              dsQuyetDinh.push(qd)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+            if (this.typeKeHoach === "THEM_DIEM_KHO_NHAN") {
+              const dsHH = this.danhSachKeHoach.filter(kh => kh.maNganKho === data.maNganKho)
+              const qd = {
+                maChiCucNhan: data.maChiCucNhan,
+                danhSachKeHoach: dsHH
+              }
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
+              dsQuyetDinh.push(qd)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+            if (this.typeKeHoach === "THEM_LO_KHO_NHAN") {
+              const dsHH = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan === data.maDiemKhoNhan)
+              dsHH.push(data)
+              const qd = {
+                maChiCucNhan: data.maChiCucNhan,
+                danhSachKeHoach: dsHH
+              }
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
+              dsQuyetDinh.push(qd)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+            if (this.typeKeHoach === "LO_KHO_NHAN") {
+              const qd = this.formData.value.danhSachQuyetDinh.find(item => item.maChiCucNhan === data.maChiCucNhan)
+              if (!qd) return
+              const dsHH = qd.danhSachKeHoach.filter(item => item.maNganKhoNhan !== data.maNganKhoNhan)
+              dsHH.push(data)
+              qd.danhSachKeHoach = dsHH
+              const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.maChiCucNhan !== data.maChiCucNhan)
+              dsQuyetDinh.push(qd)
+              this.formData.patchValue({
+                danhSachQuyetDinh: dsQuyetDinh
+              })
+            }
+
+          }
+
+        } else {
+          const groupChiCuc = this.groupBy(this.danhSachKeHoach, "maChiCucNhan")
+          const dsQD = []
+          Object.keys(groupChiCuc).forEach(element => {
+            dsQD.push({
+              danhSachKeHoach: groupChiCuc[`${element}`]
+            })
+          });
+
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQD
           })
-        });
-
-
-        this.formData.patchValue({
-          danhSachQuyetDinh: this.danhSachQuyetDinh
-        })
-
-
+        }
 
       }
     });
@@ -828,20 +759,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     await this.spinner.show();
 
     await this.spinner.hide();
+    const keHoachDcHdrId = row.hdrId
     const param = {
       dsChiCuc: [{ key: row.maDvi, title: row.tenDvi }],
-      maDvi: row ? row.maDvi : '',
-      thoiGianDkDc: row ? row.thoiGianDkDc : '',
-      maDiemKho: row ? row.maDiemKho : '',
-      maNhaKho: row ? row.maNhaKho : '',
-      maNganKho: row ? row.maNganKho : '',
-      maLoKho: row ? row.maLoKho : '',
-      soLuongDc: row ? row.soLuongDc : '',
-      duToanKphi: row ? row.duToanKphi : '',
-      // maDiemKhoNhan: data ? data.maDiemKhoNhan : '',
-      // maNhaKhoNhan: data ? data.maNhaKhoNhan : '',
-      // maNganKhoNhan: data ? data.maNganKhoNhan : '',
-      // maLoKhoNhan: data ? data.maLoKhoNhan : '',
+      data: row
     }
     const modalQD = this.modal.create({
       nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
@@ -852,8 +773,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       nzFooter: null,
       nzComponentParams: param,
     });
-    console.log('nzComponentParams', param, row)
     modalQD.afterClose.subscribe(async (data) => {
+      this.danhSachKeHoach = this.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+
       if (data) {
         if (data.isUpdate) {
           if (this.typeKeHoach === "LO_KHO_NHAN")
@@ -862,26 +784,36 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
           this.danhSachKeHoach.push({
             ...data,
-            maChiCucNhan: row.maChiCucNhan
+            hdrId: keHoachDcHdrId
           })
 
-        } else this.danhSachKeHoach.push(data)
+        } else
+          this.danhSachKeHoach.push({
+            ...data,
+            hdrId: keHoachDcHdrId
+          })
 
         this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-        console.log('modalQDdata', data)
-        console.log('modalQDdanhSachKeHoach', this.danhSachKeHoach)
-        console.log('modalQDdataTableView', this.dataTableView)
-        const groupChiCuc = this.groupBy(this.danhSachKeHoach, "maDvi")
-        Object.keys(groupChiCuc).forEach(element => {
-          this.danhSachQuyetDinh.push({
-            danhSachKeHoach: groupChiCuc[`${element}`]
+
+        const qdinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId == keHoachDcHdrId)
+        console.log('row', row)
+        if (qdinh) {
+          const dsHH = qdinh.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
+          dsHH.push({
+            ...data,
+            id: row.maDiemKhoNhan ? undefined : row.id,
+            hdrId: qdinh.keHoachDcHdrId
           })
-        });
+
+          qdinh.danhSachKeHoach = dsHH
+          const dsQuyetDinh = this.formData.value.danhSachQuyetDinh.filter(item => item.keHoachDcHdrId !== keHoachDcHdrId)
+          dsQuyetDinh.push(qdinh)
+          this.formData.patchValue({
+            danhSachQuyetDinh: dsQuyetDinh
+          })
+        }
 
 
-        this.formData.patchValue({
-          danhSachQuyetDinh: this.danhSachQuyetDinh
-        })
 
 
 
@@ -890,20 +822,17 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaChiCuc(row) {
-    console.log('xoaChiCuc', row)
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maChiCucNhan !== row.maChiCucNhan)
-    this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
   }
 
   xoaDiemKho(row) {
-    console.log('xoaDiemKho', row)
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
-    this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
   }
 
-  themDiemKho(row) {
-    this.typeKeHoach = "ADD"
-    console.log('themDiemKho', row)
+  themLoKho(row) {
+    this.typeKeHoach = "THEM_LO_KHO"
     const data = {
       maDvi: row ? row.maDvi : '',
       tenDvi: row ? row.tenDvi : '',
@@ -918,36 +847,39 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   xoaLoKho(row) {
-    console.log('xoaLoKho', row)
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKho !== row.maLoKho)
-    this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
   }
 
-  themLoKho(row) {
-    this.typeKeHoach = "ADD"
+  themDiemKhoNhan(row) {
+    this.typeKeHoach = "THEM_DIEM_KHO_NHAN"
     console.log('themLoKho', row)
     const data = {
-      maDvi: row ? row.maDvi : '',
-      tenDvi: row ? row.tenDvi : '',
-      maChiCucNhan: row ? row.maChiCucNhan : '',
-      tenChiCucNhan: row ? row.tenChiCucNhan : '',
-      maDiemKho: row ? row.maDiemKho : '',
-      maNhaKho: row ? row.maNhaKho : '',
-      maNganKho: row ? row.maNganKho : '',
-      maLoKho: row ? row.maLoKho : '',
+      ...row,
+      maDiemKhoNhan: "",
+      tenDiemKhoNhan: "",
+      maNhaKhoNhan: "",
+      tenNhaKhoNhan: "",
+      maNganKhoNhan: "",
+      tenNganKhoNhan: "",
+      maLoKhoNhan: "",
+      tenLoKhoNhan: "",
+      thuKhoNhan: "",
+      thayDoiThuKho: "",
+      slDcConLai: "",
+      tichLuongKd: "",
+      soLuongPhanBo: "",
     }
     if (this.isCuc())
       this.add(data)
     if (this.isChiCuc())
-      this.addCC(row)
+      this.addCC(data)
   }
 
   xoaDiemKhoNhan(row) {
-    console.log('xoaDiemKhoNhan', row, this.danhSachKeHoach)
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== row.maDiemKhoNhan)
-    console.log('xoaDiemKhoNhanfilter', this.danhSachKeHoach)
     if (this.isCuc()) {
-      this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
     }
 
     if (this.isChiCuc()) {
@@ -957,17 +889,21 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   suaDiemKhoNhan(row) {
     this.typeKeHoach = "DIEM_KHO_NHAN"
-    console.log('suaDiemKhoNhan', row)
     const data = {
-      maDvi: row ? row.maDvi : '',
-      tenDvi: row ? row.tenDvi : '',
-      maChiCucNhan: row ? row.maChiCucNhan : '',
-      tenChiCucNhan: row ? row.tenChiCucNhan : '',
-      maDiemKho: row ? row.maDiemKho : '',
-      maNhaKho: row ? row.maNhaKho : '',
-      maNganKho: row ? row.maNganKho : '',
-      maLoKho: row ? row.maLoKho : '',
-      maDiemKhoNhan: row ? row.maDiemKhoNhan : '',
+      ...row,
+      // maDiemKhoNhan: "",
+      // tenDiemKhoNhan: "",
+      maNhaKhoNhan: "",
+      tenNhaKhoNhan: "",
+      maNganKhoNhan: "",
+      tenNganKhoNhan: "",
+      maLoKhoNhan: "",
+      tenLoKhoNhan: "",
+      thuKhoNhan: "",
+      thayDoiThuKho: "",
+      slDcConLai: "",
+      tichLuongKd: "",
+      soLuongPhanBo: "",
     }
     if (this.isCuc())
       this.add(data)
@@ -975,38 +911,45 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.addCC(row)
   }
 
-  themDiemKhoNhan(row) {
-    this.typeKeHoach = "ADD"
-    console.log('themDiemKhoNhan', row)
+
+  themLoKhoNhan(row) {
+    this.typeKeHoach = "THEM_LO_KHO_NHAN"
+    console.log('themLoKho', row)
     const data = {
-      maDvi: row ? row.maDvi : '',
-      tenDvi: row ? row.tenDvi : '',
-      maChiCucNhan: row ? row.maChiCucNhan : '',
-      tenChiCucNhan: row ? row.tenChiCucNhan : '',
-      maDiemKho: row ? row.maDiemKho : '',
-      maNhaKho: row ? row.maNhaKho : '',
-      maNganKho: row ? row.maNganKho : '',
-      maLoKho: row ? row.maLoKho : '',
-      // maDiemKhoNhan: row ? row.maDiemKhoNhan : '',
+      ...row,
+      // maDiemKhoNhan: "",
+      // tenDiemKhoNhan: "",
+      maNhaKhoNhan: "",
+      tenNhaKhoNhan: "",
+      maNganKhoNhan: "",
+      tenNganKhoNhan: "",
+      maLoKhoNhan: "",
+      tenLoKhoNhan: "",
+      thuKhoNhan: "",
+      thayDoiThuKho: "",
+      slDcConLai: "",
+      tichLuongKd: "",
+      soLuongPhanBo: "",
     }
     if (this.isCuc())
       this.add(data)
     if (this.isChiCuc())
-      this.addCC(row)
+      this.addCC(data)
   }
 
 
   xoaLoKhoNhan(row) {
-    console.log('xoaLoKhoNhan', row)
-    this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== row.maLoKhoNhan)
+    if (row.maLoKhoNhan)
+      this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maLoKhoNhan !== row.maLoKhoNhan)
+    else
+      this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maNganKhoNhan !== row.maNganKhoNhan)
     if (this.isCuc())
-      this.dataTableView = this.buildTableViewNB(this.danhSachKeHoach, "maDiemKhoNhan")
+      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
     if (this.isChiCuc())
       this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
   }
 
   suaLoKhoNhan(row) {
-    console.log('suaLoKhoNhan', row)
     this.typeKeHoach = "LO_KHO_NHAN"
     if (this.isCuc())
       this.add(row)
@@ -1015,7 +958,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   }
 
   isLuuVaGD() {
-    return (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '01')
+    return !this.isYCXDDiemNhap() && (!this.isView && this.formData.value.trangThai == STATUS.DU_THAO && this.isCuc()) || (this.isChiCuc() && this.formData.value.loaiQdinh == '01')
   }
 
   async save(isGuiDuyet?) {
