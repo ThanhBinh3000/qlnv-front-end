@@ -49,7 +49,7 @@ export class BienBanNghiemThuComponent extends Base2Component implements OnInit 
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: "1800px",
-      nzStyle: {top: "120px"},
+      nzStyle: {top: "90px"},
       nzFooter: null,
       nzComponentParams: {}
     });

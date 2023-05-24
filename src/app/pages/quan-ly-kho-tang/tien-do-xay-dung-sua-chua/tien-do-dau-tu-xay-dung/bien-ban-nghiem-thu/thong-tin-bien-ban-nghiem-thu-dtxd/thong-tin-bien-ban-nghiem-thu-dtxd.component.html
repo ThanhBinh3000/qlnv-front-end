@@ -1,4 +1,4 @@
-<div class="bg-trang">
+<div class="bg-trang scroll-modal">
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
@@ -7,7 +7,7 @@
         [ngClass]="(formData.value.trangThai == STATUS.DA_KY)  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
-          <span>BIÊN BẢN GIAO NHẬN</span>
+          <span>BIÊN BẢN NGHIỆM THU</span>
         </div>
       </div>
       <div class="btn-group">
@@ -15,20 +15,20 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
-        <button class="btn btn-sub ml-2" (click)="pheDuyet()"
-                *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 && userService.isChiCuc() )">
+        <button class="btn btn-sub ml-2" (click)="pheDuyet()">
           <i class="icon htvbdh_trinh "></i>
           <span>Đã ký</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()" *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isChiCuc()">
+        <button class="btn btn-main btn-sm waves-effect waves-light ml-2" (click)="save()"
+                *ngIf="formData.value.trangThai == STATUS.DU_THAO">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
       </div>
     </div>
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
-      <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="3">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true">
               Năm kế hoạch
@@ -55,32 +55,44 @@
           <nz-form-item>
             <nz-form-label nzRequired>Số hợp đồng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" >
-                <input nz-input formControlName="soHopDong" [readonly]="true"/>
+              <nz-input-group nzAddOnAfterIcon="folder-open">
+                <input nz-input formControlName="soHd" [readonly]="true"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="10">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-label  [nzNoColon]="true">
-              Địa điểm giao nhận
+            <nz-form-label [nzNoColon]="true">
+              Tên hợp đồng
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input formControlName="diaDiemGiaoNhan" readonly/>
+                <input nz-input formControlName="tenHd" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true">
-              Ngày giao nhận
+            <nz-form-label [nzNoColon]="true">
+              Tên hợp đồng
             </nz-form-label>
             <nz-form-control>
-              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày giao nhận"
-                              formControlName="ngayGiaoNhan">
+              <nz-input-group>
+                <input nz-input formControlName="tenDuAn" readonly/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Ngày ký
+            </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy" nzPlaceHolder="Ngày ký"
+                              formControlName="ngayKy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -88,47 +100,36 @@
       </div>
     </form>
   </nz-card>
+  <div class="header header-green-background mg-t-10">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span class="text-uppercase font-weight-bold">THÀNH PHẦN THAM DỰ</span>
+      </div>
+    </div>
+  </div>
   <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
       <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
-              Bên giao hàng
-            </nz-form-label>
-            <nz-form-control>
-              <nz-input-group>
-                <input nz-input readonly formControlName="benGiaoHang"/>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
+        <div nz-col nzSpan="3">
+            <h4>  Đại diện chủ đầu tư </h4>
         </div>
-        <div nz-col nzSpan="12">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
-              Bên nhận hàng
-            </nz-form-label>
-            <nz-form-control>
-              <nz-input-group>
-                <input nz-input readonly formControlName="benNhanHang"/>
-              </nz-input-group>
-            </nz-form-control>
-          </nz-form-item>
+        <div nz-col nzSpan="21">
+          <input nz-input readonly formControlName="benNhanHang"/>
         </div>
-        <div nz-col nzSpan="12">
-          <nz-table class="nowrap pd-10"  [nzData]="tableBenNhan" [nzFrontPagination]="false"
+        <div nz-col nzSpan="24">
+          <nz-table class="nowrap pd-10" [nzData]="tableBenNhan" [nzFrontPagination]="false"
                     [nzShowPagination]="false" nzBordered>
             <thead>
             <tr>
               <th nzWidth="40px">STT</th>
-              <th nzWidth="300px">Đại diện bên nhận</th>
-              <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
+              <th >Họ và tên</th>
+              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
               <th></th>
               <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.hoVaTen"></th>
-              <th><input nz-input [ngModelOptions]="{standalone: true}"  [(ngModel)]="rowItemBn.chucVu"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.chucVu"></th>
               <th class="text-center">
                 <a (click)="themMoiBgBn('benNhan')">
                   <i class="icon htvbdh_dau-cong"></i>
@@ -156,8 +157,10 @@
               </ng-container>
               <ng-template #editTemplateBg>
                 <td></td>
-                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.hoVaTen"></td>
-                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.chucVu"></td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.hoVaTen">
+                </td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.chucVu">
+                </td>
                 <td class="text-center">
                   <a (click)="saveEditBgBn(idx, 'benNhan')" class="save">
                     <i class="fa fa-save"></i>
@@ -170,54 +173,62 @@
             </tbody>
           </nz-table>
         </div>
-        <div nz-col nzSpan="12">
-          <nz-table class="nowrap pd-10"  [nzData]="tableBenGiao" [nzFrontPagination]="false"
+        <div nz-col nzSpan="3">
+          <h4>  Đại diện đơn vị sử dụng </h4>
+        </div>
+        <div nz-col nzSpan="21">
+          <input nz-input readonly formControlName="benNhanHang"/>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-table class="nowrap pd-10" [nzData]="tableBenNhan" [nzFrontPagination]="false"
                     [nzShowPagination]="false" nzBordered>
             <thead>
             <tr>
               <th nzWidth="40px">STT</th>
-              <th nzWidth="300px">Đại diện bên giao</th>
-              <th nzWidth="200px">Chức vụ</th>
-              <th nzWidth="90px" class="text-center" *ngIf="!isView">Hành động</th>
+              <th >Họ và tên</th>
+              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
             </tr>
             <tr *ngIf="!isView">
               <th></th>
-              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBg.hoVaTen"></th>
-              <th><input nz-input [ngModelOptions]="{standalone: true}"  [(ngModel)]="rowItemBg.chucVu"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.hoVaTen"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.chucVu"></th>
               <th class="text-center">
-                <a (click)="themMoiBgBn('benGiao')">
+                <a (click)="themMoiBgBn('benNhan')">
                   <i class="icon htvbdh_dau-cong"></i>
                 </a>
-                <a (click)="refreshBgBn('benGiao')">
+                <a (click)="refreshBgBn('benNhan')">
                   <i class="fa fa-refresh"></i>
                 </a>
               </th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let data of tableBenGiao; let idx = index">
-              <ng-container *ngIf="!dataEditBg[idx].edit; else editTemplateBg">
+            <tr *ngFor="let data of tableBenNhan; let idx = index">
+              <ng-container *ngIf="!dataEditBn[idx].edit; else editTemplateBg">
                 <td>{{ idx + 1 }}</td>
                 <td>{{ data.hoVaTen}}</td>
                 <td>{{ data.chucVu}}</td>
                 <td class="text-center" *ngIf="!isView">
-                  <a (click)="editRowBgBn(idx, 'benGiao')">
+                  <a (click)="editRowBgBn(idx, 'benNhan')">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a (click)="deleteItemBgBn(idx, 'benGiao')">
+                  <a (click)="deleteItemBgBn(idx, 'benNhan')">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
               </ng-container>
               <ng-template #editTemplateBg>
                 <td></td>
-                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBg[idx].data.hoVaTen"></td>
-                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBg[idx].data.chucVu"></td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.hoVaTen">
+                </td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.chucVu">
+                </td>
                 <td class="text-center">
-                  <a (click)="saveEditBgBn(idx, 'benGiao')" class="save">
+                  <a (click)="saveEditBgBn(idx, 'benNhan')" class="save">
                     <i class="fa fa-save"></i>
                   </a>
-                  <a (click)="cancelEditBgBn(idx, 'benGiao')">
+                  <a (click)="cancelEditBgBn(idx, 'benNhan')">
                     <i class="fa fa-ban do"></i> </a>
                 </td>
               </ng-template>
@@ -225,138 +236,204 @@
             </tbody>
           </nz-table>
         </div>
-        <nz-table class="nowrap pd-10" [nzData]="dataTable" [nzFrontPagination]="false"
-                  [nzShowPagination]="false" nzBordered>
-          <thead>
-          <tr>
-            <th nzWidth="40px">STT</th>
-            <th nzWidth="300px">Loại hàng hóa</th>
-            <th nzWidth="140px">Đơn vị tính</th>
-            <th nzWidth="140px">Số lượng</th>
-            <th nzWidth="140px">Đơn giá</th>
-            <th>Thành tiền</th>
-            <th nzWidth="120px" class="text-center" *ngIf="!isView">Hành động</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr *ngIf="!isView">
-            <td></td>
-            <td>
-              <nz-select nzAllowClear [(ngModel)]="rowItem.maHangHoa" [ngModelOptions]="{standalone: true}">
-                <nz-option *ngFor="let item of listHangHoa" [nzValue]="item.maHangHoa"
-                           [nzLabel]="item.tenHangHoa"></nz-option>
-              </nz-select>
-            </td>
-            <td>
-              <input [ngModelOptions]="{standalone: true}" readonly type="text" nz-input [(ngModel)]="rowItem.donViTinh"/>
-            </td>
-            <td>
-              <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.soLuong" [nzSize]="'small'"
-                               [nzFormatter]="globals.formatter"
-                               [nzMin]="0"
-                               [nzParser]="globals.parser"></nz-input-number>
-            </td>
-            <td>
-              <input [ngModelOptions]="{standalone: true}" readonly type="text" nz-input [(ngModel)]="rowItem.donGia"/>
-            </td>
-            <td>
-              <nz-input-number nzDisabled [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItem.donGia * rowItem.soLuong "
-                               [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                               [nzMin]="0"
-                               [nzParser]="globals.parser"></nz-input-number>
-            </td>
-            <td class="text-center">
-              <a (click)="themMoiCtiet()">
-                <i class="icon htvbdh_dau-cong"></i>
-              </a>
-              <a (click)="refresh()">
-                <i class="fa fa-refresh"></i>
-              </a>
-            </td>
-          </tr>
-          <tr *ngFor="let data of dataTable; let idx = index">
-            <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate1">
-              <td>{{ idx + 1 }}</td>
-              <td>{{ data.tenHangHoa}}</td>
-              <td>{{ data.donViTinh }}</td>
-              <td>{{ data.soLuong  | number: '1.0-1'  }}</td>
-              <td>{{ data.donGia }}</td>
-              <td>{{ data.donGia *  data.soLuong   | number: '1.0-1'  }}</td>
-              <td class="text-center" *ngIf="!isView">
-                <a (click)="editRow(idx)">
-                  <i class="fa fa-pencil"></i>
-                </a>
-                <a (click)="deleteItem(idx)">
-                  <i class="fa fa-trash-o do"></i>
-                </a>
-              </td>
-            </ng-container>
-            <ng-template #editTemplate1>
-              <td></td>
-              <td>
-                <nz-select nzAllowClear [(ngModel)]="dataEdit[idx].data.maHangHoa" [ngModelOptions]="{standalone: true}" >
-                  <nz-option *ngFor="let item of listHangHoa" [nzValue]="item.maHangHoa"
-                             [nzLabel]="item.tenHangHoa"></nz-option>
-                </nz-select>
-              </td>
-              <td>
-                <input type="text" [ngModelOptions]="{standalone: true}" nz-input readonly
-                       [(ngModel)]="dataEdit[idx].data.donViTinh"/>
-              </td>
-              <td>
-                <nz-input-number [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEdit[idx].data.soLuong" [nzMax]="data.soLuong"
-                                 [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                 [nzMin]="0"
-                                 [nzParser]="globals.parser"></nz-input-number>
-              </td>
-              <td>
-                <input type="text" [ngModelOptions]="{standalone: true}" nz-input readonly
-                       [(ngModel)]="dataEdit[idx].data.donGia"/>
-              </td>
-              <td>
-                <nz-input-number [ngModelOptions]="{standalone: true}" nzDisabled
-                                 [(ngModel)]="dataEdit[idx].data.donGia * dataEdit[idx].data.soLuong" [nzSize]="'small'"
-                                 [nzFormatter]="globals.formatter"
-                                 [nzMin]="0"
-                                 [nzParser]="globals.parser"></nz-input-number>
-              </td>
-              <td class="text-center">
-                <a (click)="saveEdit(idx)" class="save">
-                  <i class="fa fa-save"></i>
-                </a>
-                <a (click)="cancelEdit(idx)">
-                  <i class="fa fa-ban do"></i> </a>
-              </td>
-            </ng-template>
-          </tr>
-          </tbody>
-        </nz-table>
+        <div nz-col nzSpan="3">
+          <h4>  Đại diện đơn vị giám sát </h4>
+        </div>
+        <div nz-col nzSpan="21">
+          <input nz-input readonly formControlName="benNhanHang"/>
+        </div>
         <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label  [nzNoColon]="true">
-              Quy cách chất lượng
+          <nz-table class="nowrap pd-10" [nzData]="tableBenNhan" [nzFrontPagination]="false"
+                    [nzShowPagination]="false" nzBordered>
+            <thead>
+            <tr>
+              <th nzWidth="40px">STT</th>
+              <th >Họ và tên</th>
+              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
+            </tr>
+            <tr *ngIf="!isView">
+              <th></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.hoVaTen"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.chucVu"></th>
+              <th class="text-center">
+                <a (click)="themMoiBgBn('benNhan')">
+                  <i class="icon htvbdh_dau-cong"></i>
+                </a>
+                <a (click)="refreshBgBn('benNhan')">
+                  <i class="fa fa-refresh"></i>
+                </a>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of tableBenNhan; let idx = index">
+              <ng-container *ngIf="!dataEditBn[idx].edit; else editTemplateBg">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ data.hoVaTen}}</td>
+                <td>{{ data.chucVu}}</td>
+                <td class="text-center" *ngIf="!isView">
+                  <a (click)="editRowBgBn(idx, 'benNhan')">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="deleteItemBgBn(idx, 'benNhan')">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplateBg>
+                <td></td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.hoVaTen">
+                </td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.chucVu">
+                </td>
+                <td class="text-center">
+                  <a (click)="saveEditBgBn(idx, 'benNhan')" class="save">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEditBgBn(idx, 'benNhan')">
+                    <i class="fa fa-ban do"></i> </a>
+                </td>
+              </ng-template>
+            </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <div nz-col nzSpan="3">
+          <h4>  Đại diện đơn vị thi công </h4>
+        </div>
+        <div nz-col nzSpan="21">
+          <input nz-input readonly formControlName="benNhanHang"/>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-table class="nowrap pd-10" [nzData]="tableBenNhan" [nzFrontPagination]="false"
+                    [nzShowPagination]="false" nzBordered>
+            <thead>
+            <tr>
+              <th nzWidth="40px">STT</th>
+              <th >Họ và tên</th>
+              <th nzWidth="250px">Chức vụ</th>
+              <th nzWidth="100px" class="text-center" *ngIf="!isView">Hành động</th>
+            </tr>
+            <tr *ngIf="!isView">
+              <th></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.hoVaTen"></th>
+              <th><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="rowItemBn.chucVu"></th>
+              <th class="text-center">
+                <a (click)="themMoiBgBn('benNhan')">
+                  <i class="icon htvbdh_dau-cong"></i>
+                </a>
+                <a (click)="refreshBgBn('benNhan')">
+                  <i class="fa fa-refresh"></i>
+                </a>
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of tableBenNhan; let idx = index">
+              <ng-container *ngIf="!dataEditBn[idx].edit; else editTemplateBg">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ data.hoVaTen}}</td>
+                <td>{{ data.chucVu}}</td>
+                <td class="text-center" *ngIf="!isView">
+                  <a (click)="editRowBgBn(idx, 'benNhan')">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="deleteItemBgBn(idx, 'benNhan')">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplateBg>
+                <td></td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.hoVaTen">
+                </td>
+                <td><input nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="dataEditBn[idx].data.chucVu">
+                </td>
+                <td class="text-center">
+                  <a (click)="saveEditBgBn(idx, 'benNhan')" class="save">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="cancelEditBgBn(idx, 'benNhan')">
+                    <i class="fa fa-ban do"></i> </a>
+                </td>
+              </ng-template>
+            </tr>
+            </tbody>
+          </nz-table>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Thời gian bắt đầu nghiệm thu
             </nz-form-label>
             <nz-form-control>
-              <textarea [readonly]="isView" rows="3" class="search__input" nz-input formControlName="quyCachChatLuong"></textarea>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy"
+                              formControlName="ngayKy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Thời gian bắt đầu nghiệm thu
+            </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy"
+                              formControlName="ngayKy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Ngày khởi công
+            </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy"
+                              formControlName="ngayKy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true">
+              Ngày hoàn thành
+            </nz-form-label>
+            <nz-form-control>
+              <nz-date-picker [nzDisabled]="isView" class="search__input" nzFormat="dd-MM-yyyy"
+                              formControlName="ngayKy">
+              </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
-            <nz-form-label  [nzNoColon]="true">
-              Các nội dung khác
-            </nz-form-label>
-            <nz-form-control>
-              <textarea [readonly]="isView" rows="3" class="search__input" nz-input formControlName="noiDungKhac"></textarea>
-            </nz-form-control>
+            <nz-form-label nzNoColon="true">Chất lượng, khối lượng công trình xây dựng</nz-form-label>
+            <nz-input-group>
+              <textarea nz-input nz-row="3" ></textarea>
+            </nz-input-group>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu làm căn cứ nghiệm thu
+            </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isView" [data]="fileDinhKem"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
             </div>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label nzNoColon="true">Kết luận</nz-form-label>
+            <nz-input-group>
+              <textarea nz-input nz-row="3" ></textarea>
+            </nz-input-group>
           </nz-form-item>
         </div>
       </div>

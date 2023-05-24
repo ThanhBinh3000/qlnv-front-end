@@ -73,8 +73,6 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.maBb = `/${this.formData.value.namKeHoach}/BBGN-` + this.userInfo.DON_VI.tenVietTat;
       if (this.id > 0) {
         this.detail(this.id)
-      } else {
-        this.initForm()
       }
       this.spinner.hide();
     } catch (e) {
@@ -82,22 +80,6 @@ export class ThongTinBienBanNghiemThuDtxdComponent extends Base2Component implem
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  async initForm() {
-    console.log(this.userInfo)
-    this.formData.patchValue({
-      diaDiemGiaoNhan: this.userInfo.DON_VI.diaChi,
-      benNhanHang: this.userInfo.TEN_DVI
-    })
-    await this.getMaDanhSach()
-  }
-
-  async getMaDanhSach() {
-    let id = await this.userService.getId('QL_DINH_MUC_BB_GIAO_NHAN_SEQ')
-    this.formData.patchValue({
-      soBienBan : id
-    })
   }
 
   async detail(id) {
