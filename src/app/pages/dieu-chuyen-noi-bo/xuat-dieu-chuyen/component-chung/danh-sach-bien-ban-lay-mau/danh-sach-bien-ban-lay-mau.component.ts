@@ -1,3 +1,4 @@
+import { STATUS } from 'src/app/constants/status';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
@@ -12,14 +13,20 @@ import { MESSAGE } from 'src/app/constants/message';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { BienBanLayMauDieuChuyenService } from '../services/dcnb-bien-ban-lay-mau.service';
 
+export interface PassData {
+    idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
+    maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string
+}
 @Component({
     selector: 'app-danh-sach-bien-ban-lay-mau',
     templateUrl: './danh-sach-bien-ban-lay-mau.component.html',
     styleUrls: ['./danh-sach-bien-ban-lay-mau.component.scss'],
 })
 export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
-    @Input() title: string = "Danh sách biên bản lấy mẫu/bàn giao mẫu"
-    @Input() fileNameExport: string = "file.xlsx"
+    @Input() title: string = "Danh sách biên bản lấy mẫu/bàn giao mẫu";
+    @Input() fileNameExport: string = "file.xlsx";
+    @Input() loaiDc: string;
+    @Input() loaiVthh: string[];
     // @Output() checkPermissonDelete = new EventEmitter<boolean>();
     // @Output() checkPermissonExport = new EventEmitter<boolean>();
     // @Output() checkPermissonAdd = new EventEmitter<boolean>();
@@ -39,14 +46,16 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     pageSize: number = PAGE_SIZE_DEFAULT;
     totalRecord: number = 0;
     dataTable: any[];
-    passData: {
-        idBbLayMau: number, qdinhDccId: number, soQdinhDcc: string, maLoKho: string, tenLoKho: string,
-        maNganKho: string, tenNganKho: string, maNhaKho: string, tenNhaKho: string, maDiemKho: string, tenDiemKho: string
-    } = {
+    passData: PassData = {
         idBbLayMau: null, qdinhDccId: null, soQdinhDcc: '', maLoKho: '', tenLoKho: '',
-            maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: ''
-        }
-
+        maNganKho: '', tenNganKho: '', maNhaKho: '', tenNhaKho: '', maDiemKho: '', tenDiemKho: ''
+    }
+    LIST_TRANG_THAI: { [key: string]: string } = {
+        [STATUS.DU_THAO]: "Dự thảo",
+        [STATUS.CHO_DUYET_LDCC]: "Chờ duyệt LĐ Chi Cục",
+        [STATUS.TU_CHOI_LDCC]: "Từ chối LĐ Chi Cục",
+        [STATUS.DA_DUYET_LDCC]: "Đã duyệt LĐ Chi Cục"
+    }
     constructor(httpClient: HttpClient,
         storageService: StorageService,
         notification: NzNotificationService,
@@ -56,33 +65,35 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         private cdr: ChangeDetectorRef,) {
         super(httpClient, storageService, notification, spinner, modal, bienBanLayMauDieuChuyenService);
         this.formData = this.fb.group({
-            namKeHoach: [null],
-            soBienBan: [null],
-            soQd: [null],
-            dviKnghiem: [null],
+            nam: [null],
+            soBbLayMau: [null],
+            soQdinhDcc: [null],
+            dviKiemNghiem: [null],
             ngayLayMau: [null],
             ngayLayMauTu: [null],
             ngayLayMauDen: [null],
-            maDvi: [null],
-            loaiVthh: [null],
+            trangThai: [STATUS.BAN_HANH],
+            maDvi: [this.userInfo.MA_DVI],
+            loaiDc: [],
+            loaiVthh: [],
         })
         this.filterTable = {
             nam: '',
-            soQd: '',
+            soBbLayMau: '',
+            soQdinhDcc: '',
             ngayTao: '',
-            soHd: '',
             tenLoaiVthh: '',
             tenCloaiVthh: '',
-            tgianGnhan: '',
+            thoiHanDieuChuyen: '',
             trichYeu: '',
             bbTinhKho: '',
             bbHaoDoi: '',
-            tenTrangThai: '',
-            tenTrangThaiXh: '',
+            trangThai: '',
         };
     }
 
     ngOnInit(): void {
+        this.formData.patchValue({ loaiDc: this.loaiDc, loaiVthh: this.loaiVthh });
         this.timKiem()
     }
     async timKiem() {
@@ -91,27 +102,9 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             this.formData.value.ngayLayMauDen = dayjs(this.formData.value.ngayLayMau[1]).format('YYYY-MM-DD')
         }
         try {
+            await this.search();
+            this.buildTableView();
 
-            const res = await this.bienBanLayMauDieuChuyenService.search({
-                trangThai: this.STATUS.BAN_HANH,
-                loaiDc: "DCNB",
-                paggingReq: {
-                    // limit: this.globals.prop.MAX_INTERGER,
-                    limit: this.pageSize,
-                    page: this.page - 1
-                },
-            });
-            if (res.msg == MESSAGE.SUCCESS) {
-                let data = res.data;
-                console.log("data", data.content)
-                if (data && data.content && data.content.length > 0) {
-                    this.dataTable = cloneDeep(data.content);
-                    this.totalRecord = data.totalElements;
-                    this.buildTableView()
-                }
-            } else {
-                this.notification.error(MESSAGE.ERROR, res.msg)
-            }
         } catch (error) {
             console.log("error", error)
         }
@@ -151,7 +144,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             };
         }).value();
         this.dataView = dataView;
-        console.log("dataView", this.dataView)
         this.expandAll()
     }
 
@@ -171,7 +163,7 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
     viewDetail(id: number, isView: boolean) {
 
     }
-    redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number, qdinhDccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
+    redirectToChiTiet(data: any, isView: boolean, idBbLayMau?: number, qdinhDccId?: number, soQdinhDcc?: string, maLoKho?: string, tenLoKho?: string,
         maNganKho?: string, tenNganKho?: string, maNhaKho?: string, tenNhaKho?: string, maDiemKho?: string, tenDiemKho?: string) {
         this.selectedId = idBbLayMau;
         this.isDetail = true;
@@ -180,10 +172,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
             maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho
         }
-        console.log("idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho", idBbLayMau, qdinhDccId, soQdinhDcc, maLoKho, tenLoKho,
-            maNganKho, tenNganKho, maNhaKho, tenNhaKho, maDiemKho, tenDiemKho);
-        console.log("=========================================================")
-        console.log("passData", this.passData)
     }
     disabledTuNgay = (startValue: Date): boolean => {
         if (startValue && this.formData.value.ngayLayMauDen) {
@@ -208,26 +196,69 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         return true
     }
     checkRoleAdd(trangThai: string): boolean {
-        return true
+        if (this.userService.isChiCuc() && !trangThai) {
+            return true
+        }
+        return false
     }
     checkRoleView(trangThai: string): boolean {
-        return true
+        if (this.userService.isChiCuc() && !this.checkRoleAdd(trangThai) && !this.checkRoleEdit(trangThai)) {
+            return true
+        }
+        return false
     }
     checkRoleEdit(trangThai: string): boolean {
-        return true
+        if (this.userService.isChiCuc() && (trangThai == this.STATUS.DU_THAO || trangThai == this.STATUS.TU_CHOI_LDCC)) {
+            return true
+        }
+        return false
     }
     checkRoleApprove(trangThai: string): boolean {
-        return true
+        if (this.userService.isChiCuc() && trangThai == this.STATUS.CHO_DUYET_LDCC) {
+            return true
+        }
+        return false
     }
     checkRoleDelete(trangThai: string): boolean {
-        return true
+        if (this.userService.isChiCuc() && trangThai == this.STATUS.DU_THAO) {
+            return true
+        }
     }
-    xoaItem(data) {
-
+    xoaItem(item: any, roles?) {
+        if (!this.checkPermission(roles)) {
+            return
+        }
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: async () => {
+                this.spinner.show();
+                try {
+                    let body = {
+                        id: item.id
+                    };
+                    const res = await this.bienBanLayMauDieuChuyenService.delete(body);
+                    if (res.msg == MESSAGE.SUCCESS) {
+                        await this.timKiem();
+                    }
+                } catch (e) {
+                    console.log('error: ', e);
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+                finally {
+                    this.spinner.hide()
+                }
+            },
+        });
     }
     showList() {
         this.isDetail = false;
-        this.search();
+        this.timKiem();
     }
     openModalQdDc(idQdDc: number) {
         this.idQdDc = idQdDc;
