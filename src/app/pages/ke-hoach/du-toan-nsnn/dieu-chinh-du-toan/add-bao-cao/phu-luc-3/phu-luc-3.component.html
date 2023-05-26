@@ -77,7 +77,8 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td> -->
               <td class="text-center">
-                {{getChiMuc(data.stt)}}
+                <!-- {{getChiMuc(data.stt)}} -->
+                {{i+1}}
               </td>
               <td>
                 {{data.noiDung}}
@@ -101,7 +102,9 @@
             </ng-container>
             <ng-template #editTemplate>
               <td class="text-center">
-                {{getChiMuc(editCache[data.id].data.stt)}}
+                <!-- {{getChiMuc(editCache[data.id].data.stt)}}
+                 -->
+                {{i+1}}
               </td>
               <td>
                 {{editCache[data.id].data.noiDung}}

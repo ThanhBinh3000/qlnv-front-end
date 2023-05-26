@@ -77,7 +77,7 @@ export class PhuLuc1Component implements OnInit {
   total: ItemData = new ItemData();
   isSynthetic: any;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 450;
+  BOX_NUMBER_WIDTH = 250;
   constructor(
     private dieuChinhDuToanService: DieuChinhService,
     private _modalRef: NzModalRef,
@@ -191,9 +191,9 @@ export class PhuLuc1Component implements OnInit {
     this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
 
     if (this.status) {
-      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 5).toString() + 'px';
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 7).toString() + 'px';
     } else {
-      this.scrollX = (300 + this.BOX_NUMBER_WIDTH * 5).toString() + 'px';
+      this.scrollX = (350 + this.BOX_NUMBER_WIDTH * 7).toString() + 'px';
     }
 
     this.tinhTong();

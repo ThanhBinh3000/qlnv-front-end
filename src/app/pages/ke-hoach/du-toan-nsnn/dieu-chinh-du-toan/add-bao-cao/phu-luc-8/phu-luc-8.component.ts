@@ -91,7 +91,7 @@ export class PhuLuc8Component implements OnInit {
   linhVucChis: any[] = DANH_MUC;
   isSynthetic: any;
   scrollX: string;
-  BOX_NUMBER_WIDTH = 400;
+  BOX_NUMBER_WIDTH = 250;
   constructor(
     private _modalRef: NzModalRef,
     private notification: NzNotificationService,
@@ -137,6 +137,8 @@ export class PhuLuc8Component implements OnInit {
         item.maDviTinh = dinhMuc?.donViTinh;
         item.luongSlBquanTcong = sumNumber([item.luongSlBquanTte, item.luongSlBquanUocThien])
         item.tongNcauDtoan = mulNumber(item.dinhMuc, item.luongSlBquanTcong);
+        item.dtoanDchinhDnghi = item.tongNcauDtoan - item.kphiCong
+        item.dtoanVuTvqtDnghi = item.tongNcauDtoan - item.kphiCong
       })
     }
 

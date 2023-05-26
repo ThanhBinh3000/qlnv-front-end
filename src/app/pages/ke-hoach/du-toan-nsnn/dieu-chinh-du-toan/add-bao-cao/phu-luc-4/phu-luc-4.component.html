@@ -125,7 +125,8 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
               <td class="text-center">
-                {{getIndex(data.stt)}}
+                <!-- {{getIndex(data.stt)}} -->
+                {{i+1}}
               </td>
               <td>
                 {{data.noiDung}}
@@ -161,7 +162,9 @@
                   (ngModelChange)="updateSingleChecked()"></label>
               </td>
               <td class="text-center">
-                {{getIndex(editCache[data.id].data.stt)}}
+                <!-- {{getIndex(editCache[data.id].data.stt)}} -->
+
+                {{i+1}}
               </td>
               <td>
                 {{editCache[data.id].data.noiDung}}

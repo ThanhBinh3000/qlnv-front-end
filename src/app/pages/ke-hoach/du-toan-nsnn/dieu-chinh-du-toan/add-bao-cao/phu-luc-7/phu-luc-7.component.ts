@@ -365,6 +365,7 @@ export class PhuLuc7Component implements OnInit {
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
           this.lstCtietBcao[index].dkienThienDtoan = sumNumber([this.lstCtietBcao[index].dkienThienDtoan, item.dkienThienDtoan]);
+          this.lstCtietBcao[index].tdiemBcaoDtoan = sumNumber([this.lstCtietBcao[index].tdiemBcaoDtoan, item.tdiemBcaoDtoan]);
           this.lstCtietBcao[index].dtoanLkeDaGiao = sumNumber([this.lstCtietBcao[index].dtoanLkeDaGiao, item.dtoanLkeDaGiao]);
           this.lstCtietBcao[index].dtoanDnghiDchinh = sumNumber([this.lstCtietBcao[index].dtoanDnghiDchinh, item.dtoanDnghiDchinh]);
           this.lstCtietBcao[index].dtoanNamConThieu = sumNumber([this.lstCtietBcao[index].dtoanNamConThieu, item.dtoanNamConThieu]);
