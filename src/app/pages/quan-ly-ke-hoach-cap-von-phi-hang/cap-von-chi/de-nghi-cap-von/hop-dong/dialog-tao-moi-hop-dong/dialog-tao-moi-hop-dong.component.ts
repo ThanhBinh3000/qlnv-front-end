@@ -22,7 +22,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     @Input() obj: any;
 
     userInfo: any;
-    response: BaoCao = new BaoCao();
+    response: BaoCao;
     lstHdongs: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
@@ -37,6 +37,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
+        this.response = new BaoCao();
         this.userInfo = this.userService.getUserLogin();
         this.response.ngayTao = new Date();
         this.response.maDvi = this.userInfo?.MA_DVI;

@@ -21,7 +21,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	@Input() obj: any;
 
 	userInfo: any;
-	response: BaoCao = new BaoCao();
+	response: BaoCao;
 	loaiDns: any[] = LOAI_DE_NGHI;
 	canCuGias: any[] = CAN_CU_GIA;
 	isRequestExist: number;
@@ -37,6 +37,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 	) { }
 
 	async ngOnInit() {
+		this.response = new BaoCao();
 		this.userInfo = this.userService.getUserLogin();
 		if (this.userService.isChiCuc()) {
 			this.canCuGias = this.canCuGias.filter(e => e.id == Utils.QD_DON_GIA);
