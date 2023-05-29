@@ -67,9 +67,13 @@ export class DialogQdMuabubosungTtcpComponent implements OnInit {
     }).subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
         if (event == '0101') {
-          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          const dataVatTu = hangHoa.data.filter(it => (it.ma == '02' || it.ma == '04' || it.ma == '0101' || it.ma == '0102'));
           dataVatTu.forEach(item => {
-            this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+            if (item.ma == "02") {
+              this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+            } else {
+              this.dsHangHoa = [...this.dsHangHoa, item]
+            }
           });
         } else {
           this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);

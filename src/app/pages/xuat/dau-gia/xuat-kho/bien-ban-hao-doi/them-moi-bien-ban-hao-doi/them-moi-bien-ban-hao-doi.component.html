@@ -138,7 +138,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQd()">
-                <input nz-input [readonly]="isView" formControlName="soQdGiaoNvXh" readonly/>
+                <input nz-input [readonly]="isView" formControlName="soQdGiaoNvXh" (ngModelChange)="changeSoQd($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -165,7 +165,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogDdiemNhapHang()">
-                <input [readonly]="isView" nz-input formControlName="tenDiemKho" readonly/>
+                <input [readonly]="isView" nz-input formControlName="tenDiemKho" (ngModelChange)="changeDd($event)" readonly/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

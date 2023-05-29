@@ -269,6 +269,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
             this.formData.patchValue({
               maThongBao: dataTb.maThongBao,
               soBienBan: dataTb.soBienBan,
+              loaiHinhNx: dataQdKhDtl.xhQdPdKhBdg.loaiHinhNx,
+              kieuNx: dataQdKhDtl.xhQdPdKhBdg.kieuNx,
               loaiVthh: dataTb.loaiVthh,
               tenLoaiVthh: dataTb.tenLoaiVthh,
               cloaiVthh: dataTb.cloaiVthh,
