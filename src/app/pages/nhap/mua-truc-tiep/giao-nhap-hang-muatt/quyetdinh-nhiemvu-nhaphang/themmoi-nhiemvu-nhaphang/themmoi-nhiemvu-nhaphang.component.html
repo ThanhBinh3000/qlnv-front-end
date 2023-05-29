@@ -266,7 +266,7 @@
             <ng-container *ngFor="let item of dataTable , let i = index">
                 <tr>
                     <td class="text-center">{{ i + 1 }}</td>
-                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                    <td [nzExpand]="true"></td>
                     <td>{{ item.tenDvi }}</td>
                     <td></td>
                     <td></td>
@@ -277,7 +277,7 @@
                     <td *ngIf="userService.isChiCuc()">
                     </td>
                 </tr>
-                <ng-container *ngIf="expandSet.has(i)">
+                <ng-container>
                     <tr *ngIf="userService.isChiCuc() && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
                         <td></td>
                         <td></td>
@@ -322,7 +322,7 @@
                             </a>
                         </td>
                     </tr>
-                    <tr *ngFor="let ddNhap of item.hhQdGiaoNvNhDdiemList, let y = index">
+                    <tr *ngFor="let ddNhap of item.children, let y = index">
                         <td></td>
                         <td></td>
                         <td></td>

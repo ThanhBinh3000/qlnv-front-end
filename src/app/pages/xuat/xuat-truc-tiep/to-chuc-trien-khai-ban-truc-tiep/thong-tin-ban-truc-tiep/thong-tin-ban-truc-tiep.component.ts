@@ -110,11 +110,10 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.search();
   }
 
-  redirectToChiTiet(isView: boolean, id: number, pthucBanTrucTiep: string) {
+  redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
-    this.pthucBanTrucTiep = pthucBanTrucTiep;
   }
 
   openModalQdPdKh(id: number) {

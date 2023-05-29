@@ -20,7 +20,7 @@
           <span>Ban hành</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP')"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP')  || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
@@ -37,12 +37,12 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_TP'))">
+        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
+           *ngIf="(!userService.isTongCuc() &&  thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_TP') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_CUCGIAO_DUYET_LDC'))">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+        <a class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="tuChoi()"
            *ngIf="(userService.isTongCuc() && thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV ) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_TCGIAO_DUYET_LDVU') )">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
@@ -284,18 +284,19 @@
             <th class="text-right">{{calculatortkdnTongThocCreate()}}
             </th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[0].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[0].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[1].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[1].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[2].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">{{(this.keHoachLuongThucCreate.tkdnThoc[2].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th class="text-right">{{calculatortkdnTongGaoCreate()}}</th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[0].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">
+              {{(this.keHoachLuongThucCreate.tkdnGao[0].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[1].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[1].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th
-              class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[2].soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</th>
+              class="text-right">{{(this.keHoachLuongThucCreate.tkdnGao[2].soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</th>
             <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>
             <th class="text-right">
               <input class="money-input" currencyMask [options]="AMOUNT" [(ngModel)]="keHoachLuongThucCreate.ntnThoc"/>
@@ -316,7 +317,8 @@
           [max]="keHoachLuongThucCreate.tkdnThoc[0].soLuong"
           [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong" class="w-120" [min]="0"
           [readonly]="disableBanHanhLanhDaoDuyet()" appNumberOnly /> -->
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[0].soLuong/1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"/>
 
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
@@ -324,14 +326,16 @@
               <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[0].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[1].soLuong/1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"/>
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[1].soLuong" [nzSize]="'small'"-->
               <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnThoc[1].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnThoc[2].soLuong/1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnThoc[2].soLuong"/>
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                               [nzMax]="keHoachLuongThucCreate.tkdnThoc[2].soLuong" [nzSize]="'small'"-->
@@ -339,21 +343,24 @@
             </th>
             <th class="text-right">{{calculatorxtnTongGaoCreate()}}</th>
             <th class="text-right">
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[0].soLuong / 1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"/>
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[0].soLuong" [nzSize]="'small'"-->
               <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[0].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[1].soLuong / 1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"/>
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[1].soLuong" [nzSize]="'small'"-->
               <!--                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"></nz-input-number>-->
             </th>
             <th class="text-right">
-              <input class="money-input" currencyMask [options]="AMOUNT"
+              <input class="money-input" currencyMask
+                     [options]="{allowZero: true, allowNegative: true,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: (keHoachLuongThucCreate.tkdnGao[2].soLuong / 1000),inputMode: 1}"
                      [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"/>
               <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                               [nzMax]="keHoachLuongThucCreate.tkdnGao[2].soLuong" [nzSize]="'small'"-->
@@ -379,49 +386,49 @@
               <td nzLeft class="text-right">{{data.stt}}</td>
               <td nzLeft class="text-left">{{data.tenDonvi}}</td>
               <td class="text-right">{{(data.tkdnTongSoQuyThoc / 1000) | number:
-                '1.0-1': 'vi_VN'}}</td>
-              <td class="text-right">{{(data.tkdnTongThoc / 1000)| number: '1.0-1': 'vi_VN'}}
+                '1.0-3': 'vi_VN'}}</td>
+              <td class="text-right">{{(data.tkdnTongThoc / 1000)| number: '1.0-3': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                 <td *ngFor="let item of data.tkdnThoc" class="text-right">
-                  {{(item.soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</td>
+                  {{(item.soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right"> {{(data.tkdnTongGao / 1000) | number: '1.0-1': 'vi_VN'}} </td>
+              <td class="text-right"> {{(data.tkdnTongGao / 1000) | number: '1.0-3': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
                 <td *ngFor="let item of data.tkdnGao"
-                    class="text-right"> {{(item.soLuong / 1000) | number: '1.0-1': 'vi_VN'}} </td>
+                    class="text-right"> {{(item.soLuong / 1000) | number: '1.0-3': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
               </ng-container>
-              <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-1': 'vi_VN'}}</td>
-              <td class="text-right">{{data.ntnThoc | number: '1.0-1': 'vi_VN'}}</td>
-              <td class="text-right">{{data.ntnGao | number: '1.0-1': 'vi_VN'}}</td>
+              <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-3': 'vi_VN'}}</td>
+              <td class="text-right">{{data.ntnThoc | number: '1.0-3': 'vi_VN'}}</td>
+              <td class="text-right">{{data.ntnGao | number: '1.0-3': 'vi_VN'}}</td>
               <td class="text-right">{{data.xtnTongSoQuyThoc | number:
-                '1.0-1'}}</td>
-              <td class="text-right">{{data.xtnTongThoc | number: '1.0-1': 'vi_VN'}}
+                '1.0-3'}}</td>
+              <td class="text-right">{{data.xtnTongThoc | number: '1.0-3': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.xtnThoc?.length > 0">
                 <td *ngFor="let item of data.xtnThoc" class="text-right">
-                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
+                  {{item.soLuong | number: '1.0-3': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.xtnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right">{{data.xtnTongGao | number: '1.0-1': 'vi_VN'}}
+              <td class="text-right">{{data.xtnTongGao | number: '1.0-3': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.xtnGao?.length > 0">
                 <td *ngFor="let item of data.xtnGao" class="text-right">
-                  {{item.soLuong | number: '1.0-1': 'vi_VN'}}</td>
+                  {{item.soLuong | number: '1.0-3': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.xtnGao?.length == 0">
                 <td class="text-right">0</td>
@@ -429,10 +436,10 @@
                 <td class="text-right">0</td>
               </ng-container>
               <td class="text-right">{{(data.tkcnTongSoQuyThoc / 1000) | number:
-                '1.0-1': 'vi_VN'}}</td>
-              <td class="text-right">{{(data.tkcnTongThoc / 1000) | number: '1.0-1': 'vi_VN'}}
+                '1.0-3': 'vi_VN'}}</td>
+              <td class="text-right">{{(data.tkcnTongThoc / 1000) | number: '1.0-3': 'vi_VN'}}
               </td>
-              <td class="text-right">{{(data.tkcnTongGao / 1000)| number: '1.0-1': 'vi_VN'}}
+              <td class="text-right">{{(data.tkcnTongGao / 1000)| number: '1.0-3': 'vi_VN'}}
               </td>
               <!-- <td>{{ convertTrangThai(tdongTinChiTieuKeHoachNam.trangThai) }}</td> -->
               <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
@@ -451,21 +458,21 @@
               <td nzLeft class="text-left">{{data.tenDonvi}}</td>
               <td class="text-right">{{(data.tkdnTongSoQuyThoc / 1000) | number:
                 '1.0-1'}}</td>
-              <td class="text-right">{{(data.tkdnTongThoc / 1000)| number: '1.0-1': 'vi_VN'}}
+              <td class="text-right">{{(data.tkdnTongThoc / 1000)| number: '1.0-3': 'vi_VN'}}
               </td>
               <ng-container *ngIf="data?.tkdnThoc?.length > 0">
                 <td *ngFor="let item of data.tkdnThoc" class="text-right">
-                  {{(item.soLuong / 1000) | number: '1.0-1': 'vi_VN'}}</td>
+                  {{(item.soLuong / 1000) | number: '1.0-3': 'vi_VN'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnThoc?.length == 0">
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
-              <td class="text-right"> {{(data.tkdnTongGao / 1000)| number: '1.0-1': 'vi_VN'}} </td>
+              <td class="text-right"> {{(data.tkdnTongGao / 1000)| number: '1.0-3': 'vi_VN'}} </td>
               <ng-container *ngIf="data?.tkdnGao?.length > 0">
                 <td *ngFor="let item of data.tkdnGao"
-                    class="text-right"> {{(item.soLuong / 1000)| number: '1.0-1': 'vi_VN'}} </td>
+                    class="text-right"> {{(item.soLuong / 1000)| number: '1.0-3': 'vi_VN'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
@@ -495,7 +502,8 @@
                 {{calculatorxtnTongThoc(i)}}
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnThoc[0].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong"/>
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[0].soLuong"-->
                 <!--                                 name="goiThau" class="w-200" [nzMin]="0"-->
@@ -503,7 +511,8 @@
                 <!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnThoc[1].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong"/>
 
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[1].soLuong"-->
@@ -512,7 +521,8 @@
                 <!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnThoc[2].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong"/>
 
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnThoc[2].soLuong"-->
@@ -524,7 +534,8 @@
                 {{calculatorxtnTongGao(i)}}
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnGao[0].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong"/>
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[0].soLuong"-->
                 <!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[0].soLuong"-->
@@ -532,7 +543,8 @@
                 <!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"/>
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"-->
                 <!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong"-->
@@ -540,7 +552,8 @@
                 <!--                                 [nzSize]="'small'"></nz-input-number>-->
               </td>
               <td class="text-right">
-                <input class="money-input" currencyMask [options]="AMOUNT"
+                <input class="money-input" currencyMask
+                       [options]="{allowZero: true, allowNegative: false,precision: 3,prefix: '',thousands: '.',decimal: ',', align: 'right',nullable: true,min: 0,max: dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong,inputMode: 1}"
                        [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"/>
                 <!--                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"-->
                 <!--                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong"-->
@@ -574,99 +587,99 @@
             <th class="first-last-row-table background-last-row" nzLeft> Cộng</th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc ? (sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc / 1000) : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongThoc ? (sumTotalKhDuTruLuongThuc.tkdnTongThoc / 1000) : 0)  |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 ? (sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 / 1000) : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 ? (sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 / 1000) : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 ? (sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 / 1000) : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnTongGao ? (sumTotalKhDuTruLuongThuc.tkdnTongGao / 1000) : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 ? (sumTotalKhDuTruLuongThuc.tkdnGao_nam1 / 1000) : 0)  |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 ? (sumTotalKhDuTruLuongThuc.tkdnGao_nam2 / 1000) : 0)|
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 ? (sumTotalKhDuTruLuongThuc.tkdnGao_nam3 / 1000) : 0)|
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{(sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnThoc ? sumTotalKhDuTruLuongThuc.ntnThoc : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.ntnGao ? sumTotalKhDuTruLuongThuc.ntnGao : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongThoc ? sumTotalKhDuTruLuongThuc.xtnTongThoc : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{  (sumTotalKhDuTruLuongThuc.xtnThoc_nam1 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam1 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam2 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam2 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnThoc_nam3 ? sumTotalKhDuTruLuongThuc.xtnThoc_nam3 : 0)|
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnTongGao ? sumTotalKhDuTruLuongThuc.xtnTongGao : 0)|
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam1 ? sumTotalKhDuTruLuongThuc.xtnGao_nam1 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam2 ? sumTotalKhDuTruLuongThuc.xtnGao_nam2 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.xtnGao_nam3 ? sumTotalKhDuTruLuongThuc.xtnGao_nam3 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc ? sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc / 1000 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongThoc ? sumTotalKhDuTruLuongThuc.tkcnTongThoc / 1000 : 0) |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <th
               class="background-last-row text-right">{{ (sumTotalKhDuTruLuongThuc.tkcnTongGao ? sumTotalKhDuTruLuongThuc.tkcnTongGao / 1000 : 0)  |
-              number: '1.0-1': 'vi_VN'}}
+              number: '1.0-3': 'vi_VN'}}
             </th>
             <!-- <td class="background-last-row"></td> -->
             <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||

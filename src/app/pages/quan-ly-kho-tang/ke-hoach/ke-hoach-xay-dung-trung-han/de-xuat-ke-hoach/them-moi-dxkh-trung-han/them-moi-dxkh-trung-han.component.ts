@@ -185,7 +185,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     let body = this.formData.value;
     body.soCongVan = body.soCongVan ? body.soCongVan + this.maQd : this.maQd;
     body.chiTietsReq = this.dataTableRes;
-    body.maDvi = this.userInfo.MA_DVI;
+    body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.tmdt = this.sumSoLuong(null, "tmdtDuKien", true);
     body.fileDinhKems = this.listFileDinhKem;
     let res;

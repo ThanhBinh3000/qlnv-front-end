@@ -199,7 +199,8 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         let res = await this.hopdongPhulucHopdongService.getDetail(data.id);
         if (res.msg == MESSAGE.SUCCESS) {
           this.dataTable = [];
-          const data = res.data[0];
+          const data = res.data;
+          debugger
           this.formData.patchValue({
             soHd: data.soHd,
             tenHd: data.tenHd,
@@ -214,7 +215,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             ngayKyHd: data.ngayKy,
 
           })
-          this.dataTable = data.diaDiemGiaoNhan
+          this.dataTable = data.children
         }
         else {
           this.notification.error(MESSAGE.ERROR, res.msg)
@@ -243,7 +244,6 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       this.dataTable.push(dataDetail);
     })
   }
-
 
   async getListCanCuUyQuyen() {
     let body = {

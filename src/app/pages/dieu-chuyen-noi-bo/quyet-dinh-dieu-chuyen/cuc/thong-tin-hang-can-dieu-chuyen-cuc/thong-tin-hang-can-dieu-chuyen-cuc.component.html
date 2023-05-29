@@ -10,8 +10,8 @@
           <div nz-col nzSpan="19">
             <nz-form-item>
               <nz-form-control>
-                <nz-select [nzDisabled]="!!maChiCucNhan" formControlName="maChiCucNhan" nzAllowClear
-                  (ngModelChange)="onChangeChiCucDC($event)">
+                <nz-select [nzDisabled]="this.data && !!this.data.maChiCucNhan" formControlName="maChiCucNhan"
+                  nzAllowClear (ngModelChange)="onChangeChiCucDC($event)">
                   <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -31,8 +31,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maDiemKho" formControlName="maDiemKho" nzAllowClear
-                      (ngModelChange)="getListNhaKho($event)">
+                    <nz-select [nzDisabled]="this.data && !!this.data.maDiemKho" formControlName="maDiemKho"
+                      nzAllowClear (ngModelChange)="getListNhaKho($event)">
                       <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -46,7 +46,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNhaKho" formControlName="maNhaKho" nzAllowClear
+                    <nz-select [nzDisabled]="this.data && !!this.data.maNhaKho" formControlName="maNhaKho" nzAllowClear
                       (ngModelChange)="getListNganKho($event)">
                       <nz-option *ngFor="let p of dsNhaKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -61,8 +61,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNganKho" formControlName="maNganKho" nzAllowClear
-                      (ngModelChange)="getListLoKho($event)">
+                    <nz-select [nzDisabled]="this.data && !!this.data.maNganKho" formControlName="maNganKho"
+                      nzAllowClear (ngModelChange)="getListLoKho($event)">
                       <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -76,7 +76,7 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maLoKho" formControlName="maLoKho" nzAllowClear
+                    <nz-select [nzDisabled]="this.data && !!this.data.maLoKho" formControlName="maLoKho" nzAllowClear
                       (ngModelChange)="onChangeLoKho($event)">
                       <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
@@ -128,8 +128,9 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number formControlName="soLuongDc" [nzMin]="1" [nzMax]="formData.value.tonKho || 99"
-                      [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    <nz-input-number [nzDisabled]="this.data && !!this.data.soLuongDc" formControlName="soLuongDc"
+                      [nzMin]="1" [nzMax]="formData.value.tonKho || 99" [nzStep]="1" [nzSize]="'small'"
+                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
@@ -142,8 +143,9 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-input-number formControlName="duToanKphi" [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1"
-                      [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    <nz-input-number [nzDisabled]="this.data && !!this.data.duToanKphi" formControlName="duToanKphi"
+                      [nzMin]="0" [nzMax]="999999999999" [nzStep]="0.1" [nzSize]="'small'"
+                      [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                   </nz-form-control>
                 </nz-form-item>
@@ -156,7 +158,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-date-picker formControlName="thoiGianDkDc" nzFormat="dd/MM/yyyy">
+                    <nz-date-picker [nzDisabled]="this.data && !!this.data.thoiGianDkDc" formControlName="thoiGianDkDc"
+                      nzFormat="dd/MM/yyyy">
                     </nz-date-picker>
                   </nz-form-control>
                 </nz-form-item>
@@ -175,8 +178,8 @@
               <div nz-col nzSpan="14">
                 <nz-form-item>
                   <nz-form-control>
-                    <nz-select [nzDisabled]="!!maNhaKhoNhan" formControlName="maDiemKhoNhan" nzAllowClear
-                      (ngModelChange)="getListNhaKhoNhan($event)">
+                    <nz-select [nzDisabled]="this.data && !!this.data.maDiemKhoNhan" formControlName="maDiemKhoNhan"
+                      nzAllowClear (ngModelChange)="getListNhaKhoNhan($event)">
                       <nz-option *ngFor="let p of dsDiemKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
                     </nz-select>
                   </nz-form-control>
@@ -258,7 +261,7 @@
                 <span>Tích lượng khả dụng</span>
               </div>
               <div nz-col nzSpan="14">
-                <span>{{formData.value.tichLuongKd}}</span>
+                <span>{{formData.value.tichLuongKd | number: '1.0-1':'vi_VN'}}</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">
@@ -313,14 +316,14 @@
       <div class="cantrai">
       </div>
       <div class="canphai">
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="onCancel()">
-          <i nz-icon nzType="close" class="icon-close"></i>
-          Đóng
-        </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk(formData.value)">
-          <i nz-icon nzType="close" class="icon-close"></i>
+        <button nz-button (click)="onCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button (click)="handleOk(formData.value)" class="modal__button--save">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
           Lưu
-        </a>
+        </button>
       </div>
     </div>
   </div>
