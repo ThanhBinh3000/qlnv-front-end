@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {XuatKhacComponent} from "./xuat-khac.component";
 import {
   KiemtraChatluongVtTbTrongThbhComponent
@@ -23,6 +23,7 @@ import { TongHopDsHangDtqgHethanLuukhoChuaCoKhXuatComponent } from './kiemtra-ch
 import { BienBanLayMauBanGiaoMauComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component';
 import { PhieuKiemNghiemChatLuongComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { BaoCaoKetQuaKiemDinhMauComponent } from './kiemtra-chatluong-lt-truockhi-hethan-luukho/bao-cao-ket-qua-kiem-dinh-mau/bao-cao-ket-qua-kiem-dinh-mau.component';
+import {ThanhLyDanhSachHangComponent} from "../xuat-thanh-ly/thanh-ly-danh-sach-hang/thanh-ly-danh-sach-hang.component";
 
 
 
@@ -36,6 +37,10 @@ import { BaoCaoKetQuaKiemDinhMauComponent } from './kiemtra-chatluong-lt-truockh
     NzPipesModule,
     MainModule,
     ComponentsModule,
-  ]
+  ],
+  exports: [
+    KiemtraChatluongLtTruockhiHethanLuukhoComponent
+  ],
+  providers: [DatePipe]
 })
 export class XuatKhacModule { }
