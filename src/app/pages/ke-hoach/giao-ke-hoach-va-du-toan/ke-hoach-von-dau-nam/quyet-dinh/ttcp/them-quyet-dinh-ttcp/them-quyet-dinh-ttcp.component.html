@@ -149,8 +149,8 @@
   <nz-collapse>
     <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
-      <ng-template #extraTpl>
-        <button type="button" class="btn btn-sub xanh" (click)="themKeHoach()">
+      <ng-template #extraTpl >
+        <button type="button" *ngIf="formData.value.trangThai == globals.prop.DU_THAO" class="btn btn-sub xanh" (click)="themKeHoach()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
