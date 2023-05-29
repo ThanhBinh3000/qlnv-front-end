@@ -1,18 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QuyetDinhPdKhnkComponent } from './quyet-dinh-pd-khnk.component';
 import { ComponentsModule } from "../../../../components/components.module";
 import { MainModule } from "../../../../layout/main/main.module";
 import { FormsModule } from "@angular/forms";
+import {QuyetDinhPdKhnkComponent} from "./quyet-dinh-pd-khnk.component";
+import {ThemmoiQuyetDinhPdKhnkComponent} from "./themmoi-quyet-dinh-pd-khnk/themmoi-quyet-dinh-pd-khnk.component";
+import {ThongtinDexuatComponent} from "./themmoi-quyet-dinh-pd-khnk/thongtin-dexuat/thongtin-dexuat.component";
 
 
 
 @NgModule({
   declarations: [
-    QuyetDinhPdKhnkComponent
+    QuyetDinhPdKhnkComponent,
+    ThemmoiQuyetDinhPdKhnkComponent,
+    ThongtinDexuatComponent
   ],
   exports: [
-    QuyetDinhPdKhnkComponent
+    QuyetDinhPdKhnkComponent,
+    ThemmoiQuyetDinhPdKhnkComponent
   ],
   imports: [
     CommonModule,

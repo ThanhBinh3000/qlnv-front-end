@@ -40,6 +40,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       namKh: null,
       soQd: null,
       trichYeu: null,
+      trangThai: null,
       ngayQd: null,
       lastest: 0,
       ngayQdTu: null,
@@ -62,7 +63,8 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userInfo.MA_DVI
       })
       await this.timKiem();
       await this.spinner.hide();
@@ -78,6 +80,9 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     if (this.tuNgayKy || this.denNgayKy) {
       this.formData.value.ngayQdTu = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
       this.formData.value.ngayQdDen = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
+    }
+    if(this.userService.isCuc()){
+      this.formData.value.trangThai = this.STATUS.BAN_HANH;
     }
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     await this.search();
@@ -153,6 +158,10 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+  showList() {
+    this.isDetail = false;
+    this.timKiem()
   }
 
 }
