@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {BaseTestService} from "../../../base-test.service";
 import {environment} from "../../../../../environments/environment";
+import {BaseService} from "../../../base.service";
 
 @Injectable({
   providedIn: 'root',
 })
-export class QuyetDinhPheDuyetKeHoachNhapKhacService extends BaseTestService {
-  GATEWAY = '';
+export class QuyetDinhPheDuyetKeHoachNhapKhacService extends BaseService {
+  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'nhap-khac/qd-pduyet-khnk', '');
+    super(httpClient, 'nhap-khac/qd-pduyet-khnk', '/qlnv-hang');
   }
 
   updateDdiemNhap(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   exportBbNtBq(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/ket-xuat/bbntbq`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat/bbntbq`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 
