@@ -15,6 +15,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop',
@@ -27,6 +28,19 @@ export class TongHopComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
+  STATUS = STATUS
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐC' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Từ chối - LĐC' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Đã duyệt - LĐC' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+  ];
 
   isDetail: boolean = false;
   listNam: any[] = [];
@@ -370,19 +384,36 @@ export class TongHopComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string | Date) {
-    if (value instanceof Date) {
-      value = dayjs(value).format('YYYY-MM-DD');
-    }
-    console.log(key, value);
-
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
-      this.dataTable = this.dataTableAll.filter((item) =>
-        item[key]
-          ?.toString()
-          .toLowerCase()
-          .includes(value.toString().toLowerCase()),
-      );
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
+            }
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
@@ -399,5 +430,13 @@ export class TongHopComponent implements OnInit {
       ycCapThemPhi: '',
       tenTrangThai: '',
     };
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
   }
 }
