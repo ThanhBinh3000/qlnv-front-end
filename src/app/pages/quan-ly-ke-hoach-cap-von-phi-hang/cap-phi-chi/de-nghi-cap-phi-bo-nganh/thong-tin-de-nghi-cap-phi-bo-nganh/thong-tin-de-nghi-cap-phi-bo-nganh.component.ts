@@ -55,7 +55,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   formData: FormGroup;
   yearNow: number = 0;
   taiLieuDinhKemList: any[] = [];
-
+  maQd : string = '/BQP-KH'
   listNam: any[] = [];
   listBoNganh: any[] = [];
   listLoaiHangHoa: any[] = [];
@@ -146,7 +146,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
-            if (item.cap === '1' && item.ma != '01') {
+            if (item.cap === '2') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
             } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
@@ -245,6 +245,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.ct1List = this.ct1s;
+    body.soDeNghi = body.soDeNghi ? body.soDeNghi + this.maQd : '';
     body.ngayDeNghi = this.formData.get("ngayDeNghi").value ? dayjs(this.formData.get("ngayDeNghi").value).format("YYYY-MM-DD") : null;
     this.spinner.show();
     try {
@@ -254,7 +255,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
+            this.idInput = res.data.id;
+            this.formData.patchValue({
+              id : res.data.id
+            })
           } else {
             return res.data.id;
           }
@@ -266,7 +270,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            this.idInput = res.data.id;
+            this.formData.patchValue({
+              id : res.data.id
+            })
           } else {
             return res.data.id;
           }
@@ -291,11 +298,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let data = res.data;
         if (data) {
-          console.log(data);
           this.formData.patchValue({
             'nam': data.nam,
             'maBoNganh': data.maBoNganh,
-            'soDeNghi': data.soDeNghi,
+            'soDeNghi': data.soDeNghi ? data.soDeNghi.split("/")[0] : '',
             'ngayDeNghi': data.ngayDeNghi,
             'ghiChu' : data.ghiChu
           });
@@ -307,7 +313,16 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           this.detail.trangThai = data.trangThai
           this.detail.tenTrangThai = data.tenTrangThai;
           this.ct1s = data.ct1List;
-          this.rowEdit.ct2s = data.ct1List[0].ct2List;
+          if (data.ct1List && data.ct1List.length > 0 ) {
+            let ct2List = data.ct1List[0].ct2List;
+            ct2List.forEach(item => {
+              let chiPhi = this.listLoaiChiPhi.filter(cp => cp.ma == item.loaiChiPhi);
+              if (chiPhi && chiPhi.length > 0) {
+                item.tenLoaiChiPhi =  chiPhi[0].giaTri
+              }
+            })
+          }
+          this.rowEdit.ct2s =  data.ct1List &&  data.ct1List.length > 0 ?  data.ct1List[0].ct2List : [];
           this.sortTableId('ct1s');
         }
       }
@@ -422,6 +437,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       let item = cloneDeep(this.create);
       item.stt = this.rowEdit.ct2s.length + 1;
       item.tenLoaiChiPhi=this.listLoaiChiPhi.find(s=>s.ma == item.loaiChiPhi).giaTri;
+      item.yeuCauCapThem = item.tongTien - item.kinhPhiDaCap
       this.rowEdit.ct2s = [
         ...this.rowEdit.ct2s,
         item,
