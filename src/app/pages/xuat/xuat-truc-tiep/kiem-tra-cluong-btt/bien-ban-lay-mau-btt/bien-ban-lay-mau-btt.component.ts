@@ -64,8 +64,8 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem(),
-        await this.search();
+      this.timKiem();
+      await this.search();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
@@ -79,6 +79,7 @@ export class BienBanLayMauBttComponent extends Base2Component implements OnInit 
     this.buildTableView();
     await this.spinner.hide()
   }
+
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
