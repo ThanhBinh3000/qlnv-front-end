@@ -368,6 +368,7 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
       this.dataInput = data;
       let res = await this.danhSachMuaTrucTiepService.getDetail(data.idDxHdr);
       this.dataInputCache = res.data;
+      console.log(this.dataInputCache)
     }
     await this.spinner.hide();
   }

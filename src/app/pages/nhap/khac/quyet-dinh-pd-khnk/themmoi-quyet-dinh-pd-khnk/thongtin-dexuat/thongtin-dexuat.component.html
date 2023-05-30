@@ -1,0 +1,142 @@
+<div class="header header-green-background mg-t-10">
+  <div class="header-text">
+    <div class="title-chi-tieu">
+      <span>
+      </span>
+      <span> {{title}} </span>
+    </div>
+  </div>
+</div>
+<!--START NỘI DUNG-->
+<form nzLayout="vertical" nz-form [formGroup]="formData">
+  <div nz-row [nzGutter]="[24]">
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <input nz-input readonly formControlName="tongSlNhap" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng thành tiền </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <input nz-input readonly formControlName="tongThanhTien" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+<!--END NỘI DUNG-->
+
+<!--START TABLE-->
+<div class="header header-green-background mg-t-10">
+  <div class="header-text">
+    <div class="title-chi-tieu">
+      <span>
+      </span>
+      <span> Nhập dôi thừa </span>
+    </div>
+  </div>
+</div>
+<nz-card class="mg-t-16 flex-card p-lr16 table-card">
+  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
+    <thead>
+      <tr>
+        <th style="width: 2%;">STT</th>
+        <th>Cục DTNN KV</th>
+        <th>Chi cục DTNN KV</th>
+        <th>Điểm kho</th>
+        <th>Ngăn/Lô kho</th>
+        <th>Chủng loại hàng hóa</th>
+        <th>SL tốn kho</th>
+        <th>SL hao dôi theo định mức</th>
+        <th>SL dôi thừa</th>
+        <th>Đơn giá</th>
+        <th>Thành tiền (đ)</th>
+        <th *ngIf="!isView"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of listDataGroup , let i = index">
+        <tr>
+          <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
+          <td colspan="3">{{item.tenDvi}}</td>
+          <td></td>
+          <td class="text-right red-text"></td>
+          <td class="text-right red-text"></td>
+          <td class="text-right bold-700"></td>
+          <td></td>
+          <td class="text-right bold-700"></td>
+          <td></td>
+          <td></td>
+          <td *ngIf="!isView"></td>
+        </tr>
+<!--        <ng-container *ngFor="let dtGoiThau of item.dataChild, let y = index">-->
+<!--          <tr>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td>{{dtGoiThau.goiThau}}</td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--            <td></td>-->
+<!--          </tr>-->
+<!--          <ng-container>-->
+<!--            <tr *ngFor="let res of dtGoiThau.children, let k = index">-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td>{{res.tenDvi}}</td>-->
+<!--              <td>{{dtGoiThau.diaDiemNhap}}</td>-->
+<!--              <td></td>-->
+<!--              <td></td>-->
+<!--              <td class="text-right" [contentEditable]="isEditing" (input)="onInput($event.target['textContent'])"-->
+<!--                (blur)="onBlur(res)" [class.editing]="isEditing">-->
+<!--                {{res.soLuong | number : '1.0-1' : 'vi_VN'}}</td>-->
+<!--              <td>{{dtGoiThau.donGia ? dtGoiThau.donGia : dtGoiThau.donGiaTamTinh}}</td>-->
+<!--              <td class="text-right">{{(dtGoiThau.donGiaTamTinh != null ?-->
+<!--                dtGoiThau.donGiaTamTinh * res.soLuong : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *-->
+<!--                res.soLuong : (dtGoiThau.donGia != null ? dtGoiThau.donGia * res.soLuong : 0)))-->
+<!--                | number: '1.0-1' : 'vi_VN'}}</td>-->
+<!--              <td>{{isCache ? dtGoiThau.donGiaVat : giaVat}}</td>-->
+<!--              <td class="text-right">{{(isCache ? res.soLuong * dtGoiThau.donGiaVat : res.soLuong * giaVat) | number:-->
+<!--                '1.0-1' : 'vi_VN'}}</td>-->
+<!--              <td *ngIf="!isView">-->
+<!--                <a (click)="editRow(res)">-->
+<!--                  <i class="fa fa-pencil"></i>-->
+<!--                </a>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </ng-container>-->
+<!--        </ng-container>-->
+      </ng-container>
+    </tbody>
+<!--    <tr *ngIf="listDataGroup.length > 0">-->
+<!--      <td></td>-->
+<!--      <td></td>-->
+<!--      <td></td>-->
+<!--      <td class="first-last-row-table background-last-row text-right blue-text">TỔNG</td>-->
+<!--      <td></td>-->
+<!--      <td></td>-->
+<!--      <td></td>-->
+<!--      <td class="background-last-row text-right blue-text">{{ (isCache ? calcTongSl() : tongSLuongNhap) | number :-->
+<!--        '1.0-1' : 'vi_VN' }}</td>-->
+<!--      <td></td>-->
+<!--      <td class="background-last-row text-right blue-text">{{ (isCache ? calcTongThanhTien() : tongTienTamTinh) | number-->
+<!--        : '1.0-1' : 'vi_VN' }}</td>-->
+<!--      <td></td>-->
+<!--    </tr>-->
+  </nz-table>
+</nz-card>
+<!--END TABLE-->
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>

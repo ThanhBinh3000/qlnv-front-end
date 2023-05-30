@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/guard/auth.guard';
 import { NhapComponent } from './nhap.component';
-import { MUA_TRUC_TIEP, NHAP_THEO_KE_HOACH } from './nhap.constant';
+import { MUA_TRUC_TIEP, NHAP_KHAC, NHAP_THEO_KE_HOACH } from "./nhap.constant";
 
 const routes: Routes = [
   {
@@ -28,6 +28,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('../nhap/mua-truc-tiep/mua-truc-tiep.module').then(
             (m) => m.MuaTrucTiepModule,
+          ),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: `${NHAP_KHAC}`,
+        loadChildren: () =>
+          import('../nhap/khac/khac.module').then(
+            (m) => m.KhacModule,
           ),
         canActivate: [AuthGuard],
       },

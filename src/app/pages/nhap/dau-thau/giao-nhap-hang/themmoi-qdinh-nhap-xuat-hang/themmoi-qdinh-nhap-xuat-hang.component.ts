@@ -773,6 +773,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.spinner.show();
     this.dataTable.forEach(item => {
       item.trangThai = statusSave
+      if(item.children.length == 0){
+        this.notification.success(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+      }
     })
     let body = {
       detailList: this.dataTable
