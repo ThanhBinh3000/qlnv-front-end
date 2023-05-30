@@ -52,6 +52,7 @@ export class PhuLucHopDongComponent extends Base2Component implements OnInit {
       id: [null],
       maDvi: [null],
       capDvi: [null],
+      namKeHoach: [null],
       soHd: [null],
       soHdHdr: [null],
       tenHd: [null],
@@ -94,6 +95,7 @@ export class PhuLucHopDongComponent extends Base2Component implements OnInit {
   initForm() {
     if (this.dataHdr) {
       this.formData.patchValue({
+        namKeHoach : this.dataHdr.namKeHoach,
         tenHd: this.dataHdr.tenHd,
         soHdHdr: this.dataHdr.soHd,
         ngayHieuLucHdr: this.dataHdr.ngayHieuLuc,
