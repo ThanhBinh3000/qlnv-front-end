@@ -79,7 +79,7 @@
                         <th></th>
                         <th></th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                                     (ngModelChange)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
                             </nz-input-group>
@@ -98,13 +98,13 @@
                             </nz-date-picker>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                                     (ngModelChange)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.kinhPhiDaCap"
                                     (ngModelChange)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)"
@@ -112,7 +112,7 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.ycCapThemPhi"
                                     (ngModelChange)="filterInTable('ycCapThemPhi',filterTable.ycCapThemPhi)"
@@ -120,7 +120,7 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.tenTrangThai"
                                     (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)"
@@ -128,9 +128,6 @@
                             </nz-input-group>
                         </th>
                         <th></th>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,9 +140,9 @@
                         <td>{{ data.maTongHop }}</td>
                         <td>{{ data.nam }}</td>
                         <td>{{ data.ngayTongHop|date: 'dd/MM/YYYY'}}</td>
-                        <td>{{ data.tongTien }}</td>
-                        <td>{{ data.kinhPhiDaCap }}</td>
-                        <td>{{ data.ycCapThemPhi }}</td>
+                        <td class="text-right">{{ data.tongTien  | number: '1.0-1' }}</td>
+                        <td>{{ data.kinhPhiDaCap  | number: '1.0-1' }}</td>
+                        <td>{{ data.ycCapThemPhi  | number: '1.0-1' }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
                             <a (click)="detail(data, true)">
