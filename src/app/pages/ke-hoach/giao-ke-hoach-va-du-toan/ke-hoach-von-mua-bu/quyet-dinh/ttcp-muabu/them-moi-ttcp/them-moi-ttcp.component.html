@@ -74,7 +74,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzFor="nam-qd" nzRequired>Quyết định của UBTVQH</nz-form-label>
+            <nz-form-label nzFor="nam-qd" nzRequired>Nghị quyết của UBTVQH</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="soQdUbtvqh" [nzDisabled]="isView" nzAllowClear="true">
                 <nz-option *ngFor="let data of listUbtvqh" [nzValue]="data.soQd" [nzLabel]="data.soQd">
