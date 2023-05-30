@@ -7,14 +7,8 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import * as uuid from "uuid";
-import {
-  QuyetdinhpheduyetduandtxdService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetduandtxd.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
-import {
-  QuyetdinhpheduyetTktcTdtService
-} from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetTktcTdt.service";
 import {FILETYPE} from "../../../../../../constants/fileType";
 import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 import {
