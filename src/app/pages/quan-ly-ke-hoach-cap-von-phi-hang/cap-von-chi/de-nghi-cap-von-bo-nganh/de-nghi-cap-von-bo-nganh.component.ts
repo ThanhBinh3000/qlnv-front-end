@@ -38,7 +38,8 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     soKeHoach: null,
     maBoNganh: null,
     namKh: null,
-    ngayKy: null
+    ngayDeNghiTuNgay: null,
+    ngayDeNghiDenNgay: null
   };
   filterTable: any = {
     soDeNghi: '',
@@ -172,8 +173,8 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       soDeNghi: this.searchFilter.soKeHoach,
       maBoNganh: this.searchFilter.maBoNganh,
       nam: this.searchFilter.namKh,
-      ngayDeNghiTuNgay: this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 1 ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-      ngayDeNghiDenNgay: this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 1 ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+      ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ?  dayjs(this.searchFilter.ngayDeNghiTuNgay).format('YYYY-MM-DD') : '',
+      ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ?   dayjs(this.searchFilter.ngayDeNghiDenNgay).format('YYYY-MM-DD') : '',
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
@@ -258,7 +259,8 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       soKeHoach: null,
       maBoNganh: null,
       namKh: null,
-      ngayKy: null
+      ngayDeNghiDenNgay: null,
+      ngayDeNghiTuNgay: null,
     };
     this.search();
   }
@@ -306,8 +308,8 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
           soDeNghi: this.searchFilter.soKeHoach,
           maBoNganh: this.searchFilter.maBoNganh,
           nam: this.searchFilter.namKh,
-          ngayDeNghiTuNgay: this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 1 ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-          ngayDeNghiDenNgay: this.searchFilter.ngayKy && this.searchFilter.ngayKy.length > 1 ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+          ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ?  dayjs(this.searchFilter.ngayDeNghiTuNgay).format('YYYY-MM-DD') : '',
+          ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ?   dayjs(this.searchFilter.ngayDeNghiDenNgay).format('YYYY-MM-DD') : '',
           pageNumber: this.page,
           pageSize: this.pageSize,
         };
