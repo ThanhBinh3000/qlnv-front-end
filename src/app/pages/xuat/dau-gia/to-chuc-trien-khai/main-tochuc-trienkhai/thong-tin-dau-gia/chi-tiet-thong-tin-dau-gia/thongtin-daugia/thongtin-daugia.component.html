@@ -1,6 +1,6 @@
 <nz-card class="flex-card p-lr16 ">
   <div class="bg-trang">
-    <nz-collapse>
+    <nz-collapse nzAccordion>
       <nz-collapse-panel [nzHeader]="'THÔNG TIN BÁN ĐẤU GIÁ'" [nzActive]="true">
         <nz-card class="mg-t-16 flex-card p-lr16">
           <form nzLayout="vertical" [formGroup]="formData" nz-form>
@@ -378,8 +378,8 @@
         </form>
       </nz-collapse-panel>
     </nz-collapse>
-    <nz-collapse>
-      <nz-collapse-panel nzActive="true" nzHeader="KẾT QUẢ TỔ CHÚC BÁN ĐẤU GIÁ">
+    <nz-collapse nzAccordion>
+      <nz-collapse-panel [nzActive]="true" nzHeader="KẾT QUẢ TỔ CHÚC BÁN ĐẤU GIÁ">
         <nz-card class="mg-t-16 flex-card p-lr16">
           <form nz-form nzLayout="vertical" [formGroup]="formData">
             <div nz-row [nzGutter]="[20]">
@@ -393,8 +393,8 @@
               </div>
             </div>
           </form>
-          <nz-collapse>
-            <nz-collapse-panel nzActive="true" nzHeader="THÔNG TIN BIÊN BẢN BÁN ĐẤU GIÁ">
+          <nz-collapse nzAccordion>
+            <nz-collapse-panel [nzActive]="true" nzHeader="THÔNG TIN BIÊN BẢN BÁN ĐẤU GIÁ">
               <nz-card class="mg-t-16 flex-card p-lr16">
                 <form nzLayout="vertical" [formGroup]="formData" nz-form>
                   <div nz-row [nzGutter]="[20]" class="mg-t-10">
@@ -433,8 +433,8 @@
                 </form>
               </nz-card>
               <nz-card class="mg-t-16 flex-card p-lr16">
-                <nz-collapse *ngIf="formData.value.ketQua == 1">
-                  <nz-collapse-panel nzActive="true" nzHeader="THÀNH PHẦN THAM DỰ">
+                <nz-collapse nzAccordion *ngIf="formData.value.ketQua == 1">
+                  <nz-collapse-panel [nzActive]="true" nzHeader="THÀNH PHẦN THAM DỰ">
                     <div class="group-button">
                       <h3>Khách mời chứng kiến</h3>
                     </div>
@@ -620,14 +620,15 @@
                     </nz-table>
                   </nz-collapse-panel>
                 </nz-collapse>
-                <nz-collapse>
-                  <nz-collapse-panel nzActive="true"
-                    nzHeader="SỐ LƯỢNG, ĐỊA ĐIỂM XUẤT BÁN (NƠI ĐANG BẢO QUẢN VÀ QUẢN LÝ TÀI SẢN)">
-                    <nz-table class="pd-10 " [nzScroll]="{ x: '1400px' }" nzBordered [nzData]="dataTable">
+                <nz-collapse nzAccordion>
+                  <nz-collapse-panel [nzHeader]="'SỐ LƯỢNG, ĐỊA ĐIỂM XUẤT BÁN (NƠI ĐANG BẢO QUẢN VÀ QUẢN LÝ TÀI SẢN)'"
+                    [nzActive]="true">
+                    <nz-table class="nowrap pd-10" [nzScroll]="{ x: '1400px' }" [nzFrontPagination]="false"
+                      [nzShowPagination]="false" [nzData]="dataTable" nzBordered>
                       <thead>
                         <tr>
                           <th nzWidth="30px"></th>
-                          <th nzWidth="150px" class="text-center wrap"> Chi cục </th>
+                          <th nzWidth="300px" class="text-center wrap"> Chi cục </th>
                           <th nzWidth="150px" class="text-center wrap"> Điểm kho </th>
                           <th nzWidth="150px" class="text-center wrap"> Lô kho </th>
                           <th nzWidth="100px" class="text-center wrap"> Mã ĐVTS </th>
