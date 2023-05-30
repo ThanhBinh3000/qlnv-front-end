@@ -17,7 +17,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
-import { convertTrangThai } from "../../../../../../shared/commonFunction";
+import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -43,6 +43,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
   selected: boolean = false;
+  disableTh: boolean = false
 
   constructor(
     httpClient: HttpClient,
@@ -95,6 +96,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       await Promise.all([
         this.loadDataComboBox(),
         this.loadChiTiet(),
+        this.convertTenVthh()
       ]);
       console.log(this.isViewOnModal)
       await this.spinner.hide();
@@ -103,6 +105,13 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  convertTenVthh(){
+    let data = convertIdToTenLoaiVthh(this.loaiVthh);
+    console.log(data)
+    this.formTraCuu.get('tenLoaiVthh').setValue(data)
+    this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
   }
 
   async loadChiTiet() {
@@ -194,6 +203,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     if (data) {
       this.id = data.id;
       await this.loadChiTiet();
+      this.isView = true
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
     }
   }

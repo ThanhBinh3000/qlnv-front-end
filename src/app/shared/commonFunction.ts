@@ -1,4 +1,4 @@
-import { LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG } from "../constants/config";
+import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG, TEN_LOAI_VTHH} from "../constants/config";
 import VNnum2words from 'vn-num2words';
 import { STATUS } from "../constants/status";
 
@@ -92,6 +92,22 @@ export function convertIdToLoaiVthh(id: string) {
       break;
     case LOAI_HANG_DTQG.VAT_TU:
       tenConvert = TEN_HANG_DTQG.VAT_TU;
+      break;
+  }
+  return tenConvert;
+}
+
+export function convertIdToTenLoaiVthh(id: string) {
+  let tenConvert = "";
+  switch (id) {
+    case LOAI_HANG_DTQG.GAO:
+      tenConvert = TEN_LOAI_VTHH.GAO;
+      break;
+    case LOAI_HANG_DTQG.THOC:
+      tenConvert = TEN_LOAI_VTHH.THOC;
+      break;
+    case LOAI_HANG_DTQG.MUOI:
+      tenConvert = TEN_LOAI_VTHH.MUOI;
       break;
   }
   return tenConvert;

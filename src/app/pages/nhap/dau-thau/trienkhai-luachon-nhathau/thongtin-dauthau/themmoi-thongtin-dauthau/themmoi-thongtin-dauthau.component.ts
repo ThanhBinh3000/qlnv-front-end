@@ -538,6 +538,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         item.edit = false;
         this.itemRow.soLuong = item.soLuong;
       })
+      console.log(this.listNthauNopHs)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

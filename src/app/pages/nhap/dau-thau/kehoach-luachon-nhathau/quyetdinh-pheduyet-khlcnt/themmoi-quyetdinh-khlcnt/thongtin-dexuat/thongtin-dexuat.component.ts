@@ -143,6 +143,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           this.tgianNhangChange = data.data.tgianNhang
           this.tenDuAn = data.data.children[0].tenDuAn
           this.giaVat = data.data.children[0].donGiaVat
+          this.formData.patchValue({
+            tgianDthau: data.data.tgianDthau,
+            tgianMthau: data.data.tgianMthau,
+            tgianNhang: data.data.tgianNhang,
+            tgianBdauTchuc: data.data.tgianBdauTchuc
+          });
           this.formData.get('tchuanCluong').setValue(data.data.children[0].dxuatKhLcntHdr.tchuanCluong)
           this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
           this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
@@ -160,7 +166,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           let soLuong = res.data.tongMucDt / res.data.donGiaVat;
           this.formData.patchValue({
             soLuong: soLuong,
-            tongMucDt: soLuong * res.data.donGiaVat
+            tongMucDt: soLuong * res.data.donGiaVat,
+            tgianDthau: res.data.tgianDthau,
+            tgianMthau: res.data.tgianMthau,
+            tgianNhang: res.data.tgianNhang,
+            tgianBdauTchuc: res.data.tgianBdauTchuc
           });
         }
         this.helperService.setIndexArray(this.listOfData);

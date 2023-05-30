@@ -176,6 +176,12 @@ export const TEN_HANG_DTQG = {
   VAT_TU: 'vat-tu'
 };
 
+export const TEN_LOAI_VTHH = {
+  GAO: 'Gạo tẻ',
+  THOC: 'Thóc tẻ',
+  MUOI: 'Muối trắng'
+};
+
 export const STATUS_USER = {
   HOAT_DONG: '01',
   KHOA: '00',

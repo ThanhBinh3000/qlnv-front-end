@@ -14,7 +14,7 @@
         {{ (column === 'donGiaNhaThau' ? (data[column] | number: '1.0-1' :'vi_VN')
         : column === 'ngayKy' ? (data[column] | date: 'dd/MM/YYYY')
           : column === 'ngayTao' ? (data[column] | date: 'dd/MM/YYYY')
-            : data[column] ? data[column] : data.hdr[column]) }}
+            : data[column]) }}
       </td>
       <td class="text-center">
         <a (click)="handleOk(data)">
