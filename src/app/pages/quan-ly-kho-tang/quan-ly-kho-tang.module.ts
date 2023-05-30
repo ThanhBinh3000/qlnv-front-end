@@ -147,6 +147,7 @@ import {
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-bao-cao-ktkt/thong-tin-qd-phe-duyet-bao-cao-ktkt/thong-tin-qd-phe-duyet-bao-cao-ktkt.component";
 import { ThongTinTienDoCongViecComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/tien-do-cong-viec/thong-tin-tien-do-cong-viec/thong-tin-tien-do-cong-viec.component';
 import { ThongTinBienBanNghiemThuDtxdComponent } from './tien-do-xay-dung-sua-chua/tien-do-dau-tu-xay-dung/bien-ban-nghiem-thu/thong-tin-bien-ban-nghiem-thu-dtxd/thong-tin-bien-ban-nghiem-thu-dtxd.component';
+import { ThongTinQdPdKhlcntSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-khlcnt/thong-tin-qd-pd-khlcnt-scl/thong-tin-qd-pd-khlcnt-scl.component';
 
 
 @NgModule({
@@ -230,7 +231,8 @@ import { ThongTinBienBanNghiemThuDtxdComponent } from './tien-do-xay-dung-sua-ch
         QuyetDinhPheDuyetBaoCaoKtktComponent,
         ThongTinQdPheDuyetBaoCaoKtktComponent,
         ThongTinTienDoCongViecComponent,
-        ThongTinBienBanNghiemThuDtxdComponent
+        ThongTinBienBanNghiemThuDtxdComponent,
+        ThongTinQdPdKhlcntSclComponent
     ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

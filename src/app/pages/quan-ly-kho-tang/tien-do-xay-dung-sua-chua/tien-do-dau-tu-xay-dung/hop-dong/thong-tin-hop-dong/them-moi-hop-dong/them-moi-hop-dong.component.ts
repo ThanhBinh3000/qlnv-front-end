@@ -42,8 +42,8 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
   flagThemMoi: string;
   @Input()
   itemGoiThau: any;
-  @Input()
-  itemQdPdKhlcnt: any;
+  @Input() itemQdPdKhlcnt: any;
+  @Input() itemDuAn: any;
   STATUS = STATUS;
   idPhuLuc: number;
   isViewPl: boolean
@@ -90,6 +90,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       id: [null],
+      namKeHoach: [null],
       maDvi: [this.userInfo.MA_DVI],
       idQdPdKqlcnt: [null, Validators.required],
       soQdPdKqlcnt: [null, Validators.required],
@@ -170,6 +171,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
         goiThau = dataQdPdKqlcnt.listKtTdxdQuyetDinhPdKqlcntDsgt.find(it => it.idGoiThau == this.itemGoiThau.id);
       }
       this.formData.patchValue({
+        namKeHoach : this.itemQdPdKhlcnt.namKeHoach,
         idQdPdKqlcnt: this.itemGoiThau.idQdPdKqlcnt,
         soQdPdKhlcnt: this.itemQdPdKhlcnt.soQd,
         idQdPdKhlcnt: this.itemQdPdKhlcnt.id,
@@ -238,6 +240,7 @@ export class ThemMoiHopDongComponent extends Base2Component implements OnInit {
     if (this.listPhuLuc && this.listPhuLuc.length > 0) {
       this.formData.value.listPhuLuc = this.listPhuLuc;
     }
+    this.formData.value.idDuAn = this.itemDuAn.id
     if (isKy) {
       this.modal.confirm({
         nzClosable: false,

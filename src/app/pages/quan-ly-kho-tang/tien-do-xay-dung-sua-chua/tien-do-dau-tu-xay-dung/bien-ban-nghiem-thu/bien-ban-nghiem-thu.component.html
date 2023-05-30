@@ -15,6 +15,10 @@
               [nzShowPagination]="false" nzBordered class="mt-2">
       <thead>
       <tr>
+        <th nzWidth="45px">
+          <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                 [nzIndeterminate]="indeterminate"></label>
+        </th>
         <th width="40px" class="text-center">STT</th>
         <th nzWidth="200px">Số biên bản</th>
         <th nzWidth="200px">Số hợp đồng</th>
@@ -26,20 +30,24 @@
       </thead>
       <tbody>
       <tr *ngFor="let data of dataTable; let i = index">
+        <th nzWidth="45px">
+          <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                 [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+        </th>
         <td>{{ i + 1}}</td>
         <td>{{ data.soBienBan }}</td>
-        <td>{{ data.hopDong?.soHd }}</td>
-        <td>{{ data.hopDong?.tenHd }}</td>
+        <td>{{ data.soHopDong }}</td>
+        <td>{{ data.tenHopDong}}</td>
         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
         <td>{{  data.tenTrangThai  }}</td>
         <td>
-          <a>
+          <a (click)="redirectToChiTiet(true, data.id)">
             <i class="fa fa-eye"></i>
           </a>
-          <a >
+          <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai == STATUS.DU_THAO"  >
             <i class="fa fa-pencil"></i>
           </a>
-          <a >
+          <a (click)="delete(data)" *ngIf="data.trangThai == STATUS.DU_THAO" >
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>

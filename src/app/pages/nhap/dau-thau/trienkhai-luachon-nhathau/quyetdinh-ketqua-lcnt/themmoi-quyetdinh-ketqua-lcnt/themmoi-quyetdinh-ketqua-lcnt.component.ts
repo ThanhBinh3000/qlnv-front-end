@@ -305,7 +305,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implemen
         element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
       }
     });
-
+  console.log(this.listQdPdKhlcnt)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,

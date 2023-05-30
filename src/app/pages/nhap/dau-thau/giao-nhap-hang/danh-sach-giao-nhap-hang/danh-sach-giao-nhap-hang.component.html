@@ -178,9 +178,9 @@
             <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
-            <td>{{ data.tenTrangThaiNh }}</td>
+            <td>{{ data.dtlList[0]?.tenTrangThai }}</td>
             <td>
-              <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM') || 
+              <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM') ||
               ((data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_PHANBO')))
               && (data.trangThai == STATUS.CHO_DUYET_TP ? !userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP') : true )
               && (data.trangThai == STATUS.CHO_DUYET_LDC ? !userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC') : true )"
@@ -191,7 +191,7 @@
               && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_THEM') ">
                 <i class=" fa fa-pencil"></i>
               </a>
-              <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP) 
+              <a *ngIf="(userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_TP') && data.trangThai == STATUS.CHO_DUYET_TP)
               || (userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_DUYET_LDCUC') && data.trangThai == STATUS.CHO_DUYET_LDC) "
                 (click)="redirectToThongTin(data.id, true)">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>

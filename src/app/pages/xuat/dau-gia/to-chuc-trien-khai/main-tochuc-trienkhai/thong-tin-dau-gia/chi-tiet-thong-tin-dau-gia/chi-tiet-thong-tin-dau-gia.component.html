@@ -185,10 +185,8 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán </nz-form-label>
                     <nz-form-control>
-                      <nz-input-group>
-                        <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongSoLuong "
-                          readonly />
-                      </nz-input-group>
+                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="tongSoLuong"
+                        readonly="true" />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -196,9 +194,8 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Tổng số đơn vị tài sản đấu giá </nz-form-label>
                     <nz-form-control>
-                      <nz-input-group>
-                        <input nz-input formControlName="slDviTsan " readonly />
-                      </nz-input-group>
+                      <input style="color: blue ;font-weight: bold;" nz-input formControlName="slDviTsan"
+                        readonly="true" />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -291,7 +288,7 @@
                 <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="themMoiPhienDauGia($event,data)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="deleteThongTin(data)">
+                <a (click)="deleteThongTin(data)">
                   <i class="fa fa-trash do"></i>
                 </a>
               </td>

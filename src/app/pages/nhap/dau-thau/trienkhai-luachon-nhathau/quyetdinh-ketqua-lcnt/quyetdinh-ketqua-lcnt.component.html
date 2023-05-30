@@ -218,7 +218,7 @@
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
                 (click)="redirectToChiTiet(data.id, 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
@@ -226,7 +226,7 @@
                 (click)="redirectToChiTiet(data.id, 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XOA')"
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA')"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>

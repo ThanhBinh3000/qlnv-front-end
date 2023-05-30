@@ -55,7 +55,7 @@ export class CreateBienBanLayMauComponent extends Base2Component implements OnIn
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
-      loaiBienBan: [''],
+      loaiBienBan: ['', [Validators.required]],
       nam: [dayjs().get('year')],
       maDvi: [''],
       tenDvi: [''],

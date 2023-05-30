@@ -30,8 +30,8 @@ export class ThongTinHopDongComponent extends Base2Component implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input('isViewDetail') isViewDetail: boolean;
   tongMucDt: number = 0;
-  @Input()
-  flagThemMoi: string;
+  @Input() flagThemMoi: string;
+  @Input() itemDuAn: string;
   @Input()
   itemQdPdKhLcnt: any;
   listHopDong: any[] = []
