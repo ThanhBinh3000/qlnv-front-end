@@ -63,33 +63,13 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.timKiem(),
-        await this.search();
+      this.timKiem();
+      await this.search();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  timKiem() {
-    this.formData.patchValue({
-      loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
-    })
-  }
-
-  clearFilter() {
-    this.formData.reset();
-    this.timKiem();
-    this.search();
-  }
-
-  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
-    this.selectedId = lv2.id;
-    this.isDetail = true;
-    this.isView = isView;
-    this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
 
   async search(roles?): Promise<void> {
@@ -99,43 +79,59 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     await this.spinner.hide()
   }
 
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
   buildTableView() {
-    let dataView = chain(this.dataTable).groupBy("soQd").map((value, key) => {
-      let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-        let rowLv2 = v.find(s => s.maDiemKho === k);
-        return {
-          id: rowLv2.id,
-          idVirtual: uuidv4(),
-          maDiemKho: k,
-          tenDiemKho: rowLv2.tenDiemKho,
-          maNhaKho: rowLv2.maNhaKho,
-          tenNhaKho: rowLv2.tenNhaKho,
-          maNganKho: rowLv2.maNganKho,
-          tenNganKho: rowLv2.tenNganKho,
-          tenLoKho: rowLv2.tenLoKho,
-          maLoKho: rowLv2.maLoKho,
-          soPhieu: rowLv2.soPhieu,
-          soBienBan: rowLv2.soBienBan,
-          ngayLayMau: rowLv2.ngayLayMau,
-          soBbTinhKho: rowLv2.soBbTinhKho,
-          ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-          soBbHaoDoi: rowLv2.soBbHaoDoi,
-          trangThai: rowLv2.trangThai,
-          tenTrangThai: rowLv2.tenTrangThai,
-          childData: v
+    let dataView = chain(this.dataTable)
+      .groupBy("soQd")
+      .map((value, key) => {
+        let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
+          let rowLv2 = v.find(s => s.maDiemKho === k);
+          return {
+            id: rowLv2.id,
+            idVirtual: uuidv4(),
+            maDiemKho: k,
+            tenDiemKho: rowLv2.tenDiemKho,
+            maNhaKho: rowLv2.maNhaKho,
+            tenNhaKho: rowLv2.tenNhaKho,
+            maNganKho: rowLv2.maNganKho,
+            tenNganKho: rowLv2.tenNganKho,
+            tenLoKho: rowLv2.tenLoKho,
+            maLoKho: rowLv2.maLoKho,
+            soPhieu: rowLv2.soPhieu,
+            soBienBan: rowLv2.soBienBan,
+            ngayLayMau: rowLv2.ngayLayMau,
+            soBbTinhKho: rowLv2.soBbTinhKho,
+            ngayXuatDocKho: rowLv2.ngayXuatDocKho,
+            soBbHaoDoi: rowLv2.soBbHaoDoi,
+            trangThai: rowLv2.trangThai,
+            tenTrangThai: rowLv2.tenTrangThai,
+            childData: v
+          }
         }
-      }
-      ).value();
-      let rowLv1 = value.find(s => s.soQd === key);
-      return {
-        idVirtual: uuidv4(),
-        soQd: key,
-        nam: rowLv1.nam,
-        ngayQd: rowLv1.ngayQd,
-        idQd: rowLv1.idQd,
-        childData: rs
-      };
-    }).value();
+        ).value();
+        let rowLv1 = value.find(s => s.soQd === key);
+        return {
+          idVirtual: uuidv4(),
+          soQd: key,
+          nam: rowLv1.nam,
+          ngayQd: rowLv1.ngayQd,
+          idQd: rowLv1.idQd,
+          childData: rs
+        };
+      }).value();
     this.dataView = dataView
     this.expandAll()
   }
@@ -152,6 +148,13 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     } else {
       this.expandSetString.delete(id);
     }
+  }
+
+  redirectToChiTiet(lv2: any, isView: boolean, idQdGiaoNvXh?: number) {
+    this.selectedId = lv2.id;
+    this.isDetail = true;
+    this.isView = isView;
+    this.idQdGiaoNvXh = idQdGiaoNvXh;
   }
 
   disabledNgayLayMauTu = (startValue: Date): boolean => {

@@ -57,7 +57,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
       nam: [dayjs().get('year'), Validators.required],
       maDvi: [''],
       tenDvi: [''],
-      soQdDc: ['',],
+      soQdDc: ['', [Validators.required]],
       ngayKyDc: ['',],
       ngayHlucDc: ['',],
       idQdGoc: [],
@@ -65,8 +65,8 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
       ngayKyQdGoc: ['',],
       trichYeu: [''],
       soQdCc: [''],
-      loaiVthh: ['', [Validators.required]],
-      tenLoaiVthh: ['', [Validators.required]],
+      loaiVthh: [''],
+      tenLoaiVthh: [],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
@@ -156,7 +156,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
     });
     this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách số quyết định gốc',
+      nzTitle: 'DANH SÁCH SỐ QUYẾT ĐỊNH GỐC',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
