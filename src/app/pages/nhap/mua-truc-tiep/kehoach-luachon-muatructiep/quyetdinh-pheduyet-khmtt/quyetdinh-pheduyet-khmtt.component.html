@@ -78,7 +78,7 @@
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th>Số đề xuất/tờ trình</th>
-            <th>Mã tổng hợp</th>
+            <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th class="text-center" style="width: 10%;">Trích yếu</th>
             <th class="text-center" style="width: 8%;">Phương thức mua trực tiếp</th>
             <th>Trạng thái</th>
@@ -154,7 +154,7 @@
             <td>
               <a style="color: blue; font-weight: bold;" (click)="openDxMttModal(data.idTrHdr)">{{ data.soTrHdr }}</a>
             </td>
-            <td class="text-blue">{{ data.idThHdr }}</td>
+            <td class="text-blue" *ngIf="userService.isTongCuc()"><a style="color: blue; font-weight: bold;" (click)="openThMttModal(data.idThHdr)">{{ data.idThHdr }}</a></td>
             <td>{{ data.trichYeu }}</td>
             <td>{{data.ptMuaTrucTiep}}</td>
             <td>{{ data.tenTrangThai }}</td>
@@ -209,6 +209,20 @@
   </ng-container>
   <div *nzModalFooter>
     <button nz-button (click)="closeDxMttModal()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openThMtt" (nzOnCancel)="closeThMttModal()">
+  <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+    <app-themmoi-tonghop-khmtt [id]="thMttId" [loaiVthh]="loaiVthh" [isView]="true"
+                                     [isViewOnModal]="true">
+    </app-themmoi-tonghop-khmtt>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="closeThMttModal()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
       Đóng
     </button>

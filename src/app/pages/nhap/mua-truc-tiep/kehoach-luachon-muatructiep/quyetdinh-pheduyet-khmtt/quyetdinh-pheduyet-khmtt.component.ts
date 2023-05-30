@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
 @Component({
   selector: 'app-quyetdinh-pheduyet-khmtt',
   templateUrl: './quyetdinh-pheduyet-khmtt.component.html',
@@ -20,6 +21,8 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
   denNgayKy: Date | null = null;
   dxMttId: number = 0;
   openDxMtt = false;
+  thMttId: number = 0;
+  openThMtt = false;
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
@@ -40,6 +43,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       ngayQd: null,
       lastest: 0,
       ngayQdTu: null,
+      maDvi: null,
       ngayQdDen: null
     })
     this.filterTable = {
@@ -60,7 +64,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       this.formData.patchValue({
         loaiVthh: this.loaiVthh
       })
-      await this.search();
+      await this.timKiem();
       await this.spinner.hide();
     }
     catch (e) {
@@ -75,6 +79,7 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
       this.formData.value.ngayQdTu = this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null
       this.formData.value.ngayQdDen = this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null
     }
+    this.formData.value.maDvi = this.userInfo.MA_DVI;
     await this.search();
   }
 
@@ -120,6 +125,34 @@ export class QuyetdinhPheduyetKhmttComponent extends Base2Component implements O
   closeDxMttModal() {
     this.dxMttId = null;
     this.openDxMtt = false;
+  }
+
+  openThMttModal(id: number) {
+    this.thMttId = id;
+    this.openThMtt = true;
+  }
+
+  closeThMttModal() {
+    this.thMttId = null;
+    this.openThMtt = false;
+  }
+
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
+    }
+    console.log(key, value);
+
+    if (value && value != '') {
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
   }
 
 }

@@ -8,18 +8,24 @@ import { DonviService } from "src/app/services/donvi.service";
 import { MESSAGE } from "src/app/constants/message";
 import { NgxSpinnerService } from "ngx-spinner";
 import { AMOUNT_NO_DECIMAL } from "src/app/Utility/utils";
+import { Base2Component } from "src/app/components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "src/app/services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 
 @Component({
   selector: 'app-thong-tin-hang-can-dieu-chuyen-chi-cuc',
   templateUrl: './thong-tin-hang-can-dieu-chuyen-chi-cuc.component.html',
   styleUrls: ['./thong-tin-hang-can-dieu-chuyen-chi-cuc.component.scss']
 })
-export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
+export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component implements OnInit {
   AMOUNT = AMOUNT_NO_DECIMAL;
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
   dsChiCuc: any[] = [];
+  data: any
+
   dsDiemKho: any[] = [];
 
   dsNhaKho: any[] = [];
@@ -32,49 +38,57 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
   dsNganKhoNhan: any[] = [];
   dsLoKhoNhan: any[] = [];
 
-  maDvi: string;
-  tenDvi: string;
-  maDiemKho: string;
-  tenDiemKho: string;
-  maNhaKho: string;
-  tenNhaKho: string;
-  maNganKho: string;
-  tenNganKho: string;
-  maLoKho: string;
-  tenLoKho: string;
-  maThuKho: string;
-  thuKho: string;
-  loaiVthh: string;
-  cloaiVthh: string;
-  tonKho: string;
-  soLuongDc: string;
-  duToanKphi: string;
-  thoiGianDkDc: string;
-  maDiemKhoNhan: string;
-  tenDiemKhoNhan: string;
-  maNhaKhoNhan: string;
-  tenNhaKhoNhan: string;
-  maNganKhoNhan: string;
-  tenNganKhoNhan: string;
-  maLoKhoNhan: string;
-  tenLoKhoNhan: string;
-  maThuKhoNhan: string;
-  thuKhoNhan: string;
-  thayDoiThuDo: string;
-  slDcConLai: string;
-  tichLuongKd: string;
-  soLuongPhanBo: string;
+
+  // maDvi: string;
+  // tenDvi: string;
+  // maDiemKho: string;
+  // tenDiemKho: string;
+  // maNhaKho: string;
+  // tenNhaKho: string;
+  // maNganKho: string;
+  // tenNganKho: string;
+  // maLoKho: string;
+  // tenLoKho: string;
+  // maThuKho: string;
+  // thuKho: string;
+  // loaiVthh: string;
+  // cloaiVthh: string;
+  // tonKho: string;
+  // soLuongDc: string;
+  // duToanKphi: string;
+  // thoiGianDkDc: string;
+  // maDiemKhoNhan: string;
+  // tenDiemKhoNhan: string;
+  // maNhaKhoNhan: string;
+  // tenNhaKhoNhan: string;
+  // maNganKhoNhan: string;
+  // tenNganKhoNhan: string;
+  // maLoKhoNhan: string;
+  // tenLoKhoNhan: string;
+  // maThuKhoNhan: string;
+  // thuKhoNhan: string;
+  // thayDoiThuDo: string;
+  // slDcConLai: string;
+  // tichLuongKd: string;
+  // soLuongPhanBo: string;
 
   constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private _modalRef: NzModalRef,
-    private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
       maDvi: [],
       tenDvi: [],
+      maChiCucNhan: [],
+      tenChiCucNhan: [],
       maDiemKho: [],
       tenDiemKho: [],
       maNhaKho: [],
@@ -119,7 +133,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
   handleOk(item: any) {
     this._modalRef.close({
       ...item,
-      isUpdate: !!this.maDvi
+      isUpdate: !!this.data.maDvi
     });
   }
 
@@ -129,29 +143,16 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
 
   async handleData() {
     await this.spinner.show()
-    if (this.maDvi) await this.getListDiemKho(this.maDvi)
-    if (this.maDiemKho) await this.getListNhaKho(this.maDiemKho)
-    if (this.maNhaKho) await this.getListNganKho(this.maNhaKho)
-    if (this.maNganKho) await this.getListLoKho(this.maNganKho)
+    if (this.data.maDvi) await this.getListDiemKho(this.data.maDvi)
+    if (this.data.maDiemKho) await this.getListNhaKho(this.data.maDiemKho)
+    if (this.data.maNhaKho) await this.getListNganKho(this.data.maNhaKho)
+    if (this.data.maNganKho) await this.getListLoKho(this.data.maNganKho)
 
-    if (this.maDiemKhoNhan) await this.getListNhaKhoNhan(this.maDiemKhoNhan)
-    if (this.maNhaKhoNhan) await this.getListNganKhoNhan(this.maNhaKhoNhan)
-    if (this.maNganKhoNhan) await this.getListLoKhoNhan(this.maNganKhoNhan)
+    if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
+    if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
+    if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
 
-    this.formData.patchValue({
-      maDvi: this.maDvi,
-      thoiGianDkDc: this.thoiGianDkDc,
-      maDiemKho: this.maDiemKho,
-      maNhaKho: this.maNhaKho,
-      maNganKho: this.maNganKho,
-      maLoKho: this.maLoKho,
-      soLuongDc: this.soLuongDc,
-      duToanKphi: this.duToanKphi,
-      maDiemKhoNhan: this.maDiemKhoNhan,
-      maNhaKhoNhan: this.maNhaKhoNhan,
-      maNganKhoNhan: this.maNganKhoNhan,
-      maLoKhoNhan: this.maLoKhoNhan
-    })
+    this.formData.patchValue(this.data)
     await this.spinner.hide();
   }
 
@@ -172,6 +173,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
         let body = {
           maDviCha: maDvi,
           trangThai: '01',
+          type: "MLK"
         }
         const res = await this.donViService.getTreeAll(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -207,7 +209,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       if (diemKho) {
         console.log('diemKho', diemKho, value, this.dsDiemKho)
         this.formData.patchValue({
-          maNhaKho: [],
+          maNhaKho: "",
           tenDiemKho: diemKho.tenDvi
         })
         this.dsNhaKho = this.dsDiemKho.find(f => f.maDvi === value)?.children;
@@ -223,7 +225,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       if (diemKhoNhan) {
         console.log('diemKhoNhan', diemKhoNhan, value)
         this.formData.patchValue({
-          maNhaKhoNhan: [],
+          maNhaKhoNhan: "",
           tenDiemKhoNhan: diemKhoNhan.tenDvi
         })
         this.dsNhaKhoNhan = this.dsDiemKhoNhan.find(f => f.maDvi === value)?.children;
@@ -239,7 +241,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       if (nhaKho) {
         console.log('nhaKho', nhaKho, this.dsNhaKho, value)
         this.formData.patchValue({
-          maNganKho: [],
+          maNganKho: "",
           tenNhaKho: nhaKho.tenDvi
         })
         this.dsNganKho = this.dsNhaKho.find(f => f.maDvi === value)?.children;
@@ -255,7 +257,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       if (nhaKhoNhan) {
         console.log('nhaKhoNhan', nhaKhoNhan)
         this.formData.patchValue({
-          maNganKhoNhan: [],
+          maNganKhoNhan: "",
           tenNhaKhoNhan: nhaKhoNhan.tenDvi
         })
         this.dsNganKhoNhan = this.dsNhaKhoNhan.find(f => f.maDvi === value)?.children;
@@ -271,7 +273,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       console.log('nganKho', nganKho)
       if (nganKho) {
         this.formData.patchValue({
-          maLoKho: [],
+          maLoKho: "",
           tenNganKho: nganKho.tenDvi
         })
         let body = {
@@ -290,6 +292,26 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
           }
           if (coLoKho)
             this.dsLoKho = this.dsNganKho.find(f => f.maDvi === value)?.children;
+          else {
+            this.dsLoKho = []
+            const body = {
+              maDvi: value,
+              tenLoKho: nganKho.tenDvi
+            }
+            const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
+            if (res.statusCode == 0) {
+              if (res.data.length > 0) {
+                this.formData.patchValue({
+                  loaiVthh: res.data[0].loaiVthh,
+                  tenLoaiVthh: res.data[0].tenLoaiVthh,
+                  cloaiVthh: res.data[0].cloaiVthh,
+                  tenCloaiVthh: res.data[0].tenCloaiVthh,
+                  tonKho: res.data[0].slHienThoi,
+                  tenDonViTinh: res.data[0].tenDonViTinh,
+                })
+              }
+            }
+          }
         }
 
       }
@@ -336,7 +358,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
       console.log('nganKhoNhan', nganKhoNhan)
       if (nganKhoNhan) {
         this.formData.patchValue({
-          maLoKhoNhan: [],
+          maLoKhoNhan: "",
           tenNganKhoNhan: nganKhoNhan.tenDvi
         })
         let body = {
@@ -359,6 +381,25 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
           }
           if (coLoKho)
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
+          else {
+            this.dsLoKhoNhan = []
+            const body = {
+              maDvi: value,
+              tenLoKho: nganKhoNhan.tenDvi
+            }
+            const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
+            if (res.statusCode == 0 && res.data.length > 0) {
+              this.formData.patchValue({
+                tonKhoNhan: res.data[0].slHienThoi,
+                tenDonViTinhNhan: res.data[0].tenDonViTinh
+              })
+            } else {
+              this.formData.patchValue({
+                tonKhoNhan: "",
+                tenDonViTinhNhan: ""
+              })
+            }
+          }
         }
 
         console.log('getListLoKhoNhan', value, this.dsLoKhoNhan)
@@ -379,13 +420,16 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
           tenLoKho: this.formData.value.tenLoKhoNhan
         }
         const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body);
-        if (res.statusCode == 0) {
-          if (res.data.length > 0) {
-            this.formData.patchValue({
-              tonKhoNhan: res.data[0].slHienThoi,
-              tenDonViTinhNhan: res.data[0].tenDonViTinh
-            })
-          }
+        if (res.statusCode == 0 && res.data.length > 0) {
+          this.formData.patchValue({
+            tonKhoNhan: res.data[0].slHienThoi,
+            tenDonViTinhNhan: res.data[0].tenDonViTinh
+          })
+        } else {
+          this.formData.patchValue({
+            tonKhoNhan: "",
+            tenDonViTinhNhan: ""
+          })
         }
       }
     }
@@ -395,9 +439,9 @@ export class ThongTinHangCanDieuChuyenChiCucComponent implements OnInit {
 
   onChangeSLNhapDc(value) {
     console.log('onChangeSLNhapDc', value)
-    if (value && value <= this.soLuongDc) {
+    if (value && value <= this.data.soLuongDc) {
       this.formData.patchValue({
-        slDcConLai: Number(this.soLuongDc) - (value)
+        slDcConLai: Number(this.data.soLuongDc) - (value)
       })
     }
   }

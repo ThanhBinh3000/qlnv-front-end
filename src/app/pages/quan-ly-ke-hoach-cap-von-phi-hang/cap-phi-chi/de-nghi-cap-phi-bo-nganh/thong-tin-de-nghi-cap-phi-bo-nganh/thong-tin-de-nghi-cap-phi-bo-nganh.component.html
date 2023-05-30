@@ -94,7 +94,7 @@
       </div>
         <div nz-row [nzGutter]="[48, 6]" class="pd-10">
             <div nz-col nzSpan="24">
-                <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+                <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
                     [nzData]="ct1s">
                     <thead>
                         <tr>
@@ -103,7 +103,7 @@
                             <th>Số tài khoản</th>
                             <th>Ngân hàng</th>
                             <th>Yêu cầu cấp thêm</th>
-                            <th *ngIf="!(isDisableField() || isView)">Hành động </th>
+                            <th *ngIf="!(isDisableField() || isView)" class="text-center">Hành động </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -121,7 +121,7 @@
                             <td>
                                 {{create1.ycCapThemPhi | number: '1.0-1'}}
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <a (click)="addRow('ct1s')">
                                     <i class="table-icon icon htvbdh_dau-cong"></i>
                                 </a>
@@ -138,7 +138,7 @@
                                 <td (click)="selectRow(data, 'rowEdit')">{{ data.nganHang }}</td>
                                 <td (click)="selectRow(data, 'rowEdit')">{{ data.ycCapThemPhi | number:
                                     '1.0-1' }}</td>
-                                <td *ngIf="!(isDisableField() || isView)">
+                                <td *ngIf="!(isDisableField() || isView)" class="text-center">
                                     <a (click)="editRow(data, 'ct1s')">
                                         <i class="fa fa-pencil"></i>
                                     </a>
@@ -161,7 +161,7 @@
                                 <td>
                                     {{data.ycCapThemPhi | number: '1.0-1'}}
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a (click)="saveEdit(data, 'ct1s')" class="save">
                                         <i class="fa fa-save"></i>
                                     </a>
@@ -183,8 +183,8 @@
                     </tbody>
                 </nz-table>
             </div>
-            <div nz-col nzSpan="24" class="table-ket-qua">
-                <nz-table #basicTable3 class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
+            <div nz-col nzSpan="24" class="table-ket-qua mt-2">
+                <nz-table #basicTable3 class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
                     [nzData]="rowEdit.ct2s">
                     <thead>
                         <tr>
@@ -224,7 +224,7 @@
                             <th class="text-center">Tổng chi phí</th>
                             <th class="text-center">Kinh phí đã cấp</th>
                             <th class="text-center">Yêu cầu cấp thêm</th>
-                            <th>Hành động </th>
+                            <th class="text-center">Hành động </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -259,7 +259,7 @@
                                     [(ngModel)]="create.yeuCauCapThem" >
                                 </nz-input-number>
                             </td>
-                            <td>
+                            <td class="text-center">
                                 <a (click)="addRow('ct2s')">
                                     <i class="table-icon icon htvbdh_dau-cong"></i>
                                 </a>
@@ -275,7 +275,7 @@
                                 <td>{{data.tongTien | number: '1.0-1'}}</td>
                                 <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
                                 <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
-                                <td>
+                                <td class="text-center">
                                     <a (click)="editRow(data, 'ct2s')" >
                                         <i class="fa fa-pencil"></i>
                                     </a>
@@ -312,7 +312,7 @@
                                         [nzMax]="(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)"
                                         [(ngModel)]="data.yeuCauCapThem"></nz-input-number>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a (click)="saveEdit(data, 'ct2s')" class="save">
                                         <i class="fa fa-save"></i>
                                     </a>

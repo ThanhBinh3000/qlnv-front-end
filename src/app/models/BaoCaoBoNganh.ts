@@ -240,6 +240,40 @@ export class tiepNhanHangDtqg {
   coNhieuMatHang: boolean
   edit: boolean
 }
+export class cTNhapXuatHangDtqg {
+  diaDiemDeNhapHang: string
+  tenDiaDiemDeNhapHang: string
+  dvt: string
+  nuocSanXuat: number
+  donViBaoQuan: number
+  tonKhoDauNam: number
+  nhapKnTs: number
+  nhapKnMt: number
+  nhapKnDh: number
+  nhapKnDc: number
+  nhapKnDt: number
+  nhapKnK: number
+  nhapLkTs: number
+  nhapLkMt: number
+  nhapLkDh: number
+  nhapLkDc: number
+  nhapLkDt: number
+  nhapLkK: number
+  xuatKnTs: number
+  xuatKnKtt: number
+  xuatKnBdh: number
+  xuatKnLpdh: number
+  xuatKnHh: number
+  xuatKnK: number
+  xuatLkTs: number
+  xuatLkKtt: number
+  xuatLkBdh: number
+  xuatLkLpdh: number
+  xuatLkHh: number
+  xuatLkK: number
+  tonKhoCuoiKy: number
+  edit: boolean
+}
 
 export class khMuaHangDtqg {
   danhMuc: string

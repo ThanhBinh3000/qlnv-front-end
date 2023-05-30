@@ -173,7 +173,7 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.maDvi = this.userInfo.MA_DVI;
+    body.maDvi = this.userService.isCuc() ? this.userInfo.MA_DVI : this.formData.value.maDvi;
     body.soCongVan = body.soCongVan ?  body.soCongVan + this.maQd : this.maQd;
     body.fileDinhKems = this.fileDinhKem;
     body.ctiets = this.dataTableRes;
