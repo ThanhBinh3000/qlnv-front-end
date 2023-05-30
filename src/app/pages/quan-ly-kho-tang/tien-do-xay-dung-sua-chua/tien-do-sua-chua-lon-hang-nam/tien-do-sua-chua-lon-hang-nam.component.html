@@ -70,7 +70,7 @@
         <nz-card class="flex-card p-lr16 mg-t-10">
           <nz-table nzBordered [nzData]="dataTable"
                     [nzFrontPagination]="false" [nzShowPagination]="false"
-                    [nzScroll]="{x: '2500px'}">
+                    [nzScroll]="{x: '3000px'}">
             <thead>
             <tr>
               <th class="text-center" nzWidth="45px">STT</th>
@@ -278,9 +278,9 @@
                                                   [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
-          <app-quyet-dinh-phe-duyet-khlcnt [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
-                                           [itemQdPdTktcTdt]="itemQdPdTktcTdt"
-                                           [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-quyet-dinh-phe-duyet-khlcnt>
+          <app-quyet-dinh-phe-duyet-khlcnt  [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
+                                            [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                            [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-quyet-dinh-phe-duyet-khlcnt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
           <app-cap-nhat-thong-tin-dau-thau [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
