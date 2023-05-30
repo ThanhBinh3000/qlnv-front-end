@@ -49,7 +49,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     soThongChi: null,
     tenDvi: null,
     namKh: dayjs().get('year'),
-    ngayKy: null,
+    ngayKyTu: null,
+    ngayKyDen: null,
     lyDoChi: null,
   };
   filterTable: any = {
@@ -151,8 +152,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-      "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+      "tuNgay": this.searchFilter.ngayKyTu  ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
+      "denNgay": this.searchFilter.ngayKyDen  ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
       "nam": this.searchFilter.namKh,
       "soThongTri": this.searchFilter.soThongChi,
       "lyDoChi": this.searchFilter.lyDoChi,
@@ -238,7 +239,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       soThongChi: null,
       tenDvi: null,
       namKh: null,
-      ngayKy: null,
+      ngayKyTu: null,
+      ngayKyDen: null,
       lyDoChi: null,
     }
     this.search();
@@ -282,8 +284,8 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-          "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+          "tuNgay": this.searchFilter.ngayKyTu  ? dayjs(this.searchFilter.ngayKyTu).format('YYYY-MM-DD') : null,
+          "denNgay": this.searchFilter.ngayKyDen  ? dayjs(this.searchFilter.ngayKyDen).format('YYYY-MM-DD') : null,
           "nam": this.searchFilter.namKh,
           "soThongTri": this.searchFilter.soThongChi,
           "lyDoChi": this.searchFilter.lyDoChi,

@@ -12,9 +12,20 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="4">
+        <div nz-col nzSpan="5">
           <label class="search__label">Ngày lập</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <div nz-row>
+            <div nz-col nzSpan="11" class="cus-start-date">
+              <nz-date-picker nzFormat="dd/MM/yyyy"  [(ngModel)]="searchFilter.ngayKyTu">
+              </nz-date-picker>
+            </div>
+            <div nz-col nzSpan="1">
+            </div>
+            <div nz-col nzSpan="11" class="cus-end-date">
+              <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="searchFilter.ngayKyDen">
+              </nz-date-picker>
+            </div>
+          </div>
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label"> Lý do chi </label>
@@ -70,7 +81,8 @@
           <th width="">Năm</th>
           <th width="">Ngày lập</th>
           <th width="">Lý do chi</th>
-          <th width="">Số đề nghị cấp phí</th>
+          <th width="">Mã tổng hợp</th>
+          <th width="">Đơn vị</th>
           <th width="">Trạng thái</th>
           <th width="90px">Hành động</th>
         </tr>
@@ -111,6 +123,12 @@
           </th>
           <th>
             <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDviThongTri"
+                     (input)="filterInTable('tenDviThongTri',filterTable.tenDviThongTri)" size="small"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
               <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                          (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
                 <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
@@ -128,10 +146,11 @@
           </th>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.soThongTri }}</td>
-          <td>{{ data.nam }}</td>
+          <td class="text-center">{{ data.nam }}</td>
           <td>{{ data.ngayLap | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.lyDoChi }}</td>
           <td>{{ data.soDnCapPhi }}</td>
+          <td>{{ data.tenDviThongTri }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="detail(data, true)" *ngIf="!(data.trangThai == STATUS.DU_THAO && data.maDvi == userInfo.MA_DVI)">
