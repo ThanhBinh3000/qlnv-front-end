@@ -1885,6 +1885,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   onInputTenHang(e: Event): void {
     this.isAddVatTu = false;
+    console.log( this.dataVatTuCha,' this.dataVatTuCha');
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTuCha = '';
@@ -1898,6 +1899,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataVatTuChaShow = this.dataVatTuCha.filter(
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
+      console.log(value,'valuevalue')
     }
   }
 

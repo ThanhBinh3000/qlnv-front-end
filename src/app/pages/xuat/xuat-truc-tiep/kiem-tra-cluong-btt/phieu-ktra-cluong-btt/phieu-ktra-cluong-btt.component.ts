@@ -63,12 +63,8 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
-      })
+      this.timKiem();
       await this.search();
-      this.buildTableView();
     } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
@@ -76,42 +72,25 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     }
   }
 
-  delete(item: any, roles?) {
-    if (!this.checkPermission(roles)) {
-      return
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id
-          };
-          this.phieuKtraCluongBttService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
   async search(roles?): Promise<void> {
     await this.spinner.show()
     await super.search(roles);
     this.buildTableView();
     await this.spinner.hide()
+  }
+
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
   }
 
   buildTableView() {
@@ -159,12 +138,6 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     this.expandAll()
   }
 
-  // editRow(lv2: any, isView: boolean) {
-  //   this.selectedId = lv2.id;
-  //   this.isDetail = true;
-  //   this.isView = isView;
-  // }
-
   expandAll() {
     this.dataView.forEach(s => {
       this.expandSetString.add(s.idVirtual);
@@ -198,5 +171,4 @@ export class PhieuKtraCluongBttComponent extends Base2Component implements OnIni
     this.idBienBan = null;
     this.isViewBienBan = false;
   }
-
 }
