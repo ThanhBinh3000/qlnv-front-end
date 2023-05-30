@@ -50,7 +50,9 @@
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
+                      <nz-input-group [nzAddOnAfter]="maQd">
                         <input nz-input type="text" formControlName="soDeNghi"  />
+                      </nz-input-group>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="4">
@@ -65,33 +67,33 @@
         </form>
     </div>
     <nz-card class="flex-card p-lr16 pd-t-16 mg-t-16">
-      <div nz-row [nzGutter]="[24, 6]" class="pd-10">
-          <div nz-col [nzSpan]="6">
-            <nz-form-item>
-              <nz-form-label  [nzNoColon]="true"> Dự toán TX được giao (đ)</nz-form-label>
-              <input nz-input [nzSize]="'small'" type="text" disabled  />
-            </nz-form-item>
-          </div>
+<!--      <div nz-row [nzGutter]="[24, 6]" class="pd-10">-->
+<!--          <div nz-col [nzSpan]="6">-->
+<!--            <nz-form-item>-->
+<!--              <nz-form-label  [nzNoColon]="true"> Dự toán TX được giao (đ)</nz-form-label>-->
+<!--              <input nz-input [nzSize]="'small'" type="text" disabled  />-->
+<!--            </nz-form-item>-->
+<!--          </div>-->
 
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label  [nzNoColon]="true"> Tổng số phí đã được BTC (đ)</nz-form-label>
-            <input nz-input [nzSize]="'small'" type="text" disabled   />
-          </nz-form-item>
-        </div>
+<!--        <div nz-col [nzSpan]="6">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label  [nzNoColon]="true"> Tổng số phí đã được BTC (đ)</nz-form-label>-->
+<!--            <input nz-input [nzSize]="'small'" type="text" disabled   />-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
 
 
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label  [nzNoColon]="true"> Số dự toán còn lại (đ)</nz-form-label>
-            <input nz-input [nzSize]="'small'" type="text" disabled    />
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="3">
-        </div>
-        <div nz-col [nzSpan]="3">
-        </div>
-      </div>
+<!--        <div nz-col [nzSpan]="6">-->
+<!--          <nz-form-item>-->
+<!--            <nz-form-label  [nzNoColon]="true"> Số dự toán còn lại (đ)</nz-form-label>-->
+<!--            <input nz-input [nzSize]="'small'" type="text" disabled    />-->
+<!--          </nz-form-item>-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="3">-->
+<!--        </div>-->
+<!--        <div nz-col [nzSpan]="3">-->
+<!--        </div>-->
+<!--      </div>-->
         <div nz-row [nzGutter]="[48, 6]" class="pd-10">
             <div nz-col nzSpan="24">
                 <nz-table #basicTable class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
@@ -176,7 +178,7 @@
                             <th></th>
                             <th></th>
                             <th class="text-right"> Tổng</th>
-                            <th class="bg-gray  text-money text-specical-money">{{tongBang1(ct1s) | number:
+                            <th class="bg-gray  text-money text-specical-money text-right">{{tongBang1(ct1s) | number:
                                 '1.0-1'}}</th>
                             <th *ngIf="!(isDisableField() || isView)"></th>
                         </tr>
@@ -199,7 +201,7 @@
                         </tr>
                         <tr>
                             <th colSpan="2">
-                                <nz-select name="" id="" [(ngModel)]="rowEdit.maVatTuCha"
+                                <nz-select [(ngModel)]="rowEdit.maVatTuCha" nzShowSearch
                                     (ngModelChange)="changeLoaiHangHoa($event)" >
                                     <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma"
                                         [nzLabel]="item.ten">
@@ -244,19 +246,22 @@
                                 </nz-select>
                             </td>
                             <td>
-                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [nzFormatter]="globals.formatter"
+                                                 [nzParser]="globals.parser"
                                     [(ngModel)]="create.tongTien" ></nz-input-number>
                             </td>
                             <td>
-                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [nzFormatter]="globals.formatter"
+                                                 [nzParser]="globals.parser"
                                     [nzMax]="(create.tongTien ?? 0)" [(ngModel)]="create.kinhPhiDaCap"
                                     >
                                 </nz-input-number>
                             </td>
                             <td>
-                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0" [nzFormatter]="globals.formatter" nzDisabled
+                                                 [nzParser]="globals.parser"
                                     [nzMax]="(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)"
-                                    [(ngModel)]="create.yeuCauCapThem" >
+                                    [(ngModel)]="create.tongTien - create.kinhPhiDaCap" >
                                 </nz-input-number>
                             </td>
                             <td class="text-center">
@@ -272,9 +277,9 @@
                             <ng-container *ngIf="!data.edit; else editItemTemplate">
                                 <td>{{data.tenLoaiChiPhi}}</td>
                                 <td>{{data.namPhatSinh}}</td>
-                                <td>{{data.tongTien | number: '1.0-1'}}</td>
-                                <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
-                                <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
+                                <td class="text-right">{{data.tongTien | number: '1.0-1'}}</td>
+                                <td class="text-right">{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
+                                <td class="text-right">{{data.yeuCauCapThem | number: '1.0-1'}}</td>
                                 <td class="text-center">
                                     <a (click)="editRow(data, 'ct2s')" >
                                         <i class="fa fa-pencil"></i>
@@ -325,11 +330,11 @@
                         <tr>
                             <th></th>
                             <th class="text-right"> Tổng</th>
-                            <th class="bg-gray  text-money text-specical-money">
+                            <th class="bg-gray  text-money text-specical-money text-right">
                                 {{tongChiPhiBang2(rowEdit) | number: '1.0-1'}}</th>
-                            <th class="bg-gray  text-money text-specical-money">
+                            <th class="bg-gray  text-money text-specical-money text-right">
                                 {{tongKinhPhiBang2(rowEdit) | number: '1.0-1'}}</th>
-                            <th class="bg-gray  text-money text-specical-money">
+                            <th class="bg-gray  text-money text-specical-money text-right">
                                 {{tongCapThemBang2(rowEdit) | number : '1.0-1'}}
                             </th>
                             <th></th>
