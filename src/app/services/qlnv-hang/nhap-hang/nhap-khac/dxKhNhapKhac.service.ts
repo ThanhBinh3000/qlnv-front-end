@@ -16,7 +16,7 @@ export class DxKhNhapKhacService extends BaseService {
   }
 
   dsDxDuocTaoQDinhPDuyet(): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/danh-sach-dx-tao-qd`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach-dx-tao-qd`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 }
