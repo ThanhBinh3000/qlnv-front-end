@@ -22,6 +22,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
+  danhSachKeHoach: any[] = [];
   dsChiCuc: any[] = [];
   data: any
 
@@ -89,6 +90,8 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
   }
 
   ngOnInit(): void {
+    const dis = this.danhSachKeHoach.find(item => item.maChiCucNhan === this.data.maChiCucNhan)
+    console.log('dis', !!dis, this.danhSachKeHoach, this.data)
     this.handleData()
   }
 
@@ -115,7 +118,6 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (this.data.maDiemKhoNhan) await this.getListNhaKhoNhan(this.data.maDiemKhoNhan)
     if (this.data.maNhaKhoNhan) await this.getListNganKhoNhan(this.data.maNhaKhoNhan)
     if (this.data.maNganKhoNhan) await this.getListLoKhoNhan(this.data.maNganKhoNhan)
-    console.log('ThongTinHangCanDieuChuyenCucComponent=>data', this.data)
     this.formData.patchValue(this.data)
 
     await this.spinner.hide();
@@ -123,7 +125,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   async onChangeChiCucDC(value) {
     const chiCuc = this.dsChiCuc.find(item => item.key == value)
-    console.log('chiCuc', chiCuc)
+
     this.getListDiemKho(value)
     if (chiCuc) {
       this.formData.patchValue({
@@ -132,13 +134,70 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     }
   }
 
+  checkDisabledOption(value, key): boolean {
+    const check = this.danhSachKeHoach.find(item => item[key] === value)
+    return !!check
+  }
+
+  checkDisabledDiemKho(value): boolean {
+    const check = this.danhSachKeHoach.find(item => (item.maChiCucNhan === this.formData.value.maChiCucNhan) && (item.maDiemKho === value))
+    return !!check
+  }
+
+  checkDisabledNganKho(value): boolean {
+    const dsLoKh = this.dsNganKho.find(f => f.maDvi === value)?.children;
+    if (dsLoKh.length == 0) {
+      const check = this.danhSachKeHoach.find(item => (item.maChiCucNhan === this.formData.value.maChiCucNhan) && (item.maDiemKho === this.formData.value.maDiemKho) && (item.maNhaKho === this.formData.value.maNhaKho) && (item.maNganKho === value))
+      return !!check
+    }
+    return false
+  }
+
+  checkDisabledLoKho(value): boolean {
+    const check = this.danhSachKeHoach.find(item => (item.maChiCucNhan === this.formData.value.maChiCucNhan) && (item.maDiemKho === this.formData.value.maDiemKho) && (item.maNhaKho === this.formData.value.maNhaKho) && (item.maNganKho === this.formData.value.maNganKho) && (item.maLoKho === value))
+    return !!check
+  }
+
+  checkDisabledNganKhoNhan(value): boolean {
+    const dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
+    if (dsLoKhoNhan.length == 0) {
+      const check = this.danhSachKeHoach.find(item =>
+        (item.maChiCucNhan === this.formData.value.maChiCucNhan) &&
+        (item.maDiemKho === this.formData.value.maDiemKho) &&
+        (item.maNhaKho === this.formData.value.maNhaKho) &&
+        (item.maNganKho === this.formData.value.maNganKho) &&
+        (item.maLoKho === this.formData.value.maLoKho) &&
+        (item.maDiemKhoNhan === this.formData.value.maDiemKhoNhan) &&
+        (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
+        (item.maNganKhoNhan === value)
+      )
+      return !!check
+    }
+    return false
+  }
+
+  checkDisabledLoKhoNhan(value): boolean {
+    const check = this.danhSachKeHoach.find(item =>
+      (item.maChiCucNhan === this.formData.value.maChiCucNhan) &&
+      (item.maDiemKho === this.formData.value.maDiemKho) &&
+      (item.maNhaKho === this.formData.value.maNhaKho) &&
+      (item.maNganKho === this.formData.value.maNganKho) &&
+      (item.maLoKho === this.formData.value.maLoKho) &&
+      (item.maDiemKhoNhan === this.formData.value.maDiemKhoNhan) &&
+      (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
+      (item.maNganKhoNhan === this.formData.value.maNganKhoNhan) &&
+      (item.maLoKhoNhan === value)
+    )
+
+    return !!check
+  }
+
   async getListDiemKho(maDvi) {
     if (maDvi) {
       try {
         let body = {
           maDviCha: maDvi,
           trangThai: '01',
-          type: "MLK"
         }
         const res = await this.donViService.getTreeAll(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -149,10 +208,10 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
                 this.dsDiemKho = [];
                 this.dsDiemKho = [
                   ...this.dsDiemKho,
-                  ...element.children
+                  ...element.children.filter(item => item.type == 'MLK')
                 ]
                 this.dsDiemKhoNhan = this.dsDiemKho
-                console.log('getListDiemKho', this.dsDiemKho)
+
               }
             });
           }
@@ -172,13 +231,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
     if (value) {
       const diemKho = this.dsDiemKho.find(f => f.maDvi === value)
       if (diemKho) {
-        console.log('diemKho', diemKho, value, this.dsDiemKho)
+
         this.formData.patchValue({
           maNhaKho: "",
           tenDiemKho: diemKho.tenDvi
         })
         this.dsNhaKho = this.dsDiemKho.find(f => f.maDvi === value)?.children;
-        console.log('getListNhaKho', value, this.dsNhaKho)
+
       }
 
     }

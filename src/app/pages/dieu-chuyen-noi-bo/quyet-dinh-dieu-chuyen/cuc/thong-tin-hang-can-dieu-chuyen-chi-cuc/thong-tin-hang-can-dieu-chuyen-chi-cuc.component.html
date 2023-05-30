@@ -229,7 +229,7 @@
               </div>
               <div nz-col nzSpan="14">
                 <span class="text-blue">{{formData.value.tonKhoNhan | number:'1.0-1':'vi_VN'}}</span>
-                <span>({{formData.value.tenDonViTinhNhan}})</span>
+                <span *ngIf="!!formData.value.tenDonViTinhNhan">({{formData.value.tenDonViTinhNhan}})</span>
               </div>
             </div>
 
@@ -239,7 +239,7 @@
               </div>
               <div nz-col nzSpan="14">
                 <span>{{formData.value.tichLuongKd | number:'1.0-1':'vi_VN'}}</span>
-                <span>({{formData.value.tenDonViTinhNhan}})</span>
+                <span *ngIf="!!formData.value.tenDonViTinhNhan">({{formData.value.tenDonViTinhNhan}})</span>
               </div>
             </div>
             <div nz-row [nzGutter]="24" class="mg-t-10">

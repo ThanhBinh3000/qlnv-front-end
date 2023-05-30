@@ -1,4 +1,4 @@
-<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC')">
+<div *ngIf="userService.isAccessPermisson('DCNB_QUYETDINHDC_TONGCUC')">
   <div *ngIf="isShowDS() && !isDetail" class="luong-thuc__danh-sach">
     <div class="bg-trang">
       <nz-card class="mt16 flex-card p-lr16">
@@ -188,7 +188,8 @@
               <td>{{ data.maThop }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td class="text-center">
-                <a *ngIf="data.trangThai !== STATUS.DU_THAO" (click)="redirectDetail(data.id, true)">
+                <a *ngIf="data.trangThai !== STATUS.DU_THAO && userService.isAccessPermisson('DCNB_QUYETDINHDC_XEM')"
+                  (click)="redirectDetail(data.id, true)">
                   <i class="fa fa-eye"></i>
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('DCNB_QUYETDINHDC_SUA') && isTongCuc()"

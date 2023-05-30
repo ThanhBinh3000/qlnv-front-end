@@ -35,7 +35,8 @@
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet() && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDVU')" type="button"
+        class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -331,8 +332,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView || isChiCuc()" formControlName="canCuQdTc" nzAllowClear
-                  (ngModelChange)="onChangeCanCuQdTc($event)">
+                <nz-select [nzDisabled]="isView || isChiCuc() || !formData.value.loaiQdinh" formControlName="canCuQdTc"
+                  nzAllowClear (ngModelChange)="onChangeCanCuQdTc($event)">
                   <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -489,6 +490,9 @@
               <td></td>
               <td></td>
               <td *ngIf="!isView">
+                <a (click)="themDiemKho(chiCuc)">
+                  <i class="icon htvbdh_dau-cong"></i>
+                </a>
                 <a (click)="xoaChiCuc(chiCuc)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
@@ -726,7 +730,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
                       <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                       <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                       <td class="bold">{{c.tenDonViTinh || ""}}</td>
@@ -825,7 +829,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{e.tenLoKhoNhan}}</td>
+                            <td>{{e.tenLoKhoNhan}} {{e.tenNganKhoNhan}}</td>
                             <td class="text-right">
                               {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                             <td class="text-right">
@@ -931,7 +935,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
                       <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                       <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                       <td class="bold">{{c.tenDonViTinh || ""}}</td>
@@ -965,13 +969,61 @@
                         <td></td>
                         <td></td>
                         <td class="bold">{{d.tenChiCucNhan || ""}}</td>
-                        <td>{{(d.tenDiemKhoNhan || "")}}</td>
-                        <td>{{d.tenLoKhoNhan}}</td>
+                        <td></td>
+                        <td></td>
                         <td class="text-right">
-                          {{d.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
+                        </td>
                         <td class="text-right">
-                          {{d.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+                        </td>
                       </tr>
+                      <ng-container *ngFor="let diemKhoNhan of d.children, let y = index">
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+
+                        </tr>
+                        <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>{{f.tenLoKhoNhan}} {{f.tenNganKhoNhan}}</td>
+                            <td class="text-right">
+                              {{f.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
+                            <td class="text-right">
+                              {{f.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
+
+                          </tr>
+                        </ng-container>
+                      </ng-container>
 
                     </ng-container>
                   </ng-container>
@@ -1000,7 +1052,7 @@
           <tr>
             <th>Chi cục</th>
             <th>Điểm kho</th>
-            <th>Lô kho</th>
+            <th class="text-center">Lô kho</th>
             <th class="text-center">Loại HH</th>
             <th class="text-center">Chủng loại hàng hóa</th>
             <th class="text-center">ĐVT</th>
@@ -1015,14 +1067,14 @@
           </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of basicTable.data , let i = index">
+          <ng-container *ngFor="let chicuc of basicTable.data , let i = index">
             <tr>
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-              <td [nzExpand]="item.expand"
-                (nzExpandChange)="item.expand=!item.expand; item.children=setExpand(item.expand, item.children)">
+              <td [nzExpand]="chicuc.expand"
+                (nzExpandChange)="chicuc.expand=!chicuc.expand; chicuc.children=setExpand(chicuc.expand, chicuc.children)">
               </td>
               <td></td>
-              <td class="bold">{{ item.tenDvi || "" }}</td>
+              <td class="bold">{{ chicuc.tenDvi || "" }}</td>
               <td></td>
               <td></td>
               <td></td>
@@ -1030,7 +1082,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td class="text-right bold">{{item.duToanKphi|number: '1.0-1':
+              <td class="text-right bold">{{chicuc.duToanKphi|number: '1.0-1':
                 'vi_VN'}}</td>
               <td></td>
               <td></td>
@@ -1040,15 +1092,15 @@
               <td></td>
               <td></td>
             </tr>
-            <ng-container *ngIf="item.expand">
-              <ng-container *ngFor="let bb of item.children, let y = index">
+            <ng-container *ngIf="chicuc.expand">
+              <ng-container *ngFor="let diemkho of chicuc.children, let y = index">
                 <tr>
                   <td></td>
                   <td></td>
-                  <td [nzExpand]="bb.expand" (nzExpandChange)="bb.expand=!bb.expand">
+                  <td [nzExpand]="diemkho.expand" (nzExpandChange)="diemkho.expand=!diemkho.expand">
                   </td>
                   <td></td>
-                  <td class="bold">{{ bb.tenDiemKho || ""}}</td>
+                  <td class="bold">{{ diemkho.tenDiemKho || ""}}</td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -1064,24 +1116,24 @@
                   <td></td>
                   <td></td>
                 </tr>
-                <ng-container *ngIf="bb.expand">
-                  <ng-container *ngFor="let c of bb.children, let y = index">
+                <ng-container *ngIf="diemkho.expand">
+                  <ng-container *ngFor="let loNganKho of diemkho.children, let y = index">
                     <tr>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
-                      <td class="bold">{{c.tenLoaiVthh || ""}}</td>
-                      <td class="bold">{{c.tenCloaiVthh || ""}}</td>
-                      <td class="bold">{{c.tenDonViTinh || ""}}</td>
-                      <td class="text-right bold">{{c.tonKho|number: '1.0-1':
+                      <td>{{loNganKho.tenLoKho}} {{loNganKho.tenNganKho}}</td>
+                      <td class="bold">{{loNganKho.tenLoaiVthh || ""}}</td>
+                      <td class="bold">{{loNganKho.tenCloaiVthh || ""}}</td>
+                      <td class="bold">{{loNganKho.tenDonViTinh || ""}}</td>
+                      <td class="text-right bold">{{loNganKho.tonKho|number: '1.0-1':
                         'vi_VN'}}
                       </td>
-                      <td class="text-right bold">{{c.soLuongDc|number: '1.0-1':
+                      <td class="text-right bold">{{loNganKho.soLuongDc|number: '1.0-1':
                         'vi_VN'}}</td>
-                      <td class="text-right bold">{{c.duToanKphi|number: '1.0-1':
+                      <td class="text-right bold">{{loNganKho.duToanKphi|number: '1.0-1':
                         'vi_VN'}}</td>
                       <td></td>
                       <td></td>
@@ -1091,7 +1143,7 @@
                       <td></td>
                       <td></td>
                     </tr>
-                    <ng-container *ngFor="let d of c.children, let y = index">
+                    <ng-container *ngFor="let chiCucNhan of loNganKho.children, let y = index">
                       <tr>
                         <td></td>
                         <td></td>
@@ -1105,19 +1157,19 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="bold">{{d.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
-                        <td class="bold">{{d.tenChiCucNhan || ""}}</td>
+                        <td class="bold">{{chiCucNhan.thoiGianDkDc|date: "dd/MM/yyyy"}}</td>
+                        <td class="bold">{{chiCucNhan.tenChiCucNhan || ""}}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td>
-                          <a (click)="themDiemKhoNhan(c)">
+                          <a (click)="themDiemKhoNhan(chiCucNhan)">
                             <i class="icon htvbdh_dau-cong"></i>
                           </a>
                         </td>
                       </tr>
-                      <ng-container *ngFor="let e of d.children, let y = index">
+                      <ng-container *ngFor="let diemKhoNhan of chiCucNhan.children, let y = index">
                         <tr>
                           <td></td>
                           <td></td>
@@ -1133,20 +1185,20 @@
                           <td></td>
                           <td></td>
                           <td></td>
-                          <td>{{(e.tenDiemKhoNhan || "")}}</td>
+                          <td>{{(diemKhoNhan.tenDiemKhoNhan || "")}}</td>
                           <td></td>
                           <td></td>
                           <td></td>
                           <td>
-                            <a (click)="themLoKhoNhan(e)">
+                            <a (click)="themLoKhoNhan(diemKhoNhan)">
                               <i class="icon htvbdh_dau-cong"></i>
                             </a>
-                            <a (click)="xoaDiemKhoNhan(e)">
+                            <a (click)="xoaDiemKhoNhan(diemKhoNhan)">
                               <i class="fa fa-trash-o do"></i>
                             </a>
                           </td>
                         </tr>
-                        <ng-container *ngFor="let f of e.children, let y = index">
+                        <ng-container *ngFor="let f of diemKhoNhan.children, let y = index">
                           <tr>
                             <td></td>
                             <td></td>
