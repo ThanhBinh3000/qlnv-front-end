@@ -66,13 +66,17 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 10%;">Số QĐ điều chỉnh KH LCNT</th>
-            <th class="text-center" style="width: 7%;">Ngày ký</th>
-            <th class="text-center" style="width: 30%;">Trích yếu</th>
-            <th class="text-center" style="width: 15%;">Số QĐ duyệt KHLCNT</th>
             <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 10%;">Số QĐ điều chỉnh KH LCNT</th>
+            <th class="text-center" style="width: 7%;">Ngày ký QĐ điều chỉnh</th>
+            <th class="text-center" style="width: 15%;">Số quyết định gốc</th>
+            <th class="text-center" style="width: 30%;">Trích yếu</th>
             <th class="text-center" style="width: 7%;">Loại hàng hóa</th>
-            <th class="text-center" style="width: 7%;">Số gói thầu</th>
+            <th class="text-center" style="width: 7%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 7%;">Tổng số gói thầu</th>
+            <th class="text-center" style="width: 7%;">Số gói thầu đã trúng</th>
+            <th class="text-center" style="width: 7%;">SL HĐ đã ký</th>
+            <th class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
             <th class="text-center" style="width: 7%;">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -81,18 +85,20 @@
             <th></th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                  (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+                  (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                  (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                       (input)="filterInTable('soQdDieuChinh',filterTable.trichYeu)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
+            </th>
+            <th>
+              <nz-date-picker nzPlaceHolder="Tìm kiếm" nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayQd"
+                              (ngModelChange)="filterInTable('ngayQd',filterTable.ngayQd)">
+              </nz-date-picker>
             </th>
             <th>
               <nz-input-group>
