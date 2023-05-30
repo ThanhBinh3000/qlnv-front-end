@@ -25,8 +25,8 @@ export class HopDongComponent implements OnInit {
   STATUS = STATUS;
   @Input()
   itemQdPdKhLcnt: any;
-  @Input()
-  itemQdPdDaDtxd: any;
+  @Input() itemQdPdDaDtxd: any;
+  @Input()   itemDuAn: any;
   @Input()
   itemTtdt: any;
 
