@@ -35,7 +35,8 @@
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="isPheDuyet()" type="button" class="btn btn-sub" (click)="pheDuyet()">
+      <button *ngIf="isPheDuyet() && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDVU')" type="button"
+        class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -1220,7 +1221,7 @@
                             <td class="text-right">
                               {{f.soLuongPhanBo|number:'1.0-1':'vi_VN'}}</td>
                             <td>
-                              <a (click)="themLoKhoNhan(f)">
+                              <a (click)="suaLoKhoNhan(f)">
                                 <i class="fa fa-pencil"></i>
                               </a>
                               <a (click)="xoaLoKhoNhan(f)">
