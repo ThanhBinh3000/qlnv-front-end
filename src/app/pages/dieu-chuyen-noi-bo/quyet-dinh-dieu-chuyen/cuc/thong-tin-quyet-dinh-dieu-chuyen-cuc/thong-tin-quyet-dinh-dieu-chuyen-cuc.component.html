@@ -331,8 +331,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ vào quyết định điều chuyển của Tổng cục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isView || isChiCuc()" formControlName="canCuQdTc" nzAllowClear
-                  (ngModelChange)="onChangeCanCuQdTc($event)">
+                <nz-select [nzDisabled]="isView || isChiCuc() || !formData.value.loaiQdinh" formControlName="canCuQdTc"
+                  nzAllowClear (ngModelChange)="onChangeCanCuQdTc($event)">
                   <nz-option *ngFor="let p of listQuyetDinh" [nzValue]="p.id" [nzLabel]="p.soQdinh"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -729,7 +729,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="bold">{{c.tenLoKho || ""}}</td>
+                      <td class="bold">{{c.tenLoKho || ""}} {{c.tenNganKho || ""}}</td>
                       <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                       <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                       <td class="bold">{{c.tenDonViTinh || ""}}</td>
@@ -828,7 +828,7 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>{{e.tenLoKhoNhan}}</td>
+                            <td>{{e.tenLoKhoNhan}} {{e.tenNganKhoNhan}}</td>
                             <td class="text-right">
                               {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                             <td class="text-right">
@@ -1100,7 +1100,7 @@
                   </td>
                   <td></td>
                   <td class="bold">{{ diemkho.tenDiemKho || ""}}</td>
-                  <td>{{diemkho.tenLoKho}} {{diemkho.tenNganKho}}</td>
+                  <td></td>
                   <td></td>
                   <td></td>
                   <td></td>

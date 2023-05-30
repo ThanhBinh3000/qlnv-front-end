@@ -193,7 +193,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       this.canCu = data.canCu;
       this.quyetDinh = data.quyetDinh;
 
-      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc)
+      if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
 
       if (data.loaiDc === "DCNB") {
         this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
@@ -254,10 +254,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
-  async loadDsQuyetDinh(loaiDc) {
+  async loadDsQuyetDinh(loaiDc, loaiQdinh?) {
     let body = {
-      // soQdinh: this.formData.value.soQdinh,
-      loaiDc
+      loaiDc,
+      loaiQdinh
     };
     let res = await this.quyetDinhDieuChuyenTCService.dsQuyetDinh(body);
 
@@ -304,7 +304,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           tenLoaiDc: loaiDC.text,
         })
       }
-      if (value !== "DCNB") this.loadDsQuyetDinh(value)
+      if (value === "CHI_CUC") this.loadDsQuyetDinh(value)
 
 
       this.dataTableView = []
@@ -314,7 +314,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
   async onChangeLoaiQdinh(value) {
     if (value) {
       const loaiQD = this.listLoaiQD.find(item => item.value == value)
-
+      this.loadDsQuyetDinh(this.formData.value.loaiDC, value)
       if (loaiQD) {
         this.formData.patchValue({
           tenLoaiQdinh: loaiQD.text,
@@ -350,6 +350,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           item.danhSachHangHoa.map(itemHH => {
             dsHH.push({
               ...itemHH,
+              maLoNganKho: itemHH.maLoKho ? `${itemHH.maLoKho}${itemHH.maNganKho}` : itemHH.maNganKho,
               maDvi: item.maDvi,
               tenDvi: item.tenDvi
             })
@@ -790,12 +791,14 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKhoNhan !== data.maDiemKhoNhan)
           this.danhSachKeHoach.push({
             ...data,
+            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
             hdrId: keHoachDcHdrId
           })
 
         } else
           this.danhSachKeHoach.push({
             ...data,
+            maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
             hdrId: keHoachDcHdrId
           })
 
