@@ -165,6 +165,16 @@ import {
 import {
   ThongTinQuyetDinhPheDuyetKqlcntSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl.component";
+import { HopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/hop-dong-scl.component';
+import { ThongTinHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/thong-tin-hop-dong-scl.component';
+import { PhuLucHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/phu-luc-hop-dong-scl/phu-luc-hop-dong-scl.component';
+import { ThemMoiHopDongSclComponent } from './tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/hop-dong-scl/thong-tin-hop-dong-scl/them-moi-hop-dong-scl/them-moi-hop-dong-scl.component';
+import {
+  TienDoCongViecSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-cong-viec-scl/tien-do-cong-viec-scl.component";
+import {
+  BienBanNghiemThuSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/bien-ban-nghiem-thu-scl/bien-ban-nghiem-thu-scl.component";
 
 @NgModule({
   declarations: [
@@ -254,6 +264,12 @@ import {
     CapNhatThongTinDauThauSclComponent,
     QuyetDinhPheDuyetKqlcntSclComponent,
     ThongTinQuyetDinhPheDuyetKqlcntSclComponent,
+    HopDongSclComponent,
+    ThongTinHopDongSclComponent,
+    PhuLucHopDongSclComponent,
+    ThemMoiHopDongSclComponent,
+    TienDoCongViecSclComponent,
+    BienBanNghiemThuSclComponent,
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
