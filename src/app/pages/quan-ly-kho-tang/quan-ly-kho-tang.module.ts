@@ -159,6 +159,12 @@ import {
 import {
   CapNhatThongTinDauThauSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/thong-tin-dau-thau-scl/cap-nhat-thong-tin-dau-thau-scl/cap-nhat-thong-tin-dau-thau-scl.component";
+import {
+  QuyetDinhPheDuyetKqlcntSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-kqlcnt-scl/quyet-dinh-phe-duyet-kqlcnt-scl.component";
+import {
+  ThongTinQuyetDinhPheDuyetKqlcntSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl/thong-tin-quyet-dinh-phe-duyet-kqlcnt-scl.component";
 
 @NgModule({
   declarations: [
@@ -246,6 +252,8 @@ import {
     ThongTinQuyetDinhPheDuyetKhlcntSclComponent,
     ThongTinDauThauSclComponent,
     CapNhatThongTinDauThauSclComponent,
+    QuyetDinhPheDuyetKqlcntSclComponent,
+    ThongTinQuyetDinhPheDuyetKqlcntSclComponent,
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

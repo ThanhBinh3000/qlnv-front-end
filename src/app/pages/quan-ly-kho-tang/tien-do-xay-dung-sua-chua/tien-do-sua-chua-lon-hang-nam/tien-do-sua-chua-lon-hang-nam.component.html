@@ -220,7 +220,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '04'" (click)="selectTab('03')"
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT')">
               Thông tin đấu thầu
               <img
@@ -232,7 +232,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"
-                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
               Quyết định PD KQ lựa chọn nhà thầu
               <img
@@ -284,9 +284,10 @@
         <ng-container *ngIf="tabSelected == '03'">
           <app-thong-tin-dau-thau-scl></app-thong-tin-dau-thau-scl>
         </ng-container>
-        <ng-container *ngIf="tabSelected == '05'">
-          <app-quyet-dinh-phe-duyet-kqlcnt [itemTtdt]="itemTtdt"
-                                           [itemDuAn]="itemSelected"></app-quyet-dinh-phe-duyet-kqlcnt>
+        <ng-container *ngIf="tabSelected == '04'">
+          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"
+                                               [itemDuAn]="itemSelected">
+          </app-quyet-dinh-phe-duyet-kqlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '06'">
           <app-hop-dong  [itemTtdt]="itemTtdt"
