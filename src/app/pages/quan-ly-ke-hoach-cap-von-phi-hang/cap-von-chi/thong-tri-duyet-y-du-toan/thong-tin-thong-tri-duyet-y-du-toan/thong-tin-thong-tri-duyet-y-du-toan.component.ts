@@ -123,7 +123,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       id: [{value: this.khBanDauGia ? this.khBanDauGia.id : null, disabled: this.isView ? true : false,}, [],],
-      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null, disabled: true,}, [Validators.required],],
+      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null}, [Validators.required],],
       soThongTri: [{
         value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
         disabled: this.isView ? true : false,

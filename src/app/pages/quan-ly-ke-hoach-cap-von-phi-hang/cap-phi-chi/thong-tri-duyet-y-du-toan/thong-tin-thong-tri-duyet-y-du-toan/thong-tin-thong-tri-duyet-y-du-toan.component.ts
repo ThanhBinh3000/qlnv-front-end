@@ -130,7 +130,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       nam: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.nam : null,
-          disabled: true,
+          // disabled: true,
         },
         [Validators.required],
       ],
@@ -504,14 +504,16 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       dviThongTri: null
     })*/
     if (selected) {
-      let res = await this.tongHopDeNghiCapPhiService.loadChiTiet(this.formData.get('soDnCapPhi').value);
+      let res = await this.tongHopDeNghiCapPhiService.loadChiTiet(selected);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        let map = res.data.ct1s.map(s => s.tenBoNganh);
-        if (map.includes('Tổng cục Dự Trữ')) {
+        let map = res.data.ct1s.map(s => s.maBoNganh);
+        if (map.includes('BTC')) {
           map.push('Bộ Tài chính');
         }
-        // this.dsBoNganh=res.data.cts;
-        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
+        console.log(this.dsBoNganhFix,'this.dsBoNganhFix');
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code));
+
+        console.log(map,'map');
       }
     }
   }
