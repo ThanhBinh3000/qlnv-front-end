@@ -26,6 +26,7 @@ import { DialogTuChoiComponent } from "../../../../../components/dialog/dialog-t
 export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() showFromTH: boolean;
   @Output() showListEvent = new EventEmitter<any>();
   isEditRowThemMoi: boolean = false;
   listLoaiVthh: any[] = [];
