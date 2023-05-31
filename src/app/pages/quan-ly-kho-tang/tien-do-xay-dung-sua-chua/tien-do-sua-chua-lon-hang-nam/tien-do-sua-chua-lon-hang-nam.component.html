@@ -212,7 +212,7 @@
                 [ngClass]="{'disabled-tab': !itemQdPdKtkt || itemQdPdKtkt.trangThai != STATUS.BAN_HANH}"
                 [nzSelected]="tabSelected == '02'" (click)="selectTab('02')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
-              Quyết định phê duyệt KHLCNT111
+              Quyết định phê duyệt KHLCNT
               <img *ngIf="!itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
               <img *ngIf="itemQdPdKhLcnt && itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH" class="ml-1"
@@ -277,9 +277,9 @@
                                                   (dataItemPdKtkt)="receivedData($event,'01')"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-khlcnt [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
-                                           [itemQdPdKhLcnt]="itemQdPdKhLcnt">
-          </app-quyet-dinh-phe-duyet-khlcnt>
+          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
+                                               [itemQdPdKhLcnt]="itemQdPdKhLcnt">
+          </app-quyet-dinh-phe-duyet-khlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
           <app-cap-nhat-thong-tin-dau-thau [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
