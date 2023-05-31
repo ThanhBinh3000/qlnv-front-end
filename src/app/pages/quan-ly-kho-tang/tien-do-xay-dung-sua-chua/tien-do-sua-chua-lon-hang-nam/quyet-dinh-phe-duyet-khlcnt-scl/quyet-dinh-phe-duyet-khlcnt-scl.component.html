@@ -17,10 +17,12 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-qd-pd-khlcnt-scl [id]="selectedId" (showListEvent)="showList()"
-                                  [isViewDetail]="isViewDetail"
-                                  [itemQdPdTktcTdt]="itemQdPdTktcTdt"
-                                  (dataItemKhLcnt)="receivedData($event)"
-                                  [itemDuAn]="itemDuAn"
-                                  [idInput]="selectedId"></app-thong-tin-qd-pd-khlcnt-scl>
+  <app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl [id]="selectedId" (showListEvent)="showList()"
+                                                 [isViewDetail]="isViewDetail"
+                                                 [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                                 (dataItemKhLcnt)="receivedData($event)"
+                                                 [itemDuAn]="itemDuAn"
+                                                 [idInput]="selectedId">
+
+  </app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl>
 </ng-template>

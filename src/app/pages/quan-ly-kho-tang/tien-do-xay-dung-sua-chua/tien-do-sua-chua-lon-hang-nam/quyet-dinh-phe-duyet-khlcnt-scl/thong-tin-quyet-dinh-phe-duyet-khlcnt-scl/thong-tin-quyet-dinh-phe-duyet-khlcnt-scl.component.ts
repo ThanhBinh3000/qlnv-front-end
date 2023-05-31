@@ -20,11 +20,11 @@ import {AMOUNT_NO_DECIMAL} from "../../../../../../Utility/utils";
 import {FILETYPE} from "../../../../../../constants/fileType";
 
 @Component({
-  selector: 'app-thong-tin-qd-pd-khlcnt-scl',
-  templateUrl: './thong-tin-qd-pd-khlcnt-scl.component.html',
-  styleUrls: ['./thong-tin-qd-pd-khlcnt-scl.component.scss']
+  selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl',
+  templateUrl: './thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.html',
+  styleUrls: ['./thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.scss']
 })
-export class ThongTinQdPdKhlcntSclComponent extends Base2Component implements OnInit {
+export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component implements OnInit {
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
