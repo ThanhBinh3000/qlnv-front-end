@@ -143,18 +143,18 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
           this.tgianNhangChange = data.data.tgianNhang
           this.tenDuAn = data.data.children[0].tenDuAn
           this.giaVat = data.data.children[0].donGiaVat
+          this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
+          this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
+          this.helperService.bidingDataInFormGroup(this.formData, data.data);
           this.formData.patchValue({
             tgianDthau: data.data.tgianDthau,
             tgianMthau: data.data.tgianMthau,
             tgianNhang: data.data.tgianNhang,
-            tgianBdauTchuc: data.data.tgianBdauTchuc
+            tgianBdauTchuc: data.data.tgianBdauTchuc,
+            gtriDthau: data.data.gtriDthau,
+            tchuanCluong: data.data.children[0].dxuatKhLcntHdr.tchuanCluong,
+            tongMucDt: data.data.children[0].dxuatKhLcntHdr.tongMucDt
           });
-          this.formData.get('tchuanCluong').setValue(data.data.children[0].dxuatKhLcntHdr.tchuanCluong)
-          this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
-          this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
-          this.formData.get('tongMucDt').setValue(data.data.children[0].dxuatKhLcntHdr.tongMucDt)
-          this.helperService.bidingDataInFormGroup(this.formData, data.data);
-
         } else if (res != null && res.msg == MESSAGE.SUCCESS) {
           this.tgianBdauTchucChange = res.data.tgianBdauTchuc
           this.tgianDthauChange = res.data.tgianDthau
@@ -170,9 +170,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
             tgianDthau: res.data.tgianDthau,
             tgianMthau: res.data.tgianMthau,
             tgianNhang: res.data.tgianNhang,
-            tgianBdauTchuc: res.data.tgianBdauTchuc
+            tgianBdauTchuc: res.data.tgianBdauTchuc,
+            gtriDthau: res.data.gtriDthau
           });
+          console.log(this.formData.value)
         }
+        this.objectChange.emit(this.formData.value)
         this.helperService.setIndexArray(this.listOfData);
         // this.convertListData();
         this.convertListDataLuongThuc()

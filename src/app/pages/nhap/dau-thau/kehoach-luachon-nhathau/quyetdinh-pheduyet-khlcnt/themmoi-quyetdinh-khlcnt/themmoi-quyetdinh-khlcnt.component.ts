@@ -146,13 +146,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       ldoTuchoi: [''],
       phanLoai: ['', [Validators.required]],
       vat: ['5'],
-      gtriDthau: [null,],
-      gtriHdong: [null,],
+      gtriDthau: [''],
+      gtriHdong: [''],
       donGiaVat: [''],
       tongMucDt: [null,],
       dienGiai: [''],
       tenDvi: [''],
-      tgianThien: [null],
+      tgianThien: [''],
       yKien: [''],
     })
   }
@@ -764,13 +764,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx[this.index].tongTien = $event;
   }
 
-  setNewDate($event) {
+  setNewData($event) {
     let pipe = new DatePipe('en-US');
     console.log($event)
     this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
     this.formData.get('tgianMthau').setValue(pipe.transform($event.tgianMthau, 'yyyy-MM-dd HH:mm'));
     this.formData.get('tgianDthau').setValue(pipe.transform($event.tgianDthau, 'yyyy-MM-dd HH:mm'));
     this.formData.get('tgianNhang').setValue($event.tgianNhang);
+    this.formData.get('gtriDthau').setValue($event.gtriDthau);
     // this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
     // this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
     // this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
