@@ -173,7 +173,6 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
         let body = {
           maDviCha: maDvi,
           trangThai: '01',
-          type: "MLK"
         }
         const res = await this.donViService.getTreeAll(body);
         if (res.msg == MESSAGE.SUCCESS) {
@@ -184,7 +183,7 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
                 this.dsDiemKho = [];
                 this.dsDiemKho = [
                   ...this.dsDiemKho,
-                  ...element.children
+                  ...element.children.filter(item => item.type == 'MLK')
                 ]
                 this.dsDiemKhoNhan = this.dsDiemKho
                 console.log('getListDiemKho', this.dsDiemKho)
