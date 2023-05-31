@@ -159,7 +159,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         };
         this.dataTableAllBn.push(obj);
         if (item.maDvi == '01') {
-          // i = i + 2;
           this.addDetailItem(this.dataTableAllBn, item.maDvi);
         }
         i++;
