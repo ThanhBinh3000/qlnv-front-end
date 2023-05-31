@@ -87,9 +87,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   oldDataEdit1: any = {};
   oldDataEdit2: any = {};
 
-  create: any = {
-   namPhatSinh : dayjs().get('year'),
-  };
+  create: any = {};
   create1: any = {};
 
   constructor(
@@ -411,7 +409,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   addRow(type) {
     if (type === 'ct1s') {
-      this.ct1s
       if (!this.ct1s) {
         this.ct1s = [];
       }
@@ -443,6 +440,9 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         item,
       ]
       this.ct1s[0].ct2List = this.rowEdit.ct2s
+      this.ct1s[0].maVatTuCha = this.create.maVatTuCha
+      this.ct1s[0].maVatTu = this.create.maVatTu
+      this.ct1s[0].tenHangHoa = this.create.tenHangHoa
       this.ct1s[0].ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
     }
     this.clearItemRow(type);
