@@ -157,7 +157,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         tenDvi: res.data.tenDvi,
         diaChi: res.data.diaChi,
         soLuongKhDd: soLuongDaLenKh.data,
-        soLuongChiTieu: chiCuc?.soLuongNhap * 1000
+        soLuongChiTieu: chiCuc?.soLuongNhap
       })
       this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
 

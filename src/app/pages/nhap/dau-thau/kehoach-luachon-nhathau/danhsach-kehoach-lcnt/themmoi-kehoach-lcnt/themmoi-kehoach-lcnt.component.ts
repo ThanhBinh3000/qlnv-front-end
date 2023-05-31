@@ -369,7 +369,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             loaiVthh: this.formData.value.loaiVthh,
             cloaiVthh: this.formData.value.cloaiVthh,
             trangThai: STATUS.BAN_HANH,
-            maDvi: this.formData.value.maDvi
+            maDvi: this.formData.value.maDvi,
+            loaiGia: 'LG03'
           }
           let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
           if (pag.msg == MESSAGE.SUCCESS) {
@@ -525,8 +526,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
-        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaTamTinh;
+        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -1357,7 +1358,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGiaTamTinh * 1000;
           return prev;
         }, 0);
         sum += sumChild;
@@ -1371,7 +1372,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGiaTamTinh * 1000;
           return prev;
         }, 0);
         sum += sumChild;

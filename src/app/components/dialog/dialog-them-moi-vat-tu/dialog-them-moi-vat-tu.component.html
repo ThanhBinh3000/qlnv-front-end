@@ -68,7 +68,7 @@
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Tổng số lượng nhập</nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-          <span class="blue-text">{{formattedSoLuong}} (kg)</span>
+          <span class="blue-text">{{formattedSoLuong}} (Tấn)</span>
         </nz-form-control>
       </nz-form-item>
     </div>
@@ -137,8 +137,8 @@
           <td>{{ dataChiCuc.soLuongTheoChiTieu | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuongDaMua | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ dataChiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ dataChiCuc.soLuong * formData.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ dataChiCuc.soLuong * formData.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ dataChiCuc.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ dataChiCuc.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
           <td *ngIf="!isReadOnly" class="text-left" [nzRight]="true">
             <a (click)="deleteRow(i,-1,-1)">
               <i class="fa fa-trash-o do"></i>
