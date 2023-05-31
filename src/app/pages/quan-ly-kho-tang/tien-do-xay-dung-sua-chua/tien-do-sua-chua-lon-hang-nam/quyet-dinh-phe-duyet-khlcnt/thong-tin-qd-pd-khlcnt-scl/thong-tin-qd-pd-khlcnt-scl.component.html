@@ -57,57 +57,6 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="3">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ PD KH LCNT
-                  </nz-form-label>
-                  <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                                  nzPlaceHolder="Ngày ký"
-                                  formControlName="ngayKy">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="3">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực QĐ PD KH LCNT
-                  </nz-form-label>
-                  <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
-                                  nzPlaceHolder="Ngày ký"
-                                  formControlName="ngayHieuLuc">
-                  </nz-date-picker>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ PD bản vẽ TKTC và TDT
-                  </nz-form-label>
-                  <input nz-input formControlName="soQdPdTktcTdt" [readonly]="true"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ phê duyệt dự án ĐTXD
-                  </nz-form-label>
-                  <input nz-input formControlName="soQdPdDaDtxd" [readonly]="true"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên dự án
-                  </nz-form-label>
-                  <input nz-input formControlName="tenCongTrinh" [readonly]="true"/>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
@@ -119,34 +68,73 @@
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Thuộc dự án
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Ngày ký QĐ PD KH LCNT
                   </nz-form-label>
-                  <input nz-input formControlName="tenDuAn" [readonly]="true"/>
+                  <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" nzFormat="dd/MM/YYYY"
+                                  nzPlaceHolder="Ngày ký"
+                                  formControlName="ngayKy">
+                  </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Khối dự án/Khối công trình
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Số QĐ phê duyệt BC KTKT
                   </nz-form-label>
-                  <input nz-input formControlName="khoi" [readonly]="true"/>
+                  <input nz-input formControlName="soQdPdDaDtxd" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Loại, cấp công trình
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Tên công trình
                   </nz-form-label>
-                  <input nz-input formControlName="loaiCapCt" [readonly]="true"/>
+                  <input nz-input formControlName="tenCongTrinh" [readonly]="true"/>
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="6">
               <nz-form-item>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Tổng mức đầu tư
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Loại công trình
+                  </nz-form-label>
+                  <input nz-input formControlName="tenLoaiCongTrinh" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Chủ đầu tư
+                  </nz-form-label>
+                  <input nz-input formControlName="chuDauTu" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="6">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Địa điểm sửa chữa
+                  </nz-form-label>
+                  <input nz-input formControlName="tenDuAn" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Tổng mức đầu tư (khái toán dự toán) (đ)
+                  </nz-form-label>
+                  <input nz-input currencyMask formControlName="tongMucDt" [options]="AMOUNT" [readonly]="true"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="12">
+              <nz-form-item>
+                <nz-form-control [nzErrorTip]="error">
+                  <nz-form-label [nzNoColon]="true" class="label-color-kh">Nguồn vốn đầu tư
                   </nz-form-label>
                   <input nz-input currencyMask formControlName="tongMucDt" [options]="AMOUNT" [readonly]="true"/>
                 </nz-form-control>

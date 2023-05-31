@@ -148,7 +148,9 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ?  dayjs(this.searchFilter.ngayDeNghiTuNgay).format('YYYY-MM-DD') : '',
       ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ?   dayjs(this.searchFilter.ngayDeNghiDenNgay).format('YYYY-MM-DD') : '',
       trangThai: "",
-      trangThais: []
+      trangThais: [],
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
 
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
