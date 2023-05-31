@@ -350,8 +350,8 @@
                         <tr>
                             <td [nzExpand]="true" (nzExpandChange)="onExpandChange(i, $event)"></td>
                             <td colspan="3">{{item.tenDvi}}</td>
-                            <td>{{item.soLuongTheoChiTieu[i]}}</td>
                             <td></td>
+                            <td>{{item.soLuongTheoChiTieu[i]}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -379,15 +379,15 @@
                                     (dtGoiThau.donGiaTamTinh != null ? dtGoiThau.soLuong * dtGoiThau.donGiaTamTinh : 0))
                                     | number: '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.tenNhaThau}}</td>
-                                <td class="text-right">{{dtGoiThau.trangThai == 40 ? dtGoiThau.donGiaNhaThau : null |
+                                <td class="text-right">{{(dtGoiThau.trangThai == 40 ? dtGoiThau.donGiaNhaThau : null) |
                                     number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-right">{{dtGoiThau.trangThai == 40 ? dtGoiThau.soLuong *
-                                    dtGoiThau.donGiaNhaThau : 0 | number:
+                                <td class="text-right">{{(dtGoiThau.trangThai == 40 ? dtGoiThau.soLuong *
+                                    dtGoiThau.donGiaNhaThau : 0) | number:
                                     '1.0-1' : 'vi_VN' }}
                                 </td>
-                                <td class="text-right">{{dtGoiThau.trangThai == 40 ? abs((dtGoiThau.donGiaNhaThau -
+                                <td class="text-right">{{(dtGoiThau.trangThai == 40 ? abs((dtGoiThau.donGiaNhaThau -
                                     (dtGoiThau.donGiaVat != null ?
-                                    dtGoiThau.donGiaVat : dtGoiThau.donGiaTamTinh)) * dtGoiThau.soLuong) : 0 |
+                                    dtGoiThau.donGiaVat : dtGoiThau.donGiaTamTinh)) * dtGoiThau.soLuong) : 0) |
                                     number: '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                             </tr>
@@ -421,10 +421,12 @@
                         <td class=" text-blue">Tổng</td>
                         <td></td>
                         <td></td>
+                        <td></td>
                         <td class="text-blue" style="text-align: right;">{{sumslKho('donGiaTamTinh', null,
                             'tong') |
                             number:
                             '1.0-3'}}</td>
+                        <td></td>
                         <td class="text-blue" style="text-align: right;">{{sumThanhTien('donGiaTamTinh') |
                             number:
                             '1.0-3'}}

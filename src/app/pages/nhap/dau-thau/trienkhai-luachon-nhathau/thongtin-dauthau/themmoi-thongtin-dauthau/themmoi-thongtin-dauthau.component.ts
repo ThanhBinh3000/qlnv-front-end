@@ -462,21 +462,61 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         return
       }
     }
-
-    let body = {
-      id: this.idInput,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-      loaiVthh: this.loaiVthh
-    }
-    let res = await this.thongTinDauThauService.approve(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      await this.spinner.hide()
-      this.quayLai();
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    this.pheDuyet()
+    // let res = await this.thongTinDauThauService.approve(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //   await this.spinner.hide()
+    //   this.quayLai();
+    // } else {
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
     await this.spinner.hide()
+  }
+
+
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.BAN_HANH;
+        msg = 'Bạn có muốn hoàn thành cập nhật ?'
+        break;
+      }
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: msg,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+            loaiVthh: this.loaiVthh
+          }
+
+          let res = await this.thongTinDauThauService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   async saveGoiThauPopup() {
@@ -531,14 +571,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.loaiVthh.startsWith('02') ? this.idGoiThau = dataGoiThau.idQdDtl : this.idGoiThau = dataGoiThau.id;
     }
     let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
+    this.itemRow.soLuong = dataGoiThau.soLuong
     if (res.msg == MESSAGE.SUCCESS) {
-      // this.itemRow.soLuong = dataGoiThau.soLuong;
       this.listNthauNopHs = res.data;
       this.listNthauNopHs.forEach(item => {
         item.edit = false;
-        this.itemRow.soLuong = item.soLuong;
       })
-      console.log(this.listNthauNopHs)
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

@@ -35,6 +35,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   @Output()
   showListEvent = new EventEmitter<any>();
   danhsachDx: any[] = [];
+  danhsachDxCache: any[] = [];
+  selected: boolean = false;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -202,6 +204,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail($event);
+      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.formData.patchValue({
@@ -215,10 +218,11 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
         })
         if (data.loaiVthh.startsWith('02')) {
           this.dataInput = data;
-          this.dataInputCache = cloneDeep(data);
+          // this.dataInputCache = cloneDeep(this.dataInput);
           this.danhsachDx = data.children
         } else {
           this.danhsachDx = data.children
+          this.danhsachDxCache = cloneDeep(this.danhsachDx);
           this.formData.patchValue({
             hthucLcnt: data.hthucLcnt,
             pthucLcnt: data.pthucLcnt,
@@ -231,6 +235,7 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
             tgianThienHd: data.tgianThienHd
           })
         }
+        this.showDetail(event, this.danhsachDx[0])
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -354,6 +359,25 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     $event.target.parentElement.classList.add('selectedRow')
     this.dataInput = data;
     this.dataInputCache = cloneDeep(data);
+  }
+  index = 0;
+  async showDetail($event, index) {
+    await this.spinner.show();
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow');
+      this.dataInput = this.danhsachDx[index];
+      this.dataInputCache = cloneDeep(this.danhsachDxCache[index]);
+      this.index = index;
+      await this.spinner.hide();
+    } else {
+      this.selected = true
+      this.dataInput = this.danhsachDx[0];
+      this.dataInputCache = this.danhsachDxCache[0];
+      this.index = 0;
+      await this.spinner.hide();
+    }
   }
 
 }
