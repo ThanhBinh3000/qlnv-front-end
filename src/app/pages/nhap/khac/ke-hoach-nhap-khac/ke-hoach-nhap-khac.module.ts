@@ -14,7 +14,8 @@ import { ThemMoiKeHoachNhapKhacComponent } from './them-moi-ke-hoach-nhap-khac/t
     ThemMoiKeHoachNhapKhacComponent
   ],
   exports: [
-    KeHoachNhapKhacComponent
+    KeHoachNhapKhacComponent,
+    ThemMoiKeHoachNhapKhacComponent
   ],
   imports: [
     CommonModule,

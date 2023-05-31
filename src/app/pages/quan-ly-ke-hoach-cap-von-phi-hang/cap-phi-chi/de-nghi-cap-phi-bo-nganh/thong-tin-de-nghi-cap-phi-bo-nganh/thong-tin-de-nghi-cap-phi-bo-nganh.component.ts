@@ -15,6 +15,7 @@ import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/de
 import { Globals } from 'src/app/shared/globals';
 import { isEmpty } from 'lodash';
 import {DonviService} from "../../../../../services/donvi.service";
+import {STATUS} from "../../../../../constants/status";
 
 export class DeNghiCapPhi {
   stt: string;
@@ -70,7 +71,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   chiTieDeNghiCapPhi: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
   chiTieDeNghiCapPhiCreate: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
   dsChiTietDeNghiCapPhiClone: Array<ChiTietDeNghiCapPhi> = [];
-
+  STATUS = STATUS;
   hanghoa: any = {
     "maLoaiHangHoa": "",
     "maChungLoaiHangHoa": "",
@@ -87,9 +88,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   oldDataEdit1: any = {};
   oldDataEdit2: any = {};
 
-  create: any = {
-   namPhatSinh : dayjs().get('year'),
-  };
+  create: any = {};
   create1: any = {};
 
   constructor(
@@ -214,7 +213,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: this.globals.prop.NHAP_BAN_HANH,
+            trangThaiId:STATUS.DA_HOAN_THANH,
           };
 
           let res = await this.deNghiCapPhiBoNganhService.updateStatus(body);
@@ -411,7 +410,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   addRow(type) {
     if (type === 'ct1s') {
-      this.ct1s
       if (!this.ct1s) {
         this.ct1s = [];
       }
@@ -443,6 +441,9 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         item,
       ]
       this.ct1s[0].ct2List = this.rowEdit.ct2s
+      this.ct1s[0].maVatTuCha = this.create.maVatTuCha
+      this.ct1s[0].maVatTu = this.create.maVatTu
+      this.ct1s[0].tenHangHoa = this.create.tenHangHoa
       this.ct1s[0].ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
     }
     this.clearItemRow(type);

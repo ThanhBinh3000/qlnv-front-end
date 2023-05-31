@@ -12,7 +12,8 @@
               <nz-form-control>
                 <nz-select [nzDisabled]="this.data && !!this.data.maChiCucNhan" formControlName="maChiCucNhan"
                   nzAllowClear (ngModelChange)="onChangeChiCucDC($event)">
-                  <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                  <nz-option *ngFor="let p of dsChiCuc" [nzValue]="p.key" [nzLabel]="p.title"
+                    [nzDisabled]="checkDisabledOption(p.key,'maChiCucNhan')"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -33,7 +34,8 @@
                   <nz-form-control>
                     <nz-select [nzDisabled]="this.data && !!this.data.maDiemKho" formControlName="maDiemKho"
                       nzAllowClear (ngModelChange)="getListNhaKho($event)">
-                      <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                      <nz-option *ngFor="let p of dsDiemKho" [nzValue]="p.key" [nzLabel]="p.title"
+                        [nzDisabled]="checkDisabledDiemKho(p.key)"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -63,7 +65,8 @@
                   <nz-form-control>
                     <nz-select [nzDisabled]="this.data && !!this.data.maNganKho" formControlName="maNganKho"
                       nzAllowClear (ngModelChange)="getListLoKho($event)">
-                      <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                      <nz-option *ngFor="let p of dsNganKho" [nzValue]="p.key" [nzLabel]="p.title"
+                        [nzDisabled]="checkDisabledNganKho(p.key)"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -78,7 +81,8 @@
                   <nz-form-control>
                     <nz-select [nzDisabled]="this.data && !!this.data.maLoKho" formControlName="maLoKho" nzAllowClear
                       (ngModelChange)="onChangeLoKho($event)">
-                      <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                      <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.key" [nzLabel]="p.title"
+                        [nzDisabled]="checkDisabledLoKho(p.key)"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -208,7 +212,8 @@
                 <nz-form-item>
                   <nz-form-control>
                     <nz-select formControlName="maNganKhoNhan" nzAllowClear (ngModelChange)="getListLoKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsNganKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                      <nz-option *ngFor="let p of dsNganKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"
+                        [nzDisabled]="checkDisabledNganKhoNhan(p.key)"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
@@ -222,7 +227,8 @@
                 <nz-form-item>
                   <nz-form-control>
                     <nz-select formControlName="maLoKhoNhan" nzAllowClear (ngModelChange)="onChangeLoKhoNhan($event)">
-                      <nz-option *ngFor="let p of dsLoKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"></nz-option>
+                      <nz-option *ngFor="let p of dsLoKhoNhan" [nzValue]="p.key" [nzLabel]="p.title"
+                        [nzDisabled]="checkDisabledLoKhoNhan(p.key)"></nz-option>
                     </nz-select>
                   </nz-form-control>
                 </nz-form-item>
