@@ -8,7 +8,7 @@
                   class="btn btn-lg big-btn-them" (click)="redirectToChiTiet(0,false)">
             <div class="btn-text-them">
               <i class="icon htvbdh_dau-cong"></i>
-              <span>Thêm111</span>
+              <span>Thêm</span>
             </div>
           </button>
         </div>
@@ -17,10 +17,12 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-qd-pd-khlcnt-scl [id]="selectedId" (showListEvent)="showList()"
-                                  [isViewDetail]="isViewDetail"
-                                  [itemQdPdTktcTdt]="itemQdPdTktcTdt"
-                                  (dataItemKhLcnt)="receivedData($event)"
-                                  [itemDuAn]="itemDuAn"
-                                  [idInput]="selectedId"></app-thong-tin-qd-pd-khlcnt-scl>
+  <app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl [id]="selectedId" (showListEvent)="showList()"
+                                                 [isViewDetail]="isViewDetail"
+                                                 [itemQdPdTktcTdt]="itemQdPdTktcTdt"
+                                                 (dataItemKhLcnt)="receivedData($event)"
+                                                 [itemDuAn]="itemDuAn"
+                                                 [idInput]="selectedId">
+
+  </app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl>
 </ng-template>

@@ -6,11 +6,11 @@ import {STATUS} from "../../../../../constants/status";
 import {UserService} from "../../../../../services/user.service";
 
 @Component({
-  selector: 'app-quyet-dinh-phe-duyet-khlcnt',
-  templateUrl: './quyet-dinh-phe-duyet-khlcnt.component.html',
-  styleUrls: ['./quyet-dinh-phe-duyet-khlcnt.component.scss']
+  selector: 'app-quyet-dinh-phe-duyet-khlcnt-scl',
+  templateUrl: './quyet-dinh-phe-duyet-khlcnt-scl.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-khlcnt-scl.component.scss']
 })
-export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
+export class QuyetDinhPheDuyetKhlcntSclComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
