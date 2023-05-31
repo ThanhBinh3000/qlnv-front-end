@@ -203,14 +203,14 @@
             <li nz-menu-item [nzSelected]="tabSelected == '01'" (click)="selectTab('01')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
               Quyết định phê duyệt báo cáo KTKT
-              <img *ngIf="itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH" class="ml-1"
-                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
-              <img *ngIf="!itemQdPdDaDtxd || itemQdPdDaDtxd.trangThai == STATUS.DU_THAO" class="ml-1"
+              <img *ngIf="itemQdPdKtkt && itemQdPdKtkt.trangThai == STATUS.BAN_HANH" class="ml-1"
+                   src="../../../../../assets/itemQdPdKtkt/icon_tick_xanh.svg" width="14" height="14"/>
+              <img *ngIf="!itemQdPdKtkt || itemQdPdKtkt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
             <li nz-menu-item
-                [ngClass]="{'disabled-tab': !itemQdPdTktcTdt || itemQdPdTktcTdt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
+                [ngClass]="{'disabled-tab': !itemQdPdKtkt || itemQdPdKtkt.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '02'" (click)="selectTab('02')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKHLCNT')">
               Quyết định phê duyệt KHLCNT
               <img *ngIf="!itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai == STATUS.DU_THAO" class="ml-1"
@@ -220,7 +220,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT')">
               Thông tin đấu thầu
               <img
@@ -232,7 +232,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"
-                [nzSelected]="tabSelected == '05'" (click)="selectTab('05')"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDKQLCNT')">
               Quyết định PD KQ lựa chọn nhà thầu
               <img
@@ -273,26 +273,24 @@
           </ul>
         </nz-affix>
         <ng-container *ngIf="tabSelected == '01'">
-          <app-quyet-dinh-phe-duyet-bao-cao-ktkt  [itemDuAn]="itemSelected"
-                                                  (dataItemDaDtxd)="receivedData($event,'01')"
-                                                  [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
+          <app-quyet-dinh-phe-duyet-bao-cao-ktkt  [itemDuAn]="itemSelected" [itemQdPdKtkt]="itemQdPdKtkt"
+                                                  (dataItemPdKtkt)="receivedData($event,'01')"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == '02'">
+          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'02')"
+                                               [itemQdPdKhLcnt]="itemQdPdKhLcnt">
+          </app-quyet-dinh-phe-duyet-khlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '03'">
-          <app-quyet-dinh-phe-duyet-khlcnt  [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
-                                            [itemQdPdTktcTdt]="itemQdPdTktcTdt"
-                                            [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-quyet-dinh-phe-duyet-khlcnt>
+          <app-thong-tin-dau-thau-scl></app-thong-tin-dau-thau-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '04'">
-          <app-cap-nhat-thong-tin-dau-thau [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
-                                           (dataItemTtdt)="receivedData($event,'04')"
-                                           [itemQdPdDaDtxd]="itemQdPdDaDtxd"></app-cap-nhat-thong-tin-dau-thau>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == '05'">
-          <app-quyet-dinh-phe-duyet-kqlcnt [itemTtdt]="itemTtdt"
-                                           [itemDuAn]="itemSelected"></app-quyet-dinh-phe-duyet-kqlcnt>
+          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"
+                                               [itemDuAn]="itemSelected">
+          </app-quyet-dinh-phe-duyet-kqlcnt-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '06'">
-          <app-hop-dong [itemQdPdDaDtxd]="itemQdPdDaDtxd" [itemTtdt]="itemTtdt"
+          <app-hop-dong  [itemTtdt]="itemTtdt"
                         [itemQdPdKhLcnt]="itemQdPdKhLcnt"></app-hop-dong>
         </ng-container>
         <ng-container *ngIf="tabSelected == '07'">

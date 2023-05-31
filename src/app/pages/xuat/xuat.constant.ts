@@ -28,8 +28,16 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_tieuhuy',
-    title: 'Xuất Thanh lý, tiêu hủy',
+    title: 'Xuất Thanh lý',
     url: `/xuat-thanh-ly`,
+    dropdown: 'dau-thau',
+    idHover: 'dauthau',
+    hasTab: false,
+  },
+  {
+    icon: 'htvbdh_tcdt_tieuhuy',
+    title: 'Xuất tiêu hủy',
+    url: `/xuat-tieu-huy`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: false,

@@ -18,6 +18,6 @@
 </div>
 <ng-template #templateThemmoi>
   <app-thong-tin-qd-phe-duyet-bao-cao-ktkt [id]="selectedId" [itemDuAn]="itemDuAn" (showListEvent)="showList()"
-                                           [isViewDetail]="isViewDetail"
+                                           [isViewDetail]="isViewDetail"  (dataItemTktcTdt)="receivedData($event)"
                                            [idInput]="selectedId"></app-thong-tin-qd-phe-duyet-bao-cao-ktkt>
 </ng-template>
