@@ -15,6 +15,7 @@ import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/de
 import { Globals } from 'src/app/shared/globals';
 import { isEmpty } from 'lodash';
 import {DonviService} from "../../../../../services/donvi.service";
+import {STATUS} from "../../../../../constants/status";
 
 export class DeNghiCapPhi {
   stt: string;
@@ -70,7 +71,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   chiTieDeNghiCapPhi: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
   chiTieDeNghiCapPhiCreate: ChiTietDeNghiCapPhi = new ChiTietDeNghiCapPhi();
   dsChiTietDeNghiCapPhiClone: Array<ChiTietDeNghiCapPhi> = [];
-
+  STATUS = STATUS;
   hanghoa: any = {
     "maLoaiHangHoa": "",
     "maChungLoaiHangHoa": "",
@@ -214,7 +215,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: this.globals.prop.NHAP_BAN_HANH,
+            trangThaiId:STATUS.DA_HOAN_THANH,
           };
 
           let res = await this.deNghiCapPhiBoNganhService.updateStatus(body);
