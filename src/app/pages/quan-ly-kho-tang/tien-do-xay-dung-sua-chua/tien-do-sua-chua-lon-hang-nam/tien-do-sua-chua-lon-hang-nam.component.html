@@ -220,7 +220,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"
+                [nzSelected]="tabSelected == '04'" (click)="selectTab('03')"
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT')">
               Thông tin đấu thầu
               <img
@@ -277,13 +277,12 @@
                                                   (dataItemPdKtkt)="receivedData($event,'01')"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'03')"
+          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'02')"
                                                [itemQdPdKhLcnt]="itemQdPdKhLcnt">
           </app-quyet-dinh-phe-duyet-khlcnt-scl>
         </ng-container>
-        <ng-container *ngIf="tabSelected == '04'">
-          <app-cap-nhat-thong-tin-dau-thau [idInput]="itemQdPdKhLcnt.id" [itemDuAn]="itemSelected"
-                                           (dataItemTtdt)="receivedData($event,'04')"></app-cap-nhat-thong-tin-dau-thau>
+        <ng-container *ngIf="tabSelected == '03'">
+          <app-thong-tin-dau-thau-scl></app-thong-tin-dau-thau-scl>
         </ng-container>
         <ng-container *ngIf="tabSelected == '05'">
           <app-quyet-dinh-phe-duyet-kqlcnt [itemTtdt]="itemTtdt"
