@@ -175,6 +175,12 @@ import {
 import {
   BienBanNghiemThuSclComponent
 } from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/bien-ban-nghiem-thu-scl/bien-ban-nghiem-thu-scl.component";
+import {
+  ThongTinTienDoCongViecSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl/thong-tin-tien-do-cong-viec-scl.component";
+import {
+  ThongTinBienBanSclComponent
+} from "./tien-do-xay-dung-sua-chua/tien-do-sua-chua-lon-hang-nam/bien-ban-nghiem-thu-scl/thong-tin-bien-ban-scl/thong-tin-bien-ban-scl.component";
 
 @NgModule({
   declarations: [
@@ -269,7 +275,9 @@ import {
     PhuLucHopDongSclComponent,
     ThemMoiHopDongSclComponent,
     TienDoCongViecSclComponent,
+    ThongTinTienDoCongViecSclComponent,
     BienBanNghiemThuSclComponent,
+    ThongTinBienBanSclComponent
   ],
   imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })
