@@ -9,6 +9,6 @@ export class KtKhXdHangNamService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-theo-nam/de-xuat','/qlnv-kho');
+    super(httpClient, 'dt-xd-theo-nam/de-xuat','/qlnv-kho');
   }
 }

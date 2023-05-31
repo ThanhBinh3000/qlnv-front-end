@@ -49,20 +49,20 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         id: [],
         idHd: [],
         namHd: [dayjs().get('year')],
-        soHd: ['', [Validators.required]],
-        tenHd: ['', [Validators.required]],
-        ngayHluc: [null, [Validators.required]],
-        soPhuLuc: ['', [Validators.required]],
-        ngayHlucPhuLuc: [null, [Validators.required]],
-        noiDungPhuLuc: ['', [Validators.required]],
-        thoiGianDuKien: [null, [Validators.required]],
+        soHd: [''],
+        tenHd: [''],
+        ngayHluc: [null,],
+        soPhuLuc: [''],
+        ngayHlucPhuLuc: [null,],
+        noiDungPhuLuc: [''],
+        thoiGianDuKien: [null],
         tgianGnhanTu: [],
         tgianGnhanDen: [],
-        thoiGianDuKienSauDc: [null, [Validators.required]],
+        thoiGianDuKienSauDc: [null],
         ngayHlucSauDcTu: [],
         ngayHlucSauDcDen: [],
         tgianThienHd: [],
-        tgianThienHdSauDc: [null, [Validators.required]],
+        tgianThienHdSauDc: [null],
         noiDungDcKhac: [],
         ghiChuPhuLuc: [],
         trangThaiPhuLuc: STATUS.DU_THAO,
@@ -74,12 +74,11 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     this.maHopDongSuffix = `/${this.formData.value.namHd}/HĐMB`;
+    await Promise.all([
+      this.loadDsHopDong(),
+    ]);
     if (this.idPhuLuc) {
       await this.loadChiTiet(this.idPhuLuc);
-    } else {
-      await Promise.all([
-        this.loadDsHopDong(),
-      ]);
     }
     await this.loadDsDonVi()
   }
@@ -92,8 +91,13 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
       thoiGianDuKien: (data.tgianGnhanTu && data.tgianGnhanDen) ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
     })
     this.dataTable = data.phuLucDtl;
+    if (this.objHopDongHdr) {
+      this.dataTable.forEach(s => {
+        s.donGia = this.objHopDongHdr.donGiaBanTrucTiep ?? null;
+        s.thanhTien = this.objHopDongHdr.thanhTien ?? null;
+      })
+    }
     this.fileDinhKem = data.fileDinhKems;
-
   }
 
   async loadDsDonVi() {
@@ -118,6 +122,7 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   async loadDsHopDong() {
     if (this.objHopDongHdr) {
+      console.log(this.objHopDongHdr, 999)
       this.formData.patchValue({
         idHd: this.objHopDongHdr.id ?? null,
         soHd: this.objHopDongHdr.soHd ?? null,
@@ -129,25 +134,21 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
         // tenTrangThaiPhuLuc: this.objHopDongHdr.tenTrangThaiPhuLuc ?? null,
       });
       this.objHopDongHdr.children.forEach(s => {
-        console.log(this.objHopDongHdr, 1111)
         let row = {
-          // tenDviHd: s.tenDvi,
-          // diaChiHd: s.diaChi,
-          // tongSoLuongHd: s.tongSoLuong,
-          // donGiaVatHd: s.donGiaVat,
           idHdDtl: s.id,
           tenDviHd: s.tenDvi,
           diaChiHd: s.diaChi,
-          soLuong: s.soLuong,
-          donGiaVat: s.donGiaVat,
+          soLuongBanTrucTiepHd: s.soLuongBanTrucTiepHd,
+          donGia: this.objHopDongHdr.donGiaBanTrucTiep ?? null,
+          thanhTien: this.objHopDongHdr.thanhTien ?? null,
         }
         this.dataTable = [...this.dataTable, row]
       });
-
     }
   }
 
-  async save(isOther: boolean) {
+  async save(isOther?) {
+    this.setValidator(isOther);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -230,6 +231,33 @@ export class PhuLucBttComponent extends Base2Component implements OnInit {
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
+  }
+
+
+  setValidator(isOther) {
+    if (isOther) {
+      this.formData.controls["soHd"].setValidators([Validators.required]);
+      this.formData.controls["tenHd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+      this.formData.controls["soPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["ngayHlucPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["noiDungPhuLuc"].setValidators([Validators.required]);
+      this.formData.controls["thoiGianDuKien"].setValidators([Validators.required]);
+      this.formData.controls["thoiGianDuKienSauDc"].setValidators([Validators.required]);
+      this.formData.controls["tgianThienHd"].setValidators([Validators.required]);
+      this.formData.controls["tgianThienHdSauDc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soHd"].clearValidators();
+      this.formData.controls["tenHd"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+      this.formData.controls["soPhuLuc"].clearValidators();
+      this.formData.controls["ngayHlucPhuLuc"].clearValidators();
+      this.formData.controls["noiDungPhuLuc"].clearValidators();
+      this.formData.controls["thoiGianDuKien"].clearValidators();
+      this.formData.controls["thoiGianDuKienSauDc"].clearValidators();
+      this.formData.controls["tgianThienHd"].clearValidators();
+      this.formData.controls["tgianThienHdSauDc"].clearValidators();
+    }
   }
 
 }

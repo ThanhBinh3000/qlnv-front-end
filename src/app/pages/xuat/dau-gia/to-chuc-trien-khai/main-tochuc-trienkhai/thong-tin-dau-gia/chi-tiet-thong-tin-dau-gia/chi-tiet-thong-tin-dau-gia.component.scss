@@ -2,6 +2,7 @@
   .ant-form-item-label.ant-col {
     text-align: left;
     width: 50%;
+    height: 30px;
   }
 
   .ant-picker,
@@ -12,7 +13,7 @@
   }
 
   .ant-input-number {
-    width: 100% !important;
+    width: 700% !important;
     border: none;
     background: transparent;
     color: #444444;
@@ -20,18 +21,30 @@
   }
 }
 
-// .border-right {
-//   border-right: solid 1px #e2e2e2;
-// }
+.border-right {
+  border-right: solid 1px #e2e2e2;
 
-// .ant-collapse>.ant-collapse-item>.ant-collapse-header .ant-collapse-extra button {
-//   background: #4e5484 !important; //$bg-nhat2
-//   padding: 0 10px;
-//   border-radius: 0px;
-//   font-family: "Copperplate Gothic Bold";
-//   margin-left: 8px;
+}
 
-//   &+.ant-radio-group {
-//     margin-left: 4px;
-//   }
-// }
+
+::ng-deep {
+  .bg-xam .ant-card-body {
+    background: #f8f9fa;
+    //padding: 12px;
+    //margin: 12px;
+    //border-radius: 0px;
+    //border: solid 1px #f1f1f1;
+    //margin-right: 0px !important;
+    //margin-left: 0px !important;
+  }
+}
+
+.list-file {
+  .ant-input-affix-wrapper {
+    padding: 0px 11px !important;
+  }
+}
+
+.bg-selected td {
+  background-color: #ebedff;
+}

@@ -1,16 +1,16 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
-import {MESSAGE} from "../../../../../constants/message";
-import {DonviService} from "../../../../../services/donvi.service";
+import { saveAs } from 'file-saver';
+import {
+  TongHopDxScLonService
+} from "../../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-lon/tong-hop-dx-sc-lon.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-sc-lon-tcdt',
@@ -18,52 +18,50 @@ import {DonviService} from "../../../../../services/donvi.service";
   styleUrls: ['./quyet-dinh-sc-lon-tcdt.component.scss']
 })
 export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnInit {
-  isViewDetail : boolean;
+
+  selectedId: number = 0;
+  isViewDetail: boolean;
+  isDetail: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối LĐ-Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
+  ];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private dexuatService : KtKhXdHangNamService,
-    private dviService : DonviService
+    private tongHopDxScLon : TongHopDxScLonService,
+    private router : Router,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super(httpClient, storageService, notification, spinner, modal, tongHopDxScLon)
     super.ngOnInit()
     this.formData = this.fb.group({
-      maDvi : [null],
-      soCongVan : [null],
-      tenCongTrinh : [null],
-      diaDiem : [null],
-      trichYeu : [null],
-      ngayKy : [null],
-      namBatDau : [null],
-      namKetThuc : [null],
-      role : [null],
+      maDvi: [''],
+      capDvi: [''],
+      namKeHoach: [''],
+      maTongHop: [''],
+      noiDung: [''],
+      ngayTongHopTu: [''],
+      ngayTongHopDen: [''],
+      trangThai: [''],
     });
-    this.filterTable = {
-      soCongVan: '',
-      ngayKy: '',
-      namKeHoach: '',
-      tmdt: '',
-      trichYeu: '',
-      soQdTrunghan: '',
-      tenTrangThai: '',
-    };
+    this.filterTable = {};
   }
-
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
-      this.userInfo = this.userService.getUserLogin();
-      this.formData.patchValue({
-        role : this.userService.isCuc() ? 'CUC': 'TC',
-        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
-      })
-      await Promise.all([
-        this.search()
-      ]);
+      await this.filter();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -72,17 +70,58 @@ export class QuyetDinhScLonTcdtComponent extends Base2Component implements OnIni
     }
   }
 
-  initForm() {
-    this.formData.patchValue({
-      role : this.userService.isCuc() ? 'CUC' : 'TC'
-    })
-  }
-
-  redirectToChiTiet(id: number, isView?: boolean) {
-    this.idSelected = id;
+  redirectToChiTiet(isView: boolean, id: number) {
+    this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isViewDetail = isView;
   }
 
+  async filter() {
+    this.formData.patchValue({
+      maDvi :this.userInfo.MA_DVI ,
+      capDvi :this.userInfo.CAP_DVI
+    })
+    await this.search();
+  }
+
+  async clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+      maDvi :this.userInfo.MA_DVI ,
+      capDvi :this.userInfo.CAP_DVI
+    })
+    await this.search();
+  }
+
+
+  async showList() {
+    this.isDetail = false;
+    await this.search();
+  }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.tongHopDxScLon
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'tong-hop-sua-chua-lon.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 
 }

@@ -16,6 +16,8 @@ import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
+import { TongHopKhTrungHanService } from "../../../../../services/tong-hop-kh-trung-han.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ke-hoach',
@@ -25,29 +27,36 @@ import {STATUS} from "../../../../../constants/status";
 export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   @Input() typeVthh: string;
+  @Input() dataInput: string;
   isDetail: boolean = false;
 
   STATUS = STATUS;
   selectedId: number = 0;
+  idTongHop: number = 0;
+  isViewTh : boolean;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
 
   searchFilter = {
-    soCongVan: '',
-    phuongAnTc: '',
-    trichYeu: '',
-    ngayKyBtc: '',
-    trangThai: ''
+    namKeHoach  :'',
+    soQuyetDinh: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
+    ngayHieuLucTu : '',
+    ngayHieuLucDen : '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
   };
 
   filterTable: any = {
-    soCongVan: '',
+    namKeHoach: '',
+    giaiDoan : '' ,
+    soQuyetDinh: '',
     ngayKyBtc: '',
     trichYeu: '',
     phuongAnTc: '',
-    namKeHoach: '',
     tenTrangThai: '',
   };
 
@@ -70,13 +79,19 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     public userService: UserService,
     private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
+    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private router  :Router
   ) {
   }
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_QD')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      this.checkRedirect(this.dataInput)
       this.loadDsNam();
       await this.search();
       this.spinner.hide();
@@ -84,6 +99,13 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  checkRedirect(data) {
+    if (data) {
+      this.isDetail = true;
+      this.selectedId = null;
     }
   }
 
@@ -99,16 +121,19 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      // soQuyetDinh : this.searchFilter.soQd,
-      // soCongVan : this.searchFilter.soCongVan,
-      // trichYeu : this.searchFilter.trichYeu,
-      // ngayKyTu : this.searchFilter.ngayKy[0],
-      // ngayKyDen : this.searchFilter.ngayKy[1],
+      namKeHoach : this.searchFilter.namKeHoach,
+      soQuyetDinh : this.searchFilter.soQuyetDinh,
+      ngayKyTu : this.searchFilter.ngayKyTu,
+      ngayKyDen : this.searchFilter.ngayKyDen,
+      ngayHieuLucTu : this.searchFilter.ngayHieuLucTu,
+      ngayHieuLucDen : this.searchFilter.ngayHieuLucDen,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh  : this.searchFilter.tgHoanThanh,
+      maDvi : this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -127,11 +152,6 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-  }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
   }
 
   async changePageIndex(event) {
@@ -206,11 +226,14 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soCongVan: '',
-      phuongAnTc: '',
-      trichYeu: '',
-      ngayKyBtc: '',
-      trangThai: ''
+      namKeHoach  :'',
+      soQuyetDinh: '',
+      ngayKyTu: '',
+      ngayKyDen: '',
+      ngayHieuLucTu : '',
+      ngayHieuLucDen : '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
     }
     this.search();
   }
@@ -246,6 +269,49 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     });
   }
 
+  deleteMulti() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhService.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -254,7 +320,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
         this.quyetDinhService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'quyet-dinh-phe-duyet-trung-han.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -273,9 +339,15 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['ngayKyBtc'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
@@ -285,17 +357,36 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
+  async openModalCttongHop(data : any) {
+    let body = {
+      namKeHoach : data.namKeHoach,
+      paggingReq: {
+        limit: 100,
+        page: this.page - 1,
+      }
     };
+    let res = await this.tongHopTrungHanService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let listData = res.data.content;
+      let result = listData.filter(item => item.soQuyetDinh == data.phuongAnTc);
+      if (result && result.length > 0) {
+        this.idTongHop = result[0].id;
+        this.isViewTh = true;
+      }
+    }
+  }
+
+  closeDxPaModal() {
+    this.idTongHop = null;
+    this.isViewTh = false;
   }
 }
 

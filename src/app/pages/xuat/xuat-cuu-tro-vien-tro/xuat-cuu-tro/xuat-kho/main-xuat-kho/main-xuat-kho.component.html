@@ -3,13 +3,16 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Phiếu xuất kho
         </li>
-        <li nz-menu-item (click)="selectTab(1)">
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="loaiVthh != '02'">
             Bảng kê cân hàng
+        </li>
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="loaiVthh == '02'">
+            Bảng kê vật tư
         </li>
         <li nz-menu-item (click)="selectTab(2)">
             Biên bản tịnh kho
         </li>
-        <li nz-menu-item (click)="selectTab(3)">
+        <li nz-menu-item (click)="selectTab(3)" *ngIf="loaiVthh != '02'">
             Biên bản hao dôi
         </li>
     </ul>

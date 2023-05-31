@@ -29,6 +29,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
   dataTable: any[] = [];
   listNguonVon: any[] = [];
   dataChiTieu: any;
+  listPhuongThucThanhToan: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -56,14 +57,13 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
       thongBaoKh: [null,],
       khoanTienDatTruoc: [null,],
       tongSoLuong: [null,],
-      tongTienKdienDonGia: [null,],
-      tongTienDatTruocDonGia: [null,],
+      donViTinh: [null,],
+      tongTienGiaKdTheoDgiaDd: [null,],
+      tongKhoanTienDtTheoDgiaDd: [null],
       diaChi: [],
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
       thoiGianDuKien: [],
-      tongTienGiaDeXuat: [],
-      tongTienGiaVat: []
     });
   }
 
@@ -76,6 +76,7 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
           thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
         })
         this.dataTable = this.dataInput.children
+        await this.ptThanhToan(this.dataInput)
         this.calculatorTable();
       } else {
         this.formData.reset();
@@ -118,30 +119,45 @@ export class ThongtinDexuatKhbdgComponent implements OnChanges {
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongTienGiaDeXuat: number = 0;
-    let tongTienGiaVat: number = 0;
+    let tongTienGiaKdTheoDgiaDd: number = 0;
+    let tongKhoanTienDtTheoDgiaDd: number = 0;
     this.dataTable.forEach((item) => {
-      let soLuongChiCuc = 0;
-      item.children.forEach(child => {
-        soLuongChiCuc += child.soLuong;
-        tongSoLuong += child.soLuong / 1000;
-        tongTienGiaDeXuat += child.donGiaDeXuat * child.soLuong;
-        tongTienGiaVat += child.donGiaVat * child.soLuong;
+      item.children.forEach((child) => {
+        item.soTienDtruocDx += child.soLuongDeXuat * child.donGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100;
+        item.soTienDtruocDd += child.soLuongDeXuat * child.donGiaDuocDuyet * this.formData.value.khoanTienDatTruoc / 100;
+        tongSoLuong += child.soLuongDeXuat;
+        tongTienGiaKdTheoDgiaDd += child.soLuongDeXuat * child.donGiaDuocDuyet;
       })
-      item.soLuong = soLuongChiCuc;
+      tongKhoanTienDtTheoDgiaDd += item.soTienDtruocDd
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienGiaDeXuat: tongTienGiaDeXuat,
-      tongTienGiaVat: tongTienGiaVat,
-      tongTienDatCocDx: tongTienGiaDeXuat + (tongTienGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100),
-      tongTienDatCocVat: tongTienGiaVat + (tongTienGiaVat * this.formData.value.khoanTienDatTruoc / 100),
+      tongTienGiaKdTheoDgiaDd: tongTienGiaKdTheoDgiaDd,
+      tongKhoanTienDtTheoDgiaDd: tongKhoanTienDtTheoDgiaDd,
     });
-    this.dataInput.soLuong = tongSoLuong * 1000
   }
+
 
   isDisable() {
     return false;
+  }
+
+  async ptThanhToan(data) {
+    if (data.pthucTtoan == '1') {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '1',
+          giaTri: 'Tiền mặt',
+        },
+      ];
+    } else {
+      this.listPhuongThucThanhToan = [
+        {
+          ma: '2',
+          giaTri: 'Chuyển khoản',
+        },
+      ];
+    }
   }
 
 }

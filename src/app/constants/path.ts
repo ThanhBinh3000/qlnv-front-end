@@ -31,4 +31,17 @@ export enum PATH {
   TTIN_BTT = "ttin-btt",
   KQUA_BTT = "kq-btt",
   BK_BAN_LE = "bk-ban-le",
+  HO_SO_KY_THUAT = "ho-so-ky-thuat",
+  PHIEU_XUAT_KHO = "phieu-xuat-kho",
+  BANG_KE = "bang-ke",
+  BIEN_BAN_TINH_KHO = "bien-ban-tinh-kho",
+  BIEN_BAN_HAO_DOI = "bien-ban-hao-doi",
+
+
+  NHAP_HANG = "nhap-hang",
+  // Menu 0
+  MUA_TRUC_TIEP = "mua-truc-tiep",
+
+  // Menu 2
+  DX_KH_MTT = "dx-kh-mtt",
 }

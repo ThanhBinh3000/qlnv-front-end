@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { GiaoNvXuatHangBttComponent } from './giao-nv-xuat-hang-btt.component';
 import { QdGiaoNvXuatBttComponent } from './qd-giao-nv-xuat-btt/qd-giao-nv-xuat-btt.component';
 import { ThemMoiQdGiaoNvXuatBttComponent } from './qd-giao-nv-xuat-btt/them-moi-qd-giao-nv-xuat-btt/them-moi-qd-giao-nv-xuat-btt.component';
+import { HopDongBttModule } from '../hop-dong-btt/hop-dong-btt.module';
 
 @NgModule({
     declarations: [
@@ -17,10 +18,11 @@ import { ThemMoiQdGiaoNvXuatBttComponent } from './qd-giao-nv-xuat-btt/them-moi-
         CommonModule,
         ComponentsModule,
         DirectivesModule,
+        HopDongBttModule,
     ],
     exports: [
         GiaoNvXuatHangBttComponent,
-
+        ThemMoiQdGiaoNvXuatBttComponent,
     ]
 })
 export class GiaoNvXuatHangBttModule { }

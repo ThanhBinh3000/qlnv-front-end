@@ -16,11 +16,12 @@ export const MAIN_ROUTES = {
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   // quantrihethong: 'quan-tri-he-thong',
-  dieuChuyen: 'dieu-chuyen',
+  dieuChuyenNoiBo: 'dieu-chuyen-noi-bo',
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
   quanTriHeThong: 'quan-tri-he-thong',
   khaiThacBaoCao: 'khai-thac-bao-cao',
+  baoCaoBoNganh: 'bao-cao-bo-nganh',
   // qlkhVonPhi: 'qlkh-von-phi',
 };
 
@@ -65,7 +66,7 @@ export const LIST_PAGES: RouteInfo[] = [
   },
   {
     title: 'Điều chuyển nội bộ',
-    route: MAIN_ROUTES.dieuChuyen,
+    route: MAIN_ROUTES.dieuChuyenNoiBo,
     code: 'DCNB'
   },
   {
@@ -87,6 +88,11 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
     code: 'QLKT'
+  },
+  {
+    title: 'Báo cáo Bộ/Ngành',
+    route: MAIN_ROUTES.baoCaoBoNganh,
+    code: 'DCNB'
   },
   {
     title: 'Khai thác báo cáo',

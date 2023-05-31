@@ -154,6 +154,7 @@ export class ThongTinTongHopDeXuatNhuCauBaoHiemCucComponent extends Base2Compone
       this.spinner.hide()
       return;
     }
+    console.log(this.dataHang)
     this.spinner.hide()
   }
 

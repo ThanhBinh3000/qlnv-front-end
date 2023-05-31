@@ -15,14 +15,14 @@
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-    <app-phieu-xuat-kho [loaiVthh]="loaiVthh"></app-phieu-xuat-kho>
+    <app-xc-phieu-xuat-kho [loaiVthh]="loaiVthh"></app-xc-phieu-xuat-kho>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-    <app-bang-ke-can [loaiVthh]="loaiVthh"></app-bang-ke-can>
+    <app-xc-bang-ke-can [loaiVthh]="loaiVthh"></app-xc-bang-ke-can>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
-    <app-bien-ban-tinh-kho [loaiVthh]="loaiVthh"></app-bien-ban-tinh-kho>
+    <app-xc-bien-ban-tinh-kho [loaiVthh]="loaiVthh"></app-xc-bien-ban-tinh-kho>
 </ng-container>
 <ng-container *ngIf="tabSelected == 3">
-    <app-bien-ban-hao-doi [loaiVthh]="loaiVthh"></app-bien-ban-hao-doi>
+    <app-xc-bien-ban-hao-doi [loaiVthh]="loaiVthh"></app-xc-bien-ban-hao-doi>
 </ng-container>

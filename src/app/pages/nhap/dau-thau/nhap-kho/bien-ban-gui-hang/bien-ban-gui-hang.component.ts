@@ -27,7 +27,9 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
+    namKh: '',
     soBienBan: '',
+    soPhieuNkTamGui: '',
     soQuyetDinh: '',
     ngayGuiHang: '',
   };
@@ -74,6 +76,21 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
     super(httpClient, storageService, bienBanGuiHangService);
     super.ngOnInit();
   }
+  tuNgayNk: Date | null = null;
+  denNgayNk: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayNk) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayNk.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayNk) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayNk.getTime();
+  };
 
   async ngOnInit() {
     this.spinner.show();
@@ -125,12 +142,13 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
+      namNhap: this.searchFilter.namKh,
       trangThai: this.STATUS.BAN_HANH,
       paggingReq: {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      "loaiVthh": this.loaiVthh
+      loaiVthh: this.loaiVthh
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -188,7 +206,9 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      namKh: '',
       soBienBan: '',
+      soPhieuNkTamGui: '',
       soQuyetDinh: '',
       ngayGuiHang: '',
     };

@@ -15,18 +15,18 @@
         <span>Quay lại</span>
       </button>
       <button class="btn btn-sub ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc() &&  userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_THEM')">
         <i class="icon htvbdh_trinh"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
+              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_DUYETLDTC')"
               (click)="reject(id, STATUS.TU_CHOI_LDTC)">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()) && userService.isAccessPermisson('QLĐMNXBQ_BAOHIEM_QDMUASAM_DUYETLDTC')"
               (click)="pheDuyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
@@ -330,7 +330,7 @@
             </tr>
             <ng-container *ngIf="expandSet.has(item1.idVirtual)">
               <ng-container *ngFor="let lv1 of item1.childData,let i1=index">
-                <tr>
+                <tr *ngIf="item1.tenLoaiVthh == 'Vật tư'">
                   <td></td>
                   <td (nzExpandChange)="onExpandChange(lv1.idVirtual, $event)"
                       [nzExpand]="expandSet.has(lv1.idVirtual)" nzShowExpand="true"
@@ -356,7 +356,7 @@
                   <td
                     class="font-weight-bold text-right">{{sumSoLuongHang(item.dataChildHang, 'giaTriTc', null, lv1.tenNhomTiLeBaoHiem, null, 'tenNhomTiLeBaoHiem') | number: '1.0-3'}}</td>
                 </tr>
-                <ng-container *ngIf="expandSet.has(lv1.idVirtual)">
+                <ng-container *ngIf="expandSet.has(item1.tenLoaiVthh  == 'Vật tư' ? lv1.idVirtual :  item1.idVirtual)">
                   <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
                     <tr>
                       <td></td>

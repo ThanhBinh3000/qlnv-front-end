@@ -38,7 +38,7 @@ export class HoSoKyThuatComponent extends Base2Component implements OnInit {
   ) {
     super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatCtvtService);
     this.formData = this.fb.group({
-      id: [],
+      id: [0],
       nam: [],
       idQdGiaoNvNh: [],
       soQdGiaoNvNh: [],

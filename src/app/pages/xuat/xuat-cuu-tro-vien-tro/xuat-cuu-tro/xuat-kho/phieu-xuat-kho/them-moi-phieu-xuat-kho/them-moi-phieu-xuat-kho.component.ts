@@ -23,7 +23,7 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./them-moi-phieu-xuat-kho.component.scss']
 })
 export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -52,7 +52,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [],
         maQhNs: [],
@@ -90,7 +90,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         thucXuat: [],
         donGia: [],
         thanhTien: [],
-        ghiChu: [],
+        ghiChu:  ['', [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         tenDvi: [],
         lyDoTuChoi: [],
@@ -99,9 +99,9 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         diaChiDvi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
-        tenDiemKho: [],
-        tenNhaKho: [],
-        tenNganKho: [],
+        tenDiemKho:  ['', [Validators.required]],
+        tenNhaKho:  ['', [Validators.required]],
+        tenNganKho:  ['', [Validators.required]],
         tenLoKho: [],
         fileDinhKems: [new Array<FileDinhKem>()],
 
@@ -114,18 +114,18 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
 
   async ngOnInit() {
     try {
-      this.spinner.show();
+      await this.spinner.show();
 
       await Promise.all([
         this.loadSoQuyetDinh()
       ])
       await this.loadDetail(this.idInput)
-      this.spinner.hide();
+      await this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
-      this.spinner.hide();
+      await this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
@@ -156,6 +156,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
         ngayTaoPhieu: dayjs().format('YYYY-MM-DD'),
         ngayXuatKho: dayjs().format('YYYY-MM-DD'),
         type: "XUAT_CTVT",
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -167,6 +168,8 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -249,6 +252,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       })
       let body = {
         trangThai: STATUS.DA_DUYET_LDC,
+        loaiVthh: this.loaiVthh
       }
       let res = await this.phieuKiemNghiemChatLuongService.search(body)
       const list = res.data.content;
@@ -273,6 +277,7 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
+          idPhieuKnCl: data.id,
           soPhieuKnCl: data.soPhieu,
           ktvBaoQuan: data.nguoiKn,
           ngayKn: data.ngayKnMau,
@@ -287,18 +292,12 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
     });
   }
 
-  async save(isGuiDuyet?) {
+  async save() {
+    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isGuiDuyet) {
-        this.idInput = data.id;
-        this.pheDuyet();
-      } else {
-        this.goBack()
-      }
-    }
+    let rs = await this.createUpdate(body);
+    this.formData.enable();
   }
 
   pheDuyet() {

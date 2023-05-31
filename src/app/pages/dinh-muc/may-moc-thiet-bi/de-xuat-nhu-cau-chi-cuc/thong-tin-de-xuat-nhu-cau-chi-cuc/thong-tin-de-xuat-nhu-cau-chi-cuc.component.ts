@@ -260,8 +260,8 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
     let res = await this.createUpdate(this.formData.value)
     if (res) {
-      this.goBack();
-    }
+        this.goBack()
+      }
   }
 
   async detail(id) {

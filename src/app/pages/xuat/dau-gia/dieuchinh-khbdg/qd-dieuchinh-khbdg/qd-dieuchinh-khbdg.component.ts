@@ -19,7 +19,18 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./qd-dieuchinh-khbdg.component.scss']
 })
 export class QdDieuchinhKhbdgComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string;
+  idQdPdGoc: number = 0;
+  isViewQdPdGoc: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ Chối - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ Duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã Duyệt - LĐ Vụ' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hanh' },
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -33,26 +44,23 @@ export class QdDieuchinhKhbdgComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
     this.formData = this.fb.group({
       namKh: dayjs().get('year'),
-      soQdPd: null,
-      trichYeu: null,
-      loaiVthh: null,
-      ngayKyQd: null,
-      soTrHdr: null,
       soQdDc: null,
+      trichYeu: null,
+      ngayKyDcTu: null,
+      ngayKyDcDen: null,
+      loaiVthh: null,
+      trangThai: null,
     })
 
     this.filterTable = {
-      namKh: '',
-      soQdPd: '',
-      ngayKyQd: '',
+      nam: '',
+      soQdDc: '',
+      ngayKyDc: '',
+      soQdGoc: '',
       trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
-      tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
-      slHdDaKy: '',
-      tenTrangThai: '',
+      slDviTsan: '',
     };
 
   }
@@ -60,9 +68,7 @@ export class QdDieuchinhKhbdgComponent extends Base2Component implements OnInit 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
+      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -71,4 +77,42 @@ export class QdDieuchinhKhbdgComponent extends Base2Component implements OnInit 
     }
   }
 
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
+
+  disabledNgayKyQdDcTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyDcDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyDcDen.getTime();
+  };
+
+  disabledNgayKyQdDcDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyDcTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
+  };
+
+
+  openModalQdPdGoc(id: number) {
+    this.idQdPdGoc = id;
+    this.isViewQdPdGoc = true;
+  }
+
+  closeModalQdPdGoc() {
+    this.idQdPdGoc = null;
+    this.isViewQdPdGoc = false;
+  }
 }

@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
@@ -21,63 +20,80 @@ import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { isEmpty } from 'lodash'
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { StorageService } from "../../../../../../services/storage.service";
+import { HttpClient } from "@angular/common/http";
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { FILETYPE } from 'src/app/constants/fileType';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-lcnt',
   templateUrl: './themmoi-quyetdinh-ketqua-lcnt.component.html',
   styleUrls: ['./themmoi-quyetdinh-ketqua-lcnt.component.scss']
 })
-export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
+export class ThemmoiQuyetdinhKetquaLcntComponent extends Base2Component implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() loaiVthh: String;
+  @Input() loaiVthh: string;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() soQd: string;
+  @Input() isViewOnModal: boolean;
+
+  @Input() isView: boolean;
 
   formData: FormGroup;
-  taiLieuDinhKemList: any[] = [];
 
   listQdPdKhlcnt: any[] = []
   maQd: String;
   listNam: any[] = [];
 
+  isQdkqlcnt: boolean = true;
+  danhSachFileDinhKem: FileDinhKem[] = [];
+  danhSachFileCanCuPL: FileDinhKem[] = [];
+  listFile: any[] = []
   userInfo: UserLogin;
   STATUS = STATUS
   constructor(
-    private modal: NzModalService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
-    private spinner: NgxSpinnerService,
-    private uploadFileService: UploadFileService,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
+    spinner: NgxSpinnerService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    uploadFileService: UploadFileService,
+    fb: FormBuilder,
     public globals: Globals,
     public userService: UserService,
-    private helperService: HelperService,
+    helperService: HelperService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
     private thongTinDauThauService: ThongTinDauThauService
 
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKetQuaLCNTService)
     this.formData = this.fb.group(
       {
         id: [],
-        soQd: [, [Validators.required]],
-        ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        ngayHluc: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-        namKhoach: [dayjs().get('year'), [Validators.required]],
-        trichYeu: [null,],
+        soQd: [],
+        ngayKy: [dayjs().format('YYYY-MM-DD')],
+        ngayHluc: [dayjs().format('YYYY-MM-DD')],
+        namKhoach: [dayjs().get('year')],
+        trichYeu: [null],
         soQdPdKhlcnt: ['', [Validators.required]],
-        idQdPdKhlcnt: ['', [Validators.required]],
+        idQdPdKhlcnt: [''],
         idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
         loaiVthh: [''],
-        cloaiVthh: ['']
+        cloaiVthh: [''],
+        fileDinhKems: new FormControl([]),
       }
     );
   }
 
   async ngOnInit() {
+    console.log(this.isViewDetail);
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;
@@ -90,6 +106,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
     }
+    if (this.soQd) {
+      await this.getDetail(0, this.soQd);
+    }
     await this.spinner.hide();
   }
 
@@ -100,15 +119,34 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     return false;
   }
 
-  async getDetail(id: number) {
-    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const dataDetail = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-      this.formData.patchValue({
-        soQd: dataDetail.soQd?.split('/')[0],
-      })
-      this.taiLieuDinhKemList = dataDetail.fileDinhKems;
+  async getDetail(id: number, soQd?: string) {
+    if (id > 0 || soQd) {
+      let res = null;
+      if (soQd) {
+        var body = this.formData.value
+        body.soQd = soQd
+        res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetailBySoQd(body);
+      }
+      if (id > 0) {
+        res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
+      }
+      console.log(res)
+      if (res.msg == MESSAGE.SUCCESS) {
+        const dataDetail = res.data;
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+        this.formData.patchValue({
+          soQd: dataDetail.soQd?.split('/')[0],
+        })
+        if (dataDetail.children.length > 0) {
+          dataDetail.children.forEach(item => {
+            if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+              this.danhSachFileDinhKem.push(item)
+            } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+              this.danhSachFileCanCuPL.push(item)
+            }
+          })
+        }
+      }
     }
   }
 
@@ -122,7 +160,22 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + this.maQd;
     }
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    console.log(this.danhSachFileCanCuPL)
+    console.log(this.danhSachFileDinhKem)
+    debugger
+    if (this.danhSachFileDinhKem.length > 0) {
+      this.danhSachFileDinhKem.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.danhSachFileCanCuPL.length > 0) {
+      this.danhSachFileCanCuPL.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    body.fileDinhKems = this.listFile;
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaLCNTService.update(body);
@@ -136,10 +189,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai();
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai();
         }
       }
     } else {
@@ -245,6 +296,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         element.tenLoaiVthh = element.tenLoaiVthh;
         element.cloaiVthh = element.cloaiVthh;
         element.tenCloaiVthh = element.tenCloaiVthh;
+        element.soQdPdKhlcnt = element.soQd;
       } else {
         element.soQdPdKhlcnt = element.hhQdKhlcntHdr?.soQd;
         element.loaiVthh = element.hhQdKhlcntHdr?.loaiVthh
@@ -253,7 +305,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
       }
     });
-
+  console.log(this.listQdPdKhlcnt)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,

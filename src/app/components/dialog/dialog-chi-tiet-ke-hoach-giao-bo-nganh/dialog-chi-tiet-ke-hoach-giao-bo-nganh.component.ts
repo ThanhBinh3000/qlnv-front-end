@@ -23,14 +23,14 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     id: null,
     maBoNganh: null,
     tenBoNganh: null,
-    tongTien: 0,
-    ltGaoMua: 0,
-    ltThocMua: 0,
-    ltGaoXuat: 0,
-    ltThocXuat: 0,
-    ttMuaTang: 0,
-    ttXuatBan: 0,
-    ttXuatGiam: 0,
+    tongTien: null,
+    ltGaoMua: null,
+    ltThocMua: null,
+    ltGaoXuat: null,
+    ltThocXuat: null,
+    ttMuaTang: null,
+    ttXuatBan: null,
+    ttXuatGiam: null,
     muaTangList: [],
     xuatGiamList: [],
     xuatBanList: [],
@@ -52,8 +52,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     public globals: Globals,
   ) {
     this.radioData = [
-      {label: 'Bộ tài chính', value: 'BTC'},
-      {label: 'Bộ ngành khác', value: 'Khac'},
+      {label: 'Bộ Tài chính', value: 'BTC'},
+      {label: 'Bộ/Ngành khác', value: 'Khac'},
     ];
     this.radioValue = 'BTC';
   }
@@ -141,7 +141,6 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     }
     if (this.validateData()) {
       this._modalRef.close(this.keHoach);
-      console.log(this.keHoach);
     }
   }
 

@@ -38,6 +38,13 @@ export class ChiTietCacChiCucHopDong {
   diaChi: string;
 }
 
+export class chiTietBangCanKeHang {
+  id: number;
+  maCan: string;
+  trongLuongBaoBi: number;
+  trongLuongCaBaoBi: number;
+}
+
 
 
 

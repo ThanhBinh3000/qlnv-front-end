@@ -18,7 +18,11 @@ export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit 
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+    { ma: this.STATUS.HET_HIEU_LUC, giaTri: 'Hết hiệu lực' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -47,12 +51,12 @@ export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit 
 
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+      this.formData.value.ngayKyTu = this.formData.value.ngayKy[0]
+      this.formData.value.ngayKyDen = this.formData.value.ngayKy[1]
     }
     if (this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0) {
-      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
+      this.formData.value.ngayHieuLucTu = this.formData.value.ngayHieuLuc[0]
+      this.formData.value.ngayHieuLucDen = this.formData.value.ngayHieuLuc[1]
     }
     await this.search();
   }

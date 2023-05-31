@@ -16,7 +16,7 @@
 
             <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
+                    <nz-form-label nzRequired [nzNoColon]="true"> SL xuất theo chỉ tiêu KH giao đầu năm </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                         <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -27,9 +27,10 @@
             </div>
             <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
+                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán theo KH đã được duyệt
+                    </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongKhDaDuyet" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
@@ -38,23 +39,25 @@
             </div>
             <div nz-col [nzSpan]="5">
                 <nz-form-item>
-                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
+                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán TT đề xuất </nz-form-label>
                     <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                        <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongChiCuc" [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                         </nz-input-number>
                     </nz-form-control>
                 </nz-form-item>
             </div>
-            <div nz-col [nzSpan]="20">
+            <div nz-col [nzSpan]="22">
             </div>
-            <div nz-col [nzSpan]="4">
-                <div class="text-danger float-right" nzRight>
-                    <span>
-                        Đơn vị: kg
-                    </span>
-                </div>
+            <div nz-col [nzSpan]="2">
+                <nz-form-item>
+                    <nz-form-label [nzNoColon]="true">
+                    </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24">
+                        <span class="text-green">Đơn vị :{{formData.value.donViTinh}}</span>
+                    </nz-form-control>
+                </nz-form-item>
             </div>
         </div>
         <br />
@@ -70,11 +73,11 @@
                 <th nzWidth="100px" class="text-center wrap">Chủng loại hàng hóa</th>
                 <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
-                <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất (1)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg) (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg) (4)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
+                <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
+                <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất (đ)</th>
+                <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>
             <tr>
@@ -105,10 +108,10 @@
                 <th>
                     <input nz-input [(ngModel)]="thongTinXuatBanTrucTiep.maDviTsan" class="w-150" />
                 </th>
-                <th>{{thongTinXuatBanTrucTiep.duDau}}</th>
+                <th>{{thongTinXuatBanTrucTiep.tonKho | number : '1.0-1' : 'vi_VN'}}</th>
                 <th>
                     <nz-input-number placeholder="(1)" class="text-right" nz-input
-                        [(ngModel)]="thongTinXuatBanTrucTiep.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                        [(ngModel)]="thongTinXuatBanTrucTiep.soLuongDeXuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
@@ -118,14 +121,14 @@
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number : '1.0-1'
+                <th>{{thongTinXuatBanTrucTiep.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN'}}</th>
+                <th>{{thongTinXuatBanTrucTiep.soLuongDeXuat * thongTinXuatBanTrucTiep.donGiaDeXuat | number : '1.0-1' :
+                    'vi_VN' }}</th>
+                <th>{{ thongTinXuatBanTrucTiep.soLuongDeXuat * thongTinXuatBanTrucTiep.donGiaDuocDuyet | number :
+                    '1.0-1'
                     :
-                    'vi_VN'}}</th>
-                <th>{{ thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1' :
                     'vi_VN'
                     }}</th>
-
                 <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -137,85 +140,86 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let data of listOfData, let i = index" class="editable-row">
-                <ng-container *ngIf="!data.edit; else editTemplate">
+            <tr *ngFor="let data of listOfData, let idx = index" class="editable-row">
+                <ng-container *ngIf="(editCache && editCache[idx] && !editCache[idx].edit); else editTemplate ">
                     <td>{{ data.tenDiemKho }}</td>
-                    <td>{{ data.tenNhakho }}</td>
+                    <td>{{ data.tenNhaKho }}</td>
                     <td>{{ data.tenNganKho }}</td>
                     <td>{{ data.tenLoKho }}</td>
                     <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.maDviTsan }}</td>
-                    <td>{{ data.duDau | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{ data.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{ data.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
                     <td>{{ data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaDeXuat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ data.soLuong * data.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.soLuongDeXuat * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{ data.soLuongDeXuat * data.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
-                        <a (click)="startEdit(i)">
+                        <a (click)="startEdit(idx)">
                             <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="deleteRow(i)">
+                        <a (click)="deleteRow(idx)">
                             <i class="fa fa-trash-o do"></i>
                         </a>
                     </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                    <td>
-                        <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho()">
-                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    <th>
+                        <nz-select [(ngModel)]="editCache[idx].data.maDiemKho" (ngModelChange)="changeDiemKho(idx)">
+                            <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi"
+                                [nzLabel]="p.tenDvi"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
-                        <nz-select [(ngModel)]="data.maNhaKho" (ngModelChange)="changeNhaKho()">
+                    </th>
+                    <th>
+                        <nz-select [(ngModel)]="editCache[idx].data.maNhaKho" (ngModelChange)="changeNhaKho(idx)">
                             <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
-                        <nz-select [(ngModel)]="data.maNganKho" (ngModelChange)="changeNganKho()">
+                    </th>
+                    <th>
+                        <nz-select [(ngModel)]="editCache[idx].data.maNganKho" (ngModelChange)="changeNganKho(idx)">
                             <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
-                    </td>
-                    <td>
-                        <nz-select [(ngModel)]="data.maLoKho" (ngModelChange)="changeLoKho()">
+                    </th>
+                    <th>
+                        <nz-select [(ngModel)]="editCache[idx].data.maLoKho" (ngModelChange)="changeLoKho(idx)">
                             <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
+                    </th>
+                    <td>
+                        <input nz-input [(ngModel)]="editCache[idx].data.tenCloaiVthh" class="w-150"
+                            [disabled]="true" />
                     </td>
                     <td>
-                        <input nz-input [(ngModel)]="data.tenCloaiVthh" class="w-150" [disabled]="true" />
-                    </td>
-                    <td>
-                        <input nz-input [(ngModel)]="data.maDviTsan" class="w-150" />
-                    </td>
-                    <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.duDau" [nzMin]="1" [nzStep]="1"
-                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                        </nz-input-number>
+                        <input nz-input [(ngModel)]="editCache[idx].data.maDviTsan" class="w-150" />
                     </td>
 
-                    <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
-                            [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                        </nz-input-number>
-                    </td>
+                    <td>{{editCache[idx].data.tonKho | number : '1.0-1' : 'vi_VN'}}</td>
 
                     <td>
-                        <nz-input-number class="text-right" nz-input [(ngModel)]="data.donGiaDeXuat" [nzMin]=" 1"
-                            [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.soLuongDeXuat"
+                            [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat * 1000 | number :
-                        '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat * 1000 | number : '1.0-1'
-                        : 'vi_VN'}}</td>
 
+                    <td>
+                        <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[idx].data.donGiaDeXuat"
+                            [nzMin]=" 1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                            [nzParser]="globals.parser">
+                        </nz-input-number>
+                    </td>
+                    <td>{{editCache[idx].data.donGiaDuocDuyet | number :
+                        '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{editCache[idx].data.soLuongDeXuat * editCache[idx].data.donGiaDeXuat | number :
+                        '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{editCache[idx].data.soLuongDeXuat * editCache[idx].data.donGiaDuocDuyet | number :
+                        '1.0-1'
+                        : 'vi_VN'}}</td>
                     <td class="text-center">
-                        <a (click)="saveEdit(i)" class="save">
+                        <a (click)="saveEdit(idx)" class="save">
                             <i class="icon htvbdh_tcdt_save"></i>
                         </a>
-                        <a (click)="cancelEdit(i)">
+                        <a (click)="cancelEdit(idx)">
                             <i class="fa fa-ban do"></i>
                         </a>
                     </td>
@@ -225,9 +229,9 @@
         <tfoot>
             <tr *ngIf="listOfData.length > 0">
                 <th colspan="6" class="first-last-row-table background-last-row text-left">Cộng</th>
-                <th class="background-last-row text-left"> {{ calcTong('duDau') | number : '1.0-1' : 'vi_VN' }}
+                <th class="background-last-row text-left"> {{ calcTong('tonKho') | number : '1.0-1' : 'vi_VN' }}
                 </th>
-                <th class="background-last-row text-left"> {{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN' }}
+                <th class="background-last-row text-left"> {{ calcTong('soLuongDeXuat') | number : '1.0-1' : 'vi_VN' }}
                 </th>
                 <th colspan="3">
                 </th>

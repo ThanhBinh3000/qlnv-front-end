@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-main" *ngIf="!isView" (click)="save(true)">
+    <button *ngIf="userService.isAccessPermisson('KHCNBQ_CTNCKHCNBQ_DUYET') && !isView" class="btn btn-main"
+      (click)="save(true)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -72,7 +73,9 @@
               Thời gian thực hiện
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker [nzDisabled]="isDisable()" formControlName="ngayKy" nzFormat="dd/MM/yyyy">
+              <nz-range-picker nzMode="month" [nzDisabled]="isDisable()"
+                [nzPlaceHolder]="['thời gian bắt đầu', 'thời gian kết thúc']" formControlName="ngayKy"
+                nzFormat="MM/yyyy">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -215,8 +218,7 @@
               Tổng chi phí (đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [nzDisabled]="isDisable()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                formControlName="tongChiPhi" type="number" nz-input [nzSize]="'small'"></nz-input-number>
+              <input type="text" currencyMask [options]="options" formControlName="tongChiPhi" nz-input>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -226,7 +228,7 @@
               Trạng thái
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isDisable()"  formControlName="trangThai">
+              <nz-select [nzDisabled]="isDisable()" formControlName="trangThai">
                 <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                 </nz-option>
               </nz-select>
@@ -239,7 +241,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [disabled]="isDisable()" [data]="fileDinhKem"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -264,7 +266,8 @@
             <th rowspan="3">Đến ngày</th>
             <th rowspan="3">Người thực hiện</th>
             <th rowspan="3">Trạng thái</th>
-            <th rowspan="3">Hành động</th>
+            <th rowspan="3" *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">Hành động
+            </th>
           </tr>
 
         </thead>
@@ -307,7 +310,7 @@
                 </nz-select>
               </nz-input-group>
             </td>
-            <td>
+            <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
               <a (click)="themMoiItem()">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
@@ -325,7 +328,7 @@
               <td>{{ data.denNgay | date : 'dd/MM/yyyy' }}</td>
               <td>{{ data.nguoiThucHien }}</td>
               <td>{{ data.tenTrangThaiTd }}</td>
-              <td>
+              <td *ngIf="formData.value.trangThai != STATUS.DA_NGHIEM_THU">
                 <a (click)="editItem(idx)">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -381,10 +384,23 @@
               </td>
             </ng-template>
           </tr>
-
         </tbody>
       </nz-table>
     </nz-card>
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="[18, 6]">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isViewDetail]="isView" [data]="fileTienDoTh"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
@@ -447,10 +463,10 @@
                 </nz-input-group>
               </td>
               <td>
-                <a (click)="themMoiItem1()">
+                <a [ngClass]="{'disabled': isView}" (click)="themMoiItem1()">
                   <i class="fa fa-plus"></i>
                 </a>
-                <a (click)="clearData()">
+                <a [ngClass]="{'disabled': isView}" (click)="clearData1()">
                   <i class="fa fa-refresh"></i>
                 </a>
               </td>
@@ -501,10 +517,10 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              File đính kèm
+              Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem1"></file-list>
+              <file-list [isViewDetail]="isView" [data]="fileNghiemThuTl"></file-list>
             </div>
           </nz-form-item>
         </div>

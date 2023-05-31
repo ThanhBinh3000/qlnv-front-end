@@ -4,7 +4,7 @@ import { Globals } from 'src/app/shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
-  selector: 'app-xuat-kho',
+  selector: 'app-xc-xuat-kho ',
   templateUrl: './xuat-kho.component.html',
   styleUrls: ['./xuat-kho.component.scss']
 })

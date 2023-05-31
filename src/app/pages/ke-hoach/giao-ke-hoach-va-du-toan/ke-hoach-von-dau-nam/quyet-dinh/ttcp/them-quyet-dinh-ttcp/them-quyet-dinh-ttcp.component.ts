@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {
@@ -7,6 +7,7 @@ import {
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from 'src/app/constants/message';
+import {groupBy, mapValues} from 'lodash';
 import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -16,6 +17,9 @@ import {HelperService} from 'src/app/services/helper.service';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
 import {CurrencyMaskInputMode} from 'ngx-currency'
+import {AMOUNT_ONE_DECIMAL} from "../../../../../../../Utility/utils";
+import {FILETYPE} from "../../../../../../../constants/fileType";
+import {NzCollapsePanelComponent} from "ng-zorro-antd/collapse";
 
 
 @Component({
@@ -24,6 +28,7 @@ import {CurrencyMaskInputMode} from 'ngx-currency'
   styleUrls: ['./them-quyet-dinh-ttcp.component.scss'],
 })
 export class ThemQuyetDinhTtcpComponent implements OnInit {
+  @ViewChild('collapseExpand', {static: false}) collapseExpand!: NzCollapsePanelComponent;
   @Input('isView') isView: boolean = false;
   @Input()
   idInput: number;
@@ -33,6 +38,8 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   formData: FormGroup;
   STATUS = STATUS;
   taiLieuDinhKemList: any[] = [];
+  listCcPhapLy: any[] = [];
+  listFile: any[] = []
   dsNam: any[] = [];
   maQd: string;
   userInfo: UserLogin;
@@ -40,17 +47,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   dataTableAllBn: any[] = [];
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
-  options = {
-    allowZero: true,
-    allowNegative: true,
-    precision: 0,
-    prefix: '',
-    thousands: '.',
-    decimal: ',',
-    align: "right",
-    nullable: false,
-    inputMode: CurrencyMaskInputMode.FINANCIAL
-  }
+  options = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -99,40 +96,50 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
+      this.dataTableAllBn = [];
       let res = await this.quyetDinhTtcpService.getDetail(id);
-      const data = res.data;
-      this.formData.patchValue({
-        id: data.id,
-        namQd: data.namQd,
-        ngayQd: data.ngayQd,
-        soQd: data.soQd.split('/')[0],
-        trangThai: data.trangThai,
-        trichYeu: data.trichYeu,
-      });
-      this.dataTable = data.listBoNganh;
-      if (data.listChiTangToanBoNganh.length > 0) {
-        for (let item of data.listChiTangToanBoNganh) {
-          var obj = {
-            "stt": item.stt,
-            "maCha": item.maBn == '01' ? item.maBn : null,
-            "maBn": item.maBn,
-            "tenBn": item.tenBn,
-            "isSum": false,
-            "tongSo": item.tongSo
-          };
-          this.dataTableAllBn.push(obj);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        this.formData.patchValue({
+          id: data.id,
+          namQd: data.namQd,
+          ngayQd: data.ngayQd,
+          soQd: data.soQd.split('/')[0],
+          trangThai: data.trangThai,
+          trichYeu: data.trichYeu,
+        });
+        this.dataTable = data.listBoNganh;
+        if (data.listChiTangToanBoNganh.length > 0) {
+          for (let item of data.listChiTangToanBoNganh) {
+            var obj = {
+              "stt": item.stt,
+              "maCha": item.maBn == '01' ? item.maBn : null,
+              "maBn": item.maBn,
+              "tenBn": item.tenBn,
+              "isSum": false,
+              "tongSo": item.tongSo
+            };
+            this.dataTableAllBn.push(obj);
+          }
+          this.dataTableAllBn.unshift({
+            "stt": 1,
+            "maCha": null,
+            "maBn": null,
+            "tenBn": "Bộ Tài Chính",
+            "isSum": true,
+            "tongSo": 0
+          })
+          this.onInputNumberBNChange();
         }
-        this.dataTableAllBn.unshift({
-          "stt": 1,
-          "maCha": null,
-          "maBn": null,
-          "tenBn": "Bộ Tài Chính",
-          "isSum": true,
-          "tongSo": 0
-        })
-        this.onInputNumberBNChange();
+        data.fileDinhkems.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.taiLieuDinhKemList.push(item)
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.listCcPhapLy.push(item)
+          }
+        });
+        this.listFile = data.fileDinhkems;
       }
-      this.taiLieuDinhKemList = data.fileDinhkems;
     }
   }
 
@@ -148,11 +155,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
           "maBn": item.maDvi,
           "tenBn": item.tenDvi,
           "isSum": item.maDvi == '01' ? true : false,
-          "tongSo": 0
+          "tongSo": null
         };
         this.dataTableAllBn.push(obj);
         if (item.maDvi == '01') {
-          i = i + 2;
           this.addDetailItem(this.dataTableAllBn, item.maDvi);
         }
         i++;
@@ -162,19 +168,19 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   addDetailItem(dataTableAllBn, maCha) {
     dataTableAllBn.push({
-      "stt": 2,
+      "stt": "",
       "maCha": maCha,
       "maBn": maCha,
       "tenBn": "   Lương thực",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     }, {
-      "stt": 3,
+      "stt": "",
       "maCha": maCha,
       "maBn": maCha,
       "tenBn": "   Vật tư, thiết bị",
       "isSum": false,
-      "tongSo": 0
+      "tongSo": null
     })
   }
 
@@ -192,7 +198,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.dsNam.push({
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
@@ -281,6 +287,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   }
 
   async save(isGuiDuyet?) {
+    debugger;
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -300,10 +307,23 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
     body.listToanBoNganh = this.dataTableAllBn.filter(item => item.isSum == false);
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems = this.listFile;
+    }
     let res;
-    // console.log(body);
-    // return;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);
     } else {
@@ -322,7 +342,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
-        this.quayLai();
+        this.idInput = res.data.id;
+        this.getDataDetail(this.idInput);
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -335,7 +357,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Kế hoạch dự trữ quốc gia - TTCP giao bộ ngành',
+      nzTitle: 'Kế hoạch dự trữ quốc gia - TTCP giao Bộ/Ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -355,16 +377,22 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         } else {
           this.dataTable.push(data);
         }
+        const result = mapValues(groupBy(this.dataTableAllBn, 'maBn'), (itemsByCategory: any[]) =>
+          itemsByCategory.reduce((sum, item) => sum + item.tongSo, 0)
+        );
+        this.dataTable.forEach(item => {
+          item.tongTien = result && result[item.maBoNganh] ? result[item.maBoNganh] : 0;
+        })
       }
     });
-
+    this.collapseExpand.clickHeader();
   };
 
   xoaKeHoach(index: number) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn xóa kế hoạch giao bộ ngành?',
+      nzContent: 'Bạn có muốn xóa kế hoạch giao Bộ/Ngành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,

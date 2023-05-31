@@ -2,10 +2,10 @@
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
         <li nz-menu-item nzSelected (click)="selectTab(0)"  *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT')">
-            Đề nghị cấp phí bộ ngành
+            Đề nghị cấp phí Bộ/Ngành
         </li>
         <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP')">
-            Tổng hợp đề nghị cấp phí Bộ, ngành
+            Tổng hợp đề nghị cấp phí Bộ/Ngành
         </li>
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_THONGTRI')">
             Thông tri duyệt y dự toán

@@ -31,7 +31,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     tenDeTai: '',
     capDeTai: '',
     trangThai: '',
-    nam: '',
+    thoiGian: '',
 
   };
 
@@ -175,17 +175,18 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
 
   async search() {
     this.spinner.show();
+    console.log(this.searchFilter.thoiGian);
     try {
       let body = {
         maDeTai: this.searchFilter.maDeTai,
         tenDeTai: this.searchFilter.tenDeTai,
         capDeTai: this.searchFilter.capDeTai,
         trangThai: this.searchFilter.trangThai,
-        tuNam: this.searchFilter.nam
-          ? dayjs(this.searchFilter.nam[0]).format('YYYY')
+        thoiGianTu: this.searchFilter.thoiGian
+          ? dayjs(this.searchFilter.thoiGian[0]).startOf('month')
           : null,
-        denNam: this.searchFilter.nam
-          ? dayjs(this.searchFilter.nam[1]).format('YYYY')
+        thoiGianDen: this.searchFilter.thoiGian
+          ? dayjs(this.searchFilter.thoiGian[1]).endOf('month')
           : null,
         paggingReq: {
           limit: this.pageSize,
@@ -227,7 +228,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       tenDeTai: '',
       capDeTai: '',
       trangThai: '',
-      nam: '',
+      thoiGian: '',
 
     };
     this.search();
@@ -386,8 +387,15 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
+          if (['ngayKyTu', 'ngayKyDen'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          }
+          else {
+            if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
@@ -412,5 +420,13 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   }
 
   print() {
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('MM/YYYY').toString()
+    }
+    return result;
   }
 }

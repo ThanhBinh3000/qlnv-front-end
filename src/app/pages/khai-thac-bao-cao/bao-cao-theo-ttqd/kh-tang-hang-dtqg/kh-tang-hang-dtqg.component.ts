@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -83,6 +85,32 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
     saveAs(this.pdfBlob, "bc_kh_tang_hang_du_tru_quoc_gia.pdf");
   }
 
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
+      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_kh_tang_hang_du_tru_quoc_gia.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
   closeDlg() {
     this.showDlgPreview = false;
   }
@@ -97,9 +125,9 @@ export class KhTangHangDtqgComponent extends Base2Component implements OnInit {
       let body = this.formData.value;
       body.typeFile = "pdf";
       body.fileName = "bc_kh_tang_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch tăng hàng dự trữ quốc gia";
+      body.tenBaoCao = "Báo cáo KH tăng hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.reportNhapXuatTon(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

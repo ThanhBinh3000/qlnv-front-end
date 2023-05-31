@@ -3,7 +3,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-main-xuat-kho',
+  selector: 'app-xc-main-xuat-kho',
   templateUrl: './main-xuat-kho.component.html',
   styleUrls: ['./main-xuat-kho.component.scss']
 })

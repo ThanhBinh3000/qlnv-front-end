@@ -12,10 +12,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { isEmpty } from 'lodash';
 import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { ItemDaiDien } from 'src/app/pages/nhap/dau-thau/kiem-tra-chat-luong/quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
 import { Validators } from '@angular/forms';
 
 @Component({
@@ -24,9 +22,10 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./them-moi-bb-lay-mau-ban-giao-mau.component.scss']
 })
 export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -45,7 +44,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   canCu: any = [];
   listFileDinhKem: any = [];
   fileNiemPhong: any = [];
-
+  bienBan: any[] = [];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -60,7 +59,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         loaiBienBan: [],
@@ -70,7 +69,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         ngayQdGiaoNvXh: [, [Validators.required]],
         ktvBaoQuan: [],
         soBienBan: [, [Validators.required]],
-        ngayLayMau: [, [Validators.required]],
+        ngayLayMau: [,],
         dviKiemNghiem: [, [Validators.required]],
         diaDiemLayMau: [, [Validators.required]],
         loaiVthh: [],
@@ -114,9 +113,9 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async ngOnInit() {
     try {
       this.spinner.show();
-
       await Promise.all([
         this.loadSoQuyetDinh(),
+        // this.loadSoBbLayMau(),
         this.loadPhuongPhapLayMau(),
       ])
       await this.loadDetail(this.idInput)
@@ -159,7 +158,7 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         maQhNs: this.userInfo.DON_VI.maQhns,
         ktvBaoQuan: this.userInfo.TEN_DAY_DU,
         soBienBan: `${id}/${this.formData.get('nam').value}/${this.maBb}`,
-
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -172,11 +171,14 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
+      console.log(this.listSoQuyetDinh,"this.listSoQuyetDinh")
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -212,20 +214,41 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       idQdGiaoNvXh: data.id,
       ngayQdGiaoNvXh: data.ngayKy,
       loaiVthh: data.loaiVthh,
-      cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
-      tenCloaiVthh: data.tenCloaiVthh,
-      moTaHangHoa: data.moTaHangHoa,
 
     });
-    let dataChiCuc = data.noiDungCuuTro.find(item => item.maDviChiCuc == this.userInfo.MA_DVI);
+    let dataChiCuc = data.noiDungCuuTro.find(item =>
+      item.maDviChiCuc == this.userInfo.MA_DVI
+    );
     if (dataChiCuc) {
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, dataChiCuc];
     }
+    await this.listBienBan(data.soQd)
     await this.spinner.hide();
   }
 
-
+  async listBienBan(item) {
+    await this.spinner.show();
+    let body = {
+      soQdGiaoNvXh: item,
+    }
+    let res = await this.bienBanLayMauBanGiaoMauService.search(body)
+    const data = res.data;
+    this.bienBan = data.content;
+    const listDd = [
+      ...this.listDiaDiemNhap.filter((e) => {
+        return !this.bienBan.some((bb) => {
+          if (bb.maLoKho.length > 0 && e.maLoKho.length > 0) {
+            return e.maLoKho === bb.maLoKho;
+          } else {
+            return e.maNganKho === bb.maNganKho;
+          }
+        });
+      }),
+    ];
+    this.listDiaDiemNhap = listDd;
+    console.log(this.listDiaDiemNhap,"this.listDiaDiemNhap")
+  }
 
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({
@@ -257,6 +280,8 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
         tenNganKho: data.tenNganKho,
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
       })
     }
   }
@@ -276,8 +301,6 @@ export class ThemMoiBbLayMauBanGiaoMauComponent extends Base2Component implement
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

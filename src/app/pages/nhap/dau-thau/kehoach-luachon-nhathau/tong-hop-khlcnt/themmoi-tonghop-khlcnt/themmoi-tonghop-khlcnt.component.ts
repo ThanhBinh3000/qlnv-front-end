@@ -17,6 +17,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import dayjs from 'dayjs';
 import { StorageService } from 'src/app/services/storage.service';
+import {convertIdToLoaiVthh, convertIdToTenLoaiVthh, convertTrangThai} from "../../../../../../shared/commonFunction";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -27,6 +28,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
+  @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -39,6 +42,8 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   isQuyetDinh: boolean = false;
+  selected: boolean = false;
+  disableTh: boolean = false
 
   constructor(
     httpClient: HttpClient,
@@ -85,18 +90,28 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   }
 
   async ngOnInit() {
+    console.log("isView: ", this.isView)
     await this.spinner.show();
     try {
       await Promise.all([
         this.loadDataComboBox(),
         this.loadChiTiet(),
+        this.convertTenVthh()
       ]);
+      console.log(this.isViewOnModal)
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  convertTenVthh(){
+    let data = convertIdToTenLoaiVthh(this.loaiVthh);
+    console.log(data)
+    this.formTraCuu.get('tenLoaiVthh').setValue(data)
+    this.formTraCuu.get('loaiVthh').setValue(this.loaiVthh)
   }
 
   async loadChiTiet() {
@@ -113,7 +128,12 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+      this.showFirstRow(event, this.dataTableDanhSachDX[0].idDxHdr);
     }
+  }
+
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
   }
 
   async loadDataComboBox() {
@@ -183,6 +203,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
     if (data) {
       this.id = data.id;
       await this.loadChiTiet();
+      this.isView = true
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
     }
   }
@@ -238,10 +259,27 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
+  }
+
+  convertTrangThai(status: string) {
+    return convertTrangThai(status);
+  }
+
+  thongTinTrangThai(trangThai: string): string {
+    if (trangThai === '27') {
+      return 'da-du-thao';
+    } else if (trangThai === '28') {
+      return 'da-ban-hanh';
+    }
   }
 }
 

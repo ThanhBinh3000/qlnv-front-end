@@ -17,7 +17,17 @@
                     </div>
                     <div nz-col nzSpan="4">
                         <label>Ngày lấy mẫu</label>
-                        <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <div nz-row>
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledStartNgayLayMau" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledEndNgayLayMau" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -38,17 +48,17 @@
             <h3 class="text-uppercase">Danh sách biên bản lấy mẫu/bàn giao mẫu</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_EXP')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_THEM')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM') && userService.isChiCuc()">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
                     <span>Thêm</span>
                 </button>
@@ -175,9 +185,12 @@
                                 [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
                                 style="width: 35px"></td>
                             <td>{{i + 1}}</td>
-                            <td>{{ item.soQdGiaoNvXh }}</td>
-                            <td>{{ item.nam }}</td>
-                            <td>{{ item.ngayQdGiaoNvXh }}</td>
+                            <td><a nz-button nzType="link" *ngIf="item.soQdGiaoNvXh!=null"
+                                    (click)="openQdGnvModal(item.idQdGiaoNvXh)">
+                                    {{ item.soQdGiaoNvXh}}</a>
+                            </td>
+                            <td class="bold">{{ item.nam }}</td>
+                            <td class="bold">{{ item.ngayQdGiaoNvXh }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -196,7 +209,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{lv1.soBienBan}}</td>
+                                    <td class="bold">{{lv1.soBienBan}}</td>
                                     <td>{{lv1.ngayLayMau}}</td>
                                     <td>{{lv1.tenDiemKho}}</td>
                                     <td>{{lv1.tenLoKho}}</td>
@@ -205,16 +218,19 @@
                                     <td>{{lv1.soBbHaoDoi}}</td>
                                     <td>{{lv1.tenTrangThai}}</td>
                                     <td class="text-left">
-                                        <a *ngIf="lv1.trangThai!=STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XEM')"
-                                            (click)="redirectDetail(lv1.id, true)">
+                                        <a (click)="redirectDetail(lv1.id, true)"
+                                            *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XEM) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XEM')">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="(lv1.trangThai==STATUS.DU_THAO || lv1.trangThai==STATUS.TU_CHOI_LDCC)  && userService.isCuc()
-                                         && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_THEM')"
+                                        <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.SUA)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_THEM'))"
                                             (click)="redirectDetail(lv1.id, false)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="lv1.trangThai==STATUS.DU_THAO && isOwner(lv1.maDvi) && userService.isAccessPermisson('XHDTQG_XCTVT_KTCL_LT_BBLMBGM_XOA')"
+                                        <a *ngIf="(vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.DUYET_LDCC)  && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_DUYET_LDCCUC'))"
+                                            (click)="redirectDetail(lv1.id, true)">
+                                            <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                        </a>
+                                        <a *ngIf="vldTrangThai.checkStatusPermission(lv1,CHUC_NANG.XOA) && userService.isAccessPermisson('XHDTQG_XCTVTXC_CTVT_KTCL_LT_BBLMBGM_XOA')"
                                             (click)="delete(lv1)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
@@ -235,7 +251,7 @@
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
-                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                             </ng-template>
                         </nz-pagination>
                         <!-- end phân trang -->
@@ -246,6 +262,19 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <app-them-moi-bb-lay-mau-ban-giao-mau [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+    <app-them-moi-bb-lay-mau-ban-giao-mau [idInput]="selectedId" [loaiVthh]="loaiVthh" [isView]="isView"
+        (showListEvent)="showList()">
     </app-them-moi-bb-lay-mau-ban-giao-mau>
 </div>
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="openQdGnv" (nzOnCancel)="closeQdGnvModal()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-thong-tin-qd-gnv-xuat-hang [id]="idQdGnv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-thong-tin-qd-gnv-xuat-hang>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeQdGnvModal()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

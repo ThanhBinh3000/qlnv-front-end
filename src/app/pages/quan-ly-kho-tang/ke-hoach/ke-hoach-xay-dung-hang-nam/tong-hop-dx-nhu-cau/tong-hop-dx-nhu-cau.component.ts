@@ -1,24 +1,26 @@
+
 import {
   Component,
   Input,
   OnInit,
 } from '@angular/core';
 import dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {UserService} from 'src/app/services/user.service';
-import {convertTrangThai} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {saveAs} from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
+import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {KtTongHopXdHnService} from "../../../../../services/kt-tong-hop-xd-hn.service";
-
+import { KtTongHopXdHnService } from "../../../../../services/kt-tong-hop-xd-hn.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-tong-hop-dx-nhu-cau',
   templateUrl: './tong-hop-dx-nhu-cau.component.html',
@@ -34,29 +36,30 @@ export class TongHopDxNhuCauComponent implements OnInit {
   listNam: any[] = [];
   listLoaiDuAn: any[] = [];
   STATUS = STATUS
-  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"},
-    {"ma": "18", "giaTri": "Chờ duyệt LĐ Vụ"},
-    {"ma": "19", "giaTri": "Từ chối LĐ Vụ"},
-    {"ma": "20", "giaTri": "Chờ duyệt LĐ Tổng cục"},
-    {"ma": "21", "giaTri": "Từ chối LĐ Tổng cục"},
-    {"ma": "22", "giaTri": "Đã duyệt LĐ Tổng cục"}]
+
   searchFilter = {
-    namKeHoach: '',
+    namKeHoach : '',
     maTongHop: '',
     tenDuAn: '',
-    tgKhoiCong: '',
-    tgHoanThanh: '',
-    ngayTongHop: '',
-    trangThai: '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
+    diaDiem: '',
+    ngayTongHopTu: '',
+    ngayTongHopDen: '',
+    namBatDau: '',
+    namKetThuc: '',
+    trangThai  :'',
   };
 
   filterTable: any = {
-    maTongHop: '',
-    ngayTongHop: '',
-    soQuyetDinh: '',
-    namKeHoach: '',
-    noiDung: '',
-    tenTrangThai: '',
+    namKeHoach : '',
+    giaiDoan : '',
+    id : '',
+    ngayTao : '',
+    maToTrinh : '',
+    soQuyetDinh : '',
+    noiDung : '',
+    trangThai : '',
   };
 
   allChecked = false;
@@ -70,16 +73,28 @@ export class TongHopDxNhuCauComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
+    private router: Router,
     private notification: NzNotificationService,
-    private tongHopHnService: KtTongHopXdHnService,
+    private tongHopDxXdTh: KtTongHopXdHnService,
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
-  ) {
-  }
+  ) { }
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
+  ];
 
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -113,21 +128,24 @@ export class TongHopDxNhuCauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "maDvi": this.userInfo.MA_DVI,
-      "maTongHop": this.searchFilter.maTongHop,
-      "namKeHoach": this.searchFilter.namKeHoach,
-      "namBatDau": this.searchFilter.tgKhoiCong,
-      "namKetThuc": this.searchFilter.tgHoanThanh,
-      "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
-      "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
-      "paggingReq": {
-        "limit": 10,
-        "page": this.page - 1
-      },
-      "tenDuAn": this.searchFilter.tenDuAn,
-      "trangThai": this.searchFilter.trangThai,
-    }
-    let res = await this.tongHopHnService.search(body);
+      namKeHoach : this.searchFilter.namKeHoach,
+      diaDiem: this.searchFilter.diaDiem,
+      tenDuAn: this.searchFilter.tenDuAn,
+      maTongHop: this.searchFilter.maTongHop,
+      ngayTongHopTu: this.searchFilter.ngayTongHopTu,
+      ngayTongHopDen: this.searchFilter.ngayTongHopDen,
+      namBatDau: this.searchFilter.namBatDau,
+      namKetThuc: this.searchFilter.namKetThuc,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh : this.searchFilter.tgHoanThanh,
+      trangThai : this.searchFilter.trangThai,
+      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      }
+    };
+    let res = await this.tongHopDxXdTh.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -232,8 +250,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopHnService.delete(body).then(async () => {
-            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
+          this.tongHopDxXdTh.delete(body).then(async () => {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -251,25 +269,13 @@ export class TongHopDxNhuCauComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maDvi": this.userInfo.MA_DVI,
-          "maTongHop": this.searchFilter.maTongHop,
-          "namKeHoach": this.searchFilter.namKeHoach,
-          "namBatDau": this.searchFilter.tgKhoiCong,
-          "namKetThuc": this.searchFilter.tgHoanThanh,
-          "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
-          "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
-          "paggingReq": {
-            "limit": 10,
-            "page": this.page - 1
-          },
-          "tenDuAn": this.searchFilter.tenDuAn,
-          "trangThai": this.searchFilter.trangThai,
-        }
 
-        this.tongHopHnService
+        };
+        this.tongHopDxXdTh
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'tong-hop-nhu-cau-hang-nam' +
+              '.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -288,9 +294,15 @@ export class TongHopDxNhuCauComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.giaiDoan = item.namBatDau + '-' + item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['ngayTao'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
@@ -301,16 +313,69 @@ export class TongHopDxNhuCauComponent implements OnInit {
   }
 
   async clearFilterTable() {
-    this.filterTable = {
-      namKeHoach: '',
+    this.searchFilter = {
+      namKeHoach : '',
       maTongHop: '',
       tenDuAn: '',
-      tgKhoiCong: '',
-      tgHoanThanh: '',
-      ngayTongHop: '',
-      trangThai: '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
+      diaDiem: '',
+      ngayTongHopTu: '',
+      ngayTongHopDen: '',
+      namBatDau: '',
+      namKetThuc: '',
+      trangThai  :'',
     };
     await this.search();
   }
-}
 
+  deleteMulti() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.tongHopDxXdTh.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+}

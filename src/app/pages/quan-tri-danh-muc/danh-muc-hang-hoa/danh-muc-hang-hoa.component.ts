@@ -66,9 +66,9 @@ export class DanhMucHangHoaComponent implements OnInit {
       id: [''],
       maCha: [''],
       tenHhCha: ['',],
-      tenHangHoa: ['',],
+      ten: ['',],
       maDviTinh: [''],
-      tchuanCluong: ['',],
+      tieuChuanCl: ['',],
       thoiHanLk: ['',],
       loaiHang: [''],
       kyHieu: ['',],
@@ -125,13 +125,6 @@ export class DanhMucHangHoaComponent implements OnInit {
         })
       }
     }
-  }
-
-  async loadTieuChuanCluong(maHH) {
-    let res = await this.tieuChuanService.getDetailByMaHh(maHH);
-    this.detailHangHoa.patchValue({
-      tchuanCluong: res.data ? res.data.tenQchuan : null
-    })
   }
 
   async loadListPpbq() {
@@ -236,19 +229,18 @@ export class DanhMucHangHoaComponent implements OnInit {
             maCha: detaiParent ? detaiParent.ma : null,
             id: this.nodeDetail.id,
             tenHhCha: detaiParent ? detaiParent.ten : null,
-            tenHangHoa: this.nodeDetail.ten,
+            ten: this.nodeDetail.ten,
             dviQly: this.nodeDetail.dviQly,
             maDviTinh: this.nodeDetail.maDviTinh,
-            tchuanCluong: this.nodeDetail.tchuanCluong,
+            tieuChuanCl: this.nodeDetail.tieuChuanCl,
             thoiHanLk: this.nodeDetail.thoiHanLk,
             loaiHang: this.nodeDetail.loaiHang,
             kyHieu: this.nodeDetail.kyHieu,
             ma: this.nodeDetail.ma,
             ghiChu: this.nodeDetail.ghiChu,
             nhomHhBaoHiem: this.nodeDetail.nhomHhBaoHiem,
-            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
+            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG
           })
-          this.loadTieuChuanCluong(this.detailHangHoa.value.ma);
           this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq, this.nodeDetail.ppLayMau);
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);

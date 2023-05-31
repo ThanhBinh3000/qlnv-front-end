@@ -152,4 +152,33 @@ export class UserService extends BaseService {
     return null;
   }
 
+  haveAnyCap(caps: any) {
+    if(!caps){
+      return true;
+    }
+    let user = this.getUserLogin();
+    for (let c of caps) {
+      if (c == user.CAP_DVI) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  isAccessPermissons(...params: string[]) {
+    let listPermission = [];
+    var jsonPermission = this.storageService.get(STORAGE_KEY.PERMISSION);
+    if (jsonPermission && jsonPermission.length > 0) {
+      listPermission = JSON.parse(jsonPermission);
+    }
+    for(let p of params){
+      if (listPermission && listPermission.length > 0) {
+        let checkPermission = listPermission.find(x => x === p);
+        if (checkPermission && checkPermission.length > 0) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

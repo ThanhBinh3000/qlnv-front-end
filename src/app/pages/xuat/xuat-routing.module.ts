@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { XuatComponent } from './xuat.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {XuatComponent} from './xuat.component';
+import {XuatKhacModule} from "./xuat-khac/xuat-khac.module";
 
 const routes: Routes = [
   {
@@ -27,6 +28,21 @@ const routes: Routes = [
         loadChildren: () =>
           import('./xuat-truc-tiep/xuat-truc-tiep.module').then((m) => m.XuatTrucTiepModule),
       },
+      {
+        path: 'xuat-thanh-ly',
+        loadChildren: () =>
+          import('./xuat-thanh-ly/xuat-thanh-ly.module').then((m) => m.XuatThanhLyModule),
+      },
+      {
+        path: 'xuat-khac',
+        loadChildren: () =>
+          import('./xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
+      },
+      {
+        path: 'xuat-tieu-huy',
+        loadChildren: () =>
+          import('./xuat-tieu-huy/xuat-tieu-huy.module').then((m) => m.XuatTieuHuyModule),
+      },
     ],
   },
 ];
@@ -35,4 +51,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class XuatRoutingModule { }
+export class XuatRoutingModule {
+}

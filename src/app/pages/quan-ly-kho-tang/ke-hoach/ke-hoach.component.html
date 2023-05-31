@@ -1,29 +1,29 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dmk')">
-      Danh mục dự án kho DTQG
+    <li nz-menu-item nzSelected (click)="selectTab('dmk')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_DM')">
+      Danh mục dự án, công trình kho
     </li>
-    <li nz-menu-item (click)="selectTab('qhk')">
+    <li nz-menu-item (click)="selectTab('qhk')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK')">
       Quy hoạch kho
     </li>
-    <li nz-menu-item (click)="selectTab('khxdth')" >
-      Thông tin đầu tư xây dựng trung hạn (5 năm)
+    <li nz-menu-item (click)="selectTab('khxdth')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN')" >
+      Kế hoạch đầu tư xây dựng trung hạn (5 năm)
     </li>
-    <li nz-menu-item (click)="selectTab('khxdhn')" >
-      Kế hoạch đầu tư xây dựng hàng năm
+    <li nz-menu-item (click)="selectTab('khxdhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDHANGNAM')" >
+      Kế hoạch đầu tư xây dựng theo năm
     </li>
-    <li nz-menu-item (click)="selectTab('khsclhn')" >
+    <li nz-menu-item (click)="selectTab('khsclhn')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON')" >
       Kế hoạch sửa chữa lớn hàng năm
     </li>
-    <li nz-menu-item (click)="selectTab('khschn')" >
-      Kế hoạch sửa chữa hàng năm
+    <li nz-menu-item (click)="selectTab('khsctx')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUATX')" >
+      Kế hoạch sửa chữa thường xuyên
     </li>
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 'dmk'">
-      <app-danh-muc-du-an></app-danh-muc-du-an>
+      <app-dm-du-an-cong-trinh></app-dm-du-an-cong-trinh>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'qhk'">
       <app-quy-hoach-kho></app-quy-hoach-kho>
@@ -37,8 +37,8 @@
     <ng-container *ngIf="tabSelected == 'khsclhn'">
       <app-ke-hoach-sua-chua-hang-nam></app-ke-hoach-sua-chua-hang-nam>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 'khschn'">
-      <app-ke-hoach-sc-hang-nam></app-ke-hoach-sc-hang-nam>
+    <ng-container *ngIf="tabSelected == 'khsctx'">
+      <app-ke-hoach-sua-chua-thuong-xuyen></app-ke-hoach-sua-chua-thuong-xuyen>
     </ng-container>
   </div>
 </div>

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ThongTinQuyetDinh} from "../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
+import {AMOUNT_THREE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-mua-bu',
@@ -21,7 +22,7 @@ export class MuaBuComponent implements OnInit {
   dataTableChange = new EventEmitter<any[]>();
   @Input()
   tongGtri: number
-
+  amount = AMOUNT_THREE_DECIMAL
   @Output()
   tongGtriChange = new EventEmitter<number>();
 
@@ -106,38 +107,61 @@ export class MuaBuComponent implements OnInit {
     }
   }
   onChangeLoaiVthh(event, typeData?: any) {
+    // if (typeData) {
+    //   this.dsChungLoaiHangHoa = [];
+    //   typeData.dviTinh = null;
+    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    //   if (loaiVthh.length > 0) {
+    //     typeData.cloaiVthh = null;
+    //     typeData.dviTinh = loaiVthh[0].maDviTinh;
+    //     typeData.tenVthh = loaiVthh[0].ten;
+    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
+    //   }
+    // } else  {
+    //   this.dsChungLoaiHangHoa = [];
+    //   this.rowItem.dviTinh = null;
+    //   const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
+    //   if (loaiVthh.length > 0) {
+    //     this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
+    //     this.rowItem.tenVthh = loaiVthh[0].ten;
+    //     this.dsChungLoaiHangHoa = loaiVthh[0].child;
+    //   }
+    // }
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
+      typeData.cloaiVthh = null;
       typeData.dviTinh = null;
-      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-      if (loaiVthh.length > 0) {
-        typeData.cloaiVthh = null;
-        typeData.dviTinh = loaiVthh[0].maDviTinh;
-        typeData.tenVthh = loaiVthh[0].ten;
-        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      const loaiVthh = this.dsHangHoa.find(item => item.ma == event);
+      if (loaiVthh) {
+        typeData.dviTinh = loaiVthh.maDviTinh;
+        typeData.tenVthh = loaiVthh.ten;
+        this.dsChungLoaiHangHoa = loaiVthh.child;
       }
-    } else  {
+    } else {
       this.dsChungLoaiHangHoa = [];
+      this.rowItem.cloaiVthh = null;
       this.rowItem.dviTinh = null;
-      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-      if (loaiVthh.length > 0) {
-        this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-        this.rowItem.tenVthh = loaiVthh[0].ten;
-        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      const loaiVthh = this.dsHangHoa.find(item => item.ma == event);
+      if (loaiVthh) {
+        this.rowItem.tenVthh = loaiVthh.ten;
+        this.rowItem.dviTinh = loaiVthh.maDviTinh;
+        this.dsChungLoaiHangHoa = loaiVthh.child;
       }
     }
   }
 
   onChangeCloaiVthh(event, typeData?: any ) {
     if (typeData) {
-      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-      if (cloaiVthh.length > 0) {
-        typeData.tenCloaiVthh = cloaiVthh[0].ten;
+      const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
+      if (cloaiVthh) {
+        typeData.tenCloaiVthh = cloaiVthh.ten;
+        typeData.dviTinh = cloaiVthh.maDviTinh;
       }
-    } else  {
-      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-      if (cloaiVthh.length > 0) {
-        this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+    } else {
+      const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
+      if (cloaiVthh) {
+        this.rowItem.tenCloaiVthh = cloaiVthh.ten;
+        this.rowItem.dviTinh = cloaiVthh.maDviTinh;
       }
     }
   }

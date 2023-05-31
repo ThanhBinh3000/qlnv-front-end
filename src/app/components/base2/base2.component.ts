@@ -1,23 +1,24 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormGroup, FormBuilder} from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {STATUS} from 'src/app/constants/status';
-import {UserLogin} from 'src/app/models/userlogin';
-import {BaseService} from 'src/app/services/base.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {StorageService} from 'src/app/services/storage.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
-import {saveAs} from 'file-saver';
-import {DialogTuChoiComponent} from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT, STATUS_DA_DUYET } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { STATUS, STATUS_LABEL } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
+import { BaseService } from 'src/app/services/base.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { cloneDeep } from 'lodash';
+import { saveAs } from 'file-saver';
+import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { endOfMonth } from 'date-fns';
 
 @Component({
   selector: 'app-base2',
@@ -46,7 +47,8 @@ export class Base2Component implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  isDetail: boolean = false;
+  @Input() isDetail: boolean = false;
+  @Input() dataInit: any = {};
   idSelected: number = 0;
 
   // Service
@@ -59,6 +61,7 @@ export class Base2Component implements OnInit {
   spinner: NgxSpinnerService
   notification: NzNotificationService
   uploadFileService: UploadFileService
+  ranges = { 'Hôm nay': [new Date(), new Date()], 'Tháng hiện tại': [new Date(), endOfMonth(new Date())] };
 
   constructor(
     httpClient: HttpClient,
@@ -92,7 +95,7 @@ export class Base2Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    this.spinner.show();
+    await this.spinner.show();
     try {
       let body = this.formData.value
       body.paggingReq = {
@@ -115,23 +118,25 @@ export class Base2Component implements OnInit {
         this.totalRecord = 0;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.spinner.hide();
     } catch (e) {
-      this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
   }
 
-  clearForm() {
+  clearForm(currentSearch?: any) {
     this.formData.reset();
+    if (currentSearch) {
+      this.formData.patchValue(currentSearch)
+    }
     this.search();
   }
 
   showList() {
     this.isDetail = false;
     this.search();
+    this.showListEvent.emit();
   }
 
   goBack() {
@@ -187,19 +192,31 @@ export class Base2Component implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string, type?: string) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (['ngayKy','ngayGiaoNhan','ngayHieuLuc', 'ngayDeXuat', 'ngayTongHop'].includes(key)) {
+          if (['ngayKy', 'ngayLapKh', 'ngayDuyetLdcc', 'ngayGiaoNhan', 'ngayHieuLuc', 'ngayHetHieuLuc', 'ngayDeXuat', 'ngayTongHop', 'ngayTao', 'ngayQd', 'tgianNhang', 'tgianThien', 'ngayDx', 'ngayPduyet', 'ngayThop', 'thoiGianGiaoNhan', 'ngayKyQd', 'ngayNhanCgia', 'ngayKyDc', 'tgianGnhan', 'ngayDuyet','ngayNhapKho'].includes(key)) {
             if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
               temp.push(item)
             }
           } else {
-            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-              temp.push(item)
+            if (type) {
+              if ('eq' == type) {
+                if (item[key] && item[key].toString().toLowerCase() == value.toString().toLowerCase()) {
+                  temp.push(item)
+                }
+              } else {
+                if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                  temp.push(item)
+                }
+              }
+            } else {
+              if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                temp.push(item)
+              }
             }
           }
         });
@@ -299,7 +316,7 @@ export class Base2Component implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.service.deleteMuti({idList: dataDelete});
+            let res = await this.service.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -321,14 +338,14 @@ export class Base2Component implements OnInit {
   }
 
   // Export data
-  exportData() {
+  exportData(fileName?: string) {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         this.service
           .export(this.formData.value)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, fileName ? fileName : 'data.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -346,7 +363,7 @@ export class Base2Component implements OnInit {
     if (!this.checkPermission(roles)) {
       return
     }
-    this.spinner.show();
+    await this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -360,24 +377,21 @@ export class Base2Component implements OnInit {
       }
       if (res.msg == MESSAGE.SUCCESS) {
         if (body.id && body.id > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.spinner.hide();
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.UPDATE_SUCCESS);
           return res.data;
         } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.spinner.hide();
+          this.notification.success(MESSAGE.NOTIFICATION, MESSAGE.ADD_SUCCESS);
           return res.data;
         }
+        this.formData.patchValue({id:res.data.id});
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
-        this.spinner.hide();
         return null;
       }
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, e);
-      this.spinner.hide();
     } finally {
-      this.spinner.hide();
+      await this.spinner.hide();
     }
 
   }
@@ -411,7 +425,7 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async approve(id: number, trangThai: string, msg: string, roles?: any) {
+  async approve(id: number, trangThai: string, msg: string, roles?: any, msgSuccess?: string) {
     if (!this.checkPermission(roles)) {
       return
     }
@@ -432,7 +446,7 @@ export class Base2Component implements OnInit {
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.UPDATE_SUCCESS);
             this.spinner.hide();
             this.goBack();
           } else {
@@ -455,7 +469,7 @@ export class Base2Component implements OnInit {
       return
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Từ chối',
+      nzTitle: 'Từ chối phê duyệt',
       nzContent: DialogTuChoiComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -492,6 +506,7 @@ export class Base2Component implements OnInit {
     });
   }
 
+
   checkPermission(roles): boolean {
     if (roles) {
       let type = typeof (roles);
@@ -514,6 +529,98 @@ export class Base2Component implements OnInit {
       return true
     }
     return true;
+  }
+
+  // Approve
+  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: msg,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          this.helperService.markFormGroupTouched(this.formData);
+          if (this.formData.invalid) {
+            return;
+          }
+          let res: any = {};
+          if (body.id && body.id > 0) {
+            res = await this.service.update(body);
+          } else {
+            res = await this.service.create(body);
+          }
+          if (res.msg == MESSAGE.SUCCESS) {
+            let res1 = await this.service.approve({ id: res.data.id, trangThai: trangThai });
+            if (res1.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.NOTIFICATION, msgSuccess ? msgSuccess : MESSAGE.SUCCESS);
+              this.goBack();
+              return res1;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res1.msg);
+              return null;
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            return null;
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          return null;
+        } finally {
+          await this.spinner.hide();
+        }
+      },
+    });
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
+  nvl(item: number) {
+    if (item == undefined || item == null) {
+      return 0;
+    }
+    return item;
+  }
+
+  convertToRoman(number) {
+    var romanNumerals = [
+      { value: 1000, symbol: 'M' },
+      { value: 900, symbol: 'CM' },
+      { value: 500, symbol: 'D' },
+      { value: 400, symbol: 'CD' },
+      { value: 100, symbol: 'C' },
+      { value: 90, symbol: 'XC' },
+      { value: 50, symbol: 'L' },
+      { value: 40, symbol: 'XL' },
+      { value: 10, symbol: 'X' },
+      { value: 9, symbol: 'IX' },
+      { value: 5, symbol: 'V' },
+      { value: 4, symbol: 'IV' },
+      { value: 1, symbol: 'I' }
+    ];
+
+    var romanNumber = '';
+
+    for (var i = 0; i < romanNumerals.length; i++) {
+      while (number >= romanNumerals[i].value) {
+        romanNumber += romanNumerals[i].symbol;
+        number -= romanNumerals[i].value;
+      }
+    }
+
+    return romanNumber;
   }
 
 }
