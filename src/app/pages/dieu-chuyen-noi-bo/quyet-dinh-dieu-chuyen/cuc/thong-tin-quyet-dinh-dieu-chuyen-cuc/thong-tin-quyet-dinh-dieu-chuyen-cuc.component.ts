@@ -18,7 +18,7 @@ import { DonviService } from "src/app/services/donvi.service";
 import {
   TongHopPhuongAnCuuTroService
 } from "src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/TongHopPhuongAnCuuTro.service";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 import { chain, cloneDeep, sortBy } from 'lodash';
 import { STATUS } from "src/app/constants/status";
 import { ThongTinHangCanDieuChuyenCucComponent } from "../thong-tin-hang-can-dieu-chuyen-cuc/thong-tin-hang-can-dieu-chuyen-cuc.component";

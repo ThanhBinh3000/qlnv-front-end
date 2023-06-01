@@ -16,7 +16,7 @@ import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuye
 import { QuyetDinhDieuChuyenTCService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-tc.service";
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { StorageService } from "src/app/services/storage.service";
-import { v4 as uuidv4 } from 'uuid';
+import * as uuidv4 from "uuid";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
