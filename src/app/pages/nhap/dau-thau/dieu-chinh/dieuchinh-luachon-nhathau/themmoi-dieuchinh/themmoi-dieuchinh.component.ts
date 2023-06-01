@@ -18,6 +18,7 @@ import { ThongtinDieuchinhComponent } from './thongtin-dieuchinh/thongtin-dieuch
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import {DatePipe} from "@angular/common";
 
 
 @Component({
@@ -78,6 +79,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
       tenTrangThai: ['Dự Thảo'],
       tchuanCluong: [''],
       lyDoTuchoi: [''],
+      gtriDthau: [''],
+      maDvi: ['']
     });
   }
   maQd: string = '';
@@ -147,6 +150,22 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.formData.patchValue({
 
     })
+  }
+
+  setNewData($event) {
+    let pipe = new DatePipe('en-US');
+    console.log($event)
+    this.formData.get('tgianBdauTchuc').setValue($event.tgianBdauTchuc);
+    this.formData.get('tgianMthau').setValue(pipe.transform($event.tgianMthau, 'yyyy-MM-dd HH:mm'));
+    this.formData.get('tgianDthau').setValue(pipe.transform($event.tgianDthau, 'yyyy-MM-dd HH:mm'));
+    this.formData.get('tgianNhang').setValue($event.tgianNhang);
+    this.formData.get('gtriDthau').setValue($event.gtriDthau);
+    this.formData.get('tchuanCluong').setValue($event.tchuanCluong);
+    this.formData.get('maDvi').setValue($event.maDvi);
+    // this.danhsachDx[this.index].tgianBdauTchuc = $event.tgianBdauTchuc;
+    // this.danhsachDx[this.index].tgianMthau = $event.tgianMthau;
+    // this.danhsachDx[this.index].tgianDthau = $event.tgianDthau;
+    // this.danhsachDx[this.index].tgianNhang = $event.tgianNhang;
   }
 
   async getDetail() {
