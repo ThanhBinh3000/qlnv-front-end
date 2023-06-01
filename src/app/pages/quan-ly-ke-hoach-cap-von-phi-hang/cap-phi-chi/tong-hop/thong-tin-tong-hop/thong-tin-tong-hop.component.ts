@@ -5,27 +5,28 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import {
   PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {DeNghiCapPhiBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import {TongHopDeNghiCapPhiService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {Ct1sTonghop} from './../../../../../models/TongHopDeNghiCapVon';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-tong-hop',
@@ -139,8 +140,7 @@ export class ThongTinTongHopComponent implements OnInit {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma != '01') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
-            }
-            else {
+            } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
           })
@@ -427,8 +427,7 @@ export class ThongTinTongHopComponent implements OnInit {
       this.ct1s.forEach((lt, i) => {
         lt.stt = i + 1;
       });
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       this.rowEdit.ct2s.forEach((lt, i) => {
         lt.stt = i + 1;
       });
@@ -450,8 +449,7 @@ export class ThongTinTongHopComponent implements OnInit {
         this.ct1s = temp;
       }
       this.rowEdit.isView = true;
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       let index = this.rowEdit.ct2s.findIndex(x => x.stt === item.stt);
       if (index != -1) {
         let temp = cloneDeep(this.rowEdit.ct2s);
@@ -479,8 +477,7 @@ export class ThongTinTongHopComponent implements OnInit {
       let temp = this.ct1s.filter(x => x.stt !== item.stt);
       this.ct1s = temp;
       this.sortTableId('ct1s');
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       let temp = this.rowEdit.ct2s.filter(x => x.stt !== item.stt);
       this.rowEdit.ct2s = temp;
       this.sortTableId('ct2s');
@@ -495,8 +492,7 @@ export class ThongTinTongHopComponent implements OnInit {
       this.rowEdit = cloneDeep(item);
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
-    }
-    else if (type === 'ct2s') {
+    } else if (type === 'ct2s') {
       this.oldDataEdit2 = cloneDeep(item);
     }
     item.edit = true;
@@ -549,6 +545,8 @@ export class ThongTinTongHopComponent implements OnInit {
     this.ct1s = [];
     this.spinner.show();
     let body = {
+      nam: this.formData.value.nam,
+      trangThaiTh: STATUS.CHUA_TONG_HOP,
       pageNumber: 1,
       pageSize: 1000,
     };
@@ -577,7 +575,7 @@ export class ThongTinTongHopComponent implements OnInit {
                   "tenVatTu": elementCt.tenVatTu ?? null,
                   "tenHangHoa": elementCt.tenHangHoa ?? null,
                   "ct2s": elementCt.ct2List ?? [],
-                  "idDeNghi":data[i].id,
+                  "idDeNghi": data[i].id,
                   "stt": index + 1
                 }
                 listItem.push(item);
@@ -611,8 +609,7 @@ export class ThongTinTongHopComponent implements OnInit {
       if (rowSet === 'rowDisplay') {
         this.rowDisplay = cloneDeep(row);
         this.rowDisplay.isView = true;
-      }
-      else if (rowSet === 'rowEdit') {
+      } else if (rowSet === 'rowEdit') {
         this.rowEdit = cloneDeep(row);
         this.rowEdit.isView = true;
         this.ct1s.forEach(element => {

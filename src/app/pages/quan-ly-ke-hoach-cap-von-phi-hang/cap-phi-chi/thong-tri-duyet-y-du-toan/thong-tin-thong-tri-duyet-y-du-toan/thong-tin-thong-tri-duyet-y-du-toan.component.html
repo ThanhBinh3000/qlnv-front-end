@@ -179,7 +179,8 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien">
+              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien"  [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </th>
@@ -204,7 +205,7 @@
             <td>{{idx + 1}}</td>
             <td>{{item.muc}}</td>
             <td>{{item.tieuMuc}}</td>
-            <td>{{item.soTien}}</td>
+            <td class="text-right">{{item.soTien | number : '1.0-1'}}</td>
             <td>{{item.chuThich}}</td>
             <td>
               <a (click)="showEditItem(idx, 'show')">

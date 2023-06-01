@@ -550,9 +550,9 @@ export class ThongTinComponent extends Base2Component implements OnInit, OnChang
       .groupBy("tenChiCuc")
       .map(async (value, key) => {
         let tenChiCuc = value.find(f => f.tenChiCuc === key);
-        let tongSl = value.reduce((prev, cur) => prev + cur.soLuong, 0);
+        let tongSl = value.reduce((prev, cur) => prev + cur.soLuongDeXuat, 0);
         let thanhTien = value.reduce((prev, cur) => {
-          const curThanhTien = cur.soLuong * cur.donGiaVat;
+          const curThanhTien = cur.soLuongDeXuat * cur.donGiaVat;
           return prev + curThanhTien;
         }, 0);
         return {

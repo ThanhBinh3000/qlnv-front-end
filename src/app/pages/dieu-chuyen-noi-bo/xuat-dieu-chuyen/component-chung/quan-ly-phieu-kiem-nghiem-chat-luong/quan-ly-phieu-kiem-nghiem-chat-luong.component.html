@@ -5,13 +5,13 @@
         <div nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="2">
             <label> Năm kế hoạch </label>
-            <nz-select formControlName="namKeHoach">
+            <nz-select formControlName="nam">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
             <label>Số QĐ ĐC của Cục</label>
-            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdinh" />
+            <input placeholder="Nhập số quyết định" nz-input formControlName="soQdinhDcc" />
           </div>
           <div nz-col nzSpan="4">
             <label>Số phiếu kiểm nghiệm chất lượng</label>
@@ -22,13 +22,13 @@
             <!-- <nz-range-picker formControlName="ngayKnghiemTu" nzFormat="dd/MM/yyyy"></nz-range-picker> -->
             <div nz-row>
               <div nz-col nzSpan="12" class="cus-start-date">
-                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy" formControlName="ngayKnghiemTu"
+                <nz-date-picker [nzDisabledDate]="disabledTuNgay" nzFormat="dd/MM/yyyy" formControlName="tuNgay"
                   nzPlaceHolder="Ngày bắt đầu">
                 </nz-date-picker>
               </div>
               <div nz-col nzSpan="12" class="cus-end-date">
-                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy"
-                  formControlName="ngayKnghiemDen" nzPlaceHolder="Ngày kết thúc">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgay" nzFormat="dd/MM/yyyy" formControlName="denNgay"
+                  nzPlaceHolder="Ngày kết thúc">
                 </nz-date-picker>
               </div>
             </div>
@@ -38,8 +38,8 @@
             <input placeholder="Nhập số biên bản lấy mẫu" nz-input formControlName="soBbLayMau" />
           </div>
           <div nz-col nzSpan="4">
-            <label>Số biên bản tịnh kho</label>
-            <input placeholder="Nhập số biên bản tịnh kho" nz-input formControlName="soBbXuatDocKho" />
+            <label>Số biên bản xuất dốc kho</label>
+            <input placeholder="Nhập số biên bản xuất dốc kho" nz-input formControlName="soBbXuatDocKho" />
           </div>
         </div>
       </form>
@@ -58,13 +58,11 @@
     <div class="group-button">
       <h3 class="text-uppercase"> DANH SÁCH PHIẾU KIỂM NGHIỆM CHẤT LƯỢNG </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="exportData()"
-          *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_EXP')">
+        <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KTCL_LT_KNCL_THEM')">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, null, null)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -76,9 +74,9 @@
           <tr>
             <th style="width: 35px">STT</th>
             <th></th>
-            <th>Số QĐ giao NVXH</th>
+            <th>Số QĐ ĐC của Cục</th>
             <th>Năm KH</th>
-            <th>Thời hạn XH trước ngày</th>
+            <th>Thời hạn điều chuyển</th>
             <th>Điểm kho</th>
             <th>Lô kho</th>
             <th>Số phiếu KNCL</th>
@@ -219,7 +217,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-them-moi-phieu-kiem-nghiem-chat-luong [typeVthh]="typeVthh" [idInput]="selectedId" [isView]="isView"
+  <app-them-moi-phieu-kiem-nghiem-chat-luong [typeVthh]="loaiVthh" [idInput]="selectedId" [isView]="isView"
     (showListEvent)="showList()">
   </app-them-moi-phieu-kiem-nghiem-chat-luong>
 </ng-template>
