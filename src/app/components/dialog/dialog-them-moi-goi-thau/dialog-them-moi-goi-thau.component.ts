@@ -139,9 +139,9 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     if (this.dataChiTieu) {
       for (let index = 0; index < this.dataChiTieu.khVatTuNhap.length; index++) {
         if (this.formGoiThau.get('cloaiVthh').value == null) {
-          if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
-            this.loadThongTinCuc(index);
-          }
+          // if (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh || this.dataChiTieu.khVatTuNhap[index].maVatTu == this.loaiVthh) {
+          //   this.loadThongTinCuc(index);
+          // }
         } else {
           if (this.dataChiTieu.khVatTuNhap[index].maVatTu == this.formGoiThau.get('cloaiVthh').value
             || (this.dataChiTieu.khVatTuNhap[index].maVatTuCha == this.loaiVthh && this.dataChiTieu.khVatTuNhap[index].maVatTu == null)) {
@@ -181,7 +181,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     };
     let res = await this.donviService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listChiCucMap[$event] = res.data[0].children;
+      this.listChiCucMap[$event] = res.data[0].children.filter(item => item.type != 'PB');
     }
     let cuc = this.listCuc.filter(item => item.maDvi == $event);
     this.thongTinCuc.soLuongTheoChiTieu = cuc[0].soLuongTheoChiTieu;
@@ -189,8 +189,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   onChangeChiCuc($event, maCuc) {
-    let chiCuc = this.listChiCucMap[maCuc].filter(item => item.maDvi == $event)[0];
-    this.listDiemKhoMap[$event] = chiCuc.children;
+    let chiCuc = this.listChiCucMap[maCuc].find(item => item.maDvi == $event);
+    this.listDiemKhoMap[$event] = chiCuc.children.filter(item => item.type != 'PB');
   }
 
   validateRangPrice() {
