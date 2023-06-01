@@ -972,17 +972,16 @@
                     <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
                                     class="search__input autocomplete__input donvi__input w-300">
                       <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input (input)="onInput($event,'vat-tu')"
-                             [nzAutocomplete]="autoDonViVatTuNhap" class=""
+                             [nzAutocomplete]="autoDonViVatTuNhap"
                              [(ngModel)]="keHoachVatTuNhapCreate.tenDvi"/>
                     </nz-input-group>
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
-                    <nz-autocomplete #autoDonViVatTuNhap (selectionChange)="selectDonViKeyDown($event,'kh-vat-tu')"
+                    <nz-autocomplete #autoDonViVatTuNhap (selectionChange)="selectDonViKeyDown($event,'kh-vat-tu','nhap')"
                                      [nzBackfill]="false">
                       <ng-container>
-                        <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
-                                        (click)="selectDonViVatTuNew(option,'nhap')">
+                        <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi">
                           {{ option.labelDonVi }}
                         </nz-auto-option>
                       </ng-container>
@@ -1198,7 +1197,7 @@
                     <ng-template #suffixIcon>
                       <i nz-icon nzType="search"></i>
                     </ng-template>
-                    <nz-autocomplete #autoDonViVatTuXuat (selectionChange)="selectDonViKeyDown($event,'kh-vat-tu')"
+                    <nz-autocomplete #autoDonViVatTuXuat (selectionChange)="selectDonViKeyDown($event,'kh-vat-tu','xuat')"
                                      [nzBackfill]="false">
                       <ng-container>
                         <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"

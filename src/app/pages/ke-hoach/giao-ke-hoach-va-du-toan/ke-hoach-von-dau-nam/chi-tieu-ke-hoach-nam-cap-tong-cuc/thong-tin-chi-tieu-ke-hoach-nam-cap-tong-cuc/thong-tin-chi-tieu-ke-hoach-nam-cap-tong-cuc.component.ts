@@ -1552,7 +1552,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete s.dsVatTu;
       return Object.assign(s1, s)
     }));
-
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
       for (let j = i + 1; j <= khVatTu.length - 1; j++) {
@@ -1885,7 +1884,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   onInputTenHang(e: Event): void {
     this.isAddVatTu = false;
-    console.log( this.dataVatTuCha,' this.dataVatTuCha');
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTuCha = '';
@@ -1899,7 +1897,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataVatTuChaShow = this.dataVatTuCha.filter(
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
-      console.log(value,'valuevalue')
     }
   }
 
@@ -2973,7 +2970,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
 
-  selectDonViKeyDown(event, type) {
+  selectDonViKeyDown(event, type, loai?) {
     const donVi = this.optionsDonVi.find(
       (donVi) => donVi.tenDvi === event.nzValue.trim(),
     );
@@ -2987,7 +2984,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.selectDonViMuoi(donVi);
           break;
         case 'kh-vat-tu':
-          this.selectDonViVatTu(donVi);
+          this.selectDonViVatTuNew(donVi, loai);
           break;
         default:
           break;
@@ -3092,6 +3089,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   themVatTu(type) {
     if (type == 'nhap') {
+      debugger;
       if (this.keHoachVatTuNhapCreate.tenDvi && this.keHoachVatTuNhapCreate.dsVatTu.length) {
         let dataExists = this.dataVatTuNhap.find(s => s.tenDvi == this.keHoachVatTuNhapCreate.tenDvi);
         let indexExists = this.dataVatTuNhap.findIndex(s => s.tenDvi == this.keHoachVatTuNhapCreate.tenDvi);
@@ -3102,6 +3100,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           if (find) {
             this.notification.error(MESSAGE.ALERT, 'Loại và chủng loại hàng hóa đã tồn tại.')
           } else {
+            this.keHoachVatTuNhapCreate.dsVatTu[0].donViId = this.keHoachVatTuNhapCreate.donViId;
+            this.keHoachVatTuNhapCreate.dsVatTu[0].sttDonVi = indexExists+1;
             dataExists.dsVatTu.push(this.keHoachVatTuNhapCreate.dsVatTu[0]);
             this.dataVatTuNhap.splice(indexExists, 1, dataExists);
             this.dataVatTuNhapEdit = this.dataVatTuNhap;
