@@ -1485,15 +1485,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
-    // if (isGuiDuyet) {
-    //   this.formData.controls["soQd"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayKy"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
-    // } else {
-    //   this.formData.controls["soQd"].clearValidators();
-    //   this.formData.controls["ngayKy"].clearValidators();
-    //   this.formData.controls["ngayHieuLuc"].clearValidators();
-    // };
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
