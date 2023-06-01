@@ -166,9 +166,9 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
                 moTaHangHoa: data.moTaHangHoa,
                 soLuong: data.soLuong,
                 donViTinh: data.donViTinh,
-                tgianGnhan: data.tgianGnhan,
+                tgianGnhan: data.ngayPduyet,
                 trichYeu: data.trichYeu,
-                tenTtcn: data.tenNguoiDdien,
+                tenTtcn: data.tenNguoiDdienNhaThau,
               })
               this.dataTable = data.children;
               await this.qdPdKetQuaBanDauGiaService.search({
@@ -182,7 +182,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
                   this.qdPdKetQuaBanDauGiaService.getDetail(dataQd.id).then(async s => {
                     this.formData.patchValue({
                       trichYeu: s.data.trichYeu,
-                      tgianGnhan: s.data.tgianGnhan,
                       kieuNx: s.data.kieuNx,
                       loaiHinhNx: s.data.loaiHinhNx
                     })
