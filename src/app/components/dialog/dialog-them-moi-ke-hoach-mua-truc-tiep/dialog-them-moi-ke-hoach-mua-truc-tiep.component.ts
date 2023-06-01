@@ -187,6 +187,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   addDiemKho() {
     this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
     this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
+    this.thongTinMuaTrucTiep.donGiaVat = this.donGiaVat;
     this.calcTongSLnhapTrucTiepDeXuat();
     this.calcTongThanhTienTrucTiep();
     this.calcTongThanhTienTheoDonGiaDd();
@@ -275,7 +276,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.formData.patchValue({
       tongThanhTien:
         +this.formData.get('tongSoLuong').value *
-        +this.formData.get('donGia').value,
+        +this.formData.get('donGia').value *1000,
     });
   }
 
@@ -283,10 +284,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.formData.patchValue({
       tongThanhTienVat:
         +this.formData.get('tongSoLuong').value *
-        +this.formData.get('donGiaVat').value,
+        +this.formData.get('donGiaVat').value *1000,
     });
   }
-
-
-
 }
