@@ -138,10 +138,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
         try {
             this.spinner.show();
             await Promise.all([
-                this.loadSoQuyetDinh(),
+                this.loadDetail(this.idInput),
                 this.loadPhuongPhapLayMau(),
             ])
-            await this.loadDetail(this.idInput)
             if (!this.idInput) {
                 this.formData.patchValue({ ...this.passData });
             }
@@ -206,23 +205,28 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             maDvi: this.userInfo.MA_DVI
             // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
         }
-        let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-            let data = res.data;
-            this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
-                if (arr.findIndex(f => f.soQdinh == cur.soQdinh) < 0) {
-                    arr.push(cur)
-                }
-                return arr
-            }, []) : [];
-        } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+        try {
+            let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+                let data = res.data;
+                this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
+                    if (arr.findIndex(f => f.soQdinh == cur.soQdinh) < 0) {
+                        arr.push(cur)
+                    }
+                    return arr
+                }, []) : [];
+            } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+        } catch (error) {
+            console.log("error", error)
         }
     }
 
     async openDialogSoQd(event: MouseEvent, disabled?: boolean) {
         const elm = event.target as HTMLInputElement;
         if (disabled || elm?.localName == "input") return;
+        await this.loadSoQuyetDinh();
         const modalQD = this.modal.create({
             nzTitle: 'Danh sách số quyết định xuất điều chuyển',
             nzContent: DialogTableSelectionComponent,
@@ -254,13 +258,26 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
                 soQdinhDcc: data.soQdinh,
                 qdinhDccId: data.id,
                 ngayQdDc: data.ngayKyQdinh,
-                loaiVthh: data.loaiVthh,
-                tenLoaiVthh: data.tenLoaiVthh,
+                // loaiVthh: data.loaiVthh,
+                // tenLoaiVthh: data.tenLoaiVthh,
 
+                maLoKho: '',
+                tenLoKho: '',
+                maNganKho: '',
+                tenNganKho: '',
+                maNhaKho: '',
+                tenNhaKho: '',
+                maDiemKho: '',
+                tenDiemKho: '',
+                loaiVthh: '',
+                tenLoaiVthh: '',
+                cloaiVthh: '',
+                tenCloaiVthh: ''
             });
             // let dataChiCuc = data.arrDataQuyetDinh.find(item =>
             //     item.maDviChiCuc == this.userInfo.MA_DVI
             // );
+            this.listDiaDiemNhap = [];
             let dataChiCuc = [];
             if (Array.isArray(data?.danhSachQuyetDinh)) {
                 data.danhSachQuyetDinh.forEach(element => {
@@ -332,9 +349,9 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
             this.helperService.markFormGroupTouched(this.formData);
         }
         let body = this.formData.value;
-        if (this.formData.value.soQdinhDcc) {
-            body.soQdinhDcc = this.formData.value.soQdinhDcc + "/" + this.maBb;
-        }
+        // if (this.formData.value.soQdinhDcc) {
+        //     body.soQdinhDcc = this.formData.value.soQdinhDcc + "/" + this.maBb;
+        // }
         body.bienBanLayMauDinhKem = this.bienBanLayMauDinhKem;
         body.canCu = this.canCu;
         body.id = this.idInput;
