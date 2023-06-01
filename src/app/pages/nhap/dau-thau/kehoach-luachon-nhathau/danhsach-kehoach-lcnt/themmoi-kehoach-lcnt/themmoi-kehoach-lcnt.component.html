@@ -559,9 +559,7 @@
                 <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{(diemKho.soLuong * dtGoiThau.donGiaTamTinh *1000) + (diemKho.soLuong *
-                  dtGoiThau.donGiaTamTinh *1000 *
-                  formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh *1000 * formData.value.gtriDthau / 100 | number: '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="userService.isCuc() && !isView">
                   <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">
                     <i class="fa fa-pencil"></i>
