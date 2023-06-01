@@ -39,39 +39,6 @@ export class ThongTinHangCanDieuChuyenChiCucComponent extends Base2Component imp
   dsLoKhoNhan: any[] = [];
 
 
-  // maDvi: string;
-  // tenDvi: string;
-  // maDiemKho: string;
-  // tenDiemKho: string;
-  // maNhaKho: string;
-  // tenNhaKho: string;
-  // maNganKho: string;
-  // tenNganKho: string;
-  // maLoKho: string;
-  // tenLoKho: string;
-  // maThuKho: string;
-  // thuKho: string;
-  // loaiVthh: string;
-  // cloaiVthh: string;
-  // tonKho: string;
-  // soLuongDc: string;
-  // duToanKphi: string;
-  // thoiGianDkDc: string;
-  // maDiemKhoNhan: string;
-  // tenDiemKhoNhan: string;
-  // maNhaKhoNhan: string;
-  // tenNhaKhoNhan: string;
-  // maNganKhoNhan: string;
-  // tenNganKhoNhan: string;
-  // maLoKhoNhan: string;
-  // tenLoKhoNhan: string;
-  // maThuKhoNhan: string;
-  // thuKhoNhan: string;
-  // thayDoiThuDo: string;
-  // slDcConLai: string;
-  // tichLuongKd: string;
-  // soLuongPhanBo: string;
-
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
