@@ -184,7 +184,7 @@
                           (click)="goDetail(lv2.id)">
                           <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
-                        <a (click)="delete(lv2)">
+                        <a  *ngIf="lv2.trangThai == STATUS.DU_THAO" (click)="delete(lv2)">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
