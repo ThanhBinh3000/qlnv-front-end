@@ -38,6 +38,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   listHinhThucDauThau: any[] = [];
   @Input()
   listLoaiHopDong: any[] = [];
+  @Output() objectChange = new EventEmitter<number>();
   tgianBdauTchucChange: Date | null = null;
   tgianNhangChange: Date | null = null;
   tgianDthauChange: Date | null = null;
@@ -135,20 +136,21 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     let res = null;
     if (changes) {
       if (this.dataInput) {
-        data = await this.dieuChinhQuyetDinhPdKhlcntService.findByIdQdGoc(this.dataInput.idQdHdr);
-        console.log("hihi ", data)
-        if (!this.isCache && data != null && data.msg == MESSAGE.SUCCESS) {
+        if (!this.isCache && this.dataInput.idDcDxHdr != undefined) {
+          data = await this.dieuChinhQuyetDinhPdKhlcntService.getDetail(this.dataInput.idDcDxHdr);
+          console.log("hihi ", data)
           if (this.dataInput.soLuong) {
             this.formData.patchValue({
               soLuong: this.dataInput.soLuong,
               tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat
             })
           }
+          this.listOfData = data.data.children
         }else{
           res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.dataInput.idQdHdr);
           console.log("haha ", res)
+          this.listOfData = this.dataInput.children;
         }
-        this.listOfData = this.dataInput.children;
         if (data != null && data.msg == MESSAGE.SUCCESS) {
           this.tgianBdauTchucChange = data.data.tgianBdauTchuc
           this.tgianDthauChange = data.data.tgianDthau
@@ -156,8 +158,8 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
           this.tgianNhangChange = data.data.tgianNhang
           this.tenDuAn = data.data.children[0].tenDuAn
           this.giaVat = data.data.children[0].donGiaVat
-          this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
-          this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
+          // this.tienDamBaoThHd = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100;
+          // this.tienBaoLanh = data.data.children[0].dxuatKhLcntHdr.tongMucDtDx + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriHdong / 100) + (data.data.children[0].dxuatKhLcntHdr.tongMucDtDx * data.data.children[0].dxuatKhLcntHdr.gtriDthau / 100)
           this.helperService.bidingDataInFormGroup(this.formData, data.data);
           this.formData.patchValue({
             tgianDthau: data.data.tgianDthau,
@@ -165,15 +167,18 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
             tgianNhang: data.data.tgianNhang,
             tgianBdauTchuc: data.data.tgianBdauTchuc,
             gtriDthau: data.data.gtriDthau,
-            tchuanCluong: data.data.children[0].dxuatKhLcntHdr.tchuanCluong,
-            tongMucDt: data.data.children[0].dxuatKhLcntHdr.tongMucDt
+            tenHthucLcnt: data.data.tenHthucLcnt,
+            tenPthucLcnt: data.data.tenPthucLcnt,
+            tenLoaiHdong: data.data.tenLoaiHdong,
+            tenDuAn: data.data.children[0].tenDuAn,
+            tchuanCluong: data.data.children[0].tchuanCluong,
+            tenDvi: data.data.children[0].tenDvi,
           });
         } else if (res != null && res.msg == MESSAGE.SUCCESS) {
           this.tgianBdauTchucChange = res.data.tgianBdauTchuc
           this.tgianDthauChange = res.data.tgianDthau
           this.tgianMthauChange = res.data.tgianMthau
           this.tgianNhangChange = res.data.tgianNhang
-          this.tChuanCLuong = res.data.tchuanCluong
           this.tenHangHoa = res.data.moTaHangHoa
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           let soLuong = res.data.tongMucDt / res.data.donGiaVat;
@@ -184,32 +189,49 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
             tgianMthau: res.data.tgianMthau,
             tgianNhang: res.data.tgianNhang,
             tgianBdauTchuc: res.data.tgianBdauTchuc,
-            gtriDthau: res.data.gtriDthau
+            gtriDthau: res.data.gtriDthau,
+            tenHthucLcnt: res.data.tenHthucLcnt,
+            tenPthucLcnt: res.data.tenPthucLcnt,
+            tenLoaiHdong: res.data.tenLoaiHdong,
+            tenDuAn: res.data.children[0].tenDuAn,
+            tchuanCluong: res.data.children[0].dxuatKhLcntHdr.tchuanCluong,
           });
           console.log(this.formData.value)
         }
+        this.objectChange.emit(this.formData.value)
         this.helperService.setIndexArray(this.listOfData);
         this.convertListDataLuongThuc()
-        // this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
-        // this.dataTable = this.dataInput.children;
-        // let tongMucDt = 0;
-        // this.dataTable.forEach(item => {
-        //   tongMucDt += item.soLuong * item.donGiaVat;
-        // })
-        // this.formData.patchValue({
-        //   tongMucDt: tongMucDt
-        // })
       }
     }
     await this.spinner.hide()
+  }
+
+  onDateChanged(value: any, type: any) {
+    if (type == 'tgianBdauTchuc') {
+      this.formData.get('tgianBdauTchuc').setValue(value);
+    } else if (type == 'tgianMthau') {
+      this.formData.get('tgianMthau').setValue(value);
+    } else if (type == 'tgianDthau') {
+      this.formData.get('tgianDthau').setValue(value);
+    } else if (type == 'tgianNhang') {
+      this.formData.get('tgianNhang').setValue(value);
+    }
+    this.objectChange.emit(this.formData.value)
   }
 
   convertListDataLuongThuc() {
     let listChild = [];
     this.listOfData.forEach(item => {
       item.children.forEach(i => {
-        i.goiThau = item.goiThau
-        listChild.push(i)
+        if(item.idDxDcHdr != undefined){
+          i.children.forEach(h =>{
+            i.goiThau = h.goiThau
+            listChild.push(h)
+          })
+        }else{
+          i.goiThau = item.goiThau
+          listChild.push(i)
+        }
       })
     })
     this.helperService.setIndexArray(listChild);
