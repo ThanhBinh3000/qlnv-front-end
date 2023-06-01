@@ -318,21 +318,21 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
 
   validateThanhPhanThamDu(data, name): boolean {
     if (name == 'KM') {
-      if (data.hoaVaTen && data.chucVu && data.diaChi) {
+      if (data.hoVaTen && data.chucVu && data.diaChi) {
         return true
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin khách mời chứng kiến")
         return false;
       }
     } else if (name == 'DGV') {
-      if (data.hoaVaTen && data.chucVu && data.diaChi) {
+      if (data.hoVaTen && data.chucVu && data.diaChi) {
         return true
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin đấu giá viên")
         return false;
       }
     } else {
-      if (data.hoaVaTen && data.soCccd && data.diaChi) {
+      if (data.hoVaTen && data.soCccd && data.diaChi) {
         return true
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng điền đủ thông tin tổ chức cá nhân tham giá đấu giá")

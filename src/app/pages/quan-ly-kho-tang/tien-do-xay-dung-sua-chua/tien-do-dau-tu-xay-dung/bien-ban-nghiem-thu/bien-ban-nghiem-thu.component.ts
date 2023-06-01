@@ -19,22 +19,25 @@ import dayjs from "dayjs";
   styleUrls: ['./bien-ban-nghiem-thu.component.scss']
 })
 export class BienBanNghiemThuComponent extends Base2Component implements OnInit {
-  @Input() itemDuAn : any;
-
+  @Input() itemDuAn: any;
+  @Input() itemQdPdKhLcnt: any
   selectedId: number;
   isViewDetail: boolean;
+
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanSv : BienBanNghiemThuDtxdService
+    private bienBanSv: BienBanNghiemThuDtxdService
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanSv);
     super.ngOnInit()
     this.formData = this.fb.group({
-      namKh : [null]
+      namKh: [null],
+      maDvi: [null],
+      idDuAn: [null],
     });
   }
 
@@ -44,23 +47,30 @@ export class BienBanNghiemThuComponent extends Base2Component implements OnInit 
 
   redirectToChiTiet(isView: boolean, id: number) {
     let modalQD = this.modal.create({
-      nzTitle: "",
+      nzTitle: "BIÊN BẢN NGHIỆM THU",
       nzContent: ThongTinBienBanNghiemThuDtxdComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: "1800px",
-      nzStyle: {top: "120px"},
+      nzWidth: '2000px',
       nzFooter: null,
-      nzComponentParams: {}
+      nzComponentParams: {
+        itemDuAn: this.itemDuAn,
+        itemQdPdKhLcnt: this.itemQdPdKhLcnt,
+        isView : isView,
+        id : id
+      }
     });
     modalQD.afterClose.subscribe(async (listData) => {
+      this.filter()
     })
   }
 
-  filter() {
+  async filter() {
     this.formData.patchValue({
-      namKh : this.itemDuAn.namKeHoach
+      namKh: this.itemDuAn.namKeHoach,
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      idDuAn: this.itemDuAn.id
     })
-    this.search()
+    await this.search()
   }
 }

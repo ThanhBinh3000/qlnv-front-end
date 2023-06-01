@@ -84,6 +84,13 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     }
   }
 
+  async search(roles?): Promise<void> {
+    await this.spinner.show()
+    await super.search(roles);
+    this.buildTableView();
+    await this.spinner.hide()
+  }
+
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
@@ -98,19 +105,13 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
     this.search();
   }
 
-  redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number) {
-    this.selectedId = lv2.id;
-    this.isDetail = true;
-    this.isView = isView;
-    this.idBbLayMau = idBbLayMau;
-  }
+  // redirectToChiTiet(lv2: any, isView: boolean, idBbLayMau?: number) {
+  //   this.selectedId = lv2.id;
+  //   this.isDetail = true;
+  //   this.isView = isView;
+  //   this.idBbLayMau = idBbLayMau;
+  // }
 
-  async search(roles?): Promise<void> {
-    await this.spinner.show()
-    await super.search(roles);
-    this.buildTableView();
-    await this.spinner.hide()
-  }
 
   buildTableView() {
     let dataView = chain(this.dataTable)
@@ -125,21 +126,21 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends Base2Component impl
               idVirtual: uuidv4(),
               maDiemKho: k,
               tenDiemKho: rowLv2.tenDiemKho,
-              // maNhaKho: rowLv2.maNhaKho,
-              // tenNhaKho: rowLv2.tenNhaKho,
-              // maNganKho: rowLv2.maNganKho,
-              // tenNganKho: rowLv2.tenNganKho,
-              // tenLoKho: rowLv2.tenLoKho,
-              // maLoKho: rowLv2.maLoKho,
-              // soPhieu: rowLv2.soPhieu,
-              // ngayKnghiem: rowLv2.ngayKnghiem,
-              // idBbLayMau: rowLv2.idBbLayMau,
-              // soBbLayMau: rowLv2.soBbLayMau,
-              // ngayLayMau: rowLv2.ngayLayMau,
-              // soBbXuatDocKho: rowLv2.soBbXuatDocKho,
-              // ngayXuatDocKho: rowLv2.ngayXuatDocKho,
-              // trangThai: rowLv2.trangThai,
-              // tenTrangThai: rowLv2.tenTrangThai,
+              maNhaKho: rowLv2.maNhaKho,
+              tenNhaKho: rowLv2.tenNhaKho,
+              maNganKho: rowLv2.maNganKho,
+              tenNganKho: rowLv2.tenNganKho,
+              tenLoKho: rowLv2.tenLoKho,
+              maLoKho: rowLv2.maLoKho,
+              soPhieu: rowLv2.soPhieu,
+              ngayKnghiem: rowLv2.ngayKnghiem,
+              idBbLayMau: rowLv2.idBbLayMau,
+              soBbLayMau: rowLv2.soBbLayMau,
+              ngayLayMau: rowLv2.ngayLayMau,
+              soBbXuatDocKho: rowLv2.soBbXuatDocKho,
+              ngayXuatDocKho: rowLv2.ngayXuatDocKho,
+              trangThai: rowLv2.trangThai,
+              tenTrangThai: rowLv2.tenTrangThai,
               childData: v
             }
           }

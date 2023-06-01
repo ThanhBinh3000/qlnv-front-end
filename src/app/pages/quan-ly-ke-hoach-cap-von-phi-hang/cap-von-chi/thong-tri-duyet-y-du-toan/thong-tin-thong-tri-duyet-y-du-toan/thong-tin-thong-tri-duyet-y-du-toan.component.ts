@@ -30,6 +30,7 @@ import {Globals} from 'src/app/shared/globals';
 import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
 import {includes} from 'lodash';
 import {kmr_IQ} from "ng-zorro-antd/i18n";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -122,7 +123,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       id: [{value: this.khBanDauGia ? this.khBanDauGia.id : null, disabled: this.isView ? true : false,}, [],],
-      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null, disabled: true,}, [Validators.required],],
+      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null}, [Validators.required],],
       soThongTri: [{
         value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
         disabled: this.isView ? true : false,
@@ -218,6 +219,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let res = await this.tongHopDeNghiCapVonService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongHop = res.data.content;
+      if (this.listTongHop && this.listTongHop.length > 0) {
+        this.listTongHop = this.listTongHop.filter(item => item.trangThai == STATUS.DA_DUYET_LDV)
+      }
     }
   }
 

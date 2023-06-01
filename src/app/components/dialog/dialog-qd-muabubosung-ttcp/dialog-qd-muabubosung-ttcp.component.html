@@ -2,7 +2,7 @@
   <nz-form-item nz-col nzSpan="16" class="form-item" style="padding-right: 15px;">
     <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ/Ngành</nz-form-label>
     <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
-      <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsBoNganh">
+      <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
       </nz-option>
     </nz-select>
     <span class="error-text" *ngIf="errorBn">{{globals.prop.REQUIRED}}</span>
@@ -31,12 +31,12 @@
     <div class="cantrai">
     </div>
     <div class="canphai">
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
-        <i nz-icon nzType="close" class="icon-close"></i>
-        Huỷ
+      <a class="btn btn-sub btn-sm waves-effect waves-light " (click)="onCancel()">
+        <i nz-icon nzType="close" class="fa fa-close"></i>
+        Đóng
       </a>
-      <a class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
-        <i class="icon htvbdh_luu"></i>
+      <a *ngIf="!isView" class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="luu()">
+        <i aria-hidden="true" class="fa fa-save"></i>
         Lưu
       </a>
     </div>

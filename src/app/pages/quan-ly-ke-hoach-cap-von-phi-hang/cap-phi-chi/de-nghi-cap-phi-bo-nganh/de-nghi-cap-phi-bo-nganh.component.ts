@@ -53,7 +53,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     soDeNghi: "",
     tenBoNganh: "",
     nam: "",
-    ngayDeNghi: "",
+    ngayDeNghiTuNgay: "",
+    ngayDeNghiDenNgay: "",
   };
   filterTable: any = {
     soDeNghi: '',
@@ -144,10 +145,12 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       maBoNganh: this.searchFilter.tenBoNganh ? this.searchFilter.tenBoNganh : '',
       maDvis: [this.detail.maDvi],
       nam: this.searchFilter.nam ? this.searchFilter.nam : '',
-      ngayDeNghiTuNgay: this.searchFilter.ngayDeNghi ? dayjs(this.searchFilter.ngayDeNghi[0]).format('YYYY-MM-DD') : '',
-      ngayDeNghiDenNgay: this.searchFilter.ngayDeNghi ? dayjs(this.searchFilter.ngayDeNghi[1]).format('YYYY-MM-DD') : '',
+      ngayDeNghiTuNgay: this.searchFilter.ngayDeNghiTuNgay ?  dayjs(this.searchFilter.ngayDeNghiTuNgay).format('YYYY-MM-DD') : '',
+      ngayDeNghiDenNgay: this.searchFilter.ngayDeNghiDenNgay ?   dayjs(this.searchFilter.ngayDeNghiDenNgay).format('YYYY-MM-DD') : '',
       trangThai: "",
-      trangThais: []
+      trangThais: [],
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
 
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
@@ -247,7 +250,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   clearFilter() {
     // this.searchFilter.nam = dayjs().get('year');
     this.searchFilter.soDeNghi = "";
-    this.searchFilter.ngayDeNghi = "";
+    this.searchFilter.ngayDeNghiTuNgay = "";
+    this.searchFilter.ngayDeNghiDenNgay = "";
     this.searchFilter.tenBoNganh = "";
 
     this.filterTable = {
@@ -335,7 +339,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
         this.deNghiCapPhiBoNganhService
           .exportList(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-thong-tin-de-nghi-cap-von-bo-nganh.xlsx'),
+            saveAs(blob, 'danh-sach-thong-tin.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

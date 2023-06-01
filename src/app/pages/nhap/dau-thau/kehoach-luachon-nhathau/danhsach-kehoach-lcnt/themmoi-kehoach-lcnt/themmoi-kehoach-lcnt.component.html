@@ -128,9 +128,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maTrinh}}">
-                <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
-                  [nzDisabled]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
-                </nz-input-number>
+                <input nz-input formControlName="soDxuat"
+                  [readonly]="(formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== '') || isView">
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -497,8 +496,8 @@
           <th>Địa điểm nhập kho</th>
           <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
           <th>SL theo KH năm đã được duyệt</th>
-          <th>SL nhập (kg)</th>
-          <th>Đơn giá đề xuất (đ)</th>
+          <th>SL nhập (Tấn)</th>
+          <th>Đơn giá đề xuất (đ/kg)</th>
           <th>Thành tiền tạm tính (đ)</th>
           <th>Đơn giá được duyệt bao gồm VAT (đ/kg)</th>
           <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
@@ -515,7 +514,7 @@
             <td class="text-right red-text">{{item.soLuongDaMua| number : '1.0-1' : 'vi_VN'}}</td>
             <td class="text-right blue-text bold-700">{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
-            <td class="text-right bold-700">{{ item.soLuong * item.dataChild[0].donGiaTamTinh | number :
+            <td class="text-right bold-700">{{ item.soLuong * item.dataChild[0].donGiaTamTinh *1000| number :
               '1.0-1' : 'vi_VN' }}</td>
             <td></td>
             <td></td>
@@ -557,11 +556,11 @@
                 <td></td>
                 <td class="text-right blue-text">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-                <td class="text-right">{{(diemKho.soLuong * dtGoiThau.donGiaTamTinh) + (diemKho.soLuong *
-                  dtGoiThau.donGiaTamTinh *
+                <td class="text-right">{{diemKho.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">{{(diemKho.soLuong * dtGoiThau.donGiaTamTinh *1000) + (diemKho.soLuong *
+                  dtGoiThau.donGiaTamTinh *1000 *
                   formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right" *ngIf="userService.isCuc() && !isView">
                   <a *ngIf="!isDisbleForm()" (click)="themMoiCuc(dtGoiThau.goiThau)">

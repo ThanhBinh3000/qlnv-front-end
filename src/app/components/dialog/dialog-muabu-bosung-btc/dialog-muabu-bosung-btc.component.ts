@@ -56,10 +56,32 @@ export class DialogMuabuBosungBtcComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
-    const boNganh = this.dsBoNganh.filter(item => item.ma == event)
-    if (boNganh.length > 0) {
-      this.keHoach.tenBoNganh = boNganh[0].giaTri;
+    const boNganh = this.dsBoNganh.find(item => item.maDvi == event)
+    if (boNganh) {
+      this.keHoach.tenBoNganh = boNganh.tenDvi;
     }
+    //fix btc = tcdt
+    if (event == '01') {
+      event = '0101'
+    }
+    this.danhMucService.getDanhMucHangDvql({
+      "dviQly": event
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        if (event == '0101') {
+          const dataVatTu = hangHoa.data.filter(it => (it.ma == '02' || it.ma == '04' || it.ma == '0101' || it.ma == '0102'));
+          dataVatTu.forEach(item => {
+            if (item.ma == "02") {
+              this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+            } else {
+              this.dsHangHoa = [...this.dsHangHoa, item]
+            }
+          });
+        } else {
+          this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
+        }
+      }
+    })
   }
 
   async getListBoNganh() {

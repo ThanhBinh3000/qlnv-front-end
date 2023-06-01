@@ -38,6 +38,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./xuat-khac/xuat-khac.module').then((m) => m.XuatKhacModule),
       },
+      {
+        path: 'xuat-tieu-huy',
+        loadChildren: () =>
+          import('./xuat-tieu-huy/xuat-tieu-huy.module').then((m) => m.XuatTieuHuyModule),
+      },
     ],
   },
 ];

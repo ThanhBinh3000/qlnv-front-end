@@ -10,6 +10,7 @@ import { ThongtinDaugiaComponent } from './thongtin-daugia/thongtin-daugia.compo
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'app-chi-tiet-thong-tin-dau-gia',
@@ -91,7 +92,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
         .then(async (res) => {
           const dataDtl = res.data;
-          this.dataTable = dataDtl.listTtinDg
+          this.dataTable = cloneDeep(dataDtl.listTtinDg);
           if (this.dataTable && this.dataTable.length > 0) {
             await this.showFirstRow(event, this.dataTable[0]);
           }
@@ -228,7 +229,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         return item.trangThai == this.STATUS.DU_THAO
       })
       if (dataCheck.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới vì đang có gói thầu chưa hoàn thành cập nhật, xin vui lòng hoàn thành cập nhật");
+        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới, vì đang có thông tin đấu giá chưa hoàn thành cập nhập, xin viu lòng hoàn thành cập nhập");
         return;
       }
     } const modalQD = this.modal.create({

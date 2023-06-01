@@ -42,8 +42,9 @@
         <span>Từ chối</span>
       </button>
 
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub"
-        (click)="pheDuyet()">
+      <button
+        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('DCNB_QUYETDINHDC_DUYET_LDTC')"
+        type="button" class="btn btn-sub" (click)="pheDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>

@@ -10,12 +10,12 @@ import dayjs from 'dayjs';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { STATUS } from 'src/app/constants/status';
 import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/bienBanLayMauXh.service';
-import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { XhPhieuKnghiemCluongService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/kiem-tra-chat-luong/xhPhieuKnghiemCluong.service';
 import { DatePipe } from '@angular/common';
+
 @Component({
   selector: 'app-bdg-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
@@ -25,19 +25,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() isView: boolean;
-  @Input() idBbLayMau: number;
-  dsDanhGia: any[] = [];
-  listBienBan: any[] = [];
+
   listDiaDiemXh: any[] = [];
-  phuongPhapLayMaus: any[] = [];
   listHinhThucBaoQuan: any[] = [];
+  dsDanhGia: any[] = [];
+
+  loadPhieuKnghiemCluong: any[] = [];
+  fileDinhKems: any[] = []
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNvXuatHangService,
     private bienBanLayMauXhService: BienBanLayMauXhService,
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
@@ -107,9 +108,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       trangThai: this.STATUS.DA_DUYET_LDCC,
       maDviCuc: this.userInfo.MA_DVI
     }
+    await this.loadPhieuKnCluong();
+    let dataBbLM = [];
     let res = await this.bienBanLayMauXhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      data = res.data?.content;
+      const data = [
+        ...res.data?.content.filter((item) => {
+          return !this.loadPhieuKnghiemCluong.some((child) => {
+            if (item.soBienBan.length > 0 && child.soBbLayMau.length > 0) {
+              return item.soBienBan === child.soBbLayMau;
+            }
+          })
+        })
+      ];
+      dataBbLM = data
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -121,19 +133,33 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       nzWidth: '1000px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: data,
+        dataTable: dataBbLM,
         dataHeader: ['Số QĐ giao NVXH', 'Số BB lấy mẫu/bàn giao mẫu', 'Loại hàng hóa', 'Chủng loại hàng hóa', 'Số lượng lấy mẫu'],
         dataColumn: ['soQd', 'soBienBan', 'tenLoaiVthh', 'tenCloaiVthh', 'soLuongLayMau'],
       },
     })
     modalQD.afterClose.subscribe(async (dataChose) => {
       if (dataChose) {
-        await this.bindingBienBanLM(dataChose.id);
+        await this.bindingDataQd(dataChose.id);
       }
     });
   }
 
-  async bindingBienBanLM(id) {
+  async loadPhieuKnCluong() {
+    let body = {
+      nameKh: this.formData.value.nameKh,
+      loaiVthh: this.loaiVthh,
+      maDvi: this.userInfo.MA_DVI,
+    }
+    let res = await this.xhPhieuKnghiemCluongService.search(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.loadPhieuKnghiemCluong = res.data?.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async bindingDataQd(id) {
     await this.spinner.show();
     let res = await this.bienBanLayMauXhService.getDetail(id);
     if (res.data) {
@@ -167,46 +193,11 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
           element.edit = false
         });
       }
-      let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
-      if (dataChiCuc && dataChiCuc.length > 0) {
-        this.listDiaDiemXh = dataChiCuc[0].children;
-      }
     };
 
     await this.spinner.hide();
   }
 
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm nhập hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemXh,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.formData.patchValue({
-          idDdiemXh: data.id,
-          maDiemKho: data.maDiemKho,
-          tenDiemKho: data.tenDiemKho,
-          maNhaKho: data.maNhaKho,
-          tenNhaKho: data.tenNhaKho,
-          maNganKho: data.maNganKho,
-          tenNganKho: data.tenNganKho,
-          maLoKho: data.maLoKho,
-          tenLoKho: data.tenLoKho,
-          soLuong: data.soLuong
-        });
-      }
-    });
-  }
 
   isDisabled() {
     let trangThai = this.formData.value.trangThai;
@@ -231,13 +222,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
-      loaiBienBan: this.listBienBan[0].ma,
       soPhieu: `${id}/${this.formData.get('nam').value}/PKNCL-CDTVP`,
       tenNguoiKiemNghiem: this.userInfo.TEN_DAY_DU,
+      tenTruongPhong: this.userInfo.TEN_DAY_DU,
     });
-    if (this.idBbLayMau) {
-      await this.bindingBienBanLM(this.idBbLayMau);
-    }
   }
 
   async loadDataComboBox() {
@@ -269,10 +257,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     if (this.validateNgay()) {
       let body = this.formData.value;
       body.children = this.dataTable;
-      body.fileDinhKems = this.fileDinhKem;
-      body.children.forEach(e => {
-        e.chiSoNhap = e.chiSoXuat
-      });
+      body.fileDinhKems = this.fileDinhKems;
       let data = await this.createUpdate(body);
       if (data) {
         if (isGuiDuyet) {
@@ -322,13 +307,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   async loadChitiet() {
     let data = await this.detail(this.id);
     this.dataTable = data.children
-    this.fileDinhKem = data.fileDinhKems;
-    this.dataTable.forEach(e => {
-      e.chiSoXuat = e.chiSoNhap
-    });
-    this.formData.patchValue({
-      flagNiemPhong: this.formData.value.ketQuaNiemPhong == 1,
-    })
+    this.fileDinhKems = data.fileDinhKems;
   }
 
   cancelEdit(index: number): void {

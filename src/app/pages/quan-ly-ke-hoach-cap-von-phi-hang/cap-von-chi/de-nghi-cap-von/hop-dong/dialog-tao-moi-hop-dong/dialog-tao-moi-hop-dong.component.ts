@@ -11,6 +11,7 @@ import { mulNumber, sumNumber } from 'src/app/Utility/func';
 import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { BaoCao, ItemContract } from '../../de-nghi-cap-von.constant';
+import dayjs from "dayjs";
 
 @Component({
     selector: 'dialog-tao-moi-hop-dong',
@@ -27,8 +28,9 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
     isContract = false;
+  listNam: any[] = [];
 
-    constructor(
+  constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
         private userService: UserService,
@@ -39,6 +41,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
         this.response.ngayTao = new Date();
+        this.loadDsNam();
         this.response.maDvi = this.userInfo?.MA_DVI;
         this.response.trangThai = Utils.TT_BC_1;
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
@@ -71,6 +74,15 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         )
         this.spinner.hide();
     }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get("year") - i,
+        text: dayjs().get("year") - i
+      });
+    }
+  }
 
     //lay chi tiet cua bao cao
     async getDetail() {

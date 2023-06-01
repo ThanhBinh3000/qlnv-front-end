@@ -35,4 +35,9 @@ export class HopdongService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  listHopDong(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach-hop-dong-bb-nghiem-thu`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

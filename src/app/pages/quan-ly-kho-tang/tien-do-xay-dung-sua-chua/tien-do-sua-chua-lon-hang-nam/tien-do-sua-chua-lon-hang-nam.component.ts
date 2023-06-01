@@ -47,8 +47,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   dataTableRaw: any[] = [];
   itemSelected: any;
   tabSelected: string = "01";
-  itemQdPdDaDtxd: any;
-  itemQdPdTktcTdt: any;
+  itemQdPdKtkt: any;
   itemQdPdKhLcnt: any;
   itemTtdt: any;
   itemHopDong: any;
@@ -68,7 +67,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     modal: NzModalService,
     private donViService: DonviService,
     private ktQdXdHangNamService: KtKhSuaChuaBtcService,
-    private qdPheDuyetBaoCaoTktkService: QdPheDuyetBaoCaoKtktService,
+    private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
@@ -91,10 +90,12 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   }
 
   async ngOnInit() {
+    this.spinner.show();
     if (this.userService.isCuc()) {
       await this.loadDanhSachChiCuc();
     }
     this.filter();
+    this.spinner.hide();
   }
 
   async filter() {
@@ -111,7 +112,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
         if (this.dataTableRaw && this.dataTableRaw.length > 0) {
-          this.selectRow(this.dataTableRaw[0]);
+           this.selectRow(this.dataTableRaw[0]);
         }
         this.expandAll(this.dataTable);
       } else {
@@ -135,21 +136,18 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   receivedData(data: any, tab: string) {
     switch (tab) {
       case '01':
-        this.itemQdPdDaDtxd = data;
+        this.itemQdPdKtkt = data;
         break;
       case '02':
-        this.itemQdPdTktcTdt = data;
-        break;
-      case '03':
         this.itemQdPdKhLcnt = data;
         break;
-      case '04':
+      case '03':
         this.itemTtdt = data;
         break;
-      case '05':
+      case '04':
         this.trangThaiQdPdKqLcnt = data;
         break;
-      case '06':
+      case '05':
         this.trangThaiHopDong = data;
         break;
     }
@@ -167,8 +165,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
 
 
   async loadQdPdDaDtxdByDuAn(item) {
-    this.itemQdPdTktcTdt = null;
-    this.itemQdPdDaDtxd = null;
+    this.itemQdPdKtkt = null;
     this.itemQdPdKhLcnt = null;
     this.itemTtdt = null;
     this.trangThaiQdPdKqLcnt = false;
@@ -179,26 +176,24 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let body = {
         "namKh": item.namKh,
         "soQdPdKhScl": item.soQdPdTcdt,
-        "idQdPdKhScl": item.idQdTcdt,
         "loai" : "00",
         "paggingReq": {
           "limit": 10,
           "page": 0
         }
       }
-      let res = await this.qdPheDuyetBaoCaoTktkService.search(body);
-      console.log(res,111)
+      let res = await this.qdPheDuyetBaoCaoKtktService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdDaDtxd = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        //Check tiếp quyết định phê duyệt bản vẽ
-        if (this.itemQdPdDaDtxd) {
-          await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
-          await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
-          await this.loadListItemQdPdKqLcnt(this.itemTtdt);
-          await this.loadItemHopDong();
-        } else {
-          this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
-        }
+        this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        // //Check tiếp quyết định phê duyệt bản vẽ
+        // if (this.itemQdPdKtkt) {
+        //   // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
+        //   // await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
+        //   // await this.loadListItemQdPdKqLcnt(this.itemTtdt);
+        //   // await this.loadItemHopDong();
+        // } else {
+        //   this.notification.warning(MESSAGE.WARNING, "Dự án chưa tạo quyết định phê duyệt dự án đầu tư xây dựng hoặc quyết định chưa ban hành.");
+        // }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -209,10 +204,10 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     }
   }
 
-  async loadItemQdPdTktcTdt(itemQdPdDaDtxd) {
-    if (itemQdPdDaDtxd && itemQdPdDaDtxd.trangThai == STATUS.BAN_HANH) {
+  async loadItemQdPdTktcTdt(itemQdPdTktcTdt) {
+    if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
       let body = {
-        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "idQdPdDaDtxd": this.itemQdPdKtkt.id,
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -220,7 +215,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       }
       let res = await this.quyetdinhpheduyetTktcTdtService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.itemQdPdTktcTdt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
+        this.itemQdPdKtkt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -230,9 +225,9 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   async loadItemQdPdKhLcnt(itemQdPdTktcTdt) {
     if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
       let body = {
-        "idQdPdDaDtxd": this.itemQdPdDaDtxd.id,
+        "idQdPdDaDtxd": this.itemQdPdKtkt.id,
         "idQdPdTktcTdt": itemQdPdTktcTdt.id,
-        "idDuAn": this.itemQdPdDaDtxd.idDuAn,
+        "idDuAn": this.itemQdPdKtkt.idDuAn,
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -371,8 +366,8 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   }
 
   async selectTab(tab) {
-    if (tab != '01' && (!this.itemQdPdDaDtxd || this.itemQdPdDaDtxd.trangThai != STATUS.BAN_HANH)) {
-      this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt dự án đầu tư xây dựng chưa được tạo hoặc chưa ban hành.");
+    if (tab != '01' && (!this.itemQdPdKtkt || this.itemQdPdKtkt.trangThai != STATUS.BAN_HANH)) {
+      this.notification.warning(MESSAGE.WARNING, "Quyết định phê duyệt báo cáo KTKT chưa được tạo hoặc chưa ban hành.");
       return;
     }
     this.tabSelected = tab;
