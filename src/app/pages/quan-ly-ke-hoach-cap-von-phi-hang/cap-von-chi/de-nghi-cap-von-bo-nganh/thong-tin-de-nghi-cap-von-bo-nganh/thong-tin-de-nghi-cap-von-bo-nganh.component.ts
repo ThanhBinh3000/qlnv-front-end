@@ -271,20 +271,21 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
     this.rowItem.tenVatTuCha = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
     this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
-    console.log(this.listChungLoaiHangHoa, '2222')
   }
 
   changeChungLoaiHangHoa() {
     /*let chungLoaiHangHoa = this.listChungLoaiHangHoa.filter(x => {
       return x.ma === this.rowItem.maVatTu;
     });
-
     if (chungLoaiHangHoa && chungLoaiHangHoa.length > 0) {
       this.rowItem.tenVatTu = chungLoaiHangHoa[0].ten;
       this.rowItem.donViTinh = chungLoaiHangHoa[0].maDviTinh;
     }*/
-    this.rowItem.tenVatTu = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).tenHangHoa;
-    //this.rowItem.donViTinh = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).maDviTinh;
+    let item = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu)
+    if (item) {
+      this.rowItem.tenVatTu = item.tenHangHoa;
+      this.rowItem.donViTinh = item.maDviTinh;
+    }
   }
 
   changeThanhTien() {

@@ -417,7 +417,7 @@
                         <nz-form-label [nzNoColon]="true"> Tổng SL đề xuất mua trực tiếp </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
                             <span class="text-green">{{formData.value.tongSoLuong }}
-                                (Kg)</span>
+                                (Tấn)</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -445,7 +445,7 @@
                             <th class="text-center wrap">Điểm kho nhập kho</th>
                             <th class="text-center wrap">SL theo chỉ tiêu kế hoạch năm</th>
                             <th class="text-center wrap">SL theo KH năm đã được duyệt</th>
-                            <th class="text-center wrap">SL đề xuất mua trực tiếp (kg)</th>
+                            <th class="text-center wrap">SL đề xuất mua trực tiếp (Tấn)</th>
                             <th class="text-center wrap">Đơn giá đề xuất (đ)</th>
                             <th class="text-center wrap">Thành tiền đề xuất (đ)</th>
                             <th class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
@@ -461,7 +461,7 @@
                                 <td class="text-red">{{item.soLuongChiTieu | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-red">{{item.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td class="text-black">{{item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td class="text-black">{{item.tongDongGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td class="text-black"></td>
                                 <td class="text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td></td>
                                 <td></td>
@@ -477,9 +477,9 @@
                                     <td></td>
                                     <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{children.soLuong * children.soLuong }}</td>
+                                    <td>{{children.soLuong * children.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                                     <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                    <td>{{children.soLuong * children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{children.soLuong * children.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>
                                         <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan($event,item,i)">
                                             <i class="fa fa-pencil"></i>
