@@ -1,6 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Globals } from "../../../../../../../shared/globals";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, Input, OnInit } from '@angular/core';
 import * as dayjs from "dayjs";
 import { Base2Component } from "../../../../../../../components/base2/base2.component";
 import { HttpClient } from "@angular/common/http";
@@ -15,9 +13,7 @@ import { STATUS } from 'src/app/constants/status';
 import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { L } from '@angular/cdk/keycodes';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { async } from 'rxjs';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 
 @Component({
@@ -28,12 +24,15 @@ import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ba
 export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   @Input() idInput: number;
+  @Input() isViewOnModal: boolean;
   fileDinhKems: any[] = []
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
   loadMaThongBaoQd: any[] = [];
 
   maTrinh: String;
+
+  chiu: any[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -50,6 +49,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
+      idPdKhDtl:[],
+      idThongTin: [],
       maDvi: [''],
       tenDvi: [''],
       soQdKq: [''],
@@ -107,14 +108,6 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     }
   }
 
-  onChangeLhNx($event) {
-    let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
-    if (dataNx.length > 0) {
-      this.formData.patchValue({
-        kieuNx: dataNx[0].ghiChu
-      })
-    }
-  }
 
   initForm() {
     this.formData.patchValue({
@@ -133,6 +126,11 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       this.fileDinhKems = res.fileDinhKems;
       this.fileDinhKem = res.fileDinhKem;
       await this.onChangeTtinDgia(res.maThongBao.split('/')[0]);
+      if(res.idPdKhDtl){
+        let resTb = await this.thongTinDauGiaService.getDetail(res.idThongTin)
+        const dataTb = resTb.data
+        this.dataTable = dataTb.children
+      }
     }
   }
 
@@ -216,6 +214,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       "nam": this.formData.value.nam,
       "loaiVthh": this.loaiVthh,
       "maDvi": this.userInfo.MA_DVI,
+      "trangThai" : this.STATUS.DA_HOAN_THANH,
       "paggingReq": {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -267,6 +266,9 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
             let resQdKhDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(dataTb.idQdPdDtl);
             const dataQdKhDtl = resQdKhDtl.data;
             this.formData.patchValue({
+              idThongTin: dataTb.id,
+              soQdPd: dataQdKhDtl.xhQdPdKhBdg.soQdPd,
+              idPdKhDtl: dataQdKhDtl.id,
               maThongBao: dataTb.maThongBao,
               soBienBan: dataTb.soBienBan,
               loaiHinhNx: dataQdKhDtl.xhQdPdKhBdg.loaiHinhNx,

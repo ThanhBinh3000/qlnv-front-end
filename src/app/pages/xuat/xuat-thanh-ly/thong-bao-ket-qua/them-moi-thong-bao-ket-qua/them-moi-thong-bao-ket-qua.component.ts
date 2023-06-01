@@ -22,25 +22,6 @@ import {
   ThongBaoKqThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
 
-export class BaoCaoKqDtl {
-  idVirtual: string;
-  maDiaDiem: string;
-  loaiVthh: string;
-  cloaiVthh: string;
-  donViTinh: string;
-  slHienTai: number;
-  slDeXuat: number;
-  slDaDuyet: number;
-  slCon: number;
-  donGia: number;
-  thanhTien: number;
-  ngayNhapKho: Date;
-  ngayDeXuat: Date;
-  ngayTongHop: Date;
-  lyDo: string;
-  ketQua: string;
-  type: string;
-}
 @Component({
   selector: 'app-them-moi-thong-bao-ket-qua',
   templateUrl: './them-moi-thong-bao-ket-qua.component.html',
@@ -78,33 +59,27 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
       });
     }
     this.formData = this.fb.group({
-
       id:[],
       maDvi:[],
       nam:[dayjs().get("year"), [Validators.required]],
-      soBaoCao:['', [Validators.required]],
-      ngayBaoCao:[],
-      idQd:['', [Validators.required]],
-      soQd:['', [Validators.required]],
+      soThongBao:['', [Validators.required]],
+      ngayThongBao:['', [Validators.required]],
+      idHoSo:[],
+      soHoSo:['', [Validators.required]],
+      ngayTrinhDuyet:['', [Validators.required]],
+      ngayThamDinh:['', [Validators.required]],
       noiDung:['', [Validators.required]],
-      trangThai: [STATUS.DU_THAO],
-      tongSoLuongTl:[],
-      tongSoLuongCon:[],
-      tongThanhTien:[],
-      ngayTao: [],
-      nguoiTaoId: [],
-      ngaySua: [],
-      nguoiSuaId: [],
-      ngayPduyet: [],
-      nguoiPduyetId: [],
-      ngayGduyet: [],
-      nguoiGduyetId: [],
-      lyDoTuChoi: [],
-      tenDvi: [],
-      tenTrangThai: ['Dự thảo'],
+      lyDo:[],
+      trangThai:['', [Validators.required]],
+      trangThaiTb:[STATUS.DU_THAO],
+      ngayPduyet:[],
+      nguoiPduyetId:[],
+      ngayGduyet:[],
+      nguoiGduyetId:[],
+      lyDoTuChoi:[],
+      tenDvi:[],
+      tenTrangThai:['Dự thảo'],
       fileDinhKem: [new Array<FileDinhKem>()],
-      canCu: [new Array<FileDinhKem>()],
-      baoCaoKqDtl: [new Array<BaoCaoKqDtl>()],
 
     });
 

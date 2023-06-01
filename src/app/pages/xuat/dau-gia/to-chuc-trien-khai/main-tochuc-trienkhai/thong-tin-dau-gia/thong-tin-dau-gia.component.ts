@@ -28,6 +28,9 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   idDxBdg: number = 0;
   isViewDxBdg: boolean = false;
 
+  idKqBdg: number = 0;
+  isViewKqBdg: boolean = false;
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -128,5 +131,15 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
   closeModalDxBdg() {
     this.idDxBdg = null;
     this.isViewDxBdg = false;
+  }
+
+  openModalKqBdg(id: number) {
+    this.idKqBdg = id;
+    this.isViewKqBdg = true;
+  }
+
+  closeModalKqBdg() {
+    this.idKqBdg = null;
+    this.isViewKqBdg = false;
   }
 }

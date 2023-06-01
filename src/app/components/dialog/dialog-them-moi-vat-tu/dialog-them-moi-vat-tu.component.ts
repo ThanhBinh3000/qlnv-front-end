@@ -157,7 +157,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         this.listChiCuc = this.dataChiTieu.khMuoiDuTru.filter(item => item.nhapTrongNam > 0);
         this.listChiCuc.forEach(item => {
           item.maDvi = item.maDonVi
-          item.tenDonVi = item.tenDonvi
+          item.tenDonVi = item.tenDonVi
           item.diaDiemNhap = item.diaDiemNhap
           item.soLuongNhap = item.nhapTrongNam
         })
@@ -401,7 +401,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaVat').value,
+        +this.formData.get('donGiaVat').value * 1000,
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
@@ -413,7 +413,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTienDx:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGiaTamTinh').value,
+        +this.formData.get('donGiaTamTinh').value *1000,
     });
     this.formattedThanhTienDx = this.formData.get('thanhTienDx') ? formatNumber(this.formData.get('thanhTienDx').value, 'vi_VN', '1.0-1') : '0';
   }

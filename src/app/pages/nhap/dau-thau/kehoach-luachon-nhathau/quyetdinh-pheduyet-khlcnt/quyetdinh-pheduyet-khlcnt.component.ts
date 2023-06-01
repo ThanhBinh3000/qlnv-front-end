@@ -466,14 +466,14 @@ export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements 
     this.openDxKhlcnt = false;
   }
 
-  disabledTuNgayKy = (startValue: Date): boolean => {
+  disabledTuNgayQd = (startValue: Date): boolean => {
     if (!startValue || !this.denNgayKy) {
       return false;
     }
     return startValue.getTime() > this.denNgayKy.getTime();
   };
 
-  disabledDenNgayKy = (endValue: Date): boolean => {
+  disabledDenNgayQd = (endValue: Date): boolean => {
     if (!endValue || !this.tuNgayKy) {
       return false;
     }
