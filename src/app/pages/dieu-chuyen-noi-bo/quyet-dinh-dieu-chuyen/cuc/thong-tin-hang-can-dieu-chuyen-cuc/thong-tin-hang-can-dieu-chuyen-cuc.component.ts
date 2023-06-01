@@ -91,7 +91,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   ngOnInit(): void {
     const dis = this.danhSachKeHoach.find(item => item.maChiCucNhan === this.data.maChiCucNhan)
-    console.log('dis', !!dis, this.danhSachKeHoach, this.data)
+
     this.handleData()
   }
 

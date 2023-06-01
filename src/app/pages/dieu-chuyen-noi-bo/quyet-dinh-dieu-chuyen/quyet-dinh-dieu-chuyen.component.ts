@@ -123,8 +123,6 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
     });
 
     this.idTongHop = +this.routerActive.snapshot.paramMap.get('id');
-    console.log("idTongHop", this.idTongHop)
-
 
     if (this.isChiCuc()) this.tabSelected = 1;
     if (this.tabSelected == 0) {
@@ -225,7 +223,6 @@ export class QuyetDinhDieuChuyenComponent extends Base2Component implements OnIn
       this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD')
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD')
     }
-    console.log('DSQuyetDinhDieuChuyenComponent/this.formData.value=>', this.formData.value)
     await this.search();
   }
 

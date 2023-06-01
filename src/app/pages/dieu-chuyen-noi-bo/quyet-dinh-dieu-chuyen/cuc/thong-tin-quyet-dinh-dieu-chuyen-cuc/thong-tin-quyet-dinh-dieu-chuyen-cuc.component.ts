@@ -209,8 +209,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       }
     }
-    console.log('loadChiTietdanhSachKeHoach', this.danhSachKeHoach)
-    console.log('loadChiTietdataTableView', JSON.stringify(this.dataTableView))
     await this.spinner.hide();
   }
 
@@ -371,72 +369,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     }
   }
 
-  // buildTableViewNB(data: any[] = [], groupBy: string = "maDvi") {
-  //   let dataView = chain(data)
-  //     .groupBy(groupBy)
-  //     ?.map((value, key) => {
-  //       console.log('maDvi', key, value)
-  //       let rs = chain(value)
-  //         .groupBy("maDiemKho")
-  //         ?.map((v, k) => {
-  //           console.log('maDiemKho', k, v)
-  //           let rss = chain(v)
-  //             .groupBy("maLoKho")
-  //             ?.map((vs, ks) => {
-  //               console.log('maLoKho', ks, vs)
-  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-  //               const rssx = chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-  //                 console.log('maDiemKhoNhan', inx, n)
-  //                 const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-  //                 return {
-  //                   ...maDiemKhoNhan,
-  //                   children: n
-  //                 }
-  //               }).value()
-  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //               return {
-  //                 ...maLoKho,
-  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //                 children: rssx,
-  //                 duToanKphi
-  //               }
-  //             }
-  //             ).value();
-
-  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-  //           return {
-  //             ...rowDiemKho,
-  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //             duToanKphi: duToanKphi,
-  //             children: rss,
-  //             expand: true
-  //           }
-  //         }
-  //         ).value();
-
-  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //       let rowChiCuc = value?.find(s => s[`${groupBy}`] === key);
-  //       return {
-  //         ...rowChiCuc,
-  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //         duToanKphi: duToanKphi,
-  //         children: rs,
-  //         expand: true
-  //       };
-  //     }).value();
-
-
-  //   if (data?.length !== 0) {
-  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //     this.formData.patchValue({
-  //       tongDuToanKp: tongDuToanChiPhi,
-  //     })
-  //   };
-  //   return dataView
-  // }
 
   buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
@@ -452,16 +385,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
               ?.map((vs, ks) => {
 
                 const maLoKho = vs.find(s => s?.maLoNganKho == ks);
-                // const rsss = chain(vs).groupBy("id").map((x, ix) => {
-                //   console.log('id', ix, x)
-                //   const ids = x.find(f => f.id == ix);
-
-                //   const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
-                //   if (!hasmaChiCucNhan) return {
-                //     ...ids
-                //   }
-
-                // }).value()
 
 
                 const rsxx = (groupBy === "maChiCucNhan") ? chain(vs).groupBy("maDiemKhoNhan")?.map((n, inx) => {
@@ -495,11 +418,6 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
 
-
-                // return {
-                //   ...maLoKho,
-                //   children: rsxx
-                // }
                 let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
                 return {
                   ...maLoKho,
@@ -544,64 +462,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     return dataView
   }
 
-  // buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
-  //   let dataView = chain(data)
-  //     .groupBy(groupBy)
-  //     ?.map((value, key) => {
-  //       console.log('maDvi', key, value)
-  //       let rs = chain(value)
-  //         .groupBy("maDiemKho")
-  //         ?.map((v, k) => {
-  //           console.log('maDiemKho', k, v)
-  //           let rss = chain(v)
-  //             .groupBy("maLoKho")
-  //             ?.map((vs, ks) => {
-  //               console.log('maLoKho', ks, vs)
-  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
 
-  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //               return {
-  //                 ...maLoKho,
-  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //                 children: vs,
-  //                 duToanKphi
-  //               }
-  //             }
-  //             ).value();
-
-  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-  //           return {
-  //             ...rowDiemKho,
-  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //             duToanKphi: duToanKphi,
-  //             children: rss,
-  //             expand: true
-  //           }
-  //         }
-  //         ).value();
-
-  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //       let rowChiCuc = value?.find(s => s.maDvi === key);
-  //       return {
-  //         ...rowChiCuc,
-  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //         duToanKphi: duToanKphi,
-  //         children: rs,
-  //         expand: true
-  //       };
-  //     }).value();
-
-
-  //   if (data?.length !== 0) {
-  //     const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //     this.formData.patchValue({
-  //       tongDuToanKp: tongDuToanChiPhi,
-  //     })
-  //   };
-  //   return dataView
-  // }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
     if (parantExpand) {
@@ -805,7 +666,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
 
         const qdinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId == keHoachDcHdrId)
-        console.log('row', row)
+
         if (qdinh) {
           const dsHH = qdinh.danhSachKeHoach.filter(item => !!item.maDiemKhoNhan)
           dsHH.push({
@@ -918,7 +779,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   themDiemKhoNhan(row) {
     this.typeKeHoach = "THEM_DIEM_KHO_NHAN"
-    console.log('themLoKho', row)
+
     const data = {
       ...row,
       maDiemKhoNhan: "",
@@ -997,7 +858,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   themLoKhoNhan(row) {
     this.typeKeHoach = "THEM_LO_KHO_NHAN"
-    console.log('themLoKho', row)
+
     const data = {
       ...row,
       // maDiemKhoNhan: "",
