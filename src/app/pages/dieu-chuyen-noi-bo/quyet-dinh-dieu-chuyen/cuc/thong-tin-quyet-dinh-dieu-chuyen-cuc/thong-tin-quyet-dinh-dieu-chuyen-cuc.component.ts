@@ -199,18 +199,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
       if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
 
       if (data.loaiDc === "DCNB") {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
+      } else {
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
       }
-      if (data.loaiDc === "CHI_CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-      }
-      if (data.loaiDc === "CUC" && !(this.isChiCuc() && data.loaiQdinh == '01')) {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
-      }
-      if (data.loaiDc === "CUC" && this.isChiCuc() && data.loaiQdinh == '01') {
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
 
-      }
     }
     await this.spinner.hide();
   }
@@ -361,7 +354,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
       })
 
-      this.dataTableView = this.formData.value.loaiDc === "CHI_CUC" ? this.buildTableViewChiCUC(dsHH, "maDvi") : this.buildTableViewChiCUC(dsHH, "maDvi")
+      this.dataTableView = this.buildTableView(dsHH, "maDvi")
 
       this.formData.patchValue({
         tongDuToanKp: tong,
@@ -374,7 +367,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
 
 
-  buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
+  buildTableView(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
       .groupBy(groupBy)
       ?.map((value, key) => {
@@ -523,7 +516,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
           maLoNganKho: data.maLoKho ? `${data.maLoKho}${data.maNganKho}` : data.maNganKho,
         })
 
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
         if (this.idInput) {
           if (keHoachDcHdrId) {
@@ -666,7 +659,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
             hdrId: keHoachDcHdrId
           })
 
-        this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+        this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
         const qdinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId == keHoachDcHdrId)
 
@@ -696,7 +689,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   xoaChiCuc(row) {
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maChiCucNhan !== row.maChiCucNhan)
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
       const dsKH = qDinh.danhSachKeHoach.filter(item => item.maChiCucNhan !== row.maChiCucNhan)
@@ -711,7 +704,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
 
   xoaDiemKho(row) {
     this.danhSachKeHoach = this.danhSachKeHoach.filter(kh => kh.maDiemKho !== row.maDiemKho)
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
@@ -766,7 +759,7 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         (row.maLoKho ? kh.maLoKho === row.maLoKho : true))
     )
 
-    this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)
@@ -815,11 +808,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         kh.maDiemKhoNhan === row.maDiemKhoNhan)
     )
     if (this.isCuc()) {
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     }
 
     if (this.isChiCuc()) {
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
     }
 
     if (this.idInput) {
@@ -898,9 +891,9 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
         (row.maLoKhoNhan ? kh.maLoKhoNhan === row.maLoKhoNhan : true))
     )
     if (this.isCuc())
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maChiCucNhan")
     if (this.isChiCuc())
-      this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+      this.dataTableView = this.buildTableView(this.danhSachKeHoach, "maDvi")
 
     if (this.idInput) {
       const qDinh = this.formData.value.danhSachQuyetDinh.find(item => item.keHoachDcHdrId === row.hdrId)

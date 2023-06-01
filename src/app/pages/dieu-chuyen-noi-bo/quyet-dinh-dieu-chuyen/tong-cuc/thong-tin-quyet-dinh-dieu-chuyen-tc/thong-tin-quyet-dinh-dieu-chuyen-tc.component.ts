@@ -182,13 +182,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
       this.canCu = data.canCu;
       this.quyetDinh = data.quyetDinh;
-      if (data.loaiDc === "CHI_CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-      }
-
-      if (data.loaiDc === "CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-      }
+      this.dataTableView = this.buildTableView(listHangHoa)
 
     }
     await this.spinner.hide();
@@ -255,7 +249,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
             }
 
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
+            this.dataTableView = this.buildTableView(listHangHoa)
           }
 
           if (loaiDC === "CUC") {
@@ -282,7 +276,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
               }
 
             }
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
+            this.dataTableView = this.buildTableView(listHangHoa)
 
           }
 
@@ -304,7 +298,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
 
 
-  buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
+  buildTableView(data: any[] = [], groupBy: string = "maDvi") {
     let dataView = chain(data)
       .groupBy("maDvi")
       ?.map((value, key) => {
@@ -608,13 +602,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
         })
 
-        if (loaiDC === "CHI_CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-        }
-
-        if (loaiDC === "CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-        }
+        this.dataTableView = this.buildTableView(listHangHoa)
 
 
 
