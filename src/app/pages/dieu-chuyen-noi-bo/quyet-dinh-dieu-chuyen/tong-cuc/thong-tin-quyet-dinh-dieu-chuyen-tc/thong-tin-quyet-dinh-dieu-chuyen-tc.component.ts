@@ -103,7 +103,7 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
 
     await this.spinner.show();
     try {
-      this.maQd = this.userInfo.MA_QD;
+      this.maQd = "DCNB"//this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput)
       } else {
@@ -165,11 +165,10 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
       })
 
       this.formData.patchValue({
+        ...data,
         quyetDinhPdDtl: listDeXuat,
+        soQdinh: data.soQdinh.split('/')[0]
       });
-
-
-      this.formData.patchValue(data);
 
       if (data.idThop) {
         this.formData.patchValue({
@@ -389,7 +388,12 @@ export class ThongTinQuyetDinhDieuChuyenTCComponent extends Base2Component imple
     await this.spinner.show();
     this.setValidator()
     let body = this.formData.value;
-    if (this.idInput) body.id = this.idInput
+    if (this.idInput) {
+      body.id = this.idInput
+    } else {
+      body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
+    }
+
     body.canCu = this.canCu
     body.quyetDinh = this.quyetDinh
 

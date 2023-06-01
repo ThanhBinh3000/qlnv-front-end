@@ -173,7 +173,10 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     if (id) {
       let data = await this.detail(id);
       this.danhSachKeHoach = []
-      this.formData.patchValue(data);
+      this.formData.patchValue({
+        ...data,
+        soQdinh: data.soQdinh.split('/')[0]
+      });
 
       data.danhSachQuyetDinh.map(async (item, i) => {
         if (item.dcnbKeHoachDcHdr) {
@@ -930,7 +933,11 @@ export class ThongTinQuyetDinhDieuChuyenCucComponent extends Base2Component impl
     let body = this.formData.value;
     body.canCu = this.canCu;
     body.quyetDinh = this.quyetDinh;
-    if (this.idInput) body.id = this.idInput
+    if (this.idInput) {
+      body.id = this.idInput
+    } else {
+      body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
+    }
 
     let data = await this.createUpdate(body);
     if (data) {
