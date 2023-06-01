@@ -58,7 +58,10 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
     isAddNew: boolean = false;
     isEdit: boolean = false;
 
-    dataTable: any[] = []
+    dataTable: any[] = [];
+
+    isViewModalQdDc: boolean = false;
+    idQdDcSelect: number;
 
     constructor(
         httpClient: HttpClient,
@@ -263,6 +266,18 @@ export class TongHopDieuChuyenCapTongCuc extends Base2Component implements OnIni
         else {
             this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
         }
+    }
+    openModalQdDc(event, id: number) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (id) {
+            this.idQdDcSelect = id;
+            this.isViewModalQdDc = true
+        }
+    };
+    closeModalQdDc() {
+        this.idQdDcSelect = null;
+        this.isViewModalQdDc = false
     }
 
 }

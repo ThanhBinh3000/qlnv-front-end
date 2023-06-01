@@ -158,6 +158,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       });
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
+    if (this.loaiVthhInput.startsWith('02')){
+      this.formData.get('vat').setValue('10');
+    }
     this.loadDanhMucHang();
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -1358,12 +1361,16 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh * 1000;
+          prev += cur.soLuong * item.donGiaTamTinh;
           return prev;
         }, 0);
         sum += sumChild;
       })
-      return sum;
+      if (this.loaiVthhInput.startsWith('02')){
+        return sum;
+      } else {
+        return sum * 1000;
+      }
     }
   }
 
@@ -1377,7 +1384,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }, 0);
         sum += sumChild;
       })
-      return sum * (100 + this.formData.get('gtriDthau').value) / 100;
+      return sum * this.formData.get('gtriDthau').value / 100;
     }
   }
 

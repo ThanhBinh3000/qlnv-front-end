@@ -45,7 +45,7 @@
           <nz-form-label nzRequired [nzNoColon]="true"> Tên dự án </nz-form-label>
           <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
             <nz-input-group nzAddOnAfterIcon="folder-open">
-              <input [readonly]="true" nz-input [ngModel]="isCache ? formData.value.tenDuAn : tenDuAn" [ngModelOptions]="{standalone: true}" readonly="true" />
+              <input [readonly]="true" nz-input formControlName="tenDuAn" readonly="true" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -68,48 +68,51 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
-                    HSMT) </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy" [nzDisabled]="isView">
-                    </nz-date-picker>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở thầu</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                        <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianMthau"
-                            nzFormat="HH:mm dd/MM/yyyy" [nzDisabled]="isView">
-                        </nz-date-picker>
-                    </nz-input-group>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm đóng thầu </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianDthau"
-                        nzFormat="HH:mm dd/MM/yyyy" [nzDisabled]="isView">
-                    </nz-date-picker>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn nhập hàng trước ngày </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianNhang"
-                              nzFormat="HH:mm dd/MM/yyyy" [nzDisabled]="isView">
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
+            HSMT) </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker [(ngModel)]="tgianBdauTchucChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
+                            [nzDisabled]="isView" (ngModelChange)="onDateChanged($event, 'tgianBdauTchuc')"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian nhập hàng trước ngày </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <nz-date-picker [(ngModel)]="tgianNhangChange" [ngModelOptions]="{standalone: true}" nzFormat="dd/MM/yyyy"
+                              [nzDisabled]="isView" (ngModelChange)="onDateChanged($event, 'tgianNhang')"></nz-date-picker>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở thầu</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-input-group>
+              <nz-date-picker [(ngModel)]="tgianMthauChange" [nzShowTime]="{ nzFormat: 'HH:mm' }"
+                              [ngModelOptions]="{standalone: true}" nzFormat="HH:mm dd/MM/yyyy"
+                              (ngModelChange)="onDateChanged($event, 'tgianMthau')" [nzDisabled]="isView">
               </nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Thời gian đóng thầu </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker [(ngModel)]="tgianDthauChange" [ngModelOptions]="{standalone: true}"
+                            [nzShowTime]="{ nzFormat: 'HH:mm' }" nzFormat="HH:mm dd/MM/yyyy" [nzDisabled]="isView"
+                            (ngModelChange)="onDateChanged($event, 'tgianDthau')">
+            </nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
         <div nz-col [nzSpan]="6">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> % bảo lãnh dự thầu </nz-form-label>
@@ -141,7 +144,7 @@
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group nzAddOnAfter="%">
-              <nz-input-number [ngModel]="isCache ? formData.value.donGiaVat : giaVat" [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1"
+              <nz-input-number [ngModel]="formData.value.donGiaVat" [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1"
                                [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
               </nz-input-number>
             </nz-input-group>
@@ -164,11 +167,9 @@
         <nz-form-item>
           <nz-form-label nzRequired [nzNoColon]="true"> Tên chủ đầu tư
           </nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <nz-input-group nzAddOnAfter="%">
-              <nz-input-number formControlName="tenDvi" nz-input [nzMin]="1"
-                               [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView">
-              </nz-input-number>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <nz-input-group>
+              <input [readonly]="true" nz-input formControlName="tenDvi" readonly="true" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>

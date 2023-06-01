@@ -62,6 +62,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       tenNganKho: [],
       maLoKho: [],
       tenLoKho: [],
+      maThuKho: [],
       thuKho: [],
       loaiVthh: [],
       tenLoaiVthh: [],
@@ -80,6 +81,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       tenNganKhoNhan: [],
       maLoKhoNhan: [],
       tenLoKhoNhan: [],
+      maThuKhoNhan: [],
       thuKhoNhan: [],
       thayDoiThuKho: [],
       slDcConLai: [],
@@ -91,7 +93,7 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   ngOnInit(): void {
     const dis = this.danhSachKeHoach.find(item => item.maChiCucNhan === this.data.maChiCucNhan)
-    console.log('dis', !!dis, this.danhSachKeHoach, this.data)
+
     this.handleData()
   }
 
@@ -410,9 +412,12 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
             this.dsLoKhoNhan = this.dsNganKhoNhan.find(f => f.maDvi === value)?.children;
           } else {
             this.dsLoKhoNhan = []
-            if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-              this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-              this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) {
+            if (
+              // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
+              // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
+              // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan
+              this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+            ) {
               this.formData.patchValue({
                 thayDoiThuKho: "Không"
               })
@@ -437,10 +442,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         this.formData.patchValue({
           tenLoKhoNhan: loKhoNhan.tenDvi
         })
-        if (this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
-          this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
-          this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
-          this.formData.value.maLoKho === this.formData.value.maLoKhoNhan) {
+        if (
+          // this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan &&
+          // this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan &&
+          // this.formData.value.maNganKho === this.formData.value.maNganKhoNhan &&
+          // this.formData.value.maLoKho === this.formData.value.maLoKhoNhan
+          this.formData.value.maThuKho === this.formData.value.maThuKhoNhan
+        ) {
           this.formData.patchValue({
             thayDoiThuKho: "Không"
           })

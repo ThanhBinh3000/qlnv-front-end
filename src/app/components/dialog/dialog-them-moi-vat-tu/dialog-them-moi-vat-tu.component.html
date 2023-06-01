@@ -182,8 +182,8 @@
             <td></td>
             <td></td>
             <td>{{itemChild.soLuong}}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ itemChild.soLuong * formData.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ itemChild.soLuong * formData.value.donGiaTamTinh * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ itemChild.soLuong * formData.value.donGiaVat * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
             <td [nzRight]="true">
               <a (click)="deleteRow(i,y)">
                 <i class="fa fa-trash-o do"></i>
