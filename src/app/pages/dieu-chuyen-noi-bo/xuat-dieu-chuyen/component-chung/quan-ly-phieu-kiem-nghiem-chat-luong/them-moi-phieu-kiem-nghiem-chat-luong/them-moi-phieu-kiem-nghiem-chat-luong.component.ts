@@ -1,3 +1,4 @@
+import { BienBanLayMauDieuChuyenService } from './../../services/dcnb-bien-ban-lay-mau.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -34,6 +35,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -87,6 +89,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     private danhMucService: DanhMucService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
+    private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
+    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongHangService);
     this.formData = this.fb.group({
@@ -146,6 +150,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       this.loaiVthh = this.typeVthh
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
+        this.loadSoQuyetDinh(),
         this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
       ]);
@@ -167,17 +172,39 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
 
   async initForm() {
     let res = await this.userService.getId("PHIEU_KNGHIEM_CLUONG_SEQ");
+    console.log("this.userInfo", this.userInfo)
     this.formData.patchValue({
       soPhieuKiemNghiemCl: `${res}/${this.formData.get('nam').value}/PKNCL-CDTVP`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       tenKyThuatVien: this.userInfo.TEN_DAY_DU,
+      tenTruongPhong: this.userInfo.MA_KTBQ,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
   }
-
+  async loadSoQuyetDinh() {
+    let body = {
+      trangThai: STATUS.BAN_HANH,
+      loaiVthh: ['0101', '0102'],
+      loaiDc: "DCNB",
+      maDvi: this.userInfo.MA_DVI
+      // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
+    }
+    let res = await this.quyetDinhDieuChuyenCucService.getDsSoQuyetDinhDieuChuyenCuc(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = Array.isArray(data) ? data.reduce((arr, cur) => {
+        if (arr.findIndex(f => f.soQdinh == cur.soQdinh) < 0) {
+          arr.push(cur)
+        }
+        return arr
+      }, []) : [];
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
   async getDetail(id: number) {
     this.spinner.show()
     let res = await this.phieuKiemNghiemChatLuongHangService.getDetail(id);
@@ -359,7 +386,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       },
       loaiVthh: this.loaiVthh,
     }
-    let res = await this.quanLyBienBanLayMauService.search(body);
+    let res = await this.bienBanLayMauDieuChuyenService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listBbBanGiaoMau = res.data.content
@@ -378,15 +405,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listBbBanGiaoMau,
-        dataHeader: ['Số biên bản', 'Số biên bản nhập đầy kho', 'Số QĐ Giao NV NH'],
-        dataColumn: ['soBienBan', 'soBbNhapDayKho', 'soQdGiaoNvNh']
+        dataHeader: ['Số biên bản', 'Số biên bản nhập đầy kho', 'Số QĐ Giao ĐC'],
+        dataColumn: ['soBbLayMau', 'soBbNhapDayKho', 'soQdinhDcc']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       this.bindingDataBbLayMau(data.id, false);
     });
   }
-
   async bindingDataBbLayMau(id, isChiTiet) {
     let res = await this.quanLyBienBanLayMauService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {

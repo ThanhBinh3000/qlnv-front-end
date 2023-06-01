@@ -450,7 +450,7 @@
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemKhach.hoaVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemKhach.hoVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemKhach.chucVu" /></th>
                           <th><input nz-input [(ngModel)]="rowItemKhach.diaChi" /></th>
                           <th>
@@ -467,7 +467,7 @@
                         <ng-container *ngFor="let data of findTableName('KM')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoaVaTen}}</td>
+                            <td>{{data.hoVaTen}}</td>
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -481,7 +481,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.chucVu" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -511,7 +511,7 @@
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemDgv.hoaVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemDgv.hoVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemDgv.chucVu" /></th>
                           <th><input nz-input [(ngModel)]="rowItemDgv.diaChi" /></th>
                           <th>
@@ -528,7 +528,7 @@
                         <ng-container *ngFor="let data of findTableName('DGV')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoaVaTen}}</td>
+                            <td>{{data.hoVaTen}}</td>
                             <td>{{data.chucVu}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -542,7 +542,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.chucVu" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -572,7 +572,7 @@
                         </tr>
                         <tr *ngIf="!isDisabled()">
                           <th></th>
-                          <th><input nz-input [(ngModel)]="rowItemToChuc.hoaVaTen" /></th>
+                          <th><input nz-input [(ngModel)]="rowItemToChuc.hoVaTen" /></th>
                           <th><input nz-input [(ngModel)]="rowItemToChuc.soCccd" /></th>
                           <th><input nz-input [(ngModel)]="rowItemToChuc.diaChi" /></th>
                           <th>
@@ -589,7 +589,7 @@
                         <ng-container *ngFor="let data of findTableName('NTG')?.dataChild , let i = index">
                           <tr *ngIf="!data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td>{{data.hoaVaTen}}</td>
+                            <td>{{data.hoVaTen}}</td>
                             <td>{{data.soCccd}}</td>
                             <td>{{data.diaChi}}</td>
                             <td *ngIf="!isDisabled()">
@@ -603,7 +603,7 @@
                           </tr>
                           <tr *ngIf="data.isEdit">
                             <td>{{i + 1}}</td>
-                            <td><input nz-input [(ngModel)]="data.hoaVaTen" /></td>
+                            <td><input nz-input [(ngModel)]="data.hoVaTen" /></td>
                             <td><input nz-input [(ngModel)]="data.soCccd" /></td>
                             <td><input nz-input [(ngModel)]="data.diaChi" /></td>
                             <td *ngIf="!isDisabled()">
@@ -701,7 +701,7 @@
                                 <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
                                   [(ngModel)]="children.toChucCaNhan" (ngModelChange)="changeNTG(i, y)">
                                   <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
-                                    [nzValue]="data.hoaVaTen" [nzLabel]="data.hoaVaTen"></nz-option>
+                                    [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
                                 </nz-select>
                               </td>
                             </tr>
