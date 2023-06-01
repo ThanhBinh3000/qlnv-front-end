@@ -118,6 +118,8 @@ export class VatTuCustom {
   vatTuChaId: number;
   vatTuId: number;
   isEdit: boolean = false;
+  sttDonVi: number;
+  donViId: number;
 
   constructor() {
   }

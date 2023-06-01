@@ -7,9 +7,6 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {
-  QuyetDinhPheDuyetPhuongAnCuuTroService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
 import * as dayjs from "dayjs";
 import {Validators} from "@angular/forms";
 import {STATUS} from "../../../../../constants/status";
@@ -21,6 +18,7 @@ import {QuanLyHangTrongKhoService} from "../../../../../services/quanLyHangTrong
 import {
   QuyetDinhThanhLyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/QuyetDinhThanhLyService.service";
+import {HoSoThanhLyService} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/HoSoThanhLy.service";
 
 export class QuyetDinhDtl {
   idVirtual: string;
@@ -68,7 +66,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
     private danhMucService: DanhMucService,
     private quyetDinhThanhLyService: QuyetDinhThanhLyService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
+    private hoSoThanhLyService: HoSoThanhLyService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhThanhLyService);
     for (let i = -3; i < 23; i++) {
@@ -165,9 +163,8 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
   }
 
   async loadDsHoSo() {
-    this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
+    this.hoSoThanhLyService.search({
       trangThai: STATUS.BAN_HANH,
-      nam: this.formData.get('nam').value,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
@@ -214,12 +211,9 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
       try {
         this.spinner.show();
         this.chiTiet = [];
-        this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id).then(res => {
+        this.hoSoThanhLyService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              if (this.userInfo.CAP_DVI === "2") {
-                this.dataTable = cloneDeep(res.data.hoSoDtl);
-              }
               this.formData.patchValue({
                 soHoSo: res.data.soHoSo,
                 quyetDinhDtl: this.dataTable.length>0?this.dataTable:null,
@@ -227,6 +221,7 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
                 tongSoLuongCon : this.dataTable.reduce((prev, cur) => prev + cur.slCon, 0),
                 tongThanhTien : this.dataTable.reduce((prev, cur) => prev + cur.thanhTien, 0),
               });
+              this.dataTable = cloneDeep(res.data.hoSoDtl);
               this.buildTableView()
             }
           }
@@ -256,23 +251,21 @@ export class ThemMoiQuyetDinhThanhLyComponent extends Base2Component implements 
 
 
   buildTableView() {
-    let data = cloneDeep(this.formData.value.quyetDinhDtl);
-
-    if (this.userService.isCuc()) {
-      data = data.filter(s => s.maChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
-    }
+    let data = cloneDeep(this.dataTable);
     let dataView = chain(data)
-      .groupBy("maChiCuc")
+      .groupBy("tenCuc")
       .map((value, key) => {
         let rs = chain(value)
+        let rowItem = value.find(s => s.tenCuc === key);
         return {
           idVirtual: uuid.v4(),
-          maDvi: key,
-          childData: rs,
+          tenCuc: key,
+          childData: value,
         };
       }).value();
 
     this.dataTable = dataView;
+    console.log(this.dataTable)
     this.expandAll()
 
   }

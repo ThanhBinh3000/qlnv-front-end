@@ -158,6 +158,9 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       });
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
+    if (this.loaiVthhInput.startsWith('02')){
+      this.formData.get('vat').setValue('10');
+    }
     this.loadDanhMucHang();
     if (this.idInput > 0) {
       await this.getDetail(this.idInput, null);
@@ -369,7 +372,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
             loaiVthh: this.formData.value.loaiVthh,
             cloaiVthh: this.formData.value.cloaiVthh,
             trangThai: STATUS.BAN_HANH,
-            maDvi: this.formData.value.maDvi
+            maDvi: this.formData.value.maDvi,
+            loaiGia: 'LG03'
           }
           let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
           if (pag.msg == MESSAGE.SUCCESS) {
@@ -525,8 +529,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let tongMucDt: number = 0;
       let tongMucDtDx: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
-        tongMucDtDx = tongMucDtDx + item.soLuong * item.donGiaTamTinh;
+        tongMucDt = tongMucDt + (item.soLuong * item.donGiaVat *1000);
+        tongMucDtDx = tongMucDtDx + (item.soLuong * item.donGiaTamTinh * 1000);
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -1362,7 +1366,11 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
         }, 0);
         sum += sumChild;
       })
-      return sum;
+      if (this.loaiVthhInput.startsWith('02')){
+        return sum;
+      } else {
+        return sum * 1000;
+      }
     }
   }
 
@@ -1371,12 +1379,12 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       let sum = 0
       this.listOfData.forEach(item => {
         const sumChild = item.children.reduce((prev, cur) => {
-          prev += cur.soLuong * item.donGiaTamTinh;
+          prev += cur.soLuong * item.donGiaTamTinh * 1000;
           return prev;
         }, 0);
         sum += sumChild;
       })
-      return sum * (100 + this.formData.get('gtriDthau').value) / 100;
+      return sum * this.formData.get('gtriDthau').value / 100;
     }
   }
 
