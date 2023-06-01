@@ -21,7 +21,7 @@ import {chain, cloneDeep} from 'lodash';
 import {
   QuyetDinhTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/QuyetDinhTieuHuyService.service";
-
+import {v4 as uuidv4} from "uuid";
 export class QuyetDinhDtl {
   idVirtual: string;
   maDiaDiem: string;
@@ -173,12 +173,71 @@ export class ThemMoiQuyetDinhTieuHuyComponent  extends Base2Component implements
         });
       this.formData.controls['idQd'].disable();
     } else {
+      // this.formData.patchValue({
+      //   maDvi: this.userInfo.MA_DVI,
+      //   tenDvi: this.userInfo.TEN_DVI,
+      // });
       this.formData.patchValue({
-        maDvi: this.userInfo.MA_DVI,
-        tenDvi: this.userInfo.TEN_DVI,
-      });
+        id: 85,
+        maDvi: "test_0c5b58375e5b",
+        nam: 48,
+        soQd: "test_0bc84c3e955e",
+        trichYeu: "test_3b2a08e027d7",
+        ngayKy: "2027-07-30",
+        idHoSo: 81,
+        soHoSo: "test_35afcede2e5c",
+        idKq: 95,
+        soKq: "test_4bc8cc72e2a7",
+        thoiGianThTu: "2017-07-18",
+        thoiGianThDen: "2023-05-09",
+        trangThai: "test_3a558289af2c",
+        tongSoLuongTh: 45.72,
+        tongSoLuongCon: 22.10,
+        tongThanhTien: 77.95,
+        lyDoTuChoi: "test_c078c8bbd63e",
+        tenDvi: "test_6e083cf7447f",
+        tenTrangThai: "test_9b20bda262e2",
+        quyetDinhDtl: [
+          {
+            id: 32,
+            nam: 80,
+            idTongHop: 8,
+            maTongHop: "test_9d6670a65cd3",
+            maDiaDiem: "test_c8678459274c",
+            loaiVthh: "test_12abb5407ac2",
+            cloaiVthh: "test_97d2134d6b3c",
+            donViTinh: "test_dc86cf544531",
+            slHienTai: 50.40,
+            slDeXuat: 32.98,
+            slDaDuyet: 83.48,
+            slCon: 47.70,
+            donGia: 44.03,
+            thanhTien: 67.03,
+            ngayNhapKho: "2032-08-10",
+            ngayDeXuat: "2018-04-29",
+            tgianDxTu: "2016-06-04",
+            tgianDxDen: "2027-01-05",
+            ngayTongHop: "2015-03-25",
+            lyDo: "test_5363de94d151",
+            ketQua: "test_e7d0302afe5f",
+            type: "test_6f85751bdf25",
+            trangThai: "test_7ade46baf855",
+            trangThaiTh: "test_85778417f63c",
+            tenLoaiVthh: "test_12cb1b43628a",
+            tenCloaiVthh: "test_12967afa0ff1",
+            tenCuc: "test_be9c8c3222be",
+            tenChiCuc: "test_d4c1d2fdcdb8",
+            tenDiemKho: "test_f48089d619eb",
+            tenNhaKho: "test_aed2453bef98",
+            tenNganKho: "test_4ba2515e02fb",
+            tenLoKho: "test_cda22bf17b90",
+            ngayTao: "2021-09-26",
     }
-
+    ]
+    });
+      await  this.buildTableView();
+    }
+    console.log(this.formData.value,"value")
   }
 
   async loadDsHoSo() {
@@ -273,25 +332,35 @@ export class ThemMoiQuyetDinhTieuHuyComponent  extends Base2Component implements
 
 
   buildTableView() {
-    let data = cloneDeep(this.formData.value.quyetDinhDtl);
-
-    if (this.userService.isCuc()) {
-      data = data.filter(s => s.maChiCuc.substring(0, 6) === this.userInfo.MA_DVI);
-    }
-    let dataView = chain(data)
-      .groupBy("maChiCuc")
+    this.dataTable = chain(this.formData.value.quyetDinhDtl)
+      .groupBy("maTongHop")
       .map((value, key) => {
         let rs = chain(value)
+          .groupBy("tenChiCuc")
+          .map((v, k) => {
+              let rowItem = v.find(s => s.tenChiCuc === k);
+              let idVirtual = uuidv4();
+              this.expandSetString.add(idVirtual);
+              return {
+                idVirtual: idVirtual,
+                tenChiCuc: k,
+                maDiaDiem: rowItem.maDiaDiem,
+                tenCloaiVthh: rowItem.tenCloaiVthh,
+                childData: v
+              }
+            }
+          ).value();
+        let maTongHop = value.find(s => s.maTongHop === key);
+        let idVirtual = uuidv4();
+        this.expandSetString.add(idVirtual);
         return {
-          idVirtual: uuid.v4(),
-          maDvi: key,
-          childData: rs,
+          idVirtual: idVirtual,
+          maTongHop: key,
+          nam:maTongHop.nam,
+          trangThai:maTongHop.trangThai,
+          childData: rs
         };
       }).value();
-
-    this.dataTable = dataView;
-    this.expandAll()
-
   }
 
   redirectDetail(id, b: boolean) {
