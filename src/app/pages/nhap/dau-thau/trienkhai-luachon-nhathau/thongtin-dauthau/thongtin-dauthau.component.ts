@@ -219,7 +219,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
     // } else {
     //   this.selectedId = data.id;
     // }
-    if (roles == 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM') {
+    if (roles == 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM' || roles == 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_XEM') {
       this.isView = true;
     } else {
       this.isView = false

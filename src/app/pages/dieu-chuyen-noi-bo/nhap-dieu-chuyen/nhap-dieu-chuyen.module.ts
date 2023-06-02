@@ -28,6 +28,7 @@ import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
 import { BienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/bien-ban-nghiem-thu-bao-quan-lan-dau/bien-ban-nghiem-thu-bao-quan-lan-dau.component';
 import { ThongTinBienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component';
+import { ThongTinHangDtqgComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-hang-dtqg/thong-tin-hang-dtqg.component';
 
 
 
@@ -51,7 +52,8 @@ import { ThongTinBienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghie
     BangKeNhapVatTuComponent,
     KiemTraChatLuongComponent,
     BienBanNghiemThuBaoQuanLanDauComponent,
-    ThongTinBienBanNghiemThuBaoQuanLanDauComponent
+    ThongTinBienBanNghiemThuBaoQuanLanDauComponent,
+    ThongTinHangDtqgComponent
   ],
   imports: [
     CommonModule,

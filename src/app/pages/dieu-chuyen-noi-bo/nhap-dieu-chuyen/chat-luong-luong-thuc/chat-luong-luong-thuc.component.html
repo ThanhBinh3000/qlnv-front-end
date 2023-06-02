@@ -1,5 +1,5 @@
 <div>
-  <nz-affix [nzOffsetTop]="141" class="level2">
+  <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
     <ul nz-menu nzMode="horizontal">
       <li nz-menu-item nzSelected (click)="selectTab(0)">
         Biên bản nghiệm thu bảo quản lần đầu
@@ -16,12 +16,21 @@
     </ul>
   </nz-affix>
 
-  <div>
-
-    <app-bien-ban-nghiem-thu-bao-quan-lan-dau *ngIf="tabSelected == 0"></app-bien-ban-nghiem-thu-bao-quan-lan-dau>
-    <app-kiem-tra-chat-luong *ngIf="tabSelected == 1"></app-kiem-tra-chat-luong>
-    <app-bien-ban-mau *ngIf="tabSelected == 2"></app-bien-ban-mau>
-    <app-kiem-nghiem-chat-luong *ngIf="tabSelected == 3"></app-kiem-nghiem-chat-luong>
+  <div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+      <ng-container *ngIf="tabSelected == 0">
+        <app-bien-ban-nghiem-thu-bao-quan-lan-dau *ngIf="tabSelected == 0"></app-bien-ban-nghiem-thu-bao-quan-lan-dau>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 1">
+        <app-kiem-tra-chat-luong *ngIf="tabSelected == 1"></app-kiem-tra-chat-luong>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 2">
+        <app-bien-ban-mau *ngIf="tabSelected == 2"></app-bien-ban-mau>
+      </ng-container>
+      <ng-container *ngIf="tabSelected == 3">
+        <app-kiem-nghiem-chat-luong *ngIf="tabSelected == 3"></app-kiem-nghiem-chat-luong>
+      </ng-container>
+    </div>
 
   </div>
 
