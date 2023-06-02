@@ -268,6 +268,9 @@ export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.formData.patchValue({
+            soQd: data.soQd ? data.soQd.split('/')[0] : '',
+          })
           this.fileDinhKem = data.fileDinhKems;
           this.dataCongViecDaTh = data.listKtTdscQuyetDinhPdKhlcntCvDaTh ? data.listKtTdscQuyetDinhPdKhlcntCvDaTh : [];
           this.dataCongViecKad = data.listKtTdscQuyetDinhPdKhlcntCvKad ? data.listKtTdscQuyetDinhPdKhlcntCvKad : [];
