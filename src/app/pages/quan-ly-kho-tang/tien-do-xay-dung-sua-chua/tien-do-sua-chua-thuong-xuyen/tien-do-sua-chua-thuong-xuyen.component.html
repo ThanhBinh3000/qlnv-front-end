@@ -218,17 +218,17 @@
               <img *ngIf="itemQdPdKhLcnt && itemQdPdKhLcnt.trangThai == STATUS.BAN_HANH" class="ml-1"
                    src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
             </li>
-<!--            <li nz-menu-item-->
-<!--                [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"-->
-<!--                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')">-->
-<!--              Thông tin đấu thầu-->
-<!--              <img-->
-<!--                *ngIf="!itemTtdt || itemTtdt.trangThaiDt == STATUS.CHUA_CAP_NHAT || itemTtdt.trangThaiDt == STATUS.DANG_CAP_NHAT"-->
-<!--                class="ml-1"-->
-<!--                src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>-->
-<!--              <img *ngIf="itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT" class="ml-1"-->
-<!--                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>-->
-<!--            </li>-->
+            <li nz-menu-item
+                [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')">
+              Thông tin đấu thầu
+              <img
+                *ngIf="!itemTtdt || itemTtdt.trangThaiDt == STATUS.CHUA_CAP_NHAT || itemTtdt.trangThaiDt == STATUS.DANG_CAP_NHAT"
+                class="ml-1"
+                src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
+              <img *ngIf="itemTtdt && itemTtdt.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT" class="ml-1"
+                   src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
+            </li>
 <!--            <li nz-menu-item-->
 <!--                [ngClass]="{'disabled-tab': !itemTtdt || itemTtdt.trangThaiDt != STATUS.HOAN_THANH_CAP_NHAT}"-->
 <!--                [nzSelected]="tabSelected == '04'" (click)="selectTab('04')"-->
@@ -281,9 +281,9 @@
                                                 [itemQdPdKhLcnt]="itemQdPdKhLcnt">
           </app-quyet-dinh-phe-duyet-khlcnt-sctx>
         </ng-container>
-<!--        <ng-container *ngIf="tabSelected == '03'">-->
-<!--          <app-thong-tin-dau-thau-scl></app-thong-tin-dau-thau-scl>-->
-<!--        </ng-container>-->
+        <ng-container *ngIf="tabSelected == '03'">
+          <app-thong-tin-dau-thau-sctx></app-thong-tin-dau-thau-sctx>
+        </ng-container>
 <!--        <ng-container *ngIf="tabSelected == '04'">-->
 <!--          <app-quyet-dinh-phe-duyet-kqlcnt-scl [itemTtdt]="itemTtdt"-->
 <!--                                               [itemDuAn]="itemSelected">-->
