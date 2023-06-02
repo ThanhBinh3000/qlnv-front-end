@@ -20,11 +20,11 @@ import {
 import dayjs from "dayjs";
 
 @Component({
-  selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-scl',
-  templateUrl: './thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.html',
-  styleUrls: ['./thong-tin-quyet-dinh-phe-duyet-khlcnt-scl.component.scss']
+  selector: 'app-thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx',
+  templateUrl: './thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx.component.html',
+  styleUrls: ['./thong-tin-quyet-dinh-phe-duyet-khlcnt-sctx.component.scss']
 })
-export class ThongTinQuyetDinhPheDuyetKhlcntSclComponent extends  Base2Component implements OnInit {
+export class ThongTinQuyetDinhPheDuyetKhlcntSctxComponent extends Base2Component implements OnInit {
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
