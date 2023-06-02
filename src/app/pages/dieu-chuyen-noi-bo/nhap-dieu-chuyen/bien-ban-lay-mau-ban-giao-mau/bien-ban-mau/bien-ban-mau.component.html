@@ -3,33 +3,23 @@
     <div class="bg-trang">
       <nz-card class="mt16 flex-card p-lr16">
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="20">
-            <div nz-col nzSpan="3">
-              <label class="search__label"> Năm kế hoạch </label>
-              <nz-select formControlName="nam">
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-              </nz-select>
+          <div nz-row [nzGutter]="24">
+            <div nz-col nzSpan="6">
+              <label class="search__label">Số BB lấy mẫu/bàn giao mẫu</label>
+              <input nz-input formControlName="trichYeu" />
             </div>
-            <div nz-col nzSpan="3">
+            <div nz-col nzSpan="6">
               <label class="search__label">Số QĐ điều chuyển</label>
-              <nz-input-group nzAddOnAfter="/DCNB">
-                <nz-input-number class="search__input" formControlName="soQdinh" [nzMin]="1" [nzMax]="9" [nzStep]="1"
-                  [nzSize]="'small'" [nzDisabled]="isView">
-                </nz-input-number>
-              </nz-input-group>
+              <input nz-input formControlName="trichYeu" />
             </div>
-            <div nz-col nzSpan="3">
-              <label class="search__label">Số BB NT kê lót</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Đơn vị kiểm nghiệm</label>
               <input nz-input formControlName="trichYeu" />
             </div>
 
-            <div nz-col nzSpan="4">
-              <label class="search__label">Ngày lập biên bản</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Ngày lấy mẫu</label>
               <nz-range-picker formControlName="ngayDuyetTc" nzFormat="dd/MM/yyyy"></nz-range-picker>
-            </div>
-            <div nz-col nzSpan="4">
-              <label class="search__label">Ngày kết thúc NT kê lót, BQLĐ</label>
-              <nz-range-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy"></nz-range-picker>
             </div>
 
 
@@ -61,7 +51,7 @@
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Xuất file</span>
           </button>
-          <button type="button" class="btn btn-main ml-2" (click)="deleteMulti()">
+          <button type="button" class="btn btn-main ml-2" (click)="redirectDetail(0,false)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
@@ -74,29 +64,20 @@
           [nzShowPagination]="false" nzBordered>
           <thead>
             <tr>
-              <th rowspan="2" width="60px" class="text-center">STT</th>
-              <th rowspan="2"></th>
-              <th rowspan="2">Số QĐ ĐC của Cục</th>
-              <th rowspan="2">Năm kế hoạch</th>
-              <th rowspan="2">Thời hạn ĐC</th>
-              <th colspan="2" class="text-center">Thông tin kho xuất</th>
-              <th colspan="3" class="text-center">Thông tin kho nhập</th>
-              <th rowspan="2" style="max-width: 90px; min-width: 90px;  white-space: break-spaces;" class="text-center">
-                Số BB NT kê lót,
-                BQLĐ</th>
-              <th rowspan="2">Ngày lập biên bản</th>
-              <th rowspan="2">Ngày kết thục NT kê lót, BQLĐ</th>
-              <th rowspan="2">Tổng kinh phí thực tế (đ)</th>
-              <th rowspan="2">Tổng kinh phí TC PD (đ)</th>
-              <th rowspan="2">Trạng thái</th>
-              <th rowspan="2">Hành động</th>
-            </tr>
-            <tr>
-              <th class="text-center">Lô kho</th>
-              <th class="text-center">Trạng thái xuất ĐC</th>
+              <th width="60px" class="text-center">STT</th>
+              <th></th>
+              <th></th>
+              <th class="text-center">Số QĐ điều chuyển</th>
+              <th class="text-center">Năm KH</th>
+              <th class="text-center">Thời hạn điều chuyển</th>
               <th class="text-center">Điểm kho</th>
               <th class="text-center">Lô kho</th>
-              <th class="text-center">Trạng thái nhập ĐC</th>
+              <th class="text-center">Số BB LM/BGK</th>
+              <th class="text-center">Ngày lấy mẫu</th>
+              <th class="text-center">Số BB nhập đầy kho</th>
+              <th class="text-center">Ngày nhập đầy kho</th>
+              <th class="text-center">Trạng thái</th>
+              <th class="text-center">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -264,5 +245,9 @@
     </div>
   </div>
 
+  <div class="chi-tiet" *ngIf="isDetail">
+    <app-thong-tin-bien-ban-lay-mau-ban-giao-mau [isView]="isView" [idInput]="selectedId"
+      (showListEvent)="quayLai()"></app-thong-tin-bien-ban-lay-mau-ban-giao-mau>
+  </div>
 
 </div>
