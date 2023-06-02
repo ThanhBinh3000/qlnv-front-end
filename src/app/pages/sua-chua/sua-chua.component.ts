@@ -1,31 +1,50 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild
-} from '@angular/core';
-import { Router } from '@angular/router';
-import {SUA_CHUA_ROUTE_LIST} from "./sua-chua.constant";
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ROUTE_LIST} from "src/app/pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.constant";
+import {UserService} from "src/app/services/user.service";
+import {Subscription} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "src/app/services/storage.service";
+import {Event, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
+
 @Component({
   selector: 'app-sua-chua',
   templateUrl: './sua-chua.component.html',
   styleUrls: ['./sua-chua.component.scss']
 })
-export class SuaChuaComponent implements OnInit {
+export class SuaChuaComponent implements OnInit ,OnDestroy{
   @ViewChild('myTab') myTab: ElementRef;
-  routes = SUA_CHUA_ROUTE_LIST;
+  routes: any[] = ROUTE_LIST;
   routerUrl: string = "";
   defaultUrl: string = '/sua-chua'
-
+  userService: UserService;
+  $routerChange: Subscription;
   constructor(
+    httpClient: HttpClient,
+    storageService: StorageService,
     private router: Router,
-  ) { }
+  ) {
+    this.userService = new UserService(httpClient, storageService);
+
+  }
 
   ngOnInit(): void {
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
+    this.$routerChange = this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationStart) {
+      }
+
+      if (event instanceof NavigationEnd) {
+        if (event.urlAfterRedirects) {
+          this.routerUrl = event.urlAfterRedirects
+        }
+      }
+
+      if (event instanceof NavigationError) {
+        console.log(event.error);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -80,6 +99,10 @@ export class SuaChuaComponent implements OnInit {
   }
 
   redirect(url: string) {
+    this.routerUrl = this.defaultUrl + url;
     this.router.navigate([this.defaultUrl + url]);
+  }
+  ngOnDestroy(): void {
+    this.$routerChange.unsubscribe();
   }
 }

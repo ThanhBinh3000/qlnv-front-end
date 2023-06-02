@@ -4,19 +4,22 @@ import {
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {STATUS} from "../../../../../constants/status";
 import {UserService} from "../../../../../services/user.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
-  selector: 'app-quyet-dinh-phe-duyet-khlcnt',
-  templateUrl: './quyet-dinh-phe-duyet-khlcnt.component.html',
-  styleUrls: ['./quyet-dinh-phe-duyet-khlcnt.component.scss']
+  selector: 'app-quyet-dinh-phe-duyet-khlcnt-sctx',
+  templateUrl: './quyet-dinh-phe-duyet-khlcnt-sctx.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-khlcnt-sctx.component.scss']
 })
-export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
+export class QuyetDinhPheDuyetKhlcntSctxComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
   @Input()
   itemDuAn: any;
-  @Input("itemQdPdTktcTdt") itemQdPdTktcTdt: any;
+  @Input("itemQdPdBcKtkt") itemQdPdBcKtkt: any;
   @Input("itemQdPdKhLcnt") itemQdPdKhLcnt: any;
   STATUS = STATUS;
   listTrangThai: any[] = [
@@ -27,7 +30,7 @@ export class QuyetDinhPheDuyetKhlcntComponent implements OnInit {
 
   constructor(
     public userService: UserService,
-    public quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
+    public quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService
   ) {
   }
 
