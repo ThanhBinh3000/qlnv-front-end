@@ -82,6 +82,7 @@
             <th nzWidth="5%" *ngIf="loaiVthh.startsWith('02')">Thời gian thực hiện HĐ</th>
             <th nzWidth="5%">Thời hạn nhập kho</th>
             <th nzWidth="10%" *ngIf="loaiVthh.startsWith('02')">Loại hàng hóa</th>
+            <th nzWidth="10%">Chủng loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
             <th nzWidth="5%" *ngIf="!loaiVthh.startsWith('02')">Chủ đầu tư</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
@@ -149,6 +150,12 @@
             </th>
             <th>
               <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                       (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongMucDt"
                   (input)="filterInTable('tongMucDt',filterTable.tongMucDt)" />
               </nz-input-group>
@@ -196,6 +203,7 @@
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianThien}}</td>
             <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td *ngIf="loaiVthh.startsWith('02')">{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
+            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td class="text-right">{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
             <td *ngIf="!loaiVthh.startsWith('02')">{{ data.tenDvi}}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
