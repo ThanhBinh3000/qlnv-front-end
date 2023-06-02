@@ -226,6 +226,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async findCanCuByYear(year: number, id?) {
+    console.log('1111111111111111111111111111')
     this.formData.patchValue({
       canCu: null,
     })
@@ -785,7 +786,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .loadThongTinChiTieuKeHoachNam(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-
           this.thongTinChiTieuKeHoachNam = res.data;
           // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
@@ -1712,7 +1712,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
-    this.findCanCuByYear(this.yearNow);
+    if (!this.id) {
+      this.findCanCuByYear(this.yearNow);
+    }
     // if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
     //   console.log(this.thongTinChiTieuKeHoachNam?.khLuongThuc, 'ddddddd');
     //   this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
@@ -3092,7 +3094,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             this.notification.error(MESSAGE.ALERT, 'Loại và chủng loại hàng hóa đã tồn tại.')
           } else {
             this.keHoachVatTuNhapCreate.dsVatTu[0].donViId = this.keHoachVatTuNhapCreate.donViId;
-            this.keHoachVatTuNhapCreate.dsVatTu[0].sttDonVi = indexExists+1;
+            this.keHoachVatTuNhapCreate.dsVatTu[0].sttDonVi = indexExists + 1;
             dataExists.dsVatTu.push(this.keHoachVatTuNhapCreate.dsVatTu[0]);
             this.dataVatTuNhap.splice(indexExists, 1, dataExists);
             this.dataVatTuNhapEdit = this.dataVatTuNhap;
