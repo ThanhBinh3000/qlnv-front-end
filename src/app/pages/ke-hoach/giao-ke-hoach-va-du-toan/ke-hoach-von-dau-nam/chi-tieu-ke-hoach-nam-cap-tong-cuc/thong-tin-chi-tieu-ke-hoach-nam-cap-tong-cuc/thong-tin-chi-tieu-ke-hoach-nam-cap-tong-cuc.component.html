@@ -65,7 +65,8 @@
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
           </span>
-          <span>Thông tin chỉ tiêu kế hoạch năm {{userService.isTongCuc() ? 'Tổng cục' : 'Cục'}} giao</span>
+          <span>Thông tin chỉ tiêu kế hoạch năm {{thongTinChiTieuKeHoachNam.capDvi == 1 ? 'Tổng cục' : 'Cục'}}
+            giao</span>
         </div>
       </div>
     </div>
@@ -186,8 +187,8 @@
         <div id="table-luong-thuc"
              [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div class="ghichu_tab">Đơn vị tính:Tấn</div>
-          <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered class="nowrap"
-                    [nzFrontPagination]="false" [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+          <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered
+                    [nzFrontPagination]="false" [nzShowPagination]="false" style="max-height: 700px; overflow: scroll;" [nzScroll]="{ x: '1700px' }">
             <thead>
             <tr>
               <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
@@ -948,7 +949,7 @@
           <!--        nhapvattu-->
           <nz-tab nzTitle="Nhập">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-              <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" [nzScroll]="{ y: '700px' }" nzBordered>
+              <nz-table #phanBo class="mt-16 table-chi-tiet" style="max-height: 700px; overflow: scroll;" nzBordered>
                 <thead>
                 <tr>
                   <th rowSpan="2">STT</th>
@@ -1169,7 +1170,7 @@
           <!--        xuatvattu-->
           <nz-tab nzTitle="Xuất">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-              <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered>
+              <nz-table #phanBo class="mt-16 table-chi-tiet" style="max-height: 700px; overflow: scroll;" nzBordered>
                 <thead>
                 <tr>
                   <th rowSpan="2">STT</th>
@@ -1274,13 +1275,6 @@
                     <a (click)="themVatTu('xuat')">
                       <i class="fa fa-plus"></i>
                     </a>
-                    <!--<a (click)="suaPhuongAn(i)" *ngIf="!isView">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    &lt;!&ndash;              <a (click)="deletePhanLo(item.idVirtual)">&ndash;&gt;
-                    <a (click)="xoaPhuongAn(i)" *ngIf="!isView">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>-->
                   </td>
                 </tr>
                 <ng-container *ngFor="let item of dataVatTuXuat, let i = index">
