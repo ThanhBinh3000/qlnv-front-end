@@ -143,8 +143,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td>{{lv2.tenLoKho}},
-                                                {{lv2.tenNhaKho}}
+                                            <td>{{(lv2.tenLoKho? lv2.tenLoKho + " - ": "") + (lv2.tenNganKho|| "")}}
                                             </td>
                                             <td>{{lv2.soBbLayMau}}</td>
                                             <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
@@ -153,24 +152,25 @@
                                             <td>{{lv2.soBbHaoDoi}}</td>
                                             <td>{{LIST_TRANG_THAI[lv2.trangThai]}}</td>
                                             <td class="text-left">
-                                                <a *ngIf="checkRoleAdd(lv2.trangThai)"
+                                                <a *ngIf="checkRoleAdd(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, null ,item.qdinhDccId,  item.soQdinhDcc,
                                                         lv2.maLoKho, lv2.tenLoKho, lv2.maNganKho, lv2.tenNganKho, lv2.maNhaKho, lv2.tenNhaKho, lv1.maDiemKho, lv1.tenDiemKho)">
                                                     <i class="fa fa-plus"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleView(lv2.trangThai)"
+                                                <a *ngIf="checkRoleView(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, true, lv2.id)">
                                                     <i class="fa fa-eye"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleEdit(lv2.trangThai)"
+                                                <a *ngIf="checkRoleEdit(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, lv2.id)">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleApprove(lv2.trangThai)"
+                                                <a *ngIf="checkRoleApprove(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
                                                     (click)="redirectToChiTiet(lv2, false, lv2.id)">
                                                     <i class="icon htvbdh_tcdt_pheduyet"></i>
                                                 </a>
-                                                <a *ngIf="checkRoleDelete(lv2.trangThai)" (click)="xoaItem(lv2)">
+                                                <a *ngIf="checkRoleDelete(lv2?.dcnbBienBanLayMauHdr?.trangThai)"
+                                                    (click)="xoaItem(lv2)">
                                                     <i class="fa fa-trash-o do"></i>
                                                 </a>
                                             </td>

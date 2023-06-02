@@ -154,7 +154,7 @@
                                     </nz-form-label>
                                     <nz-form-control nzErrorTip="Vui lòng nhập số đề xuất">
                                         <nz-input-group nzAddOnAfter="/DCNB">
-                                            <input nz-input formControlName="soDeXuat" [readonly]="isViewDetail" />
+                                            <input nz-input formControlName="soDxuat" [readonly]="isViewDetail" />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -336,7 +336,7 @@
                                         <td>{{ item.tenDvi}}</td>
                                         <td><a nz-button nzType="link"
                                                 (click)="openModalTHKeHoachDCCUC($event, item.thKhDcHdrId)">{{
-                                                item.soDeXuat }}</a></td>
+                                                item.soDxuat }}</a></td>
                                         <td>{{ item.ngayDuyetLdc }}</td>
                                         <td>{{ item.tongDuToanKp }}</td>
                                         <td>{{item.trichYeu}}</td>
@@ -442,7 +442,8 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
-                                                        <td>{{c.tenLoKho || ""}}</td>
+                                                        <td>{{(c.tenLoKho? c.tenLoKho + " - ": "") + (c.tenNganKho ||
+                                                            "")}}</td>
                                                         <td>{{c.tenLoaiVthh || ""}}</td>
                                                         <td>{{c.tenCloaiVthh || ""}}</td>
                                                         <td>{{c.tenDonViTinh || ""}}</td>
@@ -516,9 +517,8 @@
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td>{{e.tenDiemKhoNhan || ""}}</td>
-                                                                <td>{{(e.tenLoKhoNhan|| "") + " - " + (e.tenNganKhoNhan
-                                                                    || "") + " - "
-                                                                    + (e.tenNhaKhoNhan || "")}}</td>
+                                                                <td>{{(e.tenLoKho? e.tenLoKho + " - ": "") +
+                                                                    (e.tenNganKho || "")}}</td>
                                                                 <td>{{c.tichLuongKd|number: '1.0-1':
                                                                     'vi_VN'}}</td>
                                                                 <td>{{c.soLuongPhanBo|number: '1.0-1':
@@ -572,7 +572,7 @@
                                         <td>{{item.tenCucNhan}}</td>
                                         <td><a nz-button nzType="link"
                                                 (click)="openModalTHKeHoachDCCUC($event, item.thKhDcHdrId)">{{
-                                                item.soDeXuat }}</a></td>
+                                                item.soDxuat }}</a></td>
                                         <td>{{ item.ngayTrinhDuyetTc }}</td>
                                         <td>{{ item.tongDuToanKp }}</td>
                                         <td>{{item.trichYeu}}</td>
@@ -614,7 +614,7 @@
                                         <td class="bold">{{ item.tenDvi }}</td>
                                         <td><a nz-button nzType="link"
                                                 (click)="openModalKeHoachDC($event, item.hdrId)">{{
-                                                item.soDeXuat }}</a></td>
+                                                item.soDxuat }}</a></td>
                                         <td colspan="6"></td>
                                         <td class="text-right">{{item.duToanKphi}}</td>
                                         <td colspan="3"></td>
@@ -629,7 +629,8 @@
                                                 <td></td>
                                                 <td>{{bb.tenDiemKho}}</td>
                                                 <td></td>
-                                                <td>{{bb.tenLoKho}}</td>
+                                                <td>{{(bb.tenLoKho? bb.tenLoKho + " - ": "") + (bb.tenNganKho || "")}}
+                                                </td>
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
                                                 <td>{{bb.tenDonViTinh}}</td>

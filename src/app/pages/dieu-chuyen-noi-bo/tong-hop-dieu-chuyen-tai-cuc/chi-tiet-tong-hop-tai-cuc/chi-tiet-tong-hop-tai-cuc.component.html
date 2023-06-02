@@ -139,7 +139,7 @@
         <nz-card class="flex-card pd-l-6 pd-r-6">
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'THÔNG TIN CHUNG'" [nzActive]="true">
-                    <form nzLayout="vertical" nz-form [formGroup]="formData">
+                    <form nzLayout="vertical" nz-form [formGroup]="formData" class="form pd-l-r-10">
                         <!-- <ng-template #error let-control>
                             <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                             </ng-container>
@@ -155,7 +155,7 @@
                             </div>
                         </div> -->
                         <!-- <div class="bg-trang"> -->
-                        <div nz-row nzSpan="24" [nzGutter]="24">
+                        <div nz-row nzSpan="24" [nzGutter]="24" class="table-out-tab">
                             <div nz-col nzSpan="4">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" class="label-color-kh">Mã tổng hợp
@@ -218,10 +218,28 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh"> Loại hình nhập xuất
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="loaiHinhNhapXuat" [readOnly]="true" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
+                            <div nz-col nzSpan="4">
+                                <nz-form-item>
+                                    <nz-form-label [nzNoColon]="true" class="label-color-kh">Kiểu nhập xuất
+                                    </nz-form-label>
+                                    <nz-form-control>
+                                        <input nz-input formControlName="kieuNhapXuat" [readOnly]="true" />
+                                    </nz-form-control>
+                                </nz-form-item>
+                            </div>
                         </div>
                         <!-- </div> -->
                         <!-- <div class="bg-trang"> -->
-                        <div nz-row nzSpan="24" [nzGutter]="24">
+                        <div nz-row nzSpan="24" [nzGutter]="24" class="table-out-tab">
                             <div nz-col nzSpan="3">
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
@@ -331,7 +349,7 @@
                                     <th rowspan="2" width="60px" class="text-center">STT</th>
                                     <th rowspan="2"></th>
                                     <th rowspan="2"></th>
-                                    <th colspan="9" class="text-center">Chi cục đề xuất điều chuyển</th>
+                                    <th colspan="9">Chi cục đề xuất điều chuyển</th>
                                     <th rowspan="2"
                                         style="max-width: 90px; min-width: 90px;  white-space: break-spaces;"
                                         class="text-center">Thời gian dự
@@ -425,7 +443,8 @@
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
-                                                        <td class="bold">{{c.tenLoKho || ""}}</td>
+                                                        <td class="bold">{{(c.tenLoKho? c.tenLoKho + "-": "") +
+                                                            (c.tenNganKho|| "")}}</td>
                                                         <td class="bold">{{c.tenLoaiVthh || ""}}</td>
                                                         <td class="bold">{{c.tenCloaiVthh || ""}}</td>
                                                         <td class="bold">{{c.tenDonViTinh || ""}}</td>
@@ -531,10 +550,8 @@
                                                                     <td></td>
                                                                     <td></td>
                                                                     <td></td>
-                                                                    <td>{{(e.tenLoKhoNhan|| "") + " - " +
-                                                                        (e.tenNganKhoNhan
-                                                                        || "") + " - "
-                                                                        + (e.tenNhaKhoNhan || "")}}</td>
+                                                                    <td>{{e.tenLoKhoNhan? e.tenLoKhoNhan + " - " +
+                                                                        e.tenNganKhoNhan: ""}}</td>
                                                                     <td class="text-right">
                                                                         {{c.tichLuongKd|number:'1.0-1':'vi_VN'}}</td>
                                                                     <td class="text-right">
@@ -654,7 +671,7 @@
                                                 <td>{{bb.tenDiemKho}}</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{{bb.tenLoKho}}</td>
+                                                <td>{{(bb.tenLoKho? bb.tenLoKho + " - ": "") + bb.tenNganKho}}</td>
                                                 <td>{{bb.tenLoaiVthh}}</td>
                                                 <td>{{bb.tenCloaiVthh}}</td>
                                                 <td>{{bb.tenDonViTinh}}</td>

@@ -403,7 +403,7 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
             Array.isArray(item?.dcnbKeHoachDcHdr?.danhSachHangHoa) && item?.dcnbKeHoachDcHdr?.danhSachHangHoa.forEach(element => {
               const newItem = cloneDeep(item);
               delete newItem.dcnbKeHoachDcHdr.danhSachHangHoa;
-              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element })
+              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho })
             });
           });
         }
@@ -444,9 +444,9 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
           .groupBy("maDiemKho")
           ?.map((v, k) => {
             let rss = chain(v)
-              .groupBy("maLoKho")
+              .groupBy("maLoNganKho")
               ?.map((vs, ks) => {
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+                const maLoNganKho = vs.find(s => s?.maLoNganKho == ks);
                 const rsss = chain(vs).groupBy("id").map((x, ix) => {
                   const ids = x.find(f => f.id == ix);
 
@@ -488,8 +488,8 @@ export class ChiTietTongHopDieuChuyenCapTongCuc extends Base2Component implement
                   soLuongDc += (element.soLuongDc || 0)
                 });
                 return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                  ...maLoNganKho,
+                  idVirtual: maLoNganKho ? maLoNganKho.idVirtual ? maLoNganKho.idVirtual : uuid.v4() : uuid.v4(),
                   children: rsss,
                   duToanKphi,
                   soLuongDc

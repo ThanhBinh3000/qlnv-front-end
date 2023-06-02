@@ -490,7 +490,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
               const newItem = cloneDeep(item);
               delete newItem.dcnbKeHoachDcDtls;
               item?.dcnbKeHoachDcDtls.forEach(element => {
-                flatArray.push({ ...newItem, ...element })
+                flatArray.push({ ...newItem, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho, })
               });
             }
           })
@@ -520,7 +520,7 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
             Array.isArray(item?.dcnbKeHoachDcHdr?.danhSachHangHoa) && item?.dcnbKeHoachDcHdr?.danhSachHangHoa.forEach(element => {
               const newItem = cloneDeep(item);
               delete newItem.dcnbKeHoachDcHdr.danhSachHangHoa;
-              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element });
+              flatArray.push({ ...newItem, ...newItem.dcnbKeHoachDcHdr, ...element, maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho });
               if (!arrCCucNhan.find(f => f.value == element.maChiCucNhan)?.value) {
                 arrCCucNhan.push({ label: element.tenChiCucNhan, value: element.maChiCucNhan, checked: false })
               }
@@ -566,9 +566,9 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
           .groupBy("maDiemKho")
           ?.map((v, k) => {
             let rss = chain(v)
-              .groupBy("maLoKho")
+              .groupBy("maLoNganKho")
               ?.map((vs, ks) => {
-                const maLoKho = vs.find(s => s?.maLoKho == ks);
+                const maLoNganKho = vs.find(s => s?.maLoNganKho == ks);
                 const rsss = chain(vs).groupBy("id").map((x, ix) => {
                   const ids = x.find(f => f.id == ix);
 
@@ -610,8 +610,8 @@ export class ChiTietTongHopDieuChuyenTaiCuc extends Base2Component implements On
                   soLuongDc += (element.soLuongDc || 0)
                 });
                 return {
-                  ...maLoKho,
-                  idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuid.v4() : uuid.v4(),
+                  ...maLoNganKho,
+                  idVirtual: maLoNganKho ? maLoNganKho.idVirtual ? maLoNganKho.idVirtual : uuid.v4() : uuid.v4(),
                   children: rsss,
                   duToanKphi,
                   soLuongDc

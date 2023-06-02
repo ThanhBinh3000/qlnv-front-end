@@ -7,7 +7,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
-import { chain, cloneDeep } from 'lodash';
+import { chain, cloneDeep, groupBy } from 'lodash';
 import { v4 as uuidv4 } from 'uuid';
 import { MESSAGE } from 'src/app/constants/message';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
@@ -113,32 +113,63 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isDetail = true;
         this.isAddNew = b;
     }
+    // buildTableView() {
+    //     let dataView = Array.isArray(this.dataTable) ?
+    //         this.dataTable.map((data) => {
+
+    //             let rs = Array.isArray(data.dcnbBienBanLayMauHdrList) ? chain(data.dcnbBienBanLayMauHdrList).groupBy("maDiemKho").map((v, k) => {
+    //                 let rowLv2 = v.find(s => s.maDiemKho === k);
+    //                 if (!rowLv2) {
+    //                     return;
+    //                 }
+    //                 return {
+    //                     ...rowLv2,
+    //                     idVirtual: uuidv4(),
+    //                     maDiemKho: k,
+    //                     childData: v
+    //                 }
+    //             }
+    //             ).value() : [];
+
+    //             return {
+    //                 ...data,
+    //                 soQdinhDcc: data.soQdinh,
+    //                 qdinhDccId: data.id,
+    //                 idVirtual: uuidv4(),
+    //                 childData: rs
+    //             };
+    //         }) : []
+    //     this.dataView = dataView;
+    //     this.expandAll()
+    // }
     buildTableView() {
-        let dataView = Array.isArray(this.dataTable) ?
-            this.dataTable.map((data) => {
-
-                let rs = Array.isArray(data.dcnbBienBanLayMauHdrList) ? chain(data.dcnbBienBanLayMauHdrList).groupBy("maDiemKho").map((v, k) => {
-                    let rowLv2 = v.find(s => s.maDiemKho === k);
-                    if (!rowLv2) {
-                        return;
-                    }
-                    return {
-                        ...rowLv2,
-                        idVirtual: uuidv4(),
-                        maDiemKho: k,
-                        childData: v
-                    }
+        let dataView = Array.isArray(this.dataTable) ? this.dataTable.map((data) => {
+            let arr = [];
+            Array.isArray(data.danhSachQuyetDinh) ? data.danhSachQuyetDinh.forEach(element => {
+                Array.isArray(element?.dcnbKeHoachDcHdr?.danhSachHangHoa) && element.dcnbKeHoachDcHdr.danhSachHangHoa.forEach(item => {
+                    arr.push(item)
+                });
+            }) : [];
+            const rs = chain(arr).groupBy("maDiemKho").map((v, k) => {
+                let rowLv2 = v.find(s => s.maDiemKho === k);
+                if (!rowLv2) {
+                    return;
                 }
-                ).value() : [];
-
                 return {
-                    ...data,
-                    soQdinhDcc: data.soQdinh,
-                    qdinhDccId: data.id,
+                    ...rowLv2,
                     idVirtual: uuidv4(),
-                    childData: rs
-                };
-            }) : []
+                    maDiemKho: k,
+                    childData: v
+                }
+            }).value()
+            return {
+                ...data,
+                soQdinhDcc: data.soQdinh,
+                qdinhDccId: data.id,
+                idVirtual: uuidv4(),
+                childData: rs
+            }
+        }) : [];
         this.dataView = dataView;
         this.expandAll()
     }
