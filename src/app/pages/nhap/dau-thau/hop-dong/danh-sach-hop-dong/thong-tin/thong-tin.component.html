@@ -594,7 +594,7 @@
                                     </td>
                                     <td colspan="3">{{chiCuc.tenDvi}}</td>
                                     <td class="text-right text-bold">{{chiCuc.soLuong}}</td>
-                                    <td class="text-right text-bold">{{chiCuc.soLuong * cuc.donGiaNhaThau | number :
+                                    <td class="text-right text-bold">{{chiCuc.soLuong * formData.value.donGia | number :
                                       '1.0-1' :
                                       'vi_VN'}}</td>
                                 </tr>
@@ -605,7 +605,7 @@
                                         <td>{{diemKho.tenDvi}}</td>
                                         <td>{{diemKho.diaDiemNhap}}</td>
                                         <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                        <td class="text-right">{{diemKho.soLuong * cuc.donGiaNhaThau | number : '1.0-1' :
+                                        <td class="text-right">{{diemKho.soLuong * formData.value.donGia  | number : '1.0-1' :
                                           'vi_VN'}}
                                         </td>
                                     </tr>
