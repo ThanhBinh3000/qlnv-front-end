@@ -523,7 +523,7 @@
               <div nz-col [nzSpan]="20">
                 <nz-form-item>
                   <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
-                  <input [ngModel]=" convertTienTobangChu(tongThanhTien)" nz-input readonly
+                  <input [ngModel]=" convertTienTobangChu(formData.value.tongTien)" nz-input readonly
                          [ngModelOptions]="{standalone: true}"/>
                 </nz-form-item>
               </div>
@@ -568,7 +568,8 @@
                 <td class="text-right bold">{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                 <td></td>
                 <td></td>
-                <td class="text-right bold">{{data.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>
+                <td></td>
+<!--                <td class="text-right bold">{{data.thanhTien | number : '1.0-1' : 'vi_VN' }}</td>-->
               </tr>
               <ng-container *ngIf="expandSet.has(i)">
                 <tr *ngFor="let ddNhap of data.children, let y = index">
@@ -631,16 +632,16 @@
               <td>{{data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
               <td>{{data.ngayHlucPhuLuc | date: 'dd/MM/YYYY'}}</td>
               <td>{{data.noiDungPhuLuc}}</td>
-              <td>{{data.tenTrangThaiPhuLuc}}</td>
+              <td>{{data.tenTrangThai}}</td>
               <td *ngIf="!isQuanLy">
-                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DA_KY)" (click)="redirectPhuLuc(data.id)">
+                <a *ngIf="(data.trangThai == STATUS.DA_KY)" (click)="redirectPhuLuc(data.id)">
                   <i class="fa fa-eye"></i>
                 </a>
-                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DU_THAO && !userService.isTongCuc())"
+                <a *ngIf="(data.trangThai == STATUS.DU_THAO && !userService.isTongCuc())"
                    (click)="redirectPhuLuc(data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="(data.trangThaiPhuLuc == STATUS.DU_THAO && !userService.isTongCuc())"
+                <a *ngIf="(data.trangThai == STATUS.DU_THAO && !userService.isTongCuc())"
                    (click)="delete(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
