@@ -19,11 +19,11 @@ import {
 } from "../../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
 
 @Component({
-  selector: 'app-thong-tin-qd-phe-duyet-bao-cao-ktkt',
-  templateUrl: './thong-tin-qd-phe-duyet-bao-cao-ktkt.component.html',
-  styleUrls: ['./thong-tin-qd-phe-duyet-bao-cao-ktkt.component.scss']
+  selector: 'app-thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx',
+  templateUrl: './thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx.component.html',
+  styleUrls: ['./thong-tin-qd-phe-duyet-bao-cao-ktkt-sctx.component.scss']
 })
-export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implements OnInit {
+export class ThongTinQdPheDuyetBaoCaoKtktSctxComponent extends Base2Component implements OnInit {
   formData: FormGroup;
   @Input('isViewDetail') isViewDetail: boolean;
   @Output()
@@ -125,7 +125,8 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
         tenLoaiCongTrinh: this.itemDuAn.tenLoaiCongTrinh,
         loaiCapCt: this.itemDuAn.loaiCapCt,
         khoi: this.itemDuAn.tenKhoi,
-        nguonVonDt: this.itemDuAn.tenNguonVon,
+        nguonVonDt: this.itemDuAn.nguonVon,
+        tenNguonVon: this.itemDuAn.tenNguonVon,
         diaDiem: this.itemDuAn.diaDiem,
         giaTriDt: this.itemDuAn.tmdt,
         tieuChuanDm: this.itemDuAn.tieuChuan,
@@ -458,5 +459,3 @@ export class ThongTinQdPheDuyetBaoCaoKtktComponent extends Base2Component implem
     this.isVisiblePopDuToanXayDung = false;
   }
 }
-
-

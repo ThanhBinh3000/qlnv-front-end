@@ -4,6 +4,9 @@ import {
 } from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/dautuxaydung/quyetdinhpheduyetKhlcnt.service";
 import {STATUS} from "../../../../../constants/status";
 import {UserService} from "../../../../../services/user.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-khlcnt-scl',
@@ -16,7 +19,7 @@ export class QuyetDinhPheDuyetKhlcntSclComponent implements OnInit {
   isDetail: boolean = false;
   @Input()
   itemDuAn: any;
-  @Input("itemQdPdTktcTdt") itemQdPdTktcTdt: any;
+  @Input("itemQdPdBcKtkt") itemQdPdBcKtkt: any;
   @Input("itemQdPdKhLcnt") itemQdPdKhLcnt: any;
   STATUS = STATUS;
   listTrangThai: any[] = [
@@ -27,7 +30,7 @@ export class QuyetDinhPheDuyetKhlcntSclComponent implements OnInit {
 
   constructor(
     public userService: UserService,
-    public quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService
+    public quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService
   ) {
   }
 
