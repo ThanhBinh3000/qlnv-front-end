@@ -22,7 +22,7 @@ export class DauGiaComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-  tabSelected: number = 0;
+  tabSelected: number ;
   selectTab(tab: number) {
     this.tabSelected = tab;
     // this.loaiVthhSelected = '';

@@ -167,11 +167,6 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
         break;
       }
       case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC;
-        msg = MESSAGE.PHE_DUYET_CONFIRM
-        break;
-      }
-      case STATUS.DA_DUYET_LDC: {
         trangThai = STATUS.BAN_HANH;
         msg = MESSAGE.PHE_DUYET_CONFIRM
         break;

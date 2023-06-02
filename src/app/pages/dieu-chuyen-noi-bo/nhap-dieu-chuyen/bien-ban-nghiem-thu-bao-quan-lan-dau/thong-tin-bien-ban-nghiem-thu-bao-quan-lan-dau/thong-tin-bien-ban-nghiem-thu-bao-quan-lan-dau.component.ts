@@ -32,6 +32,7 @@ import { MaTongHopQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuye
 import { SoDeXuatQuyetDinhDieuChuyenService } from "src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/so-de-xuat-quyet-dinh-dieu-chinh.service";
 import { KeHoachDieuChuyenService } from "../../../ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.service";
 import * as uuid from "uuid";
+import { ThongTinHangDtqgComponent } from "../thong-tin-hang-dtqg/thong-tin-hang-dtqg.component";
 
 export class QuyetDinhPdDtl {
   idVirtual: number;
@@ -57,134 +58,14 @@ export class QuyetDinhPdDtl {
 })
 export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Component implements OnInit {
 
-  @Input()
-  idTHop: number;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  canCu: any[] = [];
+  dataTableView: []
   quyetDinh: any[] = [];
 
-  maQd: string = null;
-  dataInput: any;
-  dataInputCache: any;
-  isTongHop: boolean;
-  load: boolean = false;
-  listDanhSachTongHop: any[] = [];
-  listDanhSachDeXuat: any[] = [];
-  danhSachTongHop: any[] = [];
-  danhsachDx: any[] = [];
-
-  deXuatPhuongAn: any[] = [];
-  deXuatPhuongAnCache: any[] = [];
-  phuongAnView: any[] = [];
-  phuongAnViewCache: any[] = [];
-  listThanhTien: number[];
-  listSoLuong: number[];
-  listThanhTienCache: number[];
-  listSoLuongCache: number[];
-  expandSetString = new Set<string>();
-  expandSetStringCache = new Set<string>();
-  tongSoLuongDxuat = 0;
-  tongThanhTienDxuat = 0;
-  phuongAnRow: any = {};
-  dsDonVi: any;
-  listChiCuc: any[] = [];
-  isVisible = false;
-  listNoiDung = []
-  listChungLoaiHangHoa: any[] = [];
-  quyetDinhPdDtlCache: any[] = [];
-  deXuatSelected: any = []
-  dataTableView: any[] = []
-  listOfMapData: any[] = [
-    // {
-    //   key: `1`,
-    //   name: '1 John Brown sr.',
-    //   age: 60,
-    //   address: 'New York No. 1 Lake Park',
-    //   isEx: true,
-    //   children: [
-    //     {
-    //       key: `1-1`,
-    //       name: '1-1 John Brown',
-    //       age: 42,
-    //       address: 'New York No. 2 Lake Park',
-    //       isCol: false,
-    //     },
-    //     {
-    //       key: `1-2`,
-    //       name: '1-2 John Brown jr.',
-    //       age: 30,
-    //       address: 'New York No. 3 Lake Park',
-    //       isCol: true,
-    //       children: [
-    //         {
-    //           key: `1-2-1`,
-    //           name: '1-2-1 Jimmy Brown',
-    //           age: 16,
-    //           address: 'New York No. 3 Lake Park'
-    //         }
-    //       ]
-    //     },
-    //     {
-    //       key: `1-3`,
-    //       name: '1-3 Jim Green sr.',
-    //       age: 72,
-    //       address: 'London No. 1 Lake Park',
-    //       isCol: true,
-    //       children: [
-    //         {
-    //           key: `1-3-1`,
-    //           name: '1-3-1 Jim Green',
-    //           age: 42,
-    //           address: 'London No. 2 Lake Park',
-    //           // children: [
-    //           //   {
-    //           //     key: `1-3-1-1`,
-    //           //     name: '1-3-1-1 Jim Green jr.',
-    //           //     age: 25,
-    //           //     address: 'London No. 3 Lake Park'
-    //           //   },
-    //           //   {
-    //           //     key: `1-3-1-2`,
-    //           //     name: '1-3-1-2 Jimmy Green sr.',
-    //           //     age: 18,
-    //           //     address: 'London No. 4 Lake Park'
-    //           //   }
-    //           // ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
-    // {
-    //   key: `2`,
-    //   name: '2 Joe Black',
-    //   age: 32,
-    //   address: 'Sidney No. 1 Lake Park',
-    //   isEx: false
-    // },
-    // {
-    //   key: `3`,
-    //   name: '2 Joe Black',
-    //   age: 32,
-    //   address: 'Sidney No. 1 Lake Park',
-    //   isEx: false
-    // }
-  ];
-  mapOfExpandedData: { [key: string]: any[] } = {};
-  listLoaiDC: any[] = [
-    {
-      value: "CHI_CUC",
-      text: "Giữa 2 chi cục trong cùng 1 cục"
-    },
-    {
-      value: "CUC",
-      text: "Giữa 2 cục DTNN KV"
-    }
-  ];
 
   constructor(
     httpClient: HttpClient,
@@ -217,38 +98,87 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
   async ngOnInit() {
-
-    await this.spinner.show();
-    try {
-      this.maQd = this.userInfo.MA_QD;
-      if (this.idInput) {
-        await this.loadChiTiet(this.idInput)
-      } else {
-        this.initForm();
-        if (this.idTHop) {
-          this.formData.patchValue({
-            idThop: this.idTHop
-          })
-          this.selectMaTongHop(this.idTHop)
-        }
-      }
-    } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    if (this.idInput) {
+      await this.loadChiTiet(this.idInput)
     }
+
+  }
+
+  async loadChiTiet(id: number) {
+    await this.spinner.show()
+    // if (id) {
+    //   let data = await this.detail(id);
+    //   this.danhSachKeHoach = []
+    //   this.formData.patchValue({
+    //     ...data,
+    //     soQdinh: data.soQdinh.split('/')[0]
+    //   });
+
+    //   data.danhSachQuyetDinh.map(async (item, i) => {
+    //     if (item.dcnbKeHoachDcHdr) {
+    //       let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
+
+    //       dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
+    //         this.danhSachKeHoach.push({
+    //           ...element,
+    //           maLoNganKho: element.maLoKho ? `${element.maLoKho}${element.maNganKho}` : element.maNganKho,
+    //           maDvi: dcnbKeHoachDcHdr.maDvi,
+    //           tenDvi: dcnbKeHoachDcHdr.tenDvi,
+    //         })
+    //       });
+    //     }
+    //   })
+
+    //   this.canCu = data.canCu;
+    //   this.quyetDinh = data.quyetDinh;
+
+    //   if (data.loaiDc !== "DCNB") this.loadDsQuyetDinh(data.loaiDc, data.loaiQdinh)
+
+    //   if (data.loaiDc === "DCNB") {
+    //     this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maChiCucNhan")
+    //   }
+    //   if (data.loaiDc === "CHI_CUC") {
+    //     this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+    //   }
+    //   if (data.loaiDc === "CUC" && !(this.isChiCuc() && data.loaiQdinh == '01')) {
+    //     this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+    //   }
+    //   if (data.loaiDc === "CUC" && this.isChiCuc() && data.loaiQdinh == '01') {
+    //     this.dataTableView = this.buildTableViewChiCUC(this.danhSachKeHoach, "maDvi")
+
+    //   }
+    // }
     await this.spinner.hide();
   }
 
-  initForm() {
+  async add(row?: any) {
+    await this.spinner.show();
+
+    await this.spinner.hide();
+
+    const modalQD = this.modal.create({
+      nzTitle: 'THÔNG TIN HÀNG DTQG CẦN ĐIỀU CHUYỂN',
+      nzContent: ThongTinHangDtqgComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        // danhSachKeHoach: this.danhSachKeHoach,
+        // dsChiCuc: this.listChiCucNhan,
+        // data: row ? row : undefined,
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+
+
+      }
+    });
   }
 
-  isTongCuc() {
-    return this.userService.isTongCuc()
-  }
+  async openDialogQD() {
 
-  isCuc() {
-    return this.userService.isCuc()
   }
 
   setExpand(parantExpand: boolean = false, children: any = []): void {
@@ -259,348 +189,16 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
   }
 
 
-  async loadChiTiet(id: number) {
-    await this.spinner.show()
-    if (id) {
-      let data = await this.detail(id);
-      let listDeXuat = []
-      let listHangHoa = []
-      this.dataTableView = []
-      data.danhSachQuyetDinh.map(async (item, i) => {
-        if (item.dcnbKeHoachDcHdr) {
-          listDeXuat.push(item.dcnbKeHoachDcHdr)
-          let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
-
-          dcnbKeHoachDcHdr.danhSachHangHoa.forEach(element => {
-            listHangHoa.push({
-              ...element,
-              maDvi: dcnbKeHoachDcHdr.maDvi,
-              tenDvi: dcnbKeHoachDcHdr.tenDvi,
-            })
-          });
-        }
-      })
-
-      console.log('loadChiTiet', data.loaiDc, listHangHoa, this.dataTableView)
-      this.formData.patchValue({
-        quyetDinhPdDtl: listDeXuat,
-      });
-
-
-      this.formData.patchValue(data);
-
-      if (data.idThop) {
-        this.formData.patchValue({
-          type: "TH",
-        })
-      } else {
-        this.formData.patchValue({
-          type: "TTr",
-        })
-      }
-
-      this.canCu = data.canCu;
-      this.quyetDinh = data.quyetDinh;
-      if (data.loaiDc === "CHI_CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-      }
-
-      if (data.loaiDc === "CUC") {
-        this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-      }
-
-    }
-    await this.spinner.hide();
-  }
-
-
-  async onChangeLoaiDc(value) {
-    if (value) {
-      const loaiDC = this.listLoaiDC.find(item => item.value == value)
-
-      if (loaiDC) {
-        this.formData.patchValue({
-          tenLoaiDc: loaiDC.text,
-        })
-      }
-      this.dataTableView = []
-    }
-  }
-
-
-  async selectMaTongHop(event) {
-    await this.spinner.show()
-    if (event) {
-      const res = await this.maTongHopQuyetDinhDieuChuyenService.getDetail(event)
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        let listDeXuat = []
-        let listHangHoa = []
-        let listQD = []
-        let loaiDC = data.loaiDieuChuyen || this.formData.value.loaiDc
-        this.formData.patchValue({
-          loaiDc: data.loaiDieuChuyen
-        })
-
-
-        data.thKeHoachDieuChuyenTongCucDtls.map(async item => {
-          if (loaiDC === "CHI_CUC") {
-            if (item.thKeHoachDieuChuyenCucHdr) {
-
-              if (item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.length > 0) {
-                item.thKeHoachDieuChuyenCucHdr.thKeHoachDieuChuyenNoiBoCucDtls.map(async (itemKH, i) => {
-                  if (itemKH.dcnbKeHoachDcHdr) {
-                    listDeXuat.push(itemKH.dcnbKeHoachDcHdr)
-                    listQD.push({
-                      keHoachDcHdrId: itemKH.dcnbKeHoachDcHdr.id,
-                    })
-                    let dcnbKeHoachDcHdr = itemKH.dcnbKeHoachDcHdr
-                    dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
-                      listHangHoa.push({
-                        ...itemHH,
-                        maDvi: dcnbKeHoachDcHdr.maDvi,
-                        tenDvi: dcnbKeHoachDcHdr.tenDvi,
-                      })
-                    })
-                  }
-
-                })
-              }
-
-            }
-
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-          }
-
-          if (loaiDC === "CUC") {
-            listDeXuat.push(item)
-            if (item.thKeHoachDieuChuyenCucKhacCucDtl) {
-
-              if (item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.length > 0) {
-                item.thKeHoachDieuChuyenCucKhacCucDtl.dcnbKeHoachDcHdr.map(async (itemKH, i) => {
-
-                  listQD.push({
-                    keHoachDcHdrId: itemKH.id,
-                  })
-                  itemKH.danhSachHangHoa.map(async itemHH => {
-                    listHangHoa.push({
-                      ...itemHH,
-                      maDvi: itemKH.maDvi,
-                      tenDvi: itemKH.tenDvi,
-                    })
-
-                  })
-
-
-                })
-              }
-
-            }
-            this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-
-          }
-
-
-
-        })
-        console.log('buildTableView', this.dataTableView, listDeXuat)
-        this.formData.patchValue({
-          quyetDinhPdDtl: listDeXuat,
-          danhSachQuyetDinh: listQD,
-        });
-
-
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-    await this.spinner.hide()
-  }
-
-
-
-  buildTableViewChiCUC(data: any[] = [], groupBy: string = "maDvi") {
-    let dataView = chain(data)
-      .groupBy(groupBy)
-      ?.map((value, key) => {
-        console.log('maDvi', key, value)
-        let rs = chain(value)
-          .groupBy("maDiemKho")
-          ?.map((v, k) => {
-            console.log('maDiemKho', k, v)
-            let rss = chain(v)
-              .groupBy("maNganKho")
-              ?.map((vs, ks) => {
-                console.log('maNganKho', ks, vs)
-                const maNganKho = vs.find(s => s?.maNganKho == ks);
-                // const rsss = chain(vs).groupBy("id").map((x, ix) => {
-                //   console.log('id', ix, x)
-                //   const ids = x.find(f => f.id == ix);
-
-                //   const hasmaChiCucNhan = x.some(f => f.maChiCucNhan);
-                //   if (!hasmaChiCucNhan) return {
-                //     ...ids
-                //   }
-
-                //   const rsxx = chain(x).groupBy("maChiCucNhan")?.map((m, im) => {
-                //     console.log('maChiCucNhan', ix, x)
-                //     const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                //     const hasMaDiemKhoNhan = x.some(f => f.maDiemKhoNhan);
-                //     if (!hasMaDiemKhoNhan) return {
-                //       ...maChiCucNhan
-                //     }
-
-                //     const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-                //       console.log('maDiemKhoNhan', inx, n)
-                //       const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                //       return {
-                //         ...maDiemKhoNhan,
-                //         children: n
-                //       }
-                //     }).value()
-                //     return {
-                //       ...maChiCucNhan,
-                //       children: rssx
-                //     }
-                //   }).value()
-
-                //   return {
-                //     ...ids,
-                //     children: rsxx
-                //   }
-                // }).value()
-
-                const rsxx = chain(vs).groupBy("maChiCucNhan")?.map((m, im) => {
-                  console.log('maChiCucNhan', im, m)
-                  const maChiCucNhan = m.find(f => f.maChiCucNhan == im);
-                  const hasMaDiemKhoNhan = vs.some(f => f.maDiemKhoNhan);
-                  if (!hasMaDiemKhoNhan) return {
-                    ...maChiCucNhan
-                  }
-
-                  const rssx = chain(m).groupBy("maDiemKhoNhan")?.map((n, inx) => {
-                    console.log('maDiemKhoNhan', inx, n)
-                    const maDiemKhoNhan = n.find(f => f.maDiemKhoNhan == inx);
-                    return {
-                      ...maDiemKhoNhan,
-                      children: n
-                    }
-                  }).value()
-                  return {
-                    ...maChiCucNhan,
-                    children: rssx
-                  }
-                }).value()
-
-                let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-                return {
-                  ...maNganKho,
-                  idVirtual: maNganKho ? maNganKho.idVirtual ? maNganKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-                  children: rsxx,
-                  duToanKphi
-                }
-              }
-              ).value();
-
-            let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-            let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-            return {
-              ...rowDiemKho,
-              idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-              duToanKphi: duToanKphi,
-              children: rss,
-              expand: true
-            }
-          }
-          ).value();
-
-        let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-        let rowChiCuc = value?.find(s => s.maDvi === key);
-        return {
-          ...rowChiCuc,
-          idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-          duToanKphi: duToanKphi,
-          children: rs,
-          expand: true
-        };
-      }).value();
-    // this.tableView = dataView;
-    // this.expandAll()
-
-    if (data?.length !== 0) {
-      const tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-      this.formData.patchValue({
-        tongtien: tongDuToanChiPhi,
-      })
-    };
-    return dataView
-  }
-
-  // buildTableViewCUC(data: any[] = [], groupBy: string = "maDvi") {
-  //   let dataView = chain(data)
-  //     .groupBy(groupBy)
-  //     ?.map((value, key) => {
-  //       console.log('maDvi', key, value)
-  //       let rs = chain(value)
-  //         .groupBy("maDiemKho")
-  //         ?.map((v, k) => {
-  //           console.log('maDiemKho', k, v)
-  //           let rss = chain(v)
-  //             .groupBy("maLoKho")
-  //             ?.map((vs, ks) => {
-  //               console.log('maLoKho', ks, vs)
-  //               const maLoKho = vs.find(s => s?.maLoKho == ks);
-
-  //               let duToanKphi = vs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //               return {
-  //                 ...maLoKho,
-  //                 idVirtual: maLoKho ? maLoKho.idVirtual ? maLoKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //                 children: vs,
-  //                 duToanKphi
-  //               }
-  //             }
-  //             ).value();
-
-  //           let duToanKphi = v?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //           let rowDiemKho = v?.find(s => s.maDiemKho === k);
-
-  //           return {
-  //             ...rowDiemKho,
-  //             idVirtual: rowDiemKho ? rowDiemKho.idVirtual ? rowDiemKho.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //             duToanKphi: duToanKphi,
-  //             children: rss,
-  //             expand: true
-  //           }
-  //         }
-  //         ).value();
-
-  //       let duToanKphi = rs?.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //       let rowChiCuc = value?.find(s => s.maDvi === key);
-  //       return {
-  //         ...rowChiCuc,
-  //         idVirtual: rowChiCuc ? rowChiCuc.idVirtual ? rowChiCuc.idVirtual : uuidv4.v4() : uuidv4.v4(),
-  //         duToanKphi: duToanKphi,
-  //         children: rs,
-  //         expand: true
-  //       };
-  //     }).value();
-  //   // this.tableView = dataView;
-  //   // this.expandAll()
-
-  //   // if (data?.length !== 0) {
-  //   //   this.tongDuToanChiPhi = data.reduce((prev, cur) => prev + cur.duToanKphi, 0);
-  //   // };
-  //   return dataView
-  // }
-
   async save(isGuiDuyet?) {
     await this.spinner.show();
-    this.setValidator()
     let body = this.formData.value;
-    if (this.idInput) body.id = this.idInput
-    body.canCu = this.canCu
-    body.quyetDinh = this.quyetDinh
+    // body.canCu = this.canCu;
+    body.quyetDinh = this.quyetDinh;
+    if (this.idInput) {
+      body.id = this.idInput
+    } else {
+      // body.soQdinh = `${this.formData.value.soQdinh}/${this.maQd}`
+    }
 
     let data = await this.createUpdate(body);
     if (data) {
@@ -614,27 +212,97 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
     await this.spinner.hide();
   }
 
+  isYCXDDiemNhap() {
+    return this.formData.value.trangThai == STATUS.DU_THAO && this.formData.value.loaiQdinh == '01'
+  }
+
+  async ycXDDiemNhap() {
+    await this.spinner.show();
+    let body = this.formData.value;
+    // body.canCu = this.canCu;
+    body.quyetDinh = this.quyetDinh;
+    if (this.idInput) body.id = this.idInput
+
+    let data = await this.createUpdate(body);
+    if (data) {
+      this.idInput = data.id;
+      let trangThai = STATUS.YC_CHICUC_PHANBO_DC;
+      let mesg = 'Bạn muốn yêu cầu xác định điểm nhập?'
+      this.approve(this.idInput, trangThai, mesg);
+    }
+    await this.spinner.hide();
+
+  }
+
   async guiDuyet() {
-    let trangThai = STATUS.CHO_DUYET_LDV;
-    let mesg = 'Bạn muốn gửi duyệt văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    // if (this.isCuc()) {
+    //   let trangThai = STATUS.CHO_DUYET_TP;
+    //   let mesg = 'Bạn muốn gửi duyệt văn bản?'
+    //   this.approve(this.idInput, trangThai, mesg);
+    // }
+    // if (this.isChiCuc()) {
+    //   let trangThai = STATUS.CHODUYET_TBP_TVQT;
+    //   let mesg = 'Bạn muốn gửi duyệt văn bản?'
+    //   this.approve(this.idInput, trangThai, mesg);
+    // }
+  }
+
+  isTuChoi() {
+    // if (this.isCuc()) {
+    //   return this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_LDC
+    // }
+    return false
   }
 
   async tuChoi() {
-    let trangThai = () => {
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDV)
-        return STATUS.TU_CHOI_LDV
-      if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDTC)
-        return STATUS.TU_CHOI_LDTC
-      return STATUS.CHO_DUYET_LDV;
-    };
-    this.reject(this.idInput, trangThai());
+    // if (this.isCuc()) {
+    //   let trangThai = () => {
+    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP)
+    //       return STATUS.TU_CHOI_TP
+    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDC)
+    //       return STATUS.TU_CHOI_LDC
+    //     return STATUS.CHO_DUYET_TP;
+    //   };
+    //   this.reject(this.idInput, trangThai());
+    // }
+    // if (this.isChiCuc()) {
+    //   let trangThai = () => {
+    //     if (this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT)
+    //       return STATUS.TUCHOI_TBP_TVQT
+    //     if (this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC)
+    //       return STATUS.TU_CHOI_LDCC
+    //     return STATUS.CHODUYET_TBP_TVQT;
+    //   };
+    //   this.reject(this.idInput, trangThai());
+    // }
+  }
+
+  isPheDuyet() {
+    // if (this.isCuc()) {
+    //   return this.formData.value.trangThai == STATUS.CHO_DUYET_TP
+    // }
+    // if (this.isChiCuc()) {
+    //   return this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT || this.formData.value.trangThai == STATUS.CHO_DUYET_LDCC
+    // }
+    return false
   }
 
   async pheDuyet() {
-    let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_LDV ? STATUS.CHO_DUYET_LDTC : STATUS.BAN_HANH;
-    let mesg = 'Bạn muốn phê duyệt văn bản?'
-    this.approve(this.idInput, trangThai, mesg);
+    // if (this.isCuc()) {
+    //   let trangThai = this.formData.value.trangThai == STATUS.CHO_DUYET_TP ? STATUS.CHO_DUYET_LDC : STATUS.BAN_HANH;
+    //   let mesg = 'Bạn muốn phê duyệt văn bản?'
+    //   this.approve(this.idInput, trangThai, mesg);
+    // }
+    // if (this.isChiCuc()) {
+    //   let trangThai = this.formData.value.trangThai == STATUS.CHODUYET_TBP_TVQT ? STATUS.CHO_DUYET_LDCC : STATUS.DA_DUYET_LDCC;
+    //   let mesg = 'Bạn muốn phê duyệt văn bản?'
+    //   this.approve(this.idInput, trangThai, mesg);
+    // }
+
+  }
+
+  isBanHanh() {
+    return this.formData.value.trangThai == STATUS.CHO_DUYET_LDC
   }
 
   async banHanh() {
@@ -645,198 +313,6 @@ export class ThongTinBienBanNghiemThuBaoQuanLanDauComponent extends Base2Compone
 
   quayLai() {
     this.showListEvent.emit();
-  }
-
-  // flattenTree(tree) {
-  //   return tree.flatMap((item) => {
-  //     return item.childData ? this.flattenTree(item.childData) : item;
-  //   });
-  // }
-
-  setValidator(isGuiDuyet?) {
-    if (this.formData.get('type').value == 'TH') {
-      this.formData.controls["idThop"].setValidators([Validators.required]);
-      // this.formData.controls["maThop"].setValidators([Validators.required]);
-      this.formData.controls["idDxuat"].clearValidators();
-      // this.formData.controls["maDxuat"].clearValidators();
-      // this.formData.controls["ngayDx"].clearValidators();
-    }
-    if (this.formData.get('type').value == 'TTr') {
-      this.formData.controls["idThop"].clearValidators();
-      // this.formData.controls["maThop"].clearValidators();
-      // this.formData.controls["ngayThop"].clearValidators();
-      this.formData.controls["idDxuat"].setValidators([Validators.required]);
-      // this.formData.controls["maDxuat"].setValidators([Validators.required]);
-    }
-  }
-
-  async openDialogTh() {
-    if (this.formData.get('type').value != 'TH') {
-      return;
-    }
-
-    await this.spinner.show();
-    let bodyTh = {
-      loaiDieuChuyen: this.formData.get('loaiDc').value,
-      namKeHoach: this.formData.get('nam').value,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      },
-    }
-
-    let resTh = await this.maTongHopQuyetDinhDieuChuyenService.dsMaTH(bodyTh);
-    if (resTh.msg == MESSAGE.SUCCESS) {
-      this.listDanhSachTongHop = resTh.data;
-    }
-    await this.spinner.hide();
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán đấu giá',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDanhSachTongHop,
-        dataHeader: ['Mã tổng hợp'],
-        dataColumn: ['id']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.setValidator()
-        this.dataTableView = []
-        await this.selectMaTongHop(data.id);
-        this.formData.patchValue({
-          idThop: data.id,
-          idDxuat: undefined
-        });
-      }
-    });
-  }
-
-
-  async openDialogTr() {
-    if (this.formData.get('type').value != 'TTr') {
-      return
-    }
-    await this.spinner.show();
-    // Get data tờ trình
-    let bodyDx = {
-      loaiDieuChuyen: this.formData.get('loaiDc').value,
-      namKeHoach: this.formData.get('nam').value,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      },
-    }
-    let resSoDX = await this.soDeXuatQuyetDinhDieuChuyenService.dsSoDX(bodyDx);
-    if (resSoDX.msg == MESSAGE.SUCCESS) {
-      this.listDanhSachDeXuat = resSoDX.data;
-    }
-    await this.spinner.hide();
-
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách mã tổng hợp',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDanhSachDeXuat,
-        dataHeader: ['Số đề xuất/công văn'],
-        dataColumn: ['soDeXuat']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.setValidator()
-        this.formData.patchValue({
-          idDxuat: data.id,
-          idThop: undefined
-        });
-        this.dataTableView = []
-        await this.onChangeIdTrHdr(data);
-      }
-    });
-  }
-
-  async onChangeIdTrHdr(data) {
-    await this.spinner.show();
-    this.danhsachDx = [];
-    if (data) {
-      const res = await this.soDeXuatQuyetDinhDieuChuyenService.getDetail(data.id)
-      if (res.msg == MESSAGE.SUCCESS) {
-        const dataRes = res.data;
-        let loaiDC = dataRes.loaiDieuChuyen || this.formData.value.loaiDc
-        let listDeXuat = []
-        let listQD = []
-        let listHangHoa = []
-        dataRes.thKeHoachDieuChuyenCucKhacCucDtls.map(async item => {
-          if (item.dcnbKeHoachDcHdr) {
-            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
-            console.log('dcnbKeHoachDcHdr', item, dcnbKeHoachDcHdr)
-
-            dcnbKeHoachDcHdr.forEach(element => {
-              listDeXuat.push(element)
-              listQD.push({
-                keHoachDcHdrId: element.id,
-              })
-              element.danhSachHangHoa.map(async itemHH => {
-                listHangHoa.push({
-                  ...itemHH,
-                  maDvi: element.maDvi,
-                  tenDvi: element.tenDvi,
-                })
-
-              })
-            });
-          }
-
-
-
-        })
-        dataRes.thKeHoachDieuChuyenNoiBoCucDtls.map(async (item, i) => {
-          if (item.dcnbKeHoachDcHdr) {
-            listDeXuat.push(item.dcnbKeHoachDcHdr)
-            listQD.push({
-              keHoachDcHdrId: item.dcnbKeHoachDcHdr.id,
-            })
-            let dcnbKeHoachDcHdr = item.dcnbKeHoachDcHdr
-            dcnbKeHoachDcHdr.danhSachHangHoa.map(async itemHH => {
-              listHangHoa.push({
-                ...itemHH,
-                maDvi: dcnbKeHoachDcHdr.maDvi,
-                tenDvi: dcnbKeHoachDcHdr.tenDvi,
-              })
-
-            })
-          }
-
-        })
-
-        if (loaiDC === "CHI_CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-        }
-
-        if (loaiDC === "CUC") {
-          this.dataTableView = this.buildTableViewChiCUC(listHangHoa)
-        }
-
-        console.log('onChangeIdTrHdr', listDeXuat, listHangHoa, this.dataTableView)
-
-        this.formData.patchValue({
-          quyetDinhPdDtl: listDeXuat,
-          danhSachQuyetDinh: listQD,
-        });
-
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-    await this.spinner.hide();
   }
 
 }
