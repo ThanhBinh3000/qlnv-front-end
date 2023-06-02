@@ -90,6 +90,7 @@ export class QuanlyHopdongComponent implements OnInit {
       soLuongNhapKh: [''],
       tenTrangThaiHd: [''],
       trangThaiHd: [''],
+      soHdDaKy: []
     });
   }
 
@@ -191,6 +192,7 @@ export class QuanlyHopdongComponent implements OnInit {
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
+      let soHdDaKy = 0
       this.dataTable.forEach(item => {
         let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
         item.hopDong = hopDong
@@ -199,7 +201,13 @@ export class QuanlyHopdongComponent implements OnInit {
           tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
         }
       })
+      data.listHopDong.forEach(i => {
+        if (i.trangThai == STATUS.DA_KY) {
+          soHdDaKy += 1;
+        }
+      })
       this.formData.patchValue({
+        soHdDaKy: soHdDaKy,
         soLuongNhap: soLuong,
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
