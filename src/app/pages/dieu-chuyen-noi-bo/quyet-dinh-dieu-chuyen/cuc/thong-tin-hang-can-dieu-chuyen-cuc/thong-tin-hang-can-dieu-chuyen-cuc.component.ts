@@ -173,6 +173,11 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
         (item.maNhaKhoNhan === this.formData.value.maNhaKhoNhan) &&
         (item.maNganKhoNhan === value)
       )
+      if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+        (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+        (this.formData.value.maNganKho === value)) {
+        return true
+      }
       return !!check
     }
     return false
@@ -190,6 +195,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
       (item.maNganKhoNhan === this.formData.value.maNganKhoNhan) &&
       (item.maLoKhoNhan === value)
     )
+
+    if ((this.formData.value.maDiemKho === this.formData.value.maDiemKhoNhan) &&
+      (this.formData.value.maNhaKho === this.formData.value.maNhaKhoNhan) &&
+      (this.formData.value.maNganKho === this.formData.value.maNganKhoNhan) &&
+      (this.formData.value.maLoKho === value)) {
+      return true
+    }
 
     return !!check
   }

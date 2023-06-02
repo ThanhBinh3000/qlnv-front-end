@@ -393,12 +393,12 @@
                             </tr>
                             <ng-container *ngFor="let res of dtGoiThau.children, let k = index">
                                 <ng-container *ngFor="let diemKho of res.children, let l = index">
-                                    <tr *ngIf="res.idGoiThau == dtGoiThau.id">
+                                    <tr *ngIf="res.idGoiThau == dtGoiThau.id && diemKho.maDvi.startsWith(res.maDvi)">
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td>{{diemKho.tenDvi}}</td>
-                                        <td>{{res.diaDiemNhap}}</td>
+                                        <td>{{diemKho.diaDiemNhap}}</td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
@@ -479,17 +479,17 @@
                             <td class="text-right">{{(item.donGiaVat != null ? item.donGiaVat : item.donGiaTamTinh)
                                 | number : '1.0-1'
                                 : 'vi_VN'}}</td>
-                            <td class="text-right">{{(item.donGiaVat != null ? item.soLuong * item.donGiaVat * 1000 :
+                            <td class="text-right">{{(item.donGiaVat != null ? item.soLuong * item.donGiaVat :
                                 (item.donGiaTamTinh !=
-                                null ? item.soLuong * item.donGiaTamTinh * 1000 : 0)) | number : '1.0-1' : 'vi_VN'}}</td>
+                                null ? item.soLuong * item.donGiaTamTinh : 0)) | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{item.tenNhaThau}}</td>
                             <td class="text-right">{{item.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">{{item.soLuong * item.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN'
+                            <td class="text-right">{{item.soLuong * item.donGiaNhaThau | number: '1.0-1' : 'vi_VN'
                                 }}
                             </td>
-                            <td class="text-right">{{item.trangThai == 40 ? abs((item.donGiaVat != null ?
-                                (item.donGiaNhaThau - item.donGiaVat) * item.soLuong * 1000 : (item.donGiaTamTinh != null ?
-                                (item.donGiaNhaThau - item.donGiaTamTinh) * item.soLuong * 1000 : 0))) : 0 | number:
+                            <td class="text-right">{{(item.trangThai == 40 ? abs((item.donGiaVat != null ?
+                                (item.donGiaNhaThau - item.donGiaVat) * item.soLuong : (item.donGiaTamTinh != null ?
+                                (item.donGiaNhaThau - item.donGiaTamTinh) * item.soLuong : 0))) : 0) | number:
                                 '1.0-1' : 'vi_VN' }} </td>
                             <td>{{item.tenTrangThai}}</td>
                         </tr>
@@ -507,9 +507,9 @@
                                     <td class="text-right">{{(item.donGiaVat != null ? item.donGiaVat :
                                         item.donGiaTamTinh) | number :
                                         '1.0-1' : 'vi_VN'}}</td>
-                                    <td class="text-right">{{(item.donGiaVat != null ? cuc.soLuong * item.donGiaVat * 1000
+                                    <td class="text-right">{{(item.donGiaVat != null ? cuc.soLuong * item.donGiaVat
                                         :
-                                        (item.donGiaTamTinh != null ? cuc.soLuong * item.donGiaTamTinh * 1000 : 0) ) |
+                                        (item.donGiaTamTinh != null ? cuc.soLuong * item.donGiaTamTinh : 0) ) |
                                         number: '1.0-1' : 'vi_VN'}}</td>
                                     <td></td>
                                     <td></td>
@@ -533,8 +533,8 @@
                                                 item.donGiaTamTinh) |
                                                 number : '1.0-1' : 'vi_VN'}}</td>
                                             <td class="text-right">{{(item.donGiaVat != null ? chiCuc.soLuong *
-                                                item.donGiaVat * 1000 :
-                                                (item.donGiaTamTinh != null ? chiCuc.soLuong * item.donGiaTamTinh * 1000 :
+                                                item.donGiaVat :
+                                                (item.donGiaTamTinh != null ? chiCuc.soLuong * item.donGiaTamTinh :
                                                 0) ) | number : '1.0-1' : 'vi_VN'}}
                                             </td>
                                             <td></td>
@@ -557,9 +557,9 @@
                                                     item.donGiaTamTinh)
                                                     | number : '1.0-1' : 'vi_VN'}}</td>
                                                 <td class="text-right">{{(item.donGiaVat != null ? diemKho.soLuong *
-                                                    item.donGiaVat * 1000 :
+                                                    item.donGiaVat :
                                                     (item.donGiaTamTinh != null ? diemKho.soLuong *
-                                                    item.donGiaTamTinh * 1000 : 0) ) | number : '1.0-1' :
+                                                    item.donGiaTamTinh : 0) ) | number : '1.0-1' :
                                                     'vi_VN'}}</td>
                                                 <td></td>
                                                 <td></td>
@@ -645,8 +645,10 @@
                                 <td>{{ data.sdt }}</td>
                                 <td class="text-right">{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td class="text-right">{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td class="text-right">{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'
+                                <td class="text-right" *ngIf="loaiVthh.startsWith('02')">{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN'
                                     }}</td>
+                              <td class="text-right" *ngIf="!loaiVthh.startsWith('02')">{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN'
+                                }}</td>
                                 <td>{{ data.tenTrangThai }}</td>
                                 <td>{{ data.lyDo }}</td>
                                 <td *ngIf="!isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT && !isView"
