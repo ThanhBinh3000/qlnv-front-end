@@ -243,8 +243,8 @@
                 (click)="redirectToChiTiet(data, 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="loaiVthh.startsWith('02') ? ( (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA')) : ( (data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA'))"
-                (click)="redirectToChiTiet(data, 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA')">
+              <a *ngIf="loaiVthh.startsWith('02') ? (data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA') : ( (data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA'))"
+                 (click)="redirectToChiTiet(data, !loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_VT_TTDT_SUA')">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
