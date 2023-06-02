@@ -29,7 +29,7 @@ import { PassData } from '../danh-sach-bien-ban-lay-mau.component';
     styleUrls: ['./chi-tiet-danh-sach-bien-ban-lay-mau.component.scss']
 })
 export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnInit {
-    @Input() loaiVthh: string;
+    @Input() loaiVthh: string[];
     @Input() idInput: number;
     @Input() isView: boolean;
 
@@ -200,7 +200,7 @@ export class ChiTietDanhSachBienBanLayMau extends Base2Component implements OnIn
     async loadSoQuyetDinh() {
         let body = {
             trangThai: STATUS.BAN_HANH,
-            loaiVthh: ['0101', '0102'],
+            loaiVthh: this.loaiVthh,
             loaiDc: "DCNB",
             maDvi: this.userInfo.MA_DVI
             // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],

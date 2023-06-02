@@ -36,6 +36,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen-c.service';
+import { PhieuKiemNghiemChatLuongDieuChuyenService } from '../../services/dcnb-phieu-kiem-nghiem-chat-luong.service';
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -44,7 +45,8 @@ import { QuyetDinhDieuChuyenCucService } from 'src/app/services/dieu-chuyen-noi-
 })
 export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base2Component implements OnInit {
   @Input() idInput: number;
-  @Input() typeVthh: string;
+  @Input() typeVthh: string[];
+  @Input() loaiDc: string;
   @Input() isView: boolean;
   @Input() isViewOnModal: boolean;
   @Output()
@@ -53,7 +55,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   detail: any = {};
   idNhapHang: number = 0;
 
-  loaiVthh: string;
+  loaiVthh: string[];
   loaiStr: string;
   maVthh: string;
   routerVthh: string;
@@ -68,6 +70,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   listBbBanGiaoMau = [];
   dataTableChiTieu: any[] = [];
   id: number;
+  listBienBanLayMau: any[] = [];
+  listFileDinhKem: any[] = [];
 
 
   phieuKiemNghiemChatLuongHang: PhieuKiemNghiemChatLuongHang =
@@ -90,9 +94,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhDieuChuyenCucService: QuyetDinhDieuChuyenCucService,
-    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService
+    private bienBanLayMauDieuChuyenService: BienBanLayMauDieuChuyenService,
+    private phieuKiemNghiemChatLuongDieuChuyenService: PhieuKiemNghiemChatLuongDieuChuyenService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongHangService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongDieuChuyenService);
     this.formData = this.fb.group({
       id: [],
       trangThai: [STATUS.DU_THAO],
@@ -116,16 +121,13 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
-      idDdiemGiaoNvNh: [''],
-      soQdGiaoNvNh: ['', [Validators.required]],
-      idQdGiaoNvNh: ['', [Validators.required]],
       soHd: [''],
       ngayHd: [''],
       ngayLayMau: [''],
       soLuongNhapDayKho: [''],
       ngayNhapDayKho: [''],
 
-      soBbNhapDayKho: ['', [Validators.required]],
+      // soBbNhapDayKho: ['', [Validators.required]],
 
       soBbLayMau: ['', [Validators.required]],
       tenThuKho: [''],
@@ -139,6 +141,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       tenKyThuatVien: [''],
       ngayKnghiem: [''],
       hthucBquan: [''],
+      ngayHieuLucQD: [''],
+      donViTinh: ['']
     });
   }
 
@@ -187,8 +191,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      loaiVthh: ['0101', '0102'],
-      loaiDc: "DCNB",
+      loaiVthh: this.typeVthh,
+      loaiDc: this.loaiDc,
       maDvi: this.userInfo.MA_DVI
       // listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
@@ -207,7 +211,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   }
   async getDetail(id: number) {
     this.spinner.show()
-    let res = await this.phieuKiemNghiemChatLuongHangService.getDetail(id);
+    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         const data = res.data;
@@ -231,38 +235,43 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   }
 
   async save(isGuiDuyet?: boolean) {
-    await this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      await this.spinner.hide();
-      return;
-    }
-    let body = this.formData.value;
-    body.kquaKnghiem = this.dataTableChiTieu;
-    let res;
-    if (this.formData.get('id').value > 0) {
-      res = await this.phieuKiemNghiemChatLuongHangService.update(body);
-    } else {
-      res = await this.phieuKiemNghiemChatLuongHangService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (isGuiDuyet) {
-        await this.spinner.hide();
-        this.id = res.data.id;
-        this.pheDuyet();
-      } else {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.back();
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.back();
-        }
-        await this.spinner.hide();
+    try {
+
+      await this.spinner.show();
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        return;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let body = this.formData.value;
+      body.kquaKnghiem = this.dataTableChiTieu;
+      body.listFileDinhKem = this.listFileDinhKem;
+      let res;
+      if (this.formData.get('id').value > 0) {
+        res = await this.phieuKiemNghiemChatLuongDieuChuyenService.update(body);
+      } else {
+        res = await this.phieuKiemNghiemChatLuongDieuChuyenService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (isGuiDuyet) {
+          this.id = res.data.id;
+          this.pheDuyet();
+        } else {
+          if (this.formData.get('id').value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            // this.back();
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            // this.back();
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (error) {
+      console.log("error", error)
+    } finally {
       await this.spinner.hide();
+
     }
   }
 
@@ -304,7 +313,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
             trangThai: trangThai
           };
           let res =
-            await this.phieuKiemNghiemChatLuongHangService.approve(
+            await this.phieuKiemNghiemChatLuongDieuChuyenService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -343,7 +352,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
             trangThai: STATUS.TU_CHOI_LDCC,
           };
           let res =
-            await this.phieuKiemNghiemChatLuongHangService.approve(
+            await this.phieuKiemNghiemChatLuongDieuChuyenService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -380,22 +389,21 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
   async loadBbLayMau() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
+      loaiDc: this.loaiDc,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
       loaiVthh: this.loaiVthh,
     }
-    let res = await this.bienBanLayMauDieuChuyenService.search(body);
+    let res = await this.phieuKiemNghiemChatLuongDieuChuyenService.dsBBLMKiemNghiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listBbBanGiaoMau = res.data.content
-      }
+      this.listBienBanLayMau = Array.isArray(res.data) ? res.data : []
     }
   }
 
-  openDialogBbLayMau() {
-    this.loadBbLayMau();
+  async openDialogBbLayMau() {
+    await this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
       nzContent: DialogTableSelectionComponent,
@@ -404,7 +412,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listBbBanGiaoMau,
+        dataTable: this.listBienBanLayMau,
         dataHeader: ['Số biên bản', 'Số biên bản nhập đầy kho', 'Số QĐ Giao ĐC'],
         dataColumn: ['soBbLayMau', 'soBbNhapDayKho', 'soQdinhDcc']
       },
@@ -414,16 +422,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
     });
   }
   async bindingDataBbLayMau(id, isChiTiet) {
-    let res = await this.quanLyBienBanLayMauService.getDetail(id);
+    let res = await this.bienBanLayMauDieuChuyenService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
-        soBbLayMau: data.soBienBan,
-        soBbNhapDayKho: data.soBbNhapDayKho,
-        soQdGiaoNvNh: data.soQdGiaoNvNh,
-        idQdGiaoNvNh: data.idQdGiaoNvNh,
+        soBbLayMau: data.soBbLayMau,
+        soQdinhDcc: data.soQdinhDcc,
+        qdinhDccId: data.qdinhDccId,
         ngayLayMau: data.ngayLayMau,
-        idDdiemGiaoNvNh: data.idDdiemGiaoNvNh,
         maDiemKho: data.maDiemKho,
         tenDiemKho: data.tenDiemKho,
         maNhaKho: data.maNhaKho,
@@ -436,10 +442,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongXuatDieuChuyenComponent extends Base
         cloaiVthh: data.cloaiVthh,
         tenLoaiVthh: data.tenLoaiVthh,
         tenCloaiVthh: data.tenCloaiVthh,
-        moTaHangHoa: data.moTaHangHoa,
-        soLuongNhapDayKho: data.bbNhapDayKho.soLuong,
-        ngayNhapDayKho: data.bbNhapDayKho.ngayKetThucNhap,
-        tenThuKho: data.bbNhapDayKho.tenNguoiTao
+        // moTaHangHoa: data.moTaHangHoa,
+        // tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
       if (!isChiTiet) {
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);

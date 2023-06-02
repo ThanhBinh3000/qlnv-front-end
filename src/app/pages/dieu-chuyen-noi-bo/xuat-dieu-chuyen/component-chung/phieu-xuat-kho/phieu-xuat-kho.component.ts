@@ -15,7 +15,7 @@ import { chain, groupBy } from 'lodash';
   styleUrls: ['./phieu-xuat-kho.component.scss']
 })
 export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() typeVthh: string[];
 
   selectedId: number = 0;
   isView: boolean = false;
@@ -64,7 +64,7 @@ export class PhieuXuatKhoDCNBComponent extends Base2Component implements OnInit 
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
+        loaiVthh: this.typeVthh,
         maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();

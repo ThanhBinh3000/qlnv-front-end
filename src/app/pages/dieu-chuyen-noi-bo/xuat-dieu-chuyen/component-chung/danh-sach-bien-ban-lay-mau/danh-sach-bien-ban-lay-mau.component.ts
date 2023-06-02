@@ -73,7 +73,6 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
             tuNgay: [null],
             denNgay: [null],
             trangThai: [STATUS.BAN_HANH],
-            maDvi: [this.userInfo.MA_DVI],
             loaiDc: [],
             loaiVthh: [],
         })
@@ -115,30 +114,31 @@ export class DanhSachBienBanLayMau extends Base2Component implements OnInit {
         this.isAddNew = b;
     }
     buildTableView() {
-        let dataView = chain(this.dataTable).groupBy("soQdinhDcc").map((value, key) => {
-            let rs = chain(value).groupBy("maDiemKho").map((v, k) => {
-                let rowLv2 = v.find(s => s.maDiemKho === k);
-                if (!rowLv2) {
-                    return;
+        let dataView = Array.isArray(this.dataTable) ?
+            this.dataTable.map((data) => {
+
+                let rs = Array.isArray(data.dcnbBienBanLayMauHdrList) ? chain(data.dcnbBienBanLayMauHdrList).groupBy("maDiemKho").map((v, k) => {
+                    let rowLv2 = v.find(s => s.maDiemKho === k);
+                    if (!rowLv2) {
+                        return;
+                    }
+                    return {
+                        ...rowLv2,
+                        idVirtual: uuidv4(),
+                        maDiemKho: k,
+                        childData: v
+                    }
                 }
+                ).value() : [];
+
                 return {
-                    ...rowLv2,
+                    ...data,
+                    soQdinhDcc: data.soQdinh,
+                    qdinhDccId: data.id,
                     idVirtual: uuidv4(),
-                    maDiemKho: k,
-                    childData: v
-                }
-            }
-            ).value();
-            let rowLv1 = value.find(s => s.soQdinhDcc === key);
-            if (!rowLv1) {
-                return;
-            }
-            return {
-                ...rowLv1,
-                idVirtual: uuidv4(),
-                childData: rs
-            };
-        }).value();
+                    childData: rs
+                };
+            }) : []
         this.dataView = dataView;
         this.expandAll()
     }
