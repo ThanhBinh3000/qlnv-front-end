@@ -204,7 +204,7 @@
                 *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_QDPDDADTXD')">
               Quyết định phê duyệt báo cáo KTKT
               <img *ngIf="itemQdPdKtkt && itemQdPdKtkt.trangThai == STATUS.BAN_HANH" class="ml-1"
-                   src="../../../../../assets/itemQdPdKtkt/icon_tick_xanh.svg" width="14" height="14"/>
+              src="../../../../../assets/images/icon_tick_xanh.svg" width="14" height="14"/>
               <img *ngIf="!itemQdPdKtkt || itemQdPdKtkt.trangThai == STATUS.DU_THAO" class="ml-1"
                    src="../../../../../assets/images/icon_reject.svg" width="14" height="14"/>
             </li>
@@ -220,8 +220,7 @@
             </li>
             <li nz-menu-item
                 [ngClass]="{'disabled-tab': !itemQdPdKhLcnt || itemQdPdKhLcnt.trangThai != STATUS.BAN_HANH}"
-                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')"
-                *ngIf="userService.isAccessPermisson('QLKT_TDXDSCKT_TDDTXD_TTDT')">
+                [nzSelected]="tabSelected == '03'" (click)="selectTab('03')">
               Thông tin đấu thầu
               <img
                 *ngIf="!itemTtdt || itemTtdt.trangThaiDt == STATUS.CHUA_CAP_NHAT || itemTtdt.trangThaiDt == STATUS.DANG_CAP_NHAT"
@@ -277,7 +276,7 @@
                                                   (dataItemPdKtkt)="receivedData($event,'01')"></app-quyet-dinh-phe-duyet-bao-cao-ktkt>
         </ng-container>
         <ng-container *ngIf="tabSelected == '02'">
-          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'02')"
+          <app-quyet-dinh-phe-duyet-khlcnt-scl [itemDuAn]="itemSelected" (dataItemKhLcnt)="receivedData($event,'02')" [itemQdPdBcKtkt]="itemQdPdKtkt"
                                                [itemQdPdKhLcnt]="itemQdPdKhLcnt">
           </app-quyet-dinh-phe-duyet-khlcnt-scl>
         </ng-container>

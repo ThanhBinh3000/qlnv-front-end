@@ -30,6 +30,9 @@ import {
 import {
   QdPheDuyetBaoCaoKtktService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-bao-cao-ktkt.service";
+import {
+  QdPheDuyetKhlcntTdsclService
+} from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-lon-hang-nam',
@@ -69,7 +72,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
     private ktQdXdHangNamService: KtKhSuaChuaBtcService,
     private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
-    private quyetdinhpheduyetKhlcntService: QuyetdinhpheduyetKhlcntService,
+    private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
     private hopdongService: HopdongService,
   ) {
@@ -177,6 +180,8 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         "namKh": item.namKh,
         "soQdPdKhScl": item.soQdPdTcdt,
         "loai" : "00",
+        "tenCongTrinh" : item.tenCongTrinh,
+        "idDuAn" : item.id,
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -188,7 +193,7 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         // //Check tiếp quyết định phê duyệt bản vẽ
         // if (this.itemQdPdKtkt) {
         //   // await this.loadItemQdPdTktcTdt(this.itemQdPdDaDtxd);
-        //   // await this.loadItemQdPdKhLcnt(this.itemQdPdTktcTdt);
+          await this.loadItemQdPdKhLcnt(this.itemQdPdKtkt);
         //   // await this.loadListItemQdPdKqLcnt(this.itemTtdt);
         //   // await this.loadItemHopDong();
         // } else {
@@ -225,9 +230,8 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
   async loadItemQdPdKhLcnt(itemQdPdTktcTdt) {
     if (itemQdPdTktcTdt && itemQdPdTktcTdt.trangThai == STATUS.BAN_HANH) {
       let body = {
-        "idQdPdDaDtxd": this.itemQdPdKtkt.id,
-        "idQdPdTktcTdt": itemQdPdTktcTdt.id,
-        "idDuAn": this.itemQdPdKtkt.idDuAn,
+        "soQdPdBcKtkt": this.itemQdPdKtkt.soQd,
+        "idQdPdBcKtkt": this.itemQdPdKtkt.id,
         "paggingReq": {
           "limit": 10,
           "page": 0
@@ -236,7 +240,6 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
       let res = await this.quyetdinhpheduyetKhlcntService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.itemQdPdKhLcnt = res.data.content && res.data.content.length > 0 ? res.data.content[0] : null;
-        this.itemTtdt = this.itemQdPdKhLcnt;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

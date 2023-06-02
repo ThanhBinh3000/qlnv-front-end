@@ -82,7 +82,7 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   timKiem() {
     this.formData.patchValue({
       loaiVthh: this.loaiVthh,
-      maDvi: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      maDvi: this.userInfo.MA_DVI,
       trangThai: this.userService.isChiCuc() ? null : this.STATUS.DA_DUYET_LDCC
     })
   }

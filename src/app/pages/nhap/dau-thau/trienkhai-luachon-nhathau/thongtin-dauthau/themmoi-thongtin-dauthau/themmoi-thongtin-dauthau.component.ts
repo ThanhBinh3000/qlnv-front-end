@@ -745,12 +745,17 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
           arr.push(data)
         })
       }
+      debugger
       if (arr && arr.length > 0) {
         const sum = arr.reduce((prev, cur) => {
           if (cur['trangThai'] == 40 && column == 'chenhLech') {
-            prev += Math.abs((cur['donGiaNhaThau'] - cur['donGiaTamTinh']) * cur['soLuong']);
-          } else {
-            prev += cur[column] * cur['soLuong'];
+            prev += Math.abs((cur['donGiaNhaThau'] - (cur['donGiaVat'] != null ? cur['donGiaVat'] : cur['donGiaTamTinh'])) * cur['soLuong'] * 1000);
+          } else if(column == 'donGiaVat') {
+            prev += cur['donGiaVat'] != null ? cur['donGiaVat'] * cur['soLuong'] * 1000 : (cur['donGiaTamTinh'] != null ? cur['donGiaTamTinh'] * cur['soLuong'] * 1000 : 0);
+          }else{
+            if(column != 'chenhLech'){
+              prev += cur[column] * cur['soLuong'] * 1000;
+            }
           }
           return prev ? prev : 0;
         }, 0);

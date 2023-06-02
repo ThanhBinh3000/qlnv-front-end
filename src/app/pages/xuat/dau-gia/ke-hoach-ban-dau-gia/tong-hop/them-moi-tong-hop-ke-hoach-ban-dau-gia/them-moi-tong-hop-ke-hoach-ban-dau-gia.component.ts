@@ -59,6 +59,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         namKh: [dayjs().get('year'), [Validators.required]],
         ngayDuyetTu: [null],
         ngayDuyetDen: [null],
+        listTrangThai: [[STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_CBV]],
+        trangThaiTh: [STATUS.CHUA_TONG_HOP],
       }
     );
     this.formData = this.fb.group({
@@ -130,6 +132,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         await this.spinner.hide();
         return;
       }
+// this.formTraCuu.patchValue({
+//   listTrangThai: [STATUS.DA_DUYET_LDC, STATUS.DA_TAO_CBV],
+//   trangThaiTh: STATUS.CHUA_TONG_HOP,
+// })
       let body = this.formTraCuu.value;
       delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
