@@ -188,7 +188,8 @@
              [ngClass]="tabSelected == tab.luongThuc ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div class="ghichu_tab">Đơn vị tính:Tấn</div>
           <nz-table #groupingTable [nzData]="dsKeHoachLuongThucClone" nzBordered
-                    [nzFrontPagination]="false" [nzShowPagination]="false" style="max-height: 700px; overflow: scroll;" [nzScroll]="{ x: '1700px' }">
+                    [nzFrontPagination]="false" [nzShowPagination]="false" style="max-height: 700px; overflow: scroll;"
+                    [nzScroll]="{ x: '1700px' }">
             <thead>
             <tr>
               <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
@@ -689,7 +690,7 @@
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
-            <tr *ngIf="userService.isTongCuc()">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == 1">
               <th></th>
               <th></th>
               <th></th>
@@ -722,7 +723,7 @@
               <th></th>
               <th></th>
             </tr>
-            <tr *ngIf="userService.isCuc()">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != 1">
               <th></th>
               <th></th>
               <th></th>
