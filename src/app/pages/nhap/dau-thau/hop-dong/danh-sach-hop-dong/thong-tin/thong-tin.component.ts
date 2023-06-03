@@ -33,6 +33,7 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { ThongTinDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service';
+import { DonviService } from "../../../../../../services/donvi.service";
 
 interface DonviLienQuanModel {
     id: number;
@@ -110,7 +111,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
         private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
         private helperService: HelperService,
         private _modalService: NzModalService,
-        private thongTinDauThauService: ThongTinDauThauService
+        private thongTinDauThauService: ThongTinDauThauService,
+        private donViService: DonviService,
     ) {
         this.formData = this.fb.group(
             {
@@ -222,6 +224,12 @@ export class ThongTinComponent implements OnInit, OnChanges {
         this.formData.patchValue({
             maDvi: this.userInfo.MA_DVI ?? null,
             tenDvi: this.userInfo.TEN_DVI ?? null,
+        })
+        let res = await this.donViService.getDonVi({ str: this.formData.get("maDvi").value })
+        this.formData.patchValue({
+            diaChi: res.data.diaChi,
+            sdt: res.data.sdt,
+            mst: res.data.mst
         })
         if (this.dataBinding) {
             await this.bindingDataKqLcnt(this.dataBinding.id);
@@ -449,7 +457,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
             loaiHdong: data.hhQdKhlcntHdr?.loaiHdong,
             loaiVthh: data.hhQdKhlcntHdr?.loaiVthh,
             tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
-            soNgayThien: data.hhQdKhlcntHdr?.tgianThien
+            soNgayThien: data.hhQdKhlcntHdr?.tgianThien,
+            cloaiVthh: data.hhQdKhlcntHdr?.cloaiVthh,
+            tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
         })
     }
 
