@@ -180,6 +180,8 @@ export class TienDoSuaChuaLonHangNamComponent extends Base2Component implements 
         "namKh": item.namKh,
         "soQdPdKhScl": item.soQdPdTcdt,
         "loai" : "00",
+        "tenCongTrinh" : item.tenCongTrinh,
+        "idDuAn" : item.id,
         "paggingReq": {
           "limit": 10,
           "page": 0

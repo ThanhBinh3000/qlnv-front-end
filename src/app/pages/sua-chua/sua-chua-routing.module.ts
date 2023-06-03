@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {SuaChuaComponent} from "./sua-chua.component";
-import {DanhSachHangDtqgComponent} from "./danh-sach-hang-dtqg/danh-sach-hang-dtqg.component";
-import {TongHopDanhSachComponent} from "./tong-hop-danh-sach/tong-hop-danh-sach.component";
-import {QuyetDinhSuaChuaComponent} from "./quyet-dinh-sua-chua/quyet-dinh-sua-chua.component";
-import {XuatHangDtqgComponent} from "./xuat-hang-dtqg/xuat-hang-dtqg.component";
-import {PhieuKiemDinhClComponent} from "./phieu-kiem-dinh-cl/phieu-kiem-dinh-cl.component";
-import {NhapHangDtqgComponent} from "./nhap-hang-dtqg/nhap-hang-dtqg.component";
-import {BaoCaoKqComponent} from "./bao-cao-kq/bao-cao-kq.component";
+import {DieuChuyenNoiBoComponent} from "src/app/pages/dieu-chuyen-noi-bo/dieu-chuyen-noi-bo.component";
+import {
+  KeHoachDieuChuyenComponent
+} from "src/app/pages/dieu-chuyen-noi-bo/ke-hoach-dieu-chuyen/ke-hoach-dieu-chuyen.component";
+import {
+  TongHopDieuChuyenTaiCuc
+} from "src/app/pages/dieu-chuyen-noi-bo/tong-hop-dieu-chuyen-tai-cuc/tong-hop-dieu-chuyen-tai-cuc.component";
+import {
+  TongHopDieuChuyenTaiTongCuc
+} from "src/app/pages/dieu-chuyen-noi-bo/tong-hop-dieu-chuyen-tai-tong-cuc/tong-hop-dieu-chuyen-tai-tong-cuc.component";
+import {SuaChuaComponent} from "src/app/pages/sua-chua/sua-chua.component";
+import {DanhSachSuaChuaComponent} from "src/app/pages/sua-chua/danh-sach-sua-chua/danh-sach-sua-chua.component";
 
 const routes: Routes = [
   {
@@ -16,40 +20,44 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'danh-sach-hang',
+        redirectTo: 'danh-sach-sua-chua',
         pathMatch: 'full',
       },
       {
-        path: 'danh-sach-hang',
-        component: DanhSachHangDtqgComponent,
+        path: 'danh-sach-sua-chua',
+        component: DanhSachSuaChuaComponent,
       },
       {
-        path: 'tong-hop-danh-sach-hang',
-        component: TongHopDanhSachComponent,
+        path: 'tong-hop-dieu-chuyen-tai-cuc',
+        component: TongHopDieuChuyenTaiCuc
       },
       {
-        path: 'quyet-dinh-sua-chua',
-        component: QuyetDinhSuaChuaComponent,
+        path: 'tong-hop-dieu-chuyen-tong-cuc',
+        component: TongHopDieuChuyenTaiTongCuc
       },
       {
-        path: 'xuat-hang-dtqg',
-        component: XuatHangDtqgComponent,
+        path: 'quyet-dinh-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/quyet-dinh-dieu-chuyen/quyet-dinh-dieu-chuyen.module'
+            ).then((m) => m.QuyetDinhDieuChuyenModule),
       },
       {
-        path: 'phieu-kiem-dinh-chat-luong',
-        component: PhieuKiemDinhClComponent,
+        path: 'xuat-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/xuat-dieu-chuyen/xuat-dieu-chuyen.module'
+            ).then((m) => m.XuatDieuChuyenModule),
       },
       {
-        path: 'nhap-hang-dtqg',
-        component: NhapHangDtqgComponent,
+        path: 'nhap-dieu-chuyen',
+        loadChildren: () =>
+          import(
+            '../dieu-chuyen-noi-bo/nhap-dieu-chuyen/nhap-dieu-chuyen.module'
+            ).then((m) => m.NhapDieuChuyenModule),
       },
-      {
-        path: 'bao-cao-ket-qua',
-        component: BaoCaoKqComponent,
-      },
-    ],
-  },
-];
+    ]
+  }]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
