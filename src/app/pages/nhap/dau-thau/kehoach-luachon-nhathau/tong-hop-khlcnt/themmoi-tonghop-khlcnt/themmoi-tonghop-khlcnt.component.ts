@@ -44,6 +44,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
   isQuyetDinh: boolean = false;
   selected: boolean = false;
   disableTh: boolean = false
+  listFileDinhKem: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -119,6 +120,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
       let res = await this.tongHopDeXuatKHLCNTService.getDetail(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
+        this.listFileDinhKem = dataDetail.fileDinhKems;
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
@@ -199,6 +201,7 @@ export class ThemmoiTonghopKhlcntComponent extends Base2Component implements OnI
 
   async save() {
     let body = this.formData.value;
+    body.fileDinhKems = this.listFileDinhKem;
     let data = await this.createUpdate(body, 'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP');
     if (data) {
       this.id = data.id;
