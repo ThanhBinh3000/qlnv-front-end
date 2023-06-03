@@ -635,14 +635,12 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
 
   calcTong(index?) {
     if (this.dataTable && index != null) {
-      debugger
       const sum = this.dataTable[index].children.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
       return sum;
     } else if (this.dataTable) {
-      debugger
       const sum = this.dataTable.reduce((prev, cur) => {
         cur.children.forEach(res => {
           prev += res.soLuong;

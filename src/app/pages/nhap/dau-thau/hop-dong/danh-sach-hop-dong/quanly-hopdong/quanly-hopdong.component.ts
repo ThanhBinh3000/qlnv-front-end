@@ -135,19 +135,26 @@ export class QuanlyHopdongComponent implements OnInit {
     this.formData.patchValue({
       id: data.id,
       namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
-      tenLoaiHdong: data.hhQdKhlcntHdr.tenLoaiHdong,
-      tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
-      tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
+      soQdPdKqLcnt: data.soQd,
+      soQdPdKhlcnt: data.soQdPdKhlcnt,
+      tenLoaiHdong: data.hhQdKhlcntHdr?.tenLoaiHdong,
+      tenNguonVon: data.hhQdKhlcntHdr?.tenNguonVon,
+      tenLoaiVthh: data.hhQdKhlcntHdr?.tenLoaiVthh,
+      tenCloaiVthh: data.hhQdKhlcntHdr?.tenCloaiVthh,
+      soGthau: data.hhQdKhlcntHdr?.soGthau == null ? 0 : data.hhQdKhlcntHdr?.soGthau,
+      soGthauTrung: data.hhQdKhlcntHdr?.soGthauTrung == null ? 0 : data.hhQdKhlcntHdr?.soGthauTrung,
+      soGthauTruot: data.hhQdKhlcntHdr?.soGthauTruot == null ? 0 : data.hhQdKhlcntHdr?.soGthauTruot,
+      tenDuAn: data.hhQdKhlcntHdr?.children[0]?.dxuatKhLcntHdr?.tenDuAn,
       vat: 5,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
+      tenDvi: data.hhQdKhlcntHdr?.tenDvi,
     });
     this.dataTable = data.hhQdKhlcntHdr.children.filter(item => item.trangThai == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
+      let soHdDaKy = 0
       this.dataTable.forEach(item => {
         let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
         item.hopDong = hopDong
@@ -156,7 +163,13 @@ export class QuanlyHopdongComponent implements OnInit {
           tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
         }
       })
+      data.listHopDong.forEach(i => {
+        if (i.trangThai == STATUS.DA_KY) {
+          soHdDaKy += 1;
+        }
+      })
       this.formData.patchValue({
+        soHdDaKy: soHdDaKy,
         soLuongNhap: soLuong,
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
