@@ -253,7 +253,7 @@
 
                         <td>{{ data.tenTrangThai }}</td>
                         <td *ngIf="userService.isTongCuc() ">
-                            <a nz-button nzType="link" nzBlock (click)="openModalTh(data.maThop)">{{ data.maThop ==
+                            <a nz-button nzType="link" nzBlock (click)="data.maThop == null ? '' : openModalTh(data.maThop)">{{ data.maThop ==
                                 null?
                                 data.tenTrangThaiTh: data.maThop}}</a>
                         </td>
@@ -268,7 +268,8 @@
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_LDC'))
-                                     || (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))"
+                                     || (data.trangThai == STATUS.CHO_DUYET_TP && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_TP'))
+                                     || (data.trangThai == STATUS.DA_DUYET_LDC && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU'))"
                                 (click)="xemChiTiet(data.id, false, false)">
                                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                             </a>
