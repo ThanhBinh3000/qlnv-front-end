@@ -354,49 +354,71 @@ export class ThemMoiPhieuXuatKhoComponent extends Base2Component implements OnIn
       let res = await this.xhPhieuKnghiemCluongService.search(body)
       const list = res.data.content;
       console.log(list, "list")
-      this.listPhieuKtraCl = list.filter(item => (item.maDiemKho == data.maDiemKho));
-    }
-  }
-
-  openDialogPhieuKnCl() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listPhieuKtraCl,
-        dataHeader: ['Số phiếu', 'Ngày kiểm nghiệm'],
-        dataColumn: ['soPhieu', 'ngayTao']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log(data, "phiếu");
+      // this.listPhieuKtraCl = list.find(item => (item.maDiemKho == data.maDiemKho));
+      let soPhieu = list.find(item => (item.maLoKho == data.maLoKho&&item.maNganKho == data.maNganKho));
+      console.log(soPhieu,'soPhieu')
+      if(soPhieu){
         this.formData.patchValue({
-          soPhieuKnCl: data.soPhieu,
-          ktvBaoQuan: data.nguoiKn,
-          ngayKn: data.ngayTao,
-          loaiVthh: data.loaiVthh,
-          cloaiVthh: data.cloaiVthh,
-          tenLoaiVthh: data.tenLoaiVthh,
-          tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
+          soPhieuKnCl: soPhieu.soPhieu,
+          ktvBaoQuan: soPhieu.nguoiKn,
+          ngayKn: soPhieu.ngayTao,
+          loaiVthh: soPhieu.loaiVthh,
+          cloaiVthh: soPhieu.cloaiVthh,
+          tenLoaiVthh: soPhieu.tenLoaiVthh,
+          tenCloaiVthh: soPhieu.tenCloaiVthh,
+          moTaHangHoa: soPhieu.moTaHangHoa,
 
         });
       }
-    });
+    }
   }
 
+  // openDialogPhieuKnCl() {
+  //   const modalQD = this.modal.create({
+  //     nzTitle: 'Danh sách phiếu kiểm nghiệm chất lượng',
+  //     nzContent: DialogTableSelectionComponent,
+  //     nzMaskClosable: false,
+  //     nzClosable: false,
+  //     nzWidth: '900px',
+  //     nzFooter: null,
+  //     nzComponentParams: {
+  //       dataTable: this.listPhieuKtraCl,
+  //       dataHeader: ['Số phiếu', 'Ngày kiểm nghiệm'],
+  //       dataColumn: ['soPhieu', 'ngayTao']
+  //     },
+  //   });
+  //   modalQD.afterClose.subscribe(async (data) => {
+  //     if (data) {
+  //       console.log(data, "phiếu");
+  //       this.formData.patchValue({
+  //         soPhieuKnCl: data.soPhieu,
+  //         ktvBaoQuan: data.nguoiKn,
+  //         ngayKn: data.ngayTao,
+  //         loaiVthh: data.loaiVthh,
+  //         cloaiVthh: data.cloaiVthh,
+  //         tenLoaiVthh: data.tenLoaiVthh,
+  //         tenCloaiVthh: data.tenCloaiVthh,
+  //         moTaHangHoa: data.moTaHangHoa,
+  //
+  //       });
+  //     }
+  //   });
+  // }
+
   async save() {
-    this.formData.disable()
     let body = this.formData.value;
     body.fileDinhKems = this.fileDinhKems;
     await this.createUpdate(body);
-    this.formData.enable();
   }
+
+  async saveAndSend(body: any, trangThai: string, msg: string, msgSuccess?: string) {
+    if(this.formData.value.soBangKeCh){
+      await super.saveAndSend(body, trangThai, msg, msgSuccess);
+    }else {
+      this.notification.error(MESSAGE.ERROR, "Phiếu xuất kho chưa có bảng kê cân hàng");
+    }
+  }
+
 
   pheDuyet() {
     let trangThai = '';
