@@ -241,21 +241,39 @@ export class QuanlyHopdongComponent implements OnInit {
   }
 
   async approve() {
-    await this.spinner.show()
-    if (this.validateData()) {
-      let body = {
-        id: this.id,
-        trangThai: STATUS.DA_HOAN_THANH
-      }
-      let res = await this.kqLcnt.approve(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-        this.back();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-    await this.spinner.hide()
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn hoàn thành cập nhật hợp đồng ?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          if (this.validateData()) {
+            let body = {
+              id: this.id,
+              trangThai: STATUS.DA_HOAN_THANH
+            }
+            let res = await this.kqLcnt.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+              this.back();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
   validateData(): boolean {
