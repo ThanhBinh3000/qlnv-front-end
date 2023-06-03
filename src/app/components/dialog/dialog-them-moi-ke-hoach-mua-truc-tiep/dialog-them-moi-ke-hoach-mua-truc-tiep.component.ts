@@ -199,7 +199,10 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.checkDisabledSave();
   }
 
-
+  calTongThanhTien() {
+    this.calcTongThanhTienTrucTiep();
+    this.calcTongThanhTienTheoDonGiaDd();
+  }
 
   validateSoLuong(isAdd?) {
     return true;

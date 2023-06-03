@@ -225,7 +225,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       item.children.forEach(i => {
         if(item.idDxDcHdr != undefined){
           i.children.forEach(h =>{
-            i.goiThau = h.goiThau
+            h.goiThau = i.goiThau
             listChild.push(h)
           })
         }else{

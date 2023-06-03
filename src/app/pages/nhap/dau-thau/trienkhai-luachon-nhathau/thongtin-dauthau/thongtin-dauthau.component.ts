@@ -165,6 +165,7 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
     };
     let res = await this.thongTinDauThauService.search(body);
+    console.log(res.data)
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -295,13 +296,18 @@ export class ThongtinDauthauComponent extends Base2Component implements OnInit {
         let body = {
           tuNgayQd: this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
           denNgayQd: this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKhoach,
-          trichYeu: this.searchFilter.trichYeu,
+          loaiVthh: this.loaiVthh,
           soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
           soQdPdKqlcnt: this.searchFilter.soQdPdKqlcnt,
+          namKhoach: this.searchFilter.namKhoach,
+          trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
-          maDvi: this.userInfo.MA_DVI,
+          lastest: 1,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
         }
         this.thongTinDauThauService
           .export(body)
