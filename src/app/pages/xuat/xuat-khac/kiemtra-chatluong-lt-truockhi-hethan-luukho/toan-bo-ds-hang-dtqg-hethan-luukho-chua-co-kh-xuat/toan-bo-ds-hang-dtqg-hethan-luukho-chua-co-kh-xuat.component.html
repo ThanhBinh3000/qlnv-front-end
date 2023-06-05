@@ -103,7 +103,6 @@
               <th>Ngày tổng hợp (chốt DS)</th>
               <th>Trạng thái</th>
               <th>Mã danh sách</th>
-              <th>Hành động</th>
             </tr>
             </thead>
             <tbody>
@@ -113,7 +112,6 @@
                     [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true" style="width: 35px">
                   {{item.tenCuc}}
                 </td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -151,7 +149,6 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
                   </tr>
                   <ng-container *ngIf="expandSetString.has(item.idVirtual) && expandSetString.has(lv1.idVirtual)">
                     <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
@@ -171,8 +168,6 @@
                         <td>{{lv2.ngayTongHop|date:globals.dateFormat}}</td>
                         <td>{{lv2.tenTrangThai}}</td>
                         <td>{{lv2.maTongHop}}</td>
-                        <td class="text-left">
-                        </td>
                       </tr>
                     </ng-container>
                   </ng-container>
