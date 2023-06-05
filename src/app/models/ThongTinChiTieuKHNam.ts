@@ -19,7 +19,7 @@ export class ThongTinChiTieuKeHoachNam {
   ghiChu: string;
   khMuoi: Array<KeHoachMuoi> = [];
   canCu: string;
-  capDvi:number;
+  capDvi:string;
   fileDinhKemReqs: Array<FileDinhKem>;
   qdGocId: number;
   soQdGoc: string;

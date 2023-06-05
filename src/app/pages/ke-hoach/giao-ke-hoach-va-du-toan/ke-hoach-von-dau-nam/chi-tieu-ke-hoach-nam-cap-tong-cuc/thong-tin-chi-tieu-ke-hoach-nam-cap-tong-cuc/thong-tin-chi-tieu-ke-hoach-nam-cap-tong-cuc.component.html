@@ -65,7 +65,7 @@
             [ngClass]="thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'  ">
             {{thongTinChiTieuKeHoachNam.trangThai == STATUS.DU_THAO ? 'Dự thảo' : thongTinChiTieuKeHoachNam.tenTrangThai }}
           </span>
-          <span>Thông tin chỉ tiêu kế hoạch năm {{thongTinChiTieuKeHoachNam.capDvi == 1 ? 'Tổng cục' : 'Cục'}}
+          <span>Thông tin chỉ tiêu kế hoạch năm {{thongTinChiTieuKeHoachNam.capDvi == "1" ? 'Tổng cục' : 'Cục'}}
             giao</span>
         </div>
       </div>
@@ -202,7 +202,7 @@
                 <br>
                 ( 31/12/{{yearNow}})
               </th>
-              <th rowspan="4" *ngIf="!this.isViewDetail" class="text-center" width="90px" nzRight>Hành động</th>
+              <th rowspan="4" *ngIf="!this.isViewDetail" class="text-center" width="100px" nzRight>Hành động</th>
             </tr>
             <tr>
               <th rowspan="3" class="text-center">
@@ -690,7 +690,7 @@
               <th class="background-last-row" *ngIf="thongTinChiTieuKeHoachNam.trangThai===globals.prop.DU_THAO || id===0 ||
                 thongTinChiTieuKeHoachNam.trangThai===globals.prop.TU_CHOI" nzRight></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == 1">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi == '1'">
               <th></th>
               <th></th>
               <th></th>
@@ -723,7 +723,7 @@
               <th></th>
               <th></th>
             </tr>
-            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != 1">
+            <tr *ngIf="thongTinChiTieuKeHoachNam.capDvi != '1'">
               <th></th>
               <th></th>
               <th></th>
