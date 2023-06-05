@@ -377,11 +377,15 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
           if (["tenLoaiVthh"].includes(key)) {
-            if (item["qdKhlcntDtl"].hhQdKhlcntHdr.tenLoaiVthh && item["qdKhlcntDtl"].hhQdKhlcntHdr.tenLoaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            if (item["hhQdKhlcntHdr"].tenLoaiVthh && item["hhQdKhlcntHdr"].tenLoaiVthh.toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
               temp.push(item);
             }
           } else if (["tgianNhang"].includes(key)) {
             if (item["qdKhlcntDtl"].dxuatKhLcntHdr.tgianNhang && dayjs(item["qdKhlcntDtl"].dxuatKhLcntHdr.tgianNhang).format("DD/MM/YYYY").indexOf(value.toString()) != -1) {
+              temp.push(item);
+            }
+          } else if (["tgianThien"].includes(key)) {
+            if (item["hhQdKhlcntHdr"].tgianThien && item["hhQdKhlcntHdr"].tgianThien.toString().indexOf(value.toString()) != -1) {
               temp.push(item);
             }
           } else if (["soGthauTrung"].includes(key)) {
@@ -397,8 +401,14 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
               temp.push(item);
             }
           } else if (["tongMucDt"].includes(key)) {
-            if (item["qdKhlcntDtl"].donGiaVat && item["qdKhlcntDtl"].soLuong && (item["qdKhlcntDtl"].donGiaVat * item["qdKhlcntDtl"].soLuong * 1000).toString().indexOf(value.toString()) != -1) {
-              temp.push(item);
+            if (this.loaiVthh.startsWith("02")) {
+              if ((item["hhQdKhlcntHdr"].thanhTien).toString().indexOf(value.toString()) != -1) {
+                temp.push(item);
+              }
+            } else {
+              if (item["qdKhlcntDtl"].donGiaVat && item["qdKhlcntDtl"].soLuong && (item["qdKhlcntDtl"].donGiaVat * item["qdKhlcntDtl"].soLuong * 1000).toString().indexOf(value.toString()) != -1) {
+                temp.push(item);
+              }
             }
           } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item);

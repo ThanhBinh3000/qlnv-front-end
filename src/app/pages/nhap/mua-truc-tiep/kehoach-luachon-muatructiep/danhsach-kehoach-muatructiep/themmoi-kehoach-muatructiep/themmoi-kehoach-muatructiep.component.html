@@ -31,14 +31,14 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-        </ng-container>
-        <ng-container *ngIf="userService.isTongCuc()">
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button" class="btn btn-sub do"
+            <button *ngIf="!isView && (formData.value.trangThai == STATUS.DA_DUYET_LDC)
+             && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU')" type="button" class="btn btn-sub do"
                 (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
-            <button *ngIf="(formData.value.trangThai == STATUS.DA_DUYET_LDC) " type="button"
+            <button *ngIf=" !isView && (formData.value.trangThai == STATUS.DA_DUYET_LDC)
+            && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_LT_DEXUAT_DUYET_CANBOVU')" type="button"
                 class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
@@ -125,9 +125,7 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ đề xuất </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfter="{{maTrinh}}">
-                                        <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzMax]="9999999"
-                                            [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisable()">
-                                        </nz-input-number>
+                                        <input nz-input formControlName="soDxuat" [readonly]="isDisable()"/>
                                     </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
@@ -338,10 +336,10 @@
                                 </multiple-tag>
                             </td>
                             <td>
-                                <a *ngIf="isDisable()" (click)="addCoSo()">
+                                <a *ngIf="!isDisable()" (click)="addCoSo()">
                                     <i class="icon htvbdh_dau-cong xanhla"></i>
                                 </a>
-                                <a *ngIf="isDisable()" (click)="clearCoSo()">
+                                <a *ngIf="!isDisable()" (click)="clearCoSo()">
                                     <i class="fa fa-refresh"></i>
                                 </a>
                             </td>

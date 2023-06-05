@@ -539,7 +539,7 @@ export class ChiTietBangKeCanComponent extends Base2Component implements OnInit 
           bangKeDtl: this.formData.value.bangKeDtl
         })
         let body = {
-          trangThai: STATUS.DA_DUYET_LDCC,
+          trangThai: STATUS.DU_THAO,
         }
         let res = await this.phieuXuatKhoService.search(body)
         const list = res.data.content;
