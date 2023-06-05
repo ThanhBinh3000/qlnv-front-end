@@ -5,6 +5,8 @@ import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NgxSpinnerService } from "ngx-spinner";
 import { Base2Component } from "src/app/components/base2/base2.component";
+import { MESSAGE } from "src/app/constants/message";
+import { DanhMucService } from "src/app/services/danhmuc.service";
 import { DonviService } from "src/app/services/donvi.service";
 import { MangLuoiKhoService } from "src/app/services/qlnv-kho/mangLuoiKho.service";
 import { QuanLyHangTrongKhoService } from "src/app/services/quanLyHangTrongKho.service";
@@ -20,6 +22,8 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   formData: FormGroup
   fb: FormBuilder = new FormBuilder();
 
+  listDM: any[] = [];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -27,6 +31,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private _modalRef: NzModalRef,
+    private danhMucService: DanhMucService,
     private donViService: DonviService,
     private mangLuoiKhoService: MangLuoiKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
@@ -34,6 +39,7 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyHangTrongKhoService);
     this.formData = this.fb.group({
+      danhMuc: [],
       maChiCucNhan: [],
       tenChiCucNhan: [],
       maDiemKho: [],
@@ -74,6 +80,15 @@ export class ThongTinHangDtqgComponent extends Base2Component implements OnInit 
   }
 
   ngOnInit(): void {
+    this.getNhomCCDC()
+  }
+
+  async getNhomCCDC() {
+    let res = await this.danhMucService.getNhomCCDC();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDM = res.data
+    }
+    console.log('getNhomCCDC', res)
   }
 
   handleOk(item: any) {

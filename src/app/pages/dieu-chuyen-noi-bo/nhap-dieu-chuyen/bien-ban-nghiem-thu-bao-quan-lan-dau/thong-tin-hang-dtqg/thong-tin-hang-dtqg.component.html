@@ -8,8 +8,8 @@
               <nz-form-label nzRequired [nzNoColon]="true">Danh mục
               </nz-form-label>
               <nz-form-control nz-col [nzErrorTip]="error">
-                <nz-select [nzDisabled]="false" formControlName="nam" nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [nzDisabled]="false" formControlName="danhMuc" nzAllowClear>
+                  <nz-option *ngFor="let p of listDM" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
