@@ -494,7 +494,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent extends Base2Component i
     let bodyDx = {
       trangThaiList: [STATUS.DA_DUYET_LDV, STATUS.DA_DUYET_LDC, STATUS.DA_TAO_CBV],
       maTongHop: null,
-      nam: this.formData.get('nam').value,
+      // nam: this.formData.get('2022').value,
       loaiVthh: this.loaiVthh,
       idQdPdNull: true,
       paggingReq: {
