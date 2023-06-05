@@ -1099,13 +1099,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   addBaoGia() {
-    if (this.addModelBaoGia.taiLieu == null || this.addModelBaoGia.taiLieu == '') {
-      this.notification.error(
-        MESSAGE.ERROR,
-        'Vui lòng nhập file đính kèm',
-      );
-      return;
-    }
+    // if (this.addModelBaoGia.taiLieu == null || this.addModelBaoGia.taiLieu == '') {
+    //   this.notification.error(
+    //     MESSAGE.ERROR,
+    //     'Vui lòng nhập file đính kèm',
+    //   );
+    //   return;
+    // }
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
     taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.tenTlieu;
@@ -1172,13 +1172,13 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
   }
 
   addCoSo() {
-    if (this.addModelCoSo.taiLieu == null || this.addModelCoSo.taiLieu == '') {
-      this.notification.error(
-        MESSAGE.ERROR,
-        'Vui lòng nhập file đính kèm',
-      );
-      return;
-    }
+    // if (this.addModelCoSo.taiLieu == null || this.addModelCoSo.taiLieu == '') {
+    //   this.notification.error(
+    //     MESSAGE.ERROR,
+    //     'Vui lòng nhập file đính kèm',
+    //   );
+    //   return;
+    // }
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
     taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTlieu;

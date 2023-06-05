@@ -17,18 +17,21 @@ import { ChatLuongLuongThucComponent } from './chat-luong-luong-thuc/chat-luong-
 import { ChatLuongVatTuComponent } from './chat-luong-vat-tu/chat-luong-vat-tu.component';
 import { XuatKhoVatTuComponent } from './xuat-kho-vat-tu/xuat-kho-vat-tu.component';
 import { XuatKhoLuongThucComponent } from './xuat-kho-luong-thuc/xuat-kho-luong-thuc.component';
-import { BienBanMauComponent } from './bien-ban-mau/bien-ban-mau.component';
-import { KiemNghiemChatLuongComponent } from './kiem-nghiem-chat-luong/kiem-nghiem-chat-luong.component';
+import { BienBanMauComponent } from './bien-ban-lay-mau-ban-giao-mau/bien-ban-mau/bien-ban-mau.component';
+import { KiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-chat-luong/kiem-nghiem-chat-luong/kiem-nghiem-chat-luong.component';
 import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component';
 import { PhieuXuatKhoComponent } from './phieu-xuat-kho/phieu-xuat-kho.component';
 import { BangKeCanHangComponent } from './bang-ke-can-hang/bang-ke-can-hang.component';
 import { BienBanTinhKhoComponent } from './bien-ban-tinh-kho/bien-ban-tinh-kho.component';
 import { BienBanHaoDoiComponent } from './bien-ban-hao-doi/bien-ban-hao-doi.component';
 import { BangKeNhapVatTuComponent } from './bang-ke-nhap-vat-tu/bang-ke-nhap-vat-tu.component';
-import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import { KiemTraChatLuongComponent } from './phieu-kiem-tra-chat-luong/kiem-tra-chat-luong/kiem-tra-chat-luong.component';
 import { BienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/bien-ban-nghiem-thu-bao-quan-lan-dau/bien-ban-nghiem-thu-bao-quan-lan-dau.component';
 import { ThongTinBienBanNghiemThuBaoQuanLanDauComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-bien-ban-nghiem-thu-bao-quan-lan-dau.component';
 import { ThongTinHangDtqgComponent } from './bien-ban-nghiem-thu-bao-quan-lan-dau/thong-tin-hang-dtqg/thong-tin-hang-dtqg.component';
+import { ThongTinKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-chat-luong/thong-tin-kiem-nghiem-chat-luong/thong-tin-kiem-nghiem-chat-luong.component';
+import { ThongTinKiemTraChatLuongComponent } from './phieu-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong/thong-tin-kiem-tra-chat-luong.component';
+import { ThongTinBienBanLayMauBanGiaoMauComponent } from './bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau/thong-tin-bien-ban-lay-mau-ban-giao-mau.component';
 
 
 
@@ -53,7 +56,10 @@ import { ThongTinHangDtqgComponent } from './bien-ban-nghiem-thu-bao-quan-lan-da
     KiemTraChatLuongComponent,
     BienBanNghiemThuBaoQuanLanDauComponent,
     ThongTinBienBanNghiemThuBaoQuanLanDauComponent,
-    ThongTinHangDtqgComponent
+    ThongTinHangDtqgComponent,
+    ThongTinKiemNghiemChatLuongComponent,
+    ThongTinKiemTraChatLuongComponent,
+    ThongTinBienBanLayMauBanGiaoMauComponent
   ],
   imports: [
     CommonModule,

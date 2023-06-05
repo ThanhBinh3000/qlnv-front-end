@@ -587,31 +587,31 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let chiCuc of dataTable , let i = index">
-                                <!-- <ng-container *ngFor="let chiCuc of cuc.children , let y = index"> -->
+                        <ng-container *ngFor="let cuc of dataTable , let i = index">
+                            <ng-container *ngFor="let chiCuc of cuc.children , let y = index">
                                 <tr>
-                                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)">
+                                    <td [nzExpand]="expandSet.has(y)" (nzExpandChange)="onExpandChange(y, $event)">
                                     </td>
                                     <td colspan="3">{{chiCuc.tenDvi}}</td>
                                     <td class="text-right text-bold">{{chiCuc.soLuong}}</td>
-                                    <td class="text-right text-bold">{{chiCuc.soLuong * chiCuc.donGiaVat | number :
-                                        '1.0-1' :
-                                        'vi_VN'}}</td>
+                                    <td class="text-right text-bold">{{chiCuc.soLuong * formData.value.donGia | number :
+                                      '1.0-1' :
+                                      'vi_VN'}}</td>
                                 </tr>
-                                <ng-container *ngIf="expandSet.has(i)">
+                                <ng-container *ngIf="expandSet.has(y)">
                                     <tr *ngFor="let diemKho of chiCuc.children, let y = index">
                                         <td></td>
                                         <td></td>
-                                        <td>{{diemKho.tenDiemKho}}</td>
+                                        <td>{{diemKho.tenDvi}}</td>
                                         <td>{{diemKho.diaDiemNhap}}</td>
                                         <td class="text-right">{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                        <td class="text-right">{{diemKho.soLuong * chiCuc.donGiaVat | number : '1.0-1' :
-                                            'vi_VN'}}
+                                        <td class="text-right">{{diemKho.soLuong * formData.value.donGia  | number : '1.0-1' :
+                                          'vi_VN'}}
                                         </td>
                                     </tr>
                                 </ng-container>
-                                <!-- </ng-container> -->
                             </ng-container>
+                        </ng-container>
                         </tbody>
                         <tr *ngIf="dataTable.length > 0">
                             <td></td>
@@ -626,66 +626,60 @@
                         </tr>
                     </nz-table>
 
-                </ng-template>
-            </nz-card>
-            <div class="header header-green-background">
-                <div class="header-text">
-                    <div class="title-chi-tieu pointer-cursor" (click)="toggleContentVisibility(5)">
-                        <span><i class="icon htvbdh_line-dow" *ngIf="!isArrowUp[5]"></i></span>
-                        <span><i class="icon htvbdh_Untitled-1_line-up" *ngIf="isArrowUp[5]"></i></span>
-                        <span>Phụ lục hợp đồng</span>
-                    </div>
-                    <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT
+        </ng-template>
+      </nz-card>
+      <nz-collapse nzAccordion>
+        <nz-collapse-panel nzActive="true" [nzExtra]="themMoiPl"
+                           nzHeader="PHỤ LỤC HỢP ĐỒNG">
+          <ng-template #themMoiPl>
+            <button type="button" class="btn btn-sub xanh" (click)="redirectPhuLuc(false)" *ngIf="formData.value.trangThai == STATUS.DA_KY
                         && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') :
                         userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))
                         && !isQuanLy">
-                        <button type="button" class="btn btn-main" (click)="redirectPhuLuc(false)">
-                            <i class="icon htvbdh_dau-cong"></i>
-                            <span>Thêm PL hợp đồng</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <nz-card class="flex-card p-lr16 card-table" *ngIf="isContentVisible[5]">
-                <nz-table class="nowrap pd-10" nzBordered [nzData]="dataPl"
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm PL hợp đồng</span>
+            </button>
+          </ng-template>
+          <nz-table class="nowrap pd-10" nzBordered [nzData]="dataPl"
                     [nzFrontPagination]="false" [nzShowPagination]="false">
-                    <thead>
-                        <tr>
-                            <th [width]="35">STT</th>
-                            <th>Số phụ lục hợp đồng</th>
-                            <th width="300px">Ngày ký</th>
-                            <th width="300px">Ngày hiệu lực</th>
-                            <th width="300px">Về việc</th>
-                            <th width="300px">Trạng thái</th>
-                            <th width="175px" class="text-right"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let data of dataPl; let i = index" class="editable-row">
-                            <td>{{ i + 1 }}</td>
-                            <td>{{data.soPluc}}</td>
-                            <td>{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
-                            <td>{{data.noiDungPl}}</td>
-                            <td>{{data.tenTrangThai}}</td>
-                            <td>
-                                <a (click)="redirectPhuLuc(true, data.id)" *ngIf="data.trangThai!=globals.prop.DU_THAO">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
-                                    <i class="fa fa-pencil"></i>
-                                </a>
-                                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
-                                    <i class="fa fa-trash-o do"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </nz-card>
-        </nz-card>
-        <!--    END THÔNG TIN CHỦ ĐẦU TƯ-->
-    </div>
+            <thead>
+            <tr>
+              <th [width]="35">STT</th>
+              <th>Số phụ lục hợp đồng</th>
+              <th width="300px">Ngày ký</th>
+              <th width="300px">Ngày hiệu lực</th>
+              <th width="300px">Về việc</th>
+              <th width="300px">Trạng thái</th>
+              <th width="175px" class="text-right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let data of dataPl; let i = index" class="editable-row">
+              <td>{{ i + 1 }}</td>
+              <td>{{data.soPluc}}</td>
+              <td>{{data.ngayKy | date: 'dd/MM/yyyy'}}</td>
+              <td>{{data.ngayHluc | date: 'dd/MM/yyyy'}}</td>
+              <td>{{data.noiDungPl}}</td>
+              <td>{{data.tenTrangThai}}</td>
+              <td>
+                <a (click)="redirectPhuLuc(true, data.id)" *ngIf="data.trangThai!=globals.prop.DU_THAO">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a (click)="redirectPhuLuc(false, data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="xoaPhuLuc(data.id)" *ngIf="data.trangThai==globals.prop.DU_THAO && !isView">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </nz-table>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </nz-card>
+    <!--    END THÔNG TIN CHỦ ĐẦU TƯ-->
+  </div>
 </ng-container>
     <ng-template #tempPhuLuc>
         <app-phu-luc [isViewPhuLuc]="isViewPhuLuc" [idPhuLuc]="idPhuLuc" [detailHopDong]="detail" [loaiVthh]="loaiVthh"

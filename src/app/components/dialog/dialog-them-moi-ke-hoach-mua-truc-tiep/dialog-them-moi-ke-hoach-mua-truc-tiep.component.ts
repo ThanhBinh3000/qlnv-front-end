@@ -57,7 +57,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      tenGoiThau: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
       diaChi: [null],
@@ -82,6 +81,10 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     if (this.validateSoLuong()) {
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
+        return;
+      }
+      if (this.formData.get('donGia').value > this.formData.get('donGiaVat').value) {
+        this.notification.error(MESSAGE.ERROR, "Đơn giá đề xuất không được lớn hơn đơn giá được duyệt bao gồm VAT")
         return;
       }
       if (this.listOfData.length == 0) {
@@ -196,7 +199,10 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.checkDisabledSave();
   }
 
-
+  calTongThanhTien() {
+    this.calcTongThanhTienTrucTiep();
+    this.calcTongThanhTienTheoDonGiaDd();
+  }
 
   validateSoLuong(isAdd?) {
     return true;

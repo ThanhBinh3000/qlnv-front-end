@@ -682,6 +682,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.danhsachDx = [];
     if (data) {
       const res = await this.dxuatKhlcntService.getDetail(data.id)
+      console.log(res.data)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
         let tongMucDt = 0

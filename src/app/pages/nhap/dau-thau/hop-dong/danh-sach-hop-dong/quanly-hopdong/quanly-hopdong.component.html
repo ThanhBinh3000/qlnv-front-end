@@ -187,7 +187,7 @@
                                     <nz-form-label [nzNoColon]="true"> Tổng số hợp đồng đã ký </nz-form-label>
                                     <nz-form-control>
                                         <nz-input-group>
-                                            <input nz-input formControlName="soGthauTrung" readonly />
+                                            <input nz-input formControlName="soHdDaKy" readonly />
                                         </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
@@ -232,7 +232,7 @@
                         <span>Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
                     </div>
                 </div>
-                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT
+                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH
 && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_VT_HDPL_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM'))">
                     <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
                         <i class="icon htvbdh_dau-cong"></i>
@@ -249,7 +249,7 @@
                             <th>Tên hợp đồng</th>
                             <th>Ngày ký hợp đồng</th>
                             <th>Gói thầu</th>
-                            <th>Số lượng (kg)</th>
+                            <th>Số lượng</th>
                             <th>Đơn giá</th>
                             <th>Thành tiền đã bao gồm thuế VAT (đ)</th>
                             <th>Trạng thái HĐ</th>
