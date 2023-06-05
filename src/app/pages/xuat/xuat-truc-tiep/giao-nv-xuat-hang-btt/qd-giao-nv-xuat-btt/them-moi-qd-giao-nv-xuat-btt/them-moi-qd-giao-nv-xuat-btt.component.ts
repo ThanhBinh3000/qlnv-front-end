@@ -241,11 +241,11 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     this.spinner.show();
     let dsHd = []
     await this.chaoGiaMuaLeUyQuyenService.search({
+      maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-      pthucBanTrucTiep: ['Ủy quyền'],
-      namKh: this.formData.value.namKh,
-      maDvi: this.formData.value.maDvi,
+      pthucBanTrucTiep: ['02'],
+      lastest: 1
     }
     ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
