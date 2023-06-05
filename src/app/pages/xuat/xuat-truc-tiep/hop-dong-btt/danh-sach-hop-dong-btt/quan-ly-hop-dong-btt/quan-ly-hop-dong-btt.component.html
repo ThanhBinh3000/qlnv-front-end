@@ -166,27 +166,21 @@
                             </div>
                             <div nz-col [nzSpan]="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> loại hình nhập xuất
-                                    </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
                                     <nz-form-control>
-                                        <nz-select formControlName="loaiHinhNx" [nzDisabled]="true">
-                                            <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma"
-                                                [nzLabel]="p.giaTri">
-                                            </nz-option>
-                                        </nz-select>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="loaiHinhNx" readonly />
+                                        </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
                             <div nz-col [nzSpan]="24">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất
-                                    </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
                                     <nz-form-control>
-                                        <nz-select formControlName="kieuNx" [nzDisabled]="true">
-                                            <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma"
-                                                [nzLabel]="p.giaTri">
-                                            </nz-option>
-                                        </nz-select>
+                                        <nz-input-group>
+                                            <input nz-input formControlName="kieuNx" readonly />
+                                        </nz-input-group>
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>

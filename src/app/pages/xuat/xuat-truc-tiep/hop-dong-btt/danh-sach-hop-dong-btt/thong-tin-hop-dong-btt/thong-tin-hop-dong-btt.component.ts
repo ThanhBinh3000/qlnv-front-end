@@ -713,8 +713,9 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
   }
 
   setValidator(isOther) {
-    if (this.userService.isCuc) {
+    if (this.userService.isCuc()) {
       this.formData.controls["soQdKq"].setValidators([Validators.required]);
+      this.formData.controls["soQdPd"].clearValidators();
       if (isOther) {
         this.formData.controls["namHd"].setValidators([Validators.required]);
         this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
@@ -800,6 +801,7 @@ export class ThongTinHopDongBttComponent extends Base2Component implements OnIni
       }
     } else {
       this.formData.controls["soQdPd"].setValidators([Validators.required]);
+      this.formData.controls["soQdKq"].clearValidators();
       if (isOther) {
         this.formData.controls["namHd"].setValidators([Validators.required]);
         this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
