@@ -4,13 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO && !isView) &&
+    <button *ngIf="(formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView) &&
             userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_BANHANH')" type="button" class="btn btn-sub"
             (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.DU_THAO && !isView" type="button" class="btn btn-sub xanh"
+    <button *ngIf="formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU && !isView" type="button" class="btn btn-sub xanh"
             (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
@@ -23,8 +23,8 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="formData.value.trangThai == globals.prop.DU_THAO ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == globals.prop.DU_THAO ? 'Dự Thảo' : 'Ban Hành' }}
+            [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai ==  STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
           <span>Quyết định thủ tướng chính phủ</span>
         </div>
@@ -150,7 +150,7 @@
     <nz-collapse-panel #collapseExpand [nzActive]="true" nzHeader="KẾ HOẠCH DTQG GIAO TỪNG BỘ/NGÀNH"
                        class="mg-t-10" [nzExtra]="extraTpl">
       <ng-template #extraTpl >
-        <button type="button" *ngIf="formData.value.trangThai == globals.prop.DU_THAO" class="btn btn-sub xanh" (click)="themKeHoach()">
+        <button type="button" *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" class="btn btn-sub xanh" (click)="themKeHoach()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

@@ -4,13 +4,13 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'
+    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU
       && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_BANHANH')" type="button" class="btn btn-sub"
             (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
+    <button *ngIf="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU" type="button" class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -20,8 +20,8 @@
   <div class="header header-green-background mb-2">
     <div class="header-text">
       <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+          <span [ngClass]="formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.trangThai == STATUS.DANG_NHAP_DU_LIEU ? 'Đang nhập dữ liệu' : 'Ban Hành' }}
           </span>
         <span>Quyết định của BTC giao Bộ/Ngành</span>
       </div>
