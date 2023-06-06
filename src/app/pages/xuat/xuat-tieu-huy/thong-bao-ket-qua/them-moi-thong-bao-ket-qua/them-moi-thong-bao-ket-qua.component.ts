@@ -19,11 +19,11 @@ import * as uuid from "uuid";
 import {chain, cloneDeep} from 'lodash';
 import {QuanLyHangTrongKhoService} from "../../../../../services/quanLyHangTrongKho.service";
 import {
-  ThongBaoKqThanhLyService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
-import {
   QuyetDinhTieuHuyService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/QuyetDinhTieuHuyService.service";
+import {
+  ThongBaoKqTieuHuyService
+} from "../../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/ThongBaoKqTieuHuy.service";
 
 @Component({
   selector: 'app-th-them-moi-thong-bao-ket-qua',
@@ -52,11 +52,11 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private quyetDinhTieuHuyService: QuyetDinhTieuHuyService,
-    private thongBaoKqThanhLyService: ThongBaoKqThanhLyService,
+    private thongBaoKqTieuHuyService: ThongBaoKqTieuHuyService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, thongBaoKqThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, thongBaoKqTieuHuyService);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get("year") - i,
@@ -116,7 +116,7 @@ export class ThemMoiThongBaoKetQuaComponent extends Base2Component implements On
 
   async loadChiTiet(idInput: number) {
     if (idInput) {
-      await this.thongBaoKqThanhLyService.getDetail(idInput)
+      await this.thongBaoKqTieuHuyService.getDetail(idInput)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.setValue({
