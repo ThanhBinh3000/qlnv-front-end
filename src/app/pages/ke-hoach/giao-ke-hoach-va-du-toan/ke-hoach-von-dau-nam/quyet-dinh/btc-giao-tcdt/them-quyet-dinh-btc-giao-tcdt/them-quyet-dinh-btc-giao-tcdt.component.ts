@@ -65,6 +65,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
   dataTable: any[] = [];
   dsHangHoa: any[] = [];
   iterableDiffer: any;
+  STATUS = STATUS;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -85,7 +86,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         ngayQd: [null, [Validators.required]],
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
-        trangThai: ['00'],
+        trangThai: [STATUS.DANG_NHAP_DU_LIEU],
         ghiChu: ['']
       }
     );

@@ -15,12 +15,18 @@
   <tr>
     <td>-</td>
     <td>Thóc</td>
-    <td style="text-align: right;"> {{ltThocTon|number: '1.0-1': 'vi_VN'}} </td>
+    <td style="text-align: right;">
+      <input  class="money-input"  currencyMask [(ngModel)]="ltThocTon"  [options]="amount"/>
+<!--      {{ltThocTon|number: '1.0-1': 'vi_VN'}}-->
+    </td>
   </tr>
   <tr>
     <td>-</td>
     <td>Gạo</td>
-    <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1': 'vi_VN'}} </td>
+    <td style="text-align: right;">
+      <input  class="money-input"  currencyMask [(ngModel)]="ltGaoTon"  [options]="amount"/>
+<!--      {{ltGaoTon|number: '1.0-1': 'vi_VN'}}-->
+    </td>
   </tr>
   <tr>
     <td><strong>II</strong></td>
