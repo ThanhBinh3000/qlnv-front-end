@@ -8,7 +8,10 @@ import {NzStatisticModule} from "ng-zorro-antd/statistic";
 import {NzPipesModule} from "ng-zorro-antd/pipes";
 import {MainModule} from "../../../layout/main/main.module";
 import {ComponentsModule} from "../../../components/components.module";
-import {XuatTieuHuyComponent} from "./xuat-tieu-huy.component";
+import {ThongBaoKetQuaComponent} from "./thong-bao-ket-qua/thong-bao-ket-qua.component";
+import {
+  ThemMoiThongBaoKetQuaComponent
+} from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
 
 
 
@@ -16,7 +19,9 @@ import {XuatTieuHuyComponent} from "./xuat-tieu-huy.component";
   declarations: [
 
     QuyetDinhTieuHuyComponent,
-    ThemMoiQuyetDinhTieuHuyComponent
+    ThemMoiQuyetDinhTieuHuyComponent,
+    ThongBaoKetQuaComponent,
+    ThemMoiThongBaoKetQuaComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +34,9 @@ import {XuatTieuHuyComponent} from "./xuat-tieu-huy.component";
   ],
   exports: [
     QuyetDinhTieuHuyComponent,
-    ThemMoiQuyetDinhTieuHuyComponent
+    ThemMoiQuyetDinhTieuHuyComponent,
+    ThongBaoKetQuaComponent,
+    ThemMoiThongBaoKetQuaComponent
   ],
   providers: [DatePipe]
 })
