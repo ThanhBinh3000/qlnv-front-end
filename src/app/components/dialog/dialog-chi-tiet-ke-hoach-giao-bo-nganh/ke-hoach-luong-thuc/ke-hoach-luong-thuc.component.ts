@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 import {MESSAGE} from "../../../../constants/message";
 import {Globals} from './../../../../shared/globals';
+import {AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -22,7 +23,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoXuatChange = new EventEmitter<number>();
 
   @Input()
-  ltThocXuat: number = 0
+  ltThocXuat: number = 0;
   @Output()
   ltThocXuatChange = new EventEmitter<number>();
 
@@ -41,7 +42,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoTon: number = 0;
   ltThocDuTru: number = 0;
   ltGaoDuTru: number = 0;
-
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
               public globals: Globals) {
@@ -54,7 +55,7 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   initData() {
     this.quanLyHangTrongKhoService.getTrangThaiHt({
       nam: this.namHienTai,
-      maDvi: this.maBoNganh,
+      // maDvi: this.maBoNganh,
       listLoaiVthh: ['0101', '0102']
     }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {

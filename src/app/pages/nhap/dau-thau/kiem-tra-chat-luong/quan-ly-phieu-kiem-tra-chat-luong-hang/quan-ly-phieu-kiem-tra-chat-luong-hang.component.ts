@@ -18,6 +18,7 @@ import { STATUS } from "../../../../../constants/status";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -28,12 +29,16 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
+  listNam: any[] = [];
+  yearNow = dayjs().get('year');
 
   searchFilter = {
     soPhieu: '',
     ngayTongHop: '',
-    ketLuan: '',
+    kqDanhGia: '',
     soQuyetDinh: '',
+    namKhoach: '',
+    soBb: ''
   };
 
   optionsDonVi: any[] = [];
@@ -55,10 +60,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isView: boolean = false;
   idQdGiaoNvNh: number = 0;
   isTatCa: boolean = false;
-
+  tuNgayGD: Date | null = null;
+  denNgayGD: Date | null = null;
+  tuNgayKT: Date | null = null;
+  denNgayKT: Date | null = null;
   allChecked = false;
   indeterminate = false;
-
   STATUS = STATUS;
 
   filterTable: any = {
@@ -78,6 +85,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
@@ -89,6 +97,12 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -141,12 +155,19 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "page": this.page - 1
       },
       loaiVthh: this.loaiVthh,
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      soQd: this.searchFilter.soQuyetDinh,
+      namNhap: this.searchFilter.namKhoach,
+      kqDanhGia: this.searchFilter.kqDanhGia,
+      soBbNtBq: this.searchFilter.soBb,
+      tuNgayGD: this.tuNgayGD != null ? dayjs(this.tuNgayGD).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayGD: this.denNgayGD != null ? dayjs(this.denNgayGD).format('YYYY-MM-DD') + " 24:59:59" : null,
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      console.log(this.dataTable)
       this.dataTable.forEach(item => {
         if (this.userService.isChiCuc()) {
           item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
@@ -198,9 +219,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.searchFilter = {
       soPhieu: '',
       ngayTongHop: '',
-      ketLuan: '',
+      kqDanhGia: '',
       soQuyetDinh: '',
+      namKhoach: '',
+      soBb: ''
     };
+    this.tuNgayGD = null;
+    this.denNgayGD = null;
     this.search();
   }
 
@@ -258,30 +283,18 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "kqDanhGia": this.searchFilter.ketLuan,
-          "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.loaiVthh,
-          "maNganKho": null,
-          "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          "ngayLapPhieu": null,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soPhieu": this.searchFilter.soPhieu,
-          "soQd": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "tenNguoiGiao": null,
-          "trangThai": null
+          loaiVthh: this.loaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          soQd: this.searchFilter.soQuyetDinh,
+          namNhap: this.searchFilter.namKhoach,
+          soBbNtBq: this.searchFilter.soBb,
+          tuNgayGD: this.tuNgayGD != null ? dayjs(this.tuNgayGD).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayGD: this.denNgayGD != null ? dayjs(this.denNgayGD).format('YYYY-MM-DD') + " 24:59:59" : null
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
-          .exportList(body)
+        this.quanLyNghiemThuKeLotService
+          .exportPktCl(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
+            saveAs(blob, 'Danh_sach_phieu_kiem_tra_chat_luong.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -389,4 +402,28 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.expandSet2.delete(id);
     }
   }
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
+    }
+  }
+
+  disabledTuNgayGD = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayGD) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayGD.getTime();
+  };
+
+  disabledDenNgayGD = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayGD) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayGD.getTime();
+  };
+
 }

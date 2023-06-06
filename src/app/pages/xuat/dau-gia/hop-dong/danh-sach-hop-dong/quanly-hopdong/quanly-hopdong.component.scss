@@ -2,6 +2,7 @@
     .ant-form-item-label.ant-col {
         text-align: left;
         width: 50%;
+        height: 25px;
     }
 
     .ant-picker,
@@ -12,7 +13,7 @@
     }
 
     .ant-input-number {
-        width: 100% !important;
+        width: 700% !important;
         border: none;
         background: transparent;
         color: #444444;
@@ -42,4 +43,8 @@
     .ant-input-affix-wrapper {
         padding: 0px 11px !important;
     }
+}
+
+.bg-selected td {
+    background-color: #ebedff;
 }

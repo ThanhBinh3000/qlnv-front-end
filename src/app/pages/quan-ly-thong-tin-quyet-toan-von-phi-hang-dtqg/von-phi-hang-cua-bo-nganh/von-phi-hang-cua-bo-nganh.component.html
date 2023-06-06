@@ -46,11 +46,11 @@
   </nz-card>
 
   <div class="group-button">
-    <h3 class="text-uppercase">Danh sách vốn, phí hàng của Bộ, Ngành</h3>
+    <h3 class="text-uppercase">Danh sách vốn, phí hàng của Bộ/Ngành</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
         <i class="fa fa-trash-o do"></i>
-        <span>Xoá</span>
+        <span>Xóa</span>
       </button>
       <button type="button" (click)="exportData()" class="btn btn-sub">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -152,7 +152,7 @@
                          nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                          (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
             <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
             </ng-template>
           </nz-pagination>
         </div>

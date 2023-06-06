@@ -85,97 +85,67 @@
                         <th></th>
                         <th></th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soThongTri"
                                     (input)="filterInTable('soThongTri',filterTable.soThongTri)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.donViDuocDuyet"
                                     (input)="filterInTable('donViDuocDuyet',filterTable.donViDuocDuyet)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.soLenhChiTien"
                                     (input)="filterInTable('soLenhChiTien',filterTable.soLenhChiTien)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.chuong"
                                     (input)="filterInTable('chuong',filterTable.chuong)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loai"
                                     (input)="filterInTable('loai',filterTable.loai)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.khoan"
                                     (input)="filterInTable('khoan',filterTable.khoan)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lyDoChi"
                                     (input)="filterInTable('lyDoChi',filterTable.lyDoChi)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTien"
                                     (input)="filterInTable('soTien',filterTable.soTien)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.dviThuHuong"
                                     (input)="filterInTable('dviThuHuong',filterTable.dviThuHuong)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.tenTrangThai"
                                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                             </nz-input-group>
-                            <ng-template #suffixTemplateInfo>
-                                <i nz-icon nzType="search"></i>
-                            </ng-template>
                         </th>
                         <th></th>
                     </tr>
@@ -221,7 +191,7 @@
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
-                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                             </ng-template>
                         </nz-pagination>
                         <!-- end phân trang  -->

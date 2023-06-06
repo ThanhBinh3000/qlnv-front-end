@@ -1,21 +1,18 @@
-import {Component, Input, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {BaseComponent} from 'src/app/components/base/base.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {KhCnCongTrinhNghienCuu} from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
-import {Globals} from 'src/app/shared/globals';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import {  Validators } from '@angular/forms';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
 import * as dayjs from 'dayjs';
-import {NghiemThuThanhLy, TienDoThucHien} from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import {UserService} from 'src/app/services/user.service';
-import {cloneDeep} from 'lodash';
-import {HttpClient} from '@angular/common/http';
-import {StorageService} from 'src/app/services/storage.service';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {Base2Component} from './../../../../components/base2/base2.component';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
+import { cloneDeep } from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from './../../../../components/base2/base2.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { CurrencyMaskInputMode } from 'ngx-currency';
 
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
@@ -37,12 +34,24 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   listCapDt: any[] = []
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
-  fileDinhKem1: any[] = [];
+  fileTienDoTh: any[] = [];
+  fileNghiemThuTl: any[] = [];
+  options = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 0,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: false,
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  }
 
   listTrangThai1: any[] = [
-    {ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện'},
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành'},
+    { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
   trangThaiSave: string = this.STATUS.DU_THAO;
   hasError: boolean = false;
@@ -99,10 +108,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   }
 
   listTrangThai: any[] = [
-    {ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo'},
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
     // { ma: this.STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
-    {ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện'},
-    {ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu'}
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
   ];
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -130,8 +139,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.formData.patchValue({
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null
       })
-      this.fileDinhKem = data.fileDinhKems;
-      this.fileDinhKem1 = data.fileDinhKems1;
+      this.fileDinhKem = data.fileDinhKem;
+      this.fileTienDoTh = data.fileTienDoTh;
+      this.fileNghiemThuTl = data.fileNghiemThuTl;
       this.dataTable = data.tienDoThucHien;
       this.dataTable.forEach(item => {
         const tt = this.listTrangThai1.filter(d => d.ma == item.trangThaiTd)
@@ -142,14 +152,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
       this.dataTable1 = data.children;
       this.dataTable1.forEach((item, index) => {
         this.dataEdit1[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -201,19 +211,19 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     body.tienDoThucHien = this.dataTable;
     body.children = this.dataTable1;
     body.nam = dayjs().get('year');
-    body.ngayKyDen = this.formData.get('ngayKy').value
-      ? dayjs(this.formData.get('ngayKy').value[0]).format(
-        'YYYY-MM-DD',
-      )
-      : null;
     body.ngayKyTu = this.formData.get('ngayKy').value
-      ? dayjs(this.formData.get('ngayKy').value[1]).format(
-        'YYYY-MM-DD',
+      ? dayjs(this.formData.get('ngayKy').value[0]).format(
+        'YYYY-MM-01',
       )
       : null;
-    body.fileDinhKemReq = this.fileDinhKem;
-    body.fileDinhKemReq1 = this.fileDinhKem1;
-    console.log(body);
+    body.ngayKyDen = this.formData.get('ngayKy').value
+      ? dayjs(this.formData.get('ngayKy').value[1]).format(
+        'YYYY-MM-01',
+      )
+      : null;
+    body.fileDinhKem = this.fileDinhKem;
+    body.fileTienDoTh = this.fileTienDoTh;
+    body.fileNghiemThuTl = this.fileNghiemThuTl;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.khCnCongTrinhNghienCuu.update(body);
@@ -223,10 +233,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.formData.get('id').value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.quayLai();
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -308,7 +316,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -317,7 +325,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+      data: { ...this.dataTable[index] },
       edit: false,
     };
   }
@@ -353,6 +361,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
 
   clearData() {
     this.rowItem = new TienDoThucHien();
+    this.dataTable = []
   }
 
   emitDataTable() {
@@ -382,7 +391,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
   }
-
+  clearData1() {
+    this.rowItem1 = new NghiemThuThanhLy();
+    this.dataTable1 = []
+  }
   sortTableId1() {
     this.dataTable1.forEach((lt, i) => {
       lt.stt = i + 1;
@@ -398,7 +410,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       this.dataTable1.forEach((item, index) => {
         this.dataEdit1[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -407,7 +419,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
   huyEdit1(id: number): void {
     const index = this.dataTable1.findIndex((item) => item.idVirtual == id);
     this.dataEdit1[id] = {
-      data: {...this.dataTable1[index]},
+      data: { ...this.dataTable1[index] },
       edit: false,
     };
   }
@@ -439,6 +451,5 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       },
     });
   }
-
 
 }

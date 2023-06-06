@@ -2,9 +2,19 @@
     <nz-collapse-panel [nzHeader]="title" [nzActive]="true">
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[24]">
-                <div nz-col [nzSpan]="24">
+                <div nz-col [nzSpan]="24" *ngIf="isView">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Thời gian tổ chức bán trực tiếp </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
+                            </nz-range-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="24" *ngIf="!isView">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn trực tiếp tổ chức bán trực tiếp đến hết
+                            ngày </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" nzDisabled>
                             </nz-range-picker>
@@ -73,9 +83,11 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Phương thức thanh toán </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <input nz-input readonly formControlName="pthucTtoan" />
-                            </nz-input-group>
+                            <nz-select formControlName="pthucTtoan" nzDisabled>
+                                <nz-option *ngFor="let p of listPhuongThucThanhToan" [nzValue]="p.ma"
+                                    [nzLabel]="p.giaTri">
+                                </nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -119,7 +131,6 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-
                 <div nz-col [nzSpan]="24" *ngIf="isCache">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán trực tiếp </nz-form-label>
@@ -129,12 +140,21 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="7">
+                <div nz-col [nzSpan]="7" *ngIf="isView">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp đề xuất </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
-                            <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
-                                (tấn)</span>
+                            <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+                                (Kg)</span>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="7" *ngIf="!isView">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp </nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                            <span style="color: blue" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+                                (Kg)</span>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -143,30 +163,31 @@
     </nz-collapse-panel>
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
-    <nz-collapse-panel [nzHeader]="'Danh mục đơn vị tài sản bán trực tiếp'" [nzActive]="true">
+    <nz-collapse-panel [nzHeader]="'DANH MỤC ĐƠN VỊ TÀI SẢN BÁN TRỰC TIẾP'" [nzActive]="true">
         <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px" class="text-center"></th>
-                    <th nzWidth="150px" class="text-center wrap">Chi cục</th>
-                    <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
-                    <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
-                    <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
+                    <th class="text-center wrap"></th>
+                    <th class="text-center wrap">Chi cục</th>
+                    <th class="text-center wrap">Điểm kho</th>
                     <th class="text-center wrap">Lô kho</th>
-                    <th nzWidth="100px" class="text-center wrap">Mã ĐVTS</th>
-                    <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
-                    <th nzWidth="100px" class="text-center wrap">ĐVT</th>
-                    <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt(đ/kg)</th>
-                    <th nzWidth="100px" class="text-center wrap">Thành tiền (đ)</th>
-                    <th nzWidth="50px">Hành động</th>
+                    <th class="text-center wrap">Mã ĐVTS</th>
+                    <th class="text-center wrap" *ngIf="isView">SL xuất bán TT đề xuất</th>
+                    <th class="text-center wrap" *ngIf="!isView">SL xuất bán TT </th>
+                    <th class="text-center wrap">ĐVT</th>
+                    <th class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+                    <th class="text-center wrap">Thành tiền (đ)</th>
+                    <th class="text-center wrap" *ngIf="!isView">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let item of dataTable , let i = index">
                     <tr>
                         <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                        <td colspan="6">{{item.tenDvi}}</td>
-                        <td>{{item.soLuong}}</td>
+                        <td colspan="4">{{item.tenDvi}}</td>
+                        <td style="color: black ;font-weight: bold;"> {{item.soLuongChiCuc | number : '1.0-1' :
+                            'vi_VN'}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td>
@@ -180,22 +201,22 @@
                             <td></td>
                             <td></td>
                             <td>{{children.tenDiemKho}}</td>
-                            <td>{{children.tenNhaKho}}</td>
-                            <td>{{children.tenNganKho}}</td>
-                            <td>{{children.tenLoKho}}</td>
+                            <td>{{children.tenLoKho == null ? children.tenNganKho : children.tenLoKho }},
+                                {{children.tenNhaKho}}
+                            </td>
                             <td>{{children.maDviTsan}}</td>
-                            <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{children.dviTinh}}</td>
-                            <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">
+                            <td *ngIf="isView">{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td *ngIf="!isView">{{children.soLuongDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{children.donViTinh}}</td>
+                            <td>{{children.donGiaDuocDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{children.donGiaDuocDuyet * children.soLuongDeXuat | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right" *ngIf="!isView">
                             </td>
                         </tr>
                     </ng-container>
                 </ng-container>
             </tbody>
         </nz-table>
-
     </nz-collapse-panel>
 </nz-collapse>
 <ng-template #error let-control>

@@ -1,16 +1,15 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import {KhaiThacBaoCaoRoutingModule} from './khai-thac-bao-cao-routing.module';
-import {KhaiThacBaoCaoComponent} from './khai-thac-bao-cao.component';
-import {ComponentsModule} from "../../components/components.module";
-import {MainModule} from "../../layout/main/main.module";
-import {XuatRoutingModule} from "../xuat/xuat-routing.module";
+import { KhaiThacBaoCaoRoutingModule } from './khai-thac-bao-cao-routing.module';
+import { KhaiThacBaoCaoComponent } from './khai-thac-bao-cao.component';
+import { ComponentsModule } from "../../components/components.module";
+import { MainModule } from "../../layout/main/main.module";
 
 
 @NgModule({
   declarations: [
-    KhaiThacBaoCaoComponent
+    KhaiThacBaoCaoComponent,
   ],
   imports: [
     CommonModule,

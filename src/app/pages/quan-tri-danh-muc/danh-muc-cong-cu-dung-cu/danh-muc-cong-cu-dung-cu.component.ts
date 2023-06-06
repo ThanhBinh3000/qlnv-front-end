@@ -26,6 +26,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   isVisibleEdit = false;
   yeuCauKt: string;
   yeuCauKtEdit: string;
+  sttEdit: number = 0;
 
   constructor(
     httpClient: HttpClient,
@@ -134,12 +135,15 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   }
 
   startEdit(i: number) {
+    this.updateEditCache();
+    this.sttEdit = i;
     this.dataEdit[i].edit = true;
   }
 
   inputYcKyThuat() {
-      this.isVisible = true;
+    this.isVisible = true;
   }
+
   inputYcKyThuatEdit(data) {
     this.isVisibleEdit = true;
     this.yeuCauKtEdit = data.yeuCauKt;
@@ -185,6 +189,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       data: {...this.dataTable[idx]},
       edit: false,
     };
+    this.sttEdit = 0;
   }
 
   async saveDmCc(data?, idInput?) {
@@ -265,9 +270,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   }
 
   handleOkEdit(): void {
-    this.formDataChinhSua.patchValue({
-      yeuCauKt: this.yeuCauKtEdit
-    });
+    this.dataEdit[this.sttEdit].data.yeuCauKt = this.yeuCauKtEdit;
     this.isVisibleEdit = false;
   }
 }

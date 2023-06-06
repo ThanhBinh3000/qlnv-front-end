@@ -171,6 +171,18 @@ import { DialogDanhMucKhoComponent } from './dialog/dialog-danh-muc-kho/dialog-d
 import { DialogThemMoiXuatBanTrucTiepComponent } from './dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 import { DialogMmMuaSamComponent } from './dialog/dialog-mm-mua-sam/dialog-mm-mua-sam.component';
 import { DialogThemMoiBangKeBanLeComponent } from './dialog/dialog-them-moi-bang-ke-ban-le/dialog-them-moi-bang-ke-ban-le.component';
+import {
+  DialogThongBaoThongTinDauThauComponent
+} from "./dialog/dialog-thong-bao-thong-tin-dau-thau/dialog-thong-bao-thong-tin-dau-thau.component";
+import { DialogKtGiaoKhoComponent } from './dialog/dialog-kt-giao-kho/dialog-kt-giao-kho.component';
+import {
+  DialogQdPdKhlcntComponent
+} from "./dialog/ql-kho-tang/dialog-qd-pd-khlcnt/dialog-qd-pd-khlcnt.component";
+import {DialogQdPdKqlcntComponent} from "./dialog/ql-kho-tang/dialog-qd-pd-kqlcnt/dialog-qd-pd-kqlcnt.component";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatSelectModule} from "@angular/material/select";
 @NgModule({
   declarations: [
     //components
@@ -292,6 +304,10 @@ import { DialogThemMoiBangKeBanLeComponent } from './dialog/dialog-them-moi-bang
     DialogThemMoiXuatBanTrucTiepComponent,
     DialogMmMuaSamComponent,
     DialogThemMoiBangKeBanLeComponent,
+    DialogThongBaoThongTinDauThauComponent,
+    DialogKtGiaoKhoComponent,
+    DialogQdPdKhlcntComponent,
+    DialogQdPdKqlcntComponent,
   ],
   imports: [
     CommonModule,
@@ -351,7 +367,11 @@ import { DialogThemMoiBangKeBanLeComponent } from './dialog/dialog-them-moi-bang
     NzPopconfirmModule,
     NzResultModule,
     NzStatisticModule,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+    MatToolbarModule,
+    MatFormFieldModule,
+    MatAutocompleteModule,
+    MatSelectModule
   ],
   exports: [
     FormsModule,
@@ -424,7 +444,7 @@ import { DialogThemMoiBangKeBanLeComponent } from './dialog/dialog-them-moi-bang
     DialogThemMoiSoDuDauKyComponent,
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
-    Base2Component
+    Base2Component,
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

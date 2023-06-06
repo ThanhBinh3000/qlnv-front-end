@@ -14,6 +14,11 @@ export class DanhMucService extends BaseService {
     super(httpClient, 'dm-hang', '/qlnv-category');
   }
 
+  loadDsDiaDanhByCap(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/dm-dia-danh/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   loadDanhMucHangHoa() {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
     return this.httpClient.post<any>(url, null);
@@ -142,6 +147,16 @@ export class DanhMucService extends BaseService {
   getDanhMucHangDvqlAsyn(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all`;
     return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhMucChungTheoPhanHe(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach-theo-phan-he`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  getLastMaHang(ma): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-category/dm-hang/last-mahh/${ma}`
+    return this.httpClient.get<any>(url).toPromise();
   }
 
 }

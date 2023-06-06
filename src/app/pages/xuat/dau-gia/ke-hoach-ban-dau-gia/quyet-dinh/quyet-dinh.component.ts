@@ -16,6 +16,14 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class QuyetDinhComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
+  idThop: number = 0;
+  isViewThop: boolean = false;
+  idDxKh: number = 0;
+  isViewDxKh: boolean = false;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
 
   constructor(
     httpClient: HttpClient,
@@ -31,9 +39,11 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
-      ngayKyQd: null,
+      ngayKyQdTu: null,
+      ngayKyQdDen: null,
       soTrHdr: null,
-      lastest: 0
+      lastest: 0,
+      trangThai: null,
     })
     this.filterTable = {
       namKh: '',
@@ -53,9 +63,7 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
+      this.timKiem();
       await this.search();
       await this.spinner.hide();
     }
@@ -65,5 +73,54 @@ export class QuyetDinhComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      lastest: 0,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
+  openModalDxKh(id: number) {
+    this.idDxKh = id;
+    this.isViewDxKh = true;
+  }
+
+  closeModalDxKh() {
+    this.idDxKh = null;
+    this.isViewDxKh = false;
+  }
+
+  openModalTh(id: number) {
+    this.idThop = id;
+    this.isViewThop = true;
+  }
+
+  closeModalTh() {
+    this.idThop = null;
+    this.isViewThop = false;
+  }
+
+
+  disabledNgayKyQdTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyQdDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyQdDen.getTime();
+  };
+
+  disabledNgayKyQdDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyQdTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyQdTu.getTime();
+  };
 
 }

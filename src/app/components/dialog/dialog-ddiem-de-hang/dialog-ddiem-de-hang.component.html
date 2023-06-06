@@ -12,7 +12,7 @@
     <tr *ngIf="!isView">
       <td>
         <nz-input-group>
-          <nz-select [(ngModel)]="rowItem.maDvi" [nzShowArrow]="false" nzAllowClear
+          <nz-select [(ngModel)]="rowItem.maDvi" [nzShowArrow]="false" nzAllowClear nzShowSearch
                      (ngModelChange)="onChangeChiCuc($event)">
             <nz-option *ngFor="let item of dsChiCuc" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
             </nz-option>

@@ -4,7 +4,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { BienBanLayMauBanGiaoMauService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/BienBanLayMauBanGiaoMau.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import dayjs from 'dayjs';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
@@ -16,8 +15,12 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Validators } from '@angular/forms';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { KetQuaKiemNghiemChatLuongHang, PhieuKiemNghiemChatLuongHang } from 'src/app/models/PhieuKiemNghiemChatLuongThoc';
-import { QuyetDinhGiaoNvCuuTroService } from 'src/app/services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service';
-import { PhieuKiemTraChatLuongService } from './../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service';
+import {
+  PhieuKiemTraChatLuongService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/PhieuKiemTraChatLuong.service";
+import {
+  QuyetDinhGiaoNvCuuTroService
+} from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cap/QuyetDinhGiaoNvCuuTro.service";
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-tra-chat-luong',
@@ -25,7 +28,7 @@ import { PhieuKiemTraChatLuongService } from './../../../../../../../services/ql
   styleUrls: ['./them-moi-phieu-kiem-tra-chat-luong.component.scss']
 })
 export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -66,7 +69,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],
@@ -119,7 +122,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   async ngOnInit() {
     try {
       this.spinner.show();
-
+      console.log(this.loaiVthh,"333")
       await Promise.all([
         this.loadSoQuyetDinh(),
         this.loadDanhMucPhuongThucBaoQuan(),
@@ -163,6 +166,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         truongPhong: this.userInfo.MA_KTBQ,
         soPhieuKtCl: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.loaiVthh
       });
     }
 
@@ -196,6 +200,8 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh,
+      listTrangThaiXh: [STATUS.CHUA_THUC_HIEN, STATUS.DANG_THUC_HIEN],
     }
     let res = await this.quyetDinhGiaoNvCuuTroService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -304,8 +310,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }

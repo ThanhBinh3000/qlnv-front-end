@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, AfterViewInit } from '@angular/core';
 import { Globals } from 'src/app/shared/globals';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
@@ -43,7 +43,7 @@ export class QuanlyHopdongComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private kqLcnt: QuyetDinhPheDuyetKetQuaLCNTService,
-    private userService: UserService,
+    public userService: UserService,
     private modal: NzModalService,
 
   ) {
@@ -87,20 +87,30 @@ export class QuanlyHopdongComponent implements OnInit {
       soLuongTong: [''],
       soLuongGtTrung: [''],
       soLuongNhap: [''],
+      soLuongNhapKh: [''],
       tenTrangThaiHd: [''],
       trangThaiHd: [''],
     });
   }
 
-  async ngOnInit() {
-    await this.spinner.show()
-    this.userInfo = this.userService.getUserLogin();
-    await Promise.all([
-    ]);
-    if (this.id) {
-      await this.getDetail(this.id)
-    }
-    await this.spinner.hide()
+  ngOnInit() {
+    const asyncTaskPromise = new Promise<void>(async (resolve, reject) => {
+      await this.spinner.show()
+      this.userInfo = this.userService.getUserLogin();
+      await Promise.all([
+      ]);
+      if (this.id) {
+        await this.getDetail(this.id)
+      }
+      await this.spinner.hide()
+      resolve();
+    });
+    asyncTaskPromise.then(() => {
+      var firstRow = document.querySelector(".table-body tr:first-child");
+      if (firstRow) {
+        firstRow.classList.add("selectedRow");
+      }
+    });
   }
 
   async getDetail(id) {
@@ -150,29 +160,34 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    this.idHopDong = null;
+    if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {
+      this.idHopDong = this.dataTable[0].hopDong.id;
+    } else {
+      this.idHopDong = null;
+    }
   }
 
   detailLuongThuc(data) {
     this.formData.patchValue({
       id: data.id,
       namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
-      soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
-      tenDuAn: data.qdKhlcntDtl.tenDuAn,
-      tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
+      soQdPdKhlcnt: data.qdKhlcntDtl?.hhQdKhlcntHdr?.soQd,
+      soQdPdKqLcnt: data.qdKhlcntDtl?.soQdPdKqLcnt,
+      tenDuAn: data.qdKhlcntDtl?.tenDuAn,
+      tenLoaiHdong: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiHdong,
       tenDvi: data.tenDvi,
-      tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
-      soGthau: data.qdKhlcntDtl.soGthau,
-      tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
+      tenNguonVon: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenNguonVon,
+      soGthau: data.qdKhlcntDtl?.soGthau,
+      tenLoaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh,
+      tenCloaiVthh: data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh,
       vat: 5,
-      soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
+      soGthauTrung: data.qdKhlcntDtl?.soGthauTrung,
+      soGthauTruot: data.qdKhlcntDtl?.soGthauTruot,
       tenTrangThaiHd: data.tenTrangThaiHd,
       trangThaiHd: data.trangThaiHd,
-      tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
+      tongMucDt: data.qdKhlcntDtl?.soLuong * data.qdKhlcntDtl?.donGiaVat * 1000
     });
-    this.dataTable = data.qdKhlcntDtl.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    this.dataTable = data.qdKhlcntDtl?.children.filter(item => item.trangThai == STATUS.THANH_CONG);
     if (data.listHopDong) {
       let soLuong = 0
       let tongMucDtGoiTrung = 0;
@@ -189,13 +204,18 @@ export class QuanlyHopdongComponent implements OnInit {
         tongMucDtGoiTrung: tongMucDtGoiTrung
       })
     };
-    this.idHopDong = null;
+    if (this.dataTable.length > 0 && this.dataTable[0].hopDong != undefined) {
+      this.idHopDong = this.dataTable[0].hopDong.id;
+    } else {
+      this.idHopDong = null;
+    }
   }
 
   async getDetailHopDong($event, id: number) {
     this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    var firstRow = document.querySelector(".table-body tr.selectedRow");
+    firstRow.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
     this.idHopDong = id;
     this.spinner.hide();
   }
@@ -287,4 +307,27 @@ export class QuanlyHopdongComponent implements OnInit {
     });
   }
 
+  calcTongSl() {
+    if (this.dataTable) {
+      let sum = 0
+      this.dataTable.forEach(item => {
+        if (item.hopDong) {
+          sum += item.hopDong.soLuong;
+        }
+      })
+      return sum;
+    }
+  }
+
+  calcTongThanhTien() {
+    if (this.dataTable) {
+      let sum = 0
+      this.dataTable.forEach(item => {
+        if (item.hopDong) {
+          sum += item.hopDong.soLuong * item.hopDong.donGia;
+        }
+      })
+      return sum;
+    }
+  }
 }

@@ -10,18 +10,22 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <label>Ngày chào giá</label>
-                    <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
-                </div>
-                <div nz-col [nzSpan]="6">
-                    <label>Tên đơn vị</label>
-                    <nz-select formControlName="maDvi">
-                        <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
-                    </nz-select>
+                    <div nz-row [nzGutter]="24">
+                        <div nz-col [nzSpan]="12" class="cus-start-date">
+                            <nz-date-picker [nzDisabledDate]="disabledNgayChaoGiaTu" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayCgiaTu" nzPlaceHolder="Ngày bắt đầu">
+                            </nz-date-picker>
+                        </div>
+                        <div nz-col [nzSpan]="12" class="cus-end-date">
+                            <nz-date-picker [nzDisabledDate]="disabledNgayChaoGiaDen" nzFormat="dd/MM/yyyy"
+                                formControlName="ngayCgiaDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>
         <div class="cangiua group-button-search">
-            <button nz-button class="search__button--clear" (click)="clearForm()">
+            <button nz-button class="search__button--clear" (click)="clearFilter()">
                 <i class="icon  htvbdh_nhap-lai1"></i>
                 Xóa điều kiện
             </button>
@@ -31,15 +35,15 @@
             </button>
         </div>
     </nz-card>
-
     <div class="group-button">
         <h3 class="text-uppercase"> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
         <div class="buttons">
             <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">
                 <i class="fa fa-trash-o do"></i>
-                <span>Xoá</span>
+                <span>Xóa</span>
             </button>
-            <button type="button" (click)="exportData()" class="btn btn-sub">
+            <button type="button" (click)="exportData('danh-sach-quyet-dinh-phe-duyet-ket-qua-chao-gia.xlsx')"
+                class="btn btn-sub">
                 <i class="icon htvbdh_chuyen-xu-ly"></i>
                 <span>Xuất file</span>
             </button>
@@ -49,7 +53,6 @@
             </button>
         </div>
     </div>
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
@@ -59,7 +62,7 @@
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                             [nzIndeterminate]="indeterminate"></label>
                     </th>
-                    <th class="text-center" style="width: 2%;">STT</th>
+                    <th class="text-center">STT</th>
                     <th class="text-center">Số QĐ PDKQ chào giá</th>
                     <th class="text-center">Ngày ký QĐ</th>
                     <th class="text-center">Đơn vị</th>
@@ -79,13 +82,11 @@
                         </nz-input-group>
                     </th>
                     <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                                (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
+                        <nz-input-group>
+                            <nz-date-picker nzFormat="dd/MM/yyyy" nzPlaceHolder="" [(ngModel)]="filterTable.ngayKy"
+                                (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))">
+                            </nz-date-picker>
                         </nz-input-group>
-                        <ng-template #suffixTemplateInfo123>
-                            <i nz-icon nzType="calendar"></i>
-                        </ng-template>
                     </th>
                     <th>
                         <nz-input-group>
@@ -113,8 +114,11 @@
                     </th>
                     <th>
                         <nz-input-group>
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                                (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                            <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                                (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri"
+                                    [nzLabel]="p.giaTri"></nz-option>
+                            </nz-select>
                         </nz-input-group>
                     </th>
                     <th>
@@ -131,7 +135,11 @@
                     <td>{{ data.soQdKq }}</td>
                     <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                     <td>{{ data.tenDvi }}</td>
-                    <td class="text-blue">{{ data.soQdPd }}</td>
+                    <td>
+                        <a *ngIf="data.soQdPd && data.idPdKhHdr" nz-button nzType="link"
+                            (click)="openModalQdPdKh(data.idPdKhHdr)">{{
+                            data.soQdPd}}</a>
+                    </td>
                     <td>{{ data.tenLoaiVthh }}</td>
                     <td>{{ data.tenCloaiVthh }}</td>
                     <td>{{ data.tenTrangThai }}</td>
@@ -139,8 +147,13 @@
                         <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="goDetail(data.id)">
                             <i class="fa fa-eye"></i>
                         </a>
-                        <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="goDetail(data.id)">
+                        <a *ngIf="data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP ||  data.trangThai == STATUS.TU_CHOI_LDC"
+                            (click)="goDetail(data.id)">
                             <i class="fa fa-pencil"></i>
+                        </a>
+                        <a *ngIf="data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC "
+                            (click)=" goDetail(data.id)">
+                            <i class="icon htvbdh_tcdt_pheduyet"></i>
                         </a>
                         <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
                             <i class="fa fa-trash-o do"></i>
@@ -158,7 +171,7 @@
                         nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                         (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                         <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                            {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                         </ng-template>
                     </nz-pagination>
                 </div>
@@ -170,3 +183,16 @@
     <app-them-qd-pd-ket-qua-btt [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
     </app-them-qd-pd-ket-qua-btt>
 </div>
+<!--xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdPdKh" (nzOnCancel)="closeModalQdPdKh()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idQdPdKh" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdPdKh()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

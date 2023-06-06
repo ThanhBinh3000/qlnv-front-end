@@ -17,15 +17,19 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
-
+import { STATUS } from 'src/app/constants/status';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 @Component({
   selector: 'app-them-moi-tong-hop-kh-ban-truc-tiep',
   templateUrl: './them-moi-tong-hop-kh-ban-truc-tiep.component.html',
   styleUrls: ['./them-moi-tong-hop-kh-ban-truc-tiep.component.scss']
 })
+
 export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component implements OnInit {
+
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -34,7 +38,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   datePipe = new DatePipe('en-US');
-
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -42,9 +46,11 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopKhBanTrucTiepService);
+
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
@@ -52,26 +58,27 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayPduyet: [null, [Validators.required]],
+        ngayDuyetTu: [null],
+        ngayDuyetDen: [null],
       }
     );
+
     this.formData = this.fb.group({
       id: [],
       idTh: [],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
+      loaiVthh: ['', [Validators.required]],
+      cloaiVthh: ['', [Validators.required]],
       namKh: [, [Validators.required]],
       ngayDuyetTu: ['', [Validators.required]],
       ngayDuyetDen: ['', [Validators.required]],
-      ngayThop: [, [Validators.required]],
+      ngayThop: ['', [Validators.required]],
       noiDungThop: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       tenCloaiVthh: ['', [Validators.required]],
-      trangThai: [''],
+      trangThai: [STATUS.CHUA_TAO_QD],
       tenTrangThai: ['Chưa Tạo QĐ'],
       soQdCc: [''],
       tchuanCluong: [''],
-
     })
   }
 
@@ -81,6 +88,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       await Promise.all([
         this.loadChiTiet(),
       ]);
+      this.loadDanhMucHang()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -102,15 +110,24 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
           idTh: data.id
         })
         this.dataTable = data.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
       }
       else {
         this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
   }
 
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
+  }
+
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
+    this.setValidator();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
@@ -118,10 +135,6 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         return;
       }
       let body = this.formTraCuu.value;
-      if (body.ngayPduyet) {
-        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
-        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
-      }
       delete body.ngayDx;
       let res = await this.tongHopKhBanTrucTiepService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -133,6 +146,9 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTable = dataDetail.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -147,16 +163,40 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
     }
   }
 
-  async save() {
-    let body = this.formData.value;
-    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
-    if (data) {
-      this.quayLai();
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+  };
+
+  setValidator() {
+    if (this.formTraCuu.value.ngayDuyetTu == null) {
+      this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
+    } else {
+      this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
+  async save(isTaoQd?) {
+    let body = this.formData.value;
+    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
+    if (data) {
+      if (isTaoQd) {
+        this.taoQdinh();
+      } else {
+        this.goBack();
+      }
+    }
   }
 
   isDisable(): boolean {
@@ -175,7 +215,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   selectHangHoa() {
     let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      nzTitle: 'DANH SÁCH HÀNG HÓA',
       nzContent: DialogDanhSachHangHoaComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -195,6 +235,21 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
         });
       }
     });
+  }
+
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach((element) => {
+          if (element.ma == this.loaiVthh) {
+            this.formTraCuu.patchValue({
+              tenLoaiVthh: element.giaTri,
+            })
+          }
+        });
+      }
+    }
   }
 
   taoQdinh() {
@@ -219,8 +274,13 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
   idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }

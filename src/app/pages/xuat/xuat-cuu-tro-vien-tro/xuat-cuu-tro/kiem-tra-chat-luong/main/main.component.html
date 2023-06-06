@@ -6,7 +6,7 @@
     <li nz-menu-item (click)="selectTab(1)">
       Phiếu kiểm nghiệm chất lượng
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="loaiVthh == '02'">
       Hồ sơ kỹ thuật
     </li>
   </ul>

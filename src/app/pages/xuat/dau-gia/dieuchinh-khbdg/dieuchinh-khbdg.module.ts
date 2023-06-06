@@ -5,6 +5,7 @@ import { ChitietQdDieuchinhHkbdgComponent } from './qd-dieuchinh-khbdg/chitiet-q
 import { ComponentsModule } from "../../../../components/components.module";
 import { MainModule } from "../../../../layout/main/main.module";
 import { ThongtinQdDieuchinhKhbdgComponent } from './qd-dieuchinh-khbdg/chitiet-qd-dieuchinh-hkbdg/thongtin-qd-dieuchinh-khbdg/thongtin-qd-dieuchinh-khbdg.component';
+import { KeHoachBanDauGiaModule } from '../ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module';
 
 
 
@@ -20,7 +21,8 @@ import { ThongtinQdDieuchinhKhbdgComponent } from './qd-dieuchinh-khbdg/chitiet-
   imports: [
     CommonModule,
     ComponentsModule,
-    MainModule
+    MainModule,
+    KeHoachBanDauGiaModule
   ]
 })
 export class DieuchinhKhbdgModule { }

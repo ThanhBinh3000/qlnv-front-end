@@ -240,7 +240,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
         .groupBy("tenLoaiVthh")
         .map((value, key) => {
           let rs = chain(value)
-            .groupBy("tenHangHoaCha")
+            .groupBy("tenNhomTiLeBaoHiem")
             .map((v, k) => {
                 let res = chain(v)
                   .groupBy("tenHangHoa")
@@ -253,7 +253,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
                   }).value();
                 return {
                   idVirtual: uuid.v4(),
-                  tenHangHoaCha: k,
+                  tenNhomTiLeBaoHiem: k,
                   childData: res
                 };
               }
@@ -268,7 +268,7 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
     return table;
   }
 
-  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenHangHoaCha?: string, tenHangHoa?: string, type?: string): number {
+  sumSoLuongHang(table: any[], column?: string, tenLoaiVthh?: string, tenNhomTiLeBaoHiem?: string, tenHangHoa?: string, type?: string): number {
     let array = this.conVertArrayHang(table);
     let result = 0;
     if (array && array.length > 0) {
@@ -286,9 +286,9 @@ export class ThemMoiThGtriBaoHiemComponent extends Base2Component implements OnI
           }
           break;
         }
-        case 'tenHangHoaCha' : {
+        case 'tenNhomTiLeBaoHiem' : {
           if (array) {
-            let arr = array.filter(item => item.tenHangHoaCha == tenHangHoaCha)
+            let arr = array.filter(item => item.tenNhomTiLeBaoHiem == tenNhomTiLeBaoHiem)
             const sum = arr.reduce((prev, cur) => {
               prev += cur[column];
               return prev;

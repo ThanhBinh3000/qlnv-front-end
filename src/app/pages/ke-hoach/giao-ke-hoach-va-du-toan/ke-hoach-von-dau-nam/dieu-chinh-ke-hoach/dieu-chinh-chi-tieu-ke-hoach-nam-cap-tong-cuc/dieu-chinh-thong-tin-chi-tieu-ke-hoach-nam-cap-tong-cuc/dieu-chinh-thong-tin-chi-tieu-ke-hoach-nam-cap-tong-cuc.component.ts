@@ -213,8 +213,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (this.userService.isCuc()) {
         await this.selectedQdDcCTKHTC();
       }
-      await this.selectedQdGiaoCTKHCuaCuc();
-      await this.selectedDeXuatDieuChinhCuc();
+      await this.selectedQdGiaoCTKHNam();
+      // await this.selectedDeXuatDieuChinhCuc();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -1719,21 +1719,21 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  async selectedQdGiaoCTKHCuaCuc() {
+  async selectedQdGiaoCTKHNam() {
     if (this.id == 0 && !this.isView) {
       let body = {
         ngayKyDenNgay: null,
         id: 0,
         donViId: null,
         maDvi: null,
-        namKeHoach: this.namKeHoach ?? null,
+        namKeHoach: this.formData.value.namKeHoach ?? null,
         tenDvi: null,
         pageNumber: this.page,
         pageSize: this.pageSize,
         trichYeu: null,
         ngayKyTuNgay: null,
         trangThai: STATUS.BAN_HANH,
-        capDvi: 2,
+        capDvi: this.userInfo.CAP_DVI,
       };
       this.spinner.show();
       let res = await this.chiTieuKeHoachNamCapTongCucService.timKiem(body);
@@ -1752,10 +1752,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 let tempData = res.data;
-                this.formData.controls['namKeHoach'].setValue(
-                  tempData.namKeHoach,
-                );
-
+                // this.formData.controls['namKeHoach'].setValue(
+                //   tempData.namKeHoach,
+                // );
                 this.dieuChinhThongTinChiTieuKHNam.qdGocId = tempData.id;
                 this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = cloneDeep(
                   tempData.khLuongThuc,
@@ -2971,12 +2970,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           });
         }
         this.dieuChinhThongTinChiTieuKHNam.dxDcKhnIds = dxDcKhnIds;
-        // console.log(this.dieuChinhThongTinChiTieuKHNam);
-        // return;
         if (this.dataDieuChinh && this.dataDieuChinh.length > 0) {
           this.dieuChinhThongTinChiTieuKHNam.dcChiTieuId = this.dataDieuChinh[0].id;
         }
-
         this.dieuChinhThongTinChiTieuKHNam.khVatTuNhap = this.dataVatTuNhap.flatMap(s => s.dsVatTu.map(s1 => {
           delete s.dsVatTu;
           return Object.assign(s1, s)
@@ -3311,7 +3307,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         id: 0,
         donViId: null,
         maDvi: null,
-        namKeHoach: this.namKeHoach ?? null,
+        namKeHoach: this.formData.value.namKeHoach ?? null,
         tenDvi: null,
         pageNumber: this.page,
         pageSize: this.pageSize,
@@ -3331,10 +3327,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             text: data.content[0].soVanBan,
           };
           this.dataDeXuat.push(item);
-        } else {
-          this.dataDeXuat = [];
-          this.notification.error(MESSAGE.ERROR, "Không tìm thấy đề xuất điều chỉnh của Cục.");
         }
+        // else {
+        //   this.dataDeXuat = [];
+        //   this.notification.error(MESSAGE.ERROR, "Không tìm thấy đề xuất điều chỉnh của Cục.");
+        // }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -3343,7 +3340,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
 
   openDialogDeXuatCuc() {
-    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin đề xuất của cục',
@@ -3354,11 +3350,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         nzFooter: null,
         nzComponentParams: {
           type: 'de-xuat',
-          namKeHoach: this.yearNow
+          namKeHoach: this.formData.value.namKeHoach
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        if (data) {
+        if (data && !Array.isArray(data)) {
           let item = {
             id: data.id,
             text: data.soVanBan,
@@ -3372,6 +3368,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             this.dataDeXuat = [];
             this.dataDeXuat.push(item);
           }
+        }
+        if (data && Array.isArray(data)) {
+          this.dataDeXuat = [];
+          data.forEach(it => {
+            let item = {
+              id: it.id,
+              text: it.soVanBan,
+            };
+            this.dataDeXuat.push(item);
+          });
         }
       });
     }
@@ -3409,9 +3415,10 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           text: res.data[0].soQuyetDinh,
         };
         this.dataDieuChinh.push(item);
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Không tìm thấy quyết định điều chỉnh của Tổng Cục");
       }
+      // else {
+      //   this.notification.error(MESSAGE.ERROR, "Không tìm thấy quyết định điều chỉnh của Tổng Cục");
+      // }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

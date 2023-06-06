@@ -2,10 +2,11 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm</label>
-            <nz-input-number nzSize="small" [(ngModel)]="response.namBcao"
-                [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'"
-                (change)="getSoQdChiTieu()">
-            </nz-input-number>
+          <nz-select [(ngModel)]="response.namBcao"
+                     [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'"
+                     (change)="getSoQdChiTieu()">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
         </div>
         <div nz-col nzSpan="6">
             <label class="search__label">Loại đề nghị</label>

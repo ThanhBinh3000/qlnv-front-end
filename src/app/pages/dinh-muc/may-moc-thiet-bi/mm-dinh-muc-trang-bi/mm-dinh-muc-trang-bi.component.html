@@ -103,27 +103,35 @@
             </nz-input-group>
           </td>
           <td>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                     (input)="filterInTable('ngayKy',filterTable.ngayKy)"/>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHieuLuc"
-                     (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)"/>
-            </nz-input-group>
-          </td>
-          <td>
-            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHetHieuLuc"
-                     (input)="filterInTable('ngayHetHieuLuc',filterTable.ngayHetHieuLuc)"/>
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                               [(ngModel)]="filterTable.ngayKy"
+                               (ngModelChange)="filterInTable('ngayKy', convertDateToString(filterTable.ngayKy))"
+              ></nz-date-picker>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)"/>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                               [(ngModel)]="filterTable.ngayHieuLuc"
+                               (ngModelChange)="filterInTable('ngayHieuLuc', convertDateToString(filterTable.ngayHieuLuc))"
+              ></nz-date-picker>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-date-picker  nzFormat="dd/MM/yyyy" nzPlaceHolder="Tìm kiếm"
+                               [(ngModel)]="filterTable.ngayHetHieuLuc"
+                               (ngModelChange)="filterInTable('ngayHetHieuLuc', convertDateToString(filterTable.ngayHetHieuLuc))"
+              ></nz-date-picker>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-select nzAllowClear [(ngModel)]="filterTable.trangThai"
+                         (ngModelChange)="filterInTable('trangThai',filterTable.trangThai)">
+                <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
             </nz-input-group>
           </td>
           <td>
@@ -168,7 +176,7 @@
                            (nzPageIndexChange)="changePageIndex($event)"
                            (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
             <!-- end phân trang  -->

@@ -4,25 +4,35 @@
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[20]">
                     <div nz-col nzSpan="4">
-                        <label>Biên bản lấy mẫu/bàn giao mẫu</label>
+                        <label class="search__label">Biên bản lấy mẫu/bàn giao mẫu</label>
                         <input placeholder="Nhập số quyết định" nz-input formControlName="soBienBan" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số QĐ giao nhiệm vụ xuất hàng</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="soQd" />
+                        <label class="search__label">Số QĐ giao nhiệm vụ xuất hàng</label>
+                        <input placeholder="Nhập nội dung" nz-input formControlName="soQdNv" />
                     </div>
                     <div nz-col nzSpan="10">
-                        <label>Đơn vị kiểu nghiệm</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
+                        <label class="search__label">Đơn vị kiểu nghiệm</label>
+                        <input placeholder="Nhập nội dung" nz-input formControlName="dviKnghiem" />
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Ngày lấy mẫu</label>
-                        <nz-range-picker formControlName="ngayLayMau" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <label class="search__label">Ngày lấy mẫu</label>
+                        <div nz-row [nzGutter]="24">
+                            <div nz-col nzSpan="12" class="cus-start-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayLayMauTu" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauTu" nzPlaceHolder="Ngày bắt đầu">
+                                </nz-date-picker>
+                            </div>
+                            <div nz-col nzSpan="12" class="cus-end-date">
+                                <nz-date-picker [nzDisabledDate]="disabledNgayLayMauDen" nzFormat="dd/MM/yyyy"
+                                    formControlName="ngayLayMauDen" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
+                <button nz-button class="search__button--clear" (click)="clearFilter()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -34,14 +44,15 @@
         </nz-card>
 
         <div class="group-button">
-            <h3>Danh sách hợp đồng bán hàng</h3>
+            <h3>DANH SÁCH BIÊN BẢN LẤY MẪU/BÀN GIAO MẪU</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_EXP')" type="button"
+                    class="btn btn-sub" (click)="exportData('Danh-sach-bien-ban-lay-mau-ban-giao-mau-ban-truc-tiep.xlsx')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()"
-                    (click)="redirectToChiTiet(false, 0)">
+                <button *ngIf="userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_THEM')" type="button"
+                    class="btn btn-main" (click)="redirectToChiTiet(false, null, null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -49,34 +60,39 @@
         </div>
 
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" nzBordered>
+            <nz-table #tblData [nzData]="dataView" class="nowrap table-chi-tiet" nzBordered>
                 <thead>
                     <tr>
-                        <th nzWidth="30px">STT</th>
-                        <th nzWidth="30px"></th>
-                        <th>Số QĐ giao nhiệm vụ XH</th>
+                        <th style="width: 35px">STT</th>
+                        <th></th>
+                        <th>Số QĐ giao NVXH</th>
                         <th>Năm KH</th>
-                        <th>Thời gian XH trước ngày</th>
-                        <th>Số BB LM/BGM</th>
-                        <th>Ngày lấy mẫu</th>
+                        <th>Thời hạn XH trước ngày</th>
                         <th>Điểm kho</th>
                         <th>Lô kho</th>
+                        <th>Số BB LM/BGM</th>
+                        <th>Ngày lấy mẫu</th>
                         <th>Số BB tịnh kho</th>
                         <th>Ngày xuất dốc kho</th>
                         <th>Số BB hao dôi</th>
                         <th>Trạng thái</th>
-                        <th>Hành động</th>
+                        <th style="width: 10%">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngFor="let data of dataTable; let i = index">
-                        <tr>
-                            <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                            <td class="text-blue">{{ data.soQd }}</td>
-                            <td>{{ data.namKh }}</td>
-                            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                    <ng-container *ngFor="let item of tblData.data, let i = index;">
+                        <tr [ngClass]="{'bg-selected': item.selected}" class="level-1">
+                            <td>{{i + 1}}</td>
+                            <td (nzExpandChange)="onExpandStringChange(item.idVirtual, $event)"
+                                [nzExpand]="expandSetString.has(item.idVirtual)" nzShowExpand="true"
+                                style="width: 35px"></td>
+                            <td>
+                                <a *ngIf="item.soQdNv && item.idQdNv" nz-button nzType="link"
+                                    (click)="openModalQdNv(item.idQdNv)">{{
+                                    item.soQdNv}}</a>
+                            </td>
+                            <td>{{item.namKh}}</td>
+                            <td>{{item.ngayQd}}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -86,58 +102,94 @@
                             <td></td>
                             <td></td>
                             <td class="text-left">
-                                <a (click)="redirectToChiTiet(false, 0,data.id)" *ngIf="userService.isChiCuc()">
-                                    <i class="fa fa-plus"></i>
-                                </a>
                             </td>
                         </tr>
-                        <ng-container *ngIf="expandSet.has(i)">
-                            <tr *ngFor="let dataChild of data.xhBbLayMauBttHdrList">
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{ dataChild.soBienBan }}</td>
-                                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                <td>{{ dataChild.tenDiemKho }}</td>
-                                <td>{{ dataChild.tenLoKho }}</td>
-                                <td>BB tịnh kho</td>
-                                <td></td>
-                                <td>BB tịnh kho</td>
-                                <td>{{ dataChild.tenTrangThai }}</td>
-                                <td class="text-left">
-                                    <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC "
-                                        (click)="redirectToChiTiet(true, dataChild.id)">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDCC "
-                                        (click)="redirectToChiTiet(false, dataChild.id)">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a *ngIf="dataChild.trangThai == STATUS.DU_THAO && this.userService.isChiCuc()"
-                                        (click)="delete(dataChild)">
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </tr>
+                        <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                            <ng-container *ngFor="let lv1 of item.childData,let i1=index">
+                                <tr class="level-2">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{lv1.tenDiemKho}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-left">
+                                        <a (click)="redirectToChiTiet(false, null,item.idQdNv)"
+                                            *ngIf="userService.isChiCuc()">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                                <ng-container *ngIf="expandSetString.has(item.idVirtual)">
+                                    <ng-container *ngFor="let lv2 of lv1.childData,let i2=index">
+                                        <tr class="level-3">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{lv2.tenLoKho == null ? lv2.tenNganKho : lv2.tenLoKho }},
+                                                {{lv2.tenNhaKho}}
+                                            </td>
+                                            <td>{{lv2.soBienBan}}</td>
+                                            <td>{{lv2.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                                            <td>{{lv2.soBbTinhKho}}</td>
+                                            <td>{{lv2.ngayXuatDocKho}}</td>
+                                            <td>{{lv2.soBbHaoDoi}}</td>
+                                            <td>{{lv2.tenTrangThai}}</td>
+                                            <td class="text-left">
+                                                <a *ngIf=" (userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_XEM') && (lv2.trangThai == STATUS.DA_DUYET_LDCC))
+                                                ||(!userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)
+                                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.TU_CHOI_LDCC)
+                                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.DU_THAO)"
+                                                    (click)="redirectToChiTiet(lv2, true, null)">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                                <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.DU_THAO)
+                                                ||(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_THEM') && lv2.trangThai == STATUS.TU_CHOI_LDCC)"
+                                                    (click)="redirectToChiTiet(lv2, false, null)">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                                <a *ngIf="(userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_DUYET_LDCCUC') && lv2.trangThai == STATUS.CHO_DUYET_LDCC)"
+                                                    (click)="redirectToChiTiet(lv2, false, null)">
+                                                    <i class="icon htvbdh_tcdt_pheduyet"></i>
+                                                </a>
+                                                <a *ngIf="(lv2.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('XHDTQG_PTTT_KTCL_LT_BBLM_XOA')) "
+                                                    (click)="delete(lv2)">
+                                                    <i class="fa fa-trash-o do"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
                         </ng-container>
                     </ng-container>
                 </tbody>
             </nz-table>
-            <div class="tab-content tab-menu">
+            <div class="tab-content tab-menu" id="myTabContent">
                 <div class="tab-pane fade show active justify-content-between">
-                    <div class="trai"></div>
+                    <div class="trai">
+                    </div>
                     <div class="canphai">
                         <!-- begin phân trang  -->
                         <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
                             nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
                             (nzPageIndexChange)="changePageIndex($event)" (nzPageSizeChange)="changePageSize($event)">
                             <ng-template #rangeTemplate let-range="range" let-total>
-                                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
                             </ng-template>
                         </nz-pagination>
-                        <!-- end phân trang  -->
+                        <!-- end phân trang -->
                     </div>
                 </div>
             </div>
@@ -149,3 +201,16 @@
         [loaiVthh]="loaiVthh" [idQdGiaoNvXh]="idQdGiaoNvXh">
     </app-them-moi-bien-ban-lay-mau-btt>
 </div>
+<!--xem -->
+<nz-modal class="scroll-nz-modal" [nzWidth]="'90%'" [(nzVisible)]="isViewQdNv" (nzOnCancel)="closeModalQdNv()">
+    <ng-container *nzModalContent class="modal__content custom-scroll-modal">
+        <app-them-moi-qd-giao-nv-xuat-btt [idInput]="idQdNv" [loaiVthh]="loaiVthh" [isViewOnModal]="true">
+        </app-them-moi-qd-giao-nv-xuat-btt>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button (click)="closeModalQdNv()" class="modal__button--cancel">
+            <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+            Đóng
+        </button>
+    </div>
+</nz-modal>

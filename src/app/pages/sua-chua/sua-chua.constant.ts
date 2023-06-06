@@ -41,12 +41,12 @@ export const SUA_CHUA_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'nhap-hang-dtqg',
     hasTab: false,
   },
-  {
-    icon: 'htvbdh_tcdt_baocao2',
-    title: 'Báo cáo kết quả sửa chữa hàng DTQG',
-    url:  '/bao-cao-ket-qua',
-    dropdown:  'bao-cao-ket-qua',
-    idHover:  'bao-cao-ket-qua',
-    hasTab: false,
-  }
+  // {
+  //   icon: 'htvbdh_tcdt_baocao2',
+  //   title: 'Báo cáo kết quả sửa chữa hàng DTQG',
+  //   url:  '/bao-cao-ket-qua',
+  //   dropdown:  'bao-cao-ket-qua',
+  //   idHover:  'bao-cao-ket-qua',
+  //   hasTab: false,
+  // }
 ];

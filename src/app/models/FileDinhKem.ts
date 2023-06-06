@@ -55,6 +55,7 @@ export class FileDinhKem {
   fileName: string;
   fileSize: string;
   fileUrl: string;
+  fileType: string;
   id: number;
   idVirtual: number;
   noiDung: string;

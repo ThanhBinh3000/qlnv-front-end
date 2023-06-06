@@ -5,6 +5,7 @@ import { MainModule } from "../../../../layout/main/main.module";
 import { QdDieuchinhKhbttComponent } from './qd-dieuchinh-khbtt/qd-dieuchinh-khbtt.component';
 import { ThemmoiQdDieuchinhKhbttComponent } from './qd-dieuchinh-khbtt/themmoi-qd-dieuchinh-khbtt/themmoi-qd-dieuchinh-khbtt.component';
 import { ThongtinQdDieuchinhKhbttComponent } from './qd-dieuchinh-khbtt/themmoi-qd-dieuchinh-khbtt/thongtin-qd-dieuchinh-khbtt/thongtin-qd-dieuchinh-khbtt.component';
+import { KeHoachBanTrucTiepModule } from "../ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.module";
 
 
 
@@ -20,7 +21,8 @@ import { ThongtinQdDieuchinhKhbttComponent } from './qd-dieuchinh-khbtt/themmoi-
   imports: [
     CommonModule,
     ComponentsModule,
-    MainModule
+    MainModule,
+    KeHoachBanTrucTiepModule
   ]
 })
 export class DieuChinhKhBanTrucTiepModule { }

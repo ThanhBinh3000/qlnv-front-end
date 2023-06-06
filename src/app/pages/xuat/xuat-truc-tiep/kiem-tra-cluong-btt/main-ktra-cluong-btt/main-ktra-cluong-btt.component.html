@@ -6,6 +6,9 @@
         <li nz-menu-item (click)="selectTab(1)">
             Phiếu kiểm nghiệm chất lượng
         </li>
+        <li *ngIf="loaiVthh.startsWith('02')" nz-menu-item (click)="selectTab(2)">
+            Hồ sơ kỹ thuật
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
@@ -13,4 +16,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
     <app-phieu-ktra-cluong-btt [loaiVthh]="loaiVthh"></app-phieu-ktra-cluong-btt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+    <app-ho-so-ky-thuat-btt [loaiVthh]="loaiVthh"></app-ho-so-ky-thuat-btt>
 </ng-container>

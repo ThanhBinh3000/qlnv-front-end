@@ -48,15 +48,15 @@ export class NewHangHoaComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) {
     this.formHangHoa = this.fb.group({
-      maCha: [''],
-      tenCha: [''],
-      ma: ['', Validators.required],
-      ten: ['', Validators.required],
-      ghiChu: [''],
-      loaiHang: [''],
+      maCha: [null],
+      tenCha: [null],
+      ma: [null, Validators.required],
+      ten: [null, Validators.required],
+      ghiChu: [null],
+      loaiHang: [null],
       trangThai: [true],
-      kyHieu: [''],
-      maDviTinh: [''],
+      kyHieu: [null],
+      maDviTinh: [null],
     })
   }
 
@@ -210,11 +210,6 @@ export class NewHangHoaComponent implements OnInit {
     }
     let body = this.formHangHoa.value;
     body.dmHangDvqls = this.listOfTagOption;
-    if ( this.formHangHoa.value.maCha) {
-      body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
-    } else {
-      body.ma =  this.formHangHoa.value.ma
-    }
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
@@ -237,7 +232,7 @@ export class NewHangHoaComponent implements OnInit {
   }
 
 
-  nzClickNodeTree(event: any): void {
+  async nzClickNodeTree(event: any) {
     if (event.keys.length > 0) {
       let detail = event.node.origin;
       if (detail.ma) {
@@ -246,6 +241,25 @@ export class NewHangHoaComponent implements OnInit {
           loaiHang : this.convertLoaiHh(detail.loaiHang)
         })
       }
+      let ma = detail.key
+      await this.dmHangService.getLastMaHang(ma).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          let charLast = "00";
+          let lastDvi = ma ;
+          if (res.data) {
+            charLast = res.data.slice(-2);
+            lastDvi = res.data;
+          }
+          let valueNext = this.convertNumberToString(parseInt(charLast) + 1);
+          let maHhMoi = res.data ? lastDvi.slice(0, -2) + valueNext : lastDvi + valueNext;
+          this.formHangHoa.patchValue({
+            ma : maHhMoi
+          })
+        }
+      })
     }
+  }
+  convertNumberToString(value) {
+    return value < 10 ? "0" + value.toString() : value.toString();
   }
 }

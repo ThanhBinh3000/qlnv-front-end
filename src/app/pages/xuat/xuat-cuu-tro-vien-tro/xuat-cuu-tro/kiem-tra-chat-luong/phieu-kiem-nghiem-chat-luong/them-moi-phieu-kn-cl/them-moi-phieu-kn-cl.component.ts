@@ -24,7 +24,7 @@ import { PhieuKiemNghiemChatLuongService } from 'src/app/services/qlnv-hang/xuat
   styleUrls: ['./them-moi-phieu-kn-cl.component.scss']
 })
 export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit {
-  @Input() loaiVthhInput: string;
+  @Input() loaiVthh: string;
   @Input() idInput: number;
   @Input() isView: boolean;
   @Output()
@@ -63,7 +63,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
     this.formData = this.fb.group(
       {
-        id: [],
+        id: [0],
         nam: [dayjs().get("year")],
         maDvi: [, [Validators.required]],
         maQhNs: [],
@@ -71,10 +71,10 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
         ngayLapPhieu: [],
         ngayKnMau: [],
         idBienBan: [],
-        soBienBan: ['', [Validators.required]],
+        soBienBan: [],
         ngayLayMau: [],
         idQdGiaoNvXh: [],
-        soQdGiaoNvXh: ['', [Validators.required]],
+        soQdGiaoNvXh: [],
         ngayQdGiaoNvXh: [],
         nguoiKn: [],
         truongPhong: [],
@@ -139,6 +139,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
 
 
   async loadDetail(idInput: number) {
+    console.log(idInput, "idInput");
     if (idInput > 0) {
       await this.phieuKiemNghiemChatLuongService.getDetail(idInput)
         .then((res) => {
@@ -164,6 +165,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
         truongPhong: this.userInfo.MA_KTBQ,
         soPhieu: `${id}/${this.formData.get('nam').value}/${this.maPhieu}`,
         ngayLapPhieu: dayjs().format('YYYY-MM-DD'),
+        loaiVthh: this.loaiVthh,
       });
     }
 
@@ -176,6 +178,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   async loadBbLayMau() {
     let body = {
       trangThai: STATUS.DA_DUYET_LDCC,
+      loaiVthh: this.loaiVthh,
       paggingReq: {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -273,7 +276,7 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
   }
 
   async save(isGuiDuyet?) {
-    // this.setValidator(isGuiDuyet);
+    this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     body.fileDinhKems = this.listFileDinhKem;
     body.ketQuaPhanTich = this.dataTableChiTieu;
@@ -282,12 +285,17 @@ export class ThemMoiPhieuKnClComponent extends Base2Component implements OnInit 
       if (isGuiDuyet) {
         this.idInput = data.id;
         this.pheDuyet();
-      } else {
-        this.goBack()
       }
     }
   }
-
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["soBienBan"].setValidators([Validators.required]);
+      this.formData.controls["soQdGiaoNvXh"].setValidators([Validators.required]);
+      this.formData.controls["maDiemKho"].setValidators([Validators.required]);
+      this.formData.controls["tenDiemKho"].setValidators([Validators.required]);
+    }
+  }
   pheDuyet() {
     let trangThai = '';
     let msg = '';

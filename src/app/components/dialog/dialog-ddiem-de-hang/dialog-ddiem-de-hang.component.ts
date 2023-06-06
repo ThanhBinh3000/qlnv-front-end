@@ -6,6 +6,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {DANH_MUC_LEVEL} from "../../../pages/luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-dialog-ddiem-de-hang',
@@ -34,7 +35,7 @@ export class DialogDdiemDeHangComponent implements OnInit {
   async ngOnInit() {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
-      this.getListChiCuc(),
+      this.loadDsChiCuc(),
       this.updateEditCache()
     ])
   }
@@ -45,13 +46,12 @@ export class DialogDdiemDeHangComponent implements OnInit {
     this.rowItem = new DiaDiemDeHang();
   }
 
-  async getListChiCuc() {
-    let body = {
-      "maDviCha": this.userInfo.MA_DVI,
-      "trangThai": "01"
+  async loadDsChiCuc() {
+    let res = await this.donviService.layTatCaDonViByLevel(3);
+    if (res && res.data) {
+      this.dsChiCuc = res.data
+      this.dsChiCuc = this.dsChiCuc.filter(item => item.type != "PB" && item.maDvi.startsWith(this.userInfo.MA_DVI))
     }
-    const res = await this.donviService.getAll(body)
-    this.dsChiCuc = res.data;
   }
 
   clearData() {

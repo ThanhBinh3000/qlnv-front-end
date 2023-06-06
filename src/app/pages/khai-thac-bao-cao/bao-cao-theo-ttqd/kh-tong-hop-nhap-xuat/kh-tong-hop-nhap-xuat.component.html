@@ -95,10 +95,11 @@
       </form>
     </nz-card>
     <div class="group-button">
-      <button type="button" class="btn btn-sub" (click)="preView()"
+      <button nz-button (click)="preView()"
+              class="modal__button--save"
               *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP1')">
-        <i class="icon htvbdh_chuyen-xu-ly"></i>
-        <span>Kết xuất báo cáo</span>
+        <i class="icon htvbdh_new-tab"></i>
+        Kết xuất báo cáo
       </button>
     </div>
   </div>
@@ -113,8 +114,13 @@
   <div *nzModalFooter>
     <button nz-button (click)="downloadPdf()"
             class="modal__button--save">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      Tải báo cáo
+      <i class="icon htvbdh_file-pdf"></i>
+      Xuất .pdf
+    </button>
+    <button nz-button (click)="downloadExcel()"
+            class="modal__button--save">
+      <i class="icon htvbdh_nhap-excel"></i>
+      Xuất Excel
     </button>
     <button nz-button (click)="closeDlg()" class="modal__button--cancel">
       <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>

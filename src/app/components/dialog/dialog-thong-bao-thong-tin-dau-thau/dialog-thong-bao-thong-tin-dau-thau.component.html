@@ -1,0 +1,31 @@
+<form [formGroup]="formData">
+  <div class="modal__content">
+    <div>
+      <nz-form-item>
+        <nz-form-control nz-col [nzSpan]="24" >
+<!--          <textarea rows="7" value="Chưa có nhà thầu nào được cập nhật hoàn thành cho gói thầu. Nếu tiếp tục nhấn Lưu thì trạng thái gói thầu chuyển thành thất bại. Bạn có muốn lưu không?" staclass="search__input" nz-input-->
+<!--            ></textarea>-->
+          <p>
+            Chưa có nhà thầu nào được cập nhật hoàn thành cho gói thầu. Nếu tiếp tục nhấn Lưu thì trạng thái gói thầu chuyển thành thất bại. Bạn có muốn lưu không?
+          </p>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="nut">
+      <div class="cantrai">
+      </div>
+      <div class="canphai">
+        <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+          <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+          Hủy bỏ
+        </button>
+        <button nz-button (click)="handleOk()" class="modal__button--save">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          Lưu
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

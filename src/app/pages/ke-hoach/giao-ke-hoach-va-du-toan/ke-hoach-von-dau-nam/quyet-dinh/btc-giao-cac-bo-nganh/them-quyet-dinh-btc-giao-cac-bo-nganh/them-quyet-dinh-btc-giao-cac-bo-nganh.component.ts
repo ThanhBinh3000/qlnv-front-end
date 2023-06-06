@@ -1,19 +1,20 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import * as dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { STATUS } from "../../../../../../../constants/status";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {QuyetDinhBtcNganhService} from 'src/app/services/quyetDinhBtcNganh.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {FILETYPE} from "../../../../../../../constants/fileType";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -27,6 +28,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   @Output('onClose') onClose = new EventEmitter<any>();
   formData: FormGroup;
   taiLieuDinhKemList: any[] = [];
+  listCcPhapLy: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
   dsBoNganhTtcp: any[] = [];
@@ -38,6 +40,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   luanPhienList: any[] = []
   hasError: boolean = false;
   dataTable: any[] = [];
+  listFile: any[] = []
 
   constructor(
     private readonly fb: FormBuilder,
@@ -93,7 +96,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
         trichYeu: data.trichYeu,
         idTtcpBoNganh: data.idTtcpBoNganh,
       })
-      this.taiLieuDinhKemList = data.fileDinhkems;
+      // this.taiLieuDinhKemList = data.fileDinhkems;
+      data.fileDinhkems.forEach(item => {
+        if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+          this.taiLieuDinhKemList.push(item)
+        } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+          this.listCcPhapLy.push(item)
+        }
+      })
       this.muaTangList = data.muaTangList ? data.muaTangList : [];
       this.xuatGiamList = data.xuatGiamList ? data.xuatGiamList : [];
       this.xuatBanList = data.xuatBanList ? data.xuatBanList : [];
@@ -112,7 +122,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       if (data.length > 0) {
         let dataTtcp = await this.quyetDinhTtcpService.getDetail(data[0].id);
         if (dataTtcp.msg == MESSAGE.SUCCESS) {
-          console.log(dataTtcp.data);
           this.dsBoNganhTtcp = dataTtcp.data.listChiTangToanBoNganh;
         }
       } else {
@@ -131,7 +140,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.dsNam.push({
         value: dayjs().get('year') + i,
         text: dayjs().get('year') + i,
@@ -214,7 +223,23 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
-    body.fileDinhKems = this.taiLieuDinhKemList;
+    // body.fileDinhKems = this.taiLieuDinhKemList;
+    this.listFile = [];
+    if (this.taiLieuDinhKemList.length > 0) {
+      this.taiLieuDinhKemList.forEach(item => {
+        item.fileType = FILETYPE.FILE_DINH_KEM
+        this.listFile.push(item)
+      })
+    }
+    if (this.listCcPhapLy.length > 0) {
+      this.listCcPhapLy.forEach(element => {
+        element.fileType = FILETYPE.CAN_CU_PHAP_LY
+        this.listFile.push(element)
+      })
+    }
+    if (this.listFile && this.listFile.length > 0) {
+      body.fileDinhKems= this.listFile;
+    }
     body.muaTangList = this.muaTangList;
     body.xuatGiamList = this.xuatGiamList;
     body.xuatBanList = this.xuatBanList;
@@ -237,8 +262,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
         } else {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.idInput = res.data.id;
+          this.getDataDetail(this.idInput);
         }
-        this.quayLai();
+        // this.quayLai();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -258,7 +285,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.tongGiaTri = 0;
     let data = this.dsBoNganhTtcp.filter(item => item.maBn == $event);
     if (data && data.length > 0) {
-      this.tongGiaTri =  data.reduce((a, item) => a + (item['tongSo'] || 0), 0);
+      this.tongGiaTri = data.reduce((a, item) => a + (item['tongSo'] || 0), 0);
     } else {
       this.tongGiaTri = 0;
     }

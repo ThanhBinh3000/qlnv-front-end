@@ -36,7 +36,12 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-
+  openHd = false;
+  idHd: any;
+  openQdKh = false;
+  idQdKh: any;
+  tuNgayQd: Date | null = null;
+  denNgayQd: Date | null = null;
   soQD: string = null;
   canCu: string = null;
   loaiQd: string = null;
@@ -46,7 +51,7 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
   searchFilter = {
     soQd: '',
     ngayQd: null,
-    namNhap: dayjs().get('year'),
+    namNhap: '',
     trichYeu: '',
     loaiVthh: '',
     cloaiVthh: ''
@@ -155,6 +160,8 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
       loaiVthh: '',
       cloaiVthh: ''
     }
+    this.tuNgayQd = null
+    this.denNgayQd = null
     this.search();
   }
 
@@ -165,12 +172,8 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
       "soQd": this.searchFilter.soQd ? this.searchFilter.soQd.trim() : null,
       "loaiVthh": this.typeVthh,
       "cloaiVthh": this.searchFilter.cloaiVthh ? this.searchFilter.cloaiVthh : null,
-      "tuNgayQd": this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      "denNgayQd": this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
+      "ngayQdTu": this.tuNgayQd != null ? dayjs(this.tuNgayQd).format('YYYY-MM-DD') + " 00:00:00" : null,
+      "ngayQdDen": this.denNgayQd != null ? dayjs(this.denNgayQd).format('YYYY-MM-DD') + " 23:59:59" : null,
 
       "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
       "paggingReq": {
@@ -193,6 +196,38 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+  disabledTuNgayQd = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayQd) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayQd.getTime();
+  };
+
+  disabledDenNgayQd = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayQd) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayQd.getTime();
+  };
+
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
+    }
+    console.log(key, value);
+
+    if (value && value != '') {
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
+    } else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
   }
 
   async changePageIndex(event) {
@@ -294,23 +329,6 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
   chiTietQuyetDinh(isView: boolean, id: number) {
 
   }
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
 
   clearFilterTable() {
     this.filterTable = {
@@ -398,6 +416,26 @@ export class QuyetdinhNhiemvuNhaphangComponent implements OnInit {
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
+  }
+
+  openHdModal(id: number) {
+    this.idHd = id;
+    this.openHd = true;
+  }
+
+  closeHdModal() {
+    this.idHd = null;
+    this.openHd = false;
+  }
+
+  openQdKhModal(id: number) {
+    this.idQdKh = id;
+    this.openQdKh = true;
+  }
+
+  closeQdKhModal() {
+    this.idQdKh = null;
+    this.openQdKh = false;
   }
 
 }

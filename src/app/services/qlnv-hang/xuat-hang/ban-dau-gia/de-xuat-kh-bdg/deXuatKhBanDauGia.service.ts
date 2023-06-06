@@ -20,4 +20,9 @@ export class DeXuatKhBanDauGiaService extends BaseService {
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
+  getGiaBanToiThieu(cloaiVthh: string, maDvi: string, namKhoach: string) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-thieu/${cloaiVthh}/${maDvi}/${namKhoach}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
 }

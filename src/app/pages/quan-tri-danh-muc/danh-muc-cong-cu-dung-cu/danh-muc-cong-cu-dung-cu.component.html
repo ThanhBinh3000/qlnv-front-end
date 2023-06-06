@@ -51,7 +51,7 @@
     <div class="buttons">
       <!--      <button type="button" class="btn btn-sub btn-xoa" (click)="deleteMulti()">-->
       <!--        <i class="fa fa-trash-o do"></i>-->
-      <!--        <span>Xoá</span>-->
+      <!--        <span>Xóa</span>-->
       <!--      </button>-->
       <!--      <button type="button" class="btn btn-sub" (click)="exportData()">-->
       <!--        <i class="icon htvbdh_chuyen-xu-ly"></i>-->
@@ -61,16 +61,16 @@
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
-      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+      <nz-table #basicTable nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
                 [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '1150px'}">
         <thead>
         <tr>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 8%;">Mã CCDC</th>
+          <th class="text-center" style="width: 3%;">STT</th>
+          <th class="text-center"  nzWidth="80px">Mã CCDC</th>
           <th class="text-center" style="width: 15%;">Tên CCDC</th>
           <th class="text-center">Mô tả CCDC</th>
-          <th class="text-center" nzWidth="200px">Yêu cầu kỹ thuật</th>
-          <th class="text-center" style="width: 8%;">Đơn vị tính</th>
+          <th class="text-center" nzWidth="300px">Yêu cầu kỹ thuật</th>
+          <th class="text-center" nzWidth="80px">Đơn vị tính</th>
           <th class="text-center" nzWidth="300px">Nhóm CCDC</th>
           <th class="text-center" style="width: 8%;">Trạng thái</th>
           <th class="text-center" style="width: 8%;">Hành động</th>
@@ -256,7 +256,7 @@
                          (nzPageIndexChange)="changePageIndex($event)"
                          (nzPageSizeChange)="changePageSize($event)">
             <ng-template #rangeTemplate let-range="range" let-total>
-              {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
             </ng-template>
           </nz-pagination>
           <!-- end phân trang  -->

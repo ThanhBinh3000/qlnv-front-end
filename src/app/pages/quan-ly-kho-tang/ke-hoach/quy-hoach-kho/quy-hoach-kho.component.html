@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('qdqh')">
+    <li nz-menu-item nzSelected (click)="selectTab('qdqh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDQH')">
       Quyết định quy hoạch
     </li>
-    <li nz-menu-item (click)="selectTab('qddcqh')">
+    <li nz-menu-item (click)="selectTab('qddcqh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_QHK_QDDCQH')">
       Quyết định điều chỉnh quy hoạch
     </li>
   </ul>
@@ -11,6 +11,6 @@
 <ng-container *ngIf="tabSelected == 'qdqh'">
  <app-quyet-dinh-quy-hoach [type]="'01'"></app-quyet-dinh-quy-hoach>
 </ng-container>
-<ng-container *ngIf="tabSelected  == 'qddcqh'">
-  <app-quyet-dinh-dieu-chinh-quy-hoach  [type]="'02'"></app-quyet-dinh-dieu-chinh-quy-hoach>
+<ng-container  *ngIf="tabSelected  == 'qddcqh'">
+  <app-quyet-dinh-dieu-chinh-quy-hoach [type]="'02'"></app-quyet-dinh-dieu-chinh-quy-hoach>
 </ng-container>

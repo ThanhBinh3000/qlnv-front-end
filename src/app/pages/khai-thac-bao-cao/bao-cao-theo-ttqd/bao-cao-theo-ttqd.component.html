@@ -122,16 +122,11 @@
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(24)"
-                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
-              <span nz-icon nzType="fund"></span>
-              <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
-            </li>
-            <li nz-menu-item (click)="selectTab(25)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+            <li nz-menu-item (click)="selectTab(24)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Số lượng và giá trị hàng DTQG xuất viện trợ trong kỳ</span>
             </li>
-            <li nz-menu-item (click)="selectTab(26)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+            <li nz-menu-item (click)="selectTab(25)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
               <span nz-icon nzType="fund"></span>
               <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong kỳ</span>
             </li>
@@ -158,6 +153,50 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 5">
           <app-thong-tu1452013></app-thong-tu1452013>
+        </ng-container>
+
+<!--        tab 2-->
+        <ng-container *ngIf="tabSelected == 7">
+          <app-ct-nhap-xuat-ton-kho-hang-dtqg-tt-108></app-ct-nhap-xuat-ton-kho-hang-dtqg-tt-108>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 8">
+          <app-tinh-hinh-th-phi-bq-hang-dtqg-theo-dinh-muc></app-tinh-hinh-th-phi-bq-hang-dtqg-theo-dinh-muc>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 9">
+          <app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg></app-th-phi-nhap-xuat-phi-xuat-vien-tro-cuu-ho-ht-hang-dtqg>
+        </ng-container>
+
+<!--        tab 4-->
+        <ng-container *ngIf="tabSelected == 16">
+          <app-nguon-hinh-thanh-dtqg></app-nguon-hinh-thanh-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 17">
+          <app-tong-chi-cho-mua-hang-dtqg-trong-ky></app-tong-chi-cho-mua-hang-dtqg-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 18">
+          
+          <app-kh-mua-hang-dtqg></app-kh-mua-hang-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 19">
+          <app-sl-gia-tri-hang-dtqg></app-sl-gia-tri-hang-dtqg>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 20">
+          <app-sl-gia-tri-hang-dtqg-nhap-trong-ky></app-sl-gia-tri-hang-dtqg-nhap-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 21">
+          <app-sl-gia-tri-hang-dtqg-xuat-trong-ky></app-sl-gia-tri-hang-dtqg-xuat-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 22">
+          <app-sl-gia-tri-hang-dtqg-xuat-cap-khong-thu-tien-trong-ky></app-sl-gia-tri-hang-dtqg-xuat-cap-khong-thu-tien-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 23">
+          <app-sl-gia-tri-hang-dtqg-xuat-cap-ct-ht-pvqp-an-ninh-nv-khac-trong-ky></app-sl-gia-tri-hang-dtqg-xuat-cap-ct-ht-pvqp-an-ninh-nv-khac-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 24">
+          <app-sl-gia-tri-hang-dtqg-xuat-vien-tro-trong-ky></app-sl-gia-tri-hang-dtqg-xuat-vien-tro-trong-ky>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 25">
+          <app-tn-sd-hang-dtqg-xuat-ct-qp-an-nhiem-vu-khac-duoc-giao-trong-ky></app-tn-sd-hang-dtqg-xuat-ct-qp-an-nhiem-vu-khac-duoc-giao-trong-ky>
         </ng-container>
       </div>
     </div>

@@ -28,7 +28,10 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.HOAN_THANH_CAP_NHAT, giaTri: 'Hoàn thành cập nhật' },
+  ];
 
   searchFilter = {
     soThongTri: null,

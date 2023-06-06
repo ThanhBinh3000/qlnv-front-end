@@ -1,0 +1,73 @@
+<div class="header header-green-background mg-t-16">
+  <div class="header-text">
+    <div class="title-chi-tieu">
+      <span></span>
+      <span>DANH MỤC/ĐƠN VỊ BẢO QUẢN</span>
+    </div>
+  </div>
+</div>
+<form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+    <div nz-col [nzSpan]="20" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Tên đơn vị</nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+          <input nz-input formControlName="tenDvi" [nzAutocomplete]="auto" [disabled]="isViewDanhMuc"
+                 [readonly]="isViewDanhMuc">
+          <nz-autocomplete #auto (selectionChange)="changeDvi($event)">
+            <nz-auto-option *ngFor="let option of listDataGroup" [nzValue]="option.danhMuc">{{ option.danhMuc }}
+            </nz-auto-option>
+          </nz-autocomplete>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Mã số</nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+          <input nz-input formControlName="maSoDvi" [disabled]="isViewDanhMuc"
+                 [readonly]="isViewDanhMuc">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="20" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Nhóm mặt hàng</nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+          <input nz-input formControlName="nhomMatHang">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="4" class="pd-t-10">
+      <nz-form-item>
+        <nz-form-label nz-col [nzSpan]="24"  [nzNoColon]="true">Mã số</nz-form-label>
+        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+          <input nz-input formControlName="maSoNhomMatHang">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24" class="pd-t-10">
+      <label nz-checkbox formControlName="coNhieuMatHang" class="bold-text">Có nhiều mặt hàng</label>
+    </div>
+  </div>
+</form>
+<br />
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="onCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+    </div>
+  </div>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

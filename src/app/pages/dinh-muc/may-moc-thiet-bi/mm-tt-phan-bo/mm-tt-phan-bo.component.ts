@@ -9,7 +9,6 @@ import {StorageService} from "../../../../services/storage.service";
 import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
 import {QuyetDinhMuaSamService} from "../../../../services/quyet-dinh-mua-sam.service";
-import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-mm-tt-phan-bo',
@@ -21,6 +20,11 @@ export class MmTtPhanBoComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' }
+  ];
 
   constructor(
     httpClient: HttpClient,

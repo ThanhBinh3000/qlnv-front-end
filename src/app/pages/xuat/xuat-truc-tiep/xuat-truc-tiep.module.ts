@@ -13,6 +13,8 @@ import { DieuChinhKhBanTrucTiepModule } from './dieu-chinh-kh-ban-truc-tiep/dieu
 import { HopDongBttModule } from './hop-dong-btt/hop-dong-btt.module';
 import { GiaoNvXuatHangBttModule } from './giao-nv-xuat-hang-btt/giao-nv-xuat-hang-btt.module';
 import { KiemTraCluongBttModule } from './kiem-tra-cluong-btt/kiem-tra-cluong-btt.module';
+import { XuatKhoBttModule } from './xuat-kho-btt/xuat-kho-btt.module';
+import { QuyetDinhUyquenBanleBttModule } from './quyet-dinh-uyquen-banle-btt/quyet-dinh-uyquen-banle-btt.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { KiemTraCluongBttModule } from './kiem-tra-cluong-btt/kiem-tra-cluong-bt
     HopDongBttModule,
     GiaoNvXuatHangBttModule,
     KiemTraCluongBttModule,
+    XuatKhoBttModule,
+    QuyetDinhUyquenBanleBttModule,
   ],
 })
 export class XuatTrucTiepModule {

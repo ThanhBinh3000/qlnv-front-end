@@ -11,6 +11,7 @@ import {Validators} from "@angular/forms";
 import {MESSAGE} from "../../../../../../constants/message";
 import {HopDongMmTbcdService} from "../../../../../../services/hop-dong-mm-tbcd.service";
 import {MmHopDongDiaDiemCt} from "../mm-thong-tin-hop-dong.component";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-mm-them-moi-phu-luc',
@@ -129,7 +130,7 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
   }
 
 
-  async save(isKy?) {
+  async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -147,9 +148,6 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
     let body = this.formData.value
     let data = await this.createUpdate(body);
     if (data) {
-      if (isKy) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
-      }
       this.goBackHdr(true)
     }
   }
@@ -160,6 +158,21 @@ export class MmThemMoiPhuLucComponent extends Base2Component implements OnInit {
     } else {
       this.expandSetString.delete(id);
     }
+  }
+
+  async pheDuyet() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.DU_THAO :
+      case STATUS.TU_CHOI_LDTC : {
+        trangThai = STATUS.CHO_DUYET_LDTC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDTC : {
+        trangThai = STATUS.DA_DUYET_LDTC
+      }
+    }
+    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
 

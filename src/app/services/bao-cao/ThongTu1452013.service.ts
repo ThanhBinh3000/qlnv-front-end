@@ -22,4 +22,11 @@ export class ThongTu1452013Service extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/kh-tong-hop-nhap-xuat`;
     return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
   }
+
+
+  reportKhLuanPhienDoiHangDtqg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/kh-luan-phien-doi-hang-dtqg`;
+    return this._httpClient.post(url, body, {responseType: 'blob'}).toPromise();
+  }
+
 }

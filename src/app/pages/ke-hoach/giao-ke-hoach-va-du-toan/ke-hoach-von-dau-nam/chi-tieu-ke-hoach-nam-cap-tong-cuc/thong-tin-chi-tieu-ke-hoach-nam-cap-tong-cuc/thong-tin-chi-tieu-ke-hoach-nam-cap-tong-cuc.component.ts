@@ -3,7 +3,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output
 } from '@angular/core';
@@ -50,6 +50,9 @@ import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import {STATUS} from "../../../../../../constants/status";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
 import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
+import {QuyetDinhTtcpService} from "../../../../../../services/quyetDinhTtcp.service";
+import {AMOUNT_THREE_DECIMAL} from "../../../../../../Utility/utils";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -60,6 +63,7 @@ import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTr
 export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   @Input() id: number;
   @Input() isViewDetail: boolean;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
   maQd: string
@@ -80,6 +84,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     xuatTrongNamMuoi: 0,
     tonKhoCuoiNam: 0,
   };
+  sumTotalKhDuTruLuongThuc: any = {};
   tab = TAB_SELECTED;
   yearNow: number = 0;
   thongTinChiTieuKeHoachNam: ThongTinChiTieuKeHoachNam =
@@ -115,7 +120,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   canCuList: any[] = [];
   taiLieuDinhKemList: any[] = [];
   page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
+  pageSize: number = 100;
   totalRecord: number = 0;
   keHoachLuongThucShow: Array<KeHoachLuongThuc> = [];
   keHoachMuoiShow: Array<KeHoachMuoi> = [];
@@ -142,7 +147,22 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   dataVatTuNhapEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuXuatEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuConEditNhapShow: any[] = []
-  dataVatTuConEditXuatShow: any[] = []
+  dataVatTuConEditXuatShow: any[] = [];
+  dataQdTtcpGiaoBTC: any;
+  dataQdTCDTGiaoCuc: any;
+  AMOUNT = {
+    allowZero: true,
+    allowNegative: false,
+    precision: 3,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    align: "right",
+    nullable: true,
+    min: 0,
+    max: 1000000000000,
+    inputMode: CurrencyMaskInputMode.NATURAL,
+  }
 
   //
 
@@ -162,6 +182,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private uploadFileService: UploadFileService,
     public userService: UserService,
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
+    private quyetDinhTtcpService: QuyetDinhTtcpService,
     public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.initForm();
@@ -169,7 +190,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
-    for (let i = 0; i < 5; i++) {
+    for (let i = -3; i < 5; i++) {
       this.listNam.push({
         value: this.yearNow + i,
         text: this.yearNow + i,
@@ -200,24 +221,34 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         namKeHoach: dayjs().get('year')
       });
       this.findCanCuByYear(this.yearNow);
+      this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
-
 
   async findCanCuByYear(year: number, id?) {
     this.formData.patchValue({
       canCu: null,
     })
-
     if (this.userService.isCuc()) {
       let res = await this.chiTieuKeHoachNamService.canCuCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
+          this.dataQdTCDTGiaoCuc = {};
           this.formData.patchValue({
             canCu: data.soQuyetDinh,
             chiTieuId: data.id
-          })
+          });
+          // Lấy kế hoạch tổng cục giao cho cục đang login
+          let dataLuongThuc = data.khLuongThuc.find(item => item.maDonVi == this.userInfo.MA_DVI);
+          if (dataLuongThuc) {
+            this.dataQdTCDTGiaoCuc = {
+              "ltThocMua": dataLuongThuc.ntnThoc,
+              "ltGaoMua": dataLuongThuc.ntnGao,
+              "ltThocXuat": dataLuongThuc.xtnTongThoc,
+              "ltGaoXuat": dataLuongThuc.xtnTongGao,
+            }
+          }
         }
       } else {
         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
@@ -228,6 +259,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
+          //Lấy data của TTCP giao cho BTC (TCDT)
+          this.dataQdTtcpGiaoBTC = data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
           this.formData.patchValue({
             canCu: data.soQd
           })
@@ -752,8 +785,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .loadThongTinChiTieuKeHoachNam(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
+
           this.thongTinChiTieuKeHoachNam = res.data;
-          console.log(res.data);
           // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
@@ -817,7 +850,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             }).value();
           this.dataVatTuXuat.forEach(s => this.expandSetVatTuXuat.add(s.maDvi));
           this.dataVatTuXuatEdit = cloneDeep(this.dataVatTuXuat);
-
           // this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
             this.formData.controls['ngayKy'].setValidators([Validators.required])
@@ -841,6 +873,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.formData.patchValue({
             soQD: this.formData.get('soQd').value?.split('/')[0],
           });
+          this.sumRowDetailMuoi();
+          this.sumRowDetailLuongThuc();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -874,6 +908,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.cdr.detectChanges();
   }
 
+  sumDataKh(key) {
+    if (this.dsKeHoachLuongThucClone.length > 0) {
+      return this.dsKeHoachLuongThucClone.reduce((a, b) => a + (b[key] || 0), 0);
+    }
+  }
+
   reduceRowData(
     indexTable: number,
     indexCell: number,
@@ -885,7 +925,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     const listTable = document
       .getElementById(idTable)
       ?.getElementsByTagName('table');
-
     if (listTable && listTable.length >= indexTable) {
       const table = listTable[indexTable];
       for (let i = indexRow; i < table.rows.length - 1; i++) {
@@ -905,7 +944,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-    return sumVal ? Intl.NumberFormat('en-US').format(sumVal) : '0';
+    return sumVal ? Intl.NumberFormat('vi-VN').format(sumVal) : '0';
   }
 
   reduceRowDataVatTu(
@@ -1010,6 +1049,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.thongTinChiTieuKeHoachNam.khLuongThuc,
         );
         this.loadData();
+        this.sumRowDetailLuongThuc();
       },
     });
   }
@@ -1036,10 +1076,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dsMuoiClone = cloneDeep(
           this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
         );
-        this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-        this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-        this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-        this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+        this.sumRowDetailMuoi()
         this.loadData();
       },
     });
@@ -1463,6 +1500,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       return;
     }
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
+    let checkFlag = this.soSanhCtCapTrenGiao('save', isGuiDuyet);
+    if (!checkFlag) {
+      this.spinner.hide();
+      return;
+    }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
     }/${this.qdTCDT}` : null;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
@@ -1510,7 +1553,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return Object.assign(s1, s)
     }));
 
-    // console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
       for (let j = i + 1; j <= khVatTu.length - 1; j++) {
@@ -1587,7 +1629,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   }
                 })
             } else {
-              this.redirectChiTieuKeHoachNam();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              // this.redirectChiTieuKeHoachNam();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1601,7 +1644,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
-      console.log(this.thongTinChiTieuKeHoachNamInput);
       // return;
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
@@ -1639,7 +1681,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 })
             } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectChiTieuKeHoachNam()
+              // this.redirectChiTieuKeHoachNam()
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1681,22 +1723,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
     this.findCanCuByYear(this.yearNow);
-    if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
-        luongThuc.tkdnGao[0].nam = this.yearNow - 1;
-        luongThuc.tkdnGao[1].nam = this.yearNow - 2;
-        luongThuc.tkdnGao[2].nam = this.yearNow - 3;
-        luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
-        luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
-        luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
-        luongThuc.xtnGao[0].nam = this.yearNow - 1;
-        luongThuc.xtnGao[1].nam = this.yearNow - 2;
-        luongThuc.xtnGao[2].nam = this.yearNow - 3;
-        luongThuc.xtnThoc[0].nam = this.yearNow - 1;
-        luongThuc.xtnThoc[1].nam = this.yearNow - 2;
-        luongThuc.xtnThoc[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
+    //   console.log(this.thongTinChiTieuKeHoachNam?.khLuongThuc, 'ddddddd');
+    //   this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
+    //     luongThuc.tkdnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnGao[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnGao[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnGao[2].nam = this.yearNow - 3;
+    //     luongThuc.xtnThoc[0].nam = this.yearNow - 1;
+    //     luongThuc.xtnThoc[1].nam = this.yearNow - 2;
+    //     luongThuc.xtnThoc[2].nam = this.yearNow - 3;
+    //   });
+    // }
+    this.loadQdTtcpGiaoBoNganh(this.yearNow);
     // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
     //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
     //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
@@ -1739,6 +1783,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc[i],
       this.dsKeHoachLuongThucClone[i],
     );
+    this.sumRowDetailLuongThuc();
     this.cdr.detectChanges();
   }
 
@@ -1762,8 +1807,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc -
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc;
     return this.dsKeHoachLuongThucClone[i].tkcnTongThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongThoc / 1000),
       )
       : '0';
   }
@@ -1775,8 +1820,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].xtnTongGao;
 
     return this.dsKeHoachLuongThucClone[i].tkcnTongGao
-      ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -1786,7 +1831,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].xtnTongThoc +
       +this.dsKeHoachLuongThucClone[i].xtnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.dsKeHoachLuongThucClone[i].xtnTongSoQuyThoc,
       )
       : '0';
@@ -1797,8 +1842,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsKeHoachLuongThucClone[i].tkcnTongThoc +
       this.dsKeHoachLuongThucClone[i].tkcnTongGao * 2;
     return this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.dsKeHoachLuongThucClone[i].tkcnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -1808,7 +1853,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.dsKeHoachLuongThucClone[i].ntnThoc +
       +this.dsKeHoachLuongThucClone[i].ntnGao * 2;
     return this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.dsKeHoachLuongThucClone[i].ntnTongSoQuyThoc,
       )
       : '0';
@@ -1840,6 +1885,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   onInputTenHang(e: Event): void {
     this.isAddVatTu = false;
+    console.log( this.dataVatTuCha,' this.dataVatTuCha');
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.keHoachVatTuCreate.vatTuThietBi[0].tenVatTuCha = '';
@@ -1853,6 +1899,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dataVatTuChaShow = this.dataVatTuCha.filter(
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
+      console.log(value,'valuevalue')
     }
   }
 
@@ -1886,15 +1933,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (tonKho.loaiVthh == '0101') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong +=
                     tonKho.duDau;
                   break;
                 default:
@@ -1903,15 +1950,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             } else if (tonKho.loaiVthh == '0102') {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong +=
                     tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
-                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong =
+                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong +=
                     tonKho.duDau;
                   break;
                 default:
@@ -2016,12 +2063,25 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  async loadQdTtcpGiaoBoNganh(nam) {
+    const res = await this.quyetDinhTtcpService.chiTietTheoNam(nam);
+    if (res.msg == MESSAGE.SUCCESS) {
+      // lấy chỉ tiêu ttcp giao bộ tài chính : maBoNganh = 01
+      this.dataQdTtcpGiaoBTC = res.data.listBoNganh ? res.data.listBoNganh.find(item => item.maBoNganh == '01') : null;
+      // if (this.userService.isTongCuc() && !this.id) {
+      //   this.formData.patchValue({
+      //     canCu: res.data.soQd
+      //   })
+      // }
+    }
+  }
+
   calculatorntnTongQuyThocCreate(): string {
     this.keHoachLuongThucCreate.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnThoc +
       +this.keHoachLuongThucCreate.ntnGao * 2;
     return this.keHoachLuongThucCreate.ntnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.keHoachLuongThucCreate.ntnTongSoQuyThoc,
       )
       : '0';
@@ -2035,7 +2095,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           0,
         );
       return this.keHoachLuongThucCreate.xtnTongThoc
-        ? Intl.NumberFormat('en-US').format(
+        ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
           this.keHoachLuongThucCreate.xtnTongThoc,
         )
         : '0';
@@ -2047,7 +2107,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachLuongThucCreate.xtnTongGao =
         this.keHoachLuongThucCreate?.xtnGao.reduce((a, b) => a + +b.soLuong, 0);
       return this.keHoachLuongThucCreate.xtnTongGao
-        ? Intl.NumberFormat('en-US').format(
+        ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
           this.keHoachLuongThucCreate.xtnTongGao,
         )
         : '0';
@@ -2059,7 +2119,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.xtnTongThoc +
       +this.keHoachLuongThucCreate.xtnTongGao * 2;
     return this.keHoachLuongThucCreate.xtnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
         this.keHoachLuongThucCreate.xtnTongSoQuyThoc,
       )
       : '0';
@@ -2070,8 +2130,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkdnTongThoc +
       +this.keHoachLuongThucCreate.tkdnTongGao * 2;
     return this.keHoachLuongThucCreate.tkdnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongSoQuyThoc / 1000),
       )
       : '0';
   }
@@ -2080,8 +2140,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongThoc =
       this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongThoc / 1000),
       )
       : '0';
   }
@@ -2090,8 +2150,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnTongGao =
       this.keHoachLuongThucCreate?.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkdnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkdnTongGao / 1000),
       )
       : '0';
   }
@@ -2102,8 +2162,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnThoc -
       +this.keHoachLuongThucCreate.xtnTongThoc;
     return this.keHoachLuongThucCreate.tkcnTongThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongThoc / 1000),
       )
       : '0';
   }
@@ -2114,8 +2174,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.ntnGao -
       +this.keHoachLuongThucCreate.xtnTongGao;
     return this.keHoachLuongThucCreate.tkcnTongGao
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongGao,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongGao / 1000),
       )
       : '0';
   }
@@ -2125,14 +2185,83 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       +this.keHoachLuongThucCreate.tkcnTongThoc +
       +this.keHoachLuongThucCreate.tkcnTongGao * 2;
     return this.keHoachLuongThucCreate.tkcnTongSoQuyThoc
-      ? Intl.NumberFormat('en-US').format(
-        this.keHoachLuongThucCreate.tkcnTongSoQuyThoc,
+      ? Intl.NumberFormat('vi-VN', {minimumIntegerDigits: 3}).format(
+        (this.keHoachLuongThucCreate.tkcnTongSoQuyThoc / 1000),
       )
       : '0';
   }
 
+  soSanhCtCapTrenGiao(action, isGuiDuyet?) {
+    let totalNtnThoc, totalNtnGao = 0;
+    let checkFlag = true;
+    if (this.userService.isTongCuc()) {
+      if (action == 'add') {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc > (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0)) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc BTC giao");
+            return false
+          }
+          if (totalNtnGao > (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0)) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo BTC giao");
+            return false;
+          }
+        }
+      } else {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc < (this.dataQdTtcpGiaoBTC?.ltThocMua ? this.dataQdTtcpGiaoBTC.ltThocMua : 0) && isGuiDuyet) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc BTC giao");
+            return false;
+          }
+          if (totalNtnGao < (this.dataQdTtcpGiaoBTC?.ltGaoMua ? this.dataQdTtcpGiaoBTC.ltGaoMua : 0) && isGuiDuyet) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo BTC giao");
+            return false;
+          }
+        }
+      }
+    } else {
+      if (action == 'add') {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0) + this.keHoachLuongThucCreate.ntnThoc;
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0) + this.keHoachLuongThucCreate.ntnGao;
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc > (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0)) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua thóc TCDT giao");
+            return false;
+          }
+          if (totalNtnGao > (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0)) {
+            this.notification.error(MESSAGE.ERROR, "Nhập quá số lượng mua gạo TCDT giao");
+            return false;
+          }
+        }
+      } else {
+        totalNtnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+        totalNtnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+        if (totalNtnThoc || totalNtnGao) {
+          if (totalNtnThoc < (this.dataQdTCDTGiaoCuc?.ltThocMua ? this.dataQdTCDTGiaoCuc.ltThocMua : 0) && isGuiDuyet) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua thóc TCDT giao");
+            return false;
+          }
+          if (totalNtnGao < (this.dataQdTCDTGiaoCuc?.ltGaoMua ? this.dataQdTCDTGiaoCuc.ltGaoMua : 0) && isGuiDuyet) {
+            this.notification.error(MESSAGE.ERROR, "Nhập chưa bằng số chỉ tiêu mua gạo TCDT giao");
+            return false;
+            ;
+          }
+        }
+      }
+    }
+    return checkFlag;
+  }
+
   themMoiKHLT() {
     if (!this.isAddLuongThuc) {
+      return;
+    }
+    //Kiểm tra số nhập trong năm thóc , gạo có bằng chỉ tiêu BTC giao TCDT hoặc TCDT giao Cục hay ko ?
+    let checkFlag = this.soSanhCtCapTrenGiao('add');
+    if (!checkFlag) {
       return;
     }
     this.keHoachLuongThucDialog = new KeHoachLuongThuc();
@@ -2185,7 +2314,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.tkdnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2,tkdnGao3];
+    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2, tkdnGao3];
     this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnTongSoQuyThoc;
     this.keHoachLuongThucDialog.ntnThoc = +this.keHoachLuongThucCreate.ntnThoc;
@@ -2217,7 +2346,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
     this.keHoachLuongThucDialog.xtnTongGao =
       +this.keHoachLuongThucCreate.xtnGao[0].soLuong +
-      +this.keHoachLuongThucCreate.xtnGao[1].soLuong;
+      +this.keHoachLuongThucCreate.xtnGao[1].soLuong + this.keHoachLuongThucCreate.xtnGao[2].soLuong;
     const xtnGao1 = {
       id: null,
       nam: this.yearNow - 1,
@@ -2236,7 +2365,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.xtnGao[2].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2,xtnGao3];
+    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2, xtnGao3];
     this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.tkcnTongSoQuyThoc;
     this.keHoachLuongThucDialog.tkcnTongThoc =
@@ -2261,6 +2390,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khLuongThuc,
     );
     this.loadData();
+    this.sumRowDetailLuongThuc();
   }
 
   changeDonViMuoi() {
@@ -2341,10 +2471,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachMuoiCreate.tenDonVi = this.tenDonViCuc;
     }
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
-    this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
-    this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
-    this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
+    this.sumRowDetailMuoi()
     this.loadData();
   }
 
@@ -2478,7 +2605,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   //   this.keHoachMuoiCreate.tkdnTongSoMuoi =
   //     this.keHoachMuoiCreate?.tkdnMuoi.reduce((a, b) => a + +b.soLuong, 0);
   //   return this.keHoachMuoiCreate.tkdnTongSoMuoi
-  //     ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.tkdnTongSoMuoi)
+  //     ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.tkdnTongSoMuoi)
   //     : '0';
   // }
 
@@ -2486,7 +2613,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     // this.keHoachMuoiCreate.xtnTongSoMuoi =
     //   this.keHoachMuoiCreate?.xtnMuoi.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachMuoiCreate.xtnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.xtnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.xtnTongSoMuoi)
       : '0';
   }
 
@@ -2496,7 +2623,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachMuoiCreate.ntnTongSoMuoi -
       this.keHoachMuoiCreate.xtnTongSoMuoi;
     return this.keHoachMuoiCreate.tkcnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.keHoachMuoiCreate.tkcnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.keHoachMuoiCreate.tkcnTongSoMuoi)
       : '0';
   }
 
@@ -2506,12 +2633,44 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
       this.dsMuoiClone[i],
     );
+    this.sumRowDetailMuoi();
+    this.cdr.detectChanges();
+  }
+
+  sumRowDetailMuoi() {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
     this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
-    this.cdr.detectChanges();
   }
+
+  sumRowDetailLuongThuc() {
+    this.sumTotalKhDuTruLuongThuc.tkdnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.tkdnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkdnGao[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.ntnGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.ntnGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnThoc_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnThoc[2].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnTongGao, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam1 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[0].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam2 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[1].soLuong, 0);
+    this.sumTotalKhDuTruLuongThuc.xtnGao_nam3 = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.xtnGao[2]?.soLuong ? b.xtnGao[2].soLuong : 0, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongSoQuyThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongSoQuyThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongThoc = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongThoc, 0);
+    this.sumTotalKhDuTruLuongThuc.tkcnTongGao = this.dsKeHoachLuongThucClone?.reduce((a, b) => a + +b.tkcnTongGao, 0);
+  }
+
 
   cancelEditMuoi(index: number) {
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
@@ -2547,7 +2706,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   //     0,
   //   );
   //   return this.dsMuoiClone[i].xtnTongSoMuoi
-  //     ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].xtnTongSoMuoi)
+  //     ? Intl.NumberFormat('vi-VN').format(this.dsMuoiClone[i].xtnTongSoMuoi)
   //     : '0';
   // }
 
@@ -2557,7 +2716,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsMuoiClone[i].ntnTongSoMuoi -
       this.dsMuoiClone[i].xtnTongSoMuoi;
     return this.dsMuoiClone[i].tkcnTongSoMuoi
-      ? Intl.NumberFormat('en-US').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
+      ? Intl.NumberFormat('vi-VN').format(this.dsMuoiClone[i].tkcnTongSoMuoi)
       : '0';
   }
 
@@ -2708,7 +2867,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].tongCacNamTruoc +
       this.dsVatTuClone[i].vatTuThietBi[0].nhapTrongNam;
     return this.dsVatTuClone[i].vatTuThietBi[0].tongNhap
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsVatTuClone[i].vatTuThietBi[0].tongNhap,
       )
       : '0';
@@ -2720,7 +2879,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[1].soLuong +
       this.dsVatTuClone[i].vatTuThietBi[0].cacNamTruoc[2].soLuong;
     return this.dsVatTuClone[i].tongChiTieuCacnamTruoc
-      ? Intl.NumberFormat('en-US').format(
+      ? Intl.NumberFormat('vi-VN').format(
         this.dsVatTuClone[i].tongChiTieuCacnamTruoc,
       )
       : '0';

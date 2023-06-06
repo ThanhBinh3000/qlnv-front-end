@@ -5,33 +5,143 @@ import {CommonModule} from "@angular/common";
 import {CuuTroVienTroRoutingModule} from "./cuu-tro-vien-tro-routing.module";
 import {ComponentsModule} from "../../../../components/components.module";
 import {DirectivesModule} from "../../../../directives/directives.module";
-import {QuyetDinhPheDuyetPhuongAnModule} from "./quyet-dinh-phe-duyet-phuong-an/quyet-dinh-phe-duyet-phuong-an.module";
-import {TongHopPhuongAnModule} from "./tong-hop-phuong-an/tong-hop-phuong-an.module";
-import {XayDungPhuongAnModule} from "./xay-dung-phuong-an/xay-dung-phuong-an.module";
-import {QuyetDinhGnvXuatHangModule} from "./quyet-dinh-gnv-xuat-hang/quyet-dinh-gnv-xuat-hang.module";
-import {KiemTraChatLuongModule} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.module";
-import {XuatKhoModule} from "./xuat-kho/xuat-kho.module";
+import {TongHopPhuongAnComponent} from "./tong-hop-phuong-an/tong-hop-phuong-an.component";
+import {
+  ThongTinTongHopPhuongAnComponent
+} from "./tong-hop-phuong-an/thong-tin-tong-hop-phuong-an/thong-tin-tong-hop-phuong-an.component";
+import {
+  QuyetDinhPheDuyetPhuongAnComponent
+} from "./quyet-dinh-phe-duyet-phuong-an/quyet-dinh-phe-duyet-phuong-an.component";
+import {
+  ThongTinQuyetDinhPheDuyetPhuongAnComponent
+} from "./quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an.component";
+import {NzStatisticModule} from "ng-zorro-antd/statistic";
+import {NzPipesModule} from "ng-zorro-antd/pipes";
+import {MainComponent} from "./kiem-tra-chat-luong/main/main.component";
+import {
+  BienBanLayMauBanGiaoMauComponent
+} from "./kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/bien-ban-lay-mau-ban-giao-mau.component";
+import {
+  ThemMoiBbLayMauBanGiaoMauComponent
+} from "./kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau.component";
+import {
+  ThanhPhanThamGiaComponent
+} from "./kiem-tra-chat-luong/bien-ban-lay-mau-ban-giao-mau/them-moi-bb-lay-mau-ban-giao-mau/thanh-phan-tham-gia/thanh-phan-tham-gia.component";
+import {
+  PhieuKiemNghiemChatLuongComponent
+} from "./kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component";
+import {
+  ThemMoiPhieuKnClComponent
+} from "./kiem-tra-chat-luong/phieu-kiem-nghiem-chat-luong/them-moi-phieu-kn-cl/them-moi-phieu-kn-cl.component";
+import {KiemTraChatLuongComponent} from "./kiem-tra-chat-luong/kiem-tra-chat-luong.component";
+import {HoSoKyThuatComponent} from "./kiem-tra-chat-luong/ho-so-ky-thuat/ho-so-ky-thuat.component";
+import {
+  ChiTietHoSoKyThuatComponent
+} from "./kiem-tra-chat-luong/ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat/chi-tiet-ho-so-ky-thuat.component";
+import {QuyetDinhGnvXuatHangComponent} from "./quyet-dinh-gnv-xuat-hang/quyet-dinh-gnv-xuat-hang.component";
+import {
+  ThongTinQdGnvXuatHangComponent
+} from "./quyet-dinh-gnv-xuat-hang/thong-tin-qd-gnv-xuat-hang/thong-tin-qd-gnv-xuat-hang.component";
+import {XayDungPhuongAnComponent} from "./xay-dung-phuong-an/xay-dung-phuong-an.component";
+import {
+  ThongTinXayDungPhuongAnComponent
+} from "./xay-dung-phuong-an/thong-tin-xay-dung-phuong-an/thong-tin-xay-dung-phuong-an.component";
+import {MainXuatKhoComponent} from "./xuat-kho/main-xuat-kho/main-xuat-kho.component";
+import {PhieuXuatKhoComponent} from "./xuat-kho/phieu-xuat-kho/phieu-xuat-kho.component";
+import {
+  ThemMoiPhieuXuatKhoComponent
+} from "./xuat-kho/phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component";
+import {BangKeCanComponent} from "./xuat-kho/bang-ke-can/bang-ke-can.component";
+import {BienBanTinhKhoComponent} from "./xuat-kho/bien-ban-tinh-kho/bien-ban-tinh-kho.component";
+import {
+  ThemMoiBienBanTinhKhoComponent
+} from "./xuat-kho/bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component";
+import {BienBanHaoDoiComponent} from "./xuat-kho/bien-ban-hao-doi/bien-ban-hao-doi.component";
+import {
+  ThemMoiBienBanHaoDoiComponent
+} from "./xuat-kho/bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component";
+import {ChiTietBangKeCanComponent} from "./xuat-kho/bang-ke-can/chi-tiet-bang-ke-can/chi-tiet-bang-ke-can.component";
 
 @NgModule({
   declarations: [
     CuuTroVienTroComponent,
-    XuatKhoComponent
+    TongHopPhuongAnComponent,
+    ThongTinTongHopPhuongAnComponent,
+    QuyetDinhPheDuyetPhuongAnComponent,
+    ThongTinQuyetDinhPheDuyetPhuongAnComponent,
+
+
+    MainComponent,
+    BienBanLayMauBanGiaoMauComponent,
+    ThemMoiBbLayMauBanGiaoMauComponent,
+    ThanhPhanThamGiaComponent,
+    PhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKnClComponent,
+    KiemTraChatLuongComponent,
+    HoSoKyThuatComponent,
+    ChiTietHoSoKyThuatComponent,
+
+    QuyetDinhGnvXuatHangComponent,
+    ThongTinQdGnvXuatHangComponent,
+
+    XayDungPhuongAnComponent,
+    ThongTinXayDungPhuongAnComponent,
+
+    MainXuatKhoComponent,
+    PhieuXuatKhoComponent,
+    ThemMoiPhieuXuatKhoComponent,
+    BangKeCanComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    ThemMoiBienBanHaoDoiComponent,
+    XuatKhoComponent,
+
+    ChiTietBangKeCanComponent
   ],
   imports: [
     CommonModule,
-    CuuTroVienTroRoutingModule,
     ComponentsModule,
     DirectivesModule,
-    QuyetDinhPheDuyetPhuongAnModule,
-    TongHopPhuongAnModule,
-    XayDungPhuongAnModule,
-    QuyetDinhGnvXuatHangModule,
-    KiemTraChatLuongModule,
-    XuatKhoModule
+    NzStatisticModule,
+    NzPipesModule,
+    CuuTroVienTroRoutingModule,
   ],
   exports: [
     CuuTroVienTroComponent,
-    XuatKhoComponent
+    TongHopPhuongAnComponent,
+    ThongTinTongHopPhuongAnComponent,
+    QuyetDinhPheDuyetPhuongAnComponent,
+    ThongTinQuyetDinhPheDuyetPhuongAnComponent,
+
+
+    MainComponent,
+    BienBanLayMauBanGiaoMauComponent,
+    ThemMoiBbLayMauBanGiaoMauComponent,
+    ThanhPhanThamGiaComponent,
+    PhieuKiemNghiemChatLuongComponent,
+    ThemMoiPhieuKnClComponent,
+    KiemTraChatLuongComponent,
+    HoSoKyThuatComponent,
+    ChiTietHoSoKyThuatComponent,
+
+    QuyetDinhGnvXuatHangComponent,
+    ThongTinQdGnvXuatHangComponent,
+
+    XayDungPhuongAnComponent,
+    ThongTinXayDungPhuongAnComponent,
+
+    MainXuatKhoComponent,
+    PhieuXuatKhoComponent,
+    ThemMoiPhieuXuatKhoComponent,
+    BangKeCanComponent,
+    BienBanTinhKhoComponent,
+    ThemMoiBienBanTinhKhoComponent,
+    BienBanHaoDoiComponent,
+    ThemMoiBienBanHaoDoiComponent,
+    XuatKhoComponent,
+
+    ChiTietBangKeCanComponent
   ]
 })
 export class CuuTroVienTroModule {
