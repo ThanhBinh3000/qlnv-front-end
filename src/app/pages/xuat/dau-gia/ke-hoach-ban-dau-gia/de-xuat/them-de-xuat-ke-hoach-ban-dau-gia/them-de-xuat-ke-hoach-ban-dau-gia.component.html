@@ -118,7 +118,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-select formControlName="namKh" >
+                  <nz-select formControlName="namKh" (ngModelChange)="onChangeNamKh()">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
                 </nz-form-control>
