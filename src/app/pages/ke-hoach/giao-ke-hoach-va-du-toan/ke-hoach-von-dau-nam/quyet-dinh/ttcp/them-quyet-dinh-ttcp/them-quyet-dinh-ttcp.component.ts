@@ -66,7 +66,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       ngayQd: [null, [Validators.required]],
       namQd: [dayjs().get('year'), [Validators.required]],
       trichYeu: [null],
-      trangThai: ['00'],
+      trangThai: [STATUS.DANG_NHAP_DU_LIEU],
     });
   }
 

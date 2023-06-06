@@ -6,38 +6,38 @@
         </button>
         <ng-container *ngIf="userService.isCuc()">
             <button
-                *ngIf=" loaiVthhInput.startsWith('02') ?  
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                *ngIf=" loaiVthhInput.startsWith('02') ?
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
                  ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC) :
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
                  ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
                 type="button" class="btn btn-sub do" (click)="tuChoi()">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button
-                *ngIf=" loaiVthhInput.startsWith('02') ?  
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                *ngIf=" loaiVthhInput.startsWith('02') ?
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
                  ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC):
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP) 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP)
                  ||  userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC)"
                 type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button *ngIf=" loaiVthhInput.startsWith('02') ? 
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+            <button *ngIf=" loaiVthhInput.startsWith('02') ?
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
                  || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)) :
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
                  || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
                 type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Lưu và gửi duyệt</span>
             </button>
-            <button *ngIf=" loaiVthhInput.startsWith('02') ? 
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+            <button *ngIf=" loaiVthhInput.startsWith('02') ?
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_VT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
                 || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC)) :
-                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO) 
+                 userService.isAccessPermisson('XHDTQG_PTTT_KHBTT_LT_DEXUAT_THEM') && ((formData.value.trangThai===STATUS.DU_THAO)
                 || (formData.value.trangThai===STATUS.TU_CHOI_TP) || (formData.value.trangThai===STATUS.TU_CHOI_LDC))"
                 type="button" class="btn btn-main" (click)="save()">
                 <i class="icon htvbdh_tcdt_save"></i>
@@ -109,7 +109,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKh" [nzDisabled]="true">
+                            <nz-select formControlName="namKh" >
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -323,7 +323,7 @@
                                 </nz-form-label>
                                 <nz-form-control nz-col>
                                     <textarea [readonly]="isDisable()" nz-input [rows]="3" formControlName="thongBaoKh"
-                                        placeholder=". Thông báo trên trang báo địa phương... 
+                                        placeholder=". Thông báo trên trang báo địa phương...
 . Thông báo tại các chi cục dự trữ nhà nước...
 . Thông báo trên trang thông tin điện tử của TCDT NN"></textarea>
                                 </nz-form-control>

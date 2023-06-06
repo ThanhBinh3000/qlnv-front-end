@@ -218,15 +218,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadThongTinChiTieuKeHoachNam(this.id);
     } else {
       this.formData.patchValue({
-        namKeHoach: dayjs().get('year')
+        namKeHoach: dayjs().get('year'),
       });
+      this.thongTinChiTieuKeHoachNam.capDvi = this.userInfo.CAP_DVI;
       this.findCanCuByYear(this.yearNow);
       this.loadQdTtcpGiaoBoNganh(this.yearNow);
     }
   }
 
   async findCanCuByYear(year: number, id?) {
-    console.log('1111111111111111111111111111')
     this.formData.patchValue({
       canCu: null,
     })
