@@ -33,7 +33,7 @@
         <div class="title-chi-tieu">
           <span>
           </span>
-          <span>Thông tin chung</span>
+          <span>Kết quả lựa chọn nhà thầu</span>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
               Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -54,13 +54,13 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
               Số quyết định
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
-                  [nzDisabled]="disableForm()">
+                <nz-input-number [ngClass]="'number-input'" formControlName="soQd" [nzMin]="1" [nzMax]="9999999"
+                  [nzStep]="1" [nzSize]="'small'" [nzDisabled]="disableForm()">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -78,7 +78,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực
+            <nz-form-label [nzNoColon]="true"> Ngày hiệu lực
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy" [nzDisabled]="disableForm()">
@@ -112,26 +112,18 @@
               Căn cứ pháp lý
             </nz-form-label>
             <div class="list-file">
-              <file-list></file-list>
+              <file-list [isCanCuPL]="true" [isViewDetail]="isViewDetail" [data]="danhSachFileCanCuPL"></file-list>
             </div>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <div class="list-file">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input />
-                </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <div class="icon-file-dinh-kem">
-                    <i class="icon htvbdh_tcdt_tep"></i>
-                    <input class="input-file" (change)="getNameFile($event)" type="file" />
-                  </div>
-                </ng-template>
-              </div>
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm quyết định đã ký
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [isViewDetail]="isViewDetail" [data]="danhSachFileDinhKem"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>

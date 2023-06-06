@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 export class MainKehoachLuachonMuatructiepComponent implements OnInit {
 
   @Input() loaiVthh: string;
+  @Input() tyVthh: any[] = [];
 
   constructor(public userService: UserService) { }
 

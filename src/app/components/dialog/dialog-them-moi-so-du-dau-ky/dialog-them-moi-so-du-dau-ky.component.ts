@@ -3,7 +3,7 @@ import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Globals} from "../../../shared/globals";
-import {MangLuoiKhoService} from "../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {MangLuoiKhoService} from "../../../services/qlnv-kho/mangLuoiKho.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {HelperService} from "../../../services/helper.service";
 import {MESSAGE} from "../../../constants/message";
@@ -11,6 +11,7 @@ import {DanhMucService} from "../../../services/danhmuc.service";
 import {API_STATUS_CODE} from "../../../constants/config";
 import * as dayjs from "dayjs";
 import {OldResponseData} from "../../../interfaces/response";
+import {TrangThaiHoatDong} from "../../../constants/status";
 
 @Component({
   selector: 'app-dialog-them-moi-so-du-dau-ky',
@@ -50,7 +51,9 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
       loaiVthh: ['', Validators.required],
       cloaiVthh: ['', Validators.required],
       slTon: ['', Validators.required],
-      dviTinh: ['']
+      dviTinh: [''],
+      thanhTien: [0],
+      isKhoiTao : [false]
     })
   }
 
@@ -84,16 +87,22 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     if (this.formData.invalid) {
       return;
     }
+    if (!this.checkValidateLoaiVthh()) {
+      this.notification.error(MESSAGE.ERROR, 'Loại hàng hóa không hợp lệ!')
+      return;
+    }
     let body = this.detail
-    body.tichLuongSdLt = this.formData.value.tichLuongSdLt
-    body.tichLuongSdVt = this.formData.value.tichLuongSdVt
-    body.theTichSdLt = this.formData.value.theTichSdLt
-    body.theTichSdVt = this.formData.value.theTichSdVt
+    body.tichLuongKdLt = (body.tichLuongTkLt - this.formData.value.tichLuongSdLt) >= 0 ? body.tichLuongTkLt - this.formData.value.tichLuongSdLt : 0
+    body.tichLuongKdVt = (body.tichLuongKdVt - this.formData.value.tichLuongSdVt) >= 0 ? body.tichLuongKdVt - this.formData.value.tichLuongSdVt : 0
+    body.theTichKdLt = (body.theTichTkLt - this.formData.value.theTichSdLt) >=0 ? body.theTichKdLt - this.formData.value.theTichSdLt : 0
+    body.theTichKdVt = (body.theTichTkVt - this.formData.value.theTichSdVt) >= 0 ? body.theTichTkVt - this.formData.value.theTichSdVt : 0
     body.loaiVthh = this.formData.value.loaiVthh
+    body.isKhoiTao = true;
     body.cloaiVthh = this.formData.value.cloaiVthh
     body.slTon = this.formData.value.slTon
     body.dviTinh = this.formData.value.dviTinh
     body.namNhap = this.formData.value.namNhap
+    body.trangThai = body.trangThai == true ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG
     this.khoService.updateKho(type, body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -142,5 +151,21 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
         dviTinh: res.data ? res.data.maDviTinh : null
       })
     }
+  }
+
+  checkValidateLoaiVthh() : boolean {
+    let check = false;
+    if (this.detail.loaiHangHoa) {
+      let arr = this.detail.loaiHangHoa.split(",");
+      console.log(arr,2222)
+      if (arr && arr.length > 0) {
+        arr.forEach(item => {
+          if (this.formData.value.loaiVthh == item) {
+            check =true
+          }
+        })
+      }
+    }
+    return check;
   }
 }

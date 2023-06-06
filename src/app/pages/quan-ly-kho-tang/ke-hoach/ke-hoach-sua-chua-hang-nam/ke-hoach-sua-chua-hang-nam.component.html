@@ -1,13 +1,16 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dxkh')">
+    <li nz-menu-item nzSelected (click)="selectTab('dxkh')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_DX')">
      Đề xuất kế hoạch sửa chữa lớn của Cục
     </li>
-    <li nz-menu-item (click)="selectTab('qdtcdt')">
-      Quyết định kế hoạch vốn,cải tạo,sửa chữa năm của TCDT
+    <li nz-menu-item (click)="selectTab('qdtcdt')" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_TH')">
+      Tổng hợp phương án sửa chữa lớn
     </li>
-    <li nz-menu-item (click)="selectTab('qdbtc')">
-      Quyết định kế hoạch vốn,cải tạo,sửa chữa năm của BTC
+    <li nz-menu-item (click)="selectTab('qdbtc')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDBTC')" >
+      Quyết định KH sửa chữa lớn - BTC
+    </li>
+    <li nz-menu-item (click)="selectTab('qdtbscl')" *ngIf="userService.isAccessPermisson('QLKT_QHKHKT_KHSUACHUALON_QDTCDT')">
+      Quyết định/Thông báo KH sửa chữa lớn - TCDT
     </li>
   </ul>
 </nz-affix>
@@ -19,4 +22,7 @@
 </ng-container>
 <ng-container *ngIf="tabSelected == 'qdbtc'">
   <app-quyet-dinh-sc-lon-btc></app-quyet-dinh-sc-lon-btc>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdtbscl'">
+  <app-qd-thong-bao-sua-chua-lon></app-qd-thong-bao-sua-chua-lon>
 </ng-container>

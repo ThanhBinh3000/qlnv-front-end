@@ -66,8 +66,8 @@ export class QdMuaSamBaoHiemComponent extends Base2Component implements OnInit {
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.patchValue({
-        ngayKyTu :  dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY'),
-        ngayKyDen : dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY')
+        ngayKyTu: this.formData.value.ngayKy[0],
+        ngayKyDen: this.formData.value.ngayKy[1]
       })
     }
     this.formData.patchValue({
@@ -82,7 +82,7 @@ export class QdMuaSamBaoHiemComponent extends Base2Component implements OnInit {
     this.formData.patchValue({
       maDvi : this.userInfo.MA_DVI,
       capDvi : this.userInfo.CAP_DVI,
-      loai : '01',
+      loai : '00',
     })
     await this.search();
   }

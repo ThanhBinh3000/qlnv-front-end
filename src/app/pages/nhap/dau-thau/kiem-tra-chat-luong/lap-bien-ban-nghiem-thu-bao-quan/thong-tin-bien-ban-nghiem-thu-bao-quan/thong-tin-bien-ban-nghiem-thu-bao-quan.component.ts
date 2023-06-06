@@ -31,6 +31,10 @@ import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
+import { convertDviTinh } from 'src/app/shared/commonFunction';
+import { DanhMucCongCuDungCuService } from 'src/app/services/danh-muc-cong-cu-dung-cu.service';
+import { convertMaCcdc } from 'src/app/shared/commonFunction';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -61,7 +65,12 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   listHopDong: any[] = [];
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
-
+  listDviChuDongTh: any[] = [];
+  createRowUpdate: any = {};
+  tongKphi: any;
+  listCcdc: any = [];
+  danhSachFileDinhKem: FileDinhKem[] = [];
+  listFile: any[] = []
 
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -75,6 +84,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
+    private danhMucDinhMucCcdcService: DanhMucCongCuDungCuService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quanLyNghiemThuKeLotService);
@@ -146,6 +156,8 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       await Promise.all([
         this.loadDataComboBox(),
         this.loadSoQuyetDinh(),
+        this.loadDonViTinh(),
+        this.loadListCcdc(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -269,8 +281,9 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
       this.listSoPhieuNhapKho.forEach(item => {
         let phieuKtraCL = data.listPhieuKtraCl.filter(x => x.soPhieu == item.soPhieuKtraCl)[0];
-        item.soLuongThucNhap = phieuKtraCL.soLuongNhapKho
+        item.soLuongThucNhap = phieuKtraCL ? phieuKtraCL.soLuongNhapKho : 0
       })
+      await this.getNganKho(data.maLoKho ? data.maLoKho : data.maNganKho);
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -317,7 +330,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       "denNgayQd": null,
       "loaiQd": "",
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.typeVthh,
       "namNhap": null,
       "ngayQd": "",
       "orderBy": "",
@@ -349,9 +362,27 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
       let res = await this.quanLyNghiemThuKeLotService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
+          this.listDviChuDongTh = res.data.children;
+          if (this.listDviChuDongTh) {
+            if (this.listDviChuDongTh && this.listDviChuDongTh.length > 0) {
+              for (let i = 0; i < this.listDviChuDongTh.length; i++) {
+                this.listDviChuDongTh[i].stt = i + 1;
+              }
+            }
+          }
+          else {
+            this.listDviChuDongTh[0] = { id: null, stt: 0 };
+          }
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
           await this.bindingDataQd(res.data?.idQdGiaoNvNh);
           let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
+
+          if (res.data.children1.length > 0) {
+            res.data.children1.forEach(item => {
+              this.danhSachFileDinhKem.push(item)
+            })
+          }
+
           this.bindingDataDdNhap(dataDdNhap);
         }
       }
@@ -381,65 +412,96 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
   }
 
   deleteRow(data: any) {
-    // this.detail.detail = this.detail?.detail.filter(x => x.stt != data.stt);
+    this.create = this.listDviChuDongTh.filter(x => x.stt != data.stt);
     this.updateEditCache();
-  }
-
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
   }
 
 
   addRow() {
-    // if (!this.detail?.detail) {
-    //   this.detail.detail = [];
-    // }
-    // this.sortTableId();
-    // let item = cloneDeep(this.create);
-    // item.stt = this.detail?.detail.length + 1;
-    // this.detail.detail = [
-    //   ...this.detail?.detail,
-    //   item,
-    // ]
-    this.updateEditCache();
+    console.log(this.create)
+    this.listDviChuDongTh = [
+      ...this.listDviChuDongTh,
+      this.create
+    ];
     this.clearItemRow();
+  }
+
+  startEdit(index: number): void {
+    this.listDviChuDongTh[index].edit = true;
+    this.createRowUpdate = cloneDeep(this.listDviChuDongTh[index]);
+  }
+
+  saveEdit(dataUpdate, index: any): void {
+    this.listDviChuDongTh[index] = this.createRowUpdate;
+    this.listDviChuDongTh[index].edit = false;
   }
 
   clearItemRow() {
     this.create = {};
-    this.create.dvt = "Tấn";
   }
 
+  convertDviTinh(maDviTinh: any) {
+    return convertDviTinh(maDviTinh);
+  }
   cancelEdit(stt: number): void {
-    // const index = this.detail?.detail.findIndex(item => item.stt === stt);
+    const index = this.listDviChuDongTh.findIndex(item => item.stt === stt);
+    this.listDviChuDongTh[index].edit = false;
     // this.editDataCache[stt] = {
     //   data: { ...this.detail?.detail[index] },
     //   edit: false
     // };
   }
 
-  saveEdit(stt: number): void {
-    // const index = this.detail?.detail.findIndex(item => item.stt === stt);
-    // Object.assign(this.detail?.detail[index], this.editDataCache[stt].data);
-    // this.editDataCache[stt].edit = false;
-  }
 
   updateEditCache(): void {
-    // if (this.detail?.detail && this.detail?.detail.length > 0) {
-    //   this.detail?.detail.forEach((item) => {
-    //     this.editDataCache[item.stt] = {
-    //       edit: false,
-    //       data: { ...item },
-    //     };
-    //   });
-    // }
+    if (this.create && this.create.length > 0) {
+      this.listDviChuDongTh = [];
+      this.create.forEach((item) => {
+        this.listDviChuDongTh.push(item)
+      });
+    }
   }
 
   caculatorSoLuong(item: any) {
     if (item) {
       item.thanhTienTn = (item?.soLuongTn ?? 0) * (item?.donGiaTn ?? 0);
-      item.tongGtri = (item?.thanhTienTn ?? 0) + (item?.thanhTienQt ?? 0);
+      item.tongGtri = parseInt(item?.thanhTienTn) + parseInt(item?.thanhTienQt);
     }
+  }
+
+  sumslKho(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    let arr = [];
+    this.listDviChuDongTh.forEach(item => {
+      if (item) {
+        arr.push(item)
+      }
+    })
+    if (arr) {
+      if (type) {
+        const sum = arr.reduce((prev, cur) => {
+          prev += parseInt(cur[column]);
+          return prev;
+        }, 0);
+        result = sum
+      }
+    }
+    this.tongKphi = result;
+    return result;
+  }
+
+  sumslTn(column?: string, tenDvi?: string, type?: string): number {
+    let result = 0;
+    this.listDviChuDongTh.forEach(item => {
+      if (item) {
+        result += parseInt(item.soLuongTn)
+      }
+    })
+    return result;
+  }
+
+  convertSoToChu(tien: number) {
+    return convertTienTobangChu(tien);
   }
 
 
@@ -688,7 +750,14 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
           return;
         }
         let body = this.formData.value;
-        // body.detail = this.detail;
+        body.detail = this.listDviChuDongTh;
+        // body.detailDm = this.detail;
+        if (this.danhSachFileDinhKem.length > 0) {
+          this.danhSachFileDinhKem.forEach(item => {
+            this.listFile.push(item)
+          })
+        }
+        body.fileDinhKems = this.listFile;
         let res;
         if (this.formData.get('id').value > 0) {
           res = await this.quanLyNghiemThuKeLotService.update(body);
@@ -735,5 +804,51 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   print() {
 
+  }
+
+  changeCcdc(): void {
+    let item;
+    item = this.listCcdc.filter(item => item.maCcdc == this.create.noiDung)[0];
+    if (item) {
+      this.create.dvt = item.donViTinh;
+    }
+  }
+
+  async loadListCcdc() {
+    this.listCcdc = [];
+    let body = {
+      trangThai: '01',
+      paggingReq: {
+        limit: 10000,
+        page: 0,
+      }
+    };
+    let res = await this.danhMucDinhMucCcdcService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.content && res.data.content.length > 0) {
+        for (let item of res.data.content) {
+          this.listCcdc.push(item);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    console.log(this.listCcdc)
+  };
+
+  convertMaCcdc(maCcdc: string) {
+    return convertMaCcdc(maCcdc);
+  }
+
+  async getNganKho(maDvi: any) {
+    if (maDvi) {
+      let res = await this.quanLyNghiemThuKeLotService.getDataKho(maDvi);
+
+      this.formData.patchValue({
+        tichLuong: (res.data.tichLuongTkLt - res.data.tichLuongKdLt) > 0 ? res.data.tichLuongTkLt - res.data.tichLuongKdLt : 0,
+        loaiHinhKho: res.data.lhKho
+      });
+      console.log(this.formData.get('tichLuong').value)
+    }
   }
 }

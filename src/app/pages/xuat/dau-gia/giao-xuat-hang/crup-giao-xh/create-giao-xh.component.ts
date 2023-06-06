@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -8,13 +8,19 @@ import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from 'src/app/constants/status';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import {
+  QuyetDinhGiaoNvXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import {
+  HopDongXuatHangService
+} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import { DonviService } from "src/app/services/donvi.service";
+import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-create-giao-xh',
@@ -24,10 +30,17 @@ import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban
 export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
+  @Input() isDetail;
+  @Input() isViewOnModal: boolean;
 
   maQd: string = null;
   dataInput: any;
   dataInputCache: any;
+  formDataRow: FormGroup;
+  fileDinhKems: any[] = []
+
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -35,19 +48,23 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private hopDongXuatHangService: HopDongXuatHangService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
+    private donviService: DonviService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
       id: [null],
-      nam: [dayjs().get('year'), Validators.required],
+      nam: [dayjs().get('year')],
       soQd: ['',],
       maDvi: [''],
       tenDvi: [''],
       ngayKy: ['',],
       idHd: [],
-      soHd: [''],
+      soHd: ['', [Validators.required]],
+      ngayKyHd: [''],
       maDviTsan: [''],
       tenTtcn: ['',],
       loaiVthh: [''],
@@ -65,20 +82,11 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       fileName: [],
-      lyDoTuChoi: []
-    })
-  }
+      lyDoTuChoi: [],
+      loaiHinhNx: [],
+      kieuNx: [],
+    });
 
-  setValidator(isGuiDuyet?) {
-    // if (isGuiDuyet) {
-    //   this.formData.controls["soQdPd"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayKyQd"].setValidators([Validators.required]);
-    //   this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-    // } else {
-    //   this.formData.controls["soQdPd"].clearValidators();
-    //   this.formData.controls["ngayKyQd"].clearValidators();
-    //   this.formData.controls["ngayHluc"].clearValidators();
-    // }
   }
 
   deleteSelect() {
@@ -87,9 +95,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = this.userInfo.MA_QD;
-      await Promise.all([
-      ]);
+      this.maQd = '/'+this.userInfo.MA_QD;
       if (this.idInput) {
         await this.loadChiTiet(this.idInput);
       } else {
@@ -114,12 +120,13 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async openDialogSoHopDong() {
     this.spinner.show();
     let dsQdPd = []
-    let re = await this.hopDongXuatHangService.search({
+    await this.hopDongXuatHangService.search({
       trangThai: STATUS.DA_KY,
       maDvi: this.formData.value.maDvi,
-      nam: this.formData.value.nam
-    }
-    ).then(res => {
+      nam: this.formData.value.nam,
+      loaiVthh: this.loaiVthh,
+      typeQdGnv: 0
+    }).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
@@ -127,7 +134,6 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         }
       }
     });
-    console.log(re, 1111)
     this.spinner.hide();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách căn cứ trên hợp đồng',
@@ -144,13 +150,14 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.hopDongXuatHangService.getDetail(data.id).then(res => {
+        await this.hopDongXuatHangService.getDetail(data.id).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               const data = res.data;
               this.formData.patchValue({
                 soHd: data.soHd,
                 idHd: data.id,
+                ngayKyHd: data.ngayHluc,
                 maDviTsan: data.maDviTsan,
                 loaiVthh: data.loaiVthh,
                 tenLoaiVthh: data.tenLoaiVthh,
@@ -161,9 +168,28 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
                 donViTinh: data.donViTinh,
                 tgianGnhan: data.tgianGnhan,
                 trichYeu: data.trichYeu,
-                tenTtcn: data.tenNguoiDdien
+                tenTtcn: data.tenNguoiDdien,
               })
               this.dataTable = data.children;
+              await this.qdPdKetQuaBanDauGiaService.search({
+                soQdKq: data.soQdKq,
+                loaiVthh: data.loaiVthh,
+                nam: data.nam,
+                lastest: 1
+              }).then(dataQdKq => {
+                if (dataQdKq.msg == MESSAGE.SUCCESS) {
+                  let dataQd = dataQdKq.data.content[0];
+                  this.qdPdKetQuaBanDauGiaService.getDetail(dataQd.id).then(async s => {
+                    this.formData.patchValue({
+                      trichYeu: s.data.trichYeu,
+                      tgianGnhan: s.data.tgianGnhan,
+                      kieuNx: s.data.kieuNx,
+                      loaiHinhNx: s.data.loaiHinhNx
+                    })
+                    await this.loadDataComboBox(s.data)
+                  })
+                }
+              });
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -174,13 +200,28 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     });
   }
 
+  async loadDataComboBox(data) {
+    this.listLoaiHinhNx = [];
+    let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
+    console.log(resNx, 999)
+    if (resNx.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHinhNx = resNx.data.filter(item => item.ma == data.loaiHinhNx);
+    }
+    this.listKieuNx = [];
+    let resKieuNx = await this.danhMucService.danhMucChungGetAll('KIEU_NHAP_XUAT');
+    if (resKieuNx.msg == MESSAGE.SUCCESS) {
+      this.listKieuNx = resKieuNx.data
+    }
+  }
+
   async save(isGuiDuyet?) {
     this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     if (this.formData.value.soQd) {
-      body.soQd = this.formData.value.soQd + "/" + this.maQd;
+      body.soQd = this.formData.value.soQd + this.maQd;
     }
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
+    body.fileDinhKem = this.fileDinhKem;
     body.children = this.dataTable;
     let data = await this.createUpdate(body);
     if (data) {
@@ -188,7 +229,7 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
         this.idInput = data.id;
         this.pheDuyet();
       } else {
-        this.goBack()
+        // this.goBack()
       }
     }
   }
@@ -236,11 +277,14 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
   async loadChiTiet(id: number) {
     if (id > 0) {
       let data = await this.detail(id);
-      this.formData.patchValue({
-        soQd: data.soQd?.split('/')[0]
-      })
+      this.formData.patchValue(data)
+      this.maQd = data.soQd.split("/")[1];
+      data.soQd = data.soQd.split("/")[0];
       this.dataTable = data.children;
-    };
+      this.fileDinhKems = data.fileDinhKems;
+      this.fileDinhKem = data.fileDinhKem;
+      await this.loadDataComboBox(data);
+    }
   }
 
   isDisabled() {
@@ -251,24 +295,33 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
     return false;
   }
 
-  getNameFileQD($event: any) {
-    if ($event.target.files) {
-      const itemFile = {
-        name: $event.target.files[0].name,
-        file: $event.target.files[0] as File,
-      };
-      this.uploadFileService
-        .uploadFile(itemFile.file, itemFile.name)
-        .then((resUpload) => {
-          let fileDinhKemQd = new FileDinhKem();
-          fileDinhKemQd.fileName = resUpload.filename;
-          fileDinhKemQd.fileSize = resUpload.size;
-          fileDinhKemQd.fileUrl = resUpload.url;
-          fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
-        });
+  calcTong(column) {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur[column];
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 
-
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["tenDvi"].setValidators([Validators.required]);
+      this.formData.controls["maDvi"].setValidators([Validators.required]);
+      this.formData.controls["nam"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["maDviTsan"].setValidators([Validators.required]);
+      this.formData.controls["tenTtcn"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["tenDvi"].clearValidators();
+      this.formData.controls["maDvi"].clearValidators();
+      this.formData.controls["nam"].clearValidators();
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["maDviTsan"].clearValidators();
+      this.formData.controls["tenTtcn"].clearValidators();
+    }
+  }
 }

@@ -16,19 +16,36 @@ import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
+import { Base2Component } from "../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../services/storage.service";
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
   templateUrl: './quyetdinh-pheduyet-khlcnt.component.html',
   styleUrls: ['./quyetdinh-pheduyet-khlcnt.component.scss']
 })
-export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
+export class QuyetdinhPheduyetKhlcntComponent extends Base2Component implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
+  inputNam: string = '';
+  idThHdr: number = 0;
+  openTHopKhlcnt = false;
+
+  idDx: number = 0;
+  soDx: string;
+  openDxKhlcnt = false;
+  isView: boolean;
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' }
+  ];
   searchFilter = {
     soQd: null,
     loaiVthh: null,
@@ -49,6 +66,12 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     tenVthh: '',
     soGthau: '',
     tongTien: '',
+    soGthauTrung: '',
+    tenLoaiVthh: '',
+    tenTrangThai: '',
+    soTrHdr: '',
+    tgianNhang: '',
+    tgianThien: ''
   };
   STATUS = STATUS
   dataTableAll: any[] = [];
@@ -77,14 +100,16 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    spinner: NgxSpinnerService,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPheDuyetKeHoachLCNTService);
   }
 
   async ngOnInit() {
@@ -113,6 +138,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
+  async selectNam(nam) {
+    this.filterInTable('namKhoach', nam.value);
+  }
 
   insert() {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
@@ -120,14 +148,28 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
-  detail(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
-      return;
-    }
+  async detail(data?) {
     this.isDetail = true;
     this.selectedId = data.id;
+  }
+
+  async goDetail(id: number, roles?: any) {
+    if (roles != 'NHDTQG_PTDT_KHLCNT_QDLCNT_XEM') {
+      if (!this.checkPermission(roles)) {
+        return
+      }
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = false
+    } else {
+      // await this.detail(id, roles);
+      this.selectedId = id;
+      this.isDetail = true;
+      this.isView = true
+    }
   }
 
   delete(data?) {
@@ -170,12 +212,14 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
+    this.searchFilter.namKhoach = null;
     this.searchFilter.soQd = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.ngayQd = null;
     this.searchFilter.soGthau = null;
     this.searchFilter.tongTien = null;
+    this.tuNgayKy = null;
+    this.denNgayKy = null;
     this.search();
 
   }
@@ -183,12 +227,8 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   async search() {
     this.dataTable = [];
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
+      tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
       loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
@@ -205,6 +245,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data)
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
@@ -264,19 +305,16 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayQd: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayQd: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          loaiVthh: this.searchFilter.loaiVthh,
+          tuNgayQd: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+          denNgayQd: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+          loaiVthh: this.loaiVthh,
           namKhoach: this.searchFilter.namKhoach,
           trichYeu: this.searchFilter.trichYeu,
           soQd: this.searchFilter.soQd,
           tongTien: this.searchFilter.tongTien,
           soGthau: this.searchFilter.soGthau,
           lastest: 0,
+          maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
         };
         this.quyetDinhPheDuyetKeHoachLCNTService
           .exportList(body)
@@ -339,20 +377,20 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
     }
-    else {
+    console.log(key, value);
+
+    if (value && value != '') {
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -402,4 +440,43 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       this.indeterminate = true;
     }
   }
+
+  openTHopKhlcntModal(id: number) {
+    this.idThHdr = id;
+    this.openTHopKhlcnt = true;
+  }
+
+  closeTHopKhlcntModal() {
+    this.idThHdr = null;
+    this.openTHopKhlcnt = false;
+  }
+
+  openDxKhlcntModal(id?: number, soDx?: string) {
+    if (id) {
+      this.idDx = id;
+    } else {
+      this.soDx = soDx;
+    }
+    this.openDxKhlcnt = true;
+  }
+
+  closeDxKhlcntModal() {
+    this.idDx = null;
+    this.soDx = null;
+    this.openDxKhlcnt = false;
+  }
+
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
 }

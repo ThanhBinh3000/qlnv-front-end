@@ -12,12 +12,13 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { DatePipe } from '@angular/common';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -28,6 +29,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() id: number;
+  @Input() isViewOnModal: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -36,7 +38,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   datePipe = new DatePipe('en-US');
-
+  selected: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -44,33 +46,35 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
+    private danhMucService: DanhMucService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formTraCuu = this.fb.group(
       {
-        loaiVthh: [null, [Validators.required]],
-        tenLoaiVthh: [null, [Validators.required]],
-        cloaiVthh: [null, [Validators.required]],
-        tenCloaiVthh: [null, [Validators.required]],
+        loaiVthh: ['', [Validators.required]],
+        tenLoaiVthh: ['', [Validators.required]],
+        cloaiVthh: ['', [Validators.required]],
+        tenCloaiVthh: ['', [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
-        ngayPduyet: [null, [Validators.required]],
+        ngayDuyetTu: [null],
+        ngayDuyetDen: [null],
       }
     );
     this.formData = this.fb.group({
       id: [],
       idTh: [],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
-      namKh: [, [Validators.required]],
-      ngayDuyetTu: ['', [Validators.required]],
-      ngayDuyetDen: ['', [Validators.required]],
-      ngayThop: [, [Validators.required]],
+      loaiVthh: [''],
+      cloaiVthh: [''],
+      namKh: [],
+      ngayDuyetTu: [''],
+      ngayDuyetDen: [''],
+      ngayThop: [''],
       noiDungThop: ['', [Validators.required]],
-      tenLoaiVthh: ['', [Validators.required]],
-      tenCloaiVthh: ['', [Validators.required]],
-      trangThai: [''],
-      tenTrangThai: ['Chưa Tạo QĐ']
+      tenLoaiVthh: [''],
+      tenCloaiVthh: [''],
+      trangThai: [STATUS.CHUA_TAO_QD],
+      tenTrangThai: ['Chưa Tạo QĐ'],
     })
   }
 
@@ -80,6 +84,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       await Promise.all([
         this.loadChiTiet(),
       ]);
+      this.loadDanhMucHang()
       await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -101,15 +106,24 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           idTh: data.id
         })
         this.dataTable = data.children;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
       }
       else {
         this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     }
   }
 
+  async showFirstRow($event, data: any) {
+    await this.showDetail($event, data);
+  }
+
   async tongHopDeXuatTuCuc() {
     await this.spinner.show();
+    this.setValidator();
     try {
       this.helperService.markFormGroupTouched(this.formTraCuu);
       if (this.formTraCuu.invalid) {
@@ -117,10 +131,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         return;
       }
       let body = this.formTraCuu.value;
-      if (body.ngayPduyet) {
-        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
-        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
-      }
       delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -132,6 +142,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTable = dataDetail.children;
+
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.showFirstRow(event, this.dataTable[0].idDxHdr);
+        }
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -146,16 +160,41 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-  async save() {
-    let body = this.formData.value;
-    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
-    if (data) {
-      this.quayLai();
+
+  disabledNgayDuyetTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formTraCuu.value.ngayDuyetDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formTraCuu.value.ngayDuyetDen.getTime();
+  };
+
+  disabledNgayDuyetDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formTraCuu.value.ngayDuyetTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formTraCuu.value.ngayDuyetTu.getTime();
+  };
+
+  setValidator() {
+    if (this.formTraCuu.value.ngayDuyetTu == null) {
+      this.formTraCuu.controls["ngayDuyetDen"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetTu"].clearValidators();
+    } else {
+      this.formTraCuu.controls["ngayDuyetTu"].setValidators([Validators.required])
+      this.formTraCuu.controls["ngayDuyetDen"].clearValidators();
     }
   }
 
-  quayLai() {
-    this.showListEvent.emit();
+  async save(isTaoQd?) {
+    let body = this.formData.value;
+    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
+    if (data) {
+      if (isTaoQd) {
+        this.taoQdinh();
+      } else {
+        this.goBack();
+      }
+    }
   }
 
   isDisable(): boolean {
@@ -196,6 +235,21 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     });
   }
 
+  async loadDanhMucHang() {
+    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach((element) => {
+          if (element.ma == this.loaiVthh) {
+            this.formTraCuu.patchValue({
+              tenLoaiVthh: element.giaTri,
+            })
+          }
+        });
+      }
+    }
+  }
+
   taoQdinh() {
     let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
@@ -217,9 +271,13 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   idRowSelect: number;
   async showDetail($event, id: number) {
-    await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    if ($event.type == 'click') {
+      this.selected = false
+      $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+      $event.target.parentElement.classList.add('selectedRow')
+    } else {
+      this.selected = true
+    }
     this.idRowSelect = id;
     await this.spinner.hide();
   }

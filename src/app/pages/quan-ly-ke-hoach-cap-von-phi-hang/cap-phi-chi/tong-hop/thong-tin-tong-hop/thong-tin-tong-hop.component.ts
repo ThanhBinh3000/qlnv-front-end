@@ -577,6 +577,7 @@ export class ThongTinTongHopComponent implements OnInit {
                   "tenVatTu": elementCt.tenVatTu ?? null,
                   "tenHangHoa": elementCt.tenHangHoa ?? null,
                   "ct2s": elementCt.ct2List ?? [],
+                  "idDeNghi":data[i].id,
                   "stt": index + 1
                 }
                 listItem.push(item);

@@ -1,4 +1,4 @@
-<div *ngIf="!isDetail" class="luong-thuc__danh-sach">
+<div *ngIf="!isDetail && !isQuyetDinh" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -10,37 +10,51 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Loại hàng hóa</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-              <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
-            </nz-input-group>
-          </div>
-          <div nz-col nzSpan="4">
-            <label class="search__label">Chủng loại hàng hóa</label>
-            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-              <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
-            </nz-input-group>
+            <label class="search__label">Chủng loại hàng hóa </label>
+            <nz-select formControlName="cloaiVthh">
+              <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+            </nz-select>
           </div>
           <div nz-col nzSpan="7">
             <label class="search__label">Nội dung tổng hợp</label>
-            <input class="search__input" placeholder="" nz-input formControlName="noiDung" />
+            <input class="search__input" placeholder="" nz-input formControlName="noiDungThop" />
           </div>
-          <div nz-col nzSpan="3">
+          <div nz-col nzSpan="5">
             <label class="search__label">Ngày tổng hợp</label>
-            <nz-range-picker formControlName="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgayTh" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayTh"
+                  [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgayTh" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayTh"
+                  [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
           </div>
-          <div nz-col nzSpan="3">
-            <label class="search__label">Ngày ký QĐ</label>
-            <nz-range-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
-          </div>
+          <!-- <div nz-col nzSpan="5">
+            <label class="search__label">Ngày ký quyết định</label>
+            <div nz-row [nzGutter]="24">
+              <div nz-col nzSpan="12" class="cus-start-date">
+                <nz-date-picker [nzDisabledDate]="disabledTuNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="tuNgayKy"
+                  [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày bắt đầu">
+                </nz-date-picker>
+              </div>
+              <div nz-col nzSpan="12" class="cus-end-date">
+                <nz-date-picker [nzDisabledDate]="disabledDenNgayKy" nzFormat="dd/MM/yyyy" [(ngModel)]="denNgayKy"
+                  [ngModelOptions]="{standalone: true}" nzPlaceHolder="Ngày kết thúc"></nz-date-picker>
+              </div>
+            </div>
+          </div> -->
         </div>
       </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearForm()">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search" (click)="search()">
+        <button nz-button class="search__button--search" (click)="timKiem()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -53,7 +67,8 @@
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub"
+          (click)="exportData('danh_sach_tong_hop_ke_hoach_mua_truc_tiep.xlsx')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -80,7 +95,7 @@
             <th>Năm kế hoạch</th>
             <th>Chủng loại hàng hóa</th>
             <th>Trạng thái</th>
-            <th>Số QĐ phê duyệt KH mua trựu tiếp</th>
+            <th>Số QĐ phê duyệt KH mua trực tiếp</th>
             <th width="90px" class="text-right">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -93,24 +108,22 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTao"
-                  (input)="filterInTable('ngayTao',filterTable.ngayTao)" size="small" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
+              <nz-date-picker nzFormat="dd/MM/YYYY" [(ngModel)]="filterTable.ngayTao"
+                (ngModelChange)="filterInTable('ngayTao',filterTable.ngayTao)">
+              </nz-date-picker>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDung"
-                  (input)="filterInTable('noiDung',filterTable.noiDung)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDungThop"
+                  (input)="filterInTable('noiDungThop',filterTable.noiDungThop)" size="small" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
-                  (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
+                <nz-select nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
+                  (ngModelChange)="filterInTable('namKh',filterTable.namKh)">
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
@@ -121,8 +134,10 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                <nz-select nzAllowClear [(ngModel)]="filterTable.tenTrangThai"
+                  (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)">
+                  <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.giaTri" [nzLabel]="p.giaTri"></nz-option>
+                </nz-select>
               </nz-input-group>
             </th>
             <th>
@@ -143,20 +158,21 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{data.id}}</td>
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.noiDung }}</td>
+            <td>{{ data.noiDungThop }}</td>
             <td>{{ data.namKh }}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-blue">{{ data.soQdPduyet }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id)"
+              <a (click)="goDetail(data.id, 'NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')"
                 *ngIf=" (data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.CHUA_TAO_QD" (click)="goDetail(data.id)">
+              <a *ngIf=" ( data.trangThai == STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD || data.trangThai==STATUS.DA_BAN_HANH_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')"
+                (click)="taoQdinh(data)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'))"
+              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XOA'))"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
@@ -173,7 +189,7 @@
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+                {{ range[0] }}-{{ range[1] }} trên tổng số {{ total }} bản ghi
               </ng-template>
             </nz-pagination>
           </div>
@@ -183,6 +199,12 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-themmoi-tonghop-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [isView]="isView"
+    (showListEvent)="showList()">
   </app-themmoi-tonghop-khmtt>
+</div>
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+  <app-themmoi-quyetdinh-khmtt [idInput]="qdPdMttId" [loaiVthh]="loaiVthh" [dataTongHop]="formDataQd.value"
+    (showListEvent)="showTongHop()">
+  </app-themmoi-quyetdinh-khmtt>
 </div>

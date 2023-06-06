@@ -9,30 +9,34 @@ import { BangKeCanComponent } from './bang-ke-can/bang-ke-can.component';
 import { BienBanHaoDoiComponent } from './bien-ban-hao-doi/bien-ban-hao-doi.component';
 import { ThemMoiBienBanTinhKhoComponent } from './bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho/them-moi-bien-ban-tinh-kho.component';
 import { ThemMoiBienBanHaoDoiComponent } from './bien-ban-hao-doi/them-moi-bien-ban-hao-doi/them-moi-bien-ban-hao-doi.component';
-import { BangKeCanModule } from './bang-ke-can/bang-ke-can.module';
 import { ThemMoiPhieuXuatKhoComponent } from './phieu-xuat-kho/them-moi-phieu-xuat-kho/them-moi-phieu-xuat-kho.component';
+import { XuatKhoComponent } from './xuat-kho.component';
+import {CuuTroVienTroModule} from "../../xuat-cuu-tro-vien-tro/xuat-cuu-tro/cuu-tro-vien-tro.module";
 
 
 
 @NgModule({
-  declarations: [
-    MainXuatKhoComponent,
-    PhieuXuatKhoComponent,
-    ThemMoiPhieuXuatKhoComponent,
-    BangKeCanComponent,
-    BienBanTinhKhoComponent,
-    ThemMoiBienBanTinhKhoComponent,
-    BienBanHaoDoiComponent,
-    ThemMoiBienBanHaoDoiComponent,
-  ],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-    BangKeCanModule,
-  ],
-  exports: [
-    MainXuatKhoComponent,
-  ]
+  // declarations: [
+  //   MainXuatKhoComponent,
+  //   PhieuXuatKhoComponent,
+  //   ThemMoiPhieuXuatKhoComponent,
+  //   BangKeCanComponent,
+  //   BienBanTinhKhoComponent,
+  //   ThemMoiBienBanTinhKhoComponent,
+  //   BienBanHaoDoiComponent,
+  //   ThemMoiBienBanHaoDoiComponent,
+  //   XuatKhoComponent
+  // ],
+  // imports: [
+  //   CommonModule,
+  //   ComponentsModule,
+  //   DirectivesModule,
+  //   BangKeCanModule,
+  //   CuuTroVienTroModule,
+  // ],
+  //   exports: [
+  //       XuatKhoComponent,
+  //       ThemMoiBienBanHaoDoiComponent,
+  //   ]
 })
 export class XuatKhoModule { }

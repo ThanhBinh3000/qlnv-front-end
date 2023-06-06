@@ -22,7 +22,9 @@ import { saveAs } from "file-saver";
 })
 export class KhLuanPhienDoiHangComponent extends Base2Component implements OnInit {
   pdfSrc: any;
+  excelSrc: any;
   pdfBlob: any;
+  excelBlob: any;
   selectedVthhCache: any;
   selectedCloaiVthhCache: any;
   showDlgPreview = false;
@@ -83,7 +85,33 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
   }
 
   downloadPdf() {
-    saveAs(this.pdfBlob, "bc_kh_giam_hang_du_tru_quoc_gia.pdf");
+    saveAs(this.pdfBlob, "bc_kh_luan_phien_doi_hang_dtqg.pdf");
+  }
+
+  async downloadExcel() {
+    try {
+      this.spinner.show();
+      if (this.formData.value.thoiGianSx) {
+        this.formData.value.thoiGianSxTu = dayjs(this.formData.value.thoiGianSx[0]).format("YYYY-MM-DD");
+        this.formData.value.thoiGianSxDen = dayjs(this.formData.value.thoiGianSx[1]).format("YYYY-MM-DD");
+      }
+      let body = this.formData.value;
+      body.typeFile = "xlsx";
+      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
+      body.trangThai = "01";
+      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
+        this.excelBlob = s;
+        this.excelSrc = await new Response(s).arrayBuffer();
+        saveAs(this.excelBlob, "bc_kh_luan_phien_doi_hang_dtqg.xlsx");
+      });
+      this.showDlgPreview = true;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.spinner.hide();
+    }
+
   }
 
   closeDlg() {
@@ -103,10 +131,10 @@ export class KhLuanPhienDoiHangComponent extends Base2Component implements OnIni
       }
       let body = this.formData.value;
       body.typeFile = "pdf";
-      body.fileName = "bc_kh_giam_hang_du_tru_quoc_gia.jrxml";
-      body.tenBaoCao = "Báo cáo kế hoạch giảm hàng dự trữ quốc gia";
+      body.fileName = "bc_kh_luan_phien_doi_hang_dtqg.jrxml";
+      body.tenBaoCao = "Báo cáo KH luân phiên đổi hàng DTQG";
       body.trangThai = "01";
-      await this.thongTu1452013Service.reportKhNhapXuatHangDtqg(body).then(async s => {
+      await this.thongTu1452013Service.reportKhLuanPhienDoiHangDtqg(body).then(async s => {
         this.pdfBlob = s;
         this.pdfSrc = await new Response(s).arrayBuffer();
       });

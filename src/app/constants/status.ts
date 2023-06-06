@@ -37,8 +37,8 @@ export enum STATUS {
   HOAN_THANH_CAP_NHAT = '35',
   HUY_THAU = '36',
   TRUNG_THAU = '37',
-  CHO_DUYET_PTTVQT = '38',
-  TU_CHOI_PTTVQT = '39',
+  CHODUYET_TBP_TVQT = '38',
+  TUCHOI_TBP_TVQT = '39',
   THANH_CONG = '40',
   THAT_BAI = '41',
   TRUOT_THAU = '42',
@@ -58,6 +58,17 @@ export enum STATUS {
   HET_HIEU_LUC = '56',
   DADUYET_CB_CUC = '57',
   TUCHOI_CB_CUC = '58',
+  YC_CHICUC_PHANBO_DC = '59',
+  DA_PHANBO_DC_CHODUYET_TBP_TVQT = '60',
+  DA_PHANBO_DC_TUCHOI_TBP_TVQT = '61',
+  DA_PHANBO_DC_CHODUYET_LDCC = '62',
+  DA_PHANBO_DC_TUCHOI_LDCC = '63',
+  DA_PHANBO_DC_DADUYET_LDCC = '64',
+  DA_PHANBO_DC_CHODUYET_TP = '65',
+  DA_PHANBO_DC_TUCHOI_TP = '66',
+  DA_PHANBO_DC_CHODUYET_LDC = '67',
+  DA_PHANBO_DC_TUCHOI_LDC= '68',
+  DA_PHANBO_DC_DADUYET_LDC = '69'
 }
 
 export enum LoaiTaiLieu {
@@ -89,8 +100,41 @@ export enum LOAI_DON_VI {
   DV = "DV"
 }
 
+export enum KH_CT_LOAI_CHI_TIEU {
+  NHAP = "01",
+  XUAT = "00",
+}
+
 export enum LOAI_BIEN_BAN {
   BB_KTRA_NGOAI_QUAN = "BBKTNQ",
   BB_KTRA_VAN_HANH = "BBKTVH",
   BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
 }
+
+export const STATUS_LABEL = {
+  [STATUS.DU_THAO]: 'Dự thảo',
+  [STATUS.BAN_HANH]: 'Ban hành',
+  [STATUS.CHO_DUYET_LDV]: 'Chờ duyệt lãnh đạo vụ',
+} as const;
+
+export enum CHUC_NANG {
+  XEM = 'XEM',
+  SUA = 'SUA',
+  DUYET_LDTC = 'DUYET_LDTC',
+  DUYET_LDV = 'DUYET_LDV',
+  DUYET_TP = 'DUYET_TP',
+  DUYET_LDC = 'DUYET_LDC',
+  DUYET_LDCC = 'DUYET_LDCC',
+  XOA = 'XOA',
+  DUYET_KTVBQ = 'DUYET_KTVBQ',
+  DUYET_KT = 'DUYET_KT',
+  TAO_QD = 'TAO_QD',
+}
+
+
+export enum TRANG_THAI_QUY_CHUAN_TIEU_CHUAN {
+  CON_HIEU_LUC = "01",
+  HET_HIEU_LUC = "00",
+}
+
+

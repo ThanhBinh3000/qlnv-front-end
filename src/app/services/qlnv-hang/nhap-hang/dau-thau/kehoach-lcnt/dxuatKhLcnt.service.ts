@@ -4,8 +4,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../../../environments/environment';
 import { OldResponseData, ResponseData } from '../../../../../interfaces/response';
 import {
-  ThongTinDeXuatKeHoachLuaChonNhaThau,
-  ThongTinDeXuatKeHoachLuaChonNhaThauInput,
+  ThongTinDeXuatKeHoachLuaChonNhaThau
 } from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
 import { BaseService } from '../../../../base.service';
 
@@ -30,5 +29,10 @@ export class DxuatKhLcntService extends BaseService {
   getSoLuongAdded(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  getGiaBanToiDa(cloaiVthh: string, maDvi: string, namKhoach: string) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/gia-ban-toi-da/${cloaiVthh}/${maDvi}/${namKhoach}`;
+    return this.httpClient.get<any>(url).toPromise();
   }
 }

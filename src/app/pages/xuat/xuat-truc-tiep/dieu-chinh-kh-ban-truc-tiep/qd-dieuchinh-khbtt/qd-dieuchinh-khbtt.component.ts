@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MESSAGE } from "../../../../../constants/message";
-import * as dayjs from "dayjs";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -18,6 +17,17 @@ import { QuyetDinhDcBanttService } from 'src/app/services/qlnv-hang/xuat-hang/ba
 export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
+  idQdPdGoc: number = 0;
+  isViewQdPdGoc: boolean = false;
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ Chối - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ Duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã Duyệt - LĐ Vụ' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban Hanh' },
+  ];
+
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -30,12 +40,12 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
     super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
     this.formData = this.fb.group({
       namKh: null,
-      ngayKyDc: null,
       soQdDc: null,
-      soQdPd: null,
+      ngayKyDcTu: null,
+      ngayKyDcDen: null,
       trichYeu: null,
       loaiVthh: null,
-      soTrHdr: null,
+      trangThai: null,
     })
 
     this.filterTable = {
@@ -57,9 +67,7 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.formData.patchValue({
-        loaiVthh: this.loaiVthh
-      })
+      this.timKiem();
       await this.search();
     } catch (e) {
       console.log('error: ', e)
@@ -68,4 +76,40 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
     }
   }
 
+  timKiem() {
+    this.formData.patchValue({
+      loaiVthh: this.loaiVthh,
+      trangThai: this.userService.isCuc() ? this.STATUS.BAN_HANH : null
+    })
+  }
+
+  clearFilter() {
+    this.formData.reset();
+    this.timKiem();
+    this.search();
+  }
+
+  disabledNgayKyQdDcTu = (startValue: Date): boolean => {
+    if (!startValue || !this.formData.value.ngayKyDcDen) {
+      return false;
+    }
+    return startValue.getTime() > this.formData.value.ngayKyDcDen.getTime();
+  };
+
+  disabledNgayKyQdDcDen = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKyDcTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKyDcTu.getTime();
+  };
+
+  openModalQdPdGoc(id: number) {
+    this.idQdPdGoc = id;
+    this.isViewQdPdGoc = true;
+  }
+
+  closeModalQdPdGoc() {
+    this.idQdPdGoc = null;
+    this.isViewQdPdGoc = false;
+  }
 }

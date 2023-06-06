@@ -74,7 +74,7 @@
                 <nz-form-label nzRequired>Tên hàng hóa</nz-form-label>
                 <nz-form-control>
                   <nz-input-group >
-                    <input nz-input formControlName="tenHangHoa" [readonly]="!isEditData"/>
+                    <input nz-input formControlName="ten" [readonly]="!isEditData"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -82,7 +82,7 @@
             <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
               <nz-form-item>
                 <nz-form-label nzRequired>Mã hàng hóa</nz-form-label>
-                <input nz-input formControlName="ma" [readonly]="!isEditData"/>
+                <input nz-input formControlName="ma" [readonly]="true"/>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
@@ -135,12 +135,12 @@
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
                 <nz-form-label>Quy chuẩn, tiêu chuẩn</nz-form-label>
-                <input nz-input formControlName="tchuanCluong" [readonly]="true"/>
+                <textarea nz-input formControlName="tieuChuanCl" [readonly]="true"></textarea>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
-                <nz-form-label>Thời hạn lưu kho</nz-form-label>
+                <nz-form-label>Thời hạn lưu kho (tháng)</nz-form-label>
                 <input nz-input formControlName="thoiHanLk" [readonly]="true"/>
               </nz-form-item>
             </div>

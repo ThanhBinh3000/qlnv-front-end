@@ -31,6 +31,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   @Input()
   loaiVthh: string;
   isDetail: boolean = false;
+  isView: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -38,6 +39,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     soDx: '',
     namKh: '',
     ngayTongHop: '',
+    ngayLap: '',
     loaiVthh: '',
     trichYeu: ''
   };
@@ -46,7 +48,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   filterTable: any = {
     soDxuat: '',
-    ngayKy: '',
+    ngayPduyet: '',
+    ngayTao: '',
     trichYeu: '',
     soQd: '',
     namKhoach: '',
@@ -55,6 +58,22 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     soGoiThau: '',
     tenTrangThai: '',
   };
+
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_TP, giaTri: 'Chờ duyệt - TP' },
+    { ma: this.STATUS.TU_CHOI_TP, giaTri: 'Từ chối - TP' },
+    { ma: this.STATUS.CHO_DUYET_LDC, giaTri: 'Chờ duyệt - LĐ Cục' },
+    { ma: this.STATUS.TU_CHOI_LDC, giaTri: 'Từ chối - LĐ Cục' },
+    { ma: this.STATUS.DA_DUYET_LDC, giaTri: 'Đã duyệt - LĐ Cục' }
+  ];
+
+  listTrangThaiVt: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.DA_DUYET_LDV, giaTri: 'Đã duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+  ];
 
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -66,9 +85,45 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   selectedId: number = 0;
   allChecked = false;
   indeterminate = false;
+  openQdPdKhlcnt = false;
+  qdPdKhlcntId: number = 0;
+  openTh = false;
+  thId: number = 0;
+  openQdGiao = false;
+  qdGiaoId: number = 0;
+  tuNgayKy: Date | null = null;
+  denNgayKy: Date | null = null;
+  tuNgayTao: Date | null = null;
+  denNgayTao: Date | null = null;
+  disabledStartDate = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayTao) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayTao.getTime();
+  };
+
+  disabledEndDate = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayTao) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayTao.getTime();
+  };
+
+  disabledTuNgayKy = (startValue: Date): boolean => {
+    if (!startValue || !this.denNgayKy) {
+      return false;
+    }
+    return startValue.getTime() > this.denNgayKy.getTime();
+  };
+
+  disabledDenNgayKy = (endValue: Date): boolean => {
+    if (!endValue || !this.tuNgayKy) {
+      return false;
+    }
+    return endValue.getTime() <= this.tuNgayKy.getTime();
+  };
 
   async ngOnInit() {
-    console.log(this.spinner);
     try {
       if (this.loaiVthh === "02") {
         if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
@@ -80,7 +135,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           window.location.href = '/error/401'
         }
       }
-      console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -132,12 +186,10 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayKy: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayKy: this.searchFilter.ngayTongHop
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
+      tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') + " 23:59:59" : null,
+      tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') + " 00:00:00" : null,
+      denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') + " 23:59:59": null,
       soTr: this.searchFilter.soDx,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
@@ -211,6 +263,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     }
     this.isDetail = true;
     this.selectedId = null;
+    this.isView = false;
   }
 
   showList() {
@@ -218,9 +271,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     this.search()
   }
 
-  detail(data?) {
+  detail(data?, isView?) {
     this.selectedId = data.id;
     this.isDetail = true;
+    if (isView != null) {
+      this.isView = isView;
+    }
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return;
@@ -236,9 +292,11 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = null;
     this.searchFilter.soDx = null;
-    this.searchFilter.ngayTongHop = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.loaiVthh = null;
+    this.tuNgayKy = null;
+    this.denNgayKy  = null;
+    this.tuNgayTao = null;
+    this.denNgayTao = null;
     this.search();
   }
 
@@ -330,21 +388,20 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayKy: this.searchFilter.ngayTongHop
-            ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayKy: this.searchFilter.ngayTongHop
-            ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-            : null,
+          tuNgayKy: this.tuNgayKy != null ? dayjs(this.tuNgayKy).format('YYYY-MM-DD') : null,
+          denNgayKy: this.denNgayKy != null ? dayjs(this.denNgayKy).format('YYYY-MM-DD') : null,
+          tuNgayTao: this.tuNgayTao != null ? dayjs(this.tuNgayTao).format('YYYY-MM-DD') : null,
+          denNgayTao: this.denNgayTao != null ? dayjs(this.denNgayTao).format('YYYY-MM-DD') : null,
           soTr: this.searchFilter.soDx,
-          loaiVthh: this.searchFilter.loaiVthh,
+          loaiVthh: this.loaiVthh,
           namKh: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
+          maDvi: null,
         };
         this.danhSachDauThauService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-lcnt.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -410,12 +467,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   filterInTable(key: string, value: string) {
-    if (value != '') {
+    if (value !=null && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
+          if (['tgianNhang', 'ngayTao', 'ngayPduyet'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
         });
@@ -440,4 +501,38 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       tenTrangThai: '',
     }
   }
+  openQdPdKhlcntModal(id:number) {
+    this.qdPdKhlcntId = id;
+    this.openQdPdKhlcnt = true;
+  }
+  closeQdPdKhlcntModal() {
+    this.qdPdKhlcntId = null;
+    this.openQdPdKhlcnt = false;
+  }
+
+  openModalTh (id: number) {
+    this.thId = id;
+    this.openTh = true;
+  }
+  closeModalTh () {
+    this.thId = null;
+    this.openTh = false;
+  }
+  openQdGiaoModal(id:number) {
+    this.qdGiaoId = id;
+    this.openQdGiao = true;
+  }
+  closeQdGiaoModal () {
+    this.qdGiaoId = null;
+    this.openQdGiao = false;
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
 }

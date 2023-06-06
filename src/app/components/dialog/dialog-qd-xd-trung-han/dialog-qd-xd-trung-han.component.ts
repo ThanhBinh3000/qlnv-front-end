@@ -10,7 +10,8 @@ export class DialogQdXdTrungHanComponent implements OnInit {
 
   @Input() dsPhuongAn: any[] = [];
 
-  radioValue: any;
+  @Input() type  :string
+
 
   constructor(
     private _modalRef: NzModalRef,
@@ -21,12 +22,12 @@ export class DialogQdXdTrungHanComponent implements OnInit {
   async ngOnInit() {
   }
 
+
+  handleOk(data  :any) {
+    this._modalRef.close(data);
+  }
+
   onCancel() {
     this._modalRef.close();
   }
-
-  handleOk() {
-    this._modalRef.close(this.radioValue);
-  }
-
 }

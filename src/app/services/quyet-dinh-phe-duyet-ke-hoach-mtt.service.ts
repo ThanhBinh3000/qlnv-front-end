@@ -13,17 +13,6 @@ export class QuyetDinhPheDuyetKeHoachMTTService extends BaseService {
     super(httpClient, 'mua-truc-tiep/qd-pd-mtt', '/qlnv-hang');
   }
 
-  getDetailGoiThau(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/mua-truc-tiep/qd-pd-mtt/chi-tiet/goi-thau/${id}`
-    return this.httpClient.get<any>(url).toPromise();
-  }
-
-
-  exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/mua-truc-tiep/qd-pd-mtt/ket-xuat`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
-  }
-
   getDetailDtlCuc(id: number): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-ke-hoach/${id}`
     return this.httpClient.get<any>(url).toPromise();

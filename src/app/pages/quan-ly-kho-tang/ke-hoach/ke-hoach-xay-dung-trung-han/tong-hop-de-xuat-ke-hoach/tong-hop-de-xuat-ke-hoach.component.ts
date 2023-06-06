@@ -1,9 +1,9 @@
 
 import {
-  Component,
+  Component, EventEmitter,
   Input,
-  OnInit,
-} from '@angular/core';
+  OnInit, Output
+} from "@angular/core";
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -22,12 +22,14 @@ import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Router } from "@angular/router";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
   styleUrls: ['./tong-hop-de-xuat-ke-hoach.component.scss']
 })
 export class TongHopDeXuatKeHoachComponent implements OnInit {
+  @Output() eventTaoQd  = new EventEmitter<any>();
   @Input() typeVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -39,23 +41,24 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   STATUS = STATUS
 
   searchFilter = {
-    maTongHop: '',
-    dmucDuAn: '',
-    diaDiem: '',
-    loaiDuAn: '' ,
-    ngayTongHop: '',
+    namKeHoach : '',
+    tgKhoiCong : '',
+    tgHoanThanh : '',
+    ngayTongHopTu: '',
+    ngayTongHopDen: '',
     namBatDau: '',
     namKetThuc: '',
   };
 
   filterTable: any = {
-    maTongHop : '',
-    ngayTongHop : '',
+    namKeHoach : '',
+    giaiDoan : '',
+    id : '',
+    ngayTao : '',
     maToTrinh : '',
     soQuyetDinh : '',
-    giaiDoan : '',
     noiDung : '',
-    tenTrangThai : '',
+    trangThai : '',
   };
 
   allChecked = false;
@@ -75,9 +78,22 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
+    private router : Router
   ) { }
 
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.CHO_DUYET_LDV, giaTri: 'Chờ duyệt - LĐ Vụ' },
+    { ma: this.STATUS.TU_CHOI_LDV, giaTri: 'Từ chối - LĐ Vụ' },
+    { ma: this.STATUS.CHO_DUYET_LDTC, giaTri: 'Chờ duyệt - LĐ Tổng cục' },
+    { ma: this.STATUS.TU_CHOI_LDTC, giaTri: 'Từ chối - LĐ Tổng cục' },
+    { ma: this.STATUS.DA_DUYET_LDTC, giaTri: 'Đã duyệt - LĐ Tổng cục' },
+  ];
+
   async ngOnInit() {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN_TH')) {
+      this.router.navigateByUrl('/error/401')
+    }
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -111,15 +127,14 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      diaDiem: this.searchFilter.diaDiem,
-      dmucDuAn: this.searchFilter.dmucDuAn,
-      loaiDuAn: this.searchFilter.loaiDuAn,
-      maTongHop: this.searchFilter.maTongHop,
-      ngayKyTu: this.searchFilter.ngayTongHop[0],
-      ngayKyDen: this.searchFilter.ngayTongHop[1],
+      namKeHoach : this.searchFilter.namKeHoach,
+      ngayTongHopTu: this.searchFilter.ngayTongHopTu,
+      ngayTongHopDen: this.searchFilter.ngayTongHopDen,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
-      maDvi : this.userInfo.MA_DVI,
+      tgKhoiCong : this.searchFilter.tgKhoiCong,
+      tgHoanThanh : this.searchFilter.tgHoanThanh,
+      maDvi : this.userService.isTongCuc() ? this.userInfo.MA_DVI : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -231,7 +246,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
             maDvi: '',
           };
           this.tongHopTrungHanService.delete(body).then(async () => {
-            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -273,31 +288,89 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.giaiDoan = item.namBatDau+ '-' +item.namKetThuc
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
+          item.giaiDoan = item.namBatDau + ' - ' + item.namKetThuc
+          if (['tgTongHop'].includes(key)) {
+            if (item[key] && dayjs(item[key]).format('DD/MM/YYYY').indexOf(value.toString()) != -1) {
+              temp.push(item)
+            }
+          } else {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
   async clearFilterTable() {
-    this.filterTable = {
-      maTongHop: '',
-      dmucDuAn: '',
-      diaDiem: '',
-      loaiDuAn: '' ,
-      tgKcHt: '',
-      ngayTongHop: '',
+    this.searchFilter = {
+      namKeHoach : '',
+      tgKhoiCong : '',
+      tgHoanThanh : '',
+      ngayTongHopTu: '',
+      ngayTongHopDen: '',
       namBatDau: '',
-      namKetThuc: ''
+      namKetThuc: '',
     };
     await this.search();
+  }
+
+  deleteMulti() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.tongHopTrungHanService.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  convertDateToString(event: any): string {
+    let result = '';
+    if (event) {
+      result = dayjs(event).format('DD/MM/YYYY').toString()
+    }
+    return result;
+  }
+
+  emitEventTaQd(event) {
+    this.eventTaoQd.emit(event)
   }
 }
 

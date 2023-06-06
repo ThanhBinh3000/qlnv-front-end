@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from "../../../../services/user.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-ke-hoach-xay-dung-trung-han',
@@ -8,12 +10,21 @@ import { Component, OnInit } from '@angular/core';
 export class KeHoachXayDungTrungHanComponent implements OnInit {
 
   tabSelected: string = "dxkh";
-  constructor() { }
+  dataOutput : any
+  constructor(
+    public userService : UserService,
+    public router : Router
+  ) { }
   ngOnInit(): void {
+    if (!this.userService.isAccessPermisson('QLKT_QHKHKT_KHDTXDTRUNGHAN')) {
+      this.router.navigateByUrl('/error/401')
+    }
   }
 
-  selectTab(tab) {
+  selectTab(tab, data? : any) {
     this.tabSelected = tab;
+    if(data) {
+      this.dataOutput = data
+    }
   }
-
 }

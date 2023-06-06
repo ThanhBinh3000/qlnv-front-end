@@ -8,7 +8,6 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {saveAs} from 'file-saver';
 import dayjs from "dayjs";
-import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 import {HopDongMmTbcdService} from "../../../../services/hop-dong-mm-tbcd.service";
 
 @Component({
@@ -21,6 +20,10 @@ export class MmHopDongComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DA_KY, giaTri: 'Đã ký' }
+  ];
 
   constructor(
     httpClient: HttpClient,

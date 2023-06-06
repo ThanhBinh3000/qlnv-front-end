@@ -1,0 +1,51 @@
+<div class="left-menu">
+  <!-- (nzChange)="onChange($event)" -->
+  <div nz-row nzGutter="24">
+    <div nz-col nzspan="4">
+      <ul nz-menu nzMode="inline" style="max-width: 300px">
+        <!--<li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+          Thông tư 145/2013/TT-BTC
+        </li>-->
+        <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Báo cáo chất lượng hàng DTQG">
+          <ul>
+            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>BCCL công tác bảo quản gạo DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>BCCL hàng DTQG xuất kho</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>BCCL hàng DTQG nhập kho</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>BC hao hụt gạo DTQG nhập, xuất</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>Tổng hợp BC số lượng, chất lượng công cụ dụng cụ</span>
+            </li>
+            <li nz-menu-item nzSelected (click)="selectTab(5)"
+              *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA1')">
+              <span nz-icon nzType="fund"></span>
+              <span>Tổng hợp BC số lượng, số lượng máy móc thiết bị chuyên dùng</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div nz-col nzSpan="19">
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 4">
+          <app-th-bc-so-luong-cl-ccdc></app-th-bc-so-luong-cl-ccdc>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 5">
+          <app-th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung></app-th-bc-so-luong-cl-may-moc-thiet-bi-chuyen-dung>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

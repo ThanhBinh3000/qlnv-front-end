@@ -14,7 +14,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="save(true)"
+      <button class="btn btn-sub ml-2" (click)="pheDuyet()"
               *ngIf="(formData.value.trangThai == STATUS.DU_THAO && id > 0 ) && userService.isAccessPermisson('QLĐMNXBQ_MMTBCD_QDMUASAM_DUYET')">
         <i class="icon htvbdh_trinh "></i>
         <span>Đã ký</span>
@@ -194,13 +194,13 @@
                 <td></td>
                 <td>{{(i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1)}}</td>
                 <td>{{lv2.tenDvi }}</td>
+                <td>{{lv2.donViTinh}}</td>
                 <td *ngIf="itemRowEdit != ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">{{lv2.soLuong}}</td>
                 <td  *ngIf="itemRowEdit == ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">
                   <nz-input-number [nzSize]="'small'" [(ngModel)]="lv2.soLuong"
                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                   </nz-input-number>
                 </td>
-                <td>{{lv2.donViTinh}}</td>
                 <td>{{lv2.diaDiemGiaoNhan}}</td>
                 <td>{{lv2.soLuongHoanThanh}}</td>
                 <td class="text-center"  *ngIf="itemRowEdit != ((i + 1) + '.' + (i1 + 1) + '.' + (i2 + 1))">

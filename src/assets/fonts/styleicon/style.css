@@ -24,7 +24,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.htvbdh_tcdt_xuat-khac:before {
+  content: "\1f32b";
+}
 .htvbdh_tcdt_tao-ttrinh:before {
   content: "\eb26";
 }

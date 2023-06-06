@@ -29,6 +29,8 @@ import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
 import {includes} from 'lodash';
+import {kmr_IQ} from "ng-zorro-antd/i18n";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -121,7 +123,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       id: [{value: this.khBanDauGia ? this.khBanDauGia.id : null, disabled: this.isView ? true : false,}, [],],
-      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null, disabled: true,}, [Validators.required],],
+      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null}, [Validators.required],],
       soThongTri: [{
         value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
         disabled: this.isView ? true : false,
@@ -182,7 +184,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU|| this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
+    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
       return true;
     }
   }
@@ -217,6 +219,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let res = await this.tongHopDeNghiCapVonService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongHop = res.data.content;
+      if (this.listTongHop && this.listTongHop.length > 0) {
+        this.listTongHop = this.listTongHop.filter(item => item.trangThai == STATUS.DA_DUYET_LDV)
+      }
     }
   }
 
@@ -471,11 +476,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   async changeMaTongHop() {
     let selected = this.formData.get('soDnCapVon').value;
     this.dsBoNganh = [];
-    /*this.formData.patchValue({
-      dviThongTri: null
-    })*/
     if (selected) {
-      let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
+      let res = await this.tongHopDeNghiCapVonService.loadChiTiet(selected);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let map = res.data.ct1s.map(s => s.maBn);
         if (map.includes('BTC')) {
@@ -487,13 +489,28 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   async changeDonVi() {
+    this.listDviThuHuong = [];
     if (this.formData.value.dviThongTri) {
-      let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
-        maBoNganh: this.formData.value.dviThongTri,
-        maTh: this.formData.value.soDnCapVon
-      });
-      if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.listDviThuHuong = res.data;
+      if (this.formData.value.dviThongTri == 'BTC') {
+        let item = {
+          "dvCungCapHang": "Tổng cục dự trữ nhà nước",
+          "nganHang": null,
+          "id": "BTC",
+          "soTaiKhoan": null
+        };
+        this.listDviThuHuong.push(item);
+        this.formData.patchValue({
+          "dviThuHuong": this.listDviThuHuong[0].id,
+        })
+      } else {
+        let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
+          maBoNganh: this.formData.value.dviThongTri,
+          maTh: this.formData.value.soDnCapVon
+        });
+        console.log(res,'resresres');
+        if (res.msg == MESSAGE.SUCCESS && res.data) {
+          this.listDviThuHuong = res.data;
+        }
       }
     }
   }

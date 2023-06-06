@@ -22,9 +22,11 @@ export class HelperService {
 
   markFormGroupTouched(formGroup) {
     for (const i in formGroup.controls) {
-      if (formGroup.controls.hasOwnProperty(i)) {
-        formGroup.controls[i].markAsDirty();
-        formGroup.controls[i].updateValueAndValidity();
+      if (formGroup.controls.hasOwnProperty(i) && formGroup.controls[i].enabled) {
+
+          formGroup.controls[i].markAsDirty();
+          formGroup.controls[i].updateValueAndValidity();
+
       }
     }
     this.findInvalidControls(formGroup);
@@ -90,7 +92,7 @@ export class HelperService {
     }
     if (invalid.length > 0) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      console.log(invalid);
+      console.log(invalid,' invalid');
     }
   }
 

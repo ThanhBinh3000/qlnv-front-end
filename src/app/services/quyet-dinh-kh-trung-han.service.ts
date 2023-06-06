@@ -11,7 +11,7 @@ export class QuyetDinhKhTrungHanService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-trung-han/quyet-dinh','/qlnv-kho');
+    super(httpClient, 'dt-xd-trung-han/quyet-dinh','/qlnv-kho');
   }
 
   getListToTrinh(): Promise<OldResponseData> {

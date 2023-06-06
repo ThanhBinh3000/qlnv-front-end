@@ -55,6 +55,7 @@ export class CanCuXacDinh {
 
 export class ChiTietThongTinChaoGia {
   id: number;
+  idQdDtl: number;
   canhanTochuc: string;
   mst: string;
   diaChi: string;
@@ -65,9 +66,6 @@ export class ChiTietThongTinChaoGia {
   thueGtgt: number;
   thanhTien: number;
   luaChon: boolean = false;
-  luaChonPduyet: number;
-  idSoQdPduyetCgia: number;
-  idTkhaiKh: number;
   fileDinhKems: FileDinhKem = new FileDinhKem();
 }
 

@@ -4,6 +4,9 @@ import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {Globals} from './../../../../shared/globals';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
+import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
+import {CurrencyMaskInputMode} from "ngx-currency";
+import {AMOUNT, AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -27,7 +30,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dataTableChange = new EventEmitter<any[]>();
 
   @Input()
-  tongGtri: number
+  tongGtri: number;
 
   @Output()
   tongGtriChange = new EventEmitter<number>();
@@ -37,13 +40,14 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   tongSoVT: number = 0;
   tongSoLT: number = 0;
-
+  page: number = 1;
+  pageSize: number = PAGE_SIZE_DEFAULT;
+  totalRecord: number = 0;
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
-  dsDonViTinh = [];
-  dsKeHoachNam = [];
   listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
+  amount = AMOUNT_ONE_DECIMAL;
 
   constructor(
     private modal: NzModalService,
@@ -63,7 +67,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
         this.tongSoVT = item.tongSo;
       }
       if (!item.isSum) {
-        this.listTongGiaTriBnKhac[item.maBn] = {tongSo : item.tongSo};
+        this.listTongGiaTriBnKhac[item.maBn] = {tongSo: item.tongSo};
       }
     }
   }
@@ -108,6 +112,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       if (!this.dataTable) {
         this.dataTable = [];
       }
+      if ((this.rowItem.loaiVthh && !this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh).length > 0) || (this.rowItem.loaiVthh && this.rowItem.cloaiVthh && this.dataTable.filter(item => item.loaiVthh == this.rowItem.loaiVthh && item.cloaiVthh == this.rowItem.cloaiVthh).length > 0)) {
+        this.notification.error(MESSAGE.ERROR, "Hàng hóa đã được thêm, vui lòng chọn loại hàng hóa khác.")
+        return;
+      }
       this.dataTable = [...this.dataTable, this.rowItem]
       this.rowItem = new ThongTinQuyetDinh();
       this.updateEditCache()
@@ -118,7 +126,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   clearData() {
-
+    this.rowItem = new ThongTinQuyetDinh();
   }
 
   huyEdit(idx: number): void {
@@ -132,6 +140,26 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
     this.emitDataTable();
+  }
+
+  async changePageIndex(event) {
+    try {
+      this.page = event;
+      // await this.search();
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    try {
+      this.pageSize = event;
+      // await this.search();
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   updateEditCache(): void {

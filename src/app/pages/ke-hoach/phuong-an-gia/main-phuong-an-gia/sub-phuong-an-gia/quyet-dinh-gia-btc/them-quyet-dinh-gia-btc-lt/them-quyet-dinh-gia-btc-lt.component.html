@@ -33,7 +33,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="true"
+              <nz-select formControlName="namKeHoach" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="noEdit"
                 nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>

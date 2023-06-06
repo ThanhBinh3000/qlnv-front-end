@@ -1,4 +1,4 @@
-import { CurrencyMaskInputMode } from "ngx-currency";
+import {CurrencyMaskInputMode} from "ngx-currency";
 
 
 export class Utils {
@@ -139,6 +139,7 @@ export class Utils {
   }
 
 }
+
 export const ROLE_CAN_BO = ['TC_KH_VP_NV', 'C_KH_VP_NV_KH', 'C_KH_VP_NV_TVQT', 'CC_KH_VP_NV'];
 export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP', 'C_KH_VP_TBP_TVQT', 'C_KH_VP_TBP_KH', 'CC_KH_VP_TBP'];
 export const ROLE_LANH_DAO = ['TC_KH_VP_LD', 'C_KH_VP_LD', 'CC_KH_VP_LD'];
@@ -478,6 +479,62 @@ export const QUATITY = {
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
+export const AMOUNT_NO_DECIMAL = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 0,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
+export const AMOUNT_ONE_DECIMAL = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 1,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
+export const AMOUNT_TWO_DECIMAL = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 2,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
+export const AMOUNT_THREE_DECIMAL = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 3,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "right",
+  nullable: true,
+  min: 0,
+  max: 1000000000000,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 //kich co cua o nhap so lieu
 export const BOX_NUMBER_WIDTH = 150;
 
@@ -807,7 +864,6 @@ export const KHOAN_MUC = [
     level: 1,
   },
 ];
-
 
 
 export const LA_MA = [

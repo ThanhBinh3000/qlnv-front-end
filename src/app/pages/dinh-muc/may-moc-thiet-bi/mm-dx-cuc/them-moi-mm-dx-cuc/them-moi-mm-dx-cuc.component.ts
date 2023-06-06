@@ -195,6 +195,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     let res = await this.createUpdate(this.formData.value)
     if (res) {
       this.goBack();
+    }   else {
+      this.convertListData()
     }
   }
 

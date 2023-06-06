@@ -13,7 +13,7 @@ import {STATUS} from "../../../../../constants/status";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {OldResponseData} from "../../../../../interfaces/response";
-import {MangLuoiKhoService} from "../../../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {MangLuoiKhoService} from "../../../../../services/qlnv-kho/mangLuoiKho.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {
   DeXuatNhuCauBaoHiemService

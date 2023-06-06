@@ -9,11 +9,11 @@ import {environment} from "../../environments/environment";
 export class KtTongHopXdHnService extends BaseService{
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-theo-nam/tong-hop','/qlnv-kho');
+    super(httpClient, 'dt-xd-theo-nam/tong-hop','/qlnv-kho');
   }
 
   tongHop(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-tx-theo-nam/tong-hop/danh-sach-dx`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-xd-theo-nam/tong-hop/danh-sach-dx`;
     return this.httpClient.post(url, body).toPromise();
   }
 }

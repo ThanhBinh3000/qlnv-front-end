@@ -26,7 +26,11 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  @Input() isView = false;
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.BAN_HANH, giaTri: 'Ban hành' },
+  ];
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -41,10 +45,13 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
       soDx: null,
       tenDvi: null,
       maDvi: null,
+      maDviDx: null,
       ngayDx: null,
       ngayDxTu: null,
       ngayDxDen: null,
-      ngayKetThuc: null,
+      ngayKetThucDx: null,
+      ngayKetThucDxTu: null,
+      ngayKetThucDxDen: null,
       type: null
     })
     this.filterTable = {
@@ -68,8 +75,39 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   userdetail: any = {};
   selectedId: number = 0;
   isVatTu: boolean = false;
-  isView = false;
+  dxPaId: number = 0;
+  openDxPa = false;
+  idTh: number = 0;
+  openTh = false;
 
+  disabledStartNgayDX = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayDxDen) {
+      return startValue.getTime() > this.formData.value.ngayDxDen.getTime();
+    } else {
+      return false;
+    }
+  };
+
+  disabledEndNgayDx = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayDxDen.getTime();
+  };
+
+  disabledStartNgayKt = (startValue: Date): boolean => {
+    if (startValue && this.formData.value.ngayKetThucDxDen) {
+      return startValue.getTime() > this.formData.value.ngayKetThucDxDen.getTime();
+    }
+    return false;
+  };
+
+  disabledEndNgayKt = (endValue: Date): boolean => {
+    if (!endValue || !this.formData.value.ngayKetThucDxTu) {
+      return false;
+    }
+    return endValue.getTime() <= this.formData.value.ngayKetThucDxTu.getTime();
+  };
   async ngOnInit() {
     try {
       this.initData()
@@ -116,6 +154,22 @@ export class QuyetDinhPheDuyetPhuongAnComponent extends Base2Component implement
   redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    // this.isViewDetail = isView ?? false;
+    this.isView = b;
+  }
+  openDxPaModal(id: number) {
+    this.dxPaId = id;
+    this.openDxPa = true;
+  }
+  closeDxPaModal() {
+    this.dxPaId = null;
+    this.openDxPa = false;
+  }
+  openThModal(id: number) {
+    this.idTh = id;
+    this.openTh = true;
+  }
+  closeThModal() {
+    this.idTh = null;
+    this.openTh = false;
   }
 }
