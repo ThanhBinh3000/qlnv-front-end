@@ -66,7 +66,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
             </nz-form-label>
-            <nz-select formControlName="nam" nzDisabled>
+            <nz-select formControlName="nam" >
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </nz-form-item>
