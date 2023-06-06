@@ -241,7 +241,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
     this.spinner.show();
     let dsHd = []
     await this.chaoGiaMuaLeUyQuyenService.search({
-      maDviChiCuc: this.userInfo.MA_DVI,
+      // maDviChiCuc: this.userInfo.MA_DVI,
       loaiVthh: this.loaiVthh,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT,
       pthucBanTrucTiep: ['02'],

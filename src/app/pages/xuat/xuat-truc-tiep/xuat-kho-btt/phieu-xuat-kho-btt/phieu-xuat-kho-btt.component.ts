@@ -42,6 +42,7 @@ export class PhieuXuatKhoBttComponent extends Base2Component implements OnInit {
       trichYeu: null,
       ngayLayMau: null,
       loaiVthh: null,
+      maDvi: null,
     })
 
     this.filterTable = {

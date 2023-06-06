@@ -157,7 +157,7 @@
         <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != '00'"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DANG_NHAP_DU_LIEU"></label>
           </td>
           <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class="text-center">{{(page - 1) * pageSize + idx +
           1}}</td>
@@ -172,12 +172,12 @@
               <i class="fa fa-eye"></i>
             </a>
             <a
-              *ngIf="(data.trangThai == '00' && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')"
               (click)="viewDetail(data.id, false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a
-              *ngIf="(data.trangThai =='00' && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
+              *ngIf="(data.trangThai == STATUS.DANG_NHAP_DU_LIEU && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
               (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
