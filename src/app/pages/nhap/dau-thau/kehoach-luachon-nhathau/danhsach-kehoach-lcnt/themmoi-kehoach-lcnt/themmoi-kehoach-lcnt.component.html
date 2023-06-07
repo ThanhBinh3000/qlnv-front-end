@@ -473,8 +473,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm
-            nhập hàng'}}</span>
+          <span>{{ (this.userService.isCuc() || showFromTH) ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'}}</span>
         </div>
       </div>
       <div class="buttons" *ngIf="!isView">
@@ -494,8 +493,8 @@
           <th>Tên gói thầu</th>
           <th>Điểm kho</th>
           <th>Địa điểm nhập kho</th>
-          <th>Số lượng theo chỉ tiêu kế hoạch năm</th>
-          <th>SL theo KH năm đã được duyệt</th>
+          <th>Số lượng theo chỉ tiêu kế hoạch năm<br/>(Tấn)</th>
+          <th>SL theo KH năm đã được duyệt <br/>(Tấn)</th>
           <th>SL nhập (Tấn)</th>
           <th>Đơn giá đề xuất (đ/kg)</th>
           <th>Thành tiền tạm tính (đ)</th>
@@ -896,6 +895,20 @@
         </tr>
       </tbody>
     </nz-table>
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Ý kiến tham gia của các Vụ </nz-form-label>
+          <textarea [readonly]="isView" rows="3" nz-input formControlName="yKien"></textarea>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="24" *ngIf="loaiVthhInput.startsWith('02')">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> Ghi chú </nz-form-label>
+          <textarea [readonly]="isView" rows="3" nz-input formControlName="ghiChu"></textarea>
+        </nz-form-item>
+      </div>
+    </div>
   </nz-card>
 </div>
 

@@ -38,15 +38,15 @@ export const NHAP_ROUTE_LIST: Array<any> = [
     hasTab: true,
     code:'NHDTQG_PTMTT'
   },
-  {
-    icon: 'htvbdh_tcdt_nhapkhac2',
-    title: 'Hợp đồng/Bảng kê, phiếu mua hàng',
-    url: `/${NHAP_MAIN_ROUTE}/hop-dong`,
-    dropdown: 'khac',
-    idHover: 'khac',
-    hasTab: true,
-    code:'NHDTQG_PTMTT'
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_nhapkhac2',
+  //   title: 'Hợp đồng/Bảng kê, phiếu mua hàng',
+  //   url: `/${NHAP_MAIN_ROUTE}/hop-dong`,
+  //   dropdown: 'khac',
+  //   idHover: 'khac',
+  //   hasTab: true,
+  //   code:'NHDTQG_PTMTT'
+  // },
   // {
   //   icon: 'htvbdh_tcdt_baocao2',
   //   title: 'Báo cáo',

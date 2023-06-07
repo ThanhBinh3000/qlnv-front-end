@@ -143,7 +143,8 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       ldoTuchoi: [],
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
-      diaDiemDuAn: ['']
+      diaDiemDuAn: [''],
+      yKien: ['']
     });
   }
 
