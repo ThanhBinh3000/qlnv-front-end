@@ -37,7 +37,7 @@
                 <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-        <span>Phiếu nhập kho</span>
+        <span>Phiếu xuất kho</span>
       </div>
     </div>
   </div>
@@ -227,7 +227,7 @@
               Số phiếu kiểm nghiệm chất lượng
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhieuKnCl()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" >
                 <input nz-input [readonly]="isView" formControlName="soPhieuKnCl" readonly/>
               </nz-input-group>
             </nz-form-control>
@@ -272,7 +272,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Cán bộ lập phiếu(thủ kho)
+              Cán bộ lập phiếu( thủ kho)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
@@ -296,7 +296,7 @@
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              KTTV Bảo Quản
+              KTV Bảo Quản
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>

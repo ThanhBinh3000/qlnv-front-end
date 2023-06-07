@@ -1,32 +1,33 @@
 import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../components/base2/base2.component";
+import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../services/storage.service";
+import {StorageService} from "../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {DonviService} from "src/app/services/donvi.service";
+import {CHUC_NANG} from 'src/app/constants/status';
+import {MESSAGE} from "src/app/constants/message";
 import {chain, isEmpty} from "lodash";
-import {MESSAGE} from "../../../../../constants/message";
-import {CHUC_NANG} from "../../../../../constants/status";
+import {DanhMucService} from "src/app/services/danhmuc.service";
 import {v4 as uuidv4} from "uuid";
-import {
-  DanhSachHangDTQGCon6ThangService
-} from "../../../../../services/qlnv-hang/xuat-hang/xuatkhac/DanhSachHangDTQGCon6Thang.service";
+import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
+import {DanhSachTieuHuyService} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/DanhSachTieuHuy.service";
 
 @Component({
-  selector: 'app-toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat',
-  templateUrl: './toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.html',
-  styleUrls: ['./toan-bo-ds-hang-dtqg-hethan-luukho-chua-co-kh-xuat.component.scss']
+  selector: 'app-danh-sach-hang-tieu-huy',
+  templateUrl: './danh-sach-hang-tieu-huy.component.html',
+  styleUrls: ['./danh-sach-hang-tieu-huy.component.scss']
 })
-export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Component implements OnInit {
+export class DanhSachHangTieuHuyComponent extends Base2Component implements OnInit {
   CHUC_NANG = CHUC_NANG;
   dsDonvi: any[] = [];
   dsLoaiVthh: any[] = [];
   dsCloaiVthh: any[] = [];
   dataTableView: any = [];
   expandSetString = new Set<string>();
+
+  public vldTrangThai: XuatTieuHuyComponent;
 
   constructor(httpClient: HttpClient,
               storageService: StorageService,
@@ -35,8 +36,10 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
               modal: NzModalService,
               private donviService: DonviService,
               private danhMucService: DanhMucService,
-              private danhSachHangDTQGCon6ThangService: DanhSachHangDTQGCon6ThangService) {
-    super(httpClient, storageService, notification, spinner, modal, danhSachHangDTQGCon6ThangService);
+              private danhSachTieuHuyService: DanhSachTieuHuyService,
+              private XuatTieuHuyComponent: XuatTieuHuyComponent) {
+    super(httpClient, storageService, notification, spinner, modal, danhSachTieuHuyService);
+    this.vldTrangThai = XuatTieuHuyComponent;
     this.formData = this.fb.group({
       id: [],
       maDvi: [],
@@ -118,6 +121,14 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
   };
 
   async timKiem() {
+    /*    if (this.formData.value.ngayDx) {
+          this.formData.value.ngayDxTu = dayjs(this.formData.value.ngayDx[0]).format('YYYY-MM-DD')
+          this.formData.value.ngayDxDen = dayjs(this.formData.value.ngayDx[1]).format('YYYY-MM-DD')
+        }
+        if (this.formData.value.ngayKetThuc) {
+          this.formData.value.ngayKetThucTu = dayjs(this.formData.value.ngayKetThuc[0]).format('YYYY-MM-DD')
+          this.formData.value.ngayKetThucDen = dayjs(this.formData.value.ngayKetThuc[1]).format('YYYY-MM-DD')
+        }*/
     await this.search();
     this.dataTable.forEach(s => {
       s.idVirtual = uuidv4();
@@ -173,6 +184,7 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
               }
             }
           ).value();
+        let rowItem = value.find(s => s.tenCuc === key);
         let idVirtual = uuidv4();
         this.expandSetString.add(idVirtual);
         return {
@@ -181,7 +193,8 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
           childData: rs
         };
       }).value();
-    console.log(this.dataTableView ,'this.dataTableView this.dataTableView ')
+    console.log(this.dataTableView, 'dataTableView')
+    console.log(this.expandSetString)
   }
 
   onExpandStringChange(id: string, checked: boolean) {
@@ -191,5 +204,4 @@ export class ToanBoDsHangDtqgHethanLuukhoChuaCoKhXuatComponent extends Base2Comp
       this.expandSetString.delete(id);
     }
   }
-
 }

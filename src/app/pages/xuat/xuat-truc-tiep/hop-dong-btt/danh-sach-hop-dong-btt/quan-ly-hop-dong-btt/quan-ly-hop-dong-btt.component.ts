@@ -10,7 +10,6 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 import { HopDongBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/hop-dong-btt/hop-dong-btt.service';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
 import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { StorageService } from 'src/app/services/storage.service';
 @Component({
@@ -119,8 +118,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
                 tenLoaiVthh: dataQdNv.tenLoaiVthh,
                 cloaiVthh: dataQdNv.cloaiVthh,
                 tenCloaiVthh: dataQdNv.tenCloaiVthh,
-                loaiHinhNx: dataQdKh.xhQdPdKhBttHdr.loaiHinhNx,
-                kieuNx: dataQdKh.xhQdPdKhBttHdr.kieuNx,
+                loaiHinhNx: dataQdKh.xhQdPdKhBttHdr.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+                kieuNx: dataQdKh.xhQdPdKhBttHdr.kieuNx != null ? 'Xuất bán' : null,
               })
               this.dataTable = dataQdNv.listHopDongBtt;
               if (this.dataTable && this.dataTable.length > 0) {
@@ -142,8 +141,8 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
             tenLoaiVthh: data.tenLoaiVthh,
             cloaiVthh: data.cloaiVthh,
             tenCloaiVthh: data.tenCloaiVthh,
-            loaiHinhNx: data.loaiHinhNx,
-            kieuNx: data.kieuNx,
+            loaiHinhNx: data.loaiHinhNx != null ? 'Xuất bán đấu giá' : null,
+            kieuNx: data.kieuNx != null ? 'Xuất bán' : null,
           })
           this.dataTable = data.listHopDongBtt;
           if (this.dataTable && this.dataTable.length > 0) {
@@ -257,7 +256,7 @@ export class QuanLyHopDongBttComponent extends Base2Component implements OnInit 
       this.dataTable.forEach(item => {
         if (item) {
           if (item.trangThai != STATUS.DA_KY) {
-            this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
+            this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả các hợp đồng");
             result = false;
             return
           }

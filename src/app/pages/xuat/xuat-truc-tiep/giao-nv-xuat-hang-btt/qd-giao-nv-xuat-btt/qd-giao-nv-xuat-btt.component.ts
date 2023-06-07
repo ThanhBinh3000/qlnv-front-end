@@ -93,7 +93,6 @@ export class QdGiaoNvXuatBttComponent extends Base2Component implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      trangThai: this.userService.isChiCuc() ? this.STATUS.BAN_HANH : null
     })
   }
 

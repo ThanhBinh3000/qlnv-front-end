@@ -71,18 +71,18 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA')" type="button"
+        <button *ngIf="!loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XOA')" type="button"
           class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_EXP')" type="button"
+        <button *ngIf="!loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_EXP')" type="button"
           class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main"
-          (click)="redirectToChiTiet(0, 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
+        <button *ngIf="!loaiVthh.startsWith('02') ? userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA')" type="button" class="btn btn-main"
+          (click)="redirectToChiTiet(0, loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -218,15 +218,15 @@
             </td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
-                (click)="redirectToChiTiet(data.id, 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')">
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XEM')"
+                (click)="redirectToChiTiet(data.id, loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XEM' : 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')"
-                (click)="redirectToChiTiet(data.id, 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA'))"
+                (click)="redirectToChiTiet(data.id, loaiVthh.startsWith('02') ? 'NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_SUA' : 'NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA')"
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && (userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_VT_QDKQLCNT_XOA'))"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
