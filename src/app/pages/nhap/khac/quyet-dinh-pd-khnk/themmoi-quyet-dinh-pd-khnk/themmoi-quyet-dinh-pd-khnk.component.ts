@@ -125,40 +125,25 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       ngayHluc: ['',],
       idThHdr: [''],
       idTrHdr: [''],
-      soDx: [''],
+      soDxuat: [''],
       trichYeu: [''],
-      hthucLcnt: [''],
-      pthucLcnt: [''],
-      loaiHdong: [''],
-      nguonVon: [''],
-      tgianBdauTchuc: [''],
       tgianDthau: [''],
       tgianMthau: [''],
       tgianNhang: [''],
       ghiChu: [''],
-      soQdCc: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      moTaHangHoa: [''],
       trangThai: [STATUS.DU_THAO],
-      tchuanCluong: [''],
       tenTrangThai: ['Dự thảo'],
-      ldoTuchoi: [''],
       phanLoai: ['', [Validators.required]],
-      vat: ['5'],
-      gtriDthau: [null,],
-      gtriHdong: [null,],
-      donGiaVat: [''],
-      tongMucDt: [null,],
-      dienGiai: [''],
-      tenDvi: [''],
       tgianThien: [null],
-      yKien: [''],
       idTh: [null],
       tenKieuNx: [null],
-      tenLoaiNx: [null]
+      tenLoaiHinhNx: [null],
+      kieuNx: [null],
+      loaiHinhNx: [null]
     })
   }
 
@@ -355,7 +340,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
     //   })
     // })
     console.log(this.danhsachDx)
-    body.children = this.danhsachDx;
+    body.details = this.danhsachDx;
     if (this.listFileDinhKem.length > 0) {
       this.listFileDinhKem.forEach(item => {
         item.fileType = FILETYPE.FILE_DINH_KEM
@@ -528,7 +513,15 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       const data = res.data;
       const dtl = null
       console.log("data:    ", data)
-      this.listFileDinhKem = data.fileDinhKems;
+      if (data.fileDinhKems.length > 0) {
+        data.fileDinhKems.forEach(item => {
+          if (item.fileType == FILETYPE.FILE_DINH_KEM) {
+            this.listFileDinhKem.push(item)
+          } else if (item.fileType == FILETYPE.CAN_CU_PHAP_LY) {
+            this.listCanCuPhapLy.push(item)
+          }
+        })
+      }
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQd: data.soQd?.split("/")[0],
@@ -540,7 +533,7 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
         await this.dxKhNhapKhacService.getDetail(item.idDx).then((res) => {
           console.log(res)
           if (res.msg == MESSAGE.SUCCESS) {
-            item.children = res.data.dtl;
+            item.details = res.data.dtl;
           }
         })
       }
@@ -694,32 +687,24 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
           tenCloaiVthh: data.hdr.tenCloaiVthh,
           loaiVthh: data.hdr.loaiVthh,
           tenLoaiVthh: data.hdr.tenLoaiVthh,
-          tchuanCluong: data.hdr.tchuanCluong,
-          loaiHdong: data.hdr.loaiHdong,
-          pthucLcnt: data.hdr.pthucLcnt,
-          hthucLcnt: data.hdr.hthucLcnt,
-          nguonVon: data.hdr.nguonVon,
-          soQdCc: data.hdr.soQd,
           trichYeu: data.hdr.trichYeu,
           tgianBdauTchuc: data.hdr.tgianBdauTchuc,
           tgianMthau: data.hdr.tgianMthau,
           tgianDthau: data.hdr.tgianDthau,
           tgianThien: data.hdr.tgianThien,
-          gtriDthau: data.hdr.gtriDthau,
-          gtriHdong: data.hdr.gtriHdong,
-          vat: 5,
-          tenDvi: data.hdr.tenDvi,
           maDvi: data.hdr.maDvi,
-          dienGiai: data.hdr.dienGiai,
           idThHdr: null,
-          soDx: data.hdr.soDxuat,
-          // idTrHdr: dataRes.id,
-          tongMucDt: tongMucDt
+          soDxuat: data.hdr.soDxuat,
+          tongMucDt: tongMucDt,
+          kieuNx: data.hdr.kieuNx,
+          tenKieuNx: data.hdr.tenKieuNx,
+          tenLoaiHinhNx: data.hdr.tenLoaiHinhNx,
+          loaiHinhNx: data.hdr.loaiHinhNx
         })
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
-
+      await this.showFirstRow(Event, this.danhsachDx[0]);
     }
     await this.spinner.hide();
   }
@@ -733,10 +718,10 @@ export class ThemmoiQuyetDinhPdKhnkComponent implements OnInit {
       $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
       $event.target.parentElement.classList.add('selectedRow');
       this.isTongHop = this.formData.value.phanLoai == 'TH';
-      console.log(this.danhsachDx)
-      console.log(this.danhsachDxCache)
       this.dataInput = this.danhsachDx[index];
       this.dataInputCache = this.danhsachDxCache[index];
+      console.log(this.dataInput)
+      console.log(this.dataInputCache)
       this.index = index;
       await this.spinner.hide();
     } else {
