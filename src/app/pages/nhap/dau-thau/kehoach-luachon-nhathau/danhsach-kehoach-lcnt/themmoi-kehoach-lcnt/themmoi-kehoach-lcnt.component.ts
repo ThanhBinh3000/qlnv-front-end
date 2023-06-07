@@ -160,7 +160,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     }
     this.formData.get('loaiVthh').setValue(this.loaiVthhInput);
     if (this.loaiVthhInput.startsWith('02')){
-      this.formData.get('vat').setValue('10');
+      this.formData.get('vat').setValue('8');
     }
     this.loadDanhMucHang();
     if (this.idInput > 0) {
@@ -426,7 +426,7 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
       isReadOnly = true;
     }
     const modal = this.modal.create({
-      nzTitle: 'Địa điểm nhập hàng',
+      nzTitle: 'THÔNG TIN GÓI THẦU',
       nzContent: DialogThemMoiGoiThauComponent,
       nzMaskClosable: false,
       nzClosable: false,
