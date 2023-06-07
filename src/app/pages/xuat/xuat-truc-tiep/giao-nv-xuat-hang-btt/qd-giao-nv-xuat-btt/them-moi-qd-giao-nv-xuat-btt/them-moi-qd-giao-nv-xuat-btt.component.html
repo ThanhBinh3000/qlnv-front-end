@@ -90,22 +90,22 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+                        <div nz-col [nzSpan]="4">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
                                 </nz-form-label>
                                 <nz-form-control>
                                     <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
                                         [ngModelOptions]="{standalone: true}" [nzDisabled]="isDisabledQD()">
-                                        <label nz-radio nzValue="HD"> Căn cứ vào hợp đồng </label>
-                                        <label nz-radio nzValue="QDDX"> Căn cứ vào Ủy quyền/Bán lẻ </label>
+                                        <label nz-radio nzValue="01"> Chào giá </label>
+                                        <label nz-radio nzValue="02"> Ủy quyền/Bán lẻ </label>
                                     </nz-radio-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == 'HD'">
+                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Chọn hợp đồng </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Căn cứ trên HĐ </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoHopDong()">
                                         <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />
@@ -113,9 +113,9 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == 'QDDX'">
+                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == '02'">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Chọn QĐ PD KH BTT </nz-form-label>
+                                <nz-form-label [nzNoColon]="true"> Căn cứ trên QĐPD KH bán trực tiếp </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogQdPdKhBtt()">
                                         <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true" />
@@ -123,7 +123,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'HD'">
+                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Mã DVTS </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -131,7 +131,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6" *ngIf=" radioValue == 'QDDX'">
+                        <div nz-col [nzSpan]="8" *ngIf=" radioValue == '02'">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -146,7 +146,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3" *ngIf=" radioValue == 'HD'">
+                        <div nz-col [nzSpan]="4" *ngIf=" radioValue == '01'">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Tên TCCN mua hàng </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">

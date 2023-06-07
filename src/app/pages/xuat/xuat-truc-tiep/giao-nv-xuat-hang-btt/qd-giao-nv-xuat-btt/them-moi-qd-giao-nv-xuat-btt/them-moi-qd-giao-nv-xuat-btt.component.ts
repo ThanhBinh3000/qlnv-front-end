@@ -31,7 +31,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   @Input() isViewOnModal: boolean;
   maQd: string = null;
 
-  radioValue: string = 'HD';
+  radioValue: string = '01';
   listDviTsan: any[] = [];
 
   fileDinhKems: any[] = []
@@ -79,7 +79,7 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
       trichYeu: [''],
       trangThaiXh: [''],
       tenTrangThaiXh: [''],
-      phanLoai: ['HD', [Validators.required]],
+      phanLoai: ['01', [Validators.required]],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
@@ -90,27 +90,27 @@ export class ThemMoiQdGiaoNvXuatBttComponent extends Base2Component implements O
   }
 
   setValidator(isGuiDuyet?) {
-    if (this.radioValue == 'HD' && isGuiDuyet) {
+    if (this.radioValue == '01' && isGuiDuyet) {
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
       this.formData.controls["idHd"].setValidators([Validators.required]);
       this.formData.controls["soHd"].setValidators([Validators.required]);
       this.formData.controls["idQdPd"].clearValidators();
       this.formData.controls["soQdPd"].clearValidators();
     }
-    if (this.radioValue == 'QDDX' && isGuiDuyet) {
+    if (this.radioValue == '02' && isGuiDuyet) {
       this.formData.controls["idHd"].clearValidators();
       this.formData.controls["soHd"].clearValidators();
       this.formData.controls["idQdPd"].setValidators([Validators.required]);
       this.formData.controls["soQdPd"].setValidators([Validators.required]);
       this.formData.controls["soQdNv"].setValidators([Validators.required]);
     }
-    if (this.radioValue == 'HD') {
+    if (this.radioValue == '01') {
       this.formData.controls["idHd"].setValidators([Validators.required]);
       this.formData.controls["soHd"].setValidators([Validators.required]);
       this.formData.controls["idQdPd"].clearValidators();
       this.formData.controls["soQdPd"].clearValidators();
     }
-    if (this.radioValue == 'QDDX') {
+    if (this.radioValue == '02') {
       this.formData.controls["idHd"].clearValidators();
       this.formData.controls["soHd"].clearValidators();
       this.formData.controls["idQdPd"].setValidators([Validators.required]);
