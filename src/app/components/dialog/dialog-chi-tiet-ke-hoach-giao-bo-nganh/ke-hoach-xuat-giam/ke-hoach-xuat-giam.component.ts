@@ -7,6 +7,8 @@ import {MESSAGE} from 'src/app/constants/message';
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 import {CurrencyMaskInputMode} from "ngx-currency";
 import {AMOUNT, AMOUNT_ONE_DECIMAL} from "../../../../Utility/utils";
+import {chain} from "lodash";
+import {v4 as uuidv4} from "uuid";
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -21,6 +23,8 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   dsHangHoa = [];
   @Input()
   dataTable = [];
+  dataTableView = [];
+
   @Input()
   dataToanBn = [];
   @Input()
@@ -37,7 +41,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   @Input()
   isView: boolean = false;
-
+  expandSet = new Set<number>();
   tongSoVT: number = 0;
   tongSoLT: number = 0;
   page: number = 1;
@@ -57,8 +61,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.updateEditCache()
-    this.emitDataTable();
+    this.convertListData();
+    console.log(this.dataTable, 'dataTabledataTabledataTable')
+    // this.updateEditCache()
+    // this.emitDataTable();
     for (let item of this.dataToanBn) {
       if (item.maBn == '01' && !item.isSum && item.stt == 2) {
         this.tongSoLT = item.tongSo;
@@ -87,6 +93,26 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     this.dataEdit[index].edit = true;
   }
 
+  convertListData() {
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTableView = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
+          tenVthh: key,
+          dataChild: value,
+          idVirtual: uuidv4()
+        })
+      ).value();
+    }
+    this.expandAll();
+  }
+
+  expandAll() {
+    if (this.dataTableView && this.dataTableView.length > 0) {
+      this.dataTableView.forEach(s => {
+        this.expandSet.add(s.idVirtual);
+      });
+    }
+  }
+
   xoaItem(index: number) {
     this.modal.confirm({
       nzClosable: false,
@@ -99,7 +125,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
-          this.updateEditCache()
+          // this.updateEditCache()
         } catch (e) {
           console.log('error', e);
         }
@@ -118,7 +144,8 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       }
       this.dataTable = [...this.dataTable, this.rowItem]
       this.rowItem = new ThongTinQuyetDinh();
-      this.updateEditCache()
+      // this.updateEditCache()
+      this.convertListData();
       this.emitDataTable()
     } else {
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
@@ -142,6 +169,14 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     this.emitDataTable();
   }
 
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
   async changePageIndex(event) {
     try {
       this.page = event;
@@ -161,17 +196,17 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        }
-      });
-    }
-  }
+  //
+  // updateEditCache(): void {
+  //   if (this.dataTable) {
+  //     this.dataTable.forEach((item, index) => {
+  //       this.dataEdit[index] = {
+  //         edit: false,
+  //         data: {...item},
+  //       }
+  //     });
+  //   }
+  // }
 
   onChangeLoaiVthh(event, typeData?: any) {
     if (typeData) {
