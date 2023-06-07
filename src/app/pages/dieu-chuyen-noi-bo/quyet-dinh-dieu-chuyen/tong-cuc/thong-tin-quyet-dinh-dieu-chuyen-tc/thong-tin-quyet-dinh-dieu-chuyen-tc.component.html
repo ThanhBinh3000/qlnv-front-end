@@ -129,7 +129,7 @@
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [nzDisabled]="isView" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [nzDisabled]="isView || !!idTHop" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
@@ -225,7 +225,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-            <tr>
+            <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
               <td>{{i + 1}}</td>
               <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
               <td>{{item.tenCucNhan || ""}}</td>

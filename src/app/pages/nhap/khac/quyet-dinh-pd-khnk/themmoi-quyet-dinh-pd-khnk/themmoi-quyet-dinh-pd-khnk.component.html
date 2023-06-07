@@ -114,7 +114,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -132,7 +132,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isView ? '' : openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="soDx" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -143,7 +143,7 @@
             <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <input [readonly]="true" nz-input formControlName="tenLoaiNx" readonly="true" />
+              <input [readonly]="true" nz-input formControlName="tenLoaiHinhNx" readonly="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -235,11 +235,11 @@
               [ngClass]="{'bg-selected': i == 0 && this.selected}">
               <td class="text-center">{{i + 1}} </td>
               <td>{{ data.tenDvi }}</td>
-              <td>{{ data.soDx }}</td>
-              <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.tongSlDx }}</td>
+              <td>{{ data.soDxuat }}</td>
+              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.tongSlNhap }}</td>
               <td>{{ data.dvt }}</td>
-              <td>{{ data.tongTtienDx }}</td>
+              <td>{{ data.tongThanhTien }}</td>
               <td>{{ data.trichYeu }}</td>
             </tr>
           </tbody>
