@@ -225,7 +225,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of quyetDinhPdDtl.data, let i = index;">
-            <tr>
+            <tr [ngClass]="{'bg-selected': selected === i}" (click)="selectRow(i)">
               <td>{{i + 1}}</td>
               <td>{{item.tenDviCuc || item.tenCucDxuat || ""}}</td>
               <td>{{item.tenCucNhan || ""}}</td>
