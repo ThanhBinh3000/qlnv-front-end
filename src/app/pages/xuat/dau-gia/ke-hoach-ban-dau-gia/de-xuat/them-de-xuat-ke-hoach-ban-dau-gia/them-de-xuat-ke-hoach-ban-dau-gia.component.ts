@@ -68,7 +68,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       loaiHinhNx: [''],
       kieuNx: [''],
       diaChi: [],
-      namKh: [dayjs().get('year')],
+      namKh: [dayjs().get('year'),],
       soDxuat: [''],
       trichYeu: [''],
       idSoQdCtieu: [],
@@ -415,17 +415,27 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formData.get('namKh').value,
-      );
+    let res2 = null;
+    res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+      +this.formData.get('namKh').value,
+    );
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
         soQdCtieu: res2.data.soQuyetDinh,
         idSoQdCtieu: res2.data.id
       });
+    } else {
+      this.dataChiTieu = null;
+      this.formData.patchValue({
+        soQdCtieu: null,
+        idSoQdCtieu: null
+      });
     }
+  }
+
+  onChangeNamKh() {
+    this.getDataChiTieu();
   }
 
   quayLai() {

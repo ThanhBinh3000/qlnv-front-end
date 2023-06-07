@@ -12,12 +12,13 @@ import {ThongBaoKetQuaComponent} from "./thong-bao-ket-qua/thong-bao-ket-qua.com
 import {
   ThemMoiThongBaoKetQuaComponent
 } from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
+import {DanhSachHangTieuHuyComponent} from "./danh-sach-hang-tieu-huy/danh-sach-hang-tieu-huy.component";
 
 
 
 @NgModule({
   declarations: [
-
+    DanhSachHangTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
@@ -33,6 +34,7 @@ import {
     ComponentsModule,
   ],
   exports: [
+    DanhSachHangTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
