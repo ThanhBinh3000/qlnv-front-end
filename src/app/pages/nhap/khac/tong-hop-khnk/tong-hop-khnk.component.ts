@@ -6,11 +6,13 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { UserService } from "../../../../services/user.service";
 import { DonviService } from "../../../../services/donvi.service";
-import { DxKhNhapKhacService } from "../../../../services/qlnv-hang/nhap-hang/nhap-khac/dxKhNhapKhac.service";
 import { NzModalService } from "ng-zorro-antd/modal";
 import dayjs from "dayjs";
 import { cloneDeep } from 'lodash';
 import { MESSAGE } from "../../../../constants/message";
+import {
+  TongHopDxKhNhapKhacService
+} from "../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
 
 @Component({
   selector: "app-tong-hop-khnk",
@@ -61,7 +63,7 @@ export class TongHopKhnkComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private dviService: DonviService,
-    private dxKhNhapKhacService: DxKhNhapKhacService,
+    private tongHopDxKhNhapKhacService: TongHopDxKhNhapKhacService,
     private modal: NzModalService
   ) {
   }
@@ -146,17 +148,20 @@ export class TongHopKhnkComponent implements OnInit {
         page: this.page - 1
       }
     };
-    let res = await this.dxKhNhapKhacService.search(body);
+    let res = await this.tongHopDxKhNhapKhacService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
+        this.dataTableAll = cloneDeep(this.dataTable);
+        this.totalRecord = data.totalElements;
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
       this.totalRecord = 0;
@@ -283,7 +288,7 @@ export class TongHopKhnkComponent implements OnInit {
           let body = {
             "id": item.id
           };
-          this.dxKhNhapKhacService.delete(body).then((res) => {
+          this.tongHopDxKhNhapKhacService.delete(body).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
