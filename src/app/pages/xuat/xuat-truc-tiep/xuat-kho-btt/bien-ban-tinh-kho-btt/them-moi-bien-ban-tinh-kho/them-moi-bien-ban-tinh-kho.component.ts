@@ -5,7 +5,6 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
@@ -15,7 +14,6 @@ import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { QuyetDinhNvXuatBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/quyet-dinh-nv-xuat-btt/quyet-dinh-nv-xuat-btt.service';
 import { BienBanTinhKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/bien-ban-tinh-kho-btt.service';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { PhieuXuatKhoBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/xuat-kho-btt/phieu-xuat-kho-btt.service';
 
 @Component({
@@ -28,6 +26,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
   @Input() loaiVthh: string;
   @Input() isView: boolean;
   @Input() idQdGiaoNvXh: number;
+  @Input() isViewOnModal: boolean;
 
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -43,6 +42,8 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
 
   idBangKe: number = 0;
   isViewBangKe: boolean = false;
+
+  bienBanTinhKho: any[] = [];
 
   constructor(
     httpClient: HttpClient,
@@ -180,6 +181,7 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
           soHd: data.soHd,
           ngayKyHd: data.ngayKyHd,
         });
+        this.lisBienBanTinhKho(data.soQdNv)
         let dataChiCuc = data.children.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc) {
           dataChiCuc.forEach(e => {
@@ -191,6 +193,35 @@ export class ThemMoiBienBanTinhKhoComponent extends Base2Component implements On
         this.notification.error(MESSAGE.ERROR, dataRes.msg);
       }
       await this.spinner.hide();
+    }
+  }
+
+  async lisBienBanTinhKho(item) {
+    await this.spinner.show();
+    let body = {
+      soQdNv: item,
+      loaiVthh: this.loaiVthh,
+      namKh: this.formData.value.namKh,
+      maDvi: this.userInfo.MA_DVI,
+    }
+    let res = await this.bienBanTinhKhoBttService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data
+      this.bienBanTinhKho = data.content;
+      const diffList = [
+        ...this.listDiaDiemNhap.filter((item) => {
+          return !this.bienBanTinhKho.some((child) => {
+            if (child.maNganKho.length > 0 && item.maNganKho.length > 0) {
+              return item.maNganKho === child.maNganKho;
+            } else {
+              return item.maDiemKho === child.maDiemKho;
+            }
+          });
+        }),
+      ];
+      this.listDiaDiemNhap = diffList;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
