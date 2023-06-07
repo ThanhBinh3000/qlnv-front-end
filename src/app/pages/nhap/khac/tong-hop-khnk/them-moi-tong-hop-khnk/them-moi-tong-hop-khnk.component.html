@@ -5,14 +5,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
-        || formData.value.trangThai == STATUS.TU_CHOI_LDV"
+    <button
             type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO
-        || formData.value.trangThai == STATUS.TU_CHOI_LDV"
+    <button
             type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -24,7 +22,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_BAN_HANH_QD ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Tổng hợp đề xuất kế hoạch nhập khác</span>
@@ -154,20 +152,19 @@
           <tbody>
           <tr *ngFor="let data of dataTableDanhSachDX;let i = index"
               [ngClass]="{'bg-selected': i == 0 && this.selected}"
-              (click)="showDetail($event,data.hdrId)">
+              (click)="showDetail($event,data.id)">
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
-            <td>{{ data.tenDviDxuat }}</td>
-            <td>{{ data.soDxuat | date: 'dd/MM/YYYY'}}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soLuong | number: '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.soDxuat}}</td>
+            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tongSlNhap | number: '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.dvt }}</td>
             <td>{{ data.tongThanhTien | number: '1.0-1' : 'vi_VN' }}</td>
             <td>{{ data.trichYeu }}</td>
           </tr>
           </tbody>
         </nz-table>
-        <app-them-moi-ke-hoach-nhap-khac *ngIf="idRowSelect" [idInput]="idRowSelect" [isView]="isView"
+        <app-them-moi-ke-hoach-nhap-khac *ngIf="idRowSelect" [idInput]="idRowSelect" [isView]="true"
                                          [showFromTH]="true" (showListEvent)="showList()">
         </app-them-moi-ke-hoach-nhap-khac>
       </nz-collapse-panel>
