@@ -212,4 +212,13 @@ export class DanhsachKehoachMuatructiepComponent extends Base2Component implemen
     this.idSelected = id;
     this.isDetail = true;
   }
+
+  goDetail(id: number, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
+    this.idSelected = id;
+    this.isViewChiTiet = false;
+    this.isDetail = true;
+  }
 }

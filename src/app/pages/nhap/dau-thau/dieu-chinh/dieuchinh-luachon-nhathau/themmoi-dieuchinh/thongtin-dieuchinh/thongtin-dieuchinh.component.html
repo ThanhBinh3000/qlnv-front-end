@@ -276,7 +276,7 @@
                 dtGoiThau.donGiaTamTinh * res.soLuong : (dtGoiThau.donGiaVat != null ? dtGoiThau.donGiaVat *
                   res.soLuong : (dtGoiThau.donGia != null ? dtGoiThau.donGia * res.soLuong : 0)))
                 | number: '1.0-1' : 'vi_VN'}}</td>
-<!--              <td>{{isCache ? dtGoiThau.donGiaVat : giaVat}}</td>-->
+<!--              <td>{{isCache ? dtGoiThau.donGiaVat : giaVat}}</ td>-->
               <td *ngIf="!isView">
                 <a (click)="editRow(res)">
                   <i class="fa fa-pencil"></i>
