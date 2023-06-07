@@ -31,6 +31,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     ttMuaTang: null,
     ttXuatBan: null,
     ttXuatGiam: null,
+    ltGaoTon: null,
+    ltThocTon: null,
     muaTangList: [],
     xuatGiamList: [],
     xuatBanList: [],
