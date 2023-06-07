@@ -19,9 +19,6 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import {DeXuatPAGService} from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
 import {HelperService} from 'src/app/services/helper.service';
-import {
-  QuyetDinhPheDuyetKeHoachLCNTService
-} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
@@ -71,7 +68,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dataTableKsGia: any[];
 
   dataTableKqGia: any[];
+  dataTableTtThamKhao: any[];
   dviTinh: string;
+  fileDkPhanTich: any[] = [];
 
 
   constructor(
@@ -101,6 +100,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         qdCtKhNam: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
+        tenCloaiVthh: [null],
         cloaiVthh: [null, [Validators.required]],
         moTa: [null],
         tchuanCluong: [''],
@@ -253,6 +253,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.fileDinhKem = data.fileDinhKems;
+      this.fileDkPhanTich = data.filePhanTich;
       this.updateEditCache()
     }
   }
@@ -333,8 +334,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
+    let list = this.listCloaiVthh.filter(item => item.ma == event)
     this.formData.patchValue({
-      qdCtKhNam: null
+      qdCtKhNam: null,
+      tenCloaiVthh : list && list.length > 0 ? list[0].ten : ''
     })
     if (this.formData.value.loaiGia == "LG03") {
       await this.loadDsQdPduyetKhlcnt();
@@ -489,8 +492,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
+    body.ketQuaKhaoSatTtThamKhao = this.dataTableTtThamKhao;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.fileDinhKemReqs = this.fileDinhKem;
+    body.filePhanTich = this.fileDkPhanTich;
     body.type = this.type;
     body.maDvi = this.userInfo.MA_DVI
     let res
