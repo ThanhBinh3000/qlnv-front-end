@@ -129,7 +129,7 @@
           </div>
 
           <div *ngIf="isTongCuc()" nz-col [nzSpan]="12">
-            <nz-radio-group [nzDisabled]="isView" nzSize="small" class="rdo-input" formControlName="type">
+            <nz-radio-group [nzDisabled]="isView || !!idTHop" nzSize="small" class="rdo-input" formControlName="type">
               <nz-form-item nz-col [nzSpan]="11">
                 <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
                 <nz-form-control [nzErrorTip]="error">
