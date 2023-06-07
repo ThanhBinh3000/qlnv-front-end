@@ -1,22 +1,31 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ThongTinKhaoSatGia} from 'src/app/models/DeXuatPhuongAnGia';
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {NzModalService} from "ng-zorro-antd/modal";
+import {
+  KhSuaChuaLonDtl
+} from "../../../../../../../quan-ly-kho-tang/ke-hoach/ke-hoach-sua-chua-hang-nam/de-xuat-kh-sc-lon/them-moi-sc-lon/dialog-dx-sc-lon/dialog-dx-sc-lon.component";
+import {MESSAGE} from "../../../../../../../../constants/message";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-thong-tin-ksg',
   templateUrl: './thong-tin-ksg.component.html',
   styleUrls: ['./thong-tin-ksg.component.scss']
 })
-export class ThongTinKsgComponent implements OnInit {
+export class ThongTinKsgComponent implements OnInit, OnChanges {
   @Input()
   vat: any;
 
   @Input()
   isTableKetQua: boolean;
+
+  @Input()
+  isTabNdKhac: boolean;
 
   @Input()
   dataTable : any[] = [];
@@ -33,19 +42,29 @@ export class ThongTinKsgComponent implements OnInit {
   @Input()
   isView: boolean;
 
+  @Input()
+  dataCloaiVthh : any;
+
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia } } = {};
   constructor(
     private uploadFileService: UploadFileService,
     public globals: Globals,
     public modal: NzModalService,
+    public notification: NzNotificationService,
+    public spinner: NgxSpinnerService,
   ) {
   }
 
   ngOnInit(): void {
     this.emitDataTable()
     this.updateEditCache()
-    console.log(this.isView + " 123")
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.dataCloaiVthh) {
+      this.rowItem.cloaiVthh = (this.dataCloaiVthh.tenCloaiVthh ? this.dataCloaiVthh.tenCloaiVthh  + '; ' : '') + (this.dataCloaiVthh.moTa ? this.dataCloaiVthh.moTa + '; ' : '') + (this.dataCloaiVthh.tchuanCluong ? this.dataCloaiVthh.tchuanCluong : '' )
+    }
   }
 
 
@@ -62,12 +81,31 @@ export class ThongTinKsgComponent implements OnInit {
     if(!this.dataTable){
       this.dataTable=[];
     }
+    let msgRequired = this.required(this.rowItem);
+    if (msgRequired) {
+      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.spinner.hide();
+      return;
+    }
     this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();
     this.updateEditCache()
   }
+
+  required(item: ThongTinKhaoSatGia) {
+    let msgRequired = "";
+    //validator
+    if (!item.cloaiVthh && !this.isTabNdKhac) {
+      msgRequired = "Không được để trống chủng loại hàng hóa";
+    } else if (!item.donGia) {
+      msgRequired = "Không được để trống đơn giá";
+    }
+    return msgRequired;
+  }
+
+
 
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type? : any) {
     const element = event.currentTarget as HTMLInputElement;

@@ -12,6 +12,7 @@ import { MESSAGE } from "../../../../../constants/message";
 import {
   TongHopDxKhNhapKhacService
 } from "../../../../../services/qlnv-hang/nhap-hang/nhap-khac/tongHopDxKhNhapKhac.service";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: "app-them-moi-tong-hop-khnk",
@@ -53,21 +54,11 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     );
     this.formData = this.fb.group({
       id: [],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
-      namKhoach: [, [Validators.required]],
-      ngayTao: [, [Validators.required]],
-      noiDung: ["", [Validators.required]],
-      hthucLcnt: ["", [Validators.required]],
-      pthucLcnt: ["", [Validators.required]],
-      loaiHdong: ["", [Validators.required]],
-      nguonVon: ["", [Validators.required]],
-      ghiChu: [""],
-      trangThai: [""],
-      tenLoaiVthh: [""],
-      tenCloaiVthh: [""],
-      tchuanCluong: [""],
-      soQdCc: [""]
+      ngayTh: [dayjs().format("YYYY-MM-DD")],
+      trangThai: [STATUS.CHUA_TAO_QD],
+      tenTrangThai: ['Chưa Tạo QĐ'],
+      maTh: [""],
+      noiDungTh: [""],
     });
   }
 
@@ -107,21 +98,61 @@ export class ThemMoiTongHopKhnkComponent extends Base2Component implements OnIni
     let body = this.formTraCuu.value
     await this.tongHopDxKhNhapKhacService
       .dsDxDuocTaoQDinhPDuyet(body)
-      .then((res) => {
+      .then(async (res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          const dataDetail = res.data;
-          console.log(res.data)
+          let maTh = await this.userService.getId("HH_THOP_KHNK_SEQ");
+          this.formData.patchValue({
+            maTh: maTh,
+            ngayTh: dayjs().format("YYYY-MM-DD"),
+          })
+          this.dataTableDanhSachDX = res.data;
+          this.isTongHop = true;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+          this.isTongHop = false;
         }
+        if (this.dataTableDanhSachDX.length > 0) {
+          this.showDetail(event, this.dataTableDanhSachDX[0].id)
+        }
+        await this.spinner.hide();
       })
       .catch((e) => {
         console.log("error: ", e);
+        this.isTongHop = false;
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       });
   }
 
-  save(isGuiDuyet?) {
+  async save(isGuiDuyet?) {
+    let body = this.formData.value;
+    body.fileDinhKems = this.fileDinhKems;
+    let data = await this.createUpdate(body, '');
+    if (data) {
+      this.id = data.id;
+      await this.loadChiTiet();
+      // this.isView = true
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    }
+  }
 
+  async loadChiTiet() {
+    if (this.id > 0) {
+      let res = await this.tongHopDxKhNhapKhacService.getDetail(this.id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const dataDetail = res.data;
+        this.fileDinhKems = dataDetail.hdr.fileDinhKems;
+        this.dataTableDanhSachDX = dataDetail.dtl;
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail.hdr)
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail.hdr);
+        this.isTongHop = true;
+      }
+      else {
+        this.isTongHop = false;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.showDetail(event, this.dataTableDanhSachDX[0].idDxHdr);
+    }
   }
 
   clearFilter() {

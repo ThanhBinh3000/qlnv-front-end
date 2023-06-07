@@ -33,6 +33,9 @@ import {
 import {
   QdPheDuyetKhlcntTdsclService
 } from "../../../../services/qlnv-kho/tiendoxaydungsuachua/suachualon/qd-phe-duyet-khlcnt-tdscl.service";
+import {
+  TongHopScThuongXuyenService
+} from "../../../../services/qlnv-kho/quy-hoach-ke-hoach/ke-hoach-sc-thuong-xuyen/tong-hop-sc-thuong-xuyen.service";
 
 @Component({
   selector: 'app-tien-do-sua-chua-thuong-xuyen',
@@ -69,14 +72,14 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private donViService: DonviService,
-    private ktQdXdHangNamService: KtKhSuaChuaBtcService,
+    private ktQdScThuongXuyenService: TongHopScThuongXuyenService,
     private qdPheDuyetBaoCaoKtktService: QdPheDuyetBaoCaoKtktService,
     private quyetdinhpheduyetTktcTdtService: QuyetdinhpheduyetTktcTdtService,
     private quyetdinhpheduyetKhlcntService: QdPheDuyetKhlcntTdsclService,
     private quyetdinhpheduyetKqLcntService: QuyetdinhpheduyetKqLcntService,
     private hopdongService: HopdongService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, ktQdXdHangNamService)
+    super(httpClient, storageService, notification, spinner, modal, ktQdScThuongXuyenService)
     super.ngOnInit();
     this.formData = this.fb.group({
       namKeHoach: [''],
@@ -107,10 +110,10 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       this.formData.patchValue({
         maDvi: this.userInfo.MA_DVI,
         capDvi: this.userInfo.CAP_DVI,
-        loai : '00'
+        loai : '01'
       })
       let body = this.formData.value
-      let res = await this.ktQdXdHangNamService.getDanhSachDmDuAn(body);
+      let res = await this.ktQdScThuongXuyenService.getDanhSachDmDuAn(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.dataTable = this.convertListData(res.data);
         this.dataTableRaw = res.data;
@@ -179,7 +182,7 @@ export class TienDoSuaChuaThuongXuyenComponent extends Base2Component implements
       let body = {
         "namKh": item.namKh,
         "soQdPdKhScl": item.soQdPdTcdt,
-        "loai" : "00",
+        "loai" : "01",
         "paggingReq": {
           "limit": 10,
           "page": 0

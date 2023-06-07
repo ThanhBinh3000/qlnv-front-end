@@ -264,7 +264,6 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       },
     });
     modalGT.afterClose.subscribe((data) => {
-      console.log(this.dataTable, 999)
       if (!data) {
         return;
       }
@@ -320,6 +319,7 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       nzOnOk: async () => {
         try {
           this.dataTable = this.dataTable.filter((item, index) => index != i);
+          this.calculatorTable();
         } catch (e) {
           console.log('error', e);
         }
@@ -709,5 +709,19 @@ export class ThemmoiKehoachMuatructiepComponent extends Base2Component implement
       }, 0);
       return sum;
     }
+  }
+
+  calcTongThanhTien() {
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur.tongThanhTienVat;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+
+  changeNamKh() {
+    this.getDataChiTieu();
   }
 }
