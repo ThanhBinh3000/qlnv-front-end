@@ -100,6 +100,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTableView = chain(this.dataTable).groupBy("tenVthh").map((value, key) => ({
           tenVthh: key,
+          isLeaf: (!value || (value.length == 1 && !value[0].cloaiVthh)) ? true : false,
           dataChild: value,
           idVirtual: uuidv4()
         })
@@ -107,6 +108,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     } else {
       this.dataTableView = [];
     }
+    console.log(this.dataTableView, 'this.dataTableViewthis.dataTableViewthis.dataTableView')
     this.expandAll();
   }
 
@@ -118,7 +120,8 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
     }
   }
 
-  xoaItem(item: any) {
+  xoaItem(item: any, isParent?) {
+    console.log(item,'itemitemitem')
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -129,7 +132,13 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          let indexRm = this.dataTable.findIndex(it => (it.loaiVthh == item.loaiVthh && it.cloaiVthh == item.cloaiVthh));
+          let indexRm = -1;
+          if (isParent) {
+            indexRm = this.dataTable.findIndex(it => (it.tenVthh == item.tenVthh));
+          } else {
+            indexRm = this.dataTable.findIndex(it => (it.loaiVthh == item.loaiVthh && it.cloaiVthh == item.cloaiVthh));
+          }
+          console.log(indexRm,'indexRmindexRmindexRmindexRm')
           if (indexRm >= 0 && this.dataTable.length == 1) {
             this.dataTable = [];
           }
