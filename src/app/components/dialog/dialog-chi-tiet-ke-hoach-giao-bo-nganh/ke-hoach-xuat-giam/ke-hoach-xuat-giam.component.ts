@@ -121,7 +121,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   xoaItem(item: any, isParent?) {
-    console.log(item,'itemitemitem')
+    console.log(item, 'itemitemitem')
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -132,18 +132,16 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          let indexRm = -1;
           if (isParent) {
-            indexRm = this.dataTable.findIndex(it => (it.tenVthh == item.tenVthh));
+            this.dataTable = this.dataTable.filter(it => (it.tenVthh != item.tenVthh));
           } else {
-            indexRm = this.dataTable.findIndex(it => (it.loaiVthh == item.loaiVthh && it.cloaiVthh == item.cloaiVthh));
-          }
-          console.log(indexRm,'indexRmindexRmindexRmindexRm')
-          if (indexRm >= 0 && this.dataTable.length == 1) {
-            this.dataTable = [];
-          }
-          if (indexRm >= 0 && this.dataTable.length > 1) {
-            this.dataTable.splice(indexRm, 1);
+            let indexRm = this.dataTable.findIndex(it => (it.loaiVthh == item.loaiVthh && it.cloaiVthh == item.cloaiVthh));
+            if (indexRm >= 0 && this.dataTable.length == 1) {
+              this.dataTable = [];
+            }
+            if (indexRm >= 0 && this.dataTable.length > 1) {
+              this.dataTable.splice(indexRm, 1);
+            }
           }
           this.convertListData();
           this.emitDataTable();
