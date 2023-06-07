@@ -256,6 +256,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     let res = await this.tongHopPhuongAnGiaService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
+      this.formData.reset();
+      this.dataTable = [];
       this.bindingDataTongHop(res.data, body);
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
     } else {

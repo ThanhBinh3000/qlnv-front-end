@@ -36,14 +36,10 @@
                             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm tổng hợp
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="namTongHop" [nzDisabled]="isView" nzAllowClear="true">
+                                <nz-select formControlName="namTongHop" [nzDisabled]="idInput > 0" nzAllowClear="true">
                                     <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                                     </nz-option>
                                 </nz-select>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                    </ng-container>
-                                </ng-template>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -52,14 +48,10 @@
                             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="loaiVthh" [nzDisabled]="isView" nzAllowClear="true"
+                                <nz-select formControlName="loaiVthh" [nzDisabled]="idInput > 0" nzAllowClear="true"
                                     (ngModelChange)="onChangeLoaiVthh($event)">
                                     <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                     </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -68,14 +60,10 @@
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                <nz-select formControlName="cloaiVthh" [nzDisabled]="isView" nzAllowClear="true"
+                                <nz-select formControlName="cloaiVthh" [nzDisabled]="idInput > 0" nzAllowClear="true"
                                     (ngModelChange)="onChangeCloaiVthh($event)">
                                     <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
                                     </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -85,13 +73,9 @@
                             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Loại giá
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="loaiGia" [nzDisabled]="isView" nzAllowClear="true">
+                                <nz-select formControlName="loaiGia" [nzDisabled]="idInput > 0" nzAllowClear="true">
                                     <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                                     </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
@@ -100,19 +84,12 @@
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNNKV </nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                <nz-select formControlName="maDvis" [nzDisabled]="isView" [nzMaxTagCount]="2"
+                                <nz-select formControlName="maDvis" [nzDisabled]="idInput > 0" [nzMaxTagCount]="2"
                                     nzMode="multiple" [(ngModel)]="listCucSelected">
                                     <nz-option *ngFor="let item of listCuc" [nzLabel]="item.tenDvi"
                                         [nzValue]="item.maDvi">
                                     </nz-option>
-                                    <ng-template #error let-control>
-                                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                        </ng-container>
-                                    </ng-template>
                                 </nz-select>
-                                <ng-template #tagPlaceHolder let-selectedList>and {{ selectedList.length }} more
-                                    selected
-                                </ng-template>
 
                             </nz-form-control>
                         </nz-form-item>
@@ -123,17 +100,13 @@
                                 xuất
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy" class="search__input">
+                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy" class="search__input" [nzDisabled]="idInput > 0">
                                 </nz-range-picker>
-                                <ng-template #error let-control>
-                                    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                    </ng-container>
-                                </ng-template>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                 </div>
-                <div nz-row [nzGutter]="20" *ngIf="!formData.value.id">
+                <div nz-row [nzGutter]="20" *ngIf="userService.isTongCuc() && !idInput">
                     <div nz-col [nzSpan]="24">
                         <div class="tong-hop-button group-button-search">
                             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHop()">
@@ -180,7 +153,7 @@
                                     dung tổng hợp </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-input-group>
-                                        <input type="text" nz-input formControlName="noiDung" />
+                                        <input type="text" nz-input formControlName="noiDung" [readonly]="isView" />
                                     </nz-input-group>
                                     <ng-template #error let-control>
                                         <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -338,4 +311,9 @@
 <ng-template #templateSub>
     <app-them-moi-to-trinh-pag [type]="type" [isView]="isView" [idInput]="formData.value.id" (onClose)="reOpenMain()">
     </app-them-moi-to-trinh-pag>
+</ng-template>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+  </ng-container>
 </ng-template>
