@@ -9,10 +9,10 @@ import {DanhMucService} from "../../../../services/danhmuc.service";
 import {MESSAGE} from "../../../../constants/message";
 import dayjs from "dayjs";
 import {CHUC_NANG} from "../../../../constants/status";
-import {
-  ThongBaoKqThanhLyService
-} from "../../../../services/qlnv-hang/xuat-hang/xuat-thanh-ly/ThongBaoKqThanhLy.service";
 import {XuatTieuHuyComponent} from "../xuat-tieu-huy.component";
+import {
+  ThongBaoKqTieuHuyService
+} from "../../../../services/qlnv-hang/xuat-hang/xuat-tieu-huy/ThongBaoKqTieuHuy.service";
 
 @Component({
   selector: 'app-th-thong-bao-ket-qua',
@@ -40,12 +40,12 @@ export class ThongBaoKetQuaComponent extends Base2Component implements OnInit {
               notification: NzNotificationService,
               spinner: NgxSpinnerService,
               modal: NzModalService,
-              private thongBaoKqThanhLyService: ThongBaoKqThanhLyService,
+              private thongBaoKqTieuHuyService: ThongBaoKqTieuHuyService,
               private danhMucService: DanhMucService,
               private xuatThanhLyComponent: XuatTieuHuyComponent,
 
   ) {
-    super(httpClient, storageService, notification, spinner, modal, thongBaoKqThanhLyService);
+    super(httpClient, storageService, notification, spinner, modal, thongBaoKqTieuHuyService);
     this.vldTrangThai = this.xuatThanhLyComponent;
     this.formData = this.fb.group({
       nam: [''],

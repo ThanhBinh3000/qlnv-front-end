@@ -27,13 +27,13 @@
             </nz-input-group>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ PD KH sửa chữa lớn hàng năm</label>
+            <label class="search__label">Số QĐ PD KH sửa chữa thường xuyên</label>
             <nz-input-group>
               <input nz-input formControlName="soQuyetDinh"/>
             </nz-input-group>
           </div>
           <div nz-col nzSpan="5">
-            <label class="search__label">Ngày ký QĐ PD KH sửa chữa lớn hàng năm</label>
+            <label class="search__label">Ngày ký QĐ PD KH sửa chữa thường xuyên</label>
             <div nz-row>
               <div nz-col nzSpan="11">
                 <nz-date-picker nzPlaceHolder="Ngày bắt đầu" formControlName="ngayKyTu" nzFormat="dd/MM/yyyy" class="search__input"></nz-date-picker>
@@ -77,17 +77,17 @@
               <th class="text-center">Khối dự án/công trình</th>
               <th class="text-center" nzWidth="90px">Năm KH</th>
               <th class="text-center">Chi cục</th>
-              <th class="text-center">Tên công trình</th>
+              <th class="text-center">Tên công trình,hạng mục</th>
               <th class="text-center">Địa điểm xây dựng</th>
-              <th class="text-center">Loại công trình</th>
+              <th class="text-center">Loại nhu cầu sửa chữa</th>
               <th class="text-center">Thời gian thực hiện</th>
-              <th class="text-center">Nguồn vốn</th>
+              <th class="text-center">Nguồn kinh phí</th>
               <th class="text-center">Thời gian sửa chữa <br> gần đây nhất</th>
-              <th class="text-center">Số QĐ PD KH sửa chữa lớn <br> hàng năm của BTC/TCDT</th>
+              <th class="text-center">Số QĐ PD TMDT (khái <br> toán/dự toán)</th>
               <th class="text-center">Tổng mức đầu tư (khái <br> toán/dự toán)(đ)</th>
-              <th class="text-center">Giá trị quyết <br> toán được duyệt (đ)</th>
+              <th class="text-center">KH cải tạo sửa chữa <br> thường xuyên năm hiện tại(đ)</th>
               <th class="text-center">Lũy kế cấp vốn đến <br> thời điểm hiện tại (đ)</th>
-              <th class="text-center">Kế hoạch vốn <br> năm hiện tại</th>
+              <th class="text-center">Lý do sửa chữa</th>
               <th class="text-center" nzWidth="120px" nzRight>Trạng thái</th>
             </tr>
             </thead>
@@ -171,14 +171,14 @@
                             </td>
                             <td>{{itemDetail.diaDiem}}</td>
                             <td>{{itemDetail.tenLoaiCongTrinh}}</td>
-                            <td class="text-center">{{itemDetail.tgThucHien}} - {{itemDetail.tgHoanThanh}}</td>
+                            <td class="text-center">{{itemDetail.tgThucHien}}</td>
                             <td >{{itemDetail.tenNguonVon}}</td>
                             <td  class="text-center">{{itemDetail.tgSuaChua}}</td>
-                            <td class="text-blue">{{itemDetail.soQdPdTcdt}}</td>
+                            <td class="text-blue">{{itemDetail.soQdScTx}}</td>
                             <td class="text-right">{{itemDetail.tmdt | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">{{itemDetail.giaTriPd | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td class="text-right">{{itemDetail.keHoachCaiTao | number : '1.0-1' : 'vi_VN'}}</td>
                             <td class="text-right">{{itemDetail.luyKeVon | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right">{{itemDetail.vonDauTu | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{itemDetail.lyDo}}</td>
                             <td nzRight>{{itemDetail.tenTrangThai}}</td>
                           </tr>
                         </ng-container>

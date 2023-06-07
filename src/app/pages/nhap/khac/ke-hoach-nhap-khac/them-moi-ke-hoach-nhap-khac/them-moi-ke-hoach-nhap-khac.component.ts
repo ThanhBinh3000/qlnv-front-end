@@ -247,6 +247,9 @@ export class ThemMoiKeHoachNhapKhacComponent extends Base2Component implements O
           this.formData.get('id').setValue(res.data.id);
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         }
+        this.formData.patchValue({
+          soDxuat: this.formData.get("soDxuat").value.split('/')[0]
+        })
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);

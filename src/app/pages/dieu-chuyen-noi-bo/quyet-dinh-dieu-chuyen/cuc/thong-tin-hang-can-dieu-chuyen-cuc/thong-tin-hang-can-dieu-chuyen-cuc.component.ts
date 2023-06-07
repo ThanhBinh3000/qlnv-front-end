@@ -475,6 +475,13 @@ export class ThongTinHangCanDieuChuyenCucComponent extends Base2Component implem
 
   }
 
+  onChangSLDC(value) {
+    this.formData.patchValue({
+      soLuongPhanBo: "",
+      slDcConLai: ""
+    })
+  }
+
   onChangeSLNhapDc(value) {
     const slDcConLai = Number(this.formData.value.soLuongDc) - Number(value)
     if (slDcConLai >= 0) {

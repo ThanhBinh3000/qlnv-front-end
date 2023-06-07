@@ -94,7 +94,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         loaiGia: [null, [Validators.required]],
-        maDvis: [[], [Validators.required]],
+        maDvis: [[]],
         ngayDx: [null, [Validators.required]],
       }
     );
@@ -118,6 +118,9 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     const res = await this.donviService.layTatCaDonViByLevel(2);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listCuc = res.data;
+      if (this.listCuc && this.listCuc.length > 0  ) {
+        this.listCuc = this.listCuc.filter(item => item.type != 'PB')
+      }
     }
   }
 
@@ -246,10 +249,15 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       body.ngayDxDen = body.ngayDx[1];
     }
     body.type = this.type;
+    if (!body.maDvis || body.maDvis.length == 0) {
+      body.maDvis = this.listCuc.map(item => item.maDvi);
+    }
     delete body.ngayDx;
     let res = await this.tongHopPhuongAnGiaService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
+      this.formData.reset();
+      this.dataTable = [];
       this.bindingDataTongHop(res.data, body);
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
     } else {

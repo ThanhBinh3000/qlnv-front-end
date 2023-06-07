@@ -12,12 +12,19 @@ import {ThongBaoKetQuaComponent} from "./thong-bao-ket-qua/thong-bao-ket-qua.com
 import {
   ThemMoiThongBaoKetQuaComponent
 } from "./thong-bao-ket-qua/them-moi-thong-bao-ket-qua/them-moi-thong-bao-ket-qua.component";
+import {DanhSachHangTieuHuyComponent} from "./danh-sach-hang-tieu-huy/danh-sach-hang-tieu-huy.component";
+import {TongHopTieuHuyComponent} from "./tong-hop-tieu-huy/tong-hop-tieu-huy.component";
+import {
+  ChiTietTongHopTieuHuyComponent
+} from "./tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy/chi-tiet-tong-hop-tieu-huy.component";
 
 
 
 @NgModule({
   declarations: [
-
+    DanhSachHangTieuHuyComponent,
+    TongHopTieuHuyComponent,
+    ChiTietTongHopTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
@@ -33,6 +40,9 @@ import {
     ComponentsModule,
   ],
   exports: [
+    DanhSachHangTieuHuyComponent,
+    TongHopTieuHuyComponent,
+    ChiTietTongHopTieuHuyComponent,
     QuyetDinhTieuHuyComponent,
     ThemMoiQuyetDinhTieuHuyComponent,
     ThongBaoKetQuaComponent,
