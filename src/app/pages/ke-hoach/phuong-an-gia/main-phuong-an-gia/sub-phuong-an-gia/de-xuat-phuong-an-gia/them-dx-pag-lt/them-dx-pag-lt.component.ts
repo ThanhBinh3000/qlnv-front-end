@@ -252,6 +252,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.dataTableTtThamKhao = data.ketQuaKhaoSatTtThamKhao;
       this.fileDinhKem = data.fileDinhKems;
       this.fileDkPhanTich = data.filePhanTich;
       this.updateEditCache()
