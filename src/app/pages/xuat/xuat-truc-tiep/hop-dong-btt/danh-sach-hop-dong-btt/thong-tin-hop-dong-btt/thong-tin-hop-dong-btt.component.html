@@ -142,17 +142,6 @@
                             </div>
                             <div nz-col [nzSpan]="6">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true" nzRequired> Chọn đơn vị cung cấp
-                                    </nz-form-label>
-                                    <nz-form-control>
-                                        <nz-select [nzDisabled]="isDisabled()" formControlName="idDviMua" nzAllowClear
-                                            nzShowSearch>
-                                        </nz-select>
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col [nzSpan]="3">
-                                <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true"> Số Hợp đồng </nz-form-label>
                                     <nz-form-control [nzErrorTip]="error">
                                         <nz-input-group nzAddOnAfter="{{maHopDongSuffix}}">
@@ -163,7 +152,7 @@
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
-                            <div nz-col [nzSpan]="3">
+                            <div nz-col [nzSpan]="6">
                                 <nz-form-item>
                                     <nz-form-label nzRequired [nzNoColon]="true">
                                         Tên hợp đồng
@@ -190,7 +179,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true">Ghi
                                         chú (Cho ngày hiệu lực) </nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuNgayHluc" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -214,7 +203,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Ghi
                                         chú (Cho loại hợp đồng)</nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuLoaiHdong" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -249,7 +238,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Ghi
                                         chú (Cho thời gian giao nhận hàng)</nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuTgianGnhan" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -373,14 +362,6 @@
                                     <nz-form-label nzRequired [nzNoColon]="true"> Mở tại </nz-form-label>
                                     <nz-form-control nz-col [nzErrorTip]="error">
                                         <input nz-input formControlName="moTai" [readonly]="isDisabled()" />
-                                    </nz-form-control>
-                                </nz-form-item>
-                            </div>
-                            <div nz-col [nzSpan]="12">
-                                <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy </nz-form-label>
-                                    <nz-form-control nz-col [nzErrorTip]="error">
-                                        <input nz-input formControlName="ttinGiayUyQuyen" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
                             </div>
@@ -697,8 +678,7 @@
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true" [nzExtra]="extraTpl">
                     <ng-template #extraTpl>
-                        <div class="buttons"
-                            *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY && !isQuanLy">
+                        <div class="buttons" *ngIf="formData.value.id != null && !userService.isTongCuc() && !isQuanLy">
                             <button style="background: #353a64;" type="button" class="btn btn-main"
                                 (click)="redirectPhuLuc(null)">
                                 <i class="icon htvbdh_dau-cong"></i>
@@ -877,7 +857,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true">Ghi
                                         chú (Cho ngày hiệu lực) </nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuNgayHluc" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -901,7 +881,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Ghi
                                         chú (Cho loại hợp đồng)</nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuLoaiHdong" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -936,7 +916,7 @@
                                 <nz-form-item>
                                     <nz-form-label [nzNoColon]="true"> Ghi
                                         chú (Cho thời gian giao nhận hàng)</nz-form-label>
-                                    <nz-form-control [nzErrorTip]="error">
+                                    <nz-form-control>
                                         <input nz-input formControlName="ghiChuTgianGnhan" [readonly]="isDisabled()" />
                                     </nz-form-control>
                                 </nz-form-item>
@@ -1064,7 +1044,7 @@
                             </div>
                             <div nz-col [nzSpan]="12">
                                 <nz-form-item>
-                                    <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy </nz-form-label>
+                                    <nz-form-label [nzNoColon]="true"> Thông tin giấy ủy quyền </nz-form-label>
                                     <nz-form-control nz-col [nzErrorTip]="error">
                                         <input nz-input formControlName="ttinGiayUyQuyen" [readonly]="isDisabled()" />
                                     </nz-form-control>
@@ -1329,8 +1309,7 @@
             <nz-collapse nzAccordion>
                 <nz-collapse-panel [nzHeader]="'PHỤ LỤC HỢP ĐỒNG'" [nzActive]="true" [nzExtra]="extraTpl">
                     <ng-template #extraTpl>
-                        <div class="buttons"
-                            *ngIf="formData.value.id != null && !userService.isTongCuc()  && formData.value.trangThai != STATUS.DA_KY && !isQuanLy">
+                        <div class="buttons" *ngIf="formData.value.id != null && !userService.isTongCuc() && !isQuanLy">
                             <button style="background: #353a64;" type="button" class="btn btn-main"
                                 (click)="redirectPhuLuc(null)">
                                 <i class="icon htvbdh_dau-cong"></i>
