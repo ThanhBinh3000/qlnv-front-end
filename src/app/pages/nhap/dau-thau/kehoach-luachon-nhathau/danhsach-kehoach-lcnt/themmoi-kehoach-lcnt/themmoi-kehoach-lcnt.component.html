@@ -408,7 +408,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number
-                  [ngModel]="formData.value.tongMucDtDx  +(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +  +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
+                  [ngModel]="(formData.value.tongMucDtDx * formData.value.gtriHdong / 100) +(formData.value.tongMucDtDx * formData.value.gtriDthau/ 100)  "
                   [ngModelOptions]="{standalone: true}" nz-input [nzSize]="'small'" nzDisabled
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
@@ -444,7 +444,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt (tỷ đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDt | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -452,7 +452,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư đề xuất (tỷ đồng) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-1' : 'vi_VN'}}</span>
+              <span class="blue-text">{{formData.value.tongMucDtDx | number : '1.0-9999' : 'vi_VN'}}</span>
             </nz-form-control>
           </nz-form-item>
         </div>
